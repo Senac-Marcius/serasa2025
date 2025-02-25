@@ -10,5 +10,3 @@ Student: Daniel da Silva Ferrari 🎓
 
  - Secretary: Lorrany Santos de Jesus 
 - Student: Daniel da Silva Ferrari 🎓
-
-
