@@ -30,10 +30,7 @@ Invest : Guilherme Jesus Silva
 - Product: Gustavo Jesus Silva
 - Calendario: Sthefane Ashiley Garzon
 - Scale: Matheus Carvalho Dechechi
-<<<<<<< HEAD
 - Budget : Cecilia Lima de Oliveira
-=======
->>>>>>> e1ae0b705a64614d4fd336edb3f1cd2e6cc7c6fc
  - Budget : Cecilia Lima de Oliveira
 - Student : Daniel da Silva Ferrari
 - Launch : Iashiley da Silva Siqueira
@@ -54,12 +51,11 @@ Invest : Guilherme Jesus Silva
 - Collection: Nikoly Aparecida da Silva
 - Schedule : karolina rodrigues 
 -Scale- Matheus Carvalho Dechechi
-- Record : Ana Gabriela Pramparo
 
 -Scale: Matheus Carvalho Dechechi
 -Scale- Matheus Carvalho Dechechi
-
 - Positions: Bruno Henrique Rabello.
 - Collection: Nikoly Aparecida da Silva
 - objetc : emerson silva do nascimento
 - Scale- Matheus Carvalho Dechechi.
+- Record : Ana Gabriela Pramparo 
