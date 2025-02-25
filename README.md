@@ -26,3 +26,13 @@ Invest : Guilherme Jesus Silva
 - Launch : Iashiley da Silva Siqueira
 - Schedule : karolina rodrigues 
 - Positions: Bruno Henrique Rabello
+- Budget : Cecilia Lima de Oliveira
+- Student : Daniel da Silva Ferrari
+- Launch : Iashiley da Silva Siqueira
+- Schedule : karolina rodrigues 
+- Positions: Bruno Henrique Rabello.
+- Collection: Nikoly Aparecida da Silva
+
+
+- Schedule : karolina rodrigues 
+-Scale- Matheus Carvalho Dechechi
