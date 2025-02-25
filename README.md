@@ -58,5 +58,4 @@ Invest
 - Positions: Bruno Henrique Rabello.
 - Collection: Nikoly Aparecida da Silva
 - objetc : emerson silva do nascimento
-
 - Scale- Matheus Carvalho Dechechi.
