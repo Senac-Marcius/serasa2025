@@ -52,3 +52,4 @@ Invest
 - Collection: Nikoly Aparecida da Silva
 - Schedule : karolina rodrigues 
 -Scale- Matheus Carvalho Dechechi
+- Record : Ana Gabriela Pramparo
