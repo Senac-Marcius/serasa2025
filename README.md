@@ -6,7 +6,7 @@ Esse é o repositório do projeto integrador da turma tranforme-se 2025
 object employee : Bruno Alessandro Silva Ataide 
 Esse é o repositório do projeto integrador da turma tranforme-se 2025
 
-
+- Locals: Giovana Araujo
 - Positions : Bruno Henrique Rabello.
 - Secretary : Lorrany Santos de Jesus 
 - Collection : Nikoly Aparecida da Silva
@@ -15,4 +15,3 @@ Esse é o repositório do projeto integrador da turma tranforme-se 2025
 - Student: Daniel da Silva Ferrari 🎓
 - Launch: Iashiley da Silva Siqueira
 
- - Secretary: Lorrany Santos de Jesus 
