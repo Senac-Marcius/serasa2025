@@ -34,6 +34,7 @@ Invest
 - Calendario: Sthefane Ashiley Garzon
 - Scale: Matheus Carvalho Dechechi
 - Budget : Cecilia Lima de Oliveira
+ - Budget : Cecilia Lima de Oliveira
 - Student : Daniel da Silva Ferrari
 - Launch : Iashiley da Silva Siqueira
 - Schedule : karolina rodrigues 
@@ -53,3 +54,12 @@ Invest
 - Schedule : karolina rodrigues 
 -Scale- Matheus Carvalho Dechechi
 - Record : Ana Gabriela Pramparo
+
+-Scale: Matheus Carvalho Dechechi
+-Scale- Matheus Carvalho Dechechi
+
+- Positions: Bruno Henrique Rabello.
+- Collection: Nikoly Aparecida da Silva
+- objetc : emerson silva do nascimento
+
+- Scale- Matheus Carvalho Dechechi.
