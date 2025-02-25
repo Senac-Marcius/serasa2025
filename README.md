@@ -29,6 +29,3 @@ Invest : Guilherme Jesus Silva
  
 - Student : Daniel da Silva Ferrari
 - Launch : Iashiley da Silva Siqueira
-
-
--Scale: Matheus Carvalho Dechechi
