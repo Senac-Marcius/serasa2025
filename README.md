@@ -37,3 +37,8 @@ Invest : Guilherme Jesus Silva
 - Scale- Matheus Carvalho Dechechi
 - Positions: Bruno Henrique Rabello.
 - Collection: Nikoly Aparecida da Silva
+- Schedule : karolina rodrigues 
+- Positions: Bruno Henrique Rabello.
+- Collection: Nikoly Aparecida da Silva
+- Schedule : karolina rodrigues 
+-Scale- Matheus Carvalho Dechechi
