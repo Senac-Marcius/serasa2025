@@ -4,7 +4,7 @@ Esse é o repositório do projeto integrador da turma tranforme-se 2025
 object employee : Bruno Alessandro Silva Ataide 
 Esse é o repositório do projeto integrador da turma tranforme-se 2025
 I
-Invest : Guilherme Jesus Silva
+- Invest : Guilherme Jesus Silva
 - Positions: Bruno Henrique Rabello.
 - Secretary: Lorrany Santos de Jesus 
 - Collection: Nikoly Aparecida da Silva
@@ -29,7 +29,7 @@ Invest : Guilherme Jesus Silva
 - Product: Gustavo Jesus Silva
 - Calendario: Sthefane Ashiley Garzon
 - Scale: Matheus Carvalho Dechechi
- - Budget : Cecilia Lima de Oliveira
+- Budget : Cecilia Lima de Oliveira
 - Student : Daniel da Silva Ferrari
 - Launch : Iashiley da Silva Siqueira
 - Schedule : karolina rodrigues 
@@ -48,4 +48,4 @@ Invest : Guilherme Jesus Silva
 - Positions: Bruno Henrique Rabello.
 - Collection: Nikoly Aparecida da Silva
 - Schedule : karolina rodrigues 
--Scale- Matheus Carvalho Dechechi
+- Scale- Matheus Carvalho Dechechi
