@@ -24,12 +24,16 @@ Invest : Guilherme Jesus Silva
 - Class: Victor Camargo
 - Discipline : Miszael N. Costa
 - Secretary: Lorrany Santos de Jesus 
-- Student: Daniel da Silva Ferrari 🎓
 - Launch: Iashiley da Silva Siqueira
 - Secretary: Lorrany Santos de Jesus 
 - Product: Gustavo Jesus Silva
 - Calendario: Sthefane Ashiley Garzon
 - Scale: Matheus Carvalho Dechechi
+ - Budget : Cecilia Lima de Oliveira
+- Student : Daniel da Silva Ferrari
+- Launch : Iashiley da Silva Siqueira
+- Schedule : karolina rodrigues 
+- Positions: Bruno Henrique Rabello
 - Budget : Cecilia Lima de Oliveira
 - Student : Daniel da Silva Ferrari
 - Launch : Iashiley da Silva Siqueira
