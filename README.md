@@ -2,8 +2,7 @@
 Esse é o repositório do projeto integrador da turma tranforme-se 2025 
 
 
-object employee : Bruno Alessandro Silva Ataide 
-Esse é o repositório do projeto integrador da turma tranforme-se 2025
+Invest : Guilherme Jesus Silva
 
 
 - Collection: Nikoly Aparecida da Silva
@@ -26,3 +25,6 @@ Esse é o repositório do projeto integrador da turma tranforme-se 2025
  
 - Student : Daniel da Silva Ferrari
 - Launch : Iashiley da Silva Siqueira
+
+
+-Scale- Matheus Carvalho Dechechi
