@@ -13,6 +13,16 @@ Invest : Guilherme Jesus Silva
 - Secretary : Lorrany Santos de Jesus
 - Collection : Nikoly Aparecida da Silva
 - Discipline : Miszael N. Costa
+- Secretary: Lorrany Santos de Jesus 
+- Student: Daniel da Silva Ferrari 🎓
+- Launch: Iashiley da Silva Siqueira
+- Calendario: Sthefane Ashiley Garzon
+
+ 
+
+ - Budget : Cecilia Lima de Oliveira
+ 
+ 
 - Student : Daniel da Silva Ferrari
 - Launch : Iashiley da Silva Siqueira
 
