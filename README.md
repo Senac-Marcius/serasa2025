@@ -2,10 +2,12 @@
 Esse é o repositório do projeto integrador da turma tranforme-se 2025 
 
 
+-Scales: Matheus Carvalho Dechechi
 object employee : Bruno Alessandro Silva Ataide 
 Esse é o repositório do projeto integrador da turma tranforme-se 2025
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 - Local : Giovana Emanuely de Araujo 
 - Secretary: Lorrany Santos de Jesus 
@@ -15,6 +17,8 @@ Esse é o repositório do projeto integrador da turma tranforme-se 2025
 - Student: Daniel da Silva Ferrari 🎓 
 =======
 - Collection: Nikoly Aparecida da Silva
+=======
+>>>>>>> 5ba69bea36709205d9cc8f0db267a3d4cc3c3c2e
 - Discipline : Miszael N. Costa
 - Secretary: Lorrany Santos de Jesus 
 - Student: Daniel da Silva Ferrari 🎓
