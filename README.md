@@ -10,5 +10,3 @@ Esse é o repositório do projeto integrador da turma tranforme-se 2025
 - Student: Daniel da Silva Ferrari 🎓
 - Positions: Bruno Henrique Rabello.
 - Collection: Nikoly Aparecida da Silva
-
-
