@@ -22,7 +22,7 @@ Invest : Guilherme Jesus Silva
 - Student: Daniel da Silva Ferrari 🎓
 - Launch: Iashiley da Silva Siqueira
 - Calendario: Sthefane Ashiley Garzon
-
+- Scale: Matheus Carvalho Dechechi
  
 
  - Budget : Cecilia Lima de Oliveira
