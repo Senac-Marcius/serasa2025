@@ -2,8 +2,7 @@
 Esse é o repositório do projeto integrador da turma tranforme-se 2025 
 
 
-object employee : Bruno Alessandro Silva Ataide 
-Esse é o repositório do projeto integrador da turma tranforme-se 2025
+Invest : Guilherme Jesus Silva
 
 
 - Positions : Bruno Henrique Rabello
