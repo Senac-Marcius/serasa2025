@@ -13,4 +13,4 @@ Esse é o repositório do projeto integrador da turma tranforme-se 2025
 - Secretary: Lorrany Santos de Jesus 
 - Student: Daniel da Silva Ferrari 🎓
 - Launch: Iashiley da Silva Siqueira
--Scales: Matheus Carvalho Dechechi
+
