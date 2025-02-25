@@ -12,3 +12,4 @@ Esse é o repositório do projeto integrador da turma tranforme-se 2025
 - Discipline : Miszael N. Costa
 - Student : Daniel da Silva Ferrari
 - Launch : Iashiley da Silva Siqueira
+- Schedule : karolina rodrigues
