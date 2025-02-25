@@ -6,8 +6,8 @@ object employee : Bruno Alessandro Silva Ataide
 Esse é o repositório do projeto integrador da turma tranforme-se 2025
 
 
-- Positions : Bruno Henrique Rabello.
-- Secretary : Lorrany Santos de Jesus 
+- Positions : Bruno Henrique Rabello
+- Secretary : Lorrany Santos de Jesus
 - Collection : Nikoly Aparecida da Silva
 - Discipline : Miszael N. Costa
 - Secretary: Lorrany Santos de Jesus 
@@ -15,3 +15,7 @@ Esse é o repositório do projeto integrador da turma tranforme-se 2025
 - Launch: Iashiley da Silva Siqueira
 - Calendario: Sthefane Ashiley Garzon
 
+<<<<<<< HEAD
+ 
+=======
+>>>>>>> e9559f5b852ef42141493839867aad5dc05c118a
