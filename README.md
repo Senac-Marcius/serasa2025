@@ -14,7 +14,7 @@ Invest : Guilherme Jesus Silva
 - Discipline : Miszael N. Costa
 - Secretary: Lorrany Santos de Jesus 
 - Student: Daniel da Silva Ferrari 🎓
-
+- Parent: Igor bonfim dos santos
 - Secretary: Lorrany Santos de Jesus 
 - Positions : Bruno Henrique Rabello
 - Collection : Nikoly Aparecida da Silva
