@@ -2,6 +2,9 @@
 Esse é o repositório do projeto integrador da turma tranforme-se 2025
 
 
-- Local (infraestrutura): Giovana Emanuely de Araujo 
+- Local : Giovana Emanuely de Araujo 
  
- - Secretary: Lorrany Santos de Jesus 
+- Secretary: Lorrany Santos de Jesus 
+
+- Student: Daniel da Silva Ferrari 🎓
+
