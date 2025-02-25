@@ -19,7 +19,6 @@ Invest
 - Discipline : Miszael N. Costa
 - Secretary: Lorrany Santos de Jesus 
 - Student: Daniel da Silva Ferrari 🎓
-
 - Secretary: Lorrany Santos de Jesus 
 - Positions : Bruno Henrique Rabello
 - Collection : Nikoly Aparecida da Silva
@@ -52,10 +51,8 @@ Invest
 - Collection: Nikoly Aparecida da Silva
 - Schedule : karolina rodrigues 
 -Scale- Matheus Carvalho Dechechi
-
 -Scale: Matheus Carvalho Dechechi
 -Scale- Matheus Carvalho Dechechi
-
 - Positions: Bruno Henrique Rabello.
 - Collection: Nikoly Aparecida da Silva
 - objetc : emerson silva do nascimento
