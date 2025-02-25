@@ -1,0 +1,66 @@
+*{
+    margin: 0;
+    padding: 0;
+    border:0;
+    
+}
+
+body {
+    width:100vw ;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #aa8031;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+
+}
+
+form{
+    width: 600px;
+    height: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.inputsFormCadastro{
+    width: 500px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin:10px 10px;
+    box-shadow:0 10px 50px rgba(0,0,0,0.1);
+}
+h1{
+    color: #fff;
+    margin-bottom: 30px;
+    font-size: 50px;
+}
+label{
+    font-weight: 500;
+    font-size: larger;
+}
+#btnEnviar{
+    color: white;
+    background-color: green;
+    width: 300px;
+    height: 50px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 50px;
+}
+
+#btnEnviar:hover{
+    background-color: #2ecc71;
+}

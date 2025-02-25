@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SmartClass</title>
+    
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Cadastro de aluno</h1>
+
+    <form id="formCadastro" action="" method="post">
+      <label for="nome">Nome</label>
+      <input
+        id="studentName"
+        class="inputsFormCadastro"
+        type="text"
+        name="nome"
+        placeholder="Digite seu nome"
+      />
+
+      <label for="email">Email</label>
+      <input
+        id="studentEmail"
+        class="inputsFormCadastro"
+        type="email"
+        name="email"
+        placeholder="Digite seu email"
+      />
+
+      <label for="senha">Senha</label>
+      <input
+        id="studentPassword"
+        class="inputsFormCadastro"
+        type="password"
+        name="senha"
+        placeholder="Digite sua senha"
+      />
+
+      <label for="age">Data de Nascimento</label>
+      <input
+        type="date"
+        id="studentAge"
+        name="age"
+        placeholder="Escolha sua data de Nascimento"
+      />
+
+      <input id="btnEnviar" type="button" value="Enviar" />
+    </form>
+
+    <script src="script.js" module defer></script>
+  </body>
+</html>
