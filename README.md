@@ -2,7 +2,7 @@
 Esse é o repositório do projeto integrador da turma tranforme-se 2025 
 
 
--scales: Matheus Carvalho Dechechi
+-Scales: Matheus Carvalho Dechechi
 object employee : Bruno Alessandro Silva Ataide 
 Esse é o repositório do projeto integrador da turma tranforme-se 2025
 
