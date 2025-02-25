@@ -2,14 +2,9 @@
 Esse é o repositório do projeto integrador da turma tranforme-se 2025 
 
 
-Invest
+Invest : Guilherme Jesus Silva
 
 
-
-
-: Guilherme Jesus Silva
-
-- Project : Marcio Felipe Silva Steffens
 - Positions: Bruno Henrique Rabello.
 - Secretary: Lorrany Santos de Jesus 
 - Collection: Nikoly Aparecida da Silva
@@ -31,9 +26,14 @@ Invest
 - Discipline : Miszael N. Costa
 - Secretary: Lorrany Santos de Jesus 
 - Launch: Iashiley da Silva Siqueira
+- Secretary: Lorrany Santos de Jesus 
+- Product: Gustavo Jesus Silva
 - Calendario: Sthefane Ashiley Garzon
 - Scale: Matheus Carvalho Dechechi
+<<<<<<< HEAD
 - Budget : Cecilia Lima de Oliveira
+=======
+>>>>>>> e1ae0b705a64614d4fd336edb3f1cd2e6cc7c6fc
  - Budget : Cecilia Lima de Oliveira
 - Student : Daniel da Silva Ferrari
 - Launch : Iashiley da Silva Siqueira
@@ -42,6 +42,7 @@ Invest
 - Budget : Cecilia Lima de Oliveira
 - Student : Daniel da Silva Ferrari
 - Launch : Iashiley da Silva Siqueira
+- Scale: Matheus Carvalho Dechechi
 - Schedule : karolina rodrigues 
 - Scale- Matheus Carvalho Dechechi
 - Scale: Matheus Carvalho Dechechi
