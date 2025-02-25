@@ -2,9 +2,14 @@
 Esse é o repositório do projeto integrador da turma tranforme-se 2025 
 
 
-Invest : Guilherme Jesus Silva
+Invest
 
 
+
+
+: Guilherme Jesus Silva
+
+- Project : Marcio Felipe Silva Steffens
 - Positions: Bruno Henrique Rabello.
 - Secretary: Lorrany Santos de Jesus 
 - Collection: Nikoly Aparecida da Silva
@@ -14,7 +19,7 @@ Invest : Guilherme Jesus Silva
 - Discipline : Miszael N. Costa
 - Secretary: Lorrany Santos de Jesus 
 - Student: Daniel da Silva Ferrari 🎓
-
+- Parent: Igor bonfim dos santos
 - Secretary: Lorrany Santos de Jesus 
 - Positions : Bruno Henrique Rabello
 - Collection : Nikoly Aparecida da Silva
@@ -47,4 +52,3 @@ Invest : Guilherme Jesus Silva
 - Collection: Nikoly Aparecida da Silva
 - Schedule : karolina rodrigues 
 -Scale- Matheus Carvalho Dechechi
-- Record - Ana Gabriela Pramparo
