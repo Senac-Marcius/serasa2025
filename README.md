@@ -6,3 +6,6 @@ I
 
 
  - Secretary: Lorrany Santos de Jesus 
+- Student: Daniel da Silva Ferrari 🎓
+
+ 
