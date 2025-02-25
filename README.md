@@ -32,6 +32,7 @@ Invest : Guilherme Jesus Silva
 - Launch : Iashiley da Silva Siqueira
 
 
+-Scale: Matheus Carvalho Dechechi
 -Scale- Matheus Carvalho Dechechi
 
 - Positions: Bruno Henrique Rabello.
