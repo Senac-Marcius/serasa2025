@@ -4,7 +4,7 @@ Esse é o repositório do projeto integrador da turma tranforme-se 2025
 
 Invest : Guilherme Jesus Silva
 
-
+- Project : Marcio Felipe Silva Steffens
 - Positions: Bruno Henrique Rabello.
 - Secretary: Lorrany Santos de Jesus 
 - Collection: Nikoly Aparecida da Silva
