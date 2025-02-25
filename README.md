@@ -7,10 +7,9 @@ Invest : Guilherme Jesus Silva
 
 - Collection: Nikoly Aparecida da Silva
 - Discipline : Miszael N. Costa
- - Secretary: Lorrany Santos de Jesus 
+- Secretary: Lorrany Santos de Jesus 
 - Student: Daniel da Silva Ferrari 🎓
 - Positions : Bruno Henrique Rabello
-- Secretary : Lorrany Santos de Jesus
 - Collection : Nikoly Aparecida da Silva
 - Discipline : Miszael N. Costa
 - Student : Daniel da Silva Ferrari
