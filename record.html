@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="pt-BR">
     <head>
         <meta charset="UTF-8" />
         <title>Registro</title>
@@ -6,15 +7,73 @@
     <body>
         <h1>Realize o seu registro:</h1>
         <form>
-            <label>Nome: </label><input type="text"/><br><br>
-            <label>Saúde: </label><input type="text"/><br><br>
-            <label>Alergia: </label><input type="text"/><br><br>
-            <label>Doença: </label><input type="text"/><br><br>
-            <label>Medicações: </label><input type="text"/><br><br>
-            <label>Serviço: </label><input type="text"/><br><br>
-            <button>CADASTRAR</button>
+            <label>Nome: </label><input id="name" type="text"/><br><br>
+            <label>Saúde: </label><input id="health" type="text"/><br><br>
+            <label>Alergia: </label><input id="allergy" type="text"/><br><br>
+            <label>Doença: </label><input id="sick" type="text"/><br><br>
+            <label>Medicações: </label><input id="medication" type="text"/><br><br>
+            <button id="register" onclick="">CADASTRAR</button>
         </form>
         
     </body>
+    <script>
+        var records = []
+
+    function setRecord(req){
+
+        const DATE_REGEX = /^(\d{4})-(\d{2})-(\d{2})$/
+        const ID_REGEX = /^\d+$/
+
+        if (!DATE_REGEX.test(req.creatAt)){
+        return ("Data inválida! Use o formato YYYY-MM-DD.")
+        }
+
+        if (!ID_REGEX.test(req.id)){
+        return ("Campo ID deve conter apenas números") 
+        }
+
+     if (!ID_REGEX.test(req.userId)){
+        return ("Campo userID deve conter apenas números")
+        }
+
+    let r = {
+        id: req.id,
+        name: req.name,
+        description: req.description,
+        health: req.health,
+        allergy: req.allergy,
+        sick: req.sick,
+        medication: req.medication,
+        notification: req.notification,
+        creatAt: req.creatAt,
+        userId: req.userId
+
+    }
+
+
+   records.push(r) 
+}
+    function handleRegister(){
+        
+        console.log(
+            setRecord({        
+                id: records.lenght - 1,
+                name: "Maria de souza",
+                description: document.getElementById("description"),
+                health: health.getElementById("saude"),
+                allergy: allergy.getElementById("alergia"),
+                sick: sick.getElementById("gripe"),
+                medication: 4,
+                notification: notification.getElementById ("notificações"),
+                creatAt: "2025-03-21",
+                userId: 0
+            }) 
+        )
+    
+        console.log(records)
+
+
+    }
+    </script>
  
 </html>
