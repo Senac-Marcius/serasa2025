@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,36 +21,60 @@
         <input type="radio" id="voltar ao lobby" name="fav_language" value="VOLTAR AO LOBBY">
         <label for="voltar ao Catálogo">Voltar ao Catálogo</label>
 
-      </form>
+    </form>
 
-      <body> 
-        <p> <button type="button" onclick="alert('PROXIMO')">PRÓXIMO</button></p>
-      </body>
+    <p> <button type="button" onclick="alert('PROXIMO')">PRÓXIMO</button></p>
+
+    <h1>Dados para empréstimo</h1>
+    <form>
+        <p></p> <label>Nome do livro:</label><input id="namebook" type="text" /><br></p>
+        <p><label>Data de empréstimo:</label><input id="dateloan" type="date" /><br></p>
+        <p><label>Data de devolução:</label><input id="datereturns" type="date" /><br></p>
+        <p><label>Renovação:</label><input id="renewal" type="text" /><br></p>
+        <p><label>Status de empréstimo:</label><input id=" status" type="select" /><br></p>
+        <p><label>observação:</label><input id="observation" type="text" /><br></p>
+    </form>
+
+    <p> <button type="button" id="register" onclick="handleRegister()">FINALIZAR</button></p>
 
 </body>
-<body>
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Emprestimo</title>
-    </head>
-    <body>
-        <h1>Dados para empréstimo</h1>
-        <form>
-           <p></p> <label>Nome do livro:</label><input type="text"/><br></p>
-           <p><label>Data de empréstimo:</label><input type="date"/><br></p> 
-           <p><label>Data de devolução:</label><input type="date"/><br></p> 
-           <p><label>Renovação:</label><input type="text"/><br></p> 
-           <p><label>Status de empréstimo:</label><input type="text"/><br></p> 
-           <p><label>observação:</label><input type="text"/><br></p> 
-        </form>
-    </body>
-    <body> 
-        <p> <button type="button" onclick="alert('FINALIZAR')">FINALIZAR</button></p>
-      </body>
 
-    </html>
-</body>
+<script>
+    var loans = []
+
+    function setLoan(req) {
+        let l = {
+            id: loans.length - 1,
+            creatAt: req.creatAt,
+            userId: req.userId,
+            bookId: req.bookId,
+            loanDate: req.loanDate,
+            expectedLoanDate: req.expectedLoanDate,
+            renewal: req.renewal,
+            statusLoan: req.statusLoan,
+            observation: req.observation
+        }
+
+        loans.push(l)
+        return "Livro emprestado com sucesso"
+
+    }
+
+    function handleRegister() {
+        console.log(
+            setLoan({
+                creatAt: "1999-02-02",
+                userId: 0,
+                bookId: document.getElementById("namebook").value,
+                loanDate: document.getElementById("dateloan").value,
+                expectedLoanDate: document.getElementById("datereturns").value,
+                renewal: document.getElementById("renewal").value,
+                statusLoan: document.getElementById(" status").value,
+                observation: document.getElementById("observation").value
+            }));
+
+        console.log(loans)
+    }
+</script>
 
 </html>
