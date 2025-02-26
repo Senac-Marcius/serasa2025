@@ -6,13 +6,22 @@
     <body>
         <h1>Cadastro de Escala</h1>
         <form>
-            <label>Dia:</label><input type="text" /><br><br>
+            <label for="dia">Dia da semana:</label>
+            <select id="dia" name="dia">
+              <option value="domingo">Domingo</option>
+              <option value="segunda-feira">Segunda-feira</option>
+              <option value="terca-feira">Terça-feira</option>
+              <option value="quarta-feira">Quarta-feira</option>
+              <option value="quinta-feira">Quinta-feira</option>
+              <option value="sexta-feira">Sexta-feira</option>
+              <option value="sabado">Sábado</option>
+            </select><br><br>
             
-            <label>Horário de início:</label><input type="time" /><BR><br>
+            <label>Horário de início:</label><input type="time" /><br><br>
 
-            <label>Horário de término:</label><input type="time" /><BR><br>
+            <label>Horário de término:</label><input type="time" /><br><br>
 
-            <label>Data:</label><input type="date" /><BR><br>
+            <label>Data:</label><input type="date" /><br><br>
 
             <button>CADASTRAR</button>
         </form>
