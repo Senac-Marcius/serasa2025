@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="pt-BR">
     <head>
         <meta charset="UTF-8" />
         <title>despesas</title>
@@ -6,13 +7,64 @@
     <body>
         <h1>Cadastre a suas despesas</h1>
         <form>
-            <label>Nome: </label><input type="text" /><br>
-            <label>Descrição: </label><input type="text" /><br>
-            <label>Url: </label><input type="text" /><br>
-            <label>Data: </label><input type="date" /><br>
-            <label>Valor: </label><input type="number" /><br>
-            <label>Fornecedor: </label><input type="text" /><br>
-            <button>Cadastrar</button>
+            <label>Nome: </label><input id="name" type="text" /><br>
+            <label>Descrição: </label><input id="description" type="text" /><br>
+            <label>Url: </label><input id="url" type="text" /><br>
+            <label>Data: </label><input id="date" type="date" /><br>
+            <label>Valor: </label><input id="value" type="number" /><br>
+            <label>Fornecedor: </label><input id="suplier" type="text" /><br>
+            <button type="button" id="register" onclick="handleRegister()">Cadastrar</button>
         </form>
     </body>
+    <script>
+        var expenses = []
+        
+        function setExpense(req){
+
+            const idRegex = /^\d+$/;
+            const urlRegex = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+            const dateRegex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
+
+            if(! idRegex.test(req.userId)){
+                return("Campo userId deve apenas conter números")
+            }
+
+            if (! urlRegex.test(req.url)){
+                return("Campo url deve conter o seguinte formato https://dominio.")
+            }
+
+            if(! dateRegex.test(req.createAt)){
+                return("Campo crateaAt deve coter o seguinte formato YYYY-MM-DD")
+            }
+
+            let e = {
+                id: expenses.length,
+                name: req.name,
+                description: req.description,
+                url: req.url,
+                createAt: req.createAt,
+                userId: req.userId,
+                value: req.value,
+                suplier: req.suplier
+            }
+            expenses.push(e)
+            return "cadastrado sucesso"
+        }   
+        
+        function handleRegister(){
+            console.log(
+                setExpense({
+                    name: document.getElementById("name").value,
+                    description: document.getElementById("description").value,
+                    url: document.getElementById("url").value,
+                    createAt: "2025-01-20",
+                    userId: 0,
+                    value: document.getElementById("value").value,
+                    suplier : document.getElementById("suplier").value
+                })
+            )
+
+            console.log(expenses)
+        }
+    </script>
 </html>
