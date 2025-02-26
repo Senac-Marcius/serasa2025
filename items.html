@@ -12,64 +12,202 @@
     <h1>Cadastramento de Itens</h1>
 
     <form>
-        <label>Título: </label><input type="text" /><br>
-        <label>Subtítulo: </label><input type="text" /><br>
-        <button>Cadastrar</button>
+        <label>Título: </label><input id="title" type="text" /><br>
+        <label>Subtítulo: </label><input id="subtitle" type="text" /><br>
+        <label>Título Uniforme: </label><input id="uniformTitle" type="text" /><br>
+        <label>Responsáveis: </label><input id="responsible" type="text" /><br>
+        <label>Tradução: </label><input id="tradution" type="text" /><br>
+        <label>Edição: </label><input id="edition" type="text" /><br>
+        <label>Local: </label><input id="location" type="text" /><br>
+        <label>Editora: </label><input id="publisher" type="text" /><br>
+        <label>Ano: </label><input id="year" type="text" /><br>
+        <label>Idioma: </label><input id="language" type="text" /><br>
+        <label>Número de páginas: </label><input id="numberPages" type="text" /><br>
+        <label>Formato: </label><input id="format" type="text" /><br>
+        <label>Dimensões: </label><input id="dimensions" type="text" /><br>
+        <label>Ilustrações: </label><input id="illustration" type="text" /><br>
+        <label>Série: </label><input id="serie" type="text" /><br>
+        <label>Volume: </label><input id="volume" type="text" /><br>
+        <label>ISBN: </label><input id="isbn" type="text" /><br>
+        <label>ISSN: </label><input id="issn" type="text" /><br>
+        <label>Assuntos: </label><input id="subject" type="text" /><br>
+        <label>Palavras-chave: </label><input id="keywords" type="text" /><br>
+        <label>Resumo: </label><input id="summary"  type="text" /><br>
+        <label>Notas: </label><input id="notes"  type="text" /><br>
+        <label>Material adicional e suplementos: </label><input id="additionalMaterial"  type="text" /><br>
+        <label>Periodicidade: </label><input id="periodicity"  type="text" /><br>
+        <label>Data de início e encerramento: </label><input id="startEndDate"  type="text" /><br>
+        <label>Instituição: </label><input id="institution"  type="text" /><br>
+        <label>Grau: </label><input id="degree"  type="text" /><br>
+        <label>Orientadores: </label><input id="advisors"  type="text" /><br>
+        <label>Desenvolvedor: </label><input id="developer"  type="text" /><br>
+        <label>Designer: </label><input id="designer"  type="text" /><br>
+        <label>Plataforma: </label><input id="platform"  type="text" /><br>
+        <label>Número de jogadores: </label><input id="numberPlayers"  type="text" /><br>
+        <label>Faixa etária: </label><input id="ageGroup"  type="text" /><br>
+        <label>Código de produto: </label><input id="productCode"  type="text" /><br>
+        <label>Narrador: </label><input id="narrator"  type="text" /><br>
+        <label>Duração: </label><input id="duration"  type="text" /><br>
+        <label>Escala: </label><input id="scale"  type="text" /><br>
+        <label>Coordenadas geográficas: </label><input id="geographicCoordinates"  type="text" /><br>
+        <label>CDD: </label><input id="cdd"  type="text" /><br>
+        <label>Número de Chamada: </label><input id="callNumber"  type="text" /><br>
+        <button type="button" "register" onclick="handleRegister()">Cadastrar</button>
     </form>
-</body>
+    </body>
+    <script>
+        var items =  [] // vetor
 
+    function setItems (req){ //função de create
+    const patterns = { //patterns = expressões regulares (regex) 
+        numberIntFields: /^\d+$/,  // Apenas números inteiros positivos
+        textFields: /^[\p{L}\d\s.,;:()'"-]+$/u, // Para campos de texto. Para permitir caracteres acentuados e especiais comuns
+        createAt: /^\d{4}-\d{2}-\d{2}$/, // Data no formato YYYY-MM-DD (Ex: 2019-12-05 / 2025-01-15)
+        year: /^\d{4}$/,  // Ano com 4 dígitos (ex: 2023)
+        isbn: /^\d{10}(\d{3})?$/,  // ISBN-10 ou ISBN-13 (somente números. Não aceita traços)
+        edition: /^\d+ª edição$/,  // Número + "ª edição" (ex: "1ª edição")
+        dimensions: /^\d{2}\.\d{2} X \d{2}\.\d{2} cm$/,  // Formato "XX.XX X XX.XX cm"
+        cdd: /^\d{3}(\.\d+)?$/,  // Código Decimal Dewey (ex: "150.195") com números e um ponto decimal.
+        callNumber: /^[\w\d\s.-]*$/,  // Aceita letras, números, espaços, pontos e traços
+        issn: /^\d{4}-\d{3}[\dxX]$/, // ISSN padrão (ex: 1234-5679)
+        startEndDate: /^\d{4}-\d{2}-\d{2}$/, // Data no formato YYYY-MM-DD (Ex: 2019-12-05 / 2025-01-15)
+        duration: /^([0-9]{2}):([0-5][0-9]):([0-5][0-9])$/, //formato HH:MM:SS (horas, minutos e segundos)
+        scale: /^1:\d{1,3}(\.\d{3})*$/, // formato 1:XXXXXX, onde XXXXXX pode ser um número inteiro ou decimal. Aceita pontos
+        geographicCoordinates: /^\d{1,3}º\s[0-5][0-9]'\s[0-5][0-9]"$/, //formato DDDº MM' SS" (graus, minutos e segundos).
+    };
 
+    // Valida os campos com regras específicas
+    if (!patterns.numberIntFields.test(req.numberPages) || !patterns.numberIntFields.test(req.volume) || !patterns.numberIntFields.test(req.numberPlayers) ||
+        !patterns.numberIntFields.test(req.ageGroup) || !patterns.numberIntFields.test(req.productCode)){
+     return "Inválido! O campo deve conter apenas números"
+    }
+    if (!patterns.textFields.test(req.title) || !patterns.textFields.test(req.subtitle) || !patterns.textFields.test(req.uniformTitle) || !patterns.textFields.test(req.responsible) ||
+        !patterns.textFields.test(req.translation) || !patterns.textFields.test(req.language) || !patterns.textFields.test(req.publisher) || !patterns.textFields.test(req.location) || 
+        !patterns.textFields.test(req.format) || !patterns.textFields.test(req.illustrations) || !patterns.textFields.test(req.serie) || !patterns.textFields.test(req.subject) ||
+        !patterns.textFields.test(req.keywords) || !patterns.textFields.test(req.summary) || !patterns.textFields.test(req.notes) || !patterns.textFields.test(req.additionalMaterial) ||
+        !patterns.textFields.test(req.periodicity) || !patterns.textFields.test(req.institution) || !patterns.textFields.test(req.degree) || !patterns.textFields.test(req.advisors) ||
+        !patterns.textFields.test(req.developer) || !patterns.textFields.test(req.designer) || !patterns.textFields.test(req.platform) || !patterns.textFields.test(req.narrator)){
+         return "Contém caracteres inválidos!"
+    }
+    if (!patterns.year.test(req.year)){
+         return "Ano inválido! Use o formato padrão AAAA"
+    } 
+    if (!patterns.isbn.test(req.isbn)){
+         return "ISBN inválido! O campo deve conter apenas números. 10 ou 13 dígitos"
+    } 
+    if (!patterns.edition.test(req.edition)){
+        return "Edição inválida! Use o formato padrão:  1ª edição"
+    }
+    if (!patterns.dimensions.test(req.dimensions)){
+        return "Dimensões inválidas! Use o formato padrão: 00 X 00 cm "
+    } 
+    if (!patterns.cdd.test(req.cdd)){
+        return "CDD inválido! Use o formato padrão: 000.000";
+    }
+    if (!patterns.callNumber.test(req.callNumber)){
+        return "Número de chamada inválido! Use o formato padrão: cdd + tabela Cutter + inicial do título. Ex 150,095 I12m"
+    } 
+     if (!patterns.issn.test(req.issn)){
+         return "ISSN inválido! Use o formato padrão: 000-000"
+    }
+    if (!patterns.startEndDate.test(req.startEndDate)){
+        return "Inválido! Use o formato padrão: AAAA-MM-DD"
+    }
+    if (!patterns.duration.test(req.duration)){
+        return "Inválido! Use o formato padrão: HH:MM:SS (horas, minutos e segundos)"
+    }
+    if (!patterns.scale.test(req.scale)){
+        return "Inválido! Use o formato padrão: 1:XXXXXX"
+    }
+    if (!patterns.geographicCoordinates.test(req.geographicCoordinates)){
+        return "Inválido! Use o formato padrão: graus, minutos e segundos. Ex: 125° 58 : 14" 
+    }
+    if (!patterns.createAt.test(req.createAt)){
+        return "Inválido! Use o formato padrão: AAAA-MM-DD"
+    }
 
+    let i = {
+        id: items.length - 1,
+        createAt: req.createAt,
+        title: req.title,
+        subtitle: req.subtitle,
+        uniformTitle: req.uniformTitle,
+        responsible: req.responsible,
+        translation: req.translation,
+        year: req.year,
+        language: req.language,
+        edition: req.edition,
+        publisher: req.publisher,
+        location: req.location,
+        numberPages: req. numberPages,
+        format: req.format,
+        dimensions: req.dimensions,
+        illustrations: req.illustrations,
+        serie: req.serie,
+        volume: req.volume,       
+        isbn: req.isbn,
+        issn: req.issn,
+        Cdd: req.cdd,
+        callNumber: req.callNumber,
+        subject: req.subject,
+        keywords: req.keywords,
+        summary: req.summary,
+        notes: req.notes,
+        additionalMaterial: req.additionalMaterial,
+        periodicity: req.periodicity,
+        startEndDate: req.startEndDate,
+        institution: req.institution,
+        degree: req.degree,
+        advisors: req.advisors,
+        developer: req.developer,
+        designer: req.designer,
+        platform: req.platform,
+        numberPlayers: req.numberPlayers,
+        ageGroup: req.ageGroup,
+        productCode: req.productCode,
+        narrator: req.narrator,
+        duration: req.duration,
+        scale: req.scale,
+        geographicCoordinates: req.geographicCoordinates,
+       
+    }
+    items.push(i)
+        return "Cadastrado"
+}
 
+    function handleRegister(){
+        console.log(
+            setItems({
+                id: items.length - 1,
+                createAt: "2025-02-26",
+                title: Document.getElementById("title"),
+                subtitle: Document.getElementById("subtitle"),
+                responsible: Document.getElementById("responsible"),
+                edition: Document.getElementById("edition"),
+                location: Document.getElementById("location"),
+                publisher:Document.getElementById("publisher"),
+                year: Document.getElementById("year"),
+                language: Document.getElementById("language"),
+                numberPages: Document.getElementById("numberPages"),
+                format: Document.getElementById("format"),
+                dimensions:Document.getElementById("dimensions"),
+                isbn: Document.getElementById("isbn"),
+                cdd: Document.getElementById("cdd"),
+                callNumber: Document.getElementById("callNumber"),
+                subject: Document.getElementById("subject"),
+                keywords: Document.getElementById("keywords"),
+                summary: Document.getElementById("summary"),
+                notes: Document.getElementById("notes")
+            })
+        )
 
+        console.log (items)
+    }
 
+    </script>
 
 </html>
 
-Título,
-Subtítulo,
-Responsáveis,
-Tradução,
-Edição,
-Local,
-Editora,
-Ano,
-Idioma,
-Título Uniforme,
-Número de páginas,
-Formato,
-Dimensões,
-Ilustrações,
-Série,
-Volume
-ISBN,
-CDD,
-Número de Chamada,
-Assuntos,
-Palavras-chave,
-Resumo,
-Notas,
-Material adicional e suplementos,
-ISSN,
-Volume,
-Periodicidade,
-Data de início e encerramento,
-Frequência de publicação,
-Instituição,
-Grau,
-Orientadores,
-Assuntos
-Desenvolvedor,
-Designer,
-Plataforma,
-Número de jogadores,
-Faixa etária,
-Código de produto,
-Narrador,
-Duração,
-Escala,
-Coordenadas geográficas,
-Data de publicação,
 
 
 
@@ -88,4 +226,4 @@ Data de publicação,
 
 
 
-</html>
+
