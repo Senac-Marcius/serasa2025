@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Postagem</title>
+    </head>
+    <body>
+        <h1>O que você esta pensando?</h1>
+        <form>
+            <label>Nome: </label><input id="name" type="text" /><br>
+            <label>Descrição: </label><textarea id="description" type="text"></textarea><br>
+            <label>URL: </label><input id="url" type="text" /><br>
+            <button type="button" onclick="handleSet()">CADASTRAR</button>
+        </form>
+    </body>
+    <script>
+        var posts = []
+
+        function setPost(req) {
+            const idPattern = /^\d+$/
+            const urlPattern = /^(https?:\/\/)[^\s$.?#].[^\s]*$/
+            const datePattern = /^\d{4}-\d{2}-\d{2}$/
+
+            if (!idPattern.test(req.id)) return "Campo ID deve conter apenas números"
+            if (!idPattern.test(req.userId)) return "Campo User ID deve conter apenas números"
+            if (!urlPattern.test(req.url)) return "Campo URL deve conter o seguinte formato: https://dominio."
+            if (!datePattern.test(req.createAt)) return "Campo Data deve conter o seguinte formato: YYYY-MM-DD"
+            if (req.description.length > 244) return "Campo Descrição deve conter até 244 caracteres"
+
+            let p = {
+                id: req.id,
+                name: req.name,
+                description: req.description,
+                url: req.url,
+                createAt: req.createAt,
+                userId: req.userId
+            }
+
+            posts.push(p)
+            return "Postagem Cadastrada"
+        }
+
+        function handleSet() {
+            console.log(
+                setPost({
+                    id: 0,
+                    name: document.getElementById("name").value,
+                    description: document.getElementById("description").value,
+                    url: document.getElementById("url").value,
+                    createAt: "2025-02-25",
+                    userId: 0
+                })
+            )
+
+            console.log(posts)
+        }
+    </script>
+</html>
