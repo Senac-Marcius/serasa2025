@@ -8,16 +8,51 @@
 <body>
     <h1>Cadastre seu catálogo:</h1>
     <form><!--formulário-->
-        <label>Nome do livro: </label><input type="text"><br><br>
-        <label>Estrelas: </label><input type="number"><br><br><!--label (rótulo) input(barra de digitação) br (quebra de texto)-->
-        <label>Quantidade: </label><input type="number"><br><br>
-        <button>CADASTRAR</button><br>
-
-
+        <label>Nome do livro: </label><input id ="name" type="text"><br><br>
+        <label>Estrelas: </label><input id ="stars"type="number"><br><br><!--label (rótulo) input(barra de digitação) br (quebra de texto)-->
+        <label>Quantidade: </label><input id = "quantity"type="number"><br><br>
+        <button type ="button" id= "register" onclick="handleRegister()">CADASTRAR</button><br>
     </form>
-
-
-
-    
 </body>
+    <script>
+        var collections = []
+
+        function setCollections(req){//função de create
+            const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+        
+            // if(!idRegex.test(req.quantity)){
+            //     return "Campo quantidade deve conter apenas números"
+            // }
+            // if(!idRegex.test(req.stars)){
+            //     return "Campo stars deve conter apenas números"
+            // }
+            // if (!dateRegex.test(req.createAt)){
+            //     return "O campo createAt deve conter o seguinte formato YYYY-MM-DD"
+            // }
+            let c = {
+                id:collections.lenght -1,
+                name: req.name,
+                createAt: req.createAt,
+                stars:req.stars,
+                quantity:req.quantity
+
+            }
+
+            collections.push(c) // nesta linha é empurrado os dados para o vetor collections
+            return "Cadastrado"
+        }
+        function handleRegister(){  // handle chama o botão register
+            console.log(
+                setCollections({ //atribuição de req 
+                    name: document.getElementById("name").value,
+                    quantity:document.getElementById("quantity").value,
+                    createAt: "2000-12-23",
+                    stars:document.getElementById("stars").value
+
+                })
+            )
+            console.log (collections)
+        }
+    </script> <!-- script serve para usar o js dentro do html  -->
 </html>
