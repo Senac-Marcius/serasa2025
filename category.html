@@ -17,7 +17,7 @@
         <section id="scList">
             <table>
                 <thead>
-                    <th>NOME</th>
+                    <th>COR</th>
                 </thead>
                 <tbody>
 
@@ -34,7 +34,7 @@
                 description: req.description,
                 creatAt: req.creatAt,
                 color: req.color,
-                userId: req.userId 
+                userId: req.userId,
             }
             categories.push(c) 
             return "Cadastro"
@@ -52,8 +52,22 @@
                 })   
             )
 
-            console.log(categories)
+            listCategories(categories)
         }
 
+        function listCategories(cList){
+            const tbody = document.querySelector("#scList tbody") 
+            tbody.innerHTML = ""
+
+            cList.forEach(c => {
+                    const row = document.createElement("tr");
+
+                    const  corCell = document.createElement("td");
+                    corCell.textContent = c.color
+
+                    row.appendChild(corCell);
+                    tbody.appendChild(row);
+            })
+        }
     </script>
 </html>
