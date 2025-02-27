@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,16 +7,16 @@
     </head>
     <body>
         <h1>Cadastro de Solicitação</h1>
-        <section id="scRegister">     
+        <section>     
 
-            <form action="">
-                <label for="nome do solicitante">Nome Completo: </label><input id="name" type="text"><br><br>
+            <form id="scRegister">
+                <label for="name">Nome Completo: </label><input id="name" type="text"><br><br>
                 <label for="E-mail">E-mail: </label><input id="email" type="text"><br><br>
                 <label for="Telefone Celular">Telefone: </label><input id="telephone" type="number"><br><br>
                 <label for="RG">RG: </label><input id="rg" type="text"><br><br>
                 <label for="data de nascimento do solicitante">Data de Nascimento: </label><input id="dateBirth" type="date"><br><br>
                 <label for="nome da mãe">Nome da mãe: </label><input id="nameMother" type="text"><br><br>
-                <label for="Turma do solicitante">Turma: </label><input id="classs" type="text"><br><br>
+                <label for="Turma do solicitante">Turma: </label><input id="level" type="text"><br><br>
                 <label for="Nível do curso">Nível: </label><input id="grade" type="text"><br><br>
                 <label for="Período do curso">Período: </label>
                 <select id="period" name="opcoes">
@@ -29,12 +29,11 @@
             </form>
         </section>
 
-        <section>
+        <section id="scList">
             <table>
                 <thead>
-                    <tbody>
-                        <th>Nome</th>
-                        
+                    <th>Nome</th>
+                    <tbody id="tableBody">                                                
                     </tbody>
                 </thead>
             </table>
@@ -59,11 +58,11 @@
                 telephone: req.telephone,
                 dateBirth: req.dateBirth,
                 nameMother: req.nameMother,
-                class: req.class,
+                level: req.level,
                 grade:req.grade,
                 period: req.period,                     
                 createAt: req.createAt,      
-                type: req.type,                    
+                type: req.type                    
             }
 
             documents.push(d)                       //empurra o obj d na lista documents
@@ -81,7 +80,7 @@
                     telephone: document.getElementById("telephone").value,
                     dateBirth: document.getElementById("dateBirth").value,
                     nameMother: document.getElementById("nameMother").value,
-                    //class: document.getElementById(class).value,
+                    //level: document.getElementById(level).value,
                     grade: document.getElementById("grade").value,
                     period: document.getElementById("period").value, 
                     createAt: "2000-01-31"                                        
@@ -89,13 +88,26 @@
                 })
             )
 
-            console.log(documents)
+            listDocuments(documents)
         }
 
+        function listDocuments(pList){
+            const tbody = document.querySelector("#tableBody")
+            tbody.innerHTML = ""
+
+            pList.forEach(d =>{
+            
+                const row = document.createElement("tr");
+                const nameCell = document.createElement("td");
+                nameCell.textContent = d.name
+
+                row.appendChild(nameCell);
+                tbody.appendChild(row);
 
 
-
-        
+            })
+            
+        }      
 
 
     </script>
