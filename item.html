@@ -1,18 +1,46 @@
 <!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Item</title>
-</head>
-<body>  
-    <h1>Cadastre seu item</h1>
-    <form>
-        <label>ID:</label><input type="text"/><br>
-        <label>Nome:</label><input type="text"/><br>
-        <label>Marca:</label><input type="text"/><br>
-        <label> Número de Série:</label><input type="text"/><br>
-        <label>Quantidade:</label><input type="text"/><br>
-        <button>CADASTRAR</button>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Item</title>
+    </head>
+    <body>  
+        <h1>Cadastre seu item</h1>
+        <form>
+            <label>Nome:</label><input id="name"type="text"/><br>
+            <label>Marca:</label><input  id= "mark" type="text"/><br>
+            <label>Número de Série:</label><input id= "assetNumber"type="text"/><br>
+            <label>Quantidade:</label><input id="amount" type="text"/><br>
+            <button type="button" id="register"  onclick="handleRegister()">CADASTRAR</button>
         </form>
-</body>
+    </body>
+    <script>
+        var itens=[]
+        function setItens(req){        
+            let i = {
+                id: itens.length -1,
+                name: req.name,
+                mark:req.mark,
+                assetNumber: req.assetNumber, 
+                amout: req.amout
+            }
+
+            itens.push(i)
+            return "Cadastrado"
+        }
+
+        function handleRegister(){
+            console.log(
+                setItens({
+                    name: document.getElementById("name").value,
+                    mark: document.getElementById("mark").value,
+                    assetNumber:document.getElementById("assetNumber").value,
+                    amount: document.getElementById("amount").value,
+
+                }) 
+            )
+
+            console.log(itens)
+        }
+    </script>
 </html>
