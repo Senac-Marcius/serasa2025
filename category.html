@@ -5,12 +5,59 @@
     </head>
     <body>
       <h1>cadastre sua categoria!</h1>
-      <p style="color: red;">Este texto está vermelho haha!</p>
+      <section> id= "scRegister">
+        <form> 
+          <label>nome: </label><input id="name" type="text" /><br><br>
+         <button type="button" id="register" onclick="handleEnviar()">cadastrar</button>
+       </form>
 
-      <form> 
-          <label>nome: </label><input type="text" /><br><br>
-         <button>enviar</button>
-      </form>
+       </section>
+
+      <section id="scList">
+        <table>
+          <thead>
+            <th>nome</th>
+            <tbody>
+
+            </tbody>
+          </thead>
+        </table>
+     </section>
     </body>
+    <script>
+      var categories = []
+
+      function setCategory(req){
+        const namePattern = /^[a-zA-Z\s]{2,50}$/;
+        const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+        if(!namePattern.test(req.name)){
+            return "campo inserido deve conter apenas letras"
+        }
+        if(!datePattern.test(req.createAt)){
+            return "o campo deve ser somente data"
+            
+        }
+        
+        let c ={
+            id: categories.length,
+            name: req.name,
+            createAt: req.createAt
+        }
+    
+        categories.push(c)    //push é empurrar
+        return "cadastrado"
+      }
+   
+      function handleEnviar(){
+        console.log(
+          setCategory ({      
+              name: document.getElementById("name").value,
+              createAt: "1980-01-01"
+          })
+        )
+
+        console.log(categories)
+      }
+ 
+    </script>
  </html>
- <style>
