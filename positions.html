@@ -18,7 +18,7 @@
                 <button type="button" id="register" onclick="handleRegister()">Cadastrar</button><br>
             </form>
         </section>
-        <section>
+        <section id="scList">
             <table>
                 <thead>
                     <th>Cargos</th>
@@ -70,7 +70,21 @@
                     creatAt: document.getElementById("date").value,
                 })
             )
-            console.log(positions)
+            listPositions(positions)
+        }
+        function listPositions (pList){
+            const tbody = document.querySelector("#scList tbody")
+            tbody.innerHTML = ""
+
+            pList.forEach(p => {
+                const row = document.createElement("tr");
+
+                const nameCell = document.createElement("td");
+                nameCell.textContent = p.name
+
+                row.appendChild(nameCell);
+                tbody.appendChild(row);
+            })
         }
     </script>
 </html>
