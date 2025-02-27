@@ -7,7 +7,7 @@
     <body>
         <h1>Cadastre o seu Lançamento</h1>
 
-        <section> id="scRegister"
+        <section> 
             <form>
             <label>Observação: </label><input id="observation" type="text"/><br> 
             <label>Nota: </label><input id="note" type="number"/><br>
@@ -17,7 +17,7 @@
         </section>
         </form>
 
-        <section> id="scList"
+        <section id="scList">
             <table>
                 <thead>
                     <th>Observação</th>
@@ -64,17 +64,34 @@
         }
         
         function handleRegister(){
-            
+            console.log(
                 setLaunch({
                 createAt: "2000-12-31",
                 note: document.getElementById("note").value,
                 observation: document.getElementById("observation").value,
                 presence: document.getElementById("presence").value,
                 indicator: document.getElementById("indicator").value
-            })
-        
+            }))
+           
+            listLaunchs(launchs)
         }
 
-        console.log(launchs)
+
+        function listLaunchs(plist){
+            const tbody = document.querySelector("#scList tbody")
+            tbody.innerHTML = ""
+
+            plist.forEach(l => {
+                const row = document.createElement("tr");
+                const indicatorCell = document.createElement("td");
+                indicatorCell.textContent = l.indicator;
+
+                row.appendChild(indicatorCell);
+                tbody.appendChild(row);
+            })
+                
+            
+
+        }
     </script>
 </html>
