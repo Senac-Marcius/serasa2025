@@ -30,18 +30,6 @@
         var collections = []
 
         function setCollections(req){//função de create
-            const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-
-        
-            // if(!idRegex.test(req.quantity)){
-            //     return "Campo quantidade deve conter apenas números"
-            // }
-            // if(!idRegex.test(req.stars)){
-            //     return "Campo stars deve conter apenas números"
-            // }
-            // if (!dateRegex.test(req.createAt)){
-            //     return "O campo createAt deve conter o seguinte formato YYYY-MM-DD"
-            // }
             let c = {
                 id:collections.lenght -1,
                 name: req.name,
@@ -64,7 +52,21 @@
 
                 })
             )
-            console.log (collections)
+            listCollections(collections)
         }
+            function listCollections(clist){
+                const tbody = document.querySelector("#scList tbody")
+                tbody.innerHTML = ""
+                // querySelector serve para resgatar um elemento para ser utilizado dentro do parenteses, # mostra para o codigo que ele esta procurando um id
+                collections.forEach(c =>{ // pega o vetor collections e para cada item de c ele faz uma ação que foi comandada
+                    const row = document.createElement("tr")
+
+                    const nameCell = document.createElement("td")
+                    nameCell.textContent = c.name
+
+                    row.appendChild(nameCell);
+                    tbody.appendChild(row);
+                })
+            }
     </script> <!-- script serve para usar o js dentro do html  -->
-</html>
+</html>        
