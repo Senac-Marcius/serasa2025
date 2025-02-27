@@ -24,7 +24,7 @@
                 <th>Cronograma</th>
                 </thead>
                 <tbody>
-
+            
                 </tbody>
             </table>
         </section>
@@ -60,6 +60,25 @@
         )
         
         console.log(calendars)    
+
+    }
+
+    function listCalendars(Plist){
+        const tbody = document.querySelector("#scList tbody")
+        tbody. innerHTML = ""
+/*executa o callback fornecido uma vez para cada elemento da ordem com um valor atribuido*/
+        cList.forEach(c => {
+        const row = document. creadElement ("tr");
+
+        const timelineCell = document.creadElement("td");
+        timelineCell.textContent = c.timeline
+
+
+        row.appendChild(urlCell);
+        tbody.appendChild(urlCell);
+        })
+
+        listCalendars(calendars)
 
     }
     </script>
