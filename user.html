@@ -89,18 +89,6 @@
       return "O formato do e-mail está incorreto. Use o formato: example@domain.com";
     }
 
-    // if(!cpfRegex.test(req.cpf)){
-    //   return "O formato do CPF está incorreto. Use: XXX.XXX.XXX-XX"
-    // }
-    // if(!phoneRegex.test(req.phone)){
-    //   return "O formato do telefone está incorreto. Use o formato: (XX)XXXXX-XXXX"
-    // }
-    // if(!Dataregex.test(req.createAT)){
-    //   return "O formato da data está incorreto. Use o formato: YYYY-MM-D"
-    // }
-    // if(!emailRegex.test(req.emailRegex)){
-    //   return "O formato do e-mail está incorreto. Use o formato: example@domain.com";
-    // }
 
 
     let u = {
@@ -136,7 +124,31 @@
         createAT: "2023-02-15"
       })
     )
-    console.log(users)
+    listUsers(users)
+  }
+  function listUsers(ulist) {
+    //capturar tbody
+    //querySelector faz uma composição de palavras que diz qual elemento eu quero, encontra o id e seleciona o primeiro tbody
+    const tbody = document.querySelector("#scList tbody")
+    tbody.innerHTML = ""
+    //apaga o tbody p/ não ocorrer duplicagem
+
+    users.forEach(u => {
+      const row = document.createElement("tr")
+      //cria a linha
+
+      const nameCell = document.createElement("td")
+      //cria a coluna
+      nameCell.textContent = u.name
+      //adiciona informação na coluna
+
+      row.appendChild(nameCell)
+      //adiciona a coluna com a informação no row
+      tbody.appendChild(row)
+      //adiciona o row no tbody
+
+    })
+
   }
 </script>
 
