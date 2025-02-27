@@ -5,33 +5,98 @@
     </head>
     <body>
         <h1>Formulário para cadastro de Projeto:</h1>
+
         <form>
-            <label>Criador do Projeto:</label>  <input type="text" /> E-mail: <input type="email" placeholder="email@gmail.com"/><br>
+            <label>Criador do Projeto:</label>  <input id="nameuser" type="text" placeholder="Nome Completo"/> <input id="cpf" type="number" placeholder="CPF" > E-mail <input type="email" placeholder="email@gmail.com"/><br>
             <br>
-            <label>Nome do Projeto:</label>  <input type="text" /> Numero: <input type="number" placeholder="Indentificação"> <br>
+            <label>Nome do Projeto:</label>  <input id="namep" type="text" /> ID: <input type="number" placeholder="Identificação"> <br>
             <br>
-            <label>Site:</label>  <input type="url" placeholder=" https://siteprojeto.obr.br"/><br>
+            <label>Site:</label>  <input id="website" type="url" placeholder=" https://siteprojeto.org.br"/><br>
             <br>
-            <label>Previsao de início:</label>  <input type="date" /><br>
+            <label>Previsao de início:</label>  <input id="createAt" type="date" /><br>
             <br>
-            <label>Qual o periodo do projeto:</label>  <input type="date" /> á <input type="date" />  / <input type="checkbox" id="Indeterminado" name="Indeterminado" /> Indeterminado<br>
+            <label>Qual o periodo do projeto:</label>  <input id="createAt" type="date" /> á <input type="date" />  / <input id="Indeterminado" type="checkbox" name="Indeterminado" /> Indeterminado<br>
             <br>
-            <label>Objetivo:</label>  <input type="text" placeholder="Descreva de forma simplificada" /><br>
+            <label>Descrição do Projeto:</label> <br>
+                
+                <textarea id="description" placeholder="Visão geral"></textarea>
             <br>
-            <label>Recursos:</label>  <input type="text" id="valor" name="valor" placeholder="R$ 0,00" /> Aproximadamente<br>
+            <label>Objetivo:</label> <br>
+                
+                <textarea id="objective" placeholder="Simplificado se possivel"></textarea>
+            <br>
+            <label>Recursos:</label>  <input id="resources" type="text" name="valor" placeholder="R$ 0,00" /> Aproximadamente<br>
             <br>
             <label>Qual a Atividade que será proposta pelo projeto:</label> <br>
-                <textarea placeholder="Tópicos" ></textarea>
+                
+                <textarea id="activity" placeholder="Tópicos" ></textarea>
             <br>
             <label>Quais metodologias pretende abordar: <br>
                 
-                <textarea placeholder="Técnicas" ></textarea>
-                <textarea placeholder="Processos" ></textarea>
-                <textarea placeholder="Estratégias" ></textarea>
-                <textarea placeholder="Planejamento" ></textarea>
+                <textarea id="tecnic" placeholder="Técnicas" ></textarea>
+                <textarea id="process" placeholder="Processos" ></textarea>
+                <textarea id="strategy" placeholder="Estratégias" ></textarea>
+                <textarea id="planning" placeholder="Planejamento" ></textarea>
             <br><br>
 
-            <button> Cadastrar </button>
+            <button type="button" id="register" onclick="handleRegister()"> Cadastrar </button>
         </form>
+
+        <section id="scList">
+
+            <table>
+                <thead>
+                    <th>url</th>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </section>
     </body>
+    <script>
+        var projects = []
+
+        function setProject(req){
+        
+            let p = {
+                id: projects.length - 1,
+                url: req.url,
+                createAt: req.createAt, // yyyy-MM-DD
+                userid: req.userid,
+                resources: req.resources,
+                description: req.description,
+                activity: req.activity,
+                timeline: req.timeline,
+                objective: req.objective,
+                methodology: req.methodology
+            }
+
+            projects.push(p)
+        }
+        
+        function handleRegister(){     // handle é usado para chamar a função
+            console.log(
+                setProject({
+                    
+                    nome: document.getElementById("nameuser").value,
+                    nomep: document.getElementById("namep").value,
+                    url: document.getElementById("website").value,
+                    createAt: document.getElementById("createAt"),
+                    userid: document.getElementById("cpf").value,
+                    resources: document.getElementById("resources").value,
+                    description: document.getElementById("description").value, 
+                    activity: document.getElementById("activity").value,
+                    timeline: "6 meses apos o inicio do projeto, realocando o mesmo em outro lugar por mais 6 meses num periodo de 3 anos",
+                    objective: document.getElementById("objective").value,
+                    methodology: "Técnica: " + document.getElementById("tecnic").value + 
+                                 "Processos: " + document.getElementById("process").value + 
+                                 "Estratégias: " + document.getElementById("strategy").value +
+                                 "Planejamento: " + document.getElementById("planning").value
+                })
+            )
+
+            console.log(projects)
+        }
+    </script>
 </html>
