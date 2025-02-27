@@ -1,18 +1,32 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
     <head>
+        <link rel="stylesheet" href="styles.css">
         <meta charset="UTF-8"/>
         <title>Item</title>
     </head>
     <body>  
         <h1>Cadastre seu item</h1>
+     <section id="scRegister">
         <form>
-            <label>Nome:</label><input id="name"type="text"/><br>
+
             <label>Marca:</label><input  id= "mark" type="text"/><br>
             <label>Número de Série:</label><input id= "assetNumber"type="text"/><br>
             <label>Quantidade:</label><input id="amount" type="text"/><br>
             <button type="button" id="register"  onclick="handleRegister()">CADASTRAR</button>
         </form>
+    </section>
+
+        <section id="Sclist">
+            <table>
+                <thead>
+                    <th>Marca</th>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+         </section>
     </body>
     <script>
         var itens=[]
@@ -35,7 +49,7 @@
                     name: document.getElementById("name").value,
                     mark: document.getElementById("mark").value,
                     assetNumber:document.getElementById("assetNumber").value,
-                    amount: document.getElementById("amount").value,
+                    amount: document.getElementById("amount").value
 
                 }) 
             )
