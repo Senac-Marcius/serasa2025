@@ -1,23 +1,100 @@
-<!DOCTYPE html>  
-    <head>
-        <meta Schedule="UTF-8" />
-        <title>Cronograma</title>
+<!DOCTYPE html>
 
-    </head>
-     <body>
-        <h1>cadastre seu objeto Cronograma</h1>
-        <form>
-            <label>Turma </label><input type="text" /><br>
-            <label>Disciplina </label><input type="text" /><br>
-            <label>Data </label><input type="date" /><br>
-            <label>Local </label><input type="text" /><br>
-            <label>Horario de entrada </label><input="text" /><br>
-            <label>Horario de término </label><input type="text" /><br>
-            
-            <button>cadastrar<Enviar</button>
-        </form>
-     </body>
-     
+<head>
+    <meta Schedule="UTF-8" />
+    <title>Cronograma</title>
+
+</head>
+
+<body>
+    <h1>cadastre seu objeto Cronograma</h1>
+    <section id="sc">
+        <h2>Objetivo</h2>
+       
+    <form>
+        <label>url </label><input id="url" type="text" /><br>
+        <label>User </label><input id="userId" type="text" /><br>
+        <label>Turma </label><input id="class" type="text" /><br>
+        <label>Disciplina </label><input id="discipline" type="text" /><br>
+        <label>Data </label><input id="date" type="date" /><br>
+        <label>Local </label><input id="location" type="text" /><br>
+        <label>Horario de entrada </label><input id="start_time" type="time" /><br>
+        <label>Horario de término </label><input id="end_time" type="time" /><br>
+        <button type="button" id="register" onclick="handleRegister()">cadastrar</button>
+    
+    </section>
+    
+</form>
+    <section>id="list"
+        <table>
+            <thead>
+                <th></th>
+          
+           
+             <tbody>
+
+             </thead>
+            </tbody>
+        </table>
+    <section>       
+</body>   
+<script>
+    var schedules = []
+
+    function setSchedule(req) {
+        const urlRegex = /^(https?:\/\/)?([a-z0-9]+(\.[a-z0-9]+)+)(\/[a-z0-9#?&%=]*)?$/i;
+        const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+        const timeRegex = /^([01]?[0-9]|2[0-3]):([0-5]?[0-9])$/
+
+
+        if (!urlRegex.test(req.url)) () => {
+            return "Campo url deve conter o formato https:siteorganizador"
+        }
+        /*if (!dateRegex.test(req.date)) () => { alert("Campo deve conter o formato yyyy-mm-dd")
+         return };*/
+        if (!timeRegex.test(req.starttime) || !timeRegex.test(req.endtime)) () => {
+            return "Campo deve conter o formato 13:00"
+        }
+
+        let s = {
+            id: schedules.length,
+            url: req.url,
+            createAt: req.createAt,
+            userId: req.userId,
+            date: req.date,
+            disciplineId: req.disciplineId,
+            classId: req.classId,
+            locationId: req.locationId,
+            starttime: req.starttime,
+            endtime: req.endtime
+
+
+        }
+
+        schedules.push(s)
+        return "cadastrado"
+    }
+
+    function handleRegister() {
+        console.log(
+            setSchedule({
+                id: 1,
+                url: document.getElementById("url").value,
+                createAt: "2000-12-31",
+                userId: 0,
+                date:  document.getElementById("date").value,
+                disciplineId: 0,
+                classId: 0,
+                locationId: 0,
+                starttime: document.getElementById("start_time").value,
+                endtime: document.getElementById("end_time").value
+
+            })
+        )
+
+        console.log(schedules)
+    }
+
+</script>
+
 </html>
-
-   
