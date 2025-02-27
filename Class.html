@@ -67,7 +67,26 @@
                 })
             )
 
-            console.log(classes)
+            listClasses(classes)
         }
+        function listClasses(clist){
+            const tbody = document.querySelector("#scList tbody")
+            tbody.innerHTML = ""
+            
+            clist.forEach(c => {
+                const row = document.createElement("tr")
+                const nameCell = document.createElement("td")
+                nameCell.textContent = c.name
+                row.appendChild(nameCell)
+                tbody.appendChild(row)
+            })
+
+
+              } 
+
+
+
+
+        
     </script>
 </html>
