@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+    <head>
+       <meta charset = "UTF8" /> 
+        <title>Turmas</title>
+    </head>
+    <body>
+        <h1>Cadastro de turma</h1>
+        <section id="scRegister">
+            <form>
+            <label>Nome da turma: </label><input id="name" type="text"/><br>
+            <label>ID da turma: </label><input id="classid" type="text"/><br>
+            <label>Id do aluno: </label><input id="userid"type="text"/><br>
+            <label>Quantidade de Alunos: </label><input id="quant"type="text"/><br>
+            <label>Data de inicio: </label><input id="startDate" type="date"/><br>
+            <label>Data de finalização: </label><input id= "endDate"type="date"/><br>
+            <button type ="button" id="register" onclick="handleregister()">CADASTRAR</button><br>
+        </form>
+        </section>
+        
+        <section id="scList">
+            <table>
+                <thead>
+                    <th>Nome</th>
+
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+
+        </section>
+    
+    </body>
+    <script>
+        var classes = []
+
+        function setClass(req){
+            const nameRegex = /^[A-Za-z\s]+$/; 
+            const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+            if(!nameRegex.test(req.name)) return "Nome inválido, deve conter apenas letras e espaços"
+            if(!dateRegex.test(req.createAt)) return "Data de criação inválida, deve estar no formato yyyy-mm-dd"   
+            if(!dateRegex.test(req.startDate)) return "Data de início inválida, deve estar no formato yyyy-mm-dd"
+            if(!dateRegex.test(req.endDate)) return "Data de término inválida, deve estar no formato yyyy-mm-dd"
+
+            let c = {
+                name: req.name, 
+                id: classes.length,
+                quant: req.quant,
+                createAt: req.createAt,
+                startDate:req.startDate,
+                endDate: req.endDate                    
+            }
+
+            classes.push(c)
+            return "Turma cadastrada com sucesso"
+        }
+
+        function handleregister (){
+            console.log(
+                setClass({
+                    name: document.getElementById("name").value,
+                    quant:document.getElementById("quant").value,
+                    createAt:"2024-01-05",
+                    startDate:document.getElementById("startDate").value,
+                    endDate:document.getElementById("endDate").value
+                })
+            )
+
+            console.log(classes)
+        }
+    </script>
+</html>
