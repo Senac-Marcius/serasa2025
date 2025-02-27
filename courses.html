@@ -1,17 +1,52 @@
 <!DOCTYPE html>
-    <head>
-        <meta charset="UTF-8"/>
-        <title>Courses</title>
-    </head>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Courses</title>
+</head>
     <body>
         <h1>Cadastre seu curso</h1>
         <form>
-            <label>Curso: </label><input type="text"/><br>
-            <label>Descrição: </label><input type="text area"/><br>
-            <label>Plano de curso: </label><input type="file"/><br>
-            <label>Plano de orientação: </label><input type="file"/><br>
-            <label>Carga horaria: </label><input type="text"/><br>
-            <button>Cadastrar</button>
+            <label>Curso: </label><input id="course" type="text"/><br>
+            <label>Descrição: </label><input id="description" type="text area"/><br>
+            <label>Plano de curso: </label><input id="coursePlan" type="file"/><br>
+            <label>Plano de orientação: </label><input id="guidancePlan" type="file"/><br>
+            <label>Carga horaria: </label><input id="workload" type="text"/><br>
+            <button type="button" id="register" onclick="handleRegister()">Cadastrar</button>
         </form>
     </body>
+    <script>
+        var courses = []
+
+        function setCourses(req){
+           
+    
+            let p = {
+                id: courses.length -1,
+                courses: req.course,
+                description: req.description,
+                coursePlan:req.coursePlan, 
+                guidancePlan: req.guidancePlan,
+                workload: req.workload,
+                userId: req.userId  
+            }
+
+            courses.push(p)
+            return "Cadastrado"
+        }
+
+        function handleRegister(){
+            console.log(
+             setCourses({
+                courses: document.getElementById("course").value,
+                description: document.getElementById("description").value,
+                cursePlan: document.getElementById("coursePlan").value,
+                guidancePlan: document.getElementById("guidancePlan").value,
+                workload: document.getElementById("workload").value,
+                userId:0,
+            })
+        )
+        console.log(courses)
+        }
+    </script>
 </html>
