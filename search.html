@@ -1,19 +1,55 @@
 <!DOCTYPE html>
     <head>
         <meta charset="UTF-8"  />
-        <title>pesquise</title>
+        <title>pesquisa</title>
     </head>
     
     <body>
         <h1>cadraste sua pesquisa</h1>
         <form>
-            <label>Nome: </label><input type="text" /><br><br>
-            <label>Descrição: </label><input type="text" /><br><br>
-            <label>link: </label><input type="text"  /><br><br>
-
-            <button>CADASTRAR</button>
+            <label>Nome: </label><input id="name"type="text" /><br>
+            <label>Descrição: </label><textarea id="description" type="text"></textarea><br>
+            <label>link: </label><input id="link"  type="text"  /><br>
+            <button type="button" id="register" onclick="handleRegister()" >CADASTRAR</button>
         </form>
     </body>
- </html
+    <script>
+        var searches = []
+
+        function setSearche(req){
+            const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+            
+            if (! urlPattern.test(req.link)){
+                return "campo url deve conter o seguinte formato https://dominio."
+            }
+           
+            let b = {
+                id: searches.length,
+                createAt: req.createAt,
+                name: req.name,
+                link:req.link,
+                userId: req.userId,
+                description: req.description
+            
+            }
+            searches.push(b)
+            return "pesquisa cadastrado"
+        }
+        function handleRegister(){
+            console.log(
+                setSearche({
+                    createAt: "2023-01-30",      
+                    name: document.getElementById("name").value,
+                    description: document.getElementById("description").value,
+                    link: document.getElementById("link").value,
+                    userId: 0
+                }) 
+             )
+
+             console.log(searches)
+        }
+
+   </script>
+ </html>
 
 
