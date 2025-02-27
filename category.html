@@ -5,7 +5,7 @@
     </head>
     <body>
       <h1>cadastre sua categoria!</h1>
-      <section> id= "scRegister">
+      <section id="scRegister">
         <form> 
           <label>nome: </label><input id="name" type="text" /><br><br>
          <button type="button" id="register" onclick="handleEnviar()">cadastrar</button>
@@ -17,14 +17,15 @@
         <table>
           <thead>
             <th>nome</th>
-            <tbody>
-
-            </tbody>
           </thead>
+          <tbody>
+
+          </tbody>
         </table>
      </section>
     </body>
     <script>
+      
       var categories = []
 
       function setCategory(req){
@@ -56,8 +57,22 @@
           })
         )
 
-        console.log(categories)
+        listCategory(categories)
       }
  
+      function listCategory(cList){
+          const tbody = document.querySelector("#scList tbody")
+          tbody.innerHTML = ""
+
+          cList.forEach(c => {
+            const row = document.createElement("tr")
+
+            const nameCell = document.createElement("td")
+            nameCell.textContent = c.name
+
+            row.appendChild(nameCell)
+            tbody.appendChild(row)
+          })
+        }
     </script>
  </html>
