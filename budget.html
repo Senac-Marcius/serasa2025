@@ -73,6 +73,7 @@
             return "budget cadastrado"
 }
 
+
         function handleRegister(){
 
     console.log(
@@ -88,7 +89,22 @@
 
             })
         ) 
-        console.log(ocements)  
+        listOcements(ocements)  
+    }
+
+    function listOcements(bList){
+        const tbody = document.querySelector("#scList tbody")
+        tbody.innerHTML =""
+
+        ocements.forEach(b => {
+            const row = document.createElement("tr"); 
+
+            const nameCell = document.createElement("td");
+            nameCell.textContent = b.name
+
+            row.appendChild(nameCell);
+            tbody.appendChild (row);
+        })
     }
     </script>
 </html>
