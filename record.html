@@ -19,7 +19,7 @@
             <label>Alergia: </label><input id="allergy" type="text"/><br><br>
             <label>Doença: </label><input id="sick" type="text"/><br><br>
             <label>Medicação: </label><input id="medication" type="text"/><br><br>
-            <button class= "div1" type="button" id="register" onclick="handleRegister()">CADASTRAR</button>
+            <button class="div1" type="button" id="register" onclick="handleRegister()">CADASTRAR</button>
     
         </form>
     </section>
@@ -27,7 +27,7 @@
     <section id="scList">
         <table>
             <thead>
-                    <th>Nome:</th>
+                    <th>ID:</th>
             </thead>
             <tbody>
 
@@ -83,9 +83,24 @@
 
         let result = setRecord(newRecord)
         console.log(result)
-        console.log(records)
+
+        listRecord(records)
 
     }
 
+    function listRecord(rList){
+            const tbody = document.querySelector("#scList tbody")
+            tbody.innerHTML = ""
+
+        rList.forEach(r => {
+            const row = document.createElement("tr")
+
+            const idRecord = document.createElement("td")
+            idRecord.textContent = r.id
+
+            row.appendChild(idRecord)
+            tbody.appendChild(row)
+        })
+    }
 </script>
 </html>
