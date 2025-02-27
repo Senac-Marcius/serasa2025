@@ -4,13 +4,28 @@
         <title>notificação</title>
     </head>
     <body>
-        <h1>cadastre sua notificação</h1>
-        <form>
-            <label>nome: </label><input id="name" type="text"/><br><br>
-            <label>Descrição: </label><textarea id="description" type="text"></textarea><br><br>   
-            <label>Url: </label><input id="link" type="text"/><br><br>
-            <button type="button" id="register" onclick="handleRegister()" >CADASTRAR</button> 
+        <h1>suas notificações</h1>
+        <section id="scRegister">
+
+            <form>
+                <label>nome: </label><input id="name" type="text"/><br><br>
+                <label>Descrição: </label><textarea id="description" type="text"></textarea><br><br>   
+                <label>Url: </label><input id="link" type="text"/><br><br>
+                <button type="button" id="register" onclick="handleRegister()" >CADASTRAR</button> 
         </form>
+    </section>
+
+    <section id="scList">
+        <table>
+            <thead>
+                <th>NOME</th>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </section>
+
         </body>
 
     <script>
