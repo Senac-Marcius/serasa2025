@@ -6,12 +6,75 @@
     </head>
     <body>
         <h1>Cadastre o seu Lançamento</h1>
-        <form>
-            <label>Observação: </label><input type="text"/><br> 
-            <label>Nota: </label><input type="number"/><br>
-            <label>Presença: </label><input type=""/><br>
-            <label>Indicador: </label><input type="text"/><br>
-            <button>CADASTRAR</button>
+
+        <section> id="scRegister"
+            <form>
+            <label>Observação: </label><input id="observation" type="text"/><br> 
+            <label>Nota: </label><input id="note" type="number"/><br>
+            <label>Presença: </label><input id="presence" type="text"/><br>
+            <label>Indicador: </label><input id="indicator" type="text"/><br>
+            <button type="button" id="register" onclick="handleRegister()">CADASTRAR</button>
+        </section>
         </form>
+
+        <section> id="scList"
+            <table>
+                <thead>
+                    <th>Observação</th>
+                </thead>
+                <tbody>
+
+
+
+                </tbody>
+            </table>
+        </section>
+    
     </body>
+
+    <script>
+        var launchs = []
+        function setLaunch(req){
+            const userIdRegex = /^\d+$/;
+            const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+            const observationRegex = /^[a-zA-Z0-9\s]*$/; 
+
+            // if (!userIdRegex.test(req.userId)) {
+            // return "Campo userId deve conter apenas números"
+            // }
+
+            // if (!dateRegex.test(req.createAt)) {
+            // return "Campo createAt deve conter o seguinte formato YYYY-MM-DD"
+            // }
+            
+            // if (!observationRegex.test(req.observation)) {
+            //     return "Campo observation deve conter apenas letras, números e espaços"
+            // }
+            
+            let l = {
+                createAt: req.createAt,
+                note: req.note,
+                observation: req.observation,
+                presence: req.presence,
+                indicator: req.indicator
+            }
+          
+            launchs.push(l)
+
+        }
+        
+        function handleRegister(){
+            
+                setLaunch({
+                createAt: "2000-12-31",
+                note: document.getElementById("note").value,
+                observation: document.getElementById("observation").value,
+                presence: document.getElementById("presence").value,
+                indicator: document.getElementById("indicator").value
+            })
+        
+        }
+
+        console.log(launchs)
+    </script>
 </html>
