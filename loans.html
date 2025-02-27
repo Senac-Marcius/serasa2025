@@ -9,6 +9,7 @@
 
 
 <body>
+
     <h2>Você selecionou o livro 'Pequeno Príncipe'</h2>
 
     <p>Deseja confirmar esse empréstimo?:</p>
@@ -26,14 +27,29 @@
     <p> <button type="button" onclick="alert('PROXIMO')">PRÓXIMO</button></p>
 
     <h1>Dados para empréstimo</h1>
-    <form>
-        <p></p> <label>Nome do livro:</label><input id="namebook" type="text" /><br></p>
-        <p><label>Data de empréstimo:</label><input id="dateloan" type="date" /><br></p>
-        <p><label>Data de devolução:</label><input id="datereturns" type="date" /><br></p>
-        <p><label>Renovação:</label><input id="renewal" type="text" /><br></p>
-        <p><label>Status de empréstimo:</label><input id=" status" type="select" /><br></p>
-        <p><label>observação:</label><input id="observation" type="text" /><br></p>
-    </form>
+    <section id="scRegister">
+        <form>
+            <p> <label>Nome do livro:</label><input id="namebook" type="text" /><br></p>
+            <p><label>Data de empréstimo:</label><input id="dateloan" type="date" /><br></p>
+            <p><label>Data de devolução:</label><input id="datereturns" type="date" /><br></p>
+            <p><label>Renovação:</label><input id="renewal" type="text" /><br></p>
+            <p><label>Status de empréstimo:</label><input id=" status" type="select" /><br></p>
+            <p><label>observação:</label><input id="observation" type="text" /><br></p>
+        </form>
+    </select>
+
+    <section id="sclist">
+
+        <table>
+            <thead>
+                <th>Nome do Livro:</th>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+
+    </section>
 
     <p> <button type="button" id="register" onclick="handleRegister()">FINALIZAR</button></p>
 
@@ -65,7 +81,7 @@
             setLoan({
                 creatAt: "1999-02-02",
                 userId: 0,
-                bookId: document.getElementById("namebook").value,
+                bookId: document.getElementById("namebo ok").value,
                 loanDate: document.getElementById("dateloan").value,
                 expectedLoanDate: document.getElementById("datereturns").value,
                 renewal: document.getElementById("renewal").value,
