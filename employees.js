@@ -4,14 +4,13 @@ var employees = []
 function setEmployee(req){
 
         const urlsPattern = /^(https?:\/\/)[\w\-]+(\.[\w\-]+)+[/#?]?.*$/ // URLs válidas
-        const agePattern = /^(?:1[89]|[2-9]\d)$/ // Idade mínima de 18
         const tellPattern = /^\(\d{2}\)\s\d{4,5}-\d{4}$/ // Formato de telefone (XX)XXXXX-XXXX
         const emailPattern = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/ // E-mail válido
         const cpfPattern = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/ // CPF no formato 000.000.000-00
-        const datePattern = /^\d{4}-\d{2}-\d{2}$/ // Data no formato YYYY-MM-DD
+        const datePattern = /^\d{4}\/\d{2}\/\d{2}$/;
         
         if(!urlsPattern.test(req.urls))return "Campo URls deve conter apenas URLs válidas "
-        if(!agePattern.test(req.age))return "Campo Age deve conter apenas números e ter a idade mínima de 18"
+        if(!datePattern.test(req.age))return "Campo Age deve conter apenas números e ter a idade mínima de 18"
         if(!tellPattern.test(req.tell))return "Campo Tell deve seguir o formato de telefone (XX)XXXXX-XXXX"
         if(!emailPattern.test(req.email))return "Campo email deve ter um e-mail válido "
         if(!cpfPattern.test(req.cpf))return "Campo CPF deve estar no formato 000.000.000-00 "

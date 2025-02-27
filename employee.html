@@ -7,28 +7,30 @@
         <link rel = "stylesheet" href="./style.css">
     </head>
     <body>
-        <h1 class="container-1">Formulario de cadastro para funcionário</h1>
-        <form class="container-input">
+        <h1 class="container-1">Formulario para cadastro de funcionário</h1>
+        
+        <section id="eResgister">
+            <form id ="formEmployee" class="container-input">
                 <label for="urls">Currículo: </label>
-                <input type="file" id ="urls" name = "urls"/>
+                <input type="text" id ="urls" name = "urls" placeholder="Insira um perfil (linkedin , catho , etcs..)"/>
                 <label for="name">Nome: </label>
-                <input type="text" />
+                <input type="text"id="name"/>
                 <label for="age">Data de Nascimento: </label>
                 <input type="text" id="age" name="age" placeholder="MM/DD/YYYY" maxlength="10">
                 <script>
                     document.getElementById("age").addEventListener("input", function(e) {
                     let value = e.target.value.replace(/\D/g, ""); // Remove tudo que não for número
     
-                    if (value.length > 2) value = value.slice(0, 2) + "-" + value.slice(2);
-                    if (value.length > 5) value = value.slice(0, 5) + "-" + value.slice(5);
+                    if (value.length > 2) value = value.slice(0, 2) + "/" + value.slice(2);
+                    if (value.length > 5) value = value.slice(0, 5) + "/" + value.slice(5);
         
                     e.target.value = value.slice(0, 10); // Limita ao formato MM/DD/YYYY
                     });
                 </script>
-                <label for="tell">Telefone: </label>
-                <input type="tel" id="tel" name="tel" placeholder="(00) 00000-0000" maxlength="15">
+                <label for="tell" >Telefone: </label>
+                <input type="tel" id="tell" name="tell" placeholder="(00) 00000-0000" maxlength="15">
                 <script>
-                    document.getElementById("tel").addEventListener("input", function(e) {
+                    document.getElementById("tell").addEventListener("input", function(e) {
                     let value = e.target.value.replace(/\D/g, "")// Remove tudo que não for número
 
                     if (value.length > 2) value = `(${value.slice(0, 2)}) ${value.slice(2)}`
@@ -38,15 +40,18 @@
                     })
                 </script>
                 <label for="email">Email: </label>
-                <input type="email" id="email" name="email">
+                <input type="email" id="email" name="email" placeholder="emailtest@test.com.ts">
                 <label for="address">Endereço: </label>
                 <input type="text" id="address" name="address">
                 <label for="nationality">Nacionalidade: </label>
                 <input type="text" id="nationality" name="nationality">
-                <label for="cpf" >C.P.F: </label>
+                <label for="cpf">C.P.F: </label>
                 <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" required/>
                 <script>
-                    document.getElementById("cpf").addEventListener("input", function(e) {
+                    let cpf = document.getElementById("cpf")
+                
+
+                    cpf.addEventListener("input", function(e) {
                       let value = e.target.value.replace(/\D/g, "");
                   
                       if (value.length > 3) value = value.slice(0, 3) + "." + value.slice(3);
@@ -54,12 +59,13 @@
                       if (value.length > 11) value = value.slice(0, 11) + "-" + value.slice(11);
                       
                       e.target.value = value.slice(0, 14);
+                    
                     });
                 </script>
                 <label for="sex">Sexo:</label>
                 <input type="text" id="sex" name="sex">
-                <label for="martinalStatus">Estado Civil:</label>
-                <select id="discPersonality" name="discPersonality">
+                <label>Estado Civil:</label>
+                <select id="martialStatus" name="martialStatus">
                     <option value="Null">Insira o perfil</option>
                     <option value="Solteiro(a)">Solteiro(a)</option>
                     <option value="Divorciado(a)">Divorciado(a)</option>
@@ -76,10 +82,109 @@
                 </select>
                 <label for="position">Cargo:</label>
                 <input type="text" id="position"  name="position"  /> 
-                <label for="ethinicty">Etinia:</label>
-                <input type ="text"/>    
-                <button>CADASTRAR</button>
+                <label for="ethnicity">Etinia:</label>
+                <input type ="text" id="ethnicity" name="ethnicity"/>
+                <label for="deficiency" >Deficiência:</label>
+                <select id="deficiency" name="deficiency">
+                <option value="true">Sim, Possuo deficiência</option>
+                <option value="false">Não, não possuo deficiência</option>
+                </select>    
+                <label id="createAt"></label>
+                <script>
+                    // Obtém a data atual
+                    const dataAtual = new Date();
+                    
+                    // Formata a data no formato dd/mm/aaaa
+                    const dataFormatada = dataAtual.toLocaleDateString('en-US');
+            
+                    // Exibe no label
+                    document.getElementById('createAt').innerText = "Entrou em: " + dataFormatada;
+                </script>
+                <label for="isActive">Estado na empresa:</label>
+                <select id="isActive">
+                    <option value="Null">Selecione um estado</option>
+                    <option value="true">Está ativo</option>
+                    <option value="false">Está inativo</option>
+                </select>
+                    
+                <button type="button" id="register" onclick="handleRegister()">CADASTRAR</button>
+                
         </form>
-       
+        </section>
+        
+        <section id="listEmployees">
+            <table>
+                <thead>
+                    <th>Nome</th>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </section>
     </body>
+    <script>
+        var employees = []
+
+
+        function setEmployee(req){
+
+            const urlsPattern = /^(https?:\/\/)[\w\-]+(\.[\w\-]+)+[/#?]?.*$/ // URLs válidas
+            const tellPattern = /^\(\d{2}\)\s\d{4,5}-\d{4}$/ // Formato de telefone (XX)XXXXX-XXXX
+            const emailPattern = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/ // E-mail válido
+            const cpfPattern = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/ // CPF no formato 000.000.000-00
+            const datePattern = /^\d{4}\/\d{2}\/\d{2}$/;
+
+            //if(!urlsPattern.test(req.urls))return "Campo URls deve conter apenas URLs válidas "
+            //if(!datePattern.test(req.age))return "Campo Age deve conter apenas números e ter a idade mínima de 18"
+            //if(!tellPattern.test(req.tell))return "Campo Tell deve seguir o formato de telefone (XX)XXXXX-XXXX"
+            //if(!emailPattern.test(req.email))return "Campo email deve ter um e-mail válido "
+            //if(!cpfPattern.test(req.cpf))return "Campo CPF deve estar no formato 000.000.000-00 "
+            //if(!datePattern.test(req.createAt))return "Campo deve estar no formato YYYY-MM-DD"
+
+            let e =  {
+            id: employees.length-1,
+            urls: req.urls,
+            name: req.name,
+            age: req.age,
+            tell: req.tell,
+            email: req.email,
+            address: req.address,
+            nationality: req.nationality,
+            discPersonality: req.discPersonality,
+            cpf: req.cpf,
+            sex: req.sex,
+            maritalStatus: req.maritalStatus,
+            position: req.position,
+            ethnicity: req.ethnicity,
+            deficiency: req.deficiency,
+            createAt : req.createAt,
+            isActive: req.isActive
+            }
+            employees.push(e)
+        } 
+        function handleRegister(){
+            console.log(setEmployee({
+                urls: document.getElementById("urls").value,
+                name: document.getElementById("name").value,
+                age: document.getElementById("age").value,
+                tell: document.getElementById("tell").value,
+                email: document.getElementById("email").value,
+                address: document.getElementById("address").value,
+                nationality: document.getElementById("nationality").value,
+                discPersonality: document.getElementById("discPersonality").value,
+                cpf: document.getElementById("cpf").value,
+                sex: document.getElementById("sex").value,
+                maritalStatus: document.getElementById("martialStatus").value,
+                position: document.getElementById("position").value,
+                ethnicity: document.getElementById("ethnicity").value,
+                deficiency: document.getElementById("deficiency").value,
+                createAt : dataFormatada,
+                isActive: document.getElementById("isActive").value
+            }))
+           console.log(employees) 
+           document.getElementById("formEmployee").reset()         
+        }
+                   
+    </script>
 </html>
