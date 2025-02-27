@@ -6,12 +6,27 @@
     
     <body>
         <h1>cadraste sua pesquisa</h1>
-        <form>
-            <label>Nome: </label><input id="name"type="text" /><br>
-            <label>Descrição: </label><textarea id="description" type="text"></textarea><br>
-            <label>link: </label><input id="link"  type="text"  /><br>
-            <button type="button" id="register" onclick="handleRegister()" >CADASTRAR</button>
-        </form>
+        <section id="scRegister"></section>
+            <form>
+                <label>Nome: </label><input id="name"type="text" /><br>
+                <label>Descrição: </label><textarea id="description" type="text"></textarea><br>
+                <label>link: </label><input id="link"  type="text"  /><br>
+                <button type="button" id="register" onclick="handleRegister()" >CADASTRAR</button>
+            </form>
+        </section>
+        
+        <section id="sclist">
+            <table>
+                <thead>
+                    <th>nome</th>
+
+
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </section>
     </body>
     <script>
         var searches = []
