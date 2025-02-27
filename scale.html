@@ -1,29 +1,97 @@
 <!DOCTYPE html>
+<html lang="pt-BR">
     <head>
         <meta charset="UTF-8"/>
         <title>Escala</title>
     </head>
     <body>
         <h1>Cadastro de Escala</h1>
-        <form>
-            <label for="dia">Dia da semana:</label>
-            <select id="dia" name="dia">
-              <option value="domingo">Domingo</option>
-              <option value="segunda-feira">Segunda-feira</option>
-              <option value="terca-feira">Terça-feira</option>
-              <option value="quarta-feira">Quarta-feira</option>
-              <option value="quinta-feira">Quinta-feira</option>
-              <option value="sexta-feira">Sexta-feira</option>
-              <option value="sabado">Sábado</option>
-            </select><br><br>
-            
-            <label>Horário de início:</label><input type="time" /><br><br>
+        <section id="scRegister">
+            <form>
+                <label for="day">Dia da semana:</label>
+                <select id="day" name="day">
+                  <option value="domingo">Domingo</option>
+                  <option value="segunda-feira">Segunda-feira</option>
+                  <option value="terca-feira">Terça-feira</option>
+                  <option value="quarta-feira">Quarta-feira</option>
+                  <option value="quinta-feira">Quinta-feira</option>
+                  <option value="sexta-feira">Sexta-feira</option>
+                  <option value="sabado">Sábado</option>
+                </select><br><br>
+                
+                <label>Horário de início:</label><input id="starttime" type="time">
+    
+                <label>Horário de término:</label><input id="endtime" type="time" /><br><br>
+    
+                <label>Data:</label><input id="createAt" type="date" /><br><br>
+    
+                <button type="button" id="register" onclick="handleRegister()"> CADASTRAR</button>
+            </form>
+        </section>
 
-            <label>Horário de término:</label><input type="time" /><br><br>
+        <section id="scList">
 
-            <label>Data:</label><input type="date" /><br><br>
+            <table>
+                <thead>
+                    <th>Dia</th>
+                </thead>
+                <tbody>
 
-            <button>CADASTRAR</button>
-        </form>
+                </tbody>
+            </table>
+        </section>
+
     </body>
+    <script>
+        var scales =[]
+
+        function setScales(req){
+            const timePattern = /^([01]?[0-9]|2[0-3]):([0-5][0-9])$/;
+            const intPattern = /^[0-9]+$/;
+            const dayPattern = [
+                "domingo", "segunda-feira", "terça-feira", "quarta-feira", 
+                "quinta-feira", "sexta-feira", "sábado"
+            ];
+
+            if(!dayPattern.includes(req.day)){
+                return "O formato do dia da semana deve ser inteira. EX: segunda-feira"
+            }
+
+            if(!timePattern.test(req.starttime)){
+                return "O formato da hora de início deve ser HH:MM."
+            }
+
+            if(!timePattern.test(req.endtime)){
+                return "O formato da hora de término deve ser HH:MM."
+            }
+
+            if(!intPattern.test(req.userId)){
+                return "Campo userID deve conter apenas números."
+            }
+
+            let s = {
+                id: scales.length - 1,
+                day: req.day,
+                starttime: req.starttime,
+                endtime: req.endtime,
+                createAt: req.createAt,
+                userId: req.userId
+        }
+        
+        scales.push(s)
+        }
+
+        function handleRegister(){
+            console.log(
+                setScales({
+                    day: document.getElementById("day").value,
+                    starttime: document.getElementById("starttime").value,
+                    endtime: document.getElementById("endtime").value,
+                    createAt: document.getElementById("createAt").value,
+                    userId: "0"
+                })
+            )
+            console.log(scales)
+        }
+    </script>
 </html>
