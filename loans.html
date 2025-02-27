@@ -42,7 +42,7 @@
 
         <table>
             <thead>
-                <th>Nome do Livro:</th>
+                <th>Status de empréstimo:</th>
             </thead>
             <tbody>
 
@@ -81,7 +81,7 @@
             setLoan({
                 creatAt: "1999-02-02",
                 userId: 0,
-                bookId: document.getElementById("namebo ok").value,
+                bookId: document.getElementById("namebook").value,
                 loanDate: document.getElementById("dateloan").value,
                 expectedLoanDate: document.getElementById("datereturns").value,
                 renewal: document.getElementById("renewal").value,
@@ -89,8 +89,28 @@
                 observation: document.getElementById("observation").value
             }));
 
-        console.log(loans)
+        listLoans(loans)
     }
+
+    function listLoans(pList){
+        const tbody = document.querySelector("#sclist tbody")
+        tbody.innerHTML = ""
+
+        loans.forEach(p => {
+            const  row = document.createElement("tr");
+
+            const statusLoanCell = document.createElement("td");
+            statusLoanCell.textContent = p.statusLoan
+
+            row.appendChild(statusLoanCell);
+            tbody.appendChild(row);
+
+
+        })
+   }
+
+        
 </script>
+
 
 </html>
