@@ -5,16 +5,72 @@
             <title>Cargos</title>
     </head>
     <body>
-        <h1>Cadastre o cargo disponivel</h1>
-        <form>
-            <label>Cargo: </label><input type="text" /><br><p>
-            <label>Descrição: </label><input type="text" /><br></p>
-            <label>Salário: </label><input type="number" /><br></p>
-            <label>Horas trabalhadas: </label><input type="time" /><label> por dia.</label><br></p>
-            <label>Departamento: </label><input type="text" /><br></p>
-            <label>Supervisor: </label><input type="text" /><br></p>
-            <button>Cadastrar</button><br>
-        </form>
-    </body>
+        <h1>Cadastros de Cargos</h1>
+        <section id="scRegister">
+            <form>
+                <label>Cargo: </label><input id="positions" type="text" /><br><p>
+                <label>Descrição: </label><input id="description" type="text" /><br></p>
+                <label>Salário: </label><input id="salary" type="currency" /><br></p>
+                <label>Horas trabalhadas: </label><input id="workHours" type="time" /><label> por dia.</label><br></p>
+                <label>Departamento: </label><input id="department" type="text" /><br></p>
+                <label>Supervisor: </label><input id="supervisor" type="text" /><br></p>
+                <label>Data: </label><input id="date" type="date" /><br></p>
+                <button type="button" id="register" onclick="handleRegister()">Cadastrar</button><br>
+            </form>
+        </section>
+        <section>
+            <table>
+                <thead>
+                    <th>Cargos</th>
+                </thead>
+                <tbody>
 
+                </tbody>
+            </table>
+        </section>
+    </body>
+    <script>
+        var positions = []
+        function setPositions(req){
+            const datepattern = /^\d{4}-\d{2}-\d{2}$/;
+            const urlpattern = /^https:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+            if(!datepattern.test(req.creatAt)){
+                return "O campo data deve conter o seguinte formato YYYY-MM-DD"
+            }
+
+            if(req.description.length > 900){
+                return "O campo description deve conter até 900 caracters."
+
+            }
+
+            let p = {
+                id: positions.lengt - 1, 
+                name: req.name,
+                description: req.description,
+                salary: req.salary,
+                workHours: req.workHours,
+                department: req.department,
+                supervisor: req.supervisor,
+                creatAt: req.creatAt,
+            }
+
+            positions.push(p)
+            return "Cadastrado com sucesso!"
+        }
+        function handleRegister(){
+            console.log(
+                setPositions({
+                    name: document.getElementById("positions").value,
+                    description: document.getElementById("description").value,
+                    salary: document.getElementById("salary").value,
+                    workHours: document.getElementById("workHours").value,
+                    department: document.getElementById("department").value,
+                    supervisor: document.getElementById("supervisor").value,
+                    creatAt: document.getElementById("date").value,
+                })
+            )
+            console.log(positions)
+        }
+    </script>
 </html>
