@@ -7,12 +7,24 @@
 </head>
 <body>
     <h1>Cadastre seu catálogo:</h1>
-    <form><!--formulário-->
-        <label>Nome do livro: </label><input id ="name" type="text"><br><br>
-        <label>Estrelas: </label><input id ="stars"type="number"><br><br><!--label (rótulo) input(barra de digitação) br (quebra de texto)-->
-        <label>Quantidade: </label><input id = "quantity"type="number"><br><br>
-        <button type ="button" id= "register" onclick="handleRegister()">CADASTRAR</button><br>
-    </form>
+    <section id="scCollections">
+        <form><!--formulário-->
+            <label>Nome do livro: </label><input id ="name" type="text"><br><br>
+            <label>Estrelas: </label><input id ="stars"type="number"><br><br><!--label (rótulo) input(barra de digitação) br (quebra de texto)-->
+            <label>Quantidade: </label><input id = "quantity"type="number"><br><br>
+            <button type ="button" id= "register" onclick="handleRegister()">CADASTRAR</button><br>
+        </form>
+    </section>
+    <section id="scList">
+        <table>
+            <thead>
+                <th>Títulos dos livros </th>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </section>
 </body>
     <script>
         var collections = []
