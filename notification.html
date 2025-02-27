@@ -18,10 +18,10 @@
     <section id="scList">
         <table>
             <thead>
-                <th>NOME</th>
+                <th>DESCRIÇÃO</th>
             </thead>
             <tbody>
-
+                
             </tbody>
         </table>
     </section>
@@ -33,7 +33,6 @@
         function setNotification(req){
             const urlPattern = /^(https?:\/\/)?([a-z0-9-]+\.)+[a-z]{2,6}(\/[^\s]*)?$/
             const datePattern = /^\d{4}-\d{2}-\d{2}$/
-
 
             if (!urlPattern.test(req.url)){
                 return "campo url deve conter o seguinte formato https://dominio."
@@ -68,7 +67,23 @@
                     userId: 0
                 })
             )
-            console.log(notifications)
+
+            listNotifications(notifications)
+        }
+
+        function listNotifications(nList){
+            const tbody = document.querySelector("#scList tbody")
+            tbody.innerHTML = ""  
+
+            notifications.forEach(n => {
+                const row = document.createElement("tr");
+
+                const descriptionCell = document.createElement("td");
+                descriptionCell.textContent = n.description
+
+                row.appendChild(descriptionCell);
+                tbody.appendChild(row);
+            })
         }
     </script>
 </html>
