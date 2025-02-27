@@ -6,9 +6,54 @@
     <body>
         <h1>cadastre sua notificação</h1>
         <form>
-            <label>nome: </label><input type="text"/><br><br>
-            <label>Descrição: </label><input type="text"/><br><br>   
-            <button>CADASTRAR</button> 
+            <label>nome: </label><input id="name" type="text"/><br><br>
+            <label>Descrição: </label><textarea id="description" type="text"></textarea><br><br>   
+            <label>Url: </label><input id="link" type="text"/><br><br>
+            <button type="button" id="register" onclick="handleRegister()" >CADASTRAR</button> 
         </form>
-    </body>
+        </body>
+
+    <script>
+        var notifications = [] 
+        function setNotification(req){
+            const urlPattern = /^(https?:\/\/)?([a-z0-9-]+\.)+[a-z]{2,6}(\/[^\s]*)?$/
+            const datePattern = /^\d{4}-\d{2}-\d{2}$/
+
+
+            if (!urlPattern.test(req.url)){
+                return "campo url deve conter o seguinte formato https://dominio."
+            }
+
+            if(!datePattern.test(req.creatAt)){
+                return "campo createAT deve conter o seguinte formato YYYY-MM-DD"
+            }
+            if(!req.description.length > 244){
+                return "campo description deve conter ate 244 caracters"
+            }
+
+            let n = {
+                id: notifications.length,
+                description: req.description,
+                categoryId: req.categoryId,
+                url:req.url,
+                creatAt: req.creatAt,
+                userId: req.userId,
+            }
+            notifications.push(n)
+            return "cadastrado"
+        } 
+
+        function handleRegister(){
+            console.log(
+                setNotification({
+                    description: document.getElementById("description").value,
+                    categoryId: "Niveis de urgência",
+                    url:document.getElementById("link").value,
+                    creatAt: "2025-01-01",
+                    userId: 0
+                })
+            )
+            console.log(notifications)
+        }
+    </script>
 </html>
