@@ -9,43 +9,53 @@
 </head>
 
 <body>
-  <br>
-  <h1>Você pertence a nossa escola?</h1>
-  <form>
-    <input type="checkbox" id="userExterno" value="userExterno">
-    <label> Sou um usuário externo</label><br>
-    <input type="checkbox" id="UserInterno" value="UserInterno">
-    <label for="UserInterno">Sim. Sou um usuário interno</label><br>
-  </form>
-  <br>
-  <hr>
+
 
   <h1>Insira as suas informações:</h1>
+  <section id="scRegister">
+    <form>
+      <label>Nome:</label><br>
+      <input type="text" id="userName" /><br>
 
-  <form>
-    <label>Nome:</label><br>
-    <input type="text" id="userName" /><br>
+      <label>Senha:</label><br>
+      <input type="password" id="userPassword" /><br>
 
-    <label>Senha:</label><br>
-    <input type="password" id="userPassword" /><br>
+      <label>CPF:</label><br>
+      <input type="text" id="userCPF" /><br>
 
-    <label>CPF:</label><br>
-    <input type="text" id="userCPF" /><br>
+      <label>Idade:</label><br>
+      <input type="number" id="userAge" /><br>
 
-    <label>Idade:</label><br>
-    <input type="number" id="userAge" /><br>
+      <label>Phone:</label><br>
+      <input type="text" id="userPhone" /><br>
 
-    <label>Phone:</label><br>
-    <input type="text" id="userPhone" /><br>
+      <label>Email:</label><br>
+      <input type="email" id="userEmail" /><br>
 
-    <label>Email:</label><br>
-    <input type="email" id="userEmail" /><br>
+      <label>Endereço:</label><br>
+      <input type="text" id="userAddress" /><br>
+      <br>
+      <button type="button" id="register" onclick="handleRegister()">Cadastrar</button>
+    </form>
+    <hr>
+  </section>
 
-    <label>Endereço:</label><br>
-    <input type="text" id="userAddress" /><br>
-    <br>
-    <button type="button" id="register" onclick="handleRegister()">Cadastrar</button>
-  </form>
+  <section id="scList">
+    <table>
+      <thead>
+        <th>Nomes cadastrados</th>
+
+      </thead>
+
+      <tbody>
+
+      </tbody>
+
+
+    </table>
+
+  </section>
+  <!-- FUNÇÃO READ OU GET-->
 
 </body>
 
@@ -57,21 +67,40 @@
     const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
     const phoneRegex = /^\(\d{2}\)\d{5}-\d{4}$/;
     const Dataregex = /^(?:(?:19|20)\d{2})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])$/;
-  
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    if(!cpfRegex.test(req.cpf)){
-      return "O formato do CPF está incorreto. Use: XXX.XXX.XXX-XX"
+    if (!cpfRegex.test(req.cpf)) {
+      return "O formato do CPF está incorreto. Use o formato: XXX.XXX.XXX-XX";
     }
-    if(!phoneRegex.test(req.phone)){
-      return "O formato do telefone está incorreto. Use o formato: (XX)XXXXX-XXXX"
+
+    // Verificar telefone
+    if (!phoneRegex.test(req.phone)) {
+      return "O formato do telefone está incorreto. Use o formato: (XX)XXXXX-XXXX";
     }
-    if(!Dataregex.test(req.createAT)){
-      return "O formato da data está incorreto. Use o formato: YYYY-MM-D"
+    //(31)12345-6789
+
+    // Verificar data
+    if (!Dataregex.test(req.createAT)) {
+      return "O formato da data está incorreto. Use o formato: YYYY-MM-DD";
     }
-    if(!emailRegex.test(req.emailRegex)){
+
+    // Verificar e-mail
+    if (!emailRegex.test(req.email)) {
       return "O formato do e-mail está incorreto. Use o formato: example@domain.com";
     }
+
+    // if(!cpfRegex.test(req.cpf)){
+    //   return "O formato do CPF está incorreto. Use: XXX.XXX.XXX-XX"
+    // }
+    // if(!phoneRegex.test(req.phone)){
+    //   return "O formato do telefone está incorreto. Use o formato: (XX)XXXXX-XXXX"
+    // }
+    // if(!Dataregex.test(req.createAT)){
+    //   return "O formato da data está incorreto. Use o formato: YYYY-MM-D"
+    // }
+    // if(!emailRegex.test(req.emailRegex)){
+    //   return "O formato do e-mail está incorreto. Use o formato: example@domain.com";
+    // }
 
 
     let u = {
@@ -96,20 +125,19 @@
   function handleRegister() {
     console.log(
       setUser({
-        
+
         name: document.getElementById("userName").value,
         password: document.getElementById("userPassword").value,
         cpf: document.getElementById("userCPF").value,
         age: document.getElementById("userAge").value,
         phone: document.getElementById("userPhone").value,
-        email: document.getElementById("userEmail"),
+        email: document.getElementById("userEmail").value,
         address: document.getElementById("userAddress").value,
-        createAT: "2025-26-02"
+        createAT: "2023-02-15"
       })
     )
     console.log(users)
   }
-
 </script>
 
 </html>
