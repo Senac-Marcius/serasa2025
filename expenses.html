@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
     <head>
+        <link rel="stylesheet"  href="style.css">
         <meta charset="UTF-8" />
         <title>despesas</title>
     </head>
@@ -18,14 +19,14 @@
             </form> 
         </section>
 
-        <section id=" scList">
+        <section id="scList">
 
             <table>
                 <thead>
                     <th>Nome</th>
                 </thead>
                 <tbody>
-
+                    
                 </tbody>
             </table>
 
@@ -79,7 +80,22 @@
                 })
             )
 
-            console.log(expenses)
+           listExpenses(expenses)
         }
-    </script>
+   
+        function listExpenses(){
+            const tbody = document.querySelector("#scList tbody")
+            tbody.innerHTML = ""
+
+            expenses.forEach(e =>{
+                const row = document.createElement("tr");
+
+                const nameCell = document.createElement("td");
+                nameCell.textContent = e.name
+
+                row.appendChild(nameCell)
+                tbody.appendChild(row)
+            })
+        }
+   </script>
 </html>
