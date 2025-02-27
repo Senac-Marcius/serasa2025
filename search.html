@@ -18,9 +18,7 @@
         <section id="sclist">
             <table>
                 <thead>
-                    <th>nome</th>
-
-
+                    <th>Nomes</th>
                 </thead>
                 <tbody>
 
@@ -59,10 +57,28 @@
                     link: document.getElementById("link").value,
                     userId: 0
                 }) 
-             )
+            )
 
-             console.log(searches)
+            listSearches(searches)
         }
+       
+       function listSearches(sList){
+            const tbody = document.querySelector("#sclist tbody")
+            tbody.innerHTML = ""
+
+            sList.forEach(s =>  {
+                const row = document.createElement("tr");
+
+                const urlCell = document.createElement("td");
+                urlCell.textContent = s.name 
+
+                row.appendChild(urlCell);
+                tbody.appendChild(row);
+            })
+        }
+
+
+
 
    </script>
  </html>
