@@ -11,16 +11,29 @@
 
 <body>
     <h1 class="div">Realize o seu registro:</h1>
-    <form>
-        <label>Nome: </label><input id="name" type="text"/><br><br>
-        <label>Descrição: </label><textarea id="description"></textarea><br><br>
-        <label>Saúde: </label><input id="health" type="text"/><br><br>
-        <label>Alergia: </label><input id="allergy" type="text"/><br><br>
-        <label>Doença: </label><input id="sick" type="text"/><br><br>
-        <label>Medicação: </label><input id="medication" type="text"/><br><br>
-        <button class= "div1" type="button" id="register" onclick="handleRegister()">CADASTRAR</button>
+    <section id="scRegister">
+        <form>
+            <label>Nome: </label><input id="name" type="text"/><br><br>
+            <label>Descrição: </label><textarea id="description"></textarea><br><br>
+            <label>Saúde: </label><input id="health" type="text"/><br><br>
+            <label>Alergia: </label><input id="allergy" type="text"/><br><br>
+            <label>Doença: </label><input id="sick" type="text"/><br><br>
+            <label>Medicação: </label><input id="medication" type="text"/><br><br>
+            <button class= "div1" type="button" id="register" onclick="handleRegister()">CADASTRAR</button>
+    
+        </form>
+    </section>
+    
+    <section id="scList">
+        <table>
+            <thead>
+                    <th>Nome:</th>
+            </thead>
+            <tbody>
 
-    </form>
+            </tbody>
+        </table>
+    </section>
     
 </body>
 
