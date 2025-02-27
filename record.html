@@ -1,79 +1,77 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Registro</title>
-    </head>
-    <body>
-        <h1>Realize o seu registro:</h1>
-        <form>
-            <label>Nome: </label><input id="name" type="text"/><br><br>
-            <label>Saúde: </label><input id="health" type="text"/><br><br>
-            <label>Alergia: </label><input id="allergy" type="text"/><br><br>
-            <label>Doença: </label><input id="sick" type="text"/><br><br>
-            <label>Medicações: </label><input id="medication" type="text"/><br><br>
-            <button type="button" id="register" onclick="">CADASTRAR</button>
-        </form>
-        
-    </body>
-    <script>
-        var records = []
 
-    function setRecord(req){
+<head>
 
+    <meta charset="UTF-8" />
+    <title>Registro</title>
+
+</head>
+
+<body>
+    <h1>Realize o seu registro:</h1>
+    <form>
+        <label>Nome: </label><input id="name" type="text"/><br><br>
+        <label>Descrição: </label><textarea id="description"></textarea><br><br>
+        <label>Saúde: </label><input id="health" type="text"/><br><br>
+        <label>Alergia: </label><input id="allergy" type="text"/><br><br>
+        <label>Doença: </label><input id="sick" type="text"/><br><br>
+        <label>Medicação: </label><input id="medication" type="text"/><br><br>
+        <button type="button" id="register" onclick="handleRegister()">CADASTRAR</button>
+
+    </form>
+    
+</body>
+
+<script>
+    var records = []
+
+    function setRecord(req) {
         const DATE_REGEX = /^(\d{4})-(\d{2})-(\d{2})$/
         const ID_REGEX = /^\d+$/
 
-        if (!DATE_REGEX.test(req.creatAt)){
-        return ("Data inválida! Use o formato YYYY-MM-DD.")
+        if (!DATE_REGEX.test(req.createdAt)) {
+            return "Data inválida! Use o formato YYYY-MM-DD."
         }
 
-        if (!ID_REGEX.test(req.id)){
-        return ("Campo ID deve conter apenas números") 
+        if (!ID_REGEX.test(req.userId.toString())) {
+            return "Campo userId deve conter apenas números"
         }
 
-     if (!ID_REGEX.test(req.userId)){
-        return ("Campo userID deve conter apenas números")
+        let r = {
+            id: records.length,
+            name: req.name,
+            description: req.description,
+            health: req.health,
+            allergy: req.allergy,
+            sick: req.sick,
+            medication: req.medication,
+            createdAt: req.createdAt,
+            userId: req.userId
         }
 
-    let r = {
-        id: req.id,
-        name: req.name,
-        description: req.description,
-        health: req.health,
-        allergy: req.allergy,
-        sick: req.sick,
-        medication: req.medication,
-        notification: req.notification,
-        creatAt: req.creatAt,
-        userId: req.userId
-
+        records.push(r)
+        return "Cadastrado com sucesso!"
     }
 
+    function handleRegister() {
+        let newRecord = {
+            name: document.getElementById("name").value,
+            description: document.getElementById("description").value,
+            health: document.getElementById("health").value,
+            allergy: document.getElementById("allergy").value,
+            sick: document.getElementById("sick").value,
+            medication: document.getElementById("medication").value,
+            createdAt: "2025-03-21",  
+            userId: 0  
+        }
 
-   records.push(r) 
-}
-    function handleRegister(){
-        
-        console.log(
-            setRecord({        
-                id: records.lenght - 1,
-                name: "Maria de souza",
-                description: document.getElementById("description"),
-                health: health.getElementById("saude"),
-                allergy: allergy.getElementById("alergia"),
-                sick: sick.getElementById("gripe"),
-                medication: medication.getElementById("medicação"),
-                notification: notification.getElementById ("notificação"),
-                creatAt: "2025-03-21",
-                userId: 0
-            }) 
-        )
-    
+
+        let result = setRecord(newRecord)
+        console.log(result)
         console.log(records)
 
-
     }
-    </script>
- 
+    
+</script>
 </html>
