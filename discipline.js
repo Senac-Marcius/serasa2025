@@ -78,9 +78,7 @@ function getDisciplines(req) {
         return disciplines.filter(d => req.search !== undefined && d.name == req.search && d.name.includes(req.search) && req.search !== undefined && d.workload > 50)
     } else {
         return disciplines.filter(d => req.search !== undefined && d.name == req.search || d.name.includes(req.search) || req.search !== undefined && d.workload > 50)
-    }
-
-    
+    } 
 
 }
 

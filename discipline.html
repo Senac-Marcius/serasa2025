@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Gerenciador de Disciplinas</title>
-    <script src="discipline.js"></script>
 </head>
 <body>
 
@@ -16,7 +15,7 @@
         <input type="text" id="name" name="name" required><br><br>
 
         <label for="url">URL:</label>
-        <input type="url" id="url" name="url" required><br><br>
+        <input type="text" id="url" name="url" required><br><br>
 
         <label for="workload">Carga Horária:</label>
         <input type="number" id="workload" name="workload" required><br><br>
@@ -27,16 +26,75 @@
         <label for="teacher">Professor Responsável:</label>
         <input type="text" id="teacher" name="teacher" required><br><br>
 
-        <button type="submit">Cadastrar</button>
+        <button type="button" onclick="handleSet()">Cadastrar</button>
     </form>
 
     <h2>Disciplinas Cadastradas</h2>
     <div id="disciplineList"></div>
 
     <h2>Buscar Disciplinas</h2>
-    <input type="text" id="searchQuery" placeholder="Buscar por nome ou carga horária">
+    <input type="text" id="searchQuery" placeholder="Buscar por nome da disciplina">
     <button onclick="searchDisciplines()">Buscar</button>
-    
-    
+
+    <script>
+        var disciplines = [];
+
+        function setDiscipline(req) {
+            const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+            const urlPattern = /^(https?:\/\/)[^\s$.?#].[^\s]*$/;
+
+            if (!datePattern.test(req.createAt)) return "Campo Data deve conter o formato YYYY-MM-DD";
+            if (!urlPattern.test(req.url)) return "Campo URL deve ser válido, iniciando com http:// ou https://";
+
+            let d = {
+                id: disciplines.length-1,
+                name: req.name,
+                url: req.url,
+                workload: req.workload,
+                createAt: req.createAt,
+                teacher: req.teacher
+            };
+
+            disciplines.push(d);
+            updateDisciplineList();
+        }
+
+        function handleSet() {
+            setDiscipline({
+                name: document.getElementById("name").value,
+                url: document.getElementById("url").value,
+                workload: document.getElementById("workload").value,
+                createAt: document.getElementById("created_at").value,
+                teacher: document.getElementById("teacher").value
+            });
+        }
+
+        function updateDisciplineList(disciplineArray = disciplines) {
+            let list = document.getElementById("disciplineList");
+            list.innerHTML = "";
+            disciplineArray.forEach((d, index) => {
+                let item = document.createElement("p");
+                item.textContent = `${d.name} - ${d.teacher} - ${d.workload}h`;
+                
+                let deleteButton = document.createElement("button");
+                deleteButton.textContent = "Deletar";
+                deleteButton.onclick = () => deleteDiscipline(index);
+                
+                item.appendChild(deleteButton);
+                list.appendChild(item);
+            });
+        }
+
+        function searchDisciplines() {
+            let query = document.getElementById("searchQuery").value.toLowerCase();
+            let filtered = disciplines.filter(d => d.name.toLowerCase().includes(query));
+            updateDisciplineList(filtered);
+        }
+
+        function deleteDiscipline(index) {
+            disciplines.splice(index, 1);
+            updateDisciplineList();
+        }
+    </script>
 </body>
 </html>
