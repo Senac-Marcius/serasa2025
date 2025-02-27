@@ -6,13 +6,74 @@
     <boby>
             <h1>cadastre seu orçamento</h1>
             <form>
-                <label>Nome: </label><input type="text"/><br><br>
-                <label>Usuário: </label><input type="text"/><br><br>
-                <label>Url: </label><input type="text"/><br><br>
-                <label>Valor: </label><input type="number"/><br><br>
-                <label>Data Inicial: </label><input type="Date"/><br><br>
-                <label>Data Final: </label><input type="Date"/><br><br>
-                <button>CADASTRAR</button>
+                <label>Nome: </label><input id="name" type="text"/><br><br>
+                <label>Url: </label><input id="url" type="text"/><br><br>
+                <label>Valor: </label><input id="value" type="number"/><br><br>
+                <label>Data Inicial: </label><input id="startDate" type="Date"/><br><br>
+                <label>Data Final: </label><input id="endDate" type="Date"/><br><br>
+                <button type="button" id="register" onclick="handleRegister()">CADASTRAR</button>
             </form>
     </boby>
+    <script>
+        var ocements = []
+
+        function setBudget(req){
+           
+            const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+            const valuePattern =/^\d+(\.\d{1,2})?$/;
+            const startDatePattern = /^\d{4}-\d{2}-\d{2}$/;
+            const endDatePattern = /^\d{4}-\d{2}-\d{2}$/;            
+           
+
+            if (! urlPattern.test(req.url)){
+                return "campo url deve conter o seguinte formato https://dominio."
+            }
+            if(!valuePattern.test (req.value)){
+                return "o campo value deve conter apenas digitos"
+            }
+
+            if (!startDatePattern.test(req.startDate)){
+                return "campo createAt deve contar o seguinte formato YYYY-MM-DD"
+            }
+
+            if (!endDatePattern.test(req.endDate)){
+                return "campo createAt deve contar o seguinte formato YYYY-MM-DD"
+            }
+
+            if (req.name.length > 100) {
+                return "campo name deve conter até 100 caracteres"
+            }
+            let b = {
+                id: ocements.length - 1,
+                name: req.name,
+                url:req.url,
+                createAt: req.createAt,
+                userId: req.userId,
+                value: req.value,
+                startDate: req.startDate,
+                endDate: req.endDate
+            
+            }
+            ocements.push(b)
+            return "budget cadastrado"
+}
+
+        function handleRegister(){
+
+    console.log(
+                setBudget({
+                
+                name: document.getElementById("name").value, 
+                url: document.getElementById("url").value,
+                createAt: "2023-01-30",
+                userId: 0,
+                value: document.getElementById("value").value,
+                startDate: document.getElementById("startDate").value,
+                endDate: document.getElementById("endDate").value, 
+
+            })
+        ) 
+        console.log(ocements)  
+    }
+    </script>
 </html>
