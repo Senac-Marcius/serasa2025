@@ -1,24 +1,78 @@
 <!DOCTYPE html>
+<html lang="pt-br">
     <head>
-        <meta charset="UTF-8"/> <!--UTF-8 é a quantidade de bist no caracter, portanto o html vai aceitar simbolos name: req.name,
+        <meta charset="UTF-8"/> <!--UTF-8 é a quantidade de bist no caracter, portanto o html vai aceitar simbolos-->
+        <title>Responsável</title>
+    </head>
+    <body>
+        <H1>Cadastre seu responsável</H1>
+        <section id ="scRegister">
+            <form>
+                <label>Nome: </label><input id="name" type="text"/><br><br>
+                <label>idade: </label><input id="age"type="number"/><br><br>
+                <label>Parentesco: </label><input id="kinship" type="text"/><br><br>
+                <label>Telefone: </label><input id="phone" type="text"/><br><br>
+                <label>Email: </label><input id="email" type="text"/><br><br>
+                <button type="button"id="register" onclick="handleRegister()">Cadastrar: </button>
+            </form>
+        </section>
+        
+        <section><!-- adicionando tabelas-->
+            <table>
+                <thead>
+                    <th>Nome</th>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </section>
+    </body>
+    <script>
+        var parents=[]
+        
+        function setParent(req){
+            const emailParent = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            const phoneParent = /^\(\d{2}\)\s\d{4,5}-\d{4}$/;
+
+
+            if(!emailParent.test(req.email)){
+        return "Digite um email cadastrado"
+            }
+
+            if(!phoneParent.test(req.phone)){
+        return "Digite um Phone cadastrado"
+            }
+
+    let p = {
+        id: parents.length,
+        name: req.name,
         age: req.age,
         level: req.level,
         kinship: req.kinship,
         creatAt: req.creatAt,
         phone: req.phone,
         email: req.email,
-        userId: req.userId-->
-        <title>Responsável</title>
-    </head>
-    <body>
-        <H1>Cadastre seu responsável</H1>
-        <form>
-            <label>Nome: </label><input type="text"/><br><br>
-            <label>idade: </label><input type="number"/><br><br>
-            <label>Parentesco: </label><input type="text"/><br><br>
-            <label>Telefone: </label><input type="number"/><br><br>
-            <label>email: </label><input type="text"/><br><br>
-            <button>Cadastrar: </button>
-        </form>
-    </body>
+        userId: req.userId
+    }
+    parents.push(p)
+    return "casdastro realizado"
+
+}
+
+        function handleRegister(){
+           console.log(
+                setParent({
+                    name: document.getElementById("name").value,
+                    age: document.getElementById("age").value,
+                    kinship: document.getElementById("kinship").value,
+                    phone: document.getElementById("phone").value,
+                    email: document.getElementById("email").value,
+                    userId: 0
+                })
+            )
+            console.log(parents)
+        }
+
+    </script>
 </html>
