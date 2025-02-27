@@ -1,42 +1,46 @@
-/* Definir o layout do body */
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
-
-/* Estilizar o título */
-h1 {
+    background-color: #f4f4f9;
     color: #333;
-    font-size: 24px;
-    margin-bottom: 20px;
+    line-height: 1.6;
+    padding: 20px;
 }
 
-/* Estilizar o formulário */
-form {
+/* Heading */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #4CAF50;
+}
+
+/* Register Form */
+#scRegister {
     background-color: white;
-    padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
+    padding: 20px;
+    max-width: 500px;
+    margin: 0 auto 30px auto;
 }
 
-/* Estilizar os labels */
-label {
-    display: block;
-    font-size: 16px;
-    color: #333;
-    margin-bottom: 8px;
+form {
+    display: flex;
+    flex-direction: column;
 }
 
-/* Estilizar os inputs */
-input {
-    width: 100%;
+form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+form input {
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ddd;
@@ -44,30 +48,56 @@ input {
     font-size: 16px;
 }
 
-/* Estilizar o botão */
-button {
-    width: 100%;
-    padding: 12px;
-    background-color: #007bff;
+form button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
     color: white;
     border: none;
     border-radius: 4px;
     font-size: 16px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-/* Efeito hover no botão */
-button:hover {
-    background-color: #0056b3;
+form button:hover {
+    background-color: #45a049;
 }
 
-/* Estilizar inputs no foco */
-input:focus {
-    border-color: #007bff;
-    outline: none;
+/* Table Styling */
+#scList {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilizar o botão no foco */
-button:focus {
-    outline: none;
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #f2f2f2;
+}
+
+th {
+    padding: 10px;
+    text-align: left;
+    font-size: 16px;
+    color: #4CAF50;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
 }

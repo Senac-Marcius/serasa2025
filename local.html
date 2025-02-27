@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang = "pt-BR"> 
     <head>
-        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="styles.css">  
 
         <meta charset="UTF-8" />
         <title> Local </title>
@@ -25,7 +25,7 @@
                     <th>name</th>
                 </thead>
                 <tbody>
-                    
+
                 </tbody>
             </table>
         </section>
@@ -65,8 +65,25 @@
                     createAt: "2013-01-05"
                 }) 
             )
-                console.log(locals)
+                listLocals(locals)
         }
-   
+        
+        function listLocals(lList){
+            const tbody = document.querySelector("#scList tbody") //o # indica q está procurando o Id. 
+            tbody.innerHTML = ""
+
+            lList.forEach(l => {
+                const row = document.createElement("tr");  //tr= table row
+                const nameCell =  document.createElement("td");
+                nameCell.textContent = l.name;
+
+                row.appendChild(nameCell);
+                tbody.appendChild(row)
+
+            })      
+            
+            /*o locals é o meu vetor, e é tb um objeto. ele guarda a função dentro do objeto. 
+            o for each é = ao find, a cada passo ele passa pelo elemento e pega-o.   */
+        }
    </script>
 </html> 
