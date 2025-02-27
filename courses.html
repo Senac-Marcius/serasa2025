@@ -63,7 +63,8 @@
         listcourses(courses)
         }
         function listcourses(pList){
-            const tbody = document.querySelector("scList tbody")
+            const tbody = document.querySelector("#scList tbody")
+            tbody.innerHTML = ""
 
             pList.forEach(p =>{
                 const row = document.createElement("tr");
