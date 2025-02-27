@@ -5,15 +5,30 @@
        <title>Calendario</title> 
     </head>
     <body>
-       <h1>Cronograma de Calendario</h1>
-       <form>
-        <label> Nome do Aluno: </label><input id="student" type= "text"/><br>
-        <label> Curso: </label><textarea id="courses" type="text"></textarea><br>
-        <label> Periodo: </label><input id="period" type= "text"/><br>
-        <label> Data da Matricula: </label><input id="date" type= "date"/><br>
-       <!--Adicionar Cronograma-->
-        <button type="button" id="register" onclick="handleRegister()">cadastrar</button>
-       </form>
+        <h1>Cronograma de Calendario</h1>
+        <section>
+            <form id="scRegister">
+                <label> Nome do Aluno: </label><input id="student" type= "text"/><br>
+                <label> Curso: </label><textarea id="courses" type="text"></textarea><br>
+                <label> Periodo: </label><input id="period" type= "text"/><br>
+                <label> Data da Matricula: </label><input id="date" type= "date"/><br>
+                <!--Adicionar Cronograma-->
+                <button type="button" id="register" onclick="handleRegister()">cadastrar</button>
+            </form>
+       </section>
+
+        <section id="scList">
+
+            <table>
+                <thead>
+                <th>Cronograma</th>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </section>
+       
     </body>
 <script>
 
