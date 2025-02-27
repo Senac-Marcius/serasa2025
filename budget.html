@@ -5,14 +5,29 @@
     </head>
     <boby>
             <h1>cadastre seu orçamento</h1>
-            <form>
-                <label>Nome: </label><input id="name" type="text"/><br><br>
+
+            <section id="scRegister">
+                <form>
+                    <label>Nome: </label><input id="name" type="text"/><br><br>
                 <label>Url: </label><input id="url" type="text"/><br><br>
                 <label>Valor: </label><input id="value" type="number"/><br><br>
                 <label>Data Inicial: </label><input id="startDate" type="Date"/><br><br>
                 <label>Data Final: </label><input id="endDate" type="Date"/><br><br>
                 <button type="button" id="register" onclick="handleRegister()">CADASTRAR</button>
-            </form>
+                </form>
+            </section>
+
+            <section id="scList">
+            <table>
+                <thead>
+                    <th>nome</th>
+                    <tbody>
+
+                    </tbody>
+                </thead>
+            </table>
+            </section>
+    
     </boby>
     <script>
         var ocements = []
