@@ -9,7 +9,7 @@
         <section>
             <form id="scRegister">
                 <label>Curso: </label><input id="course" type="text"/><br>
-                <label>Descrição: </label><input id="description" type="text area"/><br>
+                <label>Descrição: </label><input id="description" type="textarea"/><br>
                 <label>Plano de curso: </label><input id="coursePlan" type="file"/><br>
                 <label>Plano de orientação: </label><input id="guidancePlan" type="file"/><br>
                 <label>Carga horaria: </label><input id="workload" type="text"/><br>
@@ -20,9 +20,11 @@
         <section id="scList">
             <table>
                 <thead>
-                    <th>Cursos</th>
+                    <tr>
+                        <th>Cursos</th>
+                    </tr>
                 </thead>
-                <tbody>
+                <tbody id ="tablebody">
 
                 </tbody>
             </table>
@@ -36,8 +38,8 @@
            
     
             let p = {
-                id: courses.length -1,
-                courses: req.course,
+                id: course.length ,
+                course: req.course,
                 description: req.description,
                 coursePlan:req.coursePlan, 
                 guidancePlan: req.guidancePlan,
@@ -51,20 +53,20 @@
 
         function handleRegister(){
             console.log(
-             setCourses({
-                courses: document.getElementById("course").value,
+                setCourses({
+                course: document.getElementById("course").value,
                 description: document.getElementById("description").value,
-                cursePlan: document.getElementById("coursePlan").value,
+                coursePlan: document.getElementById("coursePlan").value,
                 guidancePlan: document.getElementById("guidancePlan").value,
                 workload: document.getElementById("workload").value,
                 userId:0,
-            })
-        )
-        listcourses(courses)
+                })
+            )
+            listCourses(courses)
         }
-        function listcourses(pList){
-            const tbody = document.querySelector("#scList tbody")
-            tbody.innerHTML = ""
+        function listCourses(pList){
+            const tbody = document.querySelector("#tablebody")
+            tbody.innerHTML =""
 
             pList.forEach(p =>{
                 const row = document.createElement("tr");
