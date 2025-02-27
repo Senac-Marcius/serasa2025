@@ -13,17 +13,17 @@
                 <label>Parentesco: </label><input id="kinship" type="text"/><br><br>
                 <label>Telefone: </label><input id="phone" type="text"/><br><br>
                 <label>Email: </label><input id="email" type="text"/><br><br>
-                <button type="button"id="register" onclick="handleRegister()">Cadastrar: </button>
+                <button type="button" id="register" onclick="handleRegister()">Cadastrar: </button>
             </form>
         </section>
         
-        <section><!-- adicionando tabelas-->
+        <section id="scList"><!-- adicionando tabelas-->
             <table>
-                <thead>
-                    <th>Nome</th>
+                <thead><br>
+                    <th>Nivel de parentesco</th>
                 </thead>
                 <tbody>
-
+            
                 </tbody>
             </table>
         </section>
@@ -71,8 +71,20 @@
                     userId: 0
                 })
             )
-            console.log(parents)
+            listParent(parents)
         }
+        function listParent(plist){
+            const tbody = document.querySelector("#scList tbody")
+            tbody.innerHTML = ""
+            //forEach realiza os passos de forma automatica, executa a mesma função para todos os elementos dentro do vetor.
+            plist.forEach( p => {
+                const row = document.createElement("tr")
+                const EmailKinship = document.createElement("td")
+                EmailKinship.textContent = p.kinship
 
+                row.appendChild(EmailKinship);
+                tbody.appendChild(row);
+            })
+        }
     </script>
 </html>
