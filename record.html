@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 
 <head>
+    <link rel="stylesheet" href="style.css">
 
     <meta charset="UTF-8" />
     <title>Registro</title>
@@ -9,7 +10,7 @@
 </head>
 
 <body>
-    <h1>Realize o seu registro:</h1>
+    <h1 class="div">Realize o seu registro:</h1>
     <form>
         <label>Nome: </label><input id="name" type="text"/><br><br>
         <label>Descrição: </label><textarea id="description"></textarea><br><br>
@@ -17,7 +18,7 @@
         <label>Alergia: </label><input id="allergy" type="text"/><br><br>
         <label>Doença: </label><input id="sick" type="text"/><br><br>
         <label>Medicação: </label><input id="medication" type="text"/><br><br>
-        <button type="button" id="register" onclick="handleRegister()">CADASTRAR</button>
+        <button class= "div1" type="button" id="register" onclick="handleRegister()">CADASTRAR</button>
 
     </form>
     
@@ -72,6 +73,6 @@
         console.log(records)
 
     }
-    
+
 </script>
 </html>
