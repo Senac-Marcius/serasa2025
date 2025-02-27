@@ -49,8 +49,8 @@
             const timePattern = /^([01]?[0-9]|2[0-3]):([0-5][0-9])$/;
             const intPattern = /^[0-9]+$/;
             const dayPattern = [
-                "domingo", "segunda-feira", "terça-feira", "quarta-feira", 
-                "quinta-feira", "sexta-feira", "sábado"
+                "domingo", "segunda-feira", "terca-feira", "quarta-feira", 
+                "quinta-feira", "sexta-feira", "sabado"
             ];
 
             if(!dayPattern.includes(req.day)){
@@ -91,7 +91,24 @@
                     userId: "0"
                 })
             )
-            console.log(scales)
+
+            listScales(scales)
         }
+    
+        function listScales(sList){
+            const tbody = document.querySelector("#scList tbody")
+            tbody.innerHTML = ""
+
+            sList.forEach(s =>{
+                const row = document.createElement("tr");
+
+                const dayCell = document.createElement("td");
+                dayCell.textContent = s.day
+
+                row.appendChild(dayCell);
+                tbody.appendChild(row);
+            })
+        }
+
     </script>
 </html>
