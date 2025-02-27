@@ -5,13 +5,55 @@
     </head>
     <boby>
         <h1>cadastre sua categoria</h1>
-        <form>
-            <labol>Nome: </labol><input type="text"/><br>
-            <labol>Categoria: </labol><input type="text"/><br>
-            <labol>Descrição: </labol><input type="text"/><br>
-            <labol>Data: </labol><input type="text"/><br>
-            <labol>Cor:  </labol><input type="text"/><br>
-            <buttons>CADASTRAR</buttons>
-        </form>
+        <section id=""scRegister>
+            <form>
+                <labol>Nome: </labol><input id="name" type="text"/><br>
+                <labol>Categoria: </labol><input id="category" type="text"/><br>
+                <labol>Descrição: </labol><input id="description" type="text"/><br>
+                <labol>Cor:  </labol><input id="color" type="text"/><br>
+                <button type="button" id="register" onclick="handleRegister()">CADASTRAR</button>
+            </form>   
+        </section>
+        <section id="scList">
+            <table>
+                <thead>
+                    <th>NOME</th>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </section>
     </boby>
+    <script>
+        var categories = []
+       
+        function setCategory(req){
+            let c = {
+                id: categories.length,
+                description: req.description,
+                creatAt: req.creatAt,
+                color: req.color,
+                userId: req.userId 
+            }
+            categories.push(c) 
+            return "Cadastro"
+        } 
+
+        function handleRegister(){
+            console.log(
+                setCategory({
+                    name: document.getElementById("name").value,
+                    category: document.getElementById("category").value,
+                    description: document.getElementById("description").value,
+                    color: document.getElementById("color").value,
+                    userId: 0,
+                    creatAt:"2025-02-28"
+                })   
+            )
+
+            console.log(categories)
+        }
+
+    </script>
 </html>
