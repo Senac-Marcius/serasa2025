@@ -6,14 +6,28 @@
 </head>
     <body>
         <h1>Cadastre seu curso</h1>
-        <form>
-            <label>Curso: </label><input id="course" type="text"/><br>
-            <label>Descrição: </label><input id="description" type="text area"/><br>
-            <label>Plano de curso: </label><input id="coursePlan" type="file"/><br>
-            <label>Plano de orientação: </label><input id="guidancePlan" type="file"/><br>
-            <label>Carga horaria: </label><input id="workload" type="text"/><br>
-            <button type="button" id="register" onclick="handleRegister()">Cadastrar</button>
-        </form>
+        <section>
+            <form id="scRegister">
+                <label>Curso: </label><input id="course" type="text"/><br>
+                <label>Descrição: </label><input id="description" type="text area"/><br>
+                <label>Plano de curso: </label><input id="coursePlan" type="file"/><br>
+                <label>Plano de orientação: </label><input id="guidancePlan" type="file"/><br>
+                <label>Carga horaria: </label><input id="workload" type="text"/><br>
+                <button type="button" id="register" onclick="handleRegister()">Cadastrar</button>
+            </form>
+        </section>
+
+        <section id="scList">
+            <table>
+                <thead>
+                    <th>Cursos</th>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </section>
+
     </body>
     <script>
         var courses = []
@@ -46,7 +60,21 @@
                 userId:0,
             })
         )
-        console.log(courses)
+        listcourses(courses)
+        }
+        function listcourses(pList){
+            const tbody = document.querySelector("scList tbody")
+
+            pList.forEach(p =>{
+                const row = document.createElement("tr");
+
+                const courseCell =document.createElement("td");
+                courseCell.textContent = p.course
+
+                row.appendChild(courseCell);
+                tbody.appendChild(row);
+
+            })
         }
     </script>
 </html>
