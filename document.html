@@ -7,25 +7,42 @@
     </head>
     <body>
         <h1>Cadastro de Solicitação</h1>
-        <form action="">
-            <label for="nome do solicitante">Nome Completo: </label><input id="name" type="text"><br><br>
-            <label for="E-mail">E-mail: </label><input id="email" type="text"><br><br>
-            <label for="Telefone Celular">Telefone: </label><input id="telephone" type="number"><br><br>
-            <label for="RG">RG: </label><input id="rg" type="text"><br><br>
-            <label for="data de nascimento do solicitante">Data de Nascimento: </label><input id="dateBirth" type="date"><br><br>
-            <label for="nome da mãe">Nome da mãe: </label><input id="nameMother" type="text"><br><br>
-            <label for="Turma do solicitante">Turma: </label><input id="classs" type="text"><br><br>
-            <label for="Nível do curso">Nível: </label><input id="grade" type="text"><br><br>
-            <label for="Período do curso">Período: </label>
-            <select id="period" name="opcoes">
-                <option id="opcao1" value="opcao1">Manhã</option>
-                <option id="opcao2" value="opcao2">Tarde</option>
-                <option id="opcao3" value="opcao3">Noite</option>
-            </select>
-            <br><br><br>
-            <button type="button" id="register" onclick="handleRegister()">ENVIAR SOLICITAÇÃO</button>            
-        </form>
+        <section id="scRegister">     
+
+            <form action="">
+                <label for="nome do solicitante">Nome Completo: </label><input id="name" type="text"><br><br>
+                <label for="E-mail">E-mail: </label><input id="email" type="text"><br><br>
+                <label for="Telefone Celular">Telefone: </label><input id="telephone" type="number"><br><br>
+                <label for="RG">RG: </label><input id="rg" type="text"><br><br>
+                <label for="data de nascimento do solicitante">Data de Nascimento: </label><input id="dateBirth" type="date"><br><br>
+                <label for="nome da mãe">Nome da mãe: </label><input id="nameMother" type="text"><br><br>
+                <label for="Turma do solicitante">Turma: </label><input id="classs" type="text"><br><br>
+                <label for="Nível do curso">Nível: </label><input id="grade" type="text"><br><br>
+                <label for="Período do curso">Período: </label>
+                <select id="period" name="opcoes">
+                    <option id="opcao1" value="opcao1">Manhã</option>
+                    <option id="opcao2" value="opcao2">Tarde</option>
+                    <option id="opcao3" value="opcao3">Noite</option>
+                </select>
+                <br><br><br>
+                <button type="button" id="register" onclick="handleRegister()">ENVIAR SOLICITAÇÃO</button>            
+            </form>
+        </section>
+
+        <section>
+            <table>
+                <thead>
+                    <tbody>
+                        <th>Nome</th>
+                        
+                    </tbody>
+                </thead>
+            </table>
+
+        </section>
+
     </body>
+
     <script>
         //Atributos = campos de um formulário
         /*documentos - prontuário/dadosalunos, informações de ocorrencias, histórico, 
