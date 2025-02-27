@@ -12,10 +12,10 @@
             <label>Descrição: </label><input id="description" type="text"/><br>
             <label>Data: </label><input id="date" type="date"><br>
             <label>Url: </label><input id="url" type="text"/><br>
-            <label>Valor investido: </label><input id="amount invested" type="number"/><br>
-            <label>Renda mensal: </label><input id="monthly income" type="number"/><br>
-            <label>Valor total: </label><input id="Total value" type="number"/><br>
-            <button  type="button" id="register" onclick="handleRegister()">Cadastrar</button><br> 
+            <label>Valor investido: </label><input id="amountInvested" type="number"/><br>
+            <label>Renda mensal: </label><input id="monthlyIncome" type="number"/><br>
+            <label>Valor total: </label><input id="totalValue" type="number"/><br>
+            <button type="button" id="register" onclick="handleRegister()">Cadastrar</button><br>
         </form>
         </section>
         <section id="scList">
@@ -32,7 +32,7 @@
     </body>
     <script>
         var invests = []
-        function setinvest(req){
+        function setInvest(req){
             const idDescription = /^[A-Za-z\s]+$/;
             const idUrl = /^(https?:\/\/[^\s]+)$/;
             const idCreateAt = /^\d{4},\d{2}-\d{2}$/;
@@ -62,7 +62,7 @@
    
         function handleRegister(){
             console.log(
-                setinvest({
+                setInvest({
                     description: document.getElementById("description").value,
                     url: document.getElementById("url").value,
                     createAt: "2025-02-12",
@@ -70,8 +70,25 @@
                     num: 100
                 })
             )
-
-            console.log(invests)
+            
+            listInvests(invests)
+            
         }
-   </script>
+
+        function listInvests(){
+            const tbody = document.querySelector("#scList tbody")
+            tbody.innerHTML = ""
+            
+            invests.forEach(i => {
+                const row = document.createElement("tr")
+
+                const tdName = document.createElement("td")
+                tdName.textContent = i.description
+                
+                row.appendChild(tdName)
+                tbody.appendChild(row)
+            })
+        }
+
+    </script>
 </html>
