@@ -10,51 +10,63 @@
 
 <body>
     <h1>Cadastramento de Itens</h1>
+    <section id="scRegister">
+        <form>
+            <label>Título: </label><input id="title" type="text" /><br>
+            <label>Subtítulo: </label><input id="subtitle" type="text" /><br>
+            <label>Título Uniforme: </label><input id="uniformTitle" type="text" /><br>
+            <label>Responsáveis: </label><input id="responsible" type="text" /><br>
+            <label>Tradução: </label><input id="tradution" type="text" /><br>
+            <label>Edição: </label><input id="edition" type="text" /><br>
+            <label>Local: </label><input id="location" type="text" /><br>
+            <label>Editora: </label><input id="publisher" type="text" /><br>
+            <label>Ano: </label><input id="year" type="text" /><br>
+            <label>Idioma: </label><input id="language" type="text" /><br>
+            <label>Número de páginas: </label><input id="numberPages" type="text" /><br>
+            <label>Formato: </label><input id="format" type="text" /><br>
+            <label>Dimensões: </label><input id="dimensions" type="text" /><br>
+            <label>Ilustrações: </label><input id="illustration" type="text" /><br>
+            <label>Série: </label><input id="serie" type="text" /><br>
+            <label>Volume: </label><input id="volume" type="text" /><br>
+            <label>ISBN: </label><input id="isbn" type="text" /><br>
+            <label>ISSN: </label><input id="issn" type="text" /><br>
+            <label>Assuntos: </label><input id="subject" type="text" /><br>
+            <label>Palavras-chave: </label><input id="keywords" type="text" /><br>
+            <label>Resumo: </label><textarea id="summary" rows="10"></textarea><br>
+            <label>Notas: </label><textarea id="notes" rows="5"></textarea><br>
+            <label>Material adicional e suplementos: </label><textarea id="additionalMaterial" rows="3"></textarea><br>
+            <label>Periodicidade: </label><input id="periodicity"  type="text" /><br>
+            <label>Data de início e encerramento: </label><input id="startEndDate"  type="text" /><br>
+            <label>Instituição: </label><input id="institution"  type="text" /><br>
+            <label>Grau: </label><input id="degree"  type="text" /><br>
+            <label>Orientadores: </label><input id="advisors"  type="text" /><br>
+            <label>Desenvolvedor: </label><input id="developer"  type="text" /><br>
+            <label>Designer: </label><input id="designer"  type="text" /><br>
+            <label>Plataforma: </label><input id="platform"  type="text" /><br>
+            <label>Número de jogadores: </label><input id="numberPlayers"  type="text" /><br>
+            <label>Faixa etária: </label><input id="ageGroup"  type="text" /><br>
+            <label>Código de produto: </label><input id="productCode"  type="text" /><br>
+            <label>Narrador: </label><input id="narrator"  type="text" /><br>
+            <label>Duração: </label><input id="duration"  type="text" /><br>
+            <label>Escala: </label><input id="scale"  type="text" /><br>
+            <label>Coordenadas geográficas: </label><input id="geographicCoordinates"  type="text" /><br>
+            <label>CDD: </label><input id="cdd"  type="text" /><br>
+            <label>Número de Chamada: </label><input id="callNumber"  type="text" /><br>
+            <button type="button" "register" onclick="handleRegister()">Cadastrar</button>
+        </form>
+    </section>
+        
+    <section id="scList" >
+        <table>
+            <thead>
 
-    <form>
-        <label>Título: </label><input id="title" type="text" /><br>
-        <label>Subtítulo: </label><input id="subtitle" type="text" /><br>
-        <label>Título Uniforme: </label><input id="uniformTitle" type="text" /><br>
-        <label>Responsáveis: </label><input id="responsible" type="text" /><br>
-        <label>Tradução: </label><input id="tradution" type="text" /><br>
-        <label>Edição: </label><input id="edition" type="text" /><br>
-        <label>Local: </label><input id="location" type="text" /><br>
-        <label>Editora: </label><input id="publisher" type="text" /><br>
-        <label>Ano: </label><input id="year" type="text" /><br>
-        <label>Idioma: </label><input id="language" type="text" /><br>
-        <label>Número de páginas: </label><input id="numberPages" type="text" /><br>
-        <label>Formato: </label><input id="format" type="text" /><br>
-        <label>Dimensões: </label><input id="dimensions" type="text" /><br>
-        <label>Ilustrações: </label><input id="illustration" type="text" /><br>
-        <label>Série: </label><input id="serie" type="text" /><br>
-        <label>Volume: </label><input id="volume" type="text" /><br>
-        <label>ISBN: </label><input id="isbn" type="text" /><br>
-        <label>ISSN: </label><input id="issn" type="text" /><br>
-        <label>Assuntos: </label><input id="subject" type="text" /><br>
-        <label>Palavras-chave: </label><input id="keywords" type="text" /><br>
-        <label>Resumo: </label><textarea id="summary" rows="10"></textarea><br>
-        <label>Notas: </label><textarea id="notes" rows="5"></textarea><br>
-        <label>Material adicional e suplementos: </label><textarea id="additionalMaterial" rows="3"></textarea><br>
-        <label>Periodicidade: </label><input id="periodicity"  type="text" /><br>
-        <label>Data de início e encerramento: </label><input id="startEndDate"  type="text" /><br>
-        <label>Instituição: </label><input id="institution"  type="text" /><br>
-        <label>Grau: </label><input id="degree"  type="text" /><br>
-        <label>Orientadores: </label><input id="advisors"  type="text" /><br>
-        <label>Desenvolvedor: </label><input id="developer"  type="text" /><br>
-        <label>Designer: </label><input id="designer"  type="text" /><br>
-        <label>Plataforma: </label><input id="platform"  type="text" /><br>
-        <label>Número de jogadores: </label><input id="numberPlayers"  type="text" /><br>
-        <label>Faixa etária: </label><input id="ageGroup"  type="text" /><br>
-        <label>Código de produto: </label><input id="productCode"  type="text" /><br>
-        <label>Narrador: </label><input id="narrator"  type="text" /><br>
-        <label>Duração: </label><input id="duration"  type="text" /><br>
-        <label>Escala: </label><input id="scale"  type="text" /><br>
-        <label>Coordenadas geográficas: </label><input id="geographicCoordinates"  type="text" /><br>
-        <label>CDD: </label><input id="cdd"  type="text" /><br>
-        <label>Número de Chamada: </label><input id="callNumber"  type="text" /><br>
-        <button type="button" "register" onclick="handleRegister()">Cadastrar</button>
-    </form>
-    </body>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </section>
+</body>
     <script>
         var items =  [] // vetor
 
