@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -7,11 +7,65 @@
     <title>Produto</title>
 </head>
 <body>
-  <h1>Cadastro do Produto</h1> 
-  <form>
-    <label>Nome: </label><input type="text"/><br>
-    <label>Descrição: </label><input type="text"/><br>
-    <button>Submite</button>
-  </form>
+  <h1>Cadastro do Produto</h1>
+  <section id="scRegister">
+    <form>
+      <label>Nome:</label><input id ="name" type="text"/><br>
+      <label>Descrição: </label><input type="textarea" id ="description"/><br>
+      <button type="button" id="register" onclick="handleRegister()">Cadastrar</button>
+    </form>
+  </section>
+  <section id="scList">
+      <table>
+        <thead>
+          <th>Item</th>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+  </section>
 </body>
+<script>
+
+  var products = []
+  function setProduct(req){
+    const namePattern = /^.+$/; // Aceita qualquer caractere, incluindo espaços
+    const datePattern = /^\d{4}-\d{2}-\d{2}$/; // Formato de data YYYY-MM-DD
+    const descriptionPattern = /^.+$/; // Aceita qualquer caractere, incluindo espaços
+ 
+    if (!namePattern.test(req.name)) {
+        return"Formato de nome inválido. O nome deve conter apenas letras, números, espaços e alguns caracteres especiais."
+    }
+    if (!datePattern.test(req.createAt)) {
+        return"Formato de data inválido. A data deve estar no formato YYYY-MM-DD."
+    }
+    if (!descriptionPattern.test(req.description)) {
+        return"Formato de descrição inválido. A descrição deve conter apenas letras, números, espaços e alguns caracteres especiais."
+    }
+    if(req.description.length > 244) {
+        return"Formato de descrição inválido. A descrição deve conter apenas letras, números, espaços e alguns caracteres especiais."
+    }
+    let p = {
+        id: products.length,
+        name: req.name,
+        createAt: req.createAt,
+        description: req.description
+    };
+    products.push(p)
+    return "Cadastrado com sucesso"
+  }
+  
+  function handleRegister(){
+    console.log(
+      setProduct({  
+        name: document.getElementById("name").value, 
+        createAt: "2000-12-31", 
+        description: document.getElementById("description").value
+      })
+    )
+    
+    console.log(products)
+  }
+</script>
 </html>
