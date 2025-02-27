@@ -1,0 +1,65 @@
+body {
+    background-color: rgb(202, 202, 202);
+    color: #6f6f6f;
+    font-family: Arial, Helvetica, sans-serif;
+    width: 100vw;
+    height: 100vh;
+}
+
+.container-titles {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    margin-bottom: 50px;
+}
+
+.container-1 {
+    display: grid;
+    width: 800px;
+    margin: 0 auto;
+
+}
+
+.container-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(255, 255, 255);
+    margin: 0 auto;
+    /* width: 300px;
+    height: 250px;
+    border-radius: 15px;
+    padding: 50px; */
+}
+
+#description {
+    padding: 5px;
+    border-radius: 10px;
+    border-style: dashed;
+}
+
+#nome {
+    padding: 5px;
+    border-radius: 10px;
+}
+
+#url {
+    padding: 5px;
+    border-radius: 10px;
+}
+
+#btn-cadastrar {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    background-color: rgb(52, 52, 241);
+    color: white;
+    height: 30px;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.btn {
+    width: 460px;
+    margin: 0 auto;
+}
