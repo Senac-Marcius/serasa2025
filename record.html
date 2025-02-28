@@ -2,15 +2,35 @@
 <html lang="pt-BR">
 
 <head>
-    <link rel="stylesheet" href="style.css">
 
     <meta charset="UTF-8" />
     <title>Registro</title>
+    <style>
+        body{
+            margin: 0
+        }
+        h1{
+            text-align: center;
+            color: #BF54A3;
+            background-color: #F2F2F2;
+            margin: 2;
+        }
 
+        #scRegister{
+
+
+        }
+
+        #scList{
+
+
+
+        }
+    </style>
 </head>
 
 <body>
-    <h1 class="div">Realize o seu registro:</h1>
+    <h1>Realize o seu registro:</h1>
     <section id="scRegister">
         <form>
             <label>Nome: </label><input id="name" type="text"/><br><br>
@@ -19,7 +39,7 @@
             <label>Alergia: </label><input id="allergy" type="text"/><br><br>
             <label>Doença: </label><input id="sick" type="text"/><br><br>
             <label>Medicação: </label><input id="medication" type="text"/><br><br>
-            <button class="div1" type="button" id="register" onclick="handleRegister()">CADASTRAR</button>
+            <button type="button" id="register" onclick="handleRegister()">CADASTRAR</button>
     
         </form>
     </section>
