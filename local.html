@@ -23,9 +23,26 @@
                 margin-right: auto;
             }
             #sclist{
-                
+
 
             }
+
+            .row{
+                display:flex;
+            }
+
+            label{
+                    font-weight: 600;
+            }
+
+            button{
+                background: linear-gradient(135 deg, #6e8efb, #a777e3);
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                font-size: 16px;
+            }
+
             body{
                 margin: 0;
             }
@@ -33,17 +50,17 @@
     </head>
     <body>
         <h1> Cadastre o seu Local: </h1>
-        <section id="scRegister">
-        <form>
-            <label>Nome: </label><input id="name" type="text" /><br>
-            <label>Área: </label><input id="area" type="text" /><br> 
-            <label>Descrição: </label><input id="description" type="text" /><br> 
-            <label>Endereço: </label><input id="adress" type="text" /><br>
-            <button type="button" id="register" onclick="handleRegister()">Cadastrar</button> 
-        </form>
-
-        </section>
-
+        <div class="row"> 
+            <section id="scRegister">
+                <form>
+                    <label>Nome: </label><input id="name" type="text" /><br>
+                    <label>Área: </label><input id="area" type="text" /><br> 
+                    <label>Descrição: </label><input id="description" type="text" /><br> 
+                    <label>Endereço: </label><input id="adress" type="text" /><br>
+                    <button type="button" id="register" onclick="handleRegister()">Cadastrar</button> 
+                </form>
+            </section>
+    
         <section id="scList">
             <table>
                 <thead>
@@ -54,6 +71,7 @@
                 </tbody>  
             </table>
         </section>
+    </div>
     </body>
     <script>
         var locals = []
