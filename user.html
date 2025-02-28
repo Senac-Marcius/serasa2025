@@ -5,6 +5,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Usuário</title>
+  <style>
+    h1{
+      
+    }
+
+    #scRegister{
+    }
+    #scList{
+    }
+
+  </style>
 
 </head>
 
@@ -140,6 +151,7 @@
       const nameCell = document.createElement("td")
       //cria a coluna
       nameCell.textContent = u.name
+
       //adiciona informação na coluna
 
       row.appendChild(nameCell)
@@ -149,7 +161,13 @@
 
     })
 
+    //criar forms de filtro
+    //botão chama a função que chama a função get
+    //tem que chamar a função que retorna a lista
+
   }
 </script>
+
+
 
 </html>
