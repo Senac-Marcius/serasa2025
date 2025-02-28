@@ -10,6 +10,14 @@
             margin: 0;
 
         }
+
+        section{
+            display: flex;
+            margin:0 auto;
+            flex-direction: column;
+
+        }
+
             h1{
 
             text-align: center;
@@ -22,9 +30,15 @@
             #scRegister{
 
             line-height: 35px;
-            text-align: center;
+            text-align: center; 
 
-                
+            }
+
+            .row{ 
+                display: flex;
+                margin-top:50px;
+                padding:20px; 
+                padding:20px;
 
             }
 
@@ -36,31 +50,37 @@
     </head>
     <body>
         <h1>Cronograma de Calendario</h1>
-        <section>
-            <form id="scRegister">
-                <label> Nome do Aluno: </label><input id="student" type= "text"/><br>
-                <label> Curso: </label><textarea id="course" type="text"></textarea><br>
-                <label> Periodo: </label><input id="period" type= "text"/><br>
-                <label> Data da Matricula: </label><input id="date" type= "date"/><br>
-                <!--Adicionar Cronograma-->
-                <button type="button" id="register" onclick="handleRegister()">cadastrar</button>
-            </form>
-       </section>
-
-        <section id="scList">
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Cronograma</th>
-                    </tr>
-                </thead>
-                <tbody>
-            
-                </tbody>
-            </table>
+        <div class="row">
+            <section>
+                <form id="scRegister">
+                    <label> Nome do Aluno: </label><input id="student" type= "text"/><br>
+                    <label> Curso: </label><textarea id="course" type="text"></textarea><br>
+                    <label> Data da Matricula: </label><input id="date" type= "date"/><br>
+                    <label for="Período do curso" id="period">Periodo: </label>
+                    <select id="period" cronograma ="opcoes">
+                        <option id="opcao1" value="opcao1">Manhã</option>
+                        <option id="opcao2" value="opcao2">Tarde</option>
+                        <option id="opcao3" value="opcao3">Noite</option><br>
+                    <!--Adicionar Cronograma-->
+                    </select><br>
+                    <button type="button" id="register" onclick="handleRegister()">cadastrar</button>
+                </form>
         </section>
-       
+
+            <section id="scList">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cronograma</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                
+                    </tbody>
+                </table>
+            </section>
+    </div>
     </body>
 <script>
 
