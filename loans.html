@@ -21,6 +21,11 @@
             background: linear-gradient(135deg, #6e8efb, #a777e3);
             text-shadow: 2px 2px 5px #1d0a754d;
         }
+        section{
+            display: flex;
+            flex-direction: column;
+            margin: 0 auto;
+        }
 
         #scRegister {}
 
@@ -71,9 +76,11 @@
 <body>
     <h1> EMPRÉSTIMO</h1>
    
-    <h2>Deseja confirmar esse empréstimo?:</h2>
+    
     <div class="row">
+        
         <section id="scRegister">
+            <h2>Deseja confirmar esse empréstimo?:</h2>
             <form>
                 <input type="radio" id="html" name="fav_language" value="CONFIRMAR">
                 <label for="Confirmar">Confirmar</label><br>
@@ -99,7 +106,7 @@
             </form>
         </section>
     
-    </div>
+    
         <section id="sclist">
 
             <table>
@@ -112,7 +119,7 @@
             </table>
 
         </section>
-    
+    </div>
 </body>
 
 <script>
