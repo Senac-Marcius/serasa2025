@@ -4,36 +4,109 @@
         <link rel="stylesheet" href="styles.css">
         <meta charset="UTF-8"/>
         <title>Item</title>
-    </head>
-    <body>  
-        <h1>Cadastre seu item</h1>
-     <section id="scRegister">
-        <form>
+        <style>
+            body{
+            }
 
-            <label>Marca:</label><input  id= "mark" type="text"/><br>
-            <label>Número de Série:</label><input id= "assetNumber"type="text"/><br>
-            <label>Quantidade:</label><input id="amount" type="text"/><br>
-            <button type="button" id="register"  onclick="handleRegister()">CADASTRAR</button>
-        </form>
-    </section>
+            h1{
+                text-align: center;
+                color:#BF54a3;
+                background-color: #f2f2f2;
+                margin: 0;
+            }
 
-        <section id="Sclist">
-            <table>
-                <thead>
-                    <th>Marca</th>
-                </thead>
-                <tbody>
+            section{
+                display:flex;
+                margin: 0 auto;
+                flex-direction: column;
+            }
+    
+            #scRegister{
+           
+            }
+            #scList{
 
-                </tbody>
-            </table>
-         </section>
+            }
+            .row{
+                display: flex;
+                margin-top: 50px;
+                padding: 20px;
+            }
+            label{
+                font-weight: 600;
+            }
+            br{
+                margin:10px;
+            }
+            button {
+                background: linear-gradient(135deg, #6e8efb, #a777e3);
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                font-size: 16px;
+                font-weight: bold;
+                border-radius: 8px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+                cursor: pointer;
+                transition: all 0.3s ease-in-out;
+                position: relative;
+                overflow: hidden;
+                margin: 20px auto 0;
+                display: block;
+            }
+
+            button:hover {
+                background: linear-gradient(135deg, #5b77e0, #925ec4);
+                box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+                transform: translateY(-2px);
+            }
+
+            button:active {
+                transform: translateY(1px);
+                box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+            }
+
+    form{
+        background-color: #f2f2f2;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0px 4 px 10 px rgba(0,0,0,0.2);
+    }
+
+        </style>
+        </head>
+    <body>
+        <h1>Cadastre seu item</h1> 
+        <div class="row">
+      
+            <section id="scRegister">
+                <form>
+                    <label>Nome:</label><input  id= "name" type="text"/><br>
+                    <label>Marca:</label><input  id= "mark" type="text"/><br>
+                    <label>Número de Série:</label><input id= "assetNumber"type="text"/><br>
+                    <label>Quantidade:</label><input id="amount" type="text"/><br>
+                    <button type="button" id="register"  onclick="handleRegister()">CADASTRAR</button>
+                </form>
+            </section>
+
+            <section id="scList">
+                <table>
+                    <thead>
+                        <th>Marca</th>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </section>
+        </div>
     </body>
     <script>
         var itens=[]
         function setItens(req){        
             let i = {
-                id: itens.length -1,
-                name: req.name,
+                id: itens.length,
+                name:req.name,
                 mark:req.mark,
                 assetNumber: req.assetNumber, 
                 amout: req.amout
@@ -52,9 +125,37 @@
                     amount: document.getElementById("amount").value
 
                 }) 
-            )
 
-            console.log(itens)
+            )
+//Criar um formulário com botão usando filtro
+            listItens(itens)
         }
+        
+        function listItens(cList){
+            const tbody= document.querySelector("#scList tbody")
+            tbody.innerHTML=""
+            cList.forEach(i => {
+                const row= document.createElement("tr");
+
+                const nameCell= document.createElement("td");
+                nameCell.textContent= i.name
+
+                const viewbutton= document.createElement("button");
+                const viewCell= document.createElement("td");
+                viewCell.appendChild(viewbutton)
+
+                const editbutton= document.createElement("button");
+                const editCell= document.createElement("td");
+                  editCell.appendChild(editbutton)
+                
+
+                row.appendChild(viewCell);
+                row.appendChild(editCell);
+                row.appendChild(nameCell);
+                tbody.appendChild(row);
+                
+            });
+        }
+        
     </script>
 </html>
