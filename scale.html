@@ -3,6 +3,29 @@
     <head>
         <meta charset="UTF-8"/>
         <title>Escala</title>
+        <style>
+           body{
+                margin: 0;
+           }
+           h1{
+                text-align: center;
+                color: #BF54A3;
+                background-color: #F2F2F2;
+                margin: 0;
+            }
+
+            #scRegister{
+                text-align: left;
+                color: #BF54A3;
+                background-color: #F2F2F2;
+            }
+
+            #scList{
+                text-align: -webkit-right;
+                color: #BF54A3;
+                background-color: #F2F2F2
+            }
+        </style>
     </head>
     <body>
         <h1>Cadastro de Escala</h1>
@@ -79,6 +102,7 @@
         }
         
         scales.push(s)
+        return "Escala Cadastrada"
         }
 
         function handleRegister(){
