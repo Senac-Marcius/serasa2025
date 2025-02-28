@@ -3,56 +3,107 @@
     <head>
         <meta charset="UTF-8" />
         <title>Postagem</title>
+        <style>
+            /*
+            #BF54A3
+            #0B0C0D
+            #4EB1D9
+            #04ADBF
+            #F2F2F2
+            */
+            body{
+                margin: 0;
+            }
+
+            h1 {
+                text-align: center;
+                color: #BF54A3;
+                background-color: #F2F2F2;
+                margin: 0;
+            }
+
+            #scRegister{
+
+            }
+
+            #scList{
+
+            }
+        </style>
     </head>
     <body>
-        <h1>O que você esta pensando?</h1>
-        <form>
-            <label>Nome: </label><input id="name" type="text" /><br>
-            <label>Descrição: </label><textarea id="description" type="text"></textarea><br>
-            <label>URL: </label><input id="url" type="text" /><br>
-            <button type="button" onclick="handleSet()">CADASTRAR</button>
-        </form>
+        <h1>Seus Feed</h1>
+        
+        <section id="scRegister">
+            <form>
+                <label>Descrição: </label><textarea id="description" type="text"></textarea><br>
+                <label>URL: </label><input id="url" type="text" /><br>
+                <button type="button" id="register" onclick="handleRegister()">CADASTRAR</button>
+            </form> 
+        </section>
+        
+        <section id="scList">
+
+            <table>
+                <thead>
+                    <th>URL</th>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+
+        </section>
     </body>
     <script>
         var posts = []
 
-        function setPost(req) {
-            const idPattern = /^\d+$/
-            const urlPattern = /^(https?:\/\/)[^\s$.?#].[^\s]*$/
-            const datePattern = /^\d{4}-\d{2}-\d{2}$/
+        function setPost(req){
+            const urlPattern = /^(https?:\/\/)[^\s$.?#].[^\s]*$/;
+            const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 
-            if (!idPattern.test(req.id)) return "Campo ID deve conter apenas números"
-            if (!idPattern.test(req.userId)) return "Campo User ID deve conter apenas números"
-            if (!urlPattern.test(req.url)) return "Campo URL deve conter o seguinte formato: https://dominio."
-            if (!datePattern.test(req.createAt)) return "Campo Data deve conter o seguinte formato: YYYY-MM-DD"
-            if (req.description.length > 244) return "Campo Descrição deve conter até 244 caracteres"
+            if(!urlPattern.test(req.url)) return "Campo url deve conter o seguinte formato https://dominio."
+            if(!datePattern.test(req.createAt)) return "Campo createAt deve conter o seguinte formato YYYY-MM-DD"
+            if(req.description.length > 244) return "Campo description deve conter até 244 caracters"
 
             let p = {
-                id: req.id,
-                name: req.name,
+                id: posts.length,
                 description: req.description,
-                url: req.url,
+                url:req.url,
                 createAt: req.createAt,
                 userId: req.userId
             }
 
             posts.push(p)
-            return "Postagem Cadastrada"
+            return "Cadastrado"
         }
-
-        function handleSet() {
+   
+        function handleRegister(){
             console.log(
                 setPost({
-                    id: 0,
-                    name: document.getElementById("name").value,
                     description: document.getElementById("description").value,
                     url: document.getElementById("url").value,
-                    createAt: "2025-02-25",
+                    createAt: "2000-12-31",
                     userId: 0
                 })
             )
 
-            console.log(posts)
+            listPosts(posts)
         }
-    </script>
+   
+        function listPosts(pList){
+            const tbody = document.querySelector("#scList tbody")
+            tbody.innerHTML = ""
+
+            pList.forEach(p => {
+                const row = document.createElement("tr")
+
+                const urlCell = document.createElement("td")
+                urlCell.textContent = p.url
+
+                row.appendChild(urlCell)
+                tbody.appendChild(row)
+            })
+        }
+   </script>
 </html>
