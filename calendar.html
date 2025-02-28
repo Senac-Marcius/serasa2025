@@ -34,6 +34,18 @@
 
             }
 
+            label{ 
+                font-weight: 600;
+            }
+
+            form{
+                background-color:#F2F2F2 ;
+                padding:40px;
+                border-radius: 20px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2)
+
+            }
+
             .row{ 
                 display: flex;
                 margin-top:50px;
@@ -42,10 +54,44 @@
 
             }
 
+            br{
+                margin:10px
+
+            }
+
             #scList{
 
             }
+
             
+            button {
+                background: linear-gradient(135deg, #6e8efb, #a777e3);
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                font-size: 16px;
+                font-weight: bold;
+                border-radius: 8px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+                cursor: pointer;
+                transition: all 0.3s ease-in-out;
+                position: relative;
+                overflow: hidden;
+                margin: 20px auto 0;
+                display: block;
+            }
+
+            button:hover {
+                background: linear-gradient(135deg, #5b77e0, #925ec4);
+                box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+                transform: translateY(-2px);
+            }
+
+            button:active {
+                transform: translateY(1px);
+                box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+            }
+
        </style>
     </head>
     <body>
@@ -120,17 +166,25 @@
         tbody. innerHTML = ""
 /*executa o callback fornecido uma vez para cada elemento da ordem com um valor atribuido*/
         cList.forEach(c => {
-        const row = document.createElement ("tr");
+            const row = document.createElement ("tr");
 
-        const timelineCell = document.createElement("td");
-        timelineCell.textContent = c.DateRegistration
+            const timelineCell = document.createElement("td");
+            timelineCell.textContent = c.DateRegistration
 
+            const mybutton = document.createElement("button");
+            const editcell = document.createElement("td");
+            editcell.appendChild(mybutton)
 
-        row.appendChild(timelineCell);
-        tbody.appendChild(row);
-        })
+            const mycell = document.createElement("button");
+            const editbutton = document.createElement("td");
+            mycell.appendChild(editcell)
 
+            row.appendChild(timelineCell);
+            row.appendChild(editcell);
+            row.appendChild(mycell);
         
+            tbody.appendChild(row);
+        })
 
     }
     </script>
