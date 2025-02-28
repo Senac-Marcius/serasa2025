@@ -161,14 +161,17 @@
 
        
                 const viewCell =  document.createElement("td");
-                
                 const viewButton =  document.createElement("button");
-                viewButton.appendChild(row);
+                viewCell.appendChild(viewButton);
 
-
+                const dellCell =  document.createElement("td");
+                const dellButton =  document.createElement("button");
+                dellCell.appendChild(dellButton);
 
                 row.appendChild(nameCell);
-                viewCell.appendChild(viewCell);
+                row.appendChild(viewCell);
+                row.appendChild(dellCell);
+
                 tbody.appendChild(row)
 
             })      
