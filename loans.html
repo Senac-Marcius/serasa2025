@@ -8,48 +8,98 @@
     <style>
         h1 {
             text-align: center;
-            color: #BF54A3;
-            background-color: #f2f2f2;
-            margin: 0;
+            color:white;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            text-shadow: 2px 2px 5px #1d0a754d;
+        }
+        h2{
+            text-align: c;
+        }
+        th{
+            text-align: center;
+            color:white;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            text-shadow: 2px 2px 5px #1d0a754d;
         }
 
         #scRegister {}
 
-        #scList {}
+        #scList {
+
+        }
+        .row{
+            display:flex;
+           
+            
+        }
+        label {
+            font-weight: 600;
+        }
+       
+        button {
+                background: linear-gradient(135deg, #6e8efb, #a777e3);
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                font-size: 16px;
+                font-weight: bold;
+                border-radius: 8px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+                cursor: pointer;
+                transition: all 0.3s ease-in-out;
+                position: relative;
+                overflow: hidden;
+                margin: 20px auto 0;
+                display: block;
+            }
+
+            button:hover {
+                background: linear-gradient(135deg, #5b77e0, #925ec4);
+                box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+                transform: translateY(-2px);
+            }
+
+            button:active {
+                transform: translateY(1px);
+                box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+            }
+
     </style>
 </head>
 
 
 <body>
+    <h1> EMPRÉSTIMO</h1>
+   
+    <h2>Deseja confirmar esse empréstimo?:</h2>
+    <div class="row">
+        <section id="scRegister">
+            <form>
+                <input type="radio" id="html" name="fav_language" value="CONFIRMAR">
+                <label for="Confirmar">Confirmar</label><br>
+                <input type="radio" id="css" name="fav_language" value="RESERVAR">
+                <label for="Reservar">Reservar</label><br>
+                <input type="radio" id="voltar ao lobby" name="fav_language" value="VOLTAR AO LOBBY">
+                <label for="voltar ao Catálogo">Voltar ao Catálogo</label>
+                <p> <button type="button" onclick="alert('PROXIMO')">PRÓXIMO</button></p>
+            </form>
 
-    <h2>Você selecionou o livro 'Pequeno Príncipe'</h2>
+            
 
-    <p>Deseja confirmar esse empréstimo?:</p>
-
-    <form>
-        <input type="radio" id="html" name="fav_language" value="CONFIRMAR">
-        <label for="Confirmar">Confirmar</label><br>
-        <input type="radio" id="css" name="fav_language" value="RESERVAR">
-        <label for="Reservar">Reservar</label><br>
-        <input type="radio" id="voltar ao lobby" name="fav_language" value="VOLTAR AO LOBBY">
-        <label for="voltar ao Catálogo">Voltar ao Catálogo</label>
-
-    </form>
-
-    <p> <button type="button" onclick="alert('PROXIMO')">PRÓXIMO</button></p>
-
-    <h1>Dados para empréstimo</h1>
-    <section id="scRegister">
-        <form>
-            <p> <label>Nome do livro:</label><input id="namebook" type="text" /><br></p>
-            <p><label>Data de empréstimo:</label><input id="dateloan" type="date" /><br></p>
-            <p><label>Data de devolução:</label><input id="datereturns" type="date" /><br></p>
-            <p><label>Renovação:</label><input id="renewal" type="text" /><br></p>
-            <p><label>Status de empréstimo:</label><input id=" status" type="select" /><br></p>
-            <p><label>observação:</label><input id="observation" type="text" /><br></p>
-        </form>
-        </select>
-
+            <h2>Dados para empréstimo</h2>
+            
+            <form>
+                <p> <label>Nome do livro:</label><input id="namebook" type="text" /><br></p>
+                <p><label>Data de empréstimo:</label><input id="dateloan" type="date" /><br></p>
+                <p><label>Data de devolução:</label><input id="datereturns" type="date" /><br></p>
+                <p><label>Renovação:</label><input id="renewal" type="text" /><br></p>
+                <p><label>Status de empréstimo:</label><input id=" status" type="select" /><br></p>
+                <p><label>observação:</label><input id="observation" type="text" /><br></p>
+                    <p> <button type="button" id="register" onclick="handleRegister()">FINALIZAR</button></p>
+            </form>
+        </section>
+    
+    </div>
         <section id="sclist">
 
             <table>
@@ -62,9 +112,7 @@
             </table>
 
         </section>
-
-        <p> <button type="button" id="register" onclick="handleRegister()">FINALIZAR</button></p>
-
+    
 </body>
 
 <script>
@@ -110,13 +158,30 @@
 
         loans.forEach(p => {
             const row = document.createElement("tr");
+            
+            const buttontd = document.createElement("td");
+            const buttonEdit = document.createElement("td")
 
+            buttontd.textContent = "Deletar"
+            buttonEdit.textContent = "Editar"
             const statusLoanCell = document.createElement("td");
             statusLoanCell.textContent = p.statusLoan
 
-            row.appendChild(statusLoanCell);
-            tbody.appendChild(row);
+            const buttonEdicao = document.createElement("button");
+            const buttonDeletar = document.createElement("button");
 
+            buttonEdit.appendChild(buttonEdicao)
+            buttontd.appendChild(buttonDeletar)
+
+
+
+          
+            row.appendChild(statusLoanCell);
+            row.appendChild(buttonEdit);
+            row.appendChild(buttontd);
+
+            tbody.appendChild(row);
+            
 
         })
     }
