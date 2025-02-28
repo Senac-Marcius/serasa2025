@@ -1,149 +1,299 @@
 <!DOCTYPE html>
-<html lang ="pt-BR">
-    <head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>Cadastro de Funcionários</title>
-        <link rel = "stylesheet" href="./style.css">
-    </head>
-    <body>
-        <h1 class="container-1">Formulario para cadastro de funcionário</h1>
-        
-        <section id="eResgister">
-            <form id ="formEmployee" class="container-input">
-                <label for="urls">Currículo: </label>
-                <input type="text" id ="urls" name = "urls" placeholder="Insira um perfil (linkedin , catho , etcs..)"/>
-                <label for="name">Nome: </label>
-                <input type="text"id="name"/>
-                <label for="age">Data de Nascimento: </label>
-                <input type="text" id="age" name="age" placeholder="MM/DD/YYYY" maxlength="10">
-                <script>
-                    document.getElementById("age").addEventListener("input", function(e) {
-                    let value = e.target.value.replace(/\D/g, ""); // Remove tudo que não for número
+<html lang="pt-BR">
+
+<head>
     
+    <title>Cadastro de Funcionários</title>
+    
+    <style>
+        h1 {
+            TEXT-ALIGN: left;
+            COLOR: #3B3C40;
+            font-family: math;
+        }
+
+        .eResgister {
+            font-family: fantasy;
+            color: #3B3C3F;
+            display: flex;
+            justify-content: center;
+        }
+
+        section#esList {
+
+        }
+    </style>
+</head>
+
+<body>
+    <h1 >Formulario para cadastro de funcionário</h1>
+    <section class="eResgister">
+        <form id="formEmployee" >
+            <label for="urls">Perfil do Linkedin: </label>
+            <input type="text" id="urls" name="urls" placeholder="Insira um perfil (linkedin , catho , etcs..)" />
+            <label for="name">Nome Completo: </label>
+            <input type="text" id="name" />
+            <label for="age">Data de Nascimento: </label>
+            <input type="text" id="age" name="age" placeholder="MM/DD/YYYY" maxlength="10">
+            <script>
+                document.getElementById("age").addEventListener("input", function (e) {
+                    let value = e.target.value.replace(/\D/g, ""); // Remove tudo que não for número
+
                     if (value.length > 2) value = value.slice(0, 2) + "/" + value.slice(2);
                     if (value.length > 5) value = value.slice(0, 5) + "/" + value.slice(5);
-        
+
                     e.target.value = value.slice(0, 10); // Limita ao formato MM/DD/YYYY
-                    });
-                </script>
-                <label for="tell" >Telefone: </label>
-                <input type="tel" id="tell" name="tell" placeholder="(00) 00000-0000" maxlength="15">
-                <script>
-                    document.getElementById("tell").addEventListener("input", function(e) {
+                });
+            </script>
+            <label for="tell">Telefone de Contato: </label>
+            <input type="tel" id="tell" name="tell" placeholder="(00) 00000-0000" maxlength="15">
+            <script>
+                document.getElementById("tell").addEventListener("input", function (e) {
                     let value = e.target.value.replace(/\D/g, "")// Remove tudo que não for número
 
                     if (value.length > 2) value = `(${value.slice(0, 2)}) ${value.slice(2)}`
                     if (value.length > 7) value = `${value.slice(0, 10)}-${value.slice(10)}`
 
                     e.target.value = value.slice(0, 15); // Limita ao formato (XX) XXXXX-XXXX
-                    })
-                </script>
-                <label for="email">Email: </label>
-                <input type="email" id="email" name="email" placeholder="emailtest@test.com.ts">
-                <label for="address">Endereço: </label>
-                <input type="text" id="address" name="address">
-                <label for="nationality">Nacionalidade: </label>
-                <input type="text" id="nationality" name="nationality">
-                <label for="cpf">C.P.F: </label>
-                <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" required/>
-                <script>
-                    let cpf = document.getElementById("cpf")
-                
+                })
+            </script>
+            <label for="email">Email: </label>
+            <input type="email" id="email" name="email" placeholder="emailtest@test.com.ts">
+            <label for="cep">CEP:</label>
+            <input type="text" id="cep" name="cep" onblur="buscarEndereco()" placeholder="00000-000">
+            <label for="address">Endereço: </label>
+            <input type="text" id="address" name="address" disabled>
+            <script>
+                function buscarEndereco() {
+                    let cep = document.getElementById('cep').value.replace(/\D/g, '');
+                    if (cep.length === 8) {
+                        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (!data.erro) {
+                                    document.getElementById('address').value = `${data.logradouro}, ${data.bairro}, ${data.localidade} - ${data.uf}`;
+                                } else {
+                                    alert('CEP não encontrado!');
+                                    document.getElementById("address").disable = false
+                                }
+                            })
+                            .catch(error => console.error('Erro ao buscar CEP:', error));
+                    } else {
+                        alert('CEP inválido!');
+                    }
+                }
+            </script>
+            <label for="nationality">Nacionalidade: </label>
+            <input type="text" id="nationality" name="nationality">
+            <label for="cpf">C.P.F: </label>
+            <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+                required />
+            <script>
+                let cpf = document.getElementById("cpf")
 
-                    cpf.addEventListener("input", function(e) {
-                      let value = e.target.value.replace(/\D/g, "");
-                  
-                      if (value.length > 3) value = value.slice(0, 3) + "." + value.slice(3);
-                      if (value.length > 7) value = value.slice(0, 7) + "." + value.slice(7);
-                      if (value.length > 11) value = value.slice(0, 11) + "-" + value.slice(11);
-                      
-                      e.target.value = value.slice(0, 14);
-                    
-                    });
-                </script>
-                <label for="sex">Sexo:</label>
-                <input type="text" id="sex" name="sex">
-                <label>Estado Civil:</label>
-                <select id="martialStatus" name="martialStatus">
-                    <option value="Null">Insira o perfil</option>
-                    <option value="Solteiro(a)">Solteiro(a)</option>
-                    <option value="Divorciado(a)">Divorciado(a)</option>
-                    <option value="Casado(a)">Casado(a)</option>
-                    <option value="Viuvo(a)">Viuvo(a)</option>
-                </select>    
-                <label for="discPersonality">Personalidade: </label>
-                <select id="discPersonality" name="discPersonality">
-                    <option value="Null">Insira o perfil</option>
-                    <option value="Dominância">Dominância</option>
-                    <option value="Influência">Influência</option>
-                    <option value="Estabilidade">Estabilidade</option>
-                    <option value="Cautela">Cautela</option>
-                </select>
-                <label for="position">Cargo:</label>
-                <input type="text" id="position"  name="position"  /> 
-                <label for="ethnicity">Etinia:</label>
-                <input type ="text" id="ethnicity" name="ethnicity"/>
-                <label for="deficiency" >Deficiência:</label>
-                <select id="deficiency" name="deficiency">
+
+                cpf.addEventListener("input", function (e) {
+                    let value = e.target.value.replace(/\D/g, "");
+
+                    if (value.length > 3) value = value.slice(0, 3) + "." + value.slice(3);
+                    if (value.length > 7) value = value.slice(0, 7) + "." + value.slice(7);
+                    if (value.length > 11) value = value.slice(0, 11) + "-" + value.slice(11);
+
+                    e.target.value = value.slice(0, 14);
+
+                });
+            </script>
+            <label for="sex">Gênero:</label>
+            <select id="sex" name="sex" onchange="handleOtherOption()">
+                <option value="null">Selecione uma opção</option>
+                <option value="male">Masculino</option>
+                <option value="female">Feminino</option>
+                <option value="other">Outro(a)(e)</option>
+            </select>
+            <div id="otherSexContainer" style="display: none;">
+                <input type="text" id="otherSexInput" name="otherSex" placeholder="Especifique o gênero">
+            </div>
+            <script>
+                function handleOtherOption() {
+                    const select = document.getElementById("sex");
+                    const otherInputContainer = document.getElementById("otherSexContainer");
+                    var sex = otherInputContainer.value
+                    if (select.value === "other") {
+                        otherInputContainer.style.display = "block";
+                        console.log(document.getElementById("sex").value)
+                    } else {
+                        otherInputContainer.style.display = "none";
+                    }
+                }
+            </script>
+            <label>Estado Civil:</label>
+            <select id="martialStatus" name="martialStatus">
+                <option value="Null">Insira o perfil</option>
+                <option value="Solteiro(a)">Solteiro(a)</option>
+                <option value="Divorciado(a)">Divorciado(a)</option>
+                <option value="Casado(a)">Casado(a)</option>
+                <option value="Viuvo(a)">Viuvo(a)</option>
+            </select>
+            <label for="discPersonality">Personalidade: </label>
+            <select id="discPersonality" name="discPersonality">
+                <option value="Null">Insira o perfil</option>
+                <option value="Dominância">Dominância</option>
+                <option value="Influência">Influência</option>
+                <option value="Estabilidade">Estabilidade</option>
+                <option value="Cautela">Cautela</option>
+            </select>
+            <label for="position">Cargo:</label>
+            <input type="text" id="position" name="position" />
+            <label for="ethnicity">Etinia:</label>
+            <input type="text" id="ethnicity" name="ethnicity" />
+            <label for="deficiency">Deficiência:</label>
+            <select id="deficiency" name="deficiency" onchange="handleOtherOptionD()">
+                <option value="null">Selecione uma opção</option>
                 <option value="true">Sim, Possuo deficiência</option>
                 <option value="false">Não, não possuo deficiência</option>
-                </select>    
-                <label id="createAt"></label>
-                <script>
-                    // Obtém a data atual
-                    const dataAtual = new Date();
-                    
-                    // Formata a data no formato dd/mm/aaaa
-                    const dataFormatada = dataAtual.toLocaleDateString('en-US');
-            
-                    // Exibe no label
-                    document.getElementById('createAt').innerText = "Entrou em: " + dataFormatada;
-                </script>
-                <label for="isActive">Estado na empresa:</label>
-                <select id="isActive">
-                    <option value="Null">Selecione um estado</option>
-                    <option value="true">Está ativo</option>
-                    <option value="false">Está inativo</option>
-                </select>
-                    
-                <button type="button" id="register" onclick="handleRegister()">CADASTRAR</button>
-                
+            </select>
+            <div id="otherDeficiency" style="display: none;">
+                <input type="text" id="otherDeficiency" name="otherDeficiency" placeholder="Especifique a deficiência">
+            </div>
+            <script>
+                function handleOtherOptionD() {
+                    const select = document.getElementById("deficiency");
+                    const otherInputContainer = document.getElementById("otherDeficiency");
+                    var sex = otherInputContainer.value
+                    if (select.value === "true") {
+                        otherInputContainer.style.display = "block";
+                    } else {
+                        otherInputContainer.style.display = "none";
+                    }
+                }
+            </script>
+            <label id="createAt"></label>
+            <script>
+                // Obtém a data atual
+                const dataAtual = new Date();
+
+                // Formata a data no formato dd/mm/aaaa
+                const dataFormatada = dataAtual.toLocaleDateString('en-US');
+
+                // Exibe no label
+                document.getElementById('createAt').innerText = "Entrou em: " + dataFormatada;
+            </script>
+            <label for="isActive">Estado na empresa:</label>
+            <select id="isActive">
+                <option value="Null">Selecione um estado</option>
+                <option value="true">Está ativo</option>
+                <option value="false">Está inativo</option>
+            </select>
+            <button type="button" id="register" onclick="handleRegister()">CADASTRAR</button>
         </form>
-        </section>
-        
-        <section id="listEmployees">
-            <table>
-                <thead>
-                    <th>Nome</th>
-                </thead>
-                <tbody>
-                    
-                </tbody>
-            </table>
-        </section>
-    </body>
-    <script>
-        var employees = []
+    </section>
+    <section id="esList">
+        <table>
+            <thead>
+                <th>LISTA DE FUNCIONÁRIOS</th>
+            </thead>
+            <tbody>
 
+            </tbody>
+        </table>
+    </section>
+</body>
+<script>
+    var employees = []
+    setEmployee({
+    id: 1,
+    urls: "http://caminho",
+    name: "Bruna",
+    age: 33,
+    tell: 16997215978,
+    email: "bruna2002@gmail.com",
+    address: "rua Afonso B",
+    nationality: "Chinesa",
+    discPersonality: "Influenciadora",
+    cpf: "45890065075",
+    sex: "feminino",
+    maritalStatus: "solteiro",
+    position: "indefirido",
+    ethnicity: "branca",
+    deficiency: true,
+    createAt : "2002-08-12",
+    isActive: false
+})
+setEmployee({
+    id: 2,
+    urls: "http://caminho",
+    name: "Marcio",
+    age: 22,
+    tell: 16997214578,
+    email: "marcio2002@gmail.com",
+    address: "rua Afonso Botelho de abreu",
+    nationality: "Afegão",
+    discPersonality: "Conciliador",
+    cpf: "89678902224",
+    sex: "masculino",
+    maritalStatus: "casado",
+    position: "indefirido",
+    ethnicity: "negro",
+    deficiency: false,
+    createAt : "2022-08-12",
+    isActive: true
+})
+setEmployee({
+    id: 0,
+    urls: "http://caminho",
+    name: "Brune",
+    age: 22,
+    tell: 16997215878,
+    email: "brunoAtaide2002@gmail.com",
+    address: "rua Afonso Botelho de abreu",
+    nationality: "Brasileiro",
+    discPersonality: "Dominante",
+    cpf: "56500075658",
+    sex: "masculino",
+    maritalStatus: "solteiro",
+    position: "indefirido",
+    ethnicity: "pardo",
+    deficiency: false,
+    createAt : "1990-08-12",
+    isActive: false
+}) 
+console.log(setEmployee({
+    id: 8,
+    urls: "https://caminho.com.br",
+    name: "Bruno",
+    age: 25,
+    tell:"15999987587",
+    email: "brunoAtaide2002@gmail.com",
+    address: "rua Afonso Botelho de abreu",
+    nationality: "Brasileiro",
+    discPersonality: "Dominante",
+    cpf: "565.000.756",
+    sex: "masculino",
+    maritalStatus: "solteiro",
+    position: "indefirido",
+    ethnicity: "pardo",
+    deficiency: false,
+    createAt : "1990-08-12",
+    isActive: false
+}))
 
-        function setEmployee(req){
+    function setEmployee(req) {
 
-            const urlsPattern = /^(https?:\/\/)[\w\-]+(\.[\w\-]+)+[/#?]?.*$/ // URLs válidas
-            const tellPattern = /^\(\d{2}\)\s\d{4,5}-\d{4}$/ // Formato de telefone (XX)XXXXX-XXXX
-            const emailPattern = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/ // E-mail válido
-            const cpfPattern = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/ // CPF no formato 000.000.000-00
-            const datePattern = /^\d{4}\/\d{2}\/\d{2}$/;
+        const urlsPattern = /^(https?:\/\/)[\w\-]+(\.[\w\-]+)+[/#?]?.*$/ // URLs válidas
+        const tellPattern = /^\(\d{2}\)\s\d{4,5}-\d{4}$/ // Formato de telefone (XX)XXXXX-XXXX
+        const emailPattern = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/ // E-mail válido
+        const cpfPattern = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/ // CPF no formato 000.000.000-00
+        const datePattern = /^\d{4}\/\d{2}\/\d{2}$/;
 
-            //if(!urlsPattern.test(req.urls))return "Campo URls deve conter apenas URLs válidas "
-            //if(!datePattern.test(req.age))return "Campo Age deve conter apenas números e ter a idade mínima de 18"
-            //if(!tellPattern.test(req.tell))return "Campo Tell deve seguir o formato de telefone (XX)XXXXX-XXXX"
-            //if(!emailPattern.test(req.email))return "Campo email deve ter um e-mail válido "
-            //if(!cpfPattern.test(req.cpf))return "Campo CPF deve estar no formato 000.000.000-00 "
-            //if(!datePattern.test(req.createAt))return "Campo deve estar no formato YYYY-MM-DD"
+        //if(!urlsPattern.test(req.urls))return "Campo URls deve conter apenas URLs válidas "
+        //if(!datePattern.test(req.age))return "Campo Age deve conter apenas números e ter a idade mínima de 18"
+        //if(!tellPattern.test(req.tell))return "Campo Tell deve seguir o formato de telefone (XX)XXXXX-XXXX"
+        //if(!emailPattern.test(req.email))return "Campo email deve ter um e-mail válido "
+        //if(!cpfPattern.test(req.cpf))return "Campo CPF deve estar no formato 000.000.000-00 "
+        //if(!datePattern.test(req.createAt))return "Campo deve estar no formato YYYY-MM-DD"
 
-            let e =  {
-            id: employees.length-1,
+        let e = {
+            id: employees.length - 1,
             urls: req.urls,
             name: req.name,
             age: req.age,
@@ -158,33 +308,57 @@
             position: req.position,
             ethnicity: req.ethnicity,
             deficiency: req.deficiency,
-            createAt : req.createAt,
+            createAt: req.createAt,
             isActive: req.isActive
-            }
-            employees.push(e)
-        } 
-        function handleRegister(){
-            console.log(setEmployee({
-                urls: document.getElementById("urls").value,
-                name: document.getElementById("name").value,
-                age: document.getElementById("age").value,
-                tell: document.getElementById("tell").value,
-                email: document.getElementById("email").value,
-                address: document.getElementById("address").value,
-                nationality: document.getElementById("nationality").value,
-                discPersonality: document.getElementById("discPersonality").value,
-                cpf: document.getElementById("cpf").value,
-                sex: document.getElementById("sex").value,
-                maritalStatus: document.getElementById("martialStatus").value,
-                position: document.getElementById("position").value,
-                ethnicity: document.getElementById("ethnicity").value,
-                deficiency: document.getElementById("deficiency").value,
-                createAt : dataFormatada,
-                isActive: document.getElementById("isActive").value
-            }))
-           console.log(employees) 
-           document.getElementById("formEmployee").reset()         
         }
-                   
-    </script>
+
+        employees.push(e)
+    }
+    function handleRegister() {
+        setEmployee({
+            urls: document.getElementById("urls").value,
+            name: document.getElementById("name").value,
+            age: document.getElementById("age").value,
+            tell: document.getElementById("tell").value,
+            email: document.getElementById("email").value,
+            address: document.getElementById("address").value,
+            nationality: document.getElementById("nationality").value,
+            discPersonality: document.getElementById("discPersonality").value,
+            cpf: document.getElementById("cpf").value,
+            sex: document.getElementById("sex").value,
+            maritalStatus: document.getElementById("martialStatus").value,
+            position: document.getElementById("position").value,
+            ethnicity: document.getElementById("ethnicity").value,
+            deficiency: document.getElementById("deficiency").value,
+            createAt: dataFormatada,
+            isActive: document.getElementById("isActive").value
+        })
+        document.getElementById("formEmployee").reset()
+        listEmployees(employees)
+        if (document.getElementById("sex").value == "other") {
+            let otherSex = document.getElementById("otherSexInput").value
+            document.getElementById("sex").value = othe
+            const sGender = document.getElementById("sex")
+            const option = document.createElement("option")
+            option.innerHTML = document.getElementById("otherSexInput").value
+            sGender.appendChild(option)
+        }
+    }
+    function listEmployees(elist) {
+        const t = document.querySelector("#esList tbody")
+        t.innerHTML = ""
+
+        elist.forEach(e => {
+            const row = document.createElement("tr")
+
+            const nameCell = document.createElement("td")
+            nameCell.textContent = e.name
+
+            row.appendChild(nameCell)
+            t.appendChild(row)
+        })
+
+    }           
+</script>
+
 </html>
