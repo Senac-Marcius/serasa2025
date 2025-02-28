@@ -18,9 +18,9 @@
     <section id="scRegister">
         <div class="container-1">
             <div class="container-input row mb-3">
-                <label for="Url" class="col-sm-2 col-form-label">Url:</label>
+                <label for="Title" class="col-sm-2 col-form-label">Titulo:</label>
                 <div class="col-sm-5">
-                    <input type="url" class="form-control" id="urls">
+                    <input type="text" class="form-control" id="titles">
                 </div>
             </div>
             <div class="container-input row mb-3">
@@ -33,12 +33,17 @@
         </div>
     </section>
     <section id="scList">
-        <table>
+        <table class="table">
             <thead>
-                <th>Nome:</th>
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">Titulo</th>
+                </tr>   
             </thead>
             <tbody>
+                <tr>
 
+                </tr>
             </tbody>
         </table>
     </section>
@@ -50,7 +55,6 @@
 
     function setPost(req) {
 
-        const urlPattern = /^(https?:\/\/)[^\s$.?#].[^\s]*$/;
         const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 
         // if (!idPattern.test(req.id)) {
@@ -61,10 +65,6 @@
         //     return "Campo userId deve conter apenas números"
         // }
 
-        if (!urlPattern.test(req.urls)) {
-            return "Campo url deve conter o seguinte formato https://dominio."
-        }
-
         if (!datePattern.test(req.createAt)) {
             return "Campo createAt deve conter o seguinte formato YYYY-MM-DD"
         }
@@ -73,10 +73,14 @@
             return "Campo description deve conter até 244 caracters"
         }
 
+        if(req.titles.length > 65){
+            return "Campo de titulo deve conter até 65 caracteres"
+        }
+
         let p = {
             id: posts.length - 1,
             description: req.description,
-            urls: req.urls, // http://qualquercoisa. ou https://qualquercoisa.
+            titles: req.titles, // http://qualquercoisa. ou https://qualquercoisa.
             createAt: req.createAt, // YYYY-MM-DD
             userId: req.userId
         }
@@ -87,12 +91,27 @@
     function handleRegister() {
         console.log(setPost({
             description: document.getElementById('description').value,
-            urls: document.getElementById('urls').value,
+            titles: document.getElementById('titles').value,
             createAt: '2000-12-31',
             userId: 0
-        }))
+        })),
 
-        console.log(posts)
+        listPosts(posts)
+    }
+
+    function listPosts(pList){
+        const tbody = document.querySelector("#scList tbody")
+        tbody.innerHTML = ""
+
+        pList.forEach(p => {
+            const row = document.createElement('tr')
+
+            const titleCell = document.createElement('td')
+            titleCell.textContent = p.titles
+
+            row.appendChild(titleCell)
+            tbody.appendChild(row)
+        })
     }
 </script>
 

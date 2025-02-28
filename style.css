@@ -1,6 +1,6 @@
-body {
-    background-color: rgb(202, 202, 202);
-    color: #6f6f6f;
+body{
+    background-color: rgb(170, 0, 255);
+    color: #ffffff;
     font-family: Arial, Helvetica, sans-serif;
     width: 100vw;
     height: 100vh;
@@ -22,10 +22,10 @@ body {
 }
 
 .container-input {
+    text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgb(255, 255, 255);
     margin: 0 auto;
     /* width: 300px;
     height: 250px;
@@ -62,4 +62,13 @@ body {
 .btn {
     width: 460px;
     margin: 0 auto;
+}
+
+.table{
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    margin: 0 auto;
+    margin-top: 30px;
 }
