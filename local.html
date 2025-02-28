@@ -159,15 +159,16 @@
                 const nameCell =  document.createElement("td");
                 nameCell.textContent = l.name;
 
-                lList.forEach(l => {  
+       
                 const viewCell =  document.createElement("td");
-                row.appendChild(viewCell);
+                
                 const viewButton =  document.createElement("button");
-                row.appendChild(viewButton);
-                })
+                viewButton.appendChild(row);
+
 
 
                 row.appendChild(nameCell);
+                viewCell.appendChild(viewCell);
                 tbody.appendChild(row)
 
             })      
