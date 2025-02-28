@@ -41,12 +41,36 @@
                     font-weight: 600;
             }
 
+            br{
+                margin: 10px
+            }
+
             button{
                 background: linear-gradient(135 deg, #6e8efb, #a777e3);
                 color: white;
                 border: none;
                 padding: 12px 24px;
                 font-size: 16px;
+                font-weight: bolder;
+                border-radius: 8px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+                cursor: pointer;
+                transition: all 0.3s ease-in-out;
+                position: relative;
+                overflow: hidden;
+                margin: 20px auto 0;
+                display: block;
+            }
+
+            button:hover {
+                background: linear-gradient(135deg, #5b77e0, #925ec4);
+                box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+                transform: translateY(-2px);
+            }
+
+            button:active {
+                transform: translateY(1px);
+                box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
             }
 
             body{
@@ -64,7 +88,7 @@
     </head>
     <body>
         <h1> Cadastre o seu Local: </h1>
-        <div class="row">                           //bockshadow= mpve 
+        <div class="row">                           
             <section id="scRegister">
                 <form>
                     <label>Nome: </label><input id="name" type="text" /><br>
