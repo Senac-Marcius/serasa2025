@@ -5,6 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>empréstimo</title>
+    <style>
+        h1 {
+            text-align: center;
+            color: #BF54A3;
+            background-color: #f2f2f2;
+            margin: 0;
+        }
+
+        #scRegister {}
+
+        #scList {}
+    </style>
 </head>
 
 
@@ -36,22 +48,22 @@
             <p><label>Status de empréstimo:</label><input id=" status" type="select" /><br></p>
             <p><label>observação:</label><input id="observation" type="text" /><br></p>
         </form>
-    </select>
+        </select>
 
-    <section id="sclist">
+        <section id="sclist">
 
-        <table>
-            <thead>
-                <th>Status de empréstimo:</th>
-            </thead>
-            <tbody>
+            <table>
+                <thead>
+                    <th>Status de empréstimo:</th>
+                </thead>
+                <tbody>
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
 
-    </section>
+        </section>
 
-    <p> <button type="button" id="register" onclick="handleRegister()">FINALIZAR</button></p>
+        <p> <button type="button" id="register" onclick="handleRegister()">FINALIZAR</button></p>
 
 </body>
 
@@ -92,12 +104,12 @@
         listLoans(loans)
     }
 
-    function listLoans(pList){
+    function listLoans(pList) {
         const tbody = document.querySelector("#sclist tbody")
         tbody.innerHTML = ""
 
         loans.forEach(p => {
-            const  row = document.createElement("tr");
+            const row = document.createElement("tr");
 
             const statusLoanCell = document.createElement("td");
             statusLoanCell.textContent = p.statusLoan
@@ -107,9 +119,9 @@
 
 
         })
-   }
+    }
 
-        
+
 </script>
 
 
