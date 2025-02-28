@@ -6,15 +6,106 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Usuário</title>
   <style>
-    h1{
-      
+    h1 {
+
+      font-family: 'Arial', sans-serif;
+      color: #ffffff;
+     
+      background: linear-gradient(90deg, rgba(44, 42, 66, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(152, 59, 227, 1) 100%);
+      /* Roxo vibrante */
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      /* Sombra para destacar */
+      font-size: 25px;
+      /* Aumentar o tamanho */
+      text-align: center;
+      /* Centralizar o texto */
+      letter-spacing: 2px;
+      /* Espaçamento entre as letras */
+
+      /* Deixar o texto transparente para o gradiente aparecer */
+      padding: 20px;
+      border-radius: 10px;
+      /* Arredondar os cantos */
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      /* Sombra do título */
     }
 
-    #scRegister{
-    }
-    #scList{
+    body {
+      background-color: rgb(255, 255, 255);
     }
 
+    #scList {
+      font-family: 'Arial', sans-serif;
+      color: #8A2BE2;
+      /* Roxo vibrante */
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      /* Sombra para destacar */
+      font-size: 25px;
+      /* Aumentar o tamanho */
+      letter-spacing: 2px;
+      /* Espaçamento entre as letras */
+      color: #6b6190;
+      /* Cor do texto */
+      padding: 20px;
+      border-radius: 10px;
+      /* Arredondar os cantos */
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      /* Sombra do título */
+
+      /* Centralização do conteúdo */
+    
+
+    }
+
+    #scRegister {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      border: 1px solid #ffffff;
+      border-radius: 8px;
+      width: 300px;
+      color: #432e80;
+      box-shadow: 0 4px 4px 4px rgba(0, 0, 0, 0.2);
+      background: rgb(255, 255, 255);
+
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      color: rgb(255, 255, 255);
+      border-radius: 4px;
+      border-color: #ffffff;
+      cursor: pointer;
+      overflow: hidden;
+      display: block;
+      background: rgb(44, 42, 66);
+      background: linear-gradient(90deg, rgba(44, 42, 66, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(152, 59, 227, 1) 100%);
+    }
+  
+
+    .row {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+
+    }
+
+    label{
+      font-weight: 500;
+    }
+    br{
+      margin: 10px;
+    }
   </style>
 
 </head>
@@ -22,50 +113,56 @@
 <body>
 
 
-  <h1>Insira as suas informações:</h1>
-  <section id="scRegister">
-    <form>
-      <label>Nome:</label><br>
-      <input type="text" id="userName" /><br>
+  <h1>Acesso a biblioteca</h1>
+  <div class="row">
+    <section id="scRegister">
+      <form>
+        <label>Nome:</label><br>
+        <input type="text" id="userName" /><br>
 
-      <label>Senha:</label><br>
-      <input type="password" id="userPassword" /><br>
+        <label>Senha:</label><br>
+        <input type="password" id="userPassword" /><br>
 
-      <label>CPF:</label><br>
-      <input type="text" id="userCPF" /><br>
+        <label>CPF:</label><br>
+        <input type="text" id="userCPF" /><br>
 
-      <label>Idade:</label><br>
-      <input type="number" id="userAge" /><br>
+        <label>Idade:</label><br>
+        <input type="number" id="userAge" /><br>
 
-      <label>Phone:</label><br>
-      <input type="text" id="userPhone" /><br>
+        <label>Phone:</label><br>
+        <input type="text" id="userPhone" /><br>
 
-      <label>Email:</label><br>
-      <input type="email" id="userEmail" /><br>
+        <label>Email:</label><br>
+        <input type="email" id="userEmail" /><br>
 
-      <label>Endereço:</label><br>
-      <input type="text" id="userAddress" /><br>
-      <br>
-      <button type="button" id="register" onclick="handleRegister()">Cadastrar</button>
-    </form>
-    <hr>
-  </section>
+        <label>Endereço:</label><br>
+        <input type="text" id="userAddress" /><br>
+        <br>
+        <button type="button" id="register" onclick="handleRegister()">Cadastrar</button>
+      </form>
+      <hr>
+    </section>
 
-  <section id="scList">
-    <table>
-      <thead>
-        <th>Nomes cadastrados</th>
+    <section id="scList">
+      <table>
+        <thead>
+          <th>Nomes cadastrados</th>
+       
 
-      </thead>
+        </thead>
 
-      <tbody>
-
-      </tbody>
+        <tbody>
 
 
-    </table>
+        </tbody>
 
-  </section>
+
+      </table>
+     
+
+    </section>
+
+  </div>
   <!-- FUNÇÃO READ OU GET-->
 
 </body>
@@ -137,6 +234,8 @@
     )
     listUsers(users)
   }
+
+
   function listUsers(ulist) {
     //capturar tbody
     //querySelector faz uma composição de palavras que diz qual elemento eu quero, encontra o id e seleciona o primeiro tbody
@@ -146,18 +245,33 @@
 
     users.forEach(u => {
       const row = document.createElement("tr")
+      row.id = u.id
       //cria a linha
-
       const nameCell = document.createElement("td")
+
+      const Buttontd = document.createElement("td")
+      const ButtontdEdit = document.createElement("td")
       //cria a coluna
       nameCell.textContent = u.name
 
-      //adiciona informação na coluna
+      const button1 = document.createElement("button")
+      const buttonEdit2 = document.createElement("button")
 
+      button1.textContent = "Deletar"
+      buttonEdit2.textContent = "Editar"
+
+      Buttontd.appendChild(button1)
+      ButtontdEdit.appendChild(buttonEdit2)
+      
       row.appendChild(nameCell)
-      //adiciona a coluna com a informação no row
+      row.appendChild(Buttontd)
+      row.appendChild(ButtontdEdit)
+      
+
       tbody.appendChild(row)
+      
       //adiciona o row no tbody
+      //criar uma função na handle que chama a minha função, essa função recebe um id e através desse id ele deleta
 
     })
 
