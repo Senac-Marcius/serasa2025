@@ -3,13 +3,27 @@
     <head>
         <meta charset="UTF-8" />
        <title>Calendario</title> 
+       <style>
+            h1{
+
+            }
+
+            #scRegister{
+
+            }
+
+            #scList{
+
+            }
+            
+       </style>
     </head>
     <body>
         <h1>Cronograma de Calendario</h1>
         <section>
             <form id="scRegister">
                 <label> Nome do Aluno: </label><input id="student" type= "text"/><br>
-                <label> Curso: </label><textarea id="courses" type="text"></textarea><br>
+                <label> Curso: </label><textarea id="course" type="text"></textarea><br>
                 <label> Periodo: </label><input id="period" type= "text"/><br>
                 <label> Data da Matricula: </label><input id="date" type= "date"/><br>
                 <!--Adicionar Cronograma-->
@@ -21,7 +35,9 @@
 
             <table>
                 <thead>
-                <th>Cronograma</th>
+                    <tr>
+                        <th>Cronograma</th>
+                    </tr>
                 </thead>
                 <tbody>
             
@@ -37,9 +53,9 @@
 
     function setCalendars(req){
         let c = {
-            id: calendars.length -1,
+            id: calendars.length,
             StudentName: req.id,
-            Courses: req.Courses,
+            Course: req.Course,
             Period: req.Period,
             DateRegistration: req.DateRegistration
         }
@@ -51,7 +67,7 @@
         console.log(
             setCalendars({
             StudentName:document.getElementById("student").value,
-            Courses:document.getElementById("courses").value, 
+            Course:document.getElementById("course").value, 
             Period:document.getElementById("period").value, 
             DateRegistration:document.getElementById("date").value, 
             userId: 0,
@@ -59,26 +75,26 @@
             })
         )
         
-        console.log(calendars)    
+        listCalendars(calendars)    
 
     }
 
-    function listCalendars(Plist){
+    function listCalendars(cList){
         const tbody = document.querySelector("#scList tbody")
         tbody. innerHTML = ""
 /*executa o callback fornecido uma vez para cada elemento da ordem com um valor atribuido*/
         cList.forEach(c => {
-        const row = document. creadElement ("tr");
+        const row = document.createElement ("tr");
 
-        const timelineCell = document.creadElement("td");
-        timelineCell.textContent = c.timeline
+        const timelineCell = document.createElement("td");
+        timelineCell.textContent = c.DateRegistration
 
 
-        row.appendChild(urlCell);
-        tbody.appendChild(urlCell);
+        row.appendChild(timelineCell);
+        tbody.appendChild(row);
         })
 
-        listCalendars(calendars)
+        
 
     }
     </script>
