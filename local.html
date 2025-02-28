@@ -47,6 +47,7 @@
 
             button{
                 background: linear-gradient(135 deg, #6e8efb, #a777e3);
+                background-color:  #a777e3;
                 color: white;
                 border: none;
                 padding: 12px 24px;
@@ -158,10 +159,10 @@
                 const nameCell =  document.createElement("td");
                 nameCell.textContent = l.name;
 
-                const nameCell =  document.createElement("td");
-                
-
-                const nameCell =  document.createElement("button");
+                const viewCell =  document.createElement("td");
+                row.appendChild(viewCell);
+                const viewButton =  document.createElement("button");
+                row.appendChild(viewButton);
             
 
                 row.appendChild(nameCell);
