@@ -2,51 +2,77 @@
     <head>
         <meta charset="UTF-8" />
         <title>Projeto Integrador</title>
+        <style>
+            body{
+                margin: 0;
+                text-align: -moz-center;
+            }
+
+            h1{
+                text-align: center;
+                color: #bf54a3;
+                background-color: #f2f2f2;
+                margin: 0;
+
+            }
+
+            #scRegister{
+
+            }
+
+            #scList{
+                
+            }
+
+        </style>
+
     </head>
     <body>
+      
         <h1>Formulário para cadastro de Projeto:</h1>
+        <section id="scRegister">
+            <form>
+                <label>Criador do Projeto:</label>  <input id="nameuser" type="text" placeholder="Nome Completo"/> <input id="cpf" type="text" placeholder="CPF" maxlength="14" oninput="formatCPF(this)" /> E-mail <input type="email" placeholder="email@gmail.com"/> <br>
+                <br>
+                <label>Nome do Projeto:</label>  <input id="namep" type="text" /> <br>
+                <label>Site:</label>  <input id="website" type="url" placeholder=" https://siteprojeto.org.br"/><br>
+                <br>
+                <label>Previsao de início:</label>  <input id="createAt" type="date" /><br>
+                <br>
+                <label>Qual o periodo do projeto:</label>  <input id="createAt" type="date" /> á <input type="date" />  / <input id="Indeterminado" type="checkbox" name="Indeterminado" /> Indeterminado<br>
+                <br>
+                <label>Descrição do Projeto:</label> <br>
+                    
+                    <textarea id="description" placeholder="Visão geral"></textarea>
+                <br>
+                <label>Objetivo:</label> <br>
+                    
+                    <textarea id="objective" placeholder="Simplificado se possivel"></textarea>
+                <br>
+                <label>Recursos:</label>  <input id="resources" type="text" name="valor" placeholder="R$ 0,00" /> Aproximadamente<br>
+                <br>
+                <label>Qual a Atividade que será proposta pelo projeto:</label> <br>
+                    
+                    <textarea id="activity" placeholder="Tópicos" ></textarea>
+                <br>
+                <label>Quais metodologias pretende abordar: <br>
+                    
+                    <textarea id="tecnic" placeholder="Técnicas" ></textarea>
+                    <textarea id="process" placeholder="Processos" ></textarea>
+                    <textarea id="strategy" placeholder="Estratégias" ></textarea>
+                    <textarea id="planning" placeholder="Planejamento" ></textarea>
+                <br><br>
 
-        <form>
-            <label>Criador do Projeto:</label>  <input id="nameuser" type="text" placeholder="Nome Completo"/> <input id="cpf" type="number" placeholder="CPF" > E-mail <input type="email" placeholder="email@gmail.com"/><br>
-            <br>
-            <label>Nome do Projeto:</label>  <input id="namep" type="text" /> ID: <input type="number" placeholder="Identificação"> <br>
-            <br>
-            <label>Site:</label>  <input id="website" type="url" placeholder=" https://siteprojeto.org.br"/><br>
-            <br>
-            <label>Previsao de início:</label>  <input id="createAt" type="date" /><br>
-            <br>
-            <label>Qual o periodo do projeto:</label>  <input id="createAt" type="date" /> á <input type="date" />  / <input id="Indeterminado" type="checkbox" name="Indeterminado" /> Indeterminado<br>
-            <br>
-            <label>Descrição do Projeto:</label> <br>
-                
-                <textarea id="description" placeholder="Visão geral"></textarea>
-            <br>
-            <label>Objetivo:</label> <br>
-                
-                <textarea id="objective" placeholder="Simplificado se possivel"></textarea>
-            <br>
-            <label>Recursos:</label>  <input id="resources" type="text" name="valor" placeholder="R$ 0,00" /> Aproximadamente<br>
-            <br>
-            <label>Qual a Atividade que será proposta pelo projeto:</label> <br>
-                
-                <textarea id="activity" placeholder="Tópicos" ></textarea>
-            <br>
-            <label>Quais metodologias pretende abordar: <br>
-                
-                <textarea id="tecnic" placeholder="Técnicas" ></textarea>
-                <textarea id="process" placeholder="Processos" ></textarea>
-                <textarea id="strategy" placeholder="Estratégias" ></textarea>
-                <textarea id="planning" placeholder="Planejamento" ></textarea>
-            <br><br>
+                <button type="button" id="register" onclick="handleRegister()"> Cadastrar </button>
+            </form>
 
-            <button type="button" id="register" onclick="handleRegister()"> Cadastrar </button>
-        </form>
+        </section>
 
         <section id="scList">
 
             <table>
                 <thead>
-                    <th>url</th>
+                    <th>Nome Do Projeto</th>
                 </thead>
                 <tbody>
                     
@@ -60,7 +86,9 @@
         function setProject(req){
         
             let p = {
-                id: projects.length - 1,
+                namep: req.namep,
+                name: req.name,
+                id: projects.length,
                 url: req.url,
                 createAt: req.createAt, // yyyy-MM-DD
                 userid: req.userid,
@@ -73,16 +101,17 @@
             }
 
             projects.push(p)
+            return "Projeto Cadastrado"
         }
         
         function handleRegister(){     // handle é usado para chamar a função
             console.log(
                 setProject({
                     
-                    nome: document.getElementById("nameuser").value,
-                    nomep: document.getElementById("namep").value,
+                    name: document.getElementById("nameuser").value,
+                    namep: document.getElementById("namep").value,
                     url: document.getElementById("website").value,
-                    createAt: document.getElementById("createAt"),
+                    createAt: document.getElementById("createAt").value,
                     userid: document.getElementById("cpf").value,
                     resources: document.getElementById("resources").value,
                     description: document.getElementById("description").value, 
@@ -90,13 +119,34 @@
                     timeline: "6 meses apos o inicio do projeto, realocando o mesmo em outro lugar por mais 6 meses num periodo de 3 anos",
                     objective: document.getElementById("objective").value,
                     methodology: "Técnica: " + document.getElementById("tecnic").value + 
-                                 "Processos: " + document.getElementById("process").value + 
-                                 "Estratégias: " + document.getElementById("strategy").value +
-                                 "Planejamento: " + document.getElementById("planning").value
+                                 " | Processos: " + document.getElementById("process").value + 
+                                 " | Estratégias: " + document.getElementById("strategy").value +
+                                 " | Planejamento: " + document.getElementById("planning").value
                 })
             )
 
-            console.log(projects)
+            listProjects(projects)
         }
+
+        function listProjects(plist){
+            const tbody = document.querySelector("#scList tbody")
+            tbody.innerHTML = ""
+
+            projects.forEach(p => {    // se utiliza quando se quer utilizar a mesma função para todos os vetores e dentro do tbody vai um "tr"
+                const row = document.createElement("tr");
+
+                const namepCell = document.createElement("td");
+                namepCell.textContent = p.namep
+
+                row.appendChild(namepCell);
+                tbody.appendChild(row);
+
+            })
+        }
+
+        function formProjects(plist){
+
+        }
+
     </script>
 </html>
