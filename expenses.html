@@ -1,36 +1,68 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
     <head>
-        <link rel="stylesheet"  href="style.css">
         <meta charset="UTF-8" />
         <title>despesas</title>
+        <style>
+            body{
+                margin: 0;
+                
+
+            }
+
+            h1{
+                text-align: center;
+                color: #04ADBF;
+                background-color: #0B0C0D;
+                margin: 0;
+            }
+
+            #scRegister{
+
+            }
+
+            #scList{
+
+
+            }
+
+            .row{
+                display:flex
+            }
+
+
+        </style>
+
     </head>
     <body>
         <h1>Cadastre a suas despesas</h1>
-        <section>
-            <form id=" scRegister">
-                <label>Nome: </label><input id="name" type="text" /><br>
-                <label>Descrição: </label><input id="description" type="text" /><br>
-                <label>Url: </label><input id="url" type="text" /><br>
-                <label>Data: </label><input id="date" type="date" /><br>
-                <label>Valor: </label><input id="value" type="number" /><br>
-                <label>Fornecedor: </label><input id="suplier" type="text" /><br>
-                <button type="button" id="register" onclick="handleRegister()">Cadastrar</button>
-            </form> 
-        </section>
+        <div class="row">
+            <section id=" scRegister">
+                <form>
+                    <label>Nome: </label><input id="name" type="text" /><br>
+                    <label>Descrição: </label><input id="description" type="text" /><br>
+                    <label>Url: </label><input id="url" type="text" /><br>
+                    <label>Data: </label><input id="date" type="date" /><br>
+                    <label>Valor: </label><input id="value" type="number" /><br>
+                    <label>Fornecedor: </label><input id="suplier" type="text" /><br>
+                    <button type="button" id="register" onclick="handleRegister()">Cadastrar</button>
+                </form> 
+            </section>
 
-        <section id="scList">
+            <section id="scList">
 
-            <table>
-                <thead>
-                    <th>Nome</th>
-                </thead>
-                <tbody>
-                    
-                </tbody>
-            </table>
+                <table>
+                    <thead>
+                        <th>Nome</th>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
 
-        </section>
+            </section>
+        </div>
+        
     </body>
     <script>
         var expenses = []
