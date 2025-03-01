@@ -160,9 +160,9 @@
                 nameCell.textContent = l.name;
 
        
-                const viewCell =  document.createElement("td");
-                const viewButton =  document.createElement("button");
-                viewCell.appendChild(viewButton);
+                const viewCell =  document.createElement("td");          //criar uma célula
+                const viewButton =  document.createElement("button");    //criar um botão
+                viewCell.appendChild(viewButton);                        //colocar o botão dentro da célula
 
                 const dellCell =  document.createElement("td");
                 const dellButton =  document.createElement("button");
@@ -172,7 +172,7 @@
                 row.appendChild(viewCell);
                 row.appendChild(dellCell);
 
-                tbody.appendChild(row)
+                tbody.appendChild(row)                                 //colocar na linha = "row"
 
             })      
             
