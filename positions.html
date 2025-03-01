@@ -14,38 +14,103 @@
                     background-color: #f3f3f3;
 
                 }
+
+                section{
+                    display: flex;
+                    margin: 0 auto;
+                    flex-direction: column;
+                }
+
                 section#scRegister{
 
                 }
                 section#scList{
 
                 }
+
+                .row{
+                    display: flex;
+                    margin-top: 50px;
+                    padding: 20px;
+                }
+
+                label{
+                    font-weight: 600;
+                }
+
+                br{
+                    margin: 10px;
+                }
+
+                button{
+                    background: linear-gradient(135deg, #6e8efb, #a777e3);
+                    color: white;
+                    border: none;
+                    padding: 12px 24px;
+                    font-size: 16px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    border-radius: 8px;
+                    box-shadow: 0px 4px 10px rgba(0,0, 0, 0.2);
+                    transition: all 0.3s ease-in-out;
+                    position: relative;
+                    overflow: hidden;
+                    margin: 20px auto 0;
+                    display: block;
+
+                
+
+                }
+
+
+                button:hover{
+                    background: linear-gradient(135deg, #5b77e0, #925ec4);
+                    box-shadow: 0px 6px 15px rgba(0,0, 0, 0.3);
+                    transform: translate(-2px)
+                }
+
+                button:active{
+                    transform: translateY(1px);
+                    box-shadow: 0px 6px 15px rgba(0,0, 0, 0.2);
+                }
+
+                form{
+                    background-color:#f2f2f2;
+                    padding: 40px;
+                    border-radius: 20px;
+                    box-shadow: 0px 4px 10px rgba(0,0, 0, 0.2);
+                }
+
             </style>
     </head>
     <body>
         <h1>Cadastros de Cargos</h1>
-        <section id="scRegister">
-            <form>
-                <label>Cargo: </label><input id="positions" type="text" /><br><p>
-                <label>Descrição: </label><input id="description" type="text" /><br></p>
-                <label>Salário: </label><input id="salary" type="currency" /><br></p>
-                <label>Horas trabalhadas: </label><input id="workHours" type="time" /><label> por dia.</label><br></p>
-                <label>Departamento: </label><input id="department" type="text" /><br></p>
-                <label>Supervisor: </label><input id="supervisor" type="text" /><br></p>
-                <label>Data: </label><input id="date" type="date" /><br></p>
-                <button type="button" id="register" onclick="handleRegister()">Cadastrar</button><br>
-            </form>
-        </section>
-        <section id="scList">
-            <table>
-                <thead>
-                    <th>Cargos</th>
-                </thead>
-                <tbody>
+        <div class="row">
+            <section id="scRegister">
+                <form>
+                    <label>Cargo: </label><input id="positions" type="text" /><br><p>
+                    <label>Descrição: </label><input id="description" type="text" /><br></p>
+                    <label>Salário: </label><input id="salary" type="currency" /><br></p>
+                    <label>Horas trabalhadas: </label><input id="workHours" type="time" /><label> por dia.</label><br></p>
+                    <label>Departamento: </label><input id="department" type="text" /><br></p>
+                    <label>Supervisor: </label><input id="supervisor" type="text" /><br></p>
+                    <label>Data: </label><input id="date" type="date" /><br></p>
+                    <button type="button" id="register" onclick="handleRegister()">Cadastrar</button><br>
+                    
+                </form>
+            </section>
+            <section id="scList">
+                <table>
+                    <thead>
+                        <th>Cargos</th>
+                    </thead>
+                    <tbody>
 
-                </tbody>
-            </table>
-        </section>
+                    </tbody>
+                    
+                </table>
+            </section>
+        </div>
     </body>
     <script>
         var positions = []
@@ -90,6 +155,7 @@
             )
             listPositions(positions)
         }
+
         function listPositions (pList){
             const tbody = document.querySelector("#scList tbody")
             tbody.innerHTML = ""
@@ -100,7 +166,18 @@
                 const nameCell = document.createElement("td");
                 nameCell.textContent = p.name
 
+                const cellDell = document.createElement("td");
+                const buttonDel = document.createElement("button");
+                cellDell.appendChild(buttonDel);
+
+                const cellView = document.createElement("td");
+                const buttonView = document.createElement("button");
+                cellView.appendChild(buttonView);
+                
                 row.appendChild(nameCell);
+                row.appendChild(cellDell);
+                row.appendChild(cellView);
+
                 tbody.appendChild(row);
             })
         }
