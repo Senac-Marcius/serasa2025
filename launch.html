@@ -9,9 +9,73 @@
             
             h1{
                 text-align: center;
-                color: #ff00bc;
+                color: #a777e3;
                 background: rgb(243 241 206);
                 margin: 0;
+            }
+
+            section {
+                display: flex;
+                margin: 0 auto;
+                flex-direction: column;
+            }
+            #scRegister
+        {
+
+        }
+
+        #scList
+        {
+        }
+
+        .row {
+            display: flex;
+            margin-top: 50px;
+            padding: 20px;
+        }
+
+        lebel {
+            font-weight: 600;
+        }
+
+        br {
+            margin: 10px;
+        }
+
+
+        button {
+                background: linear-gradient(135deg, #6e8efb, #a777e3);
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                font-size: 16px;
+                font-weight: bold;
+                border-radius: 8px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+                cursor: pointer;
+                transition: all 0.3s ease-in-out;
+                position: relative;
+                overflow: hidden;
+                margin: 20px auto 0;
+                display: block;
+            }
+
+            button:hover {
+                background: linear-gradient(135deg, #5b77e0, #925ec4);
+                box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+                transform: translateY(-2px);
+            }
+
+            button:active {
+                transform: translateY(1px);
+                box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            form {
+                background-color: #F2F2F2;
+                padding: 40px;
+                border-radius: 20px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
             }
 
 
@@ -20,32 +84,31 @@
     </head>
     <body>
         <h1>Cadastre o seu Lançamento</h1>
+        <div class="row"> 
 
-        <section id="scregister"> 
-            <form>
-            <label>Observação: </label><input id="observation" type="text"/><br> 
-            <label>Nota: </label><input id="note" type="number"/><br>
-            <label>Presença: </label><input id="presence" type="text"/><br>
-            <label>Indicador: </label><input id="indicator" type="text"/><br>
-            <button type="button" id="register" onclick="handleRegister()">CADASTRAR</button>
-        </section>
-        </form>
+            <section id="scregister"> 
+                <form>
+                <label>Observação: </label><input id="observation" type="text"/><br> 
+                <label>Nota: </label><input id="note" type="number"/><br>
+                <label>Presença: </label><input id="presence" type="text"/><br>
+                <label>Indicador: </label><input id="indicator" type="text"/><br>
+                <button type="button" id="register" onclick="handleRegister()">CADASTRAR</button>
+            </section>
+            </form>
 
-        <section id="scList">
-            <table>
-                <thead>
-                    <th>Observação</th>
-                </thead>
-                <tbody>
+            <section id="scList">
+                <table>
+                    <thead>
+                        <th>Observação</th>                       
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </section>
+        </div>
 
-
-
-                </tbody>
-            </table>
-        </section>
     
     </body>
-
     <script>
         var launchs = []
         function setLaunch(req){
@@ -100,12 +163,25 @@
                 const indicatorCell = document.createElement("td");
                 indicatorCell.textContent = l.indicator;
 
-                row.appendChild(indicatorCell);
-                tbody.appendChild(row);
-            })
+              
                 
-            
+                const viewcell = document.createElement("td");
+                const viewbutton = document.createElement("button");
+                viewcell.appendChild(viewbutton);
 
-        }
+
+
+                const dellcell = document.createElement("td"); //criou uma td na variavel
+                const dellbutton = document.createElement("button"); //criou um botão na variavel
+                dellcell.appendChild(dellbutton); // criou um botão na td
+
+
+
+                row.appendChild(indicatorCell);
+                row.appendChild(viewcell); //adicionou a td na tela
+                row.appendChild(dellcell);
+                tbody.appendChild(row);
+        })
+    }
     </script>
 </html>
