@@ -14,7 +14,11 @@
 
 
 }
-      
+      section{
+        display:flex;
+        margin: 0 auto;
+        flex-direction:column;
+      }
       
 
       
@@ -26,34 +30,77 @@
       #scList{
 
       }
+      .row {
+        display: flex;
+      margin-top: 50px;
+      padding: 20px;
+      } 
+      label{
+        font-weight:600;
+      }
+      br{
+        margin: 10px;
+      } 
+            button {
+                background: linear-gradient(135deg, #6e8efb, #a777e3);
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                font-size: 16px;
+                font-weight: bold;
+                border-radius: 8px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+                cursor: pointer;
+                transition: all 0.3s ease-in-out;
+                position: relative;
+                overflow: hidden;
+                margin: 20px auto 0;
+                display: block;
+            }
 
+            button:hover {
+                background: linear-gradient(135deg, #5b77e0, #925ec4);
+                box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+                transform: translateY(-2px);
+            }
+
+            button:active {
+                transform: translateY(1px);
+                box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+            }
+
+ form {
+  background-color: #f2f2f2;
+  padding:40px;
+  border-radius: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
     </style>
     </head>
     <body>
       <h1>cadastre sua categoria!</h1>
+      <div class="row">
+        <section id="scRegister">
+          <form> 
+            <label>nome: </label><input id="name" type="text" /><br><br>
+          <button type="button" id="register" onclick="handleEnviar()">cadastrar</button>
+        </form>
 
-    
-      <section id="scRegister">
-        <form> 
-          <label>nome: </label><input id="name" type="text" /><br><br>
-         <button type="button" id="register" onclick="handleEnviar()">cadastrar</button>
-       </form>
+        </section>
+      
+        <section id="scList">
+          <table>
+            <thead>
+              <th>nome</th>
+            </thead>
+            <tbody>
 
-       </section>
-
-      <section id="scList">
-        <table>
-          <thead>
-            <th>nome</th>
-          </thead>
-          <tbody>
-
-          </tbody>
-        </table>
-     </section>
+            </tbody>
+          </table>
+      </section>
+      </div>
     </body>
     <script>
-      
       var categories = []
 
       function setCategory(req){
@@ -98,7 +145,19 @@
             const nameCell = document.createElement("td")
             nameCell.textContent = c.name
 
+            const viewCell = document.createElement("td")
+            const viewButton = document.createElement("button");
+            viewCell.appendChild(viewButton)
+
+
+            const dellCell = document.createElement("td")
+            const dellButton = document.createElement("button")
+            dellCell.appendChild(dellButton)
+
+            
             row.appendChild(nameCell)
+            row.appendChild(viewCell)
+            row.appendChild(dellCell)
             tbody.appendChild(row)
           })
         }
