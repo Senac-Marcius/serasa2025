@@ -6,39 +6,99 @@
 </head>
     <meta charset="UTF-8"/>
     <title>Produto</title>
-    <style>
-      h1{
-        text-align: center;
-        color: #0B0C0D;
-        background-color: #f2f2f2;
-        margin: 0;
-      }
-      #scRegister{
-        text-align: justify;
-        color: #04ADBF;
-        width: 50px;
-      }
-      #scList{
-        text-align: center;
-        color: #0B0C0D;
-        background-color: #f2f2f2;
-        margin: 0;
-      }
-      body{
-       margin: 0; 
-       background-color: #0B0C0D;
-      }
-      input {
-        
-      }
-      button{
-        margin: 0;
-        background-color: #04ADBF;
-      }
+    <style>body{
+      margin: 0;
+  }
+
+  h1{
+    text-align: center;
+    color: #04ADBF;
+    background-color: #0B0C0D;
+    margin: 0;
+    padding: 20px;
+  }
+
+  section{
+      display: flex;
+      margin: 0 auto;
+      flex-direction: column;
+  }
+
+  #scRegister{
+   
+  }
+  #sclist{
+    
+
+  }
+
+  .row{
+    display:flex;
+    justify-content: space-around;
+    padding: 20px;
+    margin-top: 50px;
+  }
+
+  label{
+          font-weight: 600;
+  }
+
+  br{
+      margin: 10px
+  }
+
+  button {
+     background: linear-gradient(135deg, #6e8efb, #a777e3);
+     color: white;
+     border: none;
+     padding: 12px 24px;
+     font-size: 16px;
+     font-weight: bold;
+     border-radius: 8px;
+     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+     cursor: pointer;
+     transition: all 0.3s ease-in-out;
+     position: relative;
+     overflow: hidden;
+     margin: 20px auto 0;
+     display: block;
+            }
+
+  button:hover {                  
+    background: linear-gradient(135deg, #5b77e0, #925ec4);
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    
+    
+    
+      /*background: linear-gradient(135deg, #5b77e0, #925ec4);
+      box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+      transform: translateY(-2px);
+      margin: auto;*/
+  }
+
+  button:active {
+      transform: translateY(1px);
+      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  body{
+      margin: 0;
+      font-family: Arial, sans-serif;
+  }
+
+  form{
+    background-color: #F2F2F2;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    width: 180px;
+  }
     </style>
 </head>
 <body>
   <h1>Cadastro do Produto</h1>
+  <div class="row">
   <section id="scRegister">
     <form>
       <label>Nome:</label><input id ="name" type="text"/><br>
@@ -56,6 +116,7 @@
         </tbody>
       </table>
   </section>
+</div>
 </body>
 <script>
 
@@ -109,11 +170,25 @@
         const nameCell = document.createElement("td");
         nameCell.textContent = p.name
 
+        const viewCell = document.createElement("td");
+        const viewButton = document.createElement("button") ;
+        
+        const dellCell = document.createElement("td")
+        const dellButton = document.createElement("button")
+
+        
+
         row.appendChild(nameCell);
-        tbody.appendChild(row)
+        row.appendChild(viewCell);
+        viewCell.appendChild(viewButton);
+        row.appendChild(dellCell);
+        dellCell.appendChild(dellButton);
+        tbody.appendChild(row);
     })
   }
 </script>
 </html>
+
+
 
       
