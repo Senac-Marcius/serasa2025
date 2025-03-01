@@ -5,7 +5,6 @@
         <style>
             body{
                 margin: 0;
-                text-align: -moz-center;
             }
 
             h1{
@@ -16,11 +15,62 @@
 
             }
 
+            section {
+                display: flex;
+                margin: 0 auto;
+                flex-direction: column;
+            }
+
             #scRegister{
 
             }
 
             #scList{
+                
+            }
+
+            .row{
+                display: flex;  
+                margin-top: 50px;
+                padding: 20px;
+            }
+
+            label {
+                font-weight: 600;
+            }
+
+            button {
+                background: linear-gradient(135deg, #6e8efb, #a777e3);
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                font-size: 16px;
+                font-weight: bold;
+                border-radius: 8px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+                cursor: pointer;
+                transition: all 0.3s ease-in-out;
+                position: relative;
+                overflow: hidden;
+                margin: 20px auto 0;
+                display: block;               
+            }
+
+            button:hover {
+                background: linear-gradient(135deg, #5b77e0, #925ec4);
+                box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+                transform: translateY(-10px);
+            }
+
+            button:active {
+                transform: translateY(1px);
+                box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            form {
+                background-color: #f2f2f2;
+                padding: 40px;
+                border-radius: 0px 4px 10px rgba(0, 0,0, 0.2);
                 
             }
 
@@ -30,55 +80,57 @@
     <body>
       
         <h1>Formulário para cadastro de Projeto:</h1>
-        <section id="scRegister">
-            <form>
-                <label>Criador do Projeto:</label>  <input id="nameuser" type="text" placeholder="Nome Completo"/> <input id="cpf" type="text" placeholder="CPF" maxlength="14" oninput="formatCPF(this)" /> E-mail <input type="email" placeholder="email@gmail.com"/> <br>
-                <br>
-                <label>Nome do Projeto:</label>  <input id="namep" type="text" /> <br>
-                <label>Site:</label>  <input id="website" type="url" placeholder=" https://siteprojeto.org.br"/><br>
-                <br>
-                <label>Previsao de início:</label>  <input id="createAt" type="date" /><br>
-                <br>
-                <label>Qual o periodo do projeto:</label>  <input id="createAt" type="date" /> á <input type="date" />  / <input id="Indeterminado" type="checkbox" name="Indeterminado" /> Indeterminado<br>
-                <br>
-                <label>Descrição do Projeto:</label> <br>
-                    
-                    <textarea id="description" placeholder="Visão geral"></textarea>
-                <br>
-                <label>Objetivo:</label> <br>
-                    
-                    <textarea id="objective" placeholder="Simplificado se possivel"></textarea>
-                <br>
-                <label>Recursos:</label>  <input id="resources" type="text" name="valor" placeholder="R$ 0,00" /> Aproximadamente<br>
-                <br>
-                <label>Qual a Atividade que será proposta pelo projeto:</label> <br>
-                    
-                    <textarea id="activity" placeholder="Tópicos" ></textarea>
-                <br>
-                <label>Quais metodologias pretende abordar: <br>
-                    
-                    <textarea id="tecnic" placeholder="Técnicas" ></textarea>
-                    <textarea id="process" placeholder="Processos" ></textarea>
-                    <textarea id="strategy" placeholder="Estratégias" ></textarea>
-                    <textarea id="planning" placeholder="Planejamento" ></textarea>
-                <br><br>
+        <div class="row">
+            <section id="scRegister">
+                <form>
+                    <label>Criador do Projeto:</label>  <input id="nameuser" type="text" placeholder="Nome Completo"/> <input id="cpf" type="text" placeholder="CPF" maxlength="14" oninput="formatCPF(this)" /> E-mail <input type="email" placeholder="email@gmail.com"/> <br>
+                    <br>
+                    <label>Nome do Projeto:</label>  <input id="namep" type="text" /> <br>
+                    <label>Site:</label>  <input id="website" type="url" placeholder=" https://siteprojeto.org.br"/><br>
+                    <br>
+                    <label>Previsao de início:</label>  <input id="createAt" type="date" /><br>
+                    <br>
+                    <label>Qual o periodo do projeto:</label>  <input id="createAt" type="date" /> á <input type="date" />  / <input id="Indeterminado" type="checkbox" name="Indeterminado" /> Indeterminado<br>
+                    <br>
+                    <label>Descrição do Projeto:</label> <br>
+                        
+                        <textarea id="description" placeholder="Visão geral"></textarea>
+                    <br>
+                    <label>Objetivo:</label> <br>
+                        
+                        <textarea id="objective" placeholder="Simplificado se possivel"></textarea>
+                    <br>
+                    <label>Recursos:</label>  <input id="resources" type="text" name="valor" placeholder="R$ 0,00" /> Aproximadamente<br>
+                    <br>
+                    <label>Qual a Atividade que será proposta pelo projeto:</label> <br>
+                        
+                        <textarea id="activity" placeholder="Tópicos" ></textarea>
+                    <br>
+                    <label>Quais metodologias pretende abordar: <br>
+                        
+                        <textarea id="tecnic" placeholder="Técnicas" ></textarea>
+                        <textarea id="process" placeholder="Processos" ></textarea>
+                        <textarea id="strategy" placeholder="Estratégias" ></textarea>
+                        <textarea id="planning" placeholder="Planejamento" ></textarea>
+                    <br><br>
 
-                <button type="button" id="register" onclick="handleRegister()"> Cadastrar </button>
-            </form>
+                    <button type="button" id="register" onclick="handleRegister()"> Cadastrar </button>
+                </form>
 
-        </section>
+            </section>
+        
+            <section id="scList">
 
-        <section id="scList">
-
-            <table>
-                <thead>
-                    <th>Nome Do Projeto</th>
-                </thead>
-                <tbody>
-                    
-                </tbody>
-            </table>
-        </section>
+                <table>
+                    <thead>
+                        <th>Nome Do Projeto</th><br>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </section>
+        </div>
     </body>
     <script>
         var projects = []
@@ -135,10 +187,22 @@
             projects.forEach(p => {    // se utiliza quando se quer utilizar a mesma função para todos os vetores e dentro do tbody vai um "tr"
                 const row = document.createElement("tr");
 
-                const namepCell = document.createElement("td");
+                const namepCell = document.createElement("td"); 
                 namepCell.textContent = p.namep
 
+                const viewbutton = document.createElement("button");
+                viewbutton.innerHTML = "View";
+                const viewCell = document.createElement("td");
+                viewCell.appendChild(viewbutton);
+
+                const dellbutton = document.createElement("button");
+                dellbutton.innerHTML = "Deletar";
+                const dellCell = document.createElement("td");
+                dellCell.appendChild(dellbutton);
+
                 row.appendChild(namepCell);
+                row.appendChild(dellCell);
+                row.appendChild(viewCell);
                 tbody.appendChild(row);
 
             })
