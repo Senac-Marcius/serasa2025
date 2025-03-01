@@ -5,6 +5,7 @@
         <title>Escala</title>
         <style>
            body{
+                background-color: rgba(75, 75, 75, 0.568);
                 margin: 0;
            }
            h1{
@@ -13,7 +14,11 @@
                 background-color: #F2F2F2;
                 margin: 0;
             }
-
+            section{
+                display: flex;
+                margin: 0 auto;
+                flex-direction: column;
+            }
             #scRegister{
                 text-align: left;
                 color: #BF54A3;
@@ -25,45 +30,90 @@
                 color: #BF54A3;
                 background-color: #F2F2F2
             }
+            
+            .row{
+                display:flex;
+                margin-top: 50px;
+                padding: 20px;
+
+            }
+            label {
+                font-weight: 600;
+            }
+
+            form{
+                background-color:#F2F2F2;
+                padding: 40px;
+                border-radius: 20px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            }
+            button {
+                background: linear-gradient(135deg, #6e8efb, #a777e3);
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                font-size: 16px;
+                font-weight: bold;
+                border-radius: 8px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+                cursor: pointer;
+                transition: all 0.3s ease-in-out;
+                position: relative;
+                overflow: hidden;
+                margin: 20px auto 0;
+                display: block;
+            }
+
+            button:hover {
+                background: linear-gradient(135deg, #5b77e0, #925ec4);
+                box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+                transform: translateY(-2px);
+            }
+
+            button:active {
+                transform: translateY(1px);
+                box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+            }
         </style>
     </head>
     <body>
         <h1>Cadastro de Escala</h1>
-        <section id="scRegister">
-            <form>
-                <label for="day">Dia da semana:</label>
-                <select id="day" name="day">
-                  <option value="domingo">Domingo</option>
-                  <option value="segunda-feira">Segunda-feira</option>
-                  <option value="terca-feira">Terça-feira</option>
-                  <option value="quarta-feira">Quarta-feira</option>
-                  <option value="quinta-feira">Quinta-feira</option>
-                  <option value="sexta-feira">Sexta-feira</option>
-                  <option value="sabado">Sábado</option>
-                </select><br><br>
+        <div class="row">
+            <section id="scRegister">
+                <form>
+                    <label for="day">Dia da semana:</label>
+                    <select id="day" name="day">
+                    <option value="domingo">Domingo</option>
+                    <option value="segunda-feira">Segunda-feira</option>
+                    <option value="terca-feira">Terça-feira</option>
+                    <option value="quarta-feira">Quarta-feira</option>
+                    <option value="quinta-feira">Quinta-feira</option>
+                    <option value="sexta-feira">Sexta-feira</option>
+                    <option value="sabado">Sábado</option>
+                    </select><br><br>
+                    
+                    <label>Horário de início:</label><input id="starttime" type="time">
+        
+                    <label>Horário de término:</label><input id="endtime" type="time" /><br><br>
+        
+                    <label>Data:</label><input id="createAt" type="date" /><br><br>
+        
+                    <button type="button" id="register" onclick="handleRegister()"> CADASTRAR</button>
+                </form>
+            </section>
+
+            <section id="scList">
+
+                <table>
+                    <thead>
+                        <th>Dia</th>
+                    </thead>
+                    <tbody>
                 
-                <label>Horário de início:</label><input id="starttime" type="time">
-    
-                <label>Horário de término:</label><input id="endtime" type="time" /><br><br>
-    
-                <label>Data:</label><input id="createAt" type="date" /><br><br>
-    
-                <button type="button" id="register" onclick="handleRegister()"> CADASTRAR</button>
-            </form>
-        </section>
-
-        <section id="scList">
-
-            <table>
-                <thead>
-                    <th>Dia</th>
-                </thead>
-                <tbody>
-
-                </tbody>
-            </table>
-        </section>
-
+                    </tbody>
+                </table>
+            </section>
+        </div>
     </body>
     <script>
         var scales =[]
@@ -125,14 +175,25 @@
 
             sList.forEach(s =>{
                 const row = document.createElement("tr");
-
+            
                 const dayCell = document.createElement("td");
-                dayCell.textContent = s.day
+                dayCell.textContent = s.day;
+
+                const buttonCell = document.createElement("button");
+                const viewCell = document.createElement("td");
+                viewCell.appendChild(buttonCell);
+
+                const buttondellCell = document.createElement("button");
+                const dellCell = document.createElement("td");
+                dellCell.appendChild(buttondellCell);
+                
 
                 row.appendChild(dayCell);
+                row.appendChild(viewCell);
+                row.appendChild(dellCell);
                 tbody.appendChild(row);
             })
         }
-
+        
     </script>
 </html>
