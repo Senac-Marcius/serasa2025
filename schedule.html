@@ -3,16 +3,94 @@
 <head>
     <meta Schedule="UTF-8" />
     <title>Cronograma</title>
+    <style>
+        body{
+            margin: 0;
+        }
 
+        h1{
+            text-align: center;
+            color: #BF54A3;
+            background-color: #85eeb1;
+            margin: 30;
+        }
+
+        section {
+            display: flex;
+            margin: 0 auto;
+            flex-direction: column;
+        }
+        
+        #scRegister {
+
+
+        }
+
+        #scList {
+
+
+        }
+
+        .row {
+            display: flex;
+        }
+
+        label {
+            font-weight: 600;
+        }
+
+        br {
+            margin: 10px;
+        }
+
+        button {
+                background: linear-gradient(135deg, #6e8efb, #a777e3);
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                font-size: 16px;
+                font-weight: bold;
+                border-radius: 8px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+                cursor: pointer;
+                transition: all 0.3s ease-in-out;
+                position: relative;
+                overflow: hidden;
+                margin: 20px auto 0;
+                display: block;
+            }
+
+            button:hover {
+                background: linear-gradient(135deg, #5b77e0, #925ec4);
+                box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+                transform: translateY(-2px);
+            }
+
+            button:active {
+                transform: translateY(1px);
+                box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+            }
+
+        form{
+            background-color: #f2f2f2;
+            padding: 40px;
+            border-radius: 20px ;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+
+        }
+
+    </style>
 </head>
 
 <body>
     <h1>Cadastre seu Cronograma</h1>
-    <section id="scRegister">
-        <h2>Objetivo</h2>
+    <div class="row">
+        <section id="scRegister">
+
+        <h2>Cronograma</h2>
        
-        <form>
-            <label>url </label><input id="url" type="text" /><br>
+            <form>
+            <label>Url </label><input id="url" type="text" /><br>
             <label>User </label><input id="userId" type="text" /><br>
             <label>Turma </label><input id="class" type="text" /><br>
             <label>Disciplina </label><input id="discipline" type="text" /><br>
@@ -21,43 +99,22 @@
             <label>Horario de entrada </label><input id="start_time" type="time" /><br>
             <label>Horario de término </label><input id="end_time" type="time" /><br>
             <button type="button" id="register" onclick="handleRegister()">cadastrar</button>
-        </form>
-    </section> 
+            </form>
+        </section> 
 
     <section id="scList">
-        <style>
-            body{
-                margin: 0;
-            }
-
-            h1{
-                text-align: center;
-                color: #BF54A3;
-                background-color: #85eeb1;
-                margin: 5;
-            }
-
-            #scRegister{
-
-
-            }
-
-            #scList{
-
-
-            }
-        </style>
         <table>
             <thead>
                 <th>URL</th>
             </thead>
-            <tbody>
+                 <tbody>
 
              
-            </tbody>
+                </tbody>
         </table>
 
-    </section>       
+        </section>      
+    </div> 
 </body>   
 <script>
     var schedules = []
@@ -126,7 +183,19 @@
             const urlcell = document.createElement ("td");
             urlcell.textContent = s.url
 
-            row.appendChild(urlcell);       
+            
+            const viewcell = document.createElement ("td"); //criou uma td na variavel const
+            const viewbutton = document.createElement ("button"); //cadrastrou um botão no td
+            viewcell.appendChild(viewbutton); //chamou o botão 
+
+            const dellcell = document.createElement ("td"); //criou uma td na variavel const
+            const dellbutton = document.createElement ("button"); //cadrastrou um botão no td
+            dellcell.appendChild(dellbutton);
+            
+            
+            row.appendChild(urlcell);  
+            row.appendChild(viewcell);  
+            row.appendChild(dellcell);
             tbody.appendChild(row);
         })
     }
