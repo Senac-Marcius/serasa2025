@@ -4,6 +4,7 @@
         <title>pesquisa</title>
         <style>
 
+
             body{
                 margin:0;
             }
@@ -15,8 +16,67 @@
                 margin:0;
 
             }
+            .row{
+                display: flex;
+                margin-top: 50px;
+                padding: 20px;
+            }
 
-            #sclist{
+            label{
+                font-weight: 600;
+            }
+
+            br  {
+                margin: 10px;
+            }
+
+            button {
+                background: linear-gradient(135deg, #6e8efb, #a777e3);
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                font-size: 16px;
+                font-weight: bold;
+                border-radius: 8px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+                cursor: pointer;
+                transition: all 0.3s ease-in-out;
+                position: relative;
+                overflow: hidden;
+                margin: 20px auto 0;
+                display: block;
+            }
+
+            button:hover {
+                background: linear-gradient(135deg, #5b77e0, #925ec4);
+                box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+                transform: translateY(-2px);
+            }
+
+            button:active {
+                transform: translateY(1px);
+                box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+            }
+
+
+            section{
+                display: flex;
+                margin: 0 auto;
+                flex-direction: column;
+            }
+
+            form {
+                background-color: #f2f2f2;
+                padding: 40px;
+                border-radius: 20px;
+                box-shadow: 0px 10px rgba(0, 0, 0, 0.2);
+            }
+
+            
+
+
+
+            #sclist {
 
             }
 
@@ -26,29 +86,33 @@
 
         </style>
 
+
     </head>
     
     <body>
         <h1>cadraste sua pesquisa</h1>
-        <section id="scRegister"></section>
-            <form>
-                <label>Nome: </label><input id="name"type="text" /><br>
-                <label>Descrição: </label><textarea id="description" type="text"></textarea><br>
-                <label>link: </label><input id="link"  type="text"  /><br>
-                <button type="button" id="register" onclick="handleRegister()" >CADASTRAR</button>
-            </form>
-        </section>
-        
-        <section id="sclist">
-            <table>
-                <thead>
-                    <th>Nomes</th>
-                </thead>
-                <tbody>
+        <div class="row">
+            <section id="scRegister"></section>
+                <form>
+                    <label>Nome: </label><input id="name"type="text" /><br>
+                    <label>Descrição: </label><textarea id="description" type="text"></textarea><br>
+                    <label>link: </label><input id="link"  type="text"  /><br>
+                    <button type="button" id="register" onclick="handleRegister()" >CADASTRAR</button>
+                </form>
 
-                </tbody>
-            </table>
-        </section>
+            </section>
+            
+            <section id="sclist">
+                <table>
+                    <thead>
+                        <th>Nomes</th>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </section>
+        </div>
     </body>
     <script>
         var searches = []
@@ -93,10 +157,23 @@
             sList.forEach(s =>  {
                 const row = document.createElement("tr");
 
-                const urlCell = document.createElement("td");
-                urlCell.textContent = s.name 
+                const urlCell = document.createElement("tr");
+                urlCell.textContent = s.link
+
+                const viewbutton = document.createElement("button");
+                const viewcell = document.createElement("td"); 
+                viewcell.appendChild(viewbutton);
+
+                const  editbutton = document.createElement("button");
+                const  editcell = document.createElement("td");
+
+                editcell.appendChild(editbutton);
+
 
                 row.appendChild(urlCell);
+                row.appendChild(viewcell);
+                row.appendChild(editcell);
+
                 tbody.appendChild(row);
             })
         }
