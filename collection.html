@@ -4,9 +4,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo</title>  
+    <style>
+        body{
+            margin: 0;
+        }
+        h1{
+        text-align: center;
+        color: deeppink;
+        background: peachpuff;
+        margin: 0;
+        }
+        section{
+            display: flex;
+            margin: 0 auto;
+            flex-direction: column;
+            background-color: beige;
+
+        }
+        form{
+            display: flex;
+            flex-direction: column;
+            height: 400px;
+            padding: 20px;
+            border-radius:20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 2);
+        
+        }
+        #scColections{
+         
+        
+        }
+        #scList{
+            width:400px;
+            height:400px;
+            display: flex;
+            border-radius:20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 2);
+
+        }
+    
+        .row{
+            display: flex;
+            justify-content: space-around;
+            margin-top: 100px;
+            padding: 20px;
+        }
+        label{
+            font-weight: 600px;
+        }
+        br{
+            margin: 10px;
+        }
+        button:holver{
+            background:linear-gradient(135deg,#9A34FF,#5C0499);
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+            transform: translate(-2px);
+        }
+        button:active{
+            transform: translateY(1px);
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        input{
+            width: 300px;
+            height: 25px;
+            border-radius:5px;
+        }
+        
+        button{
+            background:linear-gradient(135deg,#5C0499, #9A34FF);
+            border:none;
+            color:beige;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 2);
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+            margin: 20px auto 0;
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <h1>Cadastre seu catálogo:</h1>
+    <div class="row">
     <section id="scCollections">
         <form><!--formulário-->
             <label>Nome do livro: </label><input id ="name" type="text"><br><br>
@@ -18,13 +102,14 @@
     <section id="scList">
         <table>
             <thead>
-                <th>Títulos dos livros </th>
+                <th>TITÚLOS DOS LIVROS </th>
             </thead>
             <tbody>
 
             </tbody>
         </table>
     </section>
+    </div>
 </body>
     <script>
         var collections = []
@@ -64,7 +149,25 @@
                     const nameCell = document.createElement("td")
                     nameCell.textContent = c.name
 
+                    const buttontd = document.createElement("td")
+                    
+                     
+                    const buttonupdatetd = document.createElement("td")
+
+                    const button = document.createElement ("button")
+                     button.textContent = "Delete"
+
+                    const buttonupdate = document.createElement("button")
+                    buttonupdate.textContent = "Atualizar"
+
+                    buttonupdatetd.appendChild(buttonupdate);
+                    row.appendChild (buttonupdatetd);
+
+                    buttontd.appendChild(button);
+                    row.appendChild(buttontd);
+
                     row.appendChild(nameCell);
+
                     tbody.appendChild(row);
                 })
             }
