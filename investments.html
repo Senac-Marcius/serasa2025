@@ -19,18 +19,65 @@
                 font-size: xxx-large;
                 font-style: oblique;
             }
-            #scRegister{
 
+            h2{
+                text-align: center;
+                color: fuchsia;
+                background-color: darkmagenta;
+                margin: 0;
+                font-size: xx-large;
+                font-style: oblique;
+            }
+
+            section{
+                margin: 10px;
+                padding: 10px;
+                width: 45%;
+                height: 30vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            #scRegister{
+                background-color: fuchsia;
+                color: darkmagenta;
             }  
             
             #scList{
-                
+                background-color: fuchsia;
+                color: darkmagenta;
             }
+
+            .row {
+                display: flex;
+            }
+
+            label {
+                font-weight: 600;
+            }
+
+            br {
+                margin: 5px;
+            }
+
+            button {
+                margin: 10px;
+                padding: 10px;
+                background-color: darkmagenta;
+                color: fuchsia;
+                border: none;
+                border-radius: 100px;
+                font-style: italic;
+            }
+
         </style>
     </head>
     <body>
         <h1>Cadastre seu investimento</h1>
-        <section id="scRegister">
+        <div class="row">
+            <section id="scRegister">
             <form>
             <label>Nome: </label><input id="name" type="text"/><br>
             <label>Descrição: </label><input id="description" type="text"/><br>
@@ -46,12 +93,15 @@
             <table>
                 <thead>
                     <th>Nome</th>
+                    
                 </thead>
                 <tbody>
-
+                
                 </tbody>
             </table>
         </section>
+        </div>
+ 
         
     </body>
     <script>
@@ -72,6 +122,7 @@
             }
 
             let I = {
+                name: req.name,
                 id: invests.length,
                 description: req.description,
                 url: req.url,
@@ -87,6 +138,7 @@
         function handleRegister(){
             console.log(
                 setInvest({
+                    name: document.getElementById("name").value,
                     description: document.getElementById("description").value,
                     url: document.getElementById("url").value,
                     createAt: "2025-02-12",
@@ -107,10 +159,24 @@
                 const row = document.createElement("tr")
 
                 const tdName = document.createElement("td")
-                tdName.textContent = i.description
+                tdName.textContent = i.name
                 
+                const button1 = document.createElement("td")
+                const buttonviw = document.createElement("button")
+                 
+                
+                const button2 = document.createElement("td")
+                const buttondel = document.createElement("button")
+                
+
+            
                 row.appendChild(tdName)
+                button1.appendChild(buttonviw)
+                button2.appendChild(buttondel)
+                row.appendChild(button1)
+                row.appendChild(button2)
                 tbody.appendChild(row)
+                
             })
         }
 
