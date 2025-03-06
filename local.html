@@ -153,15 +153,23 @@
         } 
 
         function handleRegister(){
-            console.log(
-                setLocal({
-                    name: document.getElementById("name").value,
-                    area: document.getElementById("area").value,
-                    description: document.getElementById("description").value,
-                    adress: document.getElementById("adress").value,
-                    createAt: "2013-01-05"
-                }) 
-            )
+            let id = document.getElementById('id').value
+
+            if(id == -1){
+                console.log(
+                    setLocal({
+                        name: document.getElementById("name").value,
+                        area: document.getElementById("area").value,
+                        description: document.getElementById("description").value,
+                        adress: document.getElementById("adress").value,
+                        createAt: "2013-01-05"
+                    }) 
+                )
+            }else if(id > -1){
+
+            }else{
+                console.log("erro")
+            }
                 listLocals(locals)
         }
         
