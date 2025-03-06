@@ -28,13 +28,13 @@ section {
     flex-direction: column;
 }
 
-#scRegister{
+/*#scRegister{
 
-}
+}*/
 
-#scList {
+/*#scList {
 
-}
+}*/
 
 .row {
     display: flex;

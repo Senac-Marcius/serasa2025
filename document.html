@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="style.css" media="screen">
         <title>Documentos</title>
     </head>
     <body>
@@ -104,6 +105,13 @@
                 nameCell.textContent = d.name
 
                 //FILTRO
+                /*const viewCell = document.createElement("td")
+                const viewButton = document.createElement("button")
+
+                viewButton.className = "view"
+                viewCell.appendChild(viewButton)*/
+
+                //FILTRO
                 const viewCell = document.createElement("td")
                 const viewButton = document.createElement("button")
 
@@ -117,7 +125,7 @@
                 dellButton.className = "dell"
                 dellCell.appendChild(dellButton)
                 row.appendChild(nameCell)
-                row.appendChild(viewCell)
+                //row.appendChild(viewCell)
                 row.appendChild(dellCell)
                 tbody.appendChild(row)
 
