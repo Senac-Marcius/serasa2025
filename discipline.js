@@ -1,145 +1,107 @@
-var disciplines = []
+var disciplines = [];
 
-const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/; // Formato YYYY-MM-DD
-const URL_REGEX = /^(https?:\/\/)[\w.-]+(\.[a-zA-Z]{2,})+.*$/; // Validação de URL
+        function setDiscipline(req) {
+            const datePattern = /^\d{4}-\d{2}-\d{2}$/
+            const urlPattern = /^(https?:\/\/)[^\s$.?#].[^\s]*$/
 
-function formatDate(inputDate) {
-    const match = inputDate.match(/^(\d{2})\/(\d{2})\/(\d{2,4})$/)
-    if (match) {
-        let year = match[3].length === 2 ? `20${match[3]}` : match[3]
-        return `${year}-${match[2]}-${match[1]}`
-    }
-    return inputDate;
-}
+            if (!datePattern.test(req.createdAt)) return alert("Campo Data deve conter o formato YYYY-MM-DD")
+            if (!urlPattern.test(req.url)) return alert("Campo URL deve ser válido, iniciando com http:// ou https://")
 
-function setDiscipline(req) {
-    req.createAt = formatDate(req.createAt); // Converte data para YYYY-MM-DD
+            let d = {
+                id: disciplines.length,
+                name: req.name,
+                url: req.url,
+                workload: req.workload,
+                createdAt: req.createdAt,
+                teacher: req.teacher
+            };
 
-    if (!DATE_REGEX.test(req.createAt)) {
-        console.log("Data inválida! Use o formato YYYY-MM-DD.")
-        return;
-    }
-    
-    if (!URL_REGEX.test(req.url)) {
-        console.log("URL inválida! Use um formato válido (http:// ou https://)")
-        return;
-    }
-
-    let d = {
-        id: req.id,
-        name: req.name,
-        url: req.url,
-        workload: req.workload,
-        createAt: req.createAt,
-        teacher: req.teacher
-    };
-
-    disciplines.push(d);
-}
-
-function putDiscipline(req, id) {
-    let idx = disciplines.findIndex(d => d.id == id);
-
-    if (idx === -1) {
-        return "Não encontrado";
-    }
-
-    if (req.createAt !== undefined) {
-        req.createAt = formatDate(req.createAt);
-        if (!DATE_REGEX.test(req.createAt)) {
-            console.log("Data inválida! Use o formato YYYY-MM-DD.");
-            return;
+            disciplines.push(d)
+            updateDisciplineList()
+            document.getElementById("disciplineForm").reset()
         }
-    }
 
-    if (req.url !== undefined && !URL_REGEX.test(req.url)) {
-        console.log("URL inválida! Use um formato válido (http:// ou https://)");
-        return;
-    }
-
-    Object.keys(req).forEach(key => {
-        if (req[key] !== undefined) disciplines[idx][key] = req[key];
-    });
-
-    return disciplines[idx];
-}
-
-function showDiscipline(req) {
-    return disciplines.find(d => d.id == req.id)
-}
-
-function getDisciplines(req) {
-
-  if( disciplines.length = 0) return "não encontrado"
-  
-    if (!req || Object.keys(req).length === 0) return disciplines
-
-    if (req.clasule == "and") {
-        return disciplines.filter(d => req.search !== undefined && d.name == req.search && d.name.includes(req.search) && req.search !== undefined && d.workload > 50)
-    } else {
-        return disciplines.filter(d => req.search !== undefined && d.name == req.search || d.name.includes(req.search) || req.search !== undefined && d.workload > 50)
-    } 
-
-}
-
-function putDisciplinesFlexible(req) {
-    let fields = req.fields || ["name"]
-
-    return disciplines.filter(d => {
-        if (req.clasule === "and") {
-            return fields.every(field => d[field] && d[field].toString().includes(req.search))
-        } else if (req.clasule === "or") {
-            return fields.some(field => d[field] && d[field].toString().includes(req.search))
+        function handleSet() {
+            let editIndex = document.getElementById("editIndex").value
+            if (editIndex) {
+                updateDiscipline()
+            } else {
+                setDiscipline({
+                    name: document.getElementById("name").value,
+                    url: document.getElementById("url").value,
+                    workload: document.getElementById("workload").value,
+                    createdAt: document.getElementById("created_at").value,
+                    teacher: document.getElementById("teacher").value
+                });
+            }
         }
-    });
-}
 
-function delDiscipline(id){
+        function updateDisciplineList(disciplineArray = disciplines) {
+            let list = document.getElementById("disciplineList")
+            list.innerHTML = ""
+            disciplineArray.forEach((d, index) => {
+                let item = document.createElement("p")
+                item.textContent = `${d.name} - ${d.teacher} - ${d.workload}h`
 
-  let idx = disciplines.findIndex(d => d.id == id)
-  if( idx == -1) return "Não encontrado"
-  disciplines.splice(idx, 1)
-    return "Diciplina excluida!"
+                let editButton = document.createElement("button")
+                editButton.textContent = "Editar"
+                editButton.onclick = () => editDiscipline(index)
 
-  
-}
+                let deleteButton = document.createElement("button")
+                deleteButton.textContent = "Deletar"
+                deleteButton.onclick = () => deleteDiscipline(index)
 
-// Adicionando disciplinas com validação
-setDiscipline({
-    id: 0,
-    name: "miszael",
-    url: "https://www.discipline.com",
-    workload: 250,
-    createAt: "20/01/2003",
-    teacher: "professor"
-});
+                item.appendChild(editButton)
+                item.appendChild(deleteButton)
+                list.appendChild(item)
+            })
+        }
 
-setDiscipline({
-    id: 1,
-    name: "marco",
-    url: "https://www.discipline.com",
-    workload: 550,
-    createAt: "20/01/2004",
-    teacher: "professor"
-});
+        function searchDisciplines() {
+            let query = document.getElementById("searchQuery").value.toLowerCase()
+            let filtered = disciplines.filter(d => d.name.toLowerCase().includes(query))
+            updateDisciplineList(filtered)
+        }
 
-let result = getDisciplines({
-    search: "miszael",
-    clasule: "and"
-});
+        function deleteDiscipline(index) {
+            disciplines.splice(index, 1)
+            updateDisciplineList()
+        }
 
-let resultFlexible = putDisciplinesFlexible({
-    search: "550",
-    clasule: "or",
-    fields: ["workload", "name"]
-});
+        function editDiscipline(index) {
+            let d = disciplines[index]
 
-let disciplinesAtual = putDiscipline({
-    workload: 750
-}, 1);
+            document.getElementById("name").value = d.name
+            document.getElementById("url").value = d.url
+            document.getElementById("workload").value = d.workload
+            document.getElementById("created_at").value = d.createdAt
+            document.getElementById("teacher").value = d.teacher
+            document.getElementById("editIndex").value = index
 
-console.log("Resultado da busca padrão:", result)
-console.log("Resultado da busca flexível:", resultFlexible)
-console.log("Exibindo disciplina com ID 1:", showDiscipline({ id: 1 }))
-console.log("Altera a disciplina com ID 1:", disciplinesAtual)
-console.log("del", delDiscipline(1))
+            // Alterar botão "Cadastrar" para "Atualizar"
+            document.querySelector("button[onclick='handleSet()']").style.display = "none"
+            document.querySelector("button[onclick='updateDiscipline()']").style.display = "inline-block"
+        }
+
+        function updateDiscipline() {
+            let index = document.getElementById("editIndex").value
+
+            if (index !== "") {
+                disciplines[index] = {
+                    id: index,
+                    name: document.getElementById("name").value,
+                    url: document.getElementById("url").value,
+                    workload: document.getElementById("workload").value,
+                    createdAt: document.getElementById("created_at").value,
+                    teacher: document.getElementById("teacher").value
+                }
+
+                updateDisciplineList() 
+                document.getElementById("disciplineForm").reset() /** ele busca o codigo com o id "disciplineForm" e o reseta o formulário */
+                document.getElementById("editIndex").value = ""  /** está atribuindo um valor vazio à propriedade value do elemento. Ou seja, está limpando o conteúdo do campo de entrada (input) identificado por "editIndex". */
+
+                // Voltar botão "Cadastrar"
+                document.querySelector("button[onclick='handleSet()']").style.display = "inline-block"
+                document.querySelector("button[onclick='updateDiscipline()']").style.display = "none"
+            }
+        }

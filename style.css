@@ -25,17 +25,19 @@ input, button {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
-    border: 1px solid #4d4747;
+    border: 1px solid #4b474d;
     border-radius: 5px;
 }
 button {
-    background-color: #007bff;
+    background-color: #BF54A3;
     color: white;
     font-size: 16px;
     cursor: pointer;
+    
+    
 }
 button:hover {
-    background-color: #043b75;
+    background-color:#ff00bb;
 }
 #disciplineList {
     background: white;
@@ -50,6 +52,7 @@ button:hover {
     justify-content: space-between;
     padding: 10px;
     border-bottom: 1px solid #ddd;
+    
 }
 .discipline-item button {
     background-color: red;
