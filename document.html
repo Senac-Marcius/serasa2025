@@ -51,6 +51,8 @@
 
         function setDocuments(req){
 
+            //falta add o regex aqui
+
             let d = {//lista, registro, objAnonimo
                 id: documents.length-1,
                 name: req.name,
@@ -101,8 +103,23 @@
                 const nameCell = document.createElement("td");
                 nameCell.textContent = d.name
 
-                row.appendChild(nameCell);
-                tbody.appendChild(row);
+                //FILTRO
+                const viewCell = document.createElement("td")
+                const viewButton = document.createElement("button")
+
+                viewButton.className = "view"
+                viewCell.appendChild(viewButton)
+
+                //DELETE
+                const dellCell = document.createElement("td")
+                const dellButton = document.createElement("button")
+
+                dellButton.className = "dell"
+                dellCell.appendChild(dellButton)
+                row.appendChild(nameCell)
+                row.appendChild(viewCell)
+                row.appendChild(dellCell)
+                tbody.appendChild(row)
 
 
             })
