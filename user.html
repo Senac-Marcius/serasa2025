@@ -12,22 +12,20 @@
       color: #ffffff;
      
       background: linear-gradient(90deg, rgba(44, 42, 66, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(152, 59, 227, 1) 100%);
-      /* Roxo vibrante */
+   
       text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-      /* Sombra para destacar */
+   
       font-size: 25px;
-      /* Aumentar o tamanho */
+   
       text-align: center;
-      /* Centralizar o texto */
+     
       letter-spacing: 2px;
-      /* Espaçamento entre as letras */
-
-      /* Deixar o texto transparente para o gradiente aparecer */
+    
       padding: 20px;
       border-radius: 10px;
-      /* Arredondar os cantos */
+   
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      /* Sombra do título */
+    
     }
 
     body {
@@ -37,23 +35,20 @@
     #scList {
       font-family: 'Arial', sans-serif;
       color: #8A2BE2;
-      /* Roxo vibrante */
+   
       text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-      /* Sombra para destacar */
+     
       font-size: 25px;
-      /* Aumentar o tamanho */
+      
       letter-spacing: 2px;
-      /* Espaçamento entre as letras */
+      
       color: #6b6190;
-      /* Cor do texto */
+     
       padding: 20px;
       border-radius: 10px;
-      /* Arredondar os cantos */
+     
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      /* Sombra do título */
-
-      /* Centralização do conteúdo */
-    
+      
 
     }
 
@@ -244,42 +239,53 @@
     //apaga o tbody p/ não ocorrer duplicagem
 
     users.forEach(u => {
+
       const row = document.createElement("tr")
       row.id = u.id
       //cria a linha
       const nameCell = document.createElement("td")
 
-      const Buttontd = document.createElement("td")
-      const ButtontdEdit = document.createElement("td")
+      const tdButtonDelete = document.createElement("td")
+      const tdButtontEdit = document.createElement("td")
       //cria a coluna
       nameCell.textContent = u.name
 
-      const button1 = document.createElement("button")
-      const buttonEdit2 = document.createElement("button")
+      const buttonDelete = document.createElement("button")
+      const buttonEdit = document.createElement("button")
 
-      button1.textContent = "Deletar"
-      buttonEdit2.textContent = "Editar"
+      buttonDelete.textContent = "Deletar"
+      buttonEdit.textContent = "Editar"
 
-      Buttontd.appendChild(button1)
-      ButtontdEdit.appendChild(buttonEdit2)
+      buttonDelete.addEventListener("click", function () {
+            delUser(u.idUser); 
+            listUsers(users); 
+        });
       
+      tdButtonDelete.appendChild(buttonDelete)
+      tdButtontEdit.appendChild(buttonEdit)
+
+
       row.appendChild(nameCell)
-      row.appendChild(Buttontd)
-      row.appendChild(ButtontdEdit)
+      row.appendChild(tdButtonDelete)
+      row.appendChild(tdButtontEdit)
       
-
       tbody.appendChild(row)
       
-      //adiciona o row no tbody
-      //criar uma função na handle que chama a minha função, essa função recebe um id e através desse id ele deleta
 
     })
 
-    //criar forms de filtro
-    //botão chama a função que chama a função get
-    //tem que chamar a função que retorna a lista
-
   }
+  function delUser(id) {
+    let idx = users.findIndex(u => u.idUser === id);
+    if (idx === -1) {
+        alert("Id não encontrado");
+        return;
+    }
+    users.splice(idx, 1); 
+    alert("Usuário excluído");
+}
+
+
 </script>
 
 
