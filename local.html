@@ -105,7 +105,8 @@
         <h1> Cadastre o seu Local: </h1>
         <div class="row">                           
             <section id="scRegister">
-                <form>
+                <form> 
+                    <input id="id" type = "hidden" value="-1"/>
                     <label>Nome: </label><input id="name" type="text" /><br>
                     <label>Área: </label><input id="area" type="text" /><br> 
                     <label>Descrição: </label><input id="description" type="text" /><br> 
@@ -165,7 +166,11 @@
         }
         
         function editLocal(id){
-            console.log(id)
+            let local = locals.find(l => l.id == id)
+
+            document.getElementById("name").value = local.name
+            document.getElementById("area").value = local.area
+            document.getElementById("id").value = local.id
         }
 
         function listLocals(lList){
@@ -213,6 +218,9 @@
             
             
             ações do botão: Button:hover, Button:active
+
+            o q a funcao edit faz? edita
+            dentro do vetor
             */
         }
    </script>
