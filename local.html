@@ -164,6 +164,10 @@
                 listLocals(locals)
         }
         
+        function editLocal(id){
+            console.log(id)
+        }
+
         function listLocals(lList){
             const tbody = document.querySelector("#scList tbody") //o # indica q está procurando o Id. 
             tbody.innerHTML = ""
@@ -177,6 +181,9 @@
                 const editCell =  document.createElement("td");          //criar uma célula
                 const editButton =  document.createElement("button");    //criar um botão 
                 editButton.className = "round edit"
+                editButton.onclick = function() {
+                    
+                };
                 editCell.appendChild(editButton);                        //colocar o botão dentro da célula
 
                 const dellCell =  document.createElement("td");
