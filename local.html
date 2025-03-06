@@ -166,13 +166,18 @@
                     }) 
                 )
             }else if(id > -1){
-
+                    //chamar a funcao de put
+                document.getElementById("id").value = -1
             }else{
                 console.log("erro")
             }
                 listLocals(locals)
         }
         
+        function putLocal(){
+            
+        }
+
         function editLocal(id){
             let local = locals.find(l => l.id == id)
 
