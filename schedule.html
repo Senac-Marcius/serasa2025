@@ -17,6 +17,7 @@
     </div>
     <section id="scRegister">
         <div class="container-1">
+            <input type="hidden" value="-1" id="id">
             <div class="container-input row mb-3">
                 <label for="Title" class="col-sm-2 col-form-label">Titulo:</label>
                 <div class="col-sm-5">
@@ -51,7 +52,7 @@
 
 </body>
 <script>
-    var posts = []
+    var posts = JSON.parse(localStorage.getItem('posts')) || []
 
     function setPost(req) {
 
@@ -85,19 +86,57 @@
             userId: req.userId
         }
         posts.push(p)
+        localStorage.setItem('posts', JSON.stringify(posts))
         console.log('Cadastrado!!')
     }
 
     function handleRegister() {
-        console.log(setPost({
+        let id = document.getElementById('id').value
+
+        if(id == -1){
+            console.log(setPost({
             description: document.getElementById('description').value,
             titles: document.getElementById('titles').value,
             createAt: '2000-12-31',
             userId: 0
-        })),
+        }))
+    }else if(id > -1){
+        editPost({
+            id: document.getElementById('id').value,
+            titles: document.getElementById('titles').value,
+            description: document.getElementById('description').value
+        }, id)
+        document.getElementById('id').value = -1
+    }else{
+        console.log('erro!')
+    }
+        
 
         listPosts(posts)
+        console.log(posts)
     }
+
+    function putPosts(id){
+        let edit = posts.find(p => p.id == id)
+
+        document.getElementById('id').value = edit.id
+        document.getElementById('titles').value = edit.titles
+        document.getElementById('description').value = edit.description
+    }
+
+    function editPost(req, id){
+    let idx = posts.findIndex(p => p.id == id)
+
+    if(idx == -1) return "Não encontrado"
+    document.getElementById(`${id}`).textContent = req.titles
+
+    if(req.description != undefined) posts[idx].description = req.description
+    if(req.titles != undefined) posts[idx].titles = req.titles
+
+    localStorage.setItem('posts', JSON.stringify(posts))
+
+    return posts[idx]
+}
 
     function listPosts(pList){
         const tbody = document.querySelector("#scList tbody")
@@ -105,13 +144,53 @@
 
         pList.forEach(p => {
             const row = document.createElement('tr')
-
+            
             const titleCell = document.createElement('td')
             titleCell.textContent = p.titles
 
+            titleCell.id = `${p.id}`
+
+            const actionCell = document.createElement('td')
+
+            const buttonEdit = document.createElement('button')
+            buttonEdit.textContent = 'Edit'
+            buttonEdit.classList.add('btn', 'btn-primary', 'btn-sm')
+            buttonEdit.style.width = '50px'; // Definindo a largura
+            buttonEdit.style.height = '30px'; // Definindo a altura
+            buttonEdit.style.padding = '0'; // Removendo o padding para dar forma mais quadrada
+            buttonEdit.style.fontSize = '12px'; // Definindo uma fonte menor para caber o texto
+            buttonEdit.style.lineHeight = '1';
+            buttonEdit.onclick = function(){
+                putPosts(p.id)
+            }
+
+            const buttonDell = document.createElement('button')
+            buttonDell.textContent = 'Delete'
+            buttonDell.classList.add('btn', 'btn-danger', 'btn-sm')
+            buttonDell.style.width = '50px'; // Definindo a largura
+            buttonDell.style.height = '30px'; // Definindo a altura
+            buttonDell.style.padding = '0'; // Removendo o padding para dar forma mais quadrada
+            buttonDell.style.fontSize = '12px'; // Definindo uma fonte menor para caber o texto
+            buttonDell.style.lineHeight = '1';
+            buttonDell.addEventListener('click', () => {
+                
+            })
+
+            actionCell.appendChild(buttonEdit)
+            actionCell.appendChild(buttonDell)
+
+            
             row.appendChild(titleCell)
+            row.appendChild(actionCell)
             tbody.appendChild(row)
         })
+
+    }
+
+    
+
+    window.onload = function() {
+        listPosts(posts);
     }
 </script>
 
