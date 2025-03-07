@@ -15,7 +15,7 @@
                 <label for="name">Nome Completo: </label><input id="name" type="text"><br><br>
                 <label for="email">E-mail: </label><input id="email" type="text"><br><br>
                 <label for="telephone">Telefone: </label><input id="telephone" type="tel"><br><br>
-                <label for="RG">RG: </label><input id="rg" type="text"><br><br>
+                <label for="rg">RG: </label><input id="rg" type="text"><br><br>
                 <label for="dateBirth">Data de Nascimento: </label><input id="dateBirth" type="date"><br><br>
                 <label for="nameMother">Nome da mãe: </label><input id="nameMother" type="text"><br><br>
                 <label for="level">Turma: </label><input id="level" type="text"><br><br>
@@ -34,7 +34,9 @@
         <section id="scList">
             <table>
                 <thead>
-                    <th>Nome</th>                    
+                    <tr>
+                        <th>Nome</th>
+                    </tr>                    
                 </thead>
                 <tbody id="tableBody">                                                
                 </tbody>
@@ -83,8 +85,10 @@
         }
 
         function putDocuments(req,id){
-            let docIndex = documents.findIndex( d => d.id == id)
+            let docIndex = documents.findIndex( d => d.id == id);
             
+            if(docIndex == -1) return "Não Encontrado"
+
             if(req.name != undefined) documents[docIndex].name = req.name
             if(req.email != undefined) documents[docIndex].email = req.email
             if(req.telephone != undefined) documents[docIndex].telephone = req.telephone
@@ -94,18 +98,21 @@
             if(req.grade != undefined) documents[docIndex].grade = req.grade
             if(req.period != undefined) documents[docIndex].period = req.period
 
+            documents[docIndex].id = id;//GARANTE QUE O ID SEJA ÚNICO
 
-            return documents[docIndex]
+
+            return documents[docIndex];
             
         }
 
 
         function handleRegister(){
-            let id = document.getElementById("id").value
+            let id = parseInt(document.getElementById('id').value)
 
             if(id == -1){
                 console.log (
                     setDocuments({
+                        //id:id,
                         name: document.getElementById("name").value,
                         email: document.getElementById("email").value,
                         telephone: document.getElementById("telephone").value,
@@ -114,16 +121,25 @@
                         level: document.getElementById("level").value,
                         grade: document.getElementById("grade").value,
                         period: document.getElementById("period").value, 
-                        createAt: "2000-01-31"                                  
+                        createAt: new Date().toISOString().split('T')[0]                                  
                     })
                 )
+                
             }else if(id > -1){//chamar função put
                 
-                putDocuments(req,id);
-
-                /*let documentAtual = putDocuments({
-                    description: "terceiro lua",
-                })*/
+                console.log(
+                    putDocuments({
+                        id:id,
+                        name: document.getElementById("name").value,
+                        email: document.getElementById("email").value,
+                        telephone: document.getElementById("telephone").value,
+                        dateBirth: document.getElementById("dateBirth").value,
+                        nameMother: document.getElementById("nameMother").value,
+                        level: document.getElementById("level").value,
+                        grade: document.getElementById("grade").value,
+                        period: document.getElementById("period").value,
+                    },id)
+                )
                 document.getElementById("id").value =-1
             }else{
                 console.log("erro")
@@ -136,15 +152,28 @@
         function editDocuments(id){
             let doc = documents.find( d => d.id == id)
 
-            documents.getElementById("name").value = doc.name
-            documents.getElementById("email").value = doc.email
-            documents.getElementById("telephone").value = doc.telephone
-            documents.getElementById("dateBirth").value = doc.dateBirth
-            documents.getElementById("nameMother").value = doc.nameMother
-            documents.getElementById("level").value = doc.level
-            documents.getElementById("grade").value = doc.grade
-            documents.getElementById("period").value = doc.period
+            document.getElementById("name").value = doc.name
+            document.getElementById("email").value = doc.email
+            document.getElementById("telephone").value = doc.telephone
+            document.getElementById("dateBirth").value = doc.dateBirth
+            document.getElementById("nameMother").value = doc.nameMother
+            document.getElementById("level").value = doc.level
+            document.getElementById("grade").value = doc.grade
+            document.getElementById("period").value = doc.period
         }
+
+        function dellDocuments(id) {
+            let docIndex = documents.findIndex(d => d.id == id);
+
+            if (docIndex === -1) {
+                console.error("Documento não encontrado para exclusão.");
+                return;
+            }
+
+            documents.splice(docIndex, 1); // Remove o documento do array
+            listDocuments(documents); // Atualiza a tabela
+        }
+
 
         function listDocuments(pList){
             const tbody = document.querySelector("#tableBody")
@@ -161,15 +190,21 @@
                 const editButton = document.createElement("button")
 
                 editButton.className = "round edit"
-                editButton.onclick = function(){
+                editButton.textContent = "Editar"
 
+                editButton.onclick = function(){
+                    editDocuments(d.id)
                 };
                 editCell.appendChild(editButton)
 
                 //DELETE
                 const dellCell = document.createElement("td")
                 const dellButton = document.createElement("button")
-                dellButton.className = "dell"
+                dellButton.className = "round dell"
+                dellButton.textContent = "Excluir"
+                dellButton.onclick = function(){
+                    dellDocuments(d.id)
+                };
                 dellCell.appendChild(dellButton)
 
                 row.appendChild(nameCell)
