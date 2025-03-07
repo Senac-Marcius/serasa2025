@@ -188,19 +188,19 @@
 
 
                 document.getElementById("id").value = -1
-            }else{
+                }else{
                 console.log("erro")
-            }
+                }
                 listLocals(locals)
-        }
+            
 
-        function editLocal(id){
-            let local = locals.find(l => l.id == id)
+                function editLocal(id){
+                let local = locals.find(l => l.id == id)
 
-            document.getElementById("name").value = local.name
-            document.getElementById("area").value = local.area
-            document.getElementById("id").value = local.id
-        }
+                document.getElementById("name").value = local.name
+                document.getElementById("area").value = local.area
+                document.getElementById("id").value = local.id
+                }
 
     /*
     function putProduct(id){
