@@ -92,6 +92,23 @@
                 box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
             }
 
+            button.round {
+                width: 35%;
+                height: 35px;
+                border-radius: 50%
+            }
+ 
+            button.edit{
+                background-color: #ffff00;
+            }
+
+            form {
+                background-color: #F2F2F2;
+                padding: 40px;
+                border-radius: 20px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            }
+
        </style>
     </head>
     <body>
@@ -103,6 +120,7 @@
                     <label> Curso: </label><textarea id="course" type="text"></textarea><br>
                     <label> Data da Matricula: </label><input id="date" type= "date"/><br>
                     <label for="Período do curso" id="period">Periodo: </label>
+                    
                     <select id="period" cronograma ="opcoes">
                         <option id="opcao1" value="opcao1">Manhã</option>
                         <option id="opcao2" value="opcao2">Tarde</option>
@@ -144,20 +162,63 @@
     
         calendars.push(c)
         return "Cadastrado"
+
     }
-    function handleRegister(){
-        console.log(
-            setCalendars({
-            StudentName:document.getElementById("student").value,
-            Course:document.getElementById("course").value, 
-            Period:document.getElementById("period").value, 
-            DateRegistration:document.getElementById("date").value, 
-            userId: 0,
-    
-            })
-        )
+            function putcalendars(){
+            let idx = calendars.findIndex(c => c.id == id)   
         
-        listCalendars(calendars)    
+            if (idx == -1) return "Não encontrado"
+
+            if(req.description != undefined) calendarios[idx].description = req.description
+            if( req.url != undefined) calendarios[idx].url = req.url
+            if( req.createAt != undefined) calendarios[idx]. createAt = req.createAt
+            if( req.userId != undefined) calendarios[idx].userId = req.userId
+
+            return calendarios [idx]
+        }
+
+        function handleRegister(){
+            let id = document.getElementById('id').value
+            if(id == -1){
+
+                console.log(
+                    setCalendars({
+                        StudentName:document.getElementById("student").value,
+                        Course:document.getElementById("course").value, 
+                        Period:document.getElementById("period").value, 
+                        DateRegistration:document.getElementById("date").value, 
+                        userId: 0,
+            })
+                )
+            }else if(id > -1){
+                //chamar a função de put
+                
+                 putCalendars({ 
+
+                        StudentName:document.getElementById("student").value,
+                        Course:document.getElementById("course").value, 
+                        Period:document.getElementById("period").value, 
+                        DateRegistration:document.getElementById("date").value, 
+                        userId: 0,
+
+
+                 })
+
+                document.getElementById('id').value = -1
+            }else{
+                console.log("erro")
+            }
+        
+            listCalendars(calendars)    
+
+        }
+    function editCalendars (id){
+        let calendar =calendars.find(c => c.id == id)
+                document.getElementById("student").value = calendar.student,
+                document.getElementById("course").value = calendar.course,
+                document.getElementById("date").value = calendar.date,
+                document.getElementById("period").value = calendar.period,
+                document.getElementById("id").value = calendar.id
 
     }
 
@@ -167,26 +228,29 @@
 /*executa o callback fornecido uma vez para cada elemento da ordem com um valor atribuido*/
         cList.forEach(c => {
             const row = document.createElement ("tr");
-
+        
             const timelineCell = document.createElement("td");
             timelineCell.textContent = c.DateRegistration
 
-            const mybutton = document.createElement("button");
-            const editcell = document.createElement("td");
-            editcell.appendChild(mybutton)
+            const editCell = document.createElement("td")
+            const editButton = document.createElement("button")
+            editButton.className = "round edit"
+            editButton.onclick = function() {
+                editCalendars(p.id)
+            };
+            editCell.appendChild(editButton)
 
-            const mycell = document.createElement("button");
-            const editbutton = document.createElement("td");
-            mycell.appendChild(editcell)
+            const dellCell = document.createElement("td")
+            const dellButton = document.createElement("button")
+            dellButton.className = "round dell"
+            dellCell.appendChild(dellButton)
 
-            row.appendChild(timelineCell);
-            row.appendChild(editcell);
-            row.appendChild(mycell);
-        
-            tbody.appendChild(row);
-        })
-
-    }
+            row.appendChild(timelineCell)
+            row.appendChild(editCell)
+            row.appendChild(dellCell)
+            tbody.appendChild(row)
+            })
+        }
     </script>
 </html>
 
