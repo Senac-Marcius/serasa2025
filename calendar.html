@@ -1,158 +1,246 @@
 <!DOCTYPE html>
-<html lan="pt-BR">
-    <head>
-        <meta charset="UTF-8" />
-       <title>Calendario</title> 
-       <style>
-
-        body{
-
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <title>Calendário</title> 
+    <style>
+        body {
             margin: 0;
-
+            font-family: 'Arial', sans-serif;
+            background-color: #f6f4f9;
         }
 
-        section{
+        section {
             display: flex;
-            margin:0 auto;
+            margin: 0 auto;
             flex-direction: column;
-
+            width: 80%;
+            max-width: 1000px;
+            padding: 20px;
         }
 
-            h1{
-
+        h1 {
             text-align: center;
-            color: #BF54A3;
-            background: #F2F2F2;
+            color: #6f42c1;
+            background: linear-gradient(135deg, #9b59b6, #6f42c1);
+            padding: 20px;
             margin: 0;
+            font-size: 2.5rem;
+            border-radius: 8px;
+            color: white;
+        }
 
-            }
-
-            #scRegister{
-
+        #scRegister {
             line-height: 35px;
-            text-align: center; 
+            text-align: center;
+        }
 
+        label {
+            font-weight: 600;
+            margin-right: 10px;
+            display: inline-block;
+            color: #6f42c1;
+        }
+
+        form {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #d3d3d3;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: #6f42c1;
+            outline: none;
+            box-shadow: 0 0 5px rgba(111, 66, 193, 0.5);
+        }
+
+        button {
+            background: linear-gradient(135deg, #9b59b6, #6f42c1);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-top: 10px;
+            display: block;
+            width: 100%;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #8e44ad, #6f42c1);
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .row {
+            display: flex;
+            margin-top: 50px;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+
+        th {
+            background-color: #6f42c1;
+            color: white;
+            padding: 10px;
+            font-size: 1rem;
+            text-align: left;
+            border-radius: 8px 8px 0 0;
+        }
+
+        td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #ffffff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .action-buttons button {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .edit-button {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .delete-button {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .action-buttons button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-buttons button:active {
+            transform: translateY(1px);
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-column {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1rem;
+            color: #6f42c1;
+        }
+
+        td:nth-child(1), th:nth-child(1) {
+            width: 60%;
+        }
+
+        td:nth-child(2), th:nth-child(2) {
+            width: 40%;
+        }
+
+        /* Responsividade */
+        @media screen and (max-width: 768px) {
+            section {
+                width: 100%;
+                padding: 15px;
             }
 
-            label{ 
-                font-weight: 600;
+            h1 {
+                font-size: 2rem;
             }
 
-            form{
-                background-color:#F2F2F2 ;
-                padding:40px;
-                border-radius: 20px;
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2)
-
+            th, td {
+                font-size: 0.9rem;
             }
 
-            .row{ 
-                display: flex;
-                margin-top:50px;
-                padding:20px; 
-                padding:20px;
-
-            }
-
-            br{
-                margin:10px
-
-            }
-
-            #scList{
-
-            }
-
-            
             button {
-                background: linear-gradient(135deg, #6e8efb, #a777e3);
-                color: white;
-                border: none;
-                padding: 12px 24px;
-                font-size: 16px;
-                font-weight: bold;
-                border-radius: 8px;
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-                cursor: pointer;
-                transition: all 0.3s ease-in-out;
-                position: relative;
-                overflow: hidden;
-                margin: 20px auto 0;
-                display: block;
+                font-size: 0.9rem;
             }
-
-            button:hover {
-                background: linear-gradient(135deg, #5b77e0, #925ec4);
-                box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
-                transform: translateY(-2px);
-            }
-
-            button:active {
-                transform: translateY(1px);
-                box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
-            }
-
-            button.round {
-                width: 35%;
-                height: 35px;
-                border-radius: 50%
-            }
- 
-            button.edit{
-                background-color: #ffff00;
-            }
-
-            form {
-                background-color: #F2F2F2;
-                padding: 40px;
-                border-radius: 20px;
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            }
-
-       </style>
-    </head>
-    <body>
-        <h1>Cronograma de Calendario</h1>
-        <div class="row">
-            <section>
-                <form id="scRegister">
-                    <input id="id" type="hidden" value="-1"/>
-                    <label> Nome do Aluno: </label><input id="StudentName" type= "text"/><br>
-                    <label> Curso: </label><textarea id="course" type="text"></textarea><br>
-                    <label> Data da Matricula: </label><input id="date" type= "date"/><br>
-                    <label for="Período do curso" id="period">Periodo: </label>
-                    
-                    <select id="period">
-                        <option id="opcao1" value="opcao1">Manhã</option>
-                        <option id="opcao2" value="opcao2">Tarde</option>
-                        <option id="opcao3" value="opcao3">Noite</option><br>
-                    <!--Adicionar Cronograma-->
-                    </select><br>
-                    <button type="button" id="register" onclick="handleRegister()">cadastrar</button>
-                </form>
+        }
+    </style>
+</head>
+<body>
+    <h1>Cronograma de Calendário</h1>
+    <div class="row">
+        <section id="scRegister">
+            <form>
+                <input id="id" type="hidden" value="-1" />
+                <label>Nome do Aluno: </label><input id="StudentName" type="text" /><br>
+                <label>Curso: </label><textarea id="course" type="text"></textarea><br>
+                <label>Data da Matrícula: </label><input id="date" type="date" /><br>
+                <label for="period">Período: </label>
+                <select id="period">
+                    <option value="Manhã">Manhã</option>
+                    <option value="Tarde">Tarde</option>
+                    <option value="Noite">Noite</option>
+                </select><br>
+                <button type="button" id="register" onclick="handleRegister()">Cadastrar</button>
+            </form>
         </section>
 
-            <section id="scList">
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Cronograma</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                
-                    </tbody>
-                </table>
-            </section>
+        <section id="scList">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th class="action-column">Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </section>
     </div>
-    </body>
+</body>
+
 <script>
+    var calendars = [];
 
-    var calendars = []
-
-
-    function setCalendars(req){
+    function setCalendars(req) {
         let c = {
             id: calendars.length,
             StudentName: req.StudentName,
@@ -160,94 +248,92 @@
             Period: req.Period,
             DateRegistration: req.DateRegistration
         };
-    
-        calendars.push(c)
+        calendars.push(c);
         return "Cadastrado";
-
     }
-            function putcalendars(req) {
-            let idx = calendars.findIndex(c => c.id == id)   
-        
-            if (idx == -1) return "Não encontrado";
-            if (req.StudentName  != undefined) calendars[idx].StudentName  = req.StudentName; 
-            if(req.course != undefined) calendars[idx].course = req.course;
-            if( req.DateRegistration != undefined) calendars[idx].DateRegistration = req.DateRegistration;
-            if (req.Period !== undefined) calendars[idx].Period = req.Period;
 
-            return calendars [idx];
-        }
+    function putCalendars(req) {
+        let idx = calendars.findIndex(c => c.id === req.id);
+        if (idx === -1) return "Não encontrado";
+        if (req.StudentName !== undefined) calendars[idx].StudentName = req.StudentName;
+        if (req.Course !== undefined) calendars[idx].Course = req.Course;
+        if (req.DateRegistration !== undefined) calendars[idx].DateRegistration = req.DateRegistration;
+        if (req.Period !== undefined) calendars[idx].Period = req.Period;
+        return calendars[idx];
+    }
 
-        function handleRegister(){
-            let id = parseInt(document.getElementById('id').value);
-            if(id == -1){
+    function deleteCalendar(id) {
+        calendars = calendars.filter(c => c.id !== id);
+        listCalendars(calendars); // Atualiza a lista após exclusão
+    }
 
-                console.log(
-                    setCalendars({
-                        StudentName:document.getElementById("StudentName").value,
-                        Course:document.getElementById("course").value, 
-                        Period:document.getElementById("period").value, 
-                        DateRegistration:document.getElementById("date").value, 
-                
+    function handleRegister() {
+        let id = parseInt(document.getElementById('id').value);
+        if (id === -1) {
+            console.log(
+                setCalendars({
+                    StudentName: document.getElementById("StudentName").value,
+                    Course: document.getElementById("course").value,
+                    Period: document.getElementById("period").value,
+                    DateRegistration: document.getElementById("date").value,
                 })
             );
-            }else if(id > -1){
-                //chamar a função de put
-                
-                 putCalendars({ 
-                        id: id,
-                        StudentName:document.getElementById("StudentName").value,
-                        Course:document.getElementById("course").value, 
-                        Period:document.getElementById("period").value, 
-                        DateRegistration:document.getElementById("date").value, 
-                    
-                 });
-
-                document.getElementById('id').value = -1;
-            }else{
-                console.log("erro")
-            }
-        
-            listCalendars(calendars);
-
+        } else if (id > -1) {
+            // Atualiza o cronograma com o ID existente
+            putCalendars({
+                id: id,
+                StudentName: document.getElementById("StudentName").value,
+                Course: document.getElementById("course").value,
+                Period: document.getElementById("period").value,
+                DateRegistration: document.getElementById("date").value,
+            });
+            document.getElementById('id').value = -1;
+        } else {
+            console.log("Erro ao cadastrar.");
         }
-    function editCalendars (id){
-        let calendar =calendars.find(c => c.id == id)
-                document.getElementById("StudentName").value = calendar.StudentName;
-                document.getElementById("course").value = calendar.course;
-                document.getElementById("date").value = calendar.DateRegistration;
-                document.getElementById("period").value = calendar.period;
-                document.getElementById("id").value = calendar.id;
-
+        listCalendars(calendars);
     }
 
-    function listCalendars(cList){
-        const tbody = document.querySelector("#scList tbody")
-        tbody. innerHTML = ""
+    function editCalendars(id) {
+        let calendar = calendars.find(c => c.id === id);
+        document.getElementById("StudentName").value = calendar.StudentName;
+        document.getElementById("course").value = calendar.Course;
+        document.getElementById("date").value = calendar.DateRegistration;
+        document.getElementById("period").value = calendar.Period;
+        document.getElementById("id").value = calendar.id;
+    }
 
+    function listCalendars(cList) {
+        const tbody = document.querySelector("#scList tbody");
+        tbody.innerHTML = "";
         cList.forEach(c => {
-            const row = document.createElement ("tr");
-        
-            const timelineCell = document.createElement("td");
-            timelineCell.textContent = c.DateRegistration
+            const row = document.createElement("tr");
 
-            const editCell = document.createElement("td")
-            const editButton = document.createElement("button")
-            editButton.className = "round edit";
-            editButton.onclick = function() {
-                editCalendars(c.id)
-            };
-            editCell.appendChild(editButton)
+            const studentCell = document.createElement("td");
+            studentCell.textContent = c.StudentName;
 
-            const dellCell = document.createElement("td")
-            const dellButton = document.createElement("button")
-            dellButton.className = "round dell"
-            dellCell.appendChild(dellButton)
+            const actionsCell = document.createElement("td");
+            const actionButtons = document.createElement("div");
+            actionButtons.className = "action-buttons";
 
-            row.appendChild(timelineCell)
-            row.appendChild(editCell)
-            row.appendChild(dellCell)
-            tbody.appendChild(row)
-            })
-        }
-    </script>
+            const editButton = document.createElement("button");
+            editButton.textContent = "Editar";
+            editButton.className = "edit-button";
+            editButton.onclick = function () { editCalendars(c.id); };
+            actionButtons.appendChild(editButton);
+
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Excluir";
+            deleteButton.className = "delete-button";
+            deleteButton.onclick = function () { deleteCalendar(c.id); };
+            actionButtons.appendChild(deleteButton);
+
+            actionsCell.appendChild(actionButtons);
+
+            row.appendChild(studentCell);
+            row.appendChild(actionsCell);
+            tbody.appendChild(row);
+        });
+    }
+</script>
 </html>
