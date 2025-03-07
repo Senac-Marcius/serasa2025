@@ -146,7 +146,7 @@
         }
 
         let r = {
-            id: records.length,
+            id: records.length? records[records.length -1].id+1 : 0,
             name: req.name,
             description: req.description,
             health: req.health,
@@ -235,6 +235,17 @@
 
     }
 
+    function dellRecord(id){
+        let idx = records.findIndex( r => r.id == id) 
+
+        if(idx == -1) return "Não localizado"
+
+        records.splice(idx, 1)
+
+        listRecord(records)
+        return "Postagem excluída"
+    }
+
     function listRecord(rList){
             const tbody = document.querySelector("#scList tbody")
             tbody.innerHTML = ""
@@ -257,6 +268,10 @@
             const dellCell = document.createElement("td")
             const dellButton = document.createElement("button")
             dellButton.className = "round dell"
+            dellButton.onclick = function() {
+                dellRecord(r.id)
+            }
+
             dellCell.appendChild(dellButton)
 
 
