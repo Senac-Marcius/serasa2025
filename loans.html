@@ -8,23 +8,26 @@
     <style>
         h1 {
             text-align: center;
-            color:white;
+            color: white;
             background: linear-gradient(135deg, #6e8efb, #a777e3);
             text-shadow: 2px 2px 5px #1d0a754d;
         }
-        h2{
+
+        h2 {
             text-align: center;
-            color:white;
+            color: white;
             background: linear-gradient(135deg, #6e8efb, #a777e3);
             text-shadow: 2px 2px 5px #1d0a754d;
         }
-        th{
+
+        th {
             text-align: center;
-            color:white;
+            color: white;
             background: linear-gradient(135deg, #6e8efb, #a777e3);
             text-shadow: 2px 2px 5px #1d0a754d;
         }
-        section{
+
+        section {
             display: flex;
             flex-direction: column;
             margin: 0 auto;
@@ -32,72 +35,70 @@
 
         #scRegister {}
 
-        #scList {
+        #scList {}
+
+        .row {
+            display: flex;
+
 
         }
-        .row{
-            display:flex;
-           
-            
-        }
+
         label {
             font-weight: 600;
         }
-       
+
         button {
-                background: linear-gradient(135deg, #6e8efb, #a777e3);
-                color: white;
-                border: none;
-                padding: 12px 24px;
-                font-size: 16px;
-                font-weight: bold;
-                border-radius: 8px;
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-                cursor: pointer;
-                transition: all 0.3s ease-in-out;
-                position: relative;
-                overflow: hidden;
-                margin: 20px auto 0;
-                display: block;
-            }
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+            margin: 20px auto 0;
+            display: block;
+        }
 
-            button:hover {
-                background: linear-gradient(135deg, #5b77e0, #925ec4);
-                box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
-                transform: translateY(-2px);
-            }
+        button:hover {
+            background: linear-gradient(135deg, #5b77e0, #925ec4);
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
 
-            button:active {
-                transform: translateY(1px);
-                box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
-            }
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+        }
 
-            button.round {
-                width: 35px;
-                height: 35px;
-                border-radius: 50%;
-            }
+        button.round {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+        }
 
-            button.edit{
-                background:#ffff00;
-            }
+        button.edit {
+            background: #ffff00;
+        }
 
-            button.dell{
-                background:#ff0000;
-            }
-
-
+        button.dell {
+            background: #ff0000;
+        }
     </style>
 </head>
 
 
 <body>
     <h1> EMPRÉSTIMO</h1>
-   
-    
+
+
     <div class="row">
-    
-        
+
+
         <section id="scRegister">
             <h2>Deseja confirmar esse empréstimo?:</h2>
             <form>
@@ -110,23 +111,23 @@
                 <p> <button type="button" onclick="alert('PROXIMO')">PRÓXIMO</button></p>
             </form>
 
-            
+
 
             <h2>Dados para empréstimo</h2>
-            
+
             <form>
-                <input id="id" type="hidden" value="-1">
+                <input id="id" type="hidden" value="-1" />
                 <p> <label>Nome do livro:</label><input id="namebook" type="text" /><br></p>
                 <p><label>Data de empréstimo:</label><input id="dateloan" type="date" /><br></p>
                 <p><label>Data de devolução:</label><input id="datereturns" type="date" /><br></p>
                 <p><label>Renovação:</label><input id="renewal" type="text" /><br></p>
                 <p><label>Status de empréstimo:</label><input id="status" type="select" /><br></p>
                 <p><label>observação:</label><input id="observation" type="text" /><br></p>
-                    <p> <button type="button" id="register" onclick="handleRegister()">FINALIZAR</button></p>
+                <p> <button type="button" id="register" onclick="handleRegister()">FINALIZAR</button></p>
             </form>
         </section>
-    
-    
+
+
         <section id="sclist">
 
             <table>
@@ -145,28 +146,9 @@
 <script>
     var loans = []
 
-    function putLoan(req, id){
-
-    let idx = loans.findIndex(l => l.id == id) //
-
-    if (idx == -1) return "Não encontrado"
-
-    if(req.userId != undefined) loans[idx].userId = req.userId
-    if(req.bookId != undefined) loans[idx].bookId = req.bookId
-    if(req.loanDate != undefined) loans[idx].loanDate = req.loanDate
-    if(req.expectedLoanDate != undefined) loans[idx].expectedLoanDate = req.expectedLoanDate
-    if(req. effectiveLoanDate!= undefined) loans[idx].effectiveLoanDate = req.effectiveLoanDate
-    if(req.renewal != undefined) loans[idx].renewal = req.renewal
-    if(req.penalty != undefined) loans[idx].penalty = req.penalty
-    if(req.statusLoan != undefined) loans[idx].statusLoan = req.statusLoan
-    if(req.observation != undefined) loans[idx].observation = req.observation
-
-    return loans[idx]
-}
-    
     function setLoan(req) {
         let l = {
-            id: loans.length,
+            id: loans.length? loans[loans.length - 1].id + 1: 0,
             creatAt: req.creatAt,
             userId: req.userId,
             bookId: req.bookId,
@@ -181,51 +163,73 @@
         return "Livro emprestado com sucesso"
 
     }
+    function putLoan(req, id) {//parametro 
+        let idx = loans.findIndex(l => l.id == id) //
+
+        if (idx == -1) return "Não encontrado"
+
+        if (req.userId != undefined) loans[idx].userId = req.userId
+        if (req.bookId != undefined) loans[idx].bookId = req.bookId
+        if (req.loanDate != undefined) loans[idx].loanDate = req.loanDate
+        if (req.expectedLoanDate != undefined) loans[idx].expectedLoanDate = req.expectedLoanDate
+        if (req.effectiveLoanDate != undefined) loans[idx].effectiveLoanDate = req.effectiveLoanDate
+        if (req.renewal != undefined) loans[idx].renewal = req.renewal
+        if (req.penalty != undefined) loans[idx].penalty = req.penalty
+        if (req.statusLoan != undefined) loans[idx].statusLoan = req.statusLoan
+        if (req.observation != undefined) loans[idx].observation = req.observation
+
+        return loans[idx]
+    }
 
     function handleRegister() {
         let id = document.getElementById('id').value
 
-        if(id == -1){
+        if (id == -1) {
             console.log(
-            setLoan({
-                creatAt: "1999-02-02",
-                userId: 0,
+                setLoan({
+                    creatAt: "1999-02-02",
+                    userId: 0,
+                    bookId: document.getElementById("namebook").value,
+                    loanDate: document.getElementById("dateloan").value,
+                    expectedLoanDate: document.getElementById("datereturns").value,
+                    renewal: document.getElementById("renewal").value,
+                    statusLoan: document.getElementById("status").value,
+                    observation: document.getElementById("observation").value
+                })
+            )
+
+        } else if (id > -1) {
+            let loanEdit = putLoan({
                 bookId: document.getElementById("namebook").value,
                 loanDate: document.getElementById("dateloan").value,
                 expectedLoanDate: document.getElementById("datereturns").value,
                 renewal: document.getElementById("renewal").value,
                 statusLoan: document.getElementById("status").value,
                 observation: document.getElementById("observation").value
-            })
-        )
-
-        }else if(id > -1){
-            let loanEdit = putLoan({
-            userId: document.getElementById("userId").id,
-            bookId: document.getElementById("namebook").value,
-            loanDate: document.getElementById("dateloan").value,
-            expectedLoanDate: document.getElementById("datereturns").value,
-            renewal: document.getElementById("renewal").value,
-            statusLoan: document.getElementById("status").value,
-            observation: document.getElementById("observation").value
-    }, id);
+            }, id);
 
             document.getElementById('id').value = -1
-        }else{
-            console.log("erro")
+        } else {
+            console.log("Erro no processo de cadastro")
         }
-        
+
+
         listLoans(loans)
     }
-    function editLoans(id){    //document.getElement
+    function editLoans(id) {    //document.getElement
         let loan = loans.find(p => p.id == id)
         document.getElementById("namebook").value = loan.bookId
         document.getElementById("dateloan").value = loan.loanDate
-        document.getElementById("datereturns").value = loan.expectedLoanDate
+        document.getElementById("datereturns").value = loan.expectedLoanDate  //pegas essas informações e joga dentro do id
         document.getElementById("renewal").value = loan.renewal
         document.getElementById("status").value = loan.statusLoan
         document.getElementById("observation").value = loan.observation
         document.getElementById('id').value = id
+    }
+    function dellLoans(id) {
+        let idx = loans.findIndex(p => p.id == id)
+        loans.splice(idx, 1)
+        listLoans(loans)
     }
 
 
@@ -235,37 +239,43 @@
 
         loans.forEach(p => {
             const row = document.createElement("tr");
-            
-            
+
+
             const buttonEdit = document.createElement("td");
-            buttonEdit.textContent = "Editar";
+
+            
             const buttonEditElement = document.createElement("button");
             buttonEditElement.textContent = "Editar";
             buttonEditElement.className = "round edit";
             buttonEdit.appendChild(buttonEditElement);
-            buttonEdit.onclick = function() {
-            editLoans(p.id);  
-        };
+            buttonEdit.onclick = function () { //metodo onclick, guarda uma função, só aceita uma função
+                editLoans(p.id);
+            };
             buttonEdit.appendChild(buttonEditElement)
 
-           
+
             const buttonDell = document.createElement("td");
-            buttonDell.textContent = "Deletar"
             const buttonDeletarElement = document.createElement("button");
             buttonDeletarElement.textContent = "Deletar"
-            buttonDell.appendChild(buttonDeletarElement)
-
+            
+           
             const statusLoanCell = document.createElement("td");
             statusLoanCell.textContent = p.statusLoan
             buttonDeletarElement.className = "round dell"
 
-            
+            buttonDeletarElement.onclick = function () {
+                dellLoans(p.id);
+                console.log("entrei")
+            }
+            buttonDell.appendChild(buttonDeletarElement)
+
+
             row.appendChild(statusLoanCell);
             row.appendChild(buttonEdit);
             row.appendChild(buttonDell);
 
             tbody.appendChild(row);
-            
+
 
         })
     }
