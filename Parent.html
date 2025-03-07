@@ -44,6 +44,12 @@
                 border-radius: 25px;
                 box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
             }
+            form{
+                background-color: #f2f2f2;
+                padding: 40px;
+                border-radius: 25px;
+                box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+                }
             button {
                 background: linear-gradient(135deg, #6e8efb, #a777e3);
                 color: white;
@@ -99,6 +105,7 @@
                 <label>Telefone: </label><input id="phone" type="text"/><br><br>
                 <label>Email: </label><input id="email" type="text"/><br><br>
                 <button type="button" id="register" onclick="handleRegister()">Cadastrar: </button>
+            
             </form>
         </section>
         
@@ -132,7 +139,7 @@
             }
 
     let p = {
-        id: parents.length,
+        id: parents.length? parents[parents.length -1].id+1 : 0,
         name: req.name,
         age: req.age,
         level: req.level,
@@ -161,7 +168,8 @@
     
         return parents[idx]
         }
-
+    
+    
         function handleRegister(){
             let id = document.getElementById("id").value
             if(id == -1){
@@ -212,7 +220,17 @@
             
 
         }
-    
+        function delParent(id){
+            let idx = parents.findIndex(p => p.id == id)
+
+            if (idx == -1) return "não encontrado"
+
+            parents.splice(idx, 1) 
+            listParent(parents)
+            return "postagem excluida"
+        }
+        // tem que ecriar a função de dell
+        //essa função tem que deletar os dados exitentes e registrasr os novos inseridos.
         function listParent(plist){
             const tbody = document.querySelector("#scList tbody")
             tbody.innerHTML = ""
@@ -230,16 +248,19 @@
                 }
                 editEmail.appendChild(editButton)
 
-                const delEmail = document.createElement("td")
-                const delButton = document.createElement("button")
-                delButton.className = "round dell"
-                delEmail.appendChild(delButton)
+                const dellEmail = document.createElement("td")
+                const dellButton = document.createElement("button")
+                dellButton.className = "round dell"
+                dellButton.onclick = function() {
+                    delParent(p.id)
+                }
+                dellEmail.appendChild(dellButton)
 
             
-                row.appendChild(EmailKinship);
+                row.appendChild(EmailKinship)
                 row.appendChild(editEmail)
-                row.appendChild(delEmail)
-                tbody.appendChild(row);
+                row.appendChild(dellEmail)
+                tbody.appendChild(row)
             })
         }
     </script>
