@@ -1,31 +1,36 @@
-import { useEffect, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
 
-const supabase = createClient("https://esngyzvmtgvnhdydslez.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVzbmd5enZtdGd2bmhkeWRzbGV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0NDMwNTgsImV4cCI6MjA1NjAxOTA1OH0.O2jHscNv8lxsLaP9OvFVAdr_MKK4oQs-2cHLNENp_vY");
 
-function App() {
-  const [instruments, setInstruments] = useState<any[]>([]);
-
-  useEffect(() => {
-    getInstruments();
-  }, []);
-
-  async function getInstruments() {
-    const { data } = await supabase.from("Launch").select('*');
-    if (Array.isArray(data)) {
-      setInstruments(data);
-    } else {
-      console.error('Erro ao buscar dados');
-    }
-  }
-
+export default function Page() {
   return (
-    <ul>
-      {instruments.map((instrument) => (
-        <li key={instrument.id}>{instrument.id}</li>
-      ))}
-    </ul>
+    <View style={styles.container}>
+      <View style={styles.main}>
+        <Text style={styles.title}>SmartClass</Text>
+        <Text style={styles.subtitle}></Text>
+      </View>
+    </View>
   );
 }
 
-export default App;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    padding: 24,
+  },
+  main: {
+    flex: 1,
+    justifyContent: "center",
+    maxWidth: 960,
+    marginHorizontal: "auto",
+  },
+  title: {
+    fontSize: 64,
+    fontWeight: "bold",
+  },
+  subtitle: {
+    fontSize: 36,
+    color: "#38434D",
+  },
+});

@@ -1,4 +1,5 @@
 //Const CATCH_ID = document.getElementById("studentId");
+let last_id = 0
 const STUDENT_NAME = document.getElementById("studentName");
 const AGE = document.getElementById("studentAge");
 // const GRADE = document.getElementById("studentGrade");
@@ -13,18 +14,23 @@ const PASSWORD = document.getElementById("studentPassword");
 // const CITY = document.getElementById("studentCity");
 // const STATE = document.getElementById("studentState");
 // const PHONE = document.getElementById("studentPhone");
+const LISTA = document.getElementById("listaAlunos");
 const EMAIL = document.getElementById("studentEmail");
+
+
+
+
 const BTN_CADASTRAR = document
   .getElementById("btnEnviar")
   .addEventListener("click", () => {
     setStudent();
-
+    
   });
 
 let students = [];
 
 function testaCep(cep) {
-  const testeCep = /^\d{5}-\d{3}$/
+  const testeCep = /^\d{5}-\d{3}$/;
   return testeCep.test(cep);
 }
 
@@ -53,12 +59,12 @@ function setStudent() {
   //   } else if (!testaCpf(CPF.value)) {
   //     alert("CPF em formato invalido");
   //     return;}
-  if (!testaEmail(EMAIL.value)) {
-    alert("Email em formato invalido");
-  }
-
+  // if (!testaEmail(EMAIL.value)) {
+  //   alert("Email em formato invalido");
+  // }
+  last_id += 1
   let student = {
-    id: 1,
+    id: last_id,
     name: STUDENT_NAME.value,
     age: AGE.value,
     // grade: GRADE.value,
@@ -77,25 +83,49 @@ function setStudent() {
     createdAt: Date.now(),
   };
   students.push(student);
+
+  let li = document.createElement("li");
+  let button_delete = document.createElement("input");
+  let button_editar = document.createElement("input");
+  button_delete.type = "button";
+  button_editar.type = "button";
+  button_delete.value = "Deletar";
+  button_editar.value = "Editar";
+  button_delete.className = "buttonDeletar";
+  button_editar.className = "buttonEditar";
+
+  button_delete.id = last_id;
+  button_editar.id = last_id;
+  li.innerHTML = STUDENT_NAME.value;
+
+  button_delete.addEventListener("click", () => {deleteStudent(button_delete.id)})
+  button_editar.addEventListener("click",() => putStudent(button_editar.id))
+  
+
+
+  LISTA.append(li);
+  LISTA.append(button_delete);
+  LISTA.append(button_editar)
 }
 
 function getStudentById(id) {
   return students.find((student) => student.id == id);
 }
 
-function putStudent(req, id) {
+function putStudent( id) {
   let idx = students.findIndex((student) => student.id == id);
 
-  if (req.name != undefined) students[idx].name = req.name;
-  if (req.age != undefined) students[idx].age = req.age;
-  if (req.grade != undefined) students[idx].grade = req.grade;
-  if (req.CPF != undefined) students[idx].CPF = req.CPF;
-  if (req.RG != undefined) students[idx].RG = req.RG;
-  if (req.classes != undefined) students[idx].classes = req.classes;
-  if (req.userId != undefined) students[idx].userId = req.userId;
-  if (req.login != undefined) students[idx].login = req.login;
-  if (req.password != undefined) students[idx].password = req.password;
-  if (req.address != undefined) students[idx].address = req.address;
+  if (STUDENT_NAME.value != undefined) students[idx].name = STUDENT_NAME.value;
+  if (AGE.value != undefined) students[idx].age = AGE.value;
+  // if (req.grade != undefined) students[idx].grade = req.grade;
+  // if (req.CPF != undefined) students[idx].CPF = req.CPF;
+  // if (req.RG != undefined) students[idx].RG = req.RG;
+  // if (req.classes != undefined) students[idx].classes = req.classes;
+  // if (req.userId != undefined) students[idx].userId = req.userId;
+  // if (req.login != undefined) students[idx].login = req.login;
+  if (EMAIL.value != undefined) students[idx].login = EMAIL.value;
+  if (PASSWORD.value != undefined) students[idx].password = PASSWORD.value;
+  // if (req.address != undefined) students[idx].address = req.address;
 }
 
 function getStudents(req) {
@@ -116,6 +146,14 @@ function getStudents(req) {
       student.email == req.email ||
       student.createdAt == createdAt
   );
+}
+
+
+function deleteStudent(id) {
+  const index = students.findIndex(student => student.id == id);
+  if (index !== -1) {
+    students.splice(index, 1);
+  }
 }
 
 function showStudent(req) {
@@ -154,36 +192,3 @@ function showStudent(req) {
   );
 }
 
-
-let teste = {
-  id: 2,
-  name: "Jane Smith",
-  age: 22,
-  grade: "B",
-  CPF: "456498413654",
-  RG: "2354511651",
-  classesId: [1, 2],
-  userId: "user456",
-  login: "janesmith",
-  password: "password456",
-  address: "456 Elm St",
-  CEP: "98765-432",
-  city: "Othertown",
-  state: "NY",
-  phone: "555-5678",
-  email: "janesmith@example.com",
-  createdAt: new Date(),
-};
-
-let update = {
-  name: "Jane Smith updated",
-  age: 22,
-  grade: "B",
-  CPF: "456498413654",
-  RG: "2354511651",
-  classesId: [1, 2],
-  userId: "user456",
-  login: "janesmithupdated",
-  password: "password456updated",
-  address: "456 Elm St",
-};
