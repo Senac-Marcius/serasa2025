@@ -147,7 +147,7 @@
                 return "campo name deve conter até 100 caracteres"
             }
             let b = {
-                id: ocements.length ,
+                id: ocements.length? ocements [ocements.length - 1].id + 1 : 0,
                 name: req.name,
                 url:req.url,
                 createAt: req.createAt,
@@ -178,13 +178,16 @@
 
         }
 
-
+        function dellbudget(id){
+        
+            ocements = ocements.filter(b => b.id !== id);
+            listocements(ocements);
+        }
 
         function handleRegister(){
             let id = document.getElementById('id').value
     
             if(id == -1){
-                console.log(
                     setBudget({
                     
                     name: document.getElementById("name").value, 
@@ -196,7 +199,7 @@
                     endDate: document.getElementById("endDate").value, 
 
                 })
-            ) 
+            
         
             }else if (id > -1){
 
@@ -212,18 +215,20 @@
 
                 }, id) 
 
-            document.getElementById('id').value = -1
+          
             }else{
                 
                 console.log("erro")
             }
-        
+
+            document.getElementById('id').value = -1
             listOcements(ocements)  
     
         }
 
-        function editBudget(name){
-            let budget = ocements.find(b => b.name == name)
+
+        function editBudget(id){
+            let budget = ocements.find(b => b.id == id)
             document.getElementById("name").value = budget.name
             document.getElementById("url").value = budget.url
             document.getElementById ("value").value = budget.value
@@ -231,6 +236,20 @@
             document.getElementById ("endDate").value = budget.endDate
             document.getElementById ("id").value = budget.id
         }
+
+        function dellBudget(id){
+            let idx = ocements.findIndex (b => b.id == id)
+
+            if (idx == -1) return "Não encontrado"
+
+            ocements.splice(idx, 1)
+
+            listOcements(ocements)  
+
+            return "oçamento excluida com sucesso"
+
+        }
+
 
         function listOcements(bList){
             const tbody = document.querySelector("#scList tbody")
@@ -246,13 +265,16 @@
                     const editButton = document.createElement("button");
                     editButton.className = "round edit";
                     editButton.onclick = function(){
-                        editBudget(b.name)
+                        editBudget(b.id)
                     };
                     editCell.appendChild(editButton);
     
                     const dellCell = document.createElement("td");
                     const dellButton = document.createElement("button");
-                    dellButton.className = "round dell"
+                    dellButton.className = "round dell";
+                    dellButton.onclick = function(){
+                        dellBudget(b.id);
+                    };
                     dellCell.appendChild(dellButton);
     
             
