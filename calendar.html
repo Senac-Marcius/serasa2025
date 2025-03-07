@@ -116,12 +116,13 @@
         <div class="row">
             <section>
                 <form id="scRegister">
-                    <label> Nome do Aluno: </label><input id="student" type= "text"/><br>
+                    <input id="id" type="hidden" value="-1"/>
+                    <label> Nome do Aluno: </label><input id="StudentName" type= "text"/><br>
                     <label> Curso: </label><textarea id="course" type="text"></textarea><br>
                     <label> Data da Matricula: </label><input id="date" type= "date"/><br>
                     <label for="Período do curso" id="period">Periodo: </label>
                     
-                    <select id="period" cronograma ="opcoes">
+                    <select id="period">
                         <option id="opcao1" value="opcao1">Manhã</option>
                         <option id="opcao2" value="opcao2">Tarde</option>
                         <option id="opcao3" value="opcao3">Noite</option><br>
@@ -154,78 +155,75 @@
     function setCalendars(req){
         let c = {
             id: calendars.length,
-            StudentName: req.id,
+            StudentName: req.StudentName,
             Course: req.Course,
             Period: req.Period,
             DateRegistration: req.DateRegistration
-        }
+        };
     
         calendars.push(c)
-        return "Cadastrado"
+        return "Cadastrado";
 
     }
-            function putcalendars(){
+            function putcalendars(req) {
             let idx = calendars.findIndex(c => c.id == id)   
         
-            if (idx == -1) return "Não encontrado"
+            if (idx == -1) return "Não encontrado";
+            if (req.StudentName  != undefined) calendars[idx].StudentName  = req.StudentName; 
+            if(req.course != undefined) calendars[idx].course = req.course;
+            if( req.DateRegistration != undefined) calendars[idx].DateRegistration = req.DateRegistration;
+            if (req.Period !== undefined) calendars[idx].Period = req.Period;
 
-            if(req.description != undefined) calendarios[idx].description = req.description
-            if( req.url != undefined) calendarios[idx].url = req.url
-            if( req.createAt != undefined) calendarios[idx]. createAt = req.createAt
-            if( req.userId != undefined) calendarios[idx].userId = req.userId
-
-            return calendarios [idx]
+            return calendars [idx];
         }
 
         function handleRegister(){
-            let id = document.getElementById('id').value
+            let id = parseInt(document.getElementById('id').value);
             if(id == -1){
 
                 console.log(
                     setCalendars({
-                        StudentName:document.getElementById("student").value,
+                        StudentName:document.getElementById("StudentName").value,
                         Course:document.getElementById("course").value, 
                         Period:document.getElementById("period").value, 
                         DateRegistration:document.getElementById("date").value, 
-                        userId: 0,
-            })
-                )
+                
+                })
+            );
             }else if(id > -1){
                 //chamar a função de put
                 
                  putCalendars({ 
-
-                        StudentName:document.getElementById("student").value,
+                        id: id,
+                        StudentName:document.getElementById("StudentName").value,
                         Course:document.getElementById("course").value, 
                         Period:document.getElementById("period").value, 
                         DateRegistration:document.getElementById("date").value, 
-                        userId: 0,
+                    
+                 });
 
-
-                 })
-
-                document.getElementById('id').value = -1
+                document.getElementById('id').value = -1;
             }else{
                 console.log("erro")
             }
         
-            listCalendars(calendars)    
+            listCalendars(calendars);
 
         }
     function editCalendars (id){
         let calendar =calendars.find(c => c.id == id)
-                document.getElementById("student").value = calendar.student,
-                document.getElementById("course").value = calendar.course,
-                document.getElementById("date").value = calendar.date,
-                document.getElementById("period").value = calendar.period,
-                document.getElementById("id").value = calendar.id
+                document.getElementById("StudentName").value = calendar.StudentName;
+                document.getElementById("course").value = calendar.course;
+                document.getElementById("date").value = calendar.DateRegistration;
+                document.getElementById("period").value = calendar.period;
+                document.getElementById("id").value = calendar.id;
 
     }
 
     function listCalendars(cList){
         const tbody = document.querySelector("#scList tbody")
         tbody. innerHTML = ""
-/*executa o callback fornecido uma vez para cada elemento da ordem com um valor atribuido*/
+
         cList.forEach(c => {
             const row = document.createElement ("tr");
         
@@ -234,9 +232,9 @@
 
             const editCell = document.createElement("td")
             const editButton = document.createElement("button")
-            editButton.className = "round edit"
+            editButton.className = "round edit";
             editButton.onclick = function() {
-                editCalendars(p.id)
+                editCalendars(c.id)
             };
             editCell.appendChild(editButton)
 
@@ -253,5 +251,3 @@
         }
     </script>
 </html>
-
-
