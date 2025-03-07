@@ -80,6 +80,21 @@
 
             }
 
+            button.round {
+                width: 35px; 
+                height: 35px;
+                border-radius: 50%;
+
+            }
+
+            button.edit{
+            background: #ffff00;
+            }
+
+            button.dell{
+                background: #ff0000;
+            }
+
 
 
     </style>
@@ -90,6 +105,7 @@
     <div class="row">
     <section id="scRegister">
         <form>
+            <input id="id" type = "hidden" value="-1"/>
             <label>Nome: </label><input id="name" type="text"/><br><br>
             <label>Descrição: </label><textarea id="description"></textarea><br><br>
             <label>Saúde: </label><input id="health" type="text"/><br><br>
@@ -121,7 +137,7 @@
         const DATE_REGEX = /^(\d{4})-(\d{2})-(\d{2})$/
         const ID_REGEX = /^\d+$/
 
-        if (!DATE_REGEX.test(req.createdAt)) {
+        if (!DATE_REGEX.test(req.createAt)) {
             return "Data inválida! Use o formato YYYY-MM-DD."
         }
 
@@ -137,7 +153,7 @@
             allergy: req.allergy,
             sick: req.sick,
             medication: req.medication,
-            createdAt: req.createdAt,
+            createAt: req.createAt,
             userId: req.userId
         }
 
@@ -145,23 +161,77 @@
         return "Cadastrado com sucesso!"
     }
 
+    function putRecord (req, id){
+        let idx = records.findIndex(r => r.id == id) 
+
+        if(idx == -1) return "Não encontrado"
+
+        if(req.id != undefined) records[idx].id = req.id
+        if(req.name != undefined) records[idx].name = req.name
+        if(req.description != undefined) records[idx].description = req.description
+        if(req.health != undefined) records[idx].health = req.health
+        if(req.allergy != undefined) records[idx].allergy = req.allergy
+        if(req.sick != undefined) records[idx].sick = req.sick
+        if(req.medication != undefined) records[idx].medication = req.medication
+        if(req.createAt != undefined) records[idx].creatAt = req.createAt
+        if(req.userId != undefined) records[idx].userId = req.userId
+
+        return records[idx]
+    }
+
+
     function handleRegister() {
-        let newRecord = {
-            name: document.getElementById("name").value,
-            description: document.getElementById("description").value,
-            health: document.getElementById("health").value,
-            allergy: document.getElementById("allergy").value,
-            sick: document.getElementById("sick").value,
-            medication: document.getElementById("medication").value,
-            createdAt: "2025-03-21",  
-            userId: 0  
+        let id = document.getElementById('id').value
+
+        if(id == -1){
+
+            console.log(
+                setRecord ({
+                    name: document.getElementById("name").value,
+                    description: document.getElementById("description").value,
+                    health: document.getElementById("health").value,
+                    allergy: document.getElementById("allergy").value,
+                    sick: document.getElementById("sick").value,
+                    medication: document.getElementById("medication").value,
+                    createAt: "2025-03-21",  
+                    userId: 0  
+                })
+            )
+
+        } else if (id > -1){
+
+            console.log(   
+            putRecord({
+                name: document.getElementById("name").value,
+                description: document.getElementById("description").value,
+                health: document.getElementById("health").value,
+                allergy: document.getElementById("allergy").value,
+                sick: document.getElementById("sick").value,
+                medication: document.getElementById("medication").value,
+                createAt: "2025-03-21",  
+                userId: 0  
+            }, id))
+                
+            document.getElementById('id').value = -1
+
+        }else{
+            console.log("erro")
         }
 
-
-        let result = setRecord(newRecord)
-        console.log(result)
-
         listRecord(records)
+
+    }
+
+    function editRecord(id){
+        let record = records.find(r => r.id == id) 
+
+        document.getElementById("description").value = record.description
+        document.getElementById("name").value = record.name
+        document.getElementById("health").value = record.health
+        document.getElementById("allergy").value = record.allergy
+        document.getElementById("sick").value = record.sick
+        document.getElementById("medication").value = record.medication
+        document.getElementById("id").value = record.id
 
     }
 
@@ -175,19 +245,24 @@
             const idRecord = document.createElement("td")
             idRecord.textContent = r.id;
 
-            const viewCel = document.createElement("td")
-            const viewButton = document.createElement("button")
-            viewCel.appendChild(viewButton)
+            const editCell = document.createElement("td")
+            const editButton = document.createElement("button")
+            editButton.className = "round edit"
+            editButton.onclick = function() {
+                    editRecord(r.id)
+            }
+            editCell.appendChild(editButton)
 
 
-            const delCel = document.createElement("td")
-            const delButton = document.createElement("button")
-            delCel.appendChild(delButton)
+            const dellCell = document.createElement("td")
+            const dellButton = document.createElement("button")
+            dellButton.className = "round dell"
+            dellCell.appendChild(dellButton)
 
 
             row.appendChild(idRecord)
-            row.appendChild(viewCel)
-            row.appendChild(delCel)
+            row.appendChild(editCell)
+            row.appendChild(dellCell)
 
 
             tbody.appendChild(row)
