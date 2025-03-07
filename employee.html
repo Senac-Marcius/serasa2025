@@ -293,7 +293,7 @@
         //if(!datePattern.test(req.createAt))return "Campo deve estar no formato YYYY-MM-DD"
 
         let e = {
-            id: employees.length,
+            id: employees.length ? employees[employees.length -1].id + 1 : 0,
             urls: req.urls,
             name: req.name,
             age: req.age,
@@ -434,7 +434,7 @@
         const row = document.createElement("tr")
             const nameCell = document.createElement("td")
             const age = document.createElement("td")
-            const tell
+            //const tell
 
             nameCell.textContent = e.name
             
