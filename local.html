@@ -140,7 +140,7 @@
                 return "data invalida, nao aceito letras"}
         
             let l =  {                                    
-                id: locals.length,                        
+                id: locals.length? locals[locals.length - 1].id + 1: 0,                 
                 name: req.name,                            
                 area: req.area,
                 description: req.description,  
@@ -210,10 +210,9 @@
 
         function delLocal(id){          //aqui é para puxar a função de dell
             let idx = locals.findIndex(l => l.id == id)
-            if(idx == -1)  return "Não encontrado"
+        
             locals.splice(idx, 1)
-
-            console.log("Não encontrado")
+            listLocals(locals) 
 
         }
 
@@ -238,10 +237,12 @@
                 const dellCell =  document.createElement("td");
                 const dellButton =  document.createElement("button");
                 dellButton.className = "round dell";
-                let del = delLocal(1)                          //aqui é chamar a função de dell com o onclick
-                console.log(del) 
+                                                 
+                dellButton.onclick = function(id) {
+                    delLocal(l.id)                                                    //aqui é chamar a função de dell com o onclick
+                };                                                                    //let del = delLocal(1)                          
+                                                                                      //console.log(del) 
                 dellCell.appendChild(dellButton);
-
                 row.appendChild(nameCell);
                 row.appendChild(editCell);
                 row.appendChild(dellCell);
