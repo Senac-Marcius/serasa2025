@@ -77,7 +77,7 @@
             button.round {
                 width: 35px;
                 height: 35px;
-                border-radius: 17.5; 
+                border-radius: 50%;
             }
 
             button.edit {
@@ -131,26 +131,43 @@
         var locals = []
 
         function setLocal(req){   
+            const createAtRegex = /^\d{4}-\d{2}-\d{2}$/
 
-        const createAtRegex = /^\d{4}-\d{2}-\d{2}$/
-
-        if(req.name.length > 244){
+            if(req.name.length > 244){
                 return "campo name, aceita até 244 caracteres"}
-       
-        if(!createAtRegex.test(req.createAt)){
-            return "data invalida, nao aceito letras"}
         
-        let l =  {                                    
-            id: locals.length - 1,                        
-            name: req.name,                            
-            area: req.area,
-            description: req.description,  
-            adress: req.adress,                     
-            createAt: req.createAt                  
+            if(!createAtRegex.test(req.createAt)){
+                return "data invalida, nao aceito letras"}
+        
+            let l =  {                                    
+                id: locals.length,                        
+                name: req.name,                            
+                area: req.area,
+                description: req.description,  
+                adress: req.adress,                     
+                createAt: req.createAt                  
             }
-        locals.push(l) 
-        return "Cadastrado"                              
+
+            locals.push(l) 
+
+            return "Cadastrado"                              
         } 
+
+        function putLocal(req, id){
+            let idx = locals.findIndex(l => l.id == id)
+
+            if(idx == -1) return "Não encontrado"
+
+            if(req.name != undefined) locals[idx].name = req.name
+            if(req.area != undefined) locals[idx].area = req.area
+            if(req.escription != undefined) locals[idx].description = req.escription
+            if(req.adress != undefined) locals[idx].adress = req.adress
+        
+            return locals[idx]
+        }
+
+
+
 
         function handleRegister(){
             let id = document.getElementById('id').value
@@ -166,62 +183,32 @@
                     }) 
                 )
             }else if(id > -1){
-                //chamar a funcao de put =>
-
-                //OBSERVACAO: N COONSEGUI RESOLVER O EXERCICIO DE CHAMAR O PUT
-                function putLocal(id){
-    
-                    let idx = locals.findIndex(l => l.id == id)
-
-                    if(idx == -1) return "Nothing Register"
-
-                    products.splice(idx, 1)
-                
-                    if(idx == -1) return "Não encontrado"
-                    if(req.name != undefined) locals[idx].name = req.name
-                    if(req.area != undefined) locals[idx].area = req.area
-                    if(req.escription != undefined) locals[idx].description = req.escription
-                    if(req.adress != undefined) locals[idx].adress = req.adress
-                
-                    return locals[idx]
-                }
-
+                console.log(
+                    putLocal({
+                        name: document.getElementById("name").value,
+                        area: document.getElementById("area").value,
+                        description: document.getElementById("description").value,
+                        adress: document.getElementById("adress").value
+                    }, id) 
+                )
 
                 document.getElementById("id").value = -1
-                }else{
+            }else{
                 console.log("erro")
-                }
-                listLocals(locals)
+            }
             
+            listLocals(locals)
+        }
 
-                function editLocal(id){
-                let local = locals.find(l => l.id == id)
+        function editLocal(id){
+            let local = locals.find(l => l.id == id)
 
-                document.getElementById("name").value = local.name
-                document.getElementById("area").value = local.area
-                document.getElementById("id").value = local.id
-                }
+            document.getElementById("name").value = local.name
+            document.getElementById("area").value = local.area
+            document.getElementById("id").value = local.id
+        }
 
-    /*
-    function putProduct(id){      //CÓDIGO DO PUT
-    
-    let idx = locals.findIndex(l => l.id == id)
-
-    if(idx == -1) return "Nothing Register"
-
-    products.splice(idx, 1)
- 
-    
-
-    if(idx == -1) return "Não encontrado"
-    if(req.description != undefined) products[idx].description = req.description
-    if(req.creatAt != undefined) locals[idx].creatAt = req.creatAt
-    if(req.name != undefined) locals[idx].name = req.name
- 
-    return locals[idx]
- 
-}*/
-
+        //aqui é para puxar a função de dell
 
 
         function listLocals(lList){
@@ -245,6 +232,7 @@
                 const dellCell =  document.createElement("td");
                 const dellButton =  document.createElement("button");
                 dellButton.className = "round dell";
+                //aqui é chamar a função de dell com o onclick
                 dellCell.appendChild(dellButton);
 
                 row.appendChild(nameCell);
