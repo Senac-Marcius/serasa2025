@@ -71,6 +71,23 @@
                 box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
             }
 
+            button.round {
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+            }
+
+            button.dell {
+                background: #ff0000;
+
+            }
+
+            button.edit {
+                background: #ffff00;
+
+            }
+
+
             form {
                 background-color: #F2F2F2;
                 padding: 40px;
@@ -88,6 +105,7 @@
 
             <section id="scregister"> 
                 <form>
+                <input id="id" type="hidden" value="-1"/>
                 <label>Observação: </label><input id="observation" type="text"/><br> 
                 <label>Nota: </label><input id="note" type="number"/><br>
                 <label>Presença: </label><input id="presence" type="text"/><br>
@@ -129,6 +147,7 @@
             // }
             
             let l = {
+                id: launchs.length,
                 createAt: req.createAt,
                 note: req.note,
                 observation: req.observation,
@@ -141,17 +160,66 @@
         }
         
         function handleRegister(){
-            console.log(
-                setLaunch({
+            let id = document.getElementById('id').value
+
+            if(id == -1){
+                console.log(
+                    setLaunch({
+                    createAt: "2000-12-31",
+                    note: document.getElementById("note").value,
+                    observation: document.getElementById("observation").value,
+                    presence: document.getElementById("presence").value,
+                    indicator: document.getElementById("indicator").value,
+                    userId: 0
+
+            }))
+    
+
+            }else if(id > -1){
+    
+              putLaunch({
                 createAt: "2000-12-31",
                 note: document.getElementById("note").value,
                 observation: document.getElementById("observation").value,
                 presence: document.getElementById("presence").value,
-                indicator: document.getElementById("indicator").value
-            }))
+                indicator: document.getElementById("indicator").value,
+                userId: 0},id)
+
+            }else{
+                console.log("Erro")
+            }
+            
            
             listLaunchs(launchs)
         }
+
+        function editLaunch(id){ // ela edita
+            let launch = launchs.find(l => l.id == id)
+
+            document.getElementById("observation").value = launch.observation
+            document.getElementById("note").value = launch.note
+            document.getElementById("presence").value = launch.presence
+            document.getElementById("indicator").value = launch.indicator
+            document.getElementById("id").value = launch.id
+        }
+
+            // TIRAR DUVIDA SE APAGA ESSA E DEIXA A DE CIMA 
+            function putLaunch(req, id){
+
+                    if(id == -1) return "Não encontrado"
+
+                    if (req.userId != undefined) launchs[id].userId = req.userId 
+                    if (req.observation != undefined) launchs[id].observation = req.observation 
+                    if (req.presence != undefined) launchs[id].presence = req.presence 
+                    if (req.indicator != undefined) launchs[id].indicator = req.indicator 
+                
+                    return launchs[id]
+            }
+                   
+                document.getElementById('id').value = -1
+                listLaunchs(launchs)
+
+  // ATE AQUI
 
 
         function listLaunchs(plist){
@@ -165,20 +233,26 @@
 
               
                 
-                const viewcell = document.createElement("td");
-                const viewbutton = document.createElement("button");
-                viewcell.appendChild(viewbutton);
+                const editcell = document.createElement("td");
+                const editbutton = document.createElement("button");
+                editbutton.className = "round edit"
+                editbutton.onclick = function(){
+                    editLaunch (l.id)
+                };
+
+                editcell.appendChild(editbutton);
 
 
 
                 const dellcell = document.createElement("td"); //criou uma td na variavel
-                const dellbutton = document.createElement("button"); //criou um botão na variavel
+                const dellbutton = document.createElement("button");
+                dellbutton.className = "round dell" //criou um botão na variavel
                 dellcell.appendChild(dellbutton); // criou um botão na td
 
 
 
                 row.appendChild(indicatorCell);
-                row.appendChild(viewcell); //adicionou a td na tela
+                row.appendChild(editcell); //adicionou a td na tela
                 row.appendChild(dellcell);
                 tbody.appendChild(row);
         })
