@@ -5,49 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo</title>  
     <style>
+         @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+         *{
+        font-family: 'Poppins', sans-serif;
+        margin:0;
+        padding:0;
+        box-sizing:0;
+        }
         body{
             margin: 0;
+            background-color:#550080;
         }
-        h1{
-        text-align: center;
-        color: deeppink;
-        background: peachpuff;
-        margin: 0;
-        }
-        section{
-            display: flex;
-            margin: 0 auto;
-            flex-direction: column;
-            background-color: beige;
 
+        
+        .title{
+        display: flex;
+        width:500px;
+        height: 30px;
+        margin-left:10%;
+        text-align:center;
+        justify-content:start;
+        padding-top: 30px;
+        color:#fae7ff;
+        
+        
         }
-        form{
+        #scCollections{
             display: flex;
-            flex-direction: column;
+            width:300px;
             height: 400px;
-            padding: 20px;
+            flex-direction: column;
+            padding:20px;
             border-radius:20px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 2);
+            font-family: 16px;
+            background-color: #fae7ff;
+            color: #5C0499;
+    
         
-        }
-        #scColections{
-         
-        
+    
         }
         #scList{
-            width:400px;
-            height:400px;
+            height: 400px;
+            width:300px;
             display: flex;
+            padding:20px;
             border-radius:20px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 2);
-
+            font-family: 16px;
+            background-color: #fae7ff;
+            color: #5C0499;
         }
     
         .row{
             display: flex;
-            justify-content: space-around;
-            margin-top: 100px;
-            padding: 20px;
+            justify-content:start; 
+            align-items:center;
+            gap: 20px;
+            height: 100vh;
+            width: 100%;
+            margin-left: 5%;
+            position: absolute;
+            z-index:30;
+        
         }
         label{
             font-weight: 600px;
@@ -55,7 +75,7 @@
         br{
             margin: 10px;
         }
-        button:holver{
+        button:hover{
             background:linear-gradient(135deg,#9A34FF,#5C0499);
             box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
             transform: translate(-2px);
@@ -64,20 +84,27 @@
             transform: translateY(1px);
             box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
         }
+        button.round{
+            display: block;
+            width: 90px;
+            height: 35px;
+            border-radius: 30%;
+        }
+    
         input{
             width: 300px;
             height: 25px;
             border-radius:5px;
+            padding: 3px;
         }
-        
         button{
             background:linear-gradient(135deg,#5C0499, #9A34FF);
             border:none;
-            color:beige;
+            color:#fae7ff;
             padding: 12px 24px;
             font-size: 16px;
             font-weight: bold;
-            border-radius: 8px;
+            border-radius: 30px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 2);
             cursor: pointer;
             transition: all 0.3s ease-in-out;
@@ -86,13 +113,29 @@
             margin: 20px auto 0;
             display: block;
         }
+        button.Edit{
+            background:#ff0000;
+        }
+        button.Dell{
+            background:gold;
+        }
+        .img{
+            display: flex;
+            justify-content: end;
+            align-items:center;
+            position: relative;
+            margin-right: 10%;
+            margin-top: 8%;
+            z-index: 25;
+        }
     </style>
 </head>
 <body>
-    <h1>Cadastre seu catálogo:</h1>
+    <div class="title"> <h1>CADASTRE SEU CATÁLOGO:</h1></div> 
     <div class="row">
-    <section id="scCollections">
+    <section id="scCollections" >
         <form><!--formulário-->
+            <input  id="id" type="hidden" value="-1"/>
             <label>Nome do livro: </label><input id ="name" type="text"><br><br>
             <label>Estrelas: </label><input id ="stars"type="number"><br><br><!--label (rótulo) input(barra de digitação) br (quebra de texto)-->
             <label>Quantidade: </label><input id = "quantity"type="number"><br><br>
@@ -110,35 +153,73 @@
         </table>
     </section>
     </div>
+    <div class="img">
+        <img src="./livro.png" alt="book" height="400px" width="400px">
+    </div>
 </body>
     <script>
         var collections = []
 
         function setCollections(req){//função de create
             let c = {
-                id:collections.lenght -1,
+                id:collections.length,
                 name: req.name,
                 createAt: req.createAt,
                 stars:req.stars,
                 quantity:req.quantity
-
             }
 
             collections.push(c) // nesta linha é empurrado os dados para o vetor collections
             return "Cadastrado"
         }
-        function handleRegister(){  // handle chama o botão register
-            console.log(
+                
+      
+      
+        function handleRegister(){ // handle chama o botão register
+            let id = document.getElementById('id').value
+            if(id == -1){
+                console.log(
                 setCollections({ //atribuição de req 
-                    name: document.getElementById("name").value,
-                    quantity:document.getElementById("quantity").value,
-                    createAt: "2000-12-23",
-                    stars:document.getElementById("stars").value
+                name: document.getElementById("name").value,
+                quantity:document.getElementById("quantity").value,
+                createAt: "2000-12-23",
+                stars:document.getElementById("stars").value
+            })
+        )
+            }else if (id > -1){
+              let editcollection = putCollection({ //atribuição de req 
+                id:0,
+                name: document.getElementById("name").value,
+                quantity:document.getElementById("quantity").value,
+                createAt: "2000-12-23",
+                stars:document.getElementById("stars").value
+            }, id)
 
-                })
-            )
+        
+                document.getElementById('id').value = -1
+            }else{
+                console.log("erro")
+            }
             listCollections(collections)
         }
+        function editCollections(id){
+            let collection = collections.find(c => c.id == id)
+                document.getElementById("id").value = collection.id 
+                document.getElementById("name").value = collection.name 
+                document.getElementById("stars").value = collection.stars
+                document.getElementById("quantity").value = collection.quantity
+        }
+        function putCollection(req, id){ 
+                let idx = collections.findIndex(c=> c.id == id) 
+                if(idx == -1) return "não encontrado"
+                if(req.name!= undefined) collections[idx].name = req.name
+                if(req.stars!= undefined) collections[idx].stars = req.stars
+                if(req.quantity!= undefined) collections[idx].quantity = req.quantity
+                
+                return collections[idx]
+                }
+           
+                
             function listCollections(clist){
                 const tbody = document.querySelector("#scList tbody")
                 tbody.innerHTML = ""
@@ -149,27 +230,34 @@
                     const nameCell = document.createElement("td")
                     nameCell.textContent = c.name
 
-                    const buttontd = document.createElement("td")
-                    
-                     
-                    const buttonupdatetd = document.createElement("td")
+                    const dellButtontd = document.createElement("td")
+                    const buttonEdittd = document.createElement("td")
 
-                    const button = document.createElement ("button")
-                     button.textContent = "Delete"
+                    const dellButton = document.createElement ("button")
+                    dellButton.textContent = "Deletar"
+                    dellButton.className = "round Dell"
 
-                    const buttonupdate = document.createElement("button")
-                    buttonupdate.textContent = "Atualizar"
 
-                    buttonupdatetd.appendChild(buttonupdate);
-                    row.appendChild (buttonupdatetd);
 
-                    buttontd.appendChild(button);
-                    row.appendChild(buttontd);
+                    const buttonEdit = document.createElement("button")
+                    buttonEdit.textContent = "Editar"
+                      buttonEdit.className = "round Edit"
+
+                    buttonEdit.onclick = function () {
+                        editCollections(c.id)
+                    }
 
                     row.appendChild(nameCell);
+
+                    buttonEdittd.appendChild(buttonEdit);
+                    row.appendChild(buttonEdittd);
+
+                    dellButtontd.appendChild(dellButton);
+                    row.appendChild(dellButtontd);
 
                     tbody.appendChild(row);
                 })
             }
-    </script> <!-- script serve para usar o js dentro do html  -->
+
+    </script>
 </html>        
