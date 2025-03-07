@@ -18,6 +18,7 @@
                 margin: 0;
                 font-size: xxx-large;
                 font-style: oblique;
+                padding: 20px
             }
 
             h2{
@@ -62,7 +63,7 @@
                 margin: 5px;
             }
 
-            button {
+            button:hover {
                 margin: 10px;
                 padding: 10px;
                 background-color: darkmagenta;
@@ -72,6 +73,25 @@
                 font-style: italic;
             }
 
+            button:active {
+                transform: translateY(1px);
+                box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            button.round {
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+            }
+
+            button.dell {
+                background: #ff0000;
+            }
+
+            button.edit {
+                background: #ffff00;
+            }
+
         </style>
     </head>
     <body>
@@ -79,6 +99,7 @@
         <div class="row">
             <section id="scRegister">
             <form>
+            <input id ="id" type="hidden" value="-1">
             <label>Nome: </label><input id="name" type="text"/><br>
             <label>Descrição: </label><input id="description" type="text"/><br>
             <label>Data: </label><input id="date" type="date"><br>
@@ -121,7 +142,7 @@
                 return "Campo url deve conter o seguinte formato https://dominio.com";
             }
 
-            let I = {
+            let i = {
                 name: req.name,
                 id: invests.length,
                 description: req.description,
@@ -130,13 +151,43 @@
                 userId: req.userId,
                 num: req.num
             }
-            invests.push(I)
+            invests.push(i)
             return "investido"
         } 
         
    
         function handleRegister(){
+            let id = document.getElementById("id").value
+
+            if (id == -1){
+               console.log(
+                   setInvest({
+                       name: document.getElementById("name").value,
+                       description: document.getElementById("description").value,
+                       url: document.getElementById("url").value,
+                       createAt: "2025-02-12",
+                       userId: 0,
+                       num: 100
+                   })
+               )
+            }else if(id >-1){
+            putInvest({
+                       name: document.getElementById("name").value,
+                       description: document.getElementById("description").value,
+                       url: document.getElementById("url").value,
+                       createAt: "2025-02-12",
+                       userId: 0,
+                       num: 100
+                    },id)
+
+                document.getElementById("id").value = -1
+            }else{
+                    console.log("error")
+            }        
+            listInvests(invests)
+        
             console.log(
+
                 setInvest({
                     name: document.getElementById("name").value,
                     description: document.getElementById("description").value,
@@ -151,6 +202,14 @@
             
         }
 
+        function editInvests(id){
+            let i = invests.find(i => i.id = id)
+            document.getElementById("description").value = i.description
+            document.getElementById("url").value = i.url
+            document.getElementById("id").value = i.id
+
+        }
+
         function listInvests(){
             const tbody = document.querySelector("#scList tbody")
             tbody.innerHTML = ""
@@ -161,21 +220,27 @@
                 const tdName = document.createElement("td")
                 tdName.textContent = i.name
                 
-                const button1 = document.createElement("td")
-                const buttonviw = document.createElement("button")
+                const editCell = document.createElement("td")
+                const buttonEdit = document.createElement("button")
+                buttonEdit.className = "round edit"
+                buttonEdit.onclick = function() {
+                    editInvests(i.id)
+                };
+                editCell.appendChild(buttonEdit)
                  
                 
-                const button2 = document.createElement("td")
-                const buttondel = document.createElement("button")
+                const dellCell = document.createElement("td")
+                const buttonDell = document.createElement("button")
+                buttonDell.className = "round dell"
+                dellCell.appendChild(buttonDell)
                 
-
-            
                 row.appendChild(tdName)
-                button1.appendChild(buttonviw)
-                button2.appendChild(buttondel)
-                row.appendChild(button1)
-                row.appendChild(button2)
+                dellCell.appendChild(editCell)
+                buttonDell.appendChild(buttonEdit)
+                row.appendChild(dellCell)
+                row.appendChild(buttonDell)
                 tbody.appendChild(row)
+
                 
             })
         }
