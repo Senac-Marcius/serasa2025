@@ -11,32 +11,33 @@
         <section>     
 
             <form id="scRegister">
+                <input id="id" type="hidden" value="-1"/>
                 <label for="name">Nome Completo: </label><input id="name" type="text"><br><br>
-                <label for="E-mail">E-mail: </label><input id="email" type="text"><br><br>
-                <label for="Telefone Celular">Telefone: </label><input id="telephone" type="number"><br><br>
+                <label for="email">E-mail: </label><input id="email" type="text"><br><br>
+                <label for="telephone">Telefone: </label><input id="telephone" type="tel"><br><br>
                 <label for="RG">RG: </label><input id="rg" type="text"><br><br>
-                <label for="data de nascimento do solicitante">Data de Nascimento: </label><input id="dateBirth" type="date"><br><br>
-                <label for="nome da mãe">Nome da mãe: </label><input id="nameMother" type="text"><br><br>
-                <label for="Turma do solicitante">Turma: </label><input id="level" type="text"><br><br>
-                <label for="Nível do curso">Nível: </label><input id="grade" type="text"><br><br>
-                <label for="Período do curso">Período: </label>
+                <label for="dateBirth">Data de Nascimento: </label><input id="dateBirth" type="date"><br><br>
+                <label for="nameMother">Nome da mãe: </label><input id="nameMother" type="text"><br><br>
+                <label for="level">Turma: </label><input id="level" type="text"><br><br>
+                <label for="grade">Nível: </label><input id="grade" type="text"><br><br>
+                <label for="period">Período: </label>
                 <select id="period" name="opcoes">
-                    <option id="opcao1" value="opcao1">Manhã</option>
-                    <option id="opcao2" value="opcao2">Tarde</option>
-                    <option id="opcao3" value="opcao3">Noite</option>
+                    <option id="opcao1" value="manha">Manhã</option>
+                    <option id="opcao2" value="tarde">Tarde</option>
+                    <option id="opcao3" value="noite">Noite</option>
                 </select>
                 <br><br><br>
-                <button type="button" id="register" onclick="handleRegister()">ENVIAR SOLICITAÇÃO</button>            
+                <button type="button" id="register" onclick="handleRegister()">ENVIAR</button>            
             </form>
         </section>
 
         <section id="scList">
             <table>
                 <thead>
-                    <th>Nome</th>
-                    <tbody id="tableBody">                                                
-                    </tbody>
+                    <th>Nome</th>                    
                 </thead>
+                <tbody id="tableBody">                                                
+                </tbody>
             </table>
 
         </section>
@@ -48,14 +49,23 @@
         /*documentos - prontuário/dadosalunos, informações de ocorrencias, histórico, 
         declaração de matricula, boletim, diploma, atestado, RELATÓRIO - */
 
-        var documents = []
+        var documents = [] //todo documents no código se refere ao nome do vetor
 
         function setDocuments(req){
 
-            //falta add o regex aqui
+            // Expressões Regulares que formatam a entrada do usuário
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+
+
+            // Validações das expressões regulares
+            if (!emailRegex.test(req.email)){
+                console.error("Erro: Email inválido. Deve estar no formato fulano@fulano.com \n Pode conter números.")
+                return
+
+            }
 
             let d = {//lista, registro, objAnonimo
-                id: documents.length-1,
+                id: documents.length,
                 name: req.name,
                 email: req.email,                   
                 telephone: req.telephone,
@@ -72,53 +82,98 @@
             return "Documento adicionado!"          //Verifica o push
         }
 
+        function putDocuments(req,id){
+            let docIndex = documents.findIndex( d => d.id == id)
+            
+            if(req.name != undefined) documents[docIndex].name = req.name
+            if(req.email != undefined) documents[docIndex].email = req.email
+            if(req.telephone != undefined) documents[docIndex].telephone = req.telephone
+            if(req.dateBirth != undefined) documents[docIndex].dateBirth = req.dateBirth
+            if(req.nameMother != undefined) documents[docIndex].nameMother = req.nameMother
+            if(req.level != undefined) documents[docIndex].level = req.level
+            if(req.grade != undefined) documents[docIndex].grade = req.grade
+            if(req.period != undefined) documents[docIndex].period = req.period
+
+
+            return documents[docIndex]
+            
+        }
+
 
         function handleRegister(){
-            console.log (
-                setDocuments({
-  
-                    //id: documents.length-1,
-                    name: document.getElementById("name").value,
-                    email: document.getElementById("email").value,
-                    telephone: document.getElementById("telephone").value,
-                    dateBirth: document.getElementById("dateBirth").value,
-                    nameMother: document.getElementById("nameMother").value,
-                    //level: document.getElementById(level).value,
-                    grade: document.getElementById("grade").value,
-                    period: document.getElementById("period").value, 
-                    createAt: "2000-01-31"                                        
-                                      
-                })
-            )
+            let id = document.getElementById("id").value
+
+            if(id == -1){
+                console.log (
+                    setDocuments({
+                        name: document.getElementById("name").value,
+                        email: document.getElementById("email").value,
+                        telephone: document.getElementById("telephone").value,
+                        dateBirth: document.getElementById("dateBirth").value,
+                        nameMother: document.getElementById("nameMother").value,
+                        level: document.getElementById("level").value,
+                        grade: document.getElementById("grade").value,
+                        period: document.getElementById("period").value, 
+                        createAt: "2000-01-31"                                  
+                    })
+                )
+            }else if(id > -1){//chamar função put
+                
+                putDocuments(req,id);
+
+                /*let documentAtual = putDocuments({
+                    description: "terceiro lua",
+                })*/
+                document.getElementById("id").value =-1
+            }else{
+                console.log("erro")
+            }
 
             listDocuments(documents)
+        }
+
+
+        function editDocuments(id){
+            let doc = documents.find( d => d.id == id)
+
+            documents.getElementById("name").value = doc.name
+            documents.getElementById("email").value = doc.email
+            documents.getElementById("telephone").value = doc.telephone
+            documents.getElementById("dateBirth").value = doc.dateBirth
+            documents.getElementById("nameMother").value = doc.nameMother
+            documents.getElementById("level").value = doc.level
+            documents.getElementById("grade").value = doc.grade
+            documents.getElementById("period").value = doc.period
         }
 
         function listDocuments(pList){
             const tbody = document.querySelector("#tableBody")
             tbody.innerHTML = ""
 
-            pList.forEach(d =>{
-            
+            pList.forEach(d =>{            
                 const row = document.createElement("tr");
+
                 const nameCell = document.createElement("td");
                 nameCell.textContent = d.name
 
-                //FILTRO
-                const viewCell = document.createElement("td")
-                const viewButton = document.createElement("button")
+                //EDITAR
+                const editCell = document.createElement("td")
+                const editButton = document.createElement("button")
 
-                viewButton.className = "view"
-                viewCell.appendChild(viewButton)
+                editButton.className = "round edit"
+                editButton.onclick = function(){
+
+                };
+                editCell.appendChild(editButton)
 
                 //DELETE
                 const dellCell = document.createElement("td")
                 const dellButton = document.createElement("button")
-
                 dellButton.className = "dell"
                 dellCell.appendChild(dellButton)
+
                 row.appendChild(nameCell)
-                //row.appendChild(viewCell)
+                row.appendChild(editCell)
                 row.appendChild(dellCell)
                 tbody.appendChild(row)
 
@@ -128,5 +183,12 @@
         }      
 
 
+        //FILTRO
+        /*const viewCell = document.createElement("td")
+        const viewButton = document.createElement("button")
+
+        viewButton.className = "view"
+        viewCell.appendChild(viewButton)*/
     </script>
+    
 </html>
