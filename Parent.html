@@ -72,6 +72,19 @@
                 box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
             }
 
+            button.round{
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+            }
+
+            button.edit{
+                background: #c4230a;
+            }
+            button.del{
+                background: #925ec4;
+            }
+
         </style>
     </head>
     <body>
@@ -79,6 +92,7 @@
         <div class="row">
             <section id ="scRegister">
             <form>
+                <input id="id" type="hidden" value="-1"/>
                 <label>Nome: </label><input id="name" type="text"/><br><br>
                 <label>Idade: </label><input id="age"type="number"/><br><br>
                 <label>Parentesco: </label><input id="kinship" type="text"/><br><br>
@@ -91,7 +105,7 @@
         <section id="scList"><!-- adicionando tabelas-->
             <table>
                 <thead><br>
-                    <th>Nivel de parentesco</th>
+                    <th>nivel de parentesco:</th>
                 </thead>
                 <tbody>
             
@@ -132,20 +146,73 @@
     return "casdastro realizado"
 
 }
+        function putParent(req, id){
+        let idx = parents.findIndex(p => p.id == id)
+
+        if(idx == -1) return "Não encontrado"
+
+        if(req.name != undefined) parents[idx].name = req.name
+        if(req.age != undefined) parents[idx].age = req.age
+        if(req.level != undefined) parents[idx].level = req.level
+        if(req.kinship != undefined) parents[idx].kinship = req.kinship
+        if(req.url != undefined) parents[idx].url = req.url
+        if(req.phone != undefined) parents[idx].phone = req.phone
+        if(req.email != undefined) parents[idx].email = req.email
+    
+        return parents[idx]
+        }
 
         function handleRegister(){
-           console.log(
-                setParent({
-                    name: document.getElementById("name").value,
-                    age: document.getElementById("age").value,
-                    kinship: document.getElementById("kinship").value,
-                    phone: document.getElementById("phone").value,
-                    email: document.getElementById("email").value,
-                    userId: 0
-                })
-            )
-            listParent(parents)
+            let id = document.getElementById("id").value
+            if(id == -1){
+                console.log(
+                    setParent({
+            
+                        name: document.getElementById("name").value,
+                        age: document.getElementById("age").value,
+                        kinship: document.getElementById("kinship").value,
+                        phone: document.getElementById("phone").value,
+                        email: document.getElementById("email").value,
+                        userid: 0
+    
+                    })
+
+                )
+            
+            }else if(id > -1){
+                console.log(
+                    putParent({
+            
+                        name: document.getElementById("name").value,
+                        age: document.getElementById("age").value,
+                        kinship: document.getElementById("kinship").value,
+                        phone: document.getElementById("phone").value,
+                        email: document.getElementById("email").value,
+                        userId: 0
+                }, id))
+
+                document.getElementById("id").value = -1
+                
+            }else{
+            console.log("erro")
+         }
+         listParent(parents)
         }
+
+        function editParent(id){
+            let parent = parents.find(p => p.id == id)
+
+            document.getElementById("name").value = parent.name
+            document.getElementById("email").value = parent.email
+            document.getElementById("age").value = parent.age
+            document.getElementById("kinship").value = parent.kinship
+            document.getElementById("phone").value = parent.phone
+            document.getElementById("id").value = parent.id
+           
+            
+
+        }
+    
         function listParent(plist){
             const tbody = document.querySelector("#scList tbody")
             tbody.innerHTML = ""
@@ -153,19 +220,24 @@
             plist.forEach( p => {
                 const row = document.createElement("tr")
                 const EmailKinship = document.createElement("td")
-                EmailKinship.textContent = p.kinship
+                EmailKinship.textContent = p.id
 
-                const viewEmail = document.createElement("td")
-                const viewButton = document.createElement("button")
-                viewEmail.appendChild(viewButton)
+                const editEmail = document.createElement("td")
+                const editButton = document.createElement("button")
+                editButton.className = "round edit"
+                editButton.onclick = function() {
+                    editParent(p.id)
+                }
+                editEmail.appendChild(editButton)
 
                 const delEmail = document.createElement("td")
                 const delButton = document.createElement("button")
+                delButton.className = "round dell"
                 delEmail.appendChild(delButton)
 
             
                 row.appendChild(EmailKinship);
-                row.appendChild(viewEmail)
+                row.appendChild(editEmail)
                 row.appendChild(delEmail)
                 tbody.appendChild(row);
             })
