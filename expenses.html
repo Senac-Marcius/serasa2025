@@ -83,21 +83,34 @@
                 box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
             }
 
+            button.round{
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+            }
+
+            button.dell{
+                background: #ff0000;
+            }
+
+            button.edit{
+                background: #ffff00;
+            }
 
         </style>
 
     </head>
     <body>
         <h1>Cadastre a suas despesas</h1>
-        <div class="row">
-            <section id=" scRegister">
+        <div class ="row">
+            <section id =" scRegister">
                 <form>
+                    <input id = "id" type = "hidden" value = "-1"/>
                     <label>Nome: </label><input id="name" type="text" /><br>
                     <label>Descrição: </label><input id="description" type="text" /><br>
                     <label>Url: </label><input id="url" type="text" /><br>
                     <label>Data: </label><input id="date" type="date" /><br>
                     <label>Valor: </label><input id="value" type="number" /><br>
-                    <label>Fornecedor: </label><input id="suplier" type="text" /><br>
                     <button type="button" id="register" onclick="handleRegister()">Cadastrar</button>
                 </form> 
             </section>
@@ -146,27 +159,69 @@
                 url: req.url,
                 createAt: req.createAt,
                 userId: req.userId,
-                value: req.value,
-                suplier: req.suplier
+                value: req.value
             }
             expenses.push(e)
             return "cadastrado sucesso"
         }   
         
+        function putExpense(req, id){
+            let idx = expenses.findIndex(e => e.id == id)
+
+            if(idx == -1 ) return "Não encotrado"
+
+            if(req.name != undefined) expenses[idx].name = req.name
+            if(req.description != undefined) expenses[idx].description = req.description
+            if(req.createAt != undefined) expenses[idx].createAt = req.createAt
+            if(req.userId != undefined) expenses[idx].userId = req.userId
+            if(req.value != undefined) expenses[idx].value = req.value
+            if(req.url != undefined) expenses[idx].url = req.url
+
+            return expenses[idx]
+        }
+
         function handleRegister(){
-            console.log(
-                setExpense({
-                    name: document.getElementById("name").value,
-                    description: document.getElementById("description").value,
-                    url: document.getElementById("url").value,
-                    createAt: "2025-01-20",
-                    userId: 0,
-                    value: document.getElementById("value").value,
-                    suplier : document.getElementById("suplier").value
-                })
-            )
+            let id = document.getElementById('id').value
+
+            if(id == -1){
+                console.log(
+                    setExpense({
+                        name: document.getElementById("name").value,
+                        description: document.getElementById("description").value,
+                        url: document.getElementById("url").value,
+                        createAt: "2025-03-06",
+                        userId: 0,
+                        value: document.getElementById("value").value
+                        
+                    })
+                )
+            }else if(id >-1){
+
+                putExpense({
+                        name: document.getElementById("name").value,
+                        description: document.getElementById("description").value,
+                        url: document.getElementById("url").value,
+                        createAt: "2025-03-06",
+                        userId: 0,
+                        value: document.getElementById("value").value,
+                    },id)
+
+                document.getElementById('id').value = -1
+            }else{
+                console.log("error")
+            }
 
            listExpenses(expenses)
+        }
+
+        function editExpenses(id){
+            let e = expenses.find(e => e.id == id)
+
+            document.getElementById("name").value = e.name
+            document.getElementById("description").value = e.description
+            document.getElementById("url").value = e.url
+            document.getElementById("value").value = e.value
+            document.getElementById("id").value = e.id
         }
    
         function listExpenses(){
@@ -179,18 +234,21 @@
                 const nameCell = document.createElement("td");
                 nameCell.textContent = e.name
 
+                const editCell = document.createElement("td");
+                const editButton = document.createElement("button")
+                editButton.className = "round edit"
+                editButton.onclick = function () {
+                    editExpenses(e.id)
+                };
+                editCell.appendChild(editButton)
+
                 const delCell = document.createElement("td");
-                const buttonDel = document.createElement("button");
+                const delButton = document.createElement("button");
+                delButton.className = "round dell"
+                delCell.appendChild(delButton)
 
-                const showCell = document.createElement("td");
-                const buttonShow = document.createElement("button")
-                
-
-                
                 row.appendChild(nameCell)
-                showCell.appendChild(buttonShow)
-                delCell.appendChild(buttonDel)
-                row.appendChild(showCell)
+                row.appendChild(editCell)
                 row.appendChild(delCell)
                 tbody.appendChild(row)
             })
