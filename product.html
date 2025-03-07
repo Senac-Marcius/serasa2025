@@ -6,8 +6,11 @@
 </head>
     <meta charset="UTF-8"/>
     <title>Produto</title>
-    <style>body{
-      margin: 0;
+    <style>
+    
+    
+    body{
+    margin: 0;
   }
 
   h1{
@@ -19,9 +22,9 @@
   }
 
   section{
-      display: flex;
-      margin: 0 auto;
-      flex-direction: column;
+    display: flex;
+    margin: 0 auto;
+    flex-direction: column;
   }
 
   #scRegister{
@@ -65,34 +68,37 @@
             }
 
   button:hover {                  
-    background: linear-gradient(135deg, #5b77e0, #925ec4);
-    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
-    transform: translateY(-2px);
-    
-    
-    
-      /*background: linear-gradient(135deg, #5b77e0, #925ec4);
-      box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
-      transform: translateY(-2px);
-      margin: auto;*/
+     background: linear-gradient(135deg, #5b77e0, #925ec4);
+     box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+     transform: translateY(-2px);
   }
 
   button:active {
       transform: translateY(1px);
       box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
   }
-
+  button.round {
+     width: 35px;
+     height: 35px;
+     border-radius: 50%;
+  }
+  button.edit {
+     background: #ff0000;
+  }
+  button.dell {
+     background: #fff000;
+  }
   body{
-      margin: 0;
-      font-family: Arial, sans-serif;
+     margin: 0;
+     font-family: Arial, sans-serif;
   }
 
   form{
-    background-color: #F2F2F2;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    width: 180px;
+     background-color: #F2F2F2;
+     padding: 30px;
+     border-radius: 20px;
+     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+     width: 180px;
   }
     </style>
 </head>
@@ -101,6 +107,7 @@
   <div class="row">
   <section id="scRegister">
     <form>
+      <input id = "id" type = "hidden" value = "-1"/>
       <label>Nome:</label><input id ="name" type="text"/><br>
       <label>Descrição: </label><input type="textarea" id ="description"/><br>
       <button type="button" id="register" onclick="handleRegister()">Cadastrar</button>
@@ -147,18 +154,54 @@
     products.push(p)
     return "Cadastrado com sucesso"
   }
-  
+    function putProduct(req, id){
+    
+    let idx = products.findIndex(p => p.id == id)
+
+    if(idx == -1) return "Nothing Register"
+
+    products.splice(idx, 1)
+    
+    if(req.description != undefined) products[idx].description = req.description
+    if(req.creatAt != undefined) products[idx].creatAt = req.creatAt
+    if(req.name != undefined) products[idx].name = req.name
+ 
+    return products[idx]
+ 
+}
   function handleRegister(){
-    console.log(
-      setProduct({  
-        name: document.getElementById("name").value, 
-        createAt: "2000-12-31", 
-        description: document.getElementById("description").value
+    let id = document.getElementById('id').value
+    
+    if(id == -1){
+    
+      console.log(
+        setProduct({  
+          name: document.getElementById("name").value, 
+          createAt: "2000-12-31", 
+          description: document.getElementById("description").value
       })
     )
-    
     listProducts(products)
+    }else if(id != -1){
+      putProduct({ 
+        name: document.getElementById("name").value,
+        description: document.getElementById("description").value
+      },id)
+//chamar a função de put
+    document.getElementById('id').value = -1;
+    }else{
+      console.log("erro")
+    }
+
+    
   }
+
+    function editProduct(id){
+      let product = products.find(p => p.id == id)
+      document.getElementById("name").value = product.name
+      document.getElementById("description").value = product.description
+      document.getElementById("id").value = product.id
+    }
 
   function listProducts(pList){
     const tbody = document.querySelector("#scList tbody")
@@ -170,19 +213,23 @@
         const nameCell = document.createElement("td");
         nameCell.textContent = p.name
 
-        const viewCell = document.createElement("td");
-        const viewButton = document.createElement("button") ;
-        
-        const dellCell = document.createElement("td")
-        const dellButton = document.createElement("button")
+        const editCell = document.createElement("td");
+        const editButton = document.createElement("button");
+        editButton.className = "round edit"
+        editButton.onclick = function () {
+          editProduct(p.id)
+        };
+        editCell.appendChild(editButton);
 
-        
+
+        const dellCell = document.createElement("td");
+        const dellButton = document.createElement("button");
+        dellButton.className = "round dell"
+        dellCell.appendChild(dellButton);
 
         row.appendChild(nameCell);
-        row.appendChild(viewCell);
-        viewCell.appendChild(viewButton);
+        row.appendChild(editCell);
         row.appendChild(dellCell);
-        dellCell.appendChild(dellButton);
         tbody.appendChild(row);
     })
   }
