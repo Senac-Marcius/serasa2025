@@ -74,6 +74,23 @@
                 transform: translateY(1px);
                 box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
             }
+
+            button.roud {
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+            }
+
+            button.edit {
+                background: #ff0000;
+
+            }
+            
+            button.dell {
+                background: #ffff00;
+                
+            }
+
         </style>
     </head>
     <body>
@@ -81,6 +98,7 @@
         <div class="row">
             <section id="scRegister">
                 <form>
+                    <input id="id" type="hidden" value="-1"/>
                     <label for="day">Dia da semana:</label>
                     <select id="day" name="day">
                     <option value="domingo">Domingo</option>
@@ -115,7 +133,9 @@
             </section>
         </div>
     </body>
+
     <script>
+
         var scales =[]
 
         function setScales(req){
@@ -143,20 +163,24 @@
             }
 
             let s = {
-                id: scales.length - 1,
+                id: scales.length -1,
                 day: req.day,
                 starttime: req.starttime,
                 endtime: req.endtime,
-                createAt: req.createAt,
+                
+                
                 userId: req.userId
         }
         
         scales.push(s)
         return "Escala Cadastrada"
         }
+        
+        function handleRegister(req,id){
+            let idx = document.getElementById("id").value
 
-        function handleRegister(){
-            console.log(
+            if(id == -1){
+                console.log(
                 setScales({
                     day: document.getElementById("day").value,
                     starttime: document.getElementById("starttime").value,
@@ -164,36 +188,71 @@
                     createAt: document.getElementById("createAt").value,
                     userId: "0"
                 })
-            )
+                )
 
+            }else if(id > -1){
+                putScale(req,id)
+                    
+                        if(req.day != undefined)scales[idx].day = req.day
+                        if(req.starttime != undefined)scales[idx].starttime = req.starttime
+                        if(req.endtime != undefined)scales[idx].endtime = req.endtime
+                        if(req.createAt != undefined)scales[idx].createAt= req.createAt
+                        if(req.userId!= undefined)scales[idx].userId = req.userId
+
+                        return scales[idx]
+
+                        scales[idx]
+                
+                
+                document.getElementById('id').value = -1
+                
+
+            }else{
+                console.log("Erro")
+            }
+            
             listScales(scales)
         }
     
+        function editScale(id){
+            let scale= scales.find(s => s.id == id)
+
+            document.getElementById("id").value = scale.id
+            document.getElementById("day").value = scale.day
+            document.getElementById("starttime").value = scale.starttime
+            document.getElementById("endtime").value = scale.endtime
+            document.getElementById("createAt").value = scale.createAt
+        }
+
         function listScales(sList){
             const tbody = document.querySelector("#scList tbody")
             tbody.innerHTML = ""
-
+        
             sList.forEach(s =>{
                 const row = document.createElement("tr");
             
                 const dayCell = document.createElement("td");
                 dayCell.textContent = s.day;
 
-                const buttonCell = document.createElement("button");
-                const viewCell = document.createElement("td");
-                viewCell.appendChild(buttonCell);
+                const editButton = document.createElement("button");
+                const editCell = document.createElement("td");
+                editButton.className = " roud edit"
+                editButton.onclick = function(){
+                    editScale(s.id)
+                };
+                editCell.appendChild(editButton);
 
-                const buttondellCell = document.createElement("button");
+                const dellButton = document.createElement("button");
                 const dellCell = document.createElement("td");
-                dellCell.appendChild(buttondellCell);
+                dellButton.className = " roud dell"
+                dellCell.appendChild(dellButton);
                 
 
                 row.appendChild(dayCell);
-                row.appendChild(viewCell);
+                row.appendChild(editCell);
                 row.appendChild(dellCell);
                 tbody.appendChild(row);
             })
         }
-        
     </script>
 </html>
