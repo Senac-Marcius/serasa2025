@@ -166,16 +166,32 @@
                     }) 
                 )
             }else if(id > -1){
-                    //chamar a funcao de put
+                //chamar a funcao de put =>
+
+                //OBSERVACAO: N COONSEGUI RESOLVER O EXERCICIO DE CHAMAR O PUT
+                function putProduct(id){
+    
+                    let idx = locals.findIndex(l => l.id == id)
+
+                    if(idx == -1) return "Nothing Register"
+
+                    products.splice(idx, 1)
+                
+                    if(idx == -1) return "Não encontrado"
+                    if(req.name != undefined) locals[idx].name = req.name
+                    if(req.area != undefined) locals[idx].area = req.area
+                    if(req.escription != undefined) locals[idx].description = req.escription
+                    if(req.adress != undefined) locals[idx].adress = req.adress
+                
+                    return locals[idx]
+                }
+
+
                 document.getElementById("id").value = -1
             }else{
                 console.log("erro")
             }
                 listLocals(locals)
-        }
-        
-        function putLocal(){
-            
         }
 
         function editLocal(id){
@@ -185,6 +201,28 @@
             document.getElementById("area").value = local.area
             document.getElementById("id").value = local.id
         }
+
+    /*
+    function putProduct(id){
+    
+    let idx = locals.findIndex(l => l.id == id)
+
+    if(idx == -1) return "Nothing Register"
+
+    products.splice(idx, 1)
+ 
+    
+
+    if(idx == -1) return "Não encontrado"
+    if(req.description != undefined) products[idx].description = req.description
+    if(req.creatAt != undefined) locals[idx].creatAt = req.creatAt
+    if(req.name != undefined) locals[idx].name = req.name
+ 
+    return locals[idx]
+ 
+}*/
+
+
 
         function listLocals(lList){
             const tbody = document.querySelector("#scList tbody") //o # indica q está procurando o Id. 
