@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="pt-BR">
     <head>
         <meta charset="UTF-8" />
         <title>Projeto Integrador</title>
@@ -99,12 +100,12 @@
 
     </head>
     <body>
-      
+        
         <h1>Formulário para cadastro de Projeto:</h1>
         <div class="row">
             <section id="scRegister">
                 <form>
-                    <input id="id" value="-1" style="display:none;" />
+                    <input id="id" value="-1" type="hidden"/>
                     <label>Criador do Projeto:</label>  
                     <input id="nameuser" type="text" placeholder="Nome Completo"/> 
                     <input id="cpf" type="text" placeholder="CPF" maxlength="14" oninput="formatCPF(this)" />
@@ -161,27 +162,29 @@
         </div>
     </body>
     <script>
-        function formatCPF(campo) {
-                    let cpf = campo.value.replace(/\D/g, ''); // Remove tudo o que não for número
-                    if (cpf.length <= 3) {
-                        campo.value = cpf;
-                    } else if (cpf.length <= 6) {
-                        campo.value = cpf.replace(/(\d{3})(\d{1,})/, '$1.$2');
-                    } else if (cpf.length <= 9) {
-                        campo.value = cpf.replace(/(\d{3})(\d{3})(\d{1,})/, '$1.$2.$3');
-                    } else if (cpf.length <= 11) {
-                        campo.value = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{1,})/, '$1.$2.$3-$4');
-                    }
+        function 
+            formatCPF(campo) {
+                let cpf = campo.value.replace(/\D/g, ''); // Remove tudo o que não for número
+                if (cpf.length <= 3) {
+                    campo.value = cpf;
+                } else if (cpf.length <= 6) {
+                    campo.value = cpf.replace(/(\d{3})(\d{1,})/, '$1.$2');
+                } else if (cpf.length <= 9) {
+                    campo.value = cpf.replace(/(\d{3})(\d{3})(\d{1,})/, '$1.$2.$3');
+                } else if (cpf.length <= 11) {
+                    campo.value = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{1,})/, '$1.$2.$3-$4');
                 }
+            }
 
         var projects = []
 
         function setProject(req){
-        
+            const urlPattern = /^(https?:\/\/)[^\s$.?#].[^\s]*$/;
+
             let p = {
                 namep: req.namep,
                 name: req.name,
-                id: projects.length,
+                id: projects.length? projects[projects.length -1].id+1 : 0,
                 url: req.url,
                 createAt: req.createAt, // yyyy-MM-DD
                 userid: req.userid,
@@ -197,13 +200,33 @@
             return "Projeto Cadastrado"
         }
         
+        function putProjects(req,id){
+            let idx = projects.findIndex(p => p.id == id)
+
+            if(idx == -1) return "Não Encontrado"
+
+            if(req.id != undefined) projects[idx].id = req.id
+            if(req.name != undefined) projects[idx].name = req.name
+            if(req.namep != undefined) projects[idx].namep = req.namep
+            if(req.url != undefined) projects[idx].url = req.url
+            if(req.createAt != undefined) projects[idx].createAt = req.createAt
+            if(req.resources != undefined) projects[idx].resources = req.resources
+            if(req.activity != undefined) projects[idx].activity = req.activity
+            if(req.description != undefined) projects[idx].description = req.description
+            if(req.objective != undefined) projects[idx].objective = req.objective
+            if(req.timeline != undefined) projects[idx].timeline = req.timeline
+            if(req.methodology != undefined) projects[idx].methodology = req.methodology
+
+            return projects[idx]
+        }
+
         function handleRegister(){// handle é usado para chamar a função
             let id = document.getElementById('id').value
 
             if(id == -1){
                 console.log(
                     setProject({
-                        id: id;
+                        id: id,
                         name: document.getElementById("nameuser").value,
                         namep: document.getElementById("namep").value,
                         url: document.getElementById("website").value,
@@ -221,25 +244,31 @@
                     })
                 )
             }else if(id > -1){
-                let idx = projects.findIndex(p => p.id == id)
-                if(idx != -1) return "Não Encontrado"
-                    projects[idx] = {}
-                    id: id;
-                    name: document.getElementById("nameuser").value
-                    if(req.url != undefined) projects[idx].url = req.url
-                    if(req.createAt != undefined) projects[idx].createAt = req.createAt
-                    if(req.resources != undefined) projects[idx].resources = req.resources
-                    if(req.activity != undefined) projects[idx].activity = req.activity
-                    if(req.description != undefined) projects[idx].description = req.description
-                    if(req.objective != undefined) projects[idx].objective = req.objective
-                    if(req.timeline != undefined) projects[idx].timeline = req.timeline
-                    if(req.methodology != undefined) projects[idx].methodology = req.methodology
-   
-                let id = document.getElementById('id').value = -1
+                console.log(  
+                    putProjects({
+                            id: id,
+                            name: document.getElementById("nameuser").value,
+                            namep: document.getElementById("namep").value,
+                            url: document.getElementById("website").value,
+                            createAt: document.getElementById("createAt").value,
+                            userid: document.getElementById("cpf").value,
+                            resources: document.getElementById("resources").value,
+                            description: document.getElementById("description").value, 
+                            activity: document.getElementById("activity").value,
+                            timeline: "6 meses apos o inicio do projeto, realocando o mesmo em outro lugar por mais 6 meses num periodo de 3 anos",
+                            objective: document.getElementById("objective").value,
+                            methodology: "Técnica: " + document.getElementById("tecnic").value + 
+                                        " | Processos: " + document.getElementById("process").value + 
+                                        " | Estratégias: " + document.getElementById("strategy").value +
+                                        " | Planejamento: " + document.getElementById("planning").value
+                        }, id)
+                    )
+                
+                    
             }else{
                 console.log("erro")
             }
-
+            document.getElementById('id').value = -1
             listProjects(projects)
         }
 
@@ -247,26 +276,17 @@
             let project = projects.find(p => p.id == id)
 
             document.getElementById("description").value = project.description
-            document.getElementById("Nome do Projeto").value = project.description
-        }
-
-        function editProject(id) {
+            document.getElementById("namep").value = project.namep
+            document.getElementById("id").value = project.id  // Define o ID do projeto para edição
+        } 
+        function dellProject(id){
+            let idx = projects.findIndex(p => p.id == id)
+            if(idx == -1) return "não econtrado"
             
-            let project = projects.find(p => p.id == id);
-            document.getElementById("nameuser").value = project.name;
-            document.getElementById("namep").value = project.namep;
-            document.getElementById("website").value = project.url;
-            document.getElementById("createAt").value = project.createAt;
-            document.getElementById("cpf").value = project.userid;
-            document.getElementById("resources").value = project.resources;
-            document.getElementById("description").value = project.description;
-            document.getElementById("activity").value = project.activity;
-            document.getElementById("objective").value = project.objective;
-            document.getElementById("tecnic").value = project.methodology.split(' | ')[0].split(': ')[1];
-            document.getElementById("process").value = project.methodology.split(' | ')[1].split(': ')[1];
-            document.getElementById("strategy").value = project.methodology.split(' | ')[2].split(': ')[1];
-            document.getElementById("planning").value = project.methodology.split(' | ')[3].split(': ')[1];
-            document.getElementById('id').value = id; // Define o ID do projeto para edição
+            projects.splice(idx, 1)
+            
+            listProjects(projects)
+            return "deletado com sucesso"
         }
 
         function listProjects(plist){
@@ -274,41 +294,40 @@
             tbody.innerHTML = "";
 
             projects.forEach(p => {    // se utiliza quando se quer utilizar a mesma função para todos os vetores e dentro do tbody vai um "tr"
-                const row = document.createElement("tr");
+                const row = document.createElement("tr")
 
-                const namepCell = document.createElement("td"); 
+                const namepCell = document.createElement("td")
                 namepCell.textContent = p.namep
 
-                const editButton = document.createElement("button");
+                const editCell = document.createElement("td")
+                const editButton = document.createElement("button")
                 editButton.className = "edit"
                 editButton.textContent = "Editar"
                 editButton.onclick = function() {
                     editProject(p.id)
-                };
-                
+                }
+                editCell.appendChild(editButton)
 
-                const dellButton = document.createElement("button");
+                
+                const dellCell = document.createElement("td")
+                const dellButton = document.createElement("button")
                 dellButton.className = "dell"
                 dellButton.textContent = "Deletar"
+                dellButton.onclick = function() {
+                    dellProject(p.id)
+                }
+                dellCell.appendChild(dellButton)
+
                 
+                row.appendChild(namepCell)
+                row.appendChild(editCell) //Deletar
+                row.appendChild(dellCell) //Editar
 
-                const buttonsCell = document.createElement("td")
-                buttonsCell.appendChild(dellCell); //Deletar
-                buttonsCell.appendChild(editCell); //Editar
-
-                row.appendChild(namepCell);
-                row.appendChild(buttonsCell);
-                tbody.appendChild(row);
+                tbody.appendChild(row)
 
             })
         }
 
-        function formProjects(plist){
-
-
-        }
-
-
-
+       
     </script>
 </html>
