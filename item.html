@@ -65,6 +65,18 @@
                 transform: translateY(1px);
                 box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
             }
+            button.round{
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+            }
+            button.dell{
+                background: #ff0000;
+            
+            }
+            button.edit{
+                background: #ffff00;
+            }
 
     form{
         background-color: #f2f2f2;
@@ -81,6 +93,7 @@
       
             <section id="scRegister">
                 <form>
+                    <input id="id" type="hidden" value="-1">
                     <label>Nome:</label><input  id= "name" type="text"/><br>
                     <label>Marca:</label><input  id= "mark" type="text"/><br>
                     <label>Número de Série:</label><input id= "assetNumber"type="text"/><br>
@@ -117,39 +130,95 @@
         }
 
         function handleRegister(){
+            let id = document.getElementById('id').value
+            if(id== -1){
+            
             console.log(
                 setItens({
+                    id: document.getElementById('id').value,
                     name: document.getElementById("name").value,
                     mark: document.getElementById("mark").value,
                     assetNumber:document.getElementById("assetNumber").value,
                     amount: document.getElementById("amount").value
 
                 }) 
+            
+            
 
             )
+        }else if (id>-1){
+            editIten({
+                id: document.getElementById('id').value,
+                name: document.getElementById('name').value,
+                mark: document.getElementById('mark').value,
+                assetNumber: document.getElementById('assetNumber').value,
+                amount: document.getElementById('amount').value
+                
+            }, id)
+
+            document.getElementById('id').value = -1
+        }else{
+            console.log("erro")
+        }
+        }
 //Criar um formulário com botão usando filtro
             listItens(itens)
-        }
+            console.log(itens)
         
-        function listItens(cList){
+
+
+        function editIten (id){
+            let iten = itens.find(i => i.id == id)
+            document.getElementById('id').value = iten.id,
+            document.getElementById("name").value = iten.name,
+            document.getElementById("mark").value = iten.mark,
+            document.getElementById("assetNumber").value = iten.assetNumber,
+            document.getElementById("amount").value = iten.amount
+        }
+
+        function putItens(req, id){ 
+            let idx = itens.findIndex(i => i.id == id)
+
+            if(idx == -1) return "Não encontrado"
+            document.getElementById(`${id}`)
+
+            if(req.id != undefined) itens[idx].id = req.id
+            if(req.name != undefined) itens[idx].name = req.name 
+            if(req.mark != undefined) itens[idx].mark = req.mark
+            if(req.assetNumber != undefined) itens[idx].assetNumber = req.assetNumber
+            if(req.amount != undefined) itens[idx].amount = req.amount
+
+            return itens[idx]
+}
+
+
+        
+        
+        function listItens(iList){
             const tbody= document.querySelector("#scList tbody")
-            tbody.innerHTML=""
-            cList.forEach(i => {
+            tbody.innerHTML= ""
+            iList.forEach(i => {
                 const row= document.createElement("tr");
 
                 const nameCell= document.createElement("td");
                 nameCell.textContent= i.name
+                nameCell.id = `${i.id}`
 
-                const viewbutton= document.createElement("button");
-                const viewCell= document.createElement("td");
-                viewCell.appendChild(viewbutton)
+                const dellButton= document.createElement("button");
+                const dellCell= document.createElement("td");
+                dellButton.className="round dell"
+                dellCell.appendChild(dellButton)
 
-                const editbutton= document.createElement("button");
+                const editButton= document.createElement("button");
                 const editCell= document.createElement("td");
-                  editCell.appendChild(editbutton)
+                editButton.className= "round edit"
+                editButton.onclick = function(){
+                    editIten(i.id)
+                };
+                editCell.appendChild(editButton)
                 
 
-                row.appendChild(viewCell);
+                row.appendChild(dellCell);
                 row.appendChild(editCell);
                 row.appendChild(nameCell);
                 tbody.appendChild(row);
