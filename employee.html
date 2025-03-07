@@ -25,6 +25,21 @@
             border-radius: 20px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
+        section#esList{
+            background-color: #f2f2f2;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            white-space: nowrap; /* Impede quebra de linha */
+            overflow: hidden; /* Oculta o excesso de texto */
+            text-overflow: ellipsis; /* Adiciona "..." se o texto for muito grande */
+            display: flex;
+            justify-content: horizontal;
+            align-items: vertical;
+            color:#000000;
+            font-family: Arial, Helvetica, sans-serif;
+            
+        }
 
         .row{
             display: flex;
@@ -42,6 +57,31 @@
         }
         br{
         }
+        h2{
+            justify-content: top;
+            align-items: center;  
+        }
+        button.round{
+                width: 35px;
+                height: 35px;
+                border-radius: 38px;
+                font-size: 10px; /* Ajuste conforme necessário */
+                white-space: nowrap; /* Impede quebra de linha */
+                overflow: hidden; /* Oculta o excesso de texto */
+                text-overflow: ellipsis; /* Adiciona "..." se o texto for muito grande */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color:#000000;
+                font-family: Arial, Helvetica, sans-serif;
+                
+            }
+            button.dell{
+                background: #e64444;
+            }
+            button.edit{
+                background: #3af800;
+            }
         button {
                 background: linear-gradient(135deg, #6e8efb, #a777e3);
                 color: white;
@@ -80,6 +120,8 @@
     <div  class="row">
     <section id="eResgister">
         <form id="formEmployee" >
+            <h2>Dados do Funcionário</h2>
+            <input id = "id" type="hidden" value="-1"/>
             <label for="urls">Perfil do Linkedin: </label><input type="text" id="urls" name="urls" placeholder="Insira um perfil (linkedin , catho , etcs..)" /><br>
             <label for="name">Nome Completo: </label><input type="text" id="name" /><br>
             <label for="age">Data de Nascimento: </label><input type="date" id="age" name="age" placeholder="MM/DD/YYYY" maxlength="10"><br>
@@ -227,7 +269,7 @@
         //if(!datePattern.test(req.createAt))return "Campo deve estar no formato YYYY-MM-DD"
 
         let e = {
-            id: employees.length - 1,
+            id: employees.length,
             urls: req.urls,
             name: req.name,
             age: req.age,
@@ -249,6 +291,8 @@
         employees.push(e)
     }
     function handleRegister() {
+        let id = document.getElementById(`id`).value
+        if(id == -1){
         setEmployee({
             urls: document.getElementById("urls").value,
             name: document.getElementById("name").value,
@@ -267,8 +311,6 @@
             createAt: dataFormatada,
             isActive: document.getElementById("isActive").value
         })
-        document.getElementById("formEmployee").reset()
-        listEmployees(employees)
         if (document.getElementById("sex").value == "other") {
             let otherSex = document.getElementById("otherSexInput").value
             document.getElementById("sex").value = othe
@@ -277,9 +319,85 @@
             option.innerHTML = document.getElementById("otherSexInput").value
             sGender.appendChild(option)
         }
+        
+        document.getElementById("formEmployee").reset()
+        listEmployees(employees)
+        } else if(id > -1){
+            putEmployye({
+            urls: document.getElementById("urls").value,
+            name: document.getElementById("name").value,
+            age: document.getElementById("age").value,
+            tell: document.getElementById("tell").value,
+            email: document.getElementById("email").value,
+            address: document.getElementById("address").value,
+            nationality: document.getElementById("nationality").value,
+            discPersonality: document.getElementById("discPersonality").value,
+            cpf: document.getElementById("cpf").value,
+            sex: document.getElementById("sex").value,
+            maritalStatus: document.getElementById("martialStatus").value,
+            position: document.getElementById("position").value,
+            ethnicity: document.getElementById("ethnicity").value,
+            deficiency: document.getElementById("deficiency").value,
+            isActive: document.getElementById("isActive").value
+            },id)
+
+            
+            document.getElementById("formEmployee").reset()
+            document.getElementById("id").value = -1
+        } else{
+            console.log("Erro Ao Cadastrar usuario")
+        }
     }
-   
+    function editEmployees(id){
+        let employee = employees.find(e => e.id == id)
+
+        document.getElementById("id").value = employee.id
+        document.getElementById("urls").value = employee.urls
+        document.getElementById("name").value = employee.name
+        document.getElementById("age").value = employee.age
+        document.getElementById("tell").value = employee.tell
+        document.getElementById("email").value = employee.email
+        document.getElementById("address").value = employee.address
+        document.getElementById("nationality").value = employee.nationality
+        document.getElementById("discPersonality").value = employee.discPersonality
+        document.getElementById("cpf").value = employee.cpf
+        document.getElementById("sex").value = employee.sex
+        document.getElementById("martialStatus").value = employee.maritalStatus
+        document.getElementById("position").value = employee.position
+        document.getElementById("ethnicity").value = employee.ethnicity
+        document.getElementById("deficiency").value = employee.deficiency
+        document.getElementById("createAt").value = employee.createAt
+        document.getElementById("isActive").value = employee.isActive
+
+    }
+    function putEmployye(req ,id){
+
+    if(employees.length == 0)return "Não ha usuarios para alterar"
+    let idx = employees.findIndex(e => e.id == id)
+    document.getElementById(`${id}`).textContent = req.name
+    //operador ternario
+    //employees[idx].age = (req.age != undefined)? req.age : employees[idx].age;
+    req.urls != undefined && (employees[idx].urls = req.urls)   
+    req.name != undefined && (employees[idx].name = req.name)
+    req.age != undefined && (employees[idx].age = req.age)
+    req.tell != undefined && (employees[idx].tell = req.tell)
+    req.email != undefined && (employees[idx].email = req.email)
+    req.address != undefined && (employees[idx].address = req.address)
+    req.nationality!= undefined && (employees[idx].nationality = req.nationality)
+    req.discPersonality!= undefined && (employees[idx].discPersonality = req.discPersonality)
+    req.cpf!= undefined && (employees[idx].cpf = req.cpf)
+    req.sex!= undefined && (employees[idx].sex = req.sex)
+    req.maritalStatus != undefined && (employees[idx].maritalStatus = req.maritalStatus)    
+    req.position != undefined && (employees[idx].position = req.position)
+    req.ethnicity != undefined && (employees[idx].ethnicity = req.ethnicity)
+    req.deficiency!= undefined && (employees[idx].deficiency = req.deficiency)
+    req.createAt!= undefined && (employees[idx].createAt = req.createAt)
+    req.isActive != undefined && (employees[idx].isActive = req.isActive)
+
+    return employees[idx]
+    }
     function listEmployees(elist) {
+        
         const t = document.querySelector("#esList tbody")
         t.innerHTML = ""
 
@@ -287,46 +405,32 @@
             const row = document.createElement("tr")
             const nameCell = document.createElement("td")
             const buttonView = document.createElement("td")
-            const buttonDel = document.createElement("td")
+            const buttonDell = document.createElement("td")
             const buttonDelete = document.createElement("button")
-            const buttonShow = document.createElement("button")
+            const buttonEdit = document.createElement("button")
 
             nameCell.textContent = e.name
-            buttonDelete.textContent = "Deletar"
-            buttonShow.textContent = "Mostrar"
-            buttonShow.addEventListener("click", showEmployye(e.id))
-            buttonDelete.addEventListener("click", deleteEmployee())
+            nameCell.id =`${e.id}`
+            buttonEdit.className = "round edit"
+            buttonDelete.className = "round dell"
+            buttonDelete.textContent = "Dell"
+            buttonEdit.textContent = "Edit"
             
+            buttonEdit.onclick = function(){
+                editEmployees(e.id)
+            }
+            
+
             row.appendChild(nameCell)
             row.appendChild(buttonView)
-            row.appendChild(buttonDel)
-            buttonDel.appendChild(buttonDelete)
-            buttonView.appendChild(buttonShow)
+            row.appendChild(buttonDell)
+            buttonDell.appendChild(buttonDelete)
+            buttonView.appendChild(buttonEdit)
             t.appendChild(row)
 
         })
-
     }
-    function showEmployye(id){
-     if(employees.length == 0)return "Não ha usuarios para mostrar"
-     let infoUser = employees.find(e => e.id == id)
-     console.log(infoUser)
-     const t = document.querySelector("#esList tbody")
-     t.innerHTML = ""
-     const rowInfo = document.createElement("tr")   
-     const showInfo = document.createElement("td")
-     showInfo.textContent = infoUser
-     
-     rowInfo.appendChild(showInfo)
-     t.appendChild(rowInfo)
-
-    }
-    function deleteEmployee(id){
-    if(employees.length == 0)return "Não ha usuarios para deletar"
-    let idx = employees.findIndex(e => e.id == id)
-    employees.splice(idx,1)
-    return "Usuario deletado"
-}           
+        
 </script>
 
 </html>
