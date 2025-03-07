@@ -1,181 +1,258 @@
 <!DOCTYPE html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>notificação</title>
-        <style>
-            form {
-                background-color: #F2F2F2;
-                padding: 40px;
-                border-radius: 20px;
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            }
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <title>notificação</title>
+    <style>
+        form {
+            background-color: #F2F2F2;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
 
-            body{
-                margin: 0;
-            }
+        body {
+            margin: 0;
+        }
 
-            h1{
-                text-align: center;
-                color: #BF54A3;
-                background-color: #f2f2f2;
-                margin: 0
-            }
+        h1 {
+            text-align: center;
+            color: #BF54A3;
+            background-color: #f2f2f2;
+            margin: 0;
+        }
 
-            section{
-                display: flex;
-                margin: 0 auto;
-                flex-direction: column;
-            }
+        section {
+            display: flex;
+            margin: 0 auto;
+            flex-direction: column;
+        }
 
-            #scRegister{
+        .row {
+            display: flex;
+            margin-top: 50px;
+            padding: 20px;
+        }
 
-            }
+        label {
+            font-weight: 600;
+        }
 
-            #scList{
+        br {
+            margin: 10px;
+        }
 
-            }
+        button {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+            margin: 20px auto 0;
+            display: inline-block;
+            margin-right: 10px;
+        }
 
+        button:hover {
+            background: linear-gradient(135deg, #5b77e0, #925ec4);
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
 
-            .row {
-                display: flex;
-                margin-top: 50px;
-                padding: 20px;
-            }
-            label{
-                front-weight: 600;
-            }
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+        }
 
-            br{
-                margin: 10px;
-            }
+        button.round {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+        }
 
-            button {
-                background: linear-gradient(135deg, #6e8efb, #a777e3);
-                color: white;
-                border: none;
-                padding: 12px 24px;
-                font-size: 16px;
-                font-weight: bold;
-                border-radius: 8px;
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-                cursor: pointer;
-                transition: all 0.3s ease-in-out;
-                position: relative;
-                overflow: hidden;
-                margin: 20px auto 0;
-                display: block;
-            }
+        button.dell {
+            background: #f700ff;
+        }
 
-            button:hover {
-                background: linear-gradient(135deg, #5b77e0, #925ec4);
-                box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
-                transform: translateY(-2px);
-            }
+        button.edit {
+            background: #ae00ff;
+        }
 
-            button:active {
-                transform: translateY(1px);
-                box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
-            }
+        .action-buttons {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
 
-
-        </style>
-    </head>
-    <body>
-        <h1>suas notificações</h1>
-        <div class="row">
+        td {
+            word-wrap: break-word;
+            max-width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>suas notificações</h1>
+    <div class="row">
         <section id="scRegister">
-
             <form>
-                <label>nome: </label><input id="name" type="text"/><br><br>
+                <input id="id" type="hidden" value="-1">
+                <label>Nome: </label><input id="name" type="text" /><br><br>
                 <label>Descrição: </label><textarea id="description" type="text"></textarea><br>
-                <label>Url: </label><input id="link" type="text"/><br><br>
-                <button type="button" id="register" onclick="handleRegister()" >CADASTRAR</button> 
-        </form>
-    </section>
+                <label>Url: </label><input id="link" type="text" /><br><br>
+                <label>Categorias:</label>
+                <select id="categoryId">
+                    <option value="1">Categoria 1</option>
+                    <option value="2">Categoria 2</option>
+                </select><br><br>
+                <label>Data de Criação:</label>
+                <input id="creatAt" type="date" /><br><br>
+                <button type="button" id="register" onclick="handleRegister()">CADASTRAR</button>
+            </form>
+        </section>
 
-    <section id="scList">
-        <table>
-            <thead>
-                <th>DESCRIÇÃO</th>
+        <section id="scList">
+            <table>
+                <thead>
+                    <th>NOME</th>
+                    <th>AÇÃO</th>
                 </thead>
-                <tbody>
-                
-                </tbody>
-                </table>
-            </section>
-        </div>
-        </body>
+                <tbody></tbody>
+            </table>
+        </section>
+    </div>
 
     <script>
-        var notifications = [] 
-        function setNotification(req){
-            const urlPattern = /^(https?:\/\/)?([a-z0-9-]+\.)+[a-z]{2,6}(\/[^\s]*)?$/
-            const datePattern = /^\d{4}-\d{2}-\d{2}$/
+        var notifications = [];
 
-            if (!urlPattern.test(req.url)){
-                return "campo url deve conter o seguinte formato https://dominio."
+        function setNotification(req) {
+            const urlPattern = /^(https?:\/\/)?([a-z0-9-]+\.)+[a-z]{2,6}(\/[^\s]*)?$/;
+            const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+
+            if (!urlPattern.test(req.url)) {
+                return "campo url deve conter o seguinte formato https://dominio.";
             }
 
-            if(!datePattern.test(req.creatAt)){
-                return "campo createAT deve conter o seguinte formato YYYY-MM-DD"
+            if (!datePattern.test(req.creatAt)) {
+                return "campo createAT deve conter o seguinte formato YYYY-MM-DD";
             }
-            if(!req.description.length > 244){
-                return "campo description deve conter ate 244 caracters"
+
+            if (req.description.length > 244) {
+                return "campo description deve conter ate 244 caracteres";
             }
 
             let n = {
                 id: notifications.length,
                 description: req.description,
                 categoryId: req.categoryId,
-                url:req.url,
+                url: req.url,
                 creatAt: req.creatAt,
-                userId: req.userId,
-            }
-            notifications.push(n)
-            return "cadastrado"
-        } 
-
-        function handleRegister(){
-            console.log(
-                setNotification({
-                    description: document.getElementById("description").value,
-                    categoryId: "Niveis de urgência",
-                    url:document.getElementById("link").value,
-                    creatAt: "2025-01-01",
-                    userId: 0
-                })
-            )
-
-            listNotifications(notifications)
+            };
+            notifications.push(n);
+            return "cadastrado";
         }
 
-        function listNotifications(nList){
-            const tbody = document.querySelector("#scList tbody")
-            tbody.innerHTML = ""  
+        function handleRegister() {
+            let id = document.getElementById('id').value;
+
+            // Se o id for -1, estamos criando uma nova notificação
+            if (id == -1) {
+                const message = setNotification({
+                    description: document.getElementById("description").value,
+                    categoryId: document.getElementById("categoryId").value,
+                    url: document.getElementById("link").value,
+                    creatAt: document.getElementById("creatAt").value
+                });
+                console.log(message);
+            } else {
+                // Atualiza a notificação existente
+                let notification = notifications.find(n => n.id == id);
+
+                if (notification) {
+                    notification.description = document.getElementById("description").value;
+                    notification.url = document.getElementById("link").value;
+                    notification.creatAt = document.getElementById("creatAt").value;
+                    notification.categoryId = document.getElementById("categoryId").value;
+                }
+
+                // Resetar o ID após salvar para garantir que o próximo cadastro será novo
+                document.getElementById('id').value = -1;
+
+                // Alterar o texto do botão para "Cadastrar" novamente
+                const registerButton = document.querySelector("#register");
+                registerButton.textContent = "CADASTRAR";
+                registerButton.setAttribute("onclick", "handleRegister()");
+            }
+
+            // Atualiza a lista de notificações
+            listNotifications(notifications);
+        }
+
+        function editNotification(id) {
+            let notification = notifications.find(n => n.id == id);
+
+            // Preenche os campos com os dados da notificação
+            document.getElementById("description").value = notification.description;
+            document.getElementById("link").value = notification.url;
+            document.getElementById("categoryId").value = notification.categoryId;
+            document.getElementById("creatAt").value = notification.creatAt;
+            document.getElementById("id").value = notification.id;
+
+            // Alterando o texto do botão para "Salvar"
+            const registerButton = document.querySelector("#register");
+            registerButton.textContent = "Salvar";
+            registerButton.setAttribute("onclick", `handleRegister()`);
+        }
+
+        function deleteNotification(id) {
+            notifications = notifications.filter(n => n.id != id);
+            listNotifications(notifications);
+        }
+
+        function listNotifications(nList) {
+            const tbody = document.querySelector("#scList tbody");
+            tbody.innerHTML = "";
 
             notifications.forEach(n => {
                 const row = document.createElement("tr");
 
                 const descriptionCell = document.createElement("td");
-                descriptionCell.textContent = n.description
+                descriptionCell.textContent = n.description;
 
-                const viewcell = document.createElement("td");
-                const viewbutton = document.createElement("button");
-                viewcell.appendChild(viewbutton);
+                const actionsCell = document.createElement("td");
+                actionsCell.className = "action-buttons";
 
+                // Edit button
+                const editButton = document.createElement("button");
+                editButton.className = "round edit";
+                editButton.textContent = "Editar";
+                editButton.id = `editButton-${n.id}`;
+                editButton.onclick = function () {
+                    editNotification(n.id);
+                };
+                actionsCell.appendChild(editButton);
 
-                const delcell = document.createElement("td");
-                const delbutton = document.createElement("button");
-                delcell.appendChild(delbutton);
-
-           
+                // Delete button
+                const dellButton = document.createElement("button");
+                dellButton.className = "round dell";
+                dellButton.textContent = "Excluir";
+                dellButton.onclick = function () {
+                    deleteNotification(n.id);
+                };
+                actionsCell.appendChild(dellButton);
 
                 row.appendChild(descriptionCell);
-                row.appendChild(viewcell);
-                row.appendChild(delcell);
+                row.appendChild(actionsCell);
 
                 tbody.appendChild(row);
-            })
+            });
         }
     </script>
+</body>
 </html>
