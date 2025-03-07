@@ -74,6 +74,20 @@
                     box-shadow: 0px 6px 15px rgba(0,0, 0, 0.2);
                 }
 
+                button.round {
+                    width: 35px;
+                    height: 35px;
+                    border-radius: 50%;
+                }
+
+                button.dell{
+                    background: #ff0000;
+                }
+
+                button.edit{
+                    background: #ffff00;
+                }
+
                 form{
                     background-color:#f2f2f2;
                     padding: 40px;
@@ -88,6 +102,7 @@
         <div class="row">
             <section id="scRegister">
                 <form>
+                    <input id="id" type = "hidden" value = "-1"/>
                     <label>Cargo: </label><input id="positions" type="text" /><br><p>
                     <label>Descrição: </label><input id="description" type="text" /><br></p>
                     <label>Salário: </label><input id="salary" type="currency" /><br></p>
@@ -128,7 +143,7 @@
             }
 
             let p = {
-                id: positions.lengt - 1, 
+                id: positions.length, 
                 name: req.name,
                 description: req.description,
                 salary: req.salary,
@@ -141,19 +156,66 @@
             positions.push(p)
             return "Cadastrado com sucesso!"
         }
+        
+        function putPosition(req, id){
+            let idx = positions.findIndex(p => p.id == id)
+            if (idx !== -1) {
+
+                if(req.description != undefined) positions[idx].description = req.description
+                if(req.name != undefined) positions[idx].name = req.name
+                if(req.salary != undefined) positions[idx].salary = req.salary
+                if(req.workHours != undefined) positions[idx].workHours = req.workHours
+                if(req.department != undefined) positions[idx].department = req.department
+                if(req.supervisor != undefined) positions[idx].supervisor = req.supervisor
+                if(req.creatAt != undefined) positions[idx].creatAt = req.creatAt
+            }
+            return positions[idx]
+
+            
+        }
+
         function handleRegister(){
-            console.log(
-                setPositions({
-                    name: document.getElementById("positions").value,
-                    description: document.getElementById("description").value,
-                    salary: document.getElementById("salary").value,
-                    workHours: document.getElementById("workHours").value,
-                    department: document.getElementById("department").value,
-                    supervisor: document.getElementById("supervisor").value,
-                    creatAt: document.getElementById("date").value,
-                })
-            )
-            listPositions(positions)
+            let id = document.getElementById("id").value
+            
+            if(id == -1){
+                    setPositions({
+                        name: document.getElementById("positions").value,
+                        description: document.getElementById("description").value,
+                        salary: document.getElementById("salary").value,
+                        workHours: document.getElementById("workHours").value,
+                        department: document.getElementById("department").value,
+                        supervisor: document.getElementById("supervisor").value,
+                        creatAt: document.getElementById("date").value,
+                    })
+                    listPositions(positions)
+                }else{
+                putPosition({
+                        name: document.getElementById("positions").value,
+                        description: document.getElementById("description").value,
+                        salary: document.getElementById("salary").value,
+                        workHours: document.getElementById("workHours").value,
+                        department: document.getElementById("department").value,
+                        supervisor: document.getElementById("supervisor").value,
+                        creatAt: document.getElementById("date").value,
+                },id)
+                        listPositions(positions)
+                        document.getElementById("id").value = -1
+                console.log("Erro")
+            }
+            
+        }
+
+        function editPosition (id){
+            let  position = positions.find(p => p.id == id);
+            document.getElementById("id").value = position.id
+            document.getElementById("positions").value = position.name
+            document.getElementById("description").value = position.description
+            document.getElementById("salary").value = position.salary
+            document.getElementById("workHours").value = position.workHours
+            document.getElementById("department").value = position.department
+            document.getElementById("supervisor").value = position.supervisor
+            document.getElementById("date").value = position.creatAt
+            
         }
 
         function listPositions (pList){
@@ -168,15 +230,21 @@
 
                 const cellDell = document.createElement("td");
                 const buttonDel = document.createElement("button");
+                buttonDel.className = "round dell";
                 cellDell.appendChild(buttonDel);
 
-                const cellView = document.createElement("td");
-                const buttonView = document.createElement("button");
-                cellView.appendChild(buttonView);
+                const editCell = document.createElement("td");
+                const editButton = document.createElement("button");
+                editButton.className = "round edit";
+                editButton.onclick = function(){
+                    editPosition (p.id);
+                };
+
+                editCell.appendChild(editButton);
                 
                 row.appendChild(nameCell);
                 row.appendChild(cellDell);
-                row.appendChild(cellView);
+                row.appendChild(editCell);
 
                 tbody.appendChild(row);
             })
