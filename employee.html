@@ -40,6 +40,20 @@
             font-family: Arial, Helvetica, sans-serif;
             
         }
+        section#searchEs{
+            background-color: #f2f2f2;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            white-space: nowrap; /* Impede quebra de linha */
+            overflow: hidden; /* Oculta o excesso de texto */
+            text-overflow: ellipsis; /* Adiciona "..." se o texto for muito grande */
+            display: flex;
+            justify-content: horizontal;
+            align-items: vertical;
+            color:#000000;
+            font-family: Arial, Helvetica, sans-serif;
+        }
 
         .row{
             display: flex;
@@ -175,6 +189,16 @@
             <button type="button" id="register" onclick="handleRegister()">CADASTRAR</button><br>
         </form>
     </section>
+    <section id="searchEs">
+        <table>
+            <thead>
+                <th>RESULTADO DA BUSCA</th>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </section>
     <section id="esList">
         <table>
             <thead>
@@ -293,61 +317,62 @@
     function handleRegister() {
         let id = document.getElementById(`id`).value
         if(id == -1){
-        setEmployee({
-            urls: document.getElementById("urls").value,
-            name: document.getElementById("name").value,
-            age: document.getElementById("age").value,
-            tell: document.getElementById("tell").value,
-            email: document.getElementById("email").value,
-            address: document.getElementById("address").value,
-            nationality: document.getElementById("nationality").value,
-            discPersonality: document.getElementById("discPersonality").value,
-            cpf: document.getElementById("cpf").value,
-            sex: document.getElementById("sex").value,
-            maritalStatus: document.getElementById("martialStatus").value,
-            position: document.getElementById("position").value,
-            ethnicity: document.getElementById("ethnicity").value,
-            deficiency: document.getElementById("deficiency").value,
-            createAt: dataFormatada,
-            isActive: document.getElementById("isActive").value
-        })
-        if (document.getElementById("sex").value == "other") {
-            let otherSex = document.getElementById("otherSexInput").value
-            document.getElementById("sex").value = othe
-            const sGender = document.getElementById("sex")
-            const option = document.createElement("option")
-            option.innerHTML = document.getElementById("otherSexInput").value
-            sGender.appendChild(option)
-        }
-        
-        document.getElementById("formEmployee").reset()
-        listEmployees(employees)
+            setEmployee({
+                urls: document.getElementById("urls").value,
+                name: document.getElementById("name").value,
+                age: document.getElementById("age").value,
+                tell: document.getElementById("tell").value,
+                email: document.getElementById("email").value,
+                address: document.getElementById("address").value,
+                nationality: document.getElementById("nationality").value,
+                discPersonality: document.getElementById("discPersonality").value,
+                cpf: document.getElementById("cpf").value,
+                sex: document.getElementById("sex").value,
+                maritalStatus: document.getElementById("martialStatus").value,
+                position: document.getElementById("position").value,
+                ethnicity: document.getElementById("ethnicity").value,
+                deficiency: document.getElementById("deficiency").value,
+                createAt: dataFormatada,
+                isActive: document.getElementById("isActive").value
+            })
+            if (document.getElementById("sex").value == "other") {
+                let otherSex = document.getElementById("otherSexInput").value
+                document.getElementById("sex").value = othe
+                const sGender = document.getElementById("sex")
+                const option = document.createElement("option")
+                option.innerHTML = document.getElementById("otherSexInput").value
+                sGender.appendChild(option)
+            }
+            
+            document.getElementById("formEmployee").reset()
         } else if(id > -1){
             putEmployye({
-            urls: document.getElementById("urls").value,
-            name: document.getElementById("name").value,
-            age: document.getElementById("age").value,
-            tell: document.getElementById("tell").value,
-            email: document.getElementById("email").value,
-            address: document.getElementById("address").value,
-            nationality: document.getElementById("nationality").value,
-            discPersonality: document.getElementById("discPersonality").value,
-            cpf: document.getElementById("cpf").value,
-            sex: document.getElementById("sex").value,
-            maritalStatus: document.getElementById("martialStatus").value,
-            position: document.getElementById("position").value,
-            ethnicity: document.getElementById("ethnicity").value,
-            deficiency: document.getElementById("deficiency").value,
-            isActive: document.getElementById("isActive").value
+                urls: document.getElementById("urls").value,
+                name: document.getElementById("name").value,
+                age: document.getElementById("age").value,
+                tell: document.getElementById("tell").value,
+                email: document.getElementById("email").value,
+                address: document.getElementById("address").value,
+                nationality: document.getElementById("nationality").value,
+                discPersonality: document.getElementById("discPersonality").value,
+                cpf: document.getElementById("cpf").value,
+                sex: document.getElementById("sex").value,
+                maritalStatus: document.getElementById("martialStatus").value,
+                position: document.getElementById("position").value,
+                ethnicity: document.getElementById("ethnicity").value,
+                deficiency: document.getElementById("deficiency").value,
+                isActive: document.getElementById("isActive").value
             },id)
 
-            
             document.getElementById("formEmployee").reset()
             document.getElementById("id").value = -1
         } else{
             console.log("Erro Ao Cadastrar usuario")
         }
+
+        listEmployees(employees)
     }
+
     function editEmployees(id){
         let employee = employees.find(e => e.id == id)
 
@@ -368,38 +393,62 @@
         document.getElementById("deficiency").value = employee.deficiency
         document.getElementById("createAt").value = employee.createAt
         document.getElementById("isActive").value = employee.isActive
-
     }
+
     function putEmployye(req ,id){
 
-    if(employees.length == 0)return "Não ha usuarios para alterar"
-    let idx = employees.findIndex(e => e.id == id)
-    document.getElementById(`${id}`).textContent = req.name
-    //operador ternario
-    //employees[idx].age = (req.age != undefined)? req.age : employees[idx].age;
-    req.urls != undefined && (employees[idx].urls = req.urls)   
-    req.name != undefined && (employees[idx].name = req.name)
-    req.age != undefined && (employees[idx].age = req.age)
-    req.tell != undefined && (employees[idx].tell = req.tell)
-    req.email != undefined && (employees[idx].email = req.email)
-    req.address != undefined && (employees[idx].address = req.address)
-    req.nationality!= undefined && (employees[idx].nationality = req.nationality)
-    req.discPersonality!= undefined && (employees[idx].discPersonality = req.discPersonality)
-    req.cpf!= undefined && (employees[idx].cpf = req.cpf)
-    req.sex!= undefined && (employees[idx].sex = req.sex)
-    req.maritalStatus != undefined && (employees[idx].maritalStatus = req.maritalStatus)    
-    req.position != undefined && (employees[idx].position = req.position)
-    req.ethnicity != undefined && (employees[idx].ethnicity = req.ethnicity)
-    req.deficiency!= undefined && (employees[idx].deficiency = req.deficiency)
-    req.createAt!= undefined && (employees[idx].createAt = req.createAt)
-    req.isActive != undefined && (employees[idx].isActive = req.isActive)
+        if(employees.length == 0)return "Não ha usuarios para alterar"
 
-    return employees[idx]
+        let idx = employees.findIndex(e => e.id == id)
+        //operador ternario
+        //employees[idx].age = (req.age != undefined)? req.age : employees[idx].age;
+        req.urls != undefined && (employees[idx].urls = req.urls)   
+        req.name != undefined && (employees[idx].name = req.name)
+        req.age != undefined && (employees[idx].age = req.age)
+        req.tell != undefined && (employees[idx].tell = req.tell)
+        req.email != undefined && (employees[idx].email = req.email)
+        req.address != undefined && (employees[idx].address = req.address)
+        req.nationality!= undefined && (employees[idx].nationality = req.nationality)
+        req.discPersonality!= undefined && (employees[idx].discPersonality = req.discPersonality)
+        req.cpf!= undefined && (employees[idx].cpf = req.cpf)
+        req.sex!= undefined && (employees[idx].sex = req.sex)
+        req.maritalStatus != undefined && (employees[idx].maritalStatus = req.maritalStatus)    
+        req.position != undefined && (employees[idx].position = req.position)
+        req.ethnicity != undefined && (employees[idx].ethnicity = req.ethnicity)
+        req.deficiency!= undefined && (employees[idx].deficiency = req.deficiency)
+        req.createAt!= undefined && (employees[idx].createAt = req.createAt)
+        req.isActive != undefined && (employees[idx].isActive = req.isActive)
+
+        return employees[idx]
     }
+
+    function deleteEmployee(id){
+    let idx = employees.findIndex(e => e.id == id)
+    employees.splice(idx,1)
+    listEmployees(employees)
+    }
+    function showEmployye(name){
+    const t = document.querySelector("#searchEs tbody")
+    t.innerHTML = "" //limpa o body da tabela 
+    if((employees.find(e => e.name == name))){
+        const row = document.createElement("tr")
+            const nameCell = document.createElement("td")
+            const age = document.createElement("td")
+            const tell
+
+            nameCell.textContent = e.name
+            
+            
+            row.appendChild(nameCell)
+            t.appendChild(row)
+    }
+       
+    }
+
     function listEmployees(elist) {
         
         const t = document.querySelector("#esList tbody")
-        t.innerHTML = ""
+        t.innerHTML = "" //limpa o body da tabela
 
         elist.forEach(e => {
             const row = document.createElement("tr")
@@ -410,7 +459,6 @@
             const buttonEdit = document.createElement("button")
 
             nameCell.textContent = e.name
-            nameCell.id =`${e.id}`
             buttonEdit.className = "round edit"
             buttonDelete.className = "round dell"
             buttonDelete.textContent = "Dell"
@@ -419,15 +467,16 @@
             buttonEdit.onclick = function(){
                 editEmployees(e.id)
             }
+            buttonDelete.onclick = function(){
+                deleteEmployee(e.id)
+            }
             
-
             row.appendChild(nameCell)
             row.appendChild(buttonView)
             row.appendChild(buttonDell)
             buttonDell.appendChild(buttonDelete)
             buttonView.appendChild(buttonEdit)
             t.appendChild(row)
-
         })
     }
         
