@@ -10,22 +10,22 @@
 
       font-family: 'Arial', sans-serif;
       color: #ffffff;
-     
+
       background: linear-gradient(90deg, rgba(44, 42, 66, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(152, 59, 227, 1) 100%);
-   
+
       text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-   
+
       font-size: 25px;
-   
+
       text-align: center;
-     
+
       letter-spacing: 2px;
-    
+
       padding: 20px;
       border-radius: 10px;
-   
+
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    
+
     }
 
     body {
@@ -35,20 +35,20 @@
     #scList {
       font-family: 'Arial', sans-serif;
       color: #8A2BE2;
-   
+
       text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-     
+
       font-size: 25px;
-      
+
       letter-spacing: 2px;
-      
+
       color: #6b6190;
-     
+
       padding: 20px;
       border-radius: 10px;
-     
+
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      
+
 
     }
 
@@ -86,7 +86,7 @@
       background: rgb(44, 42, 66);
       background: linear-gradient(90deg, rgba(44, 42, 66, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(152, 59, 227, 1) 100%);
     }
-  
+
 
     .row {
       display: flex;
@@ -95,11 +95,26 @@
 
     }
 
-    label{
+    label {
       font-weight: 500;
     }
-    br{
+
+    br {
       margin: 10px;
+    }
+
+    button.round {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+    }
+
+    button.edit {
+      background: #ffe02f;
+    }
+
+    button.dell {
+      background: #ff2f00;
     }
   </style>
 
@@ -112,6 +127,8 @@
   <div class="row">
     <section id="scRegister">
       <form>
+        <input id="id" type="hidden" value="-1">
+
         <label>Nome:</label><br>
         <input type="text" id="userName" /><br>
 
@@ -119,16 +136,16 @@
         <input type="password" id="userPassword" /><br>
 
         <label>CPF:</label><br>
-        <input type="text" id="userCPF" /><br>
+        <input type="text" id="userCPF" placeholder="XXX.XXX.XXX-XX" /><br>
 
         <label>Idade:</label><br>
         <input type="number" id="userAge" /><br>
 
         <label>Phone:</label><br>
-        <input type="text" id="userPhone" /><br>
+        <input type="text" id="userPhone" placeholder="(XX)XXXXX-XXXX" /><br>
 
         <label>Email:</label><br>
-        <input type="email" id="userEmail" /><br>
+        <input type="email" id="userEmail" placeholder="user@domain.com" /><br>
 
         <label>Endereço:</label><br>
         <input type="text" id="userAddress" /><br>
@@ -142,7 +159,7 @@
       <table>
         <thead>
           <th>Nomes cadastrados</th>
-       
+
 
         </thead>
 
@@ -153,7 +170,7 @@
 
 
       </table>
-     
+
 
     </section>
 
@@ -193,9 +210,8 @@
     }
 
 
-
     let u = {
-      idUser: users.length - 1,
+      id: users.length,
       name: req.name,
       password: req.password,
       cpf: req.cpf,
@@ -213,22 +229,71 @@
   }
 
   //botão onclick
-  function handleRegister() {
-    console.log(
-      setUser({
 
-        name: document.getElementById("userName").value,
-        password: document.getElementById("userPassword").value,
-        cpf: document.getElementById("userCPF").value,
-        age: document.getElementById("userAge").value,
-        phone: document.getElementById("userPhone").value,
-        email: document.getElementById("userEmail").value,
-        address: document.getElementById("userAddress").value,
-        createAT: "2023-02-15"
-      })
-    )
+  function handleRegister() {
+    let id = document.getElementById("id").value
+    if (id == -1) {
+      console.log(
+        setUser({
+          name: document.getElementById("userName").value,
+          password: document.getElementById("userPassword").value,
+          cpf: document.getElementById("userCPF").value,
+          age: document.getElementById("userAge").value,
+          phone: document.getElementById("userPhone").value,
+          email: document.getElementById("userEmail").value,
+          address: document.getElementById("userAddress").value,
+          createAT: "2023-02-15"
+        })
+      )
+    } else if (id > -1) {
+      //chamar a função put
+      let put = putUser({
+          name: document.getElementById("userName").value,
+          password: document.getElementById("userPassword").value,
+          cpf: document.getElementById("userCPF").value,
+          age: document.getElementById("userAge").value,
+          phone: document.getElementById("userPhone").value,
+          email: document.getElementById("userEmail").value,
+          address: document.getElementById("userAddress").value,
+          createAT: "2023-02-15"
+        }, id)
+      console.log(put)
+
+      document.getElementById('id').value = -1
+
+    } else {
+      console.log("erro")
+    }
+
     listUsers(users)
   }
+
+  function putUser(req, id) {
+        let idx = users.findIndex(u => u.id == id)
+        if (idx == -1) return "Não encontrado"
+        if (req.name != undefined) users[idx].name = req.name
+        if (req.address != undefined) users[idx].address = req.address
+        if (req.password != undefined) users[idx].password = req.password
+        if (req.cpf != undefined) users[idx].cpf = req.cpf
+        if (req.age != undefined) users[idx].age = req.age
+        if (req.phone != undefined) users[idx].phone = req.phone
+        if (req.email != undefined) users[idx].email = req.email
+        if (req.createAT != undefined) users[idx].email = req.email
+        return users[idx]
+      }
+
+  function editUser(id) {
+    let user = users.find(u => u.id == id)
+    document.getElementById("userName").value = user.name
+    document.getElementById("userPassword").value = user.password
+    document.getElementById("userCPF").value = user.cpf
+    document.getElementById("userAge").value = user.age
+    document.getElementById("userEmail").value = user.email
+    document.getElementById("userPhone").value = user.phone
+    document.getElementById("userAddress").value = user.address
+    document.getElementById('id').value = user.id
+  }
+
 
 
   function listUsers(ulist) {
@@ -256,34 +321,50 @@
       buttonDelete.textContent = "Deletar"
       buttonEdit.textContent = "Editar"
 
-      buttonDelete.addEventListener("click", function () {
-            delUser(u.idUser); 
-            listUsers(users); 
-        });
-      
+      // buttonDelete.addEventListener("click", function () {
+      //       delUser(u.id); 
+      //       listUsers(users); 
+      //   });
+
+      buttonEdit.className = "round edit"
+      buttonDelete.className = "round dell"
+      buttonEdit.onclick = function () {
+        editUser(u.id)
+
+      };
+
       tdButtonDelete.appendChild(buttonDelete)
       tdButtontEdit.appendChild(buttonEdit)
-
 
       row.appendChild(nameCell)
       row.appendChild(tdButtonDelete)
       row.appendChild(tdButtontEdit)
-      
+
       tbody.appendChild(row)
-      
+
 
     })
 
   }
-  function delUser(id) {
-    let idx = users.findIndex(u => u.idUser === id);
-    if (idx === -1) {
-        alert("Id não encontrado");
-        return;
-    }
-    users.splice(idx, 1); 
-    alert("Usuário excluído");
-}
+  //   function delUser(id) {
+  //     let idx = users.findIndex(u => u.id === id);
+  //     if (idx === -1) {
+  //         alert("Id não encontrado");
+  //         return;
+  //     }
+  //     users.splice(idx, 1);
+  //     alert("Usuário excluído");
+  // }
+  //   function delUser(id) {
+  //     let idx = users.findIndex(u => u.id === id);
+  //     if (idx === -1) {
+  //         alert("Id não encontrado");
+  //         return;
+  //     }
+  //     users.splice(idx, 1);
+  //     alert("Usuário excluído");
+
+  // }
 
 
 </script>
