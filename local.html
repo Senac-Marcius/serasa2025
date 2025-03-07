@@ -208,8 +208,14 @@
             document.getElementById("id").value = local.id
         }
 
-        //aqui é para puxar a função de dell
+        function delLocal(id){          //aqui é para puxar a função de dell
+            let idx = locals.findIndex(l => l.id == id)
+            if(idx == -1)  return "Não encontrado"
+            locals.splice(idx, 1)
 
+            console.log("Não encontrado")
+
+        }
 
         function listLocals(lList){
             const tbody = document.querySelector("#scList tbody") //o # indica q está procurando o Id. 
@@ -232,7 +238,8 @@
                 const dellCell =  document.createElement("td");
                 const dellButton =  document.createElement("button");
                 dellButton.className = "round dell";
-                //aqui é chamar a função de dell com o onclick
+                let del = delLocal(1)                          //aqui é chamar a função de dell com o onclick
+                console.log(del) 
                 dellCell.appendChild(dellButton);
 
                 row.appendChild(nameCell);
