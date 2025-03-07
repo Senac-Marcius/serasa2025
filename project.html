@@ -4,14 +4,14 @@
         <title>Projeto Integrador</title>
         <style>
             body{
-                margin: 0;
+                border-radius: 10px;
             }
 
             h1{
                 text-align: center;
                 color: #bf54a3;
                 background-color: #f2f2f2;
-                margin: 0;
+                border-radius: 10px;
 
             }
 
@@ -22,11 +22,17 @@
             }
 
             #scRegister{
-
+                text-align: left;
+                color: #bf54a3;
+                background-color: #f2f2f2;
+                border-radius: 10px;
             }
 
             #scList{
-                
+                text-align: -webkit-right;
+                color: #bf54a3;
+                background-color: #f2f2f2;
+                border-radius: 10px;
             }
 
             .row{
@@ -46,7 +52,7 @@
                 padding: 12px 24px;
                 font-size: 16px;
                 font-weight: bold;
-                border-radius: 8px;
+                border-radius: 10px;
                 box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
                 cursor: pointer;
                 transition: all 0.3s ease-in-out;
@@ -67,11 +73,26 @@
                 box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
             }
 
+            button.roud {
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+            }
+
             form {
                 background-color: #f2f2f2;
                 padding: 40px;
                 border-radius: 0px 4px 10px rgba(0, 0,0, 0.2);
                 
+            }
+
+            button.edit {
+                background: #ffff00; 
+            }
+
+            
+            button.dell {
+                background: #ff0000; 
             }
 
         </style>
@@ -83,38 +104,45 @@
         <div class="row">
             <section id="scRegister">
                 <form>
-                    <label>Criador do Projeto:</label>  <input id="nameuser" type="text" placeholder="Nome Completo"/> <input id="cpf" type="text" placeholder="CPF" maxlength="14" oninput="formatCPF(this)" /> E-mail <input type="email" placeholder="email@gmail.com"/> <br>
-                    <br>
-                    <label>Nome do Projeto:</label>  <input id="namep" type="text" /> <br>
-                    <label>Site:</label>  <input id="website" type="url" placeholder=" https://siteprojeto.org.br"/><br>
-                    <br>
-                    <label>Previsao de início:</label>  <input id="createAt" type="date" /><br>
-                    <br>
-                    <label>Qual o periodo do projeto:</label>  <input id="createAt" type="date" /> á <input type="date" />  / <input id="Indeterminado" type="checkbox" name="Indeterminado" /> Indeterminado<br>
-                    <br>
+                    <input id="id" value="-1" style="display:none;" />
+                    <label>Criador do Projeto:</label>  
+                    <input id="nameuser" type="text" placeholder="Nome Completo"/> 
+                    <input id="cpf" type="text" placeholder="CPF" maxlength="14" oninput="formatCPF(this)" />
+                    E-mail 
+                    <input type="email" placeholder="email@gmail.com"/> <br><br>
+                    
+                    <label>Nome do Projeto:</label>  
+                    <input id="namep" type="text" />
+                    <label>Site:</label>  
+                    <input id="website" type="url" placeholder=" https://siteprojeto.org.br"/><br><br>
+                    
+                    <label>Previsao de início:</label>  
+                    <input id="createAt" type="date" /><br><br>
+                    
+                    <label>Qual o periodo do projeto:</label>  
+                    <input id="createAt" type="date" /> á 
+                    <input type="date" />  
+                    / <input id="Indeterminado" type="checkbox" name="Indeterminado" /> Indeterminado<br><br>
+                    
                     <label>Descrição do Projeto:</label> <br>
-                        
-                        <textarea id="description" placeholder="Visão geral"></textarea>
-                    <br>
+                    <textarea id="description" placeholder="Visão geral"></textarea><br><br>
+                    
                     <label>Objetivo:</label> <br>
-                        
-                        <textarea id="objective" placeholder="Simplificado se possivel"></textarea>
-                    <br>
-                    <label>Recursos:</label>  <input id="resources" type="text" name="valor" placeholder="R$ 0,00" /> Aproximadamente<br>
-                    <br>
+                    <textarea id="objective" placeholder="Simplificado se possivel"></textarea><br><br>
+                    
+                    <label>Recursos:</label>  
+                    <input id="resources" type="text" name="valor" placeholder="R$ 0,00" /> Aproximadamente<br><br>
+                    
                     <label>Qual a Atividade que será proposta pelo projeto:</label> <br>
-                        
-                        <textarea id="activity" placeholder="Tópicos" ></textarea>
-                    <br>
+                    <textarea id="activity" placeholder="Tópicos" ></textarea><br><br>
+                    
                     <label>Quais metodologias pretende abordar: <br>
-                        
+
                         <textarea id="tecnic" placeholder="Técnicas" ></textarea>
                         <textarea id="process" placeholder="Processos" ></textarea>
                         <textarea id="strategy" placeholder="Estratégias" ></textarea>
-                        <textarea id="planning" placeholder="Planejamento" ></textarea>
-                    <br><br>
-
-                    <button type="button" id="register" onclick="handleRegister()"> Cadastrar </button>
+                        <textarea id="planning" placeholder="Planejamento" ></textarea><br><br>
+                        <button type="button" id="register" onclick="handleRegister()"> Cadastrar </button>
                 </form>
 
             </section>
@@ -133,6 +161,19 @@
         </div>
     </body>
     <script>
+        function formatCPF(campo) {
+                    let cpf = campo.value.replace(/\D/g, ''); // Remove tudo o que não for número
+                    if (cpf.length <= 3) {
+                        campo.value = cpf;
+                    } else if (cpf.length <= 6) {
+                        campo.value = cpf.replace(/(\d{3})(\d{1,})/, '$1.$2');
+                    } else if (cpf.length <= 9) {
+                        campo.value = cpf.replace(/(\d{3})(\d{3})(\d{1,})/, '$1.$2.$3');
+                    } else if (cpf.length <= 11) {
+                        campo.value = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{1,})/, '$1.$2.$3-$4');
+                    }
+                }
+
         var projects = []
 
         function setProject(req){
@@ -156,33 +197,81 @@
             return "Projeto Cadastrado"
         }
         
-        function handleRegister(){     // handle é usado para chamar a função
-            console.log(
-                setProject({
-                    
-                    name: document.getElementById("nameuser").value,
-                    namep: document.getElementById("namep").value,
-                    url: document.getElementById("website").value,
-                    createAt: document.getElementById("createAt").value,
-                    userid: document.getElementById("cpf").value,
-                    resources: document.getElementById("resources").value,
-                    description: document.getElementById("description").value, 
-                    activity: document.getElementById("activity").value,
-                    timeline: "6 meses apos o inicio do projeto, realocando o mesmo em outro lugar por mais 6 meses num periodo de 3 anos",
-                    objective: document.getElementById("objective").value,
-                    methodology: "Técnica: " + document.getElementById("tecnic").value + 
-                                 " | Processos: " + document.getElementById("process").value + 
-                                 " | Estratégias: " + document.getElementById("strategy").value +
-                                 " | Planejamento: " + document.getElementById("planning").value
-                })
-            )
+        function handleRegister(){// handle é usado para chamar a função
+            let id = document.getElementById('id').value
+
+            if(id == -1){
+                console.log(
+                    setProject({
+                        id: id;
+                        name: document.getElementById("nameuser").value,
+                        namep: document.getElementById("namep").value,
+                        url: document.getElementById("website").value,
+                        createAt: document.getElementById("createAt").value,
+                        userid: document.getElementById("cpf").value,
+                        resources: document.getElementById("resources").value,
+                        description: document.getElementById("description").value, 
+                        activity: document.getElementById("activity").value,
+                        timeline: "6 meses apos o inicio do projeto, realocando o mesmo em outro lugar por mais 6 meses num periodo de 3 anos",
+                        objective: document.getElementById("objective").value,
+                        methodology: "Técnica: " + document.getElementById("tecnic").value + 
+                                    " | Processos: " + document.getElementById("process").value + 
+                                    " | Estratégias: " + document.getElementById("strategy").value +
+                                    " | Planejamento: " + document.getElementById("planning").value
+                    })
+                )
+            }else if(id > -1){
+                let idx = projects.findIndex(p => p.id == id)
+                if(idx != -1) return "Não Encontrado"
+                    projects[idx] = {}
+                    id: id;
+                    name: document.getElementById("nameuser").value
+                    if(req.url != undefined) projects[idx].url = req.url
+                    if(req.createAt != undefined) projects[idx].createAt = req.createAt
+                    if(req.resources != undefined) projects[idx].resources = req.resources
+                    if(req.activity != undefined) projects[idx].activity = req.activity
+                    if(req.description != undefined) projects[idx].description = req.description
+                    if(req.objective != undefined) projects[idx].objective = req.objective
+                    if(req.timeline != undefined) projects[idx].timeline = req.timeline
+                    if(req.methodology != undefined) projects[idx].methodology = req.methodology
+   
+                let id = document.getElementById('id').value = -1
+            }else{
+                console.log("erro")
+            }
 
             listProjects(projects)
         }
 
+        function editProject(id){
+            let project = projects.find(p => p.id == id)
+
+            document.getElementById("description").value = project.description
+            document.getElementById("Nome do Projeto").value = project.description
+        }
+
+        function editProject(id) {
+            
+            let project = projects.find(p => p.id == id);
+            document.getElementById("nameuser").value = project.name;
+            document.getElementById("namep").value = project.namep;
+            document.getElementById("website").value = project.url;
+            document.getElementById("createAt").value = project.createAt;
+            document.getElementById("cpf").value = project.userid;
+            document.getElementById("resources").value = project.resources;
+            document.getElementById("description").value = project.description;
+            document.getElementById("activity").value = project.activity;
+            document.getElementById("objective").value = project.objective;
+            document.getElementById("tecnic").value = project.methodology.split(' | ')[0].split(': ')[1];
+            document.getElementById("process").value = project.methodology.split(' | ')[1].split(': ')[1];
+            document.getElementById("strategy").value = project.methodology.split(' | ')[2].split(': ')[1];
+            document.getElementById("planning").value = project.methodology.split(' | ')[3].split(': ')[1];
+            document.getElementById('id').value = id; // Define o ID do projeto para edição
+        }
+
         function listProjects(plist){
             const tbody = document.querySelector("#scList tbody")
-            tbody.innerHTML = ""
+            tbody.innerHTML = "";
 
             projects.forEach(p => {    // se utiliza quando se quer utilizar a mesma função para todos os vetores e dentro do tbody vai um "tr"
                 const row = document.createElement("tr");
@@ -190,19 +279,25 @@
                 const namepCell = document.createElement("td"); 
                 namepCell.textContent = p.namep
 
-                const viewbutton = document.createElement("button");
-                viewbutton.innerHTML = "View";
-                const viewCell = document.createElement("td");
-                viewCell.appendChild(viewbutton);
+                const editButton = document.createElement("button");
+                editButton.className = "edit"
+                editButton.textContent = "Editar"
+                editButton.onclick = function() {
+                    editProject(p.id)
+                };
+                
 
-                const dellbutton = document.createElement("button");
-                dellbutton.innerHTML = "Deletar";
-                const dellCell = document.createElement("td");
-                dellCell.appendChild(dellbutton);
+                const dellButton = document.createElement("button");
+                dellButton.className = "dell"
+                dellButton.textContent = "Deletar"
+                
+
+                const buttonsCell = document.createElement("td")
+                buttonsCell.appendChild(dellCell); //Deletar
+                buttonsCell.appendChild(editCell); //Editar
 
                 row.appendChild(namepCell);
-                row.appendChild(dellCell);
-                row.appendChild(viewCell);
+                row.appendChild(buttonsCell);
                 tbody.appendChild(row);
 
             })
@@ -210,7 +305,10 @@
 
         function formProjects(plist){
 
+
         }
+
+
 
     </script>
 </html>
