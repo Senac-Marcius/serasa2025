@@ -77,6 +77,19 @@
                 box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
             }
 
+            button.roud{
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+            }
+
+            button.edit{
+                background-color: #ff0000;
+            }
+
+            button.dell{
+                background-color: #ffff00;
+            }
     </style>
 </head>
     <body>
@@ -84,6 +97,7 @@
         <div class="row">
             <section>
                 <form id="scRegister">
+                    <input id="id" type="hidden" value="-1"/>
                     <label>Curso: </label><input id="course" type="text"/><br>
                     <label>Descrição: </label><input id="description" type="textarea"/><br>
                     <label>Plano de curso: </label><input id="coursePlan" type="file"/><br>
@@ -114,7 +128,7 @@
            
     
             let p = {
-                id: course.length ,
+                id: courses.length ,
                 course: req.course,
                 description: req.description,
                 coursePlan:req.coursePlan, 
@@ -126,20 +140,75 @@
             courses.push(p)
             return "Cadastrado"
         }
+        function putCourses(req, id){
+            let idx = courses.findIndex(c => c.id == id)
+
+            if(idx == -1) return "Não encontrado"
+
+            if(req.course !=undefined) courses[idx].course = req.course
+            if(req.description != undefined) courses[idx].description = req.description
+            if(req.coursePlan != undefined) courses[idx].coursePlan = req.coursePlan
+            if(req.guidancePlan != undefined) courses[idx].guidancePlan = req.guidancePlan
+            if(req.userId != undefined) courses[idx].userId = req.userId
+
+            return courses[idx]
+        }
 
         function handleRegister(){
-            console.log(
-                setCourses({
-                course: document.getElementById("course").value,
-                description: document.getElementById("description").value,
-                coursePlan: document.getElementById("coursePlan").value,
-                guidancePlan: document.getElementById("guidancePlan").value,
-                workload: document.getElementById("workload").value,
-                userId:0,
-                })
-            )
-            listCourses(courses)
+            let id = parseInt(document.getElementById('id').value);
+            if (id === -1){
+
+                console.log(
+                    setCourses({
+                    course: document.getElementById("course").value,
+                    description: document.getElementById("description").value,
+                    coursePlan: document.getElementById("coursePlan").value,
+                    guidancePlan: document.getElementById("guidancePlan").value,
+                    workload: document.getElementById("workload").value,
+                    userId:0,
+                    })
+                );
+            }else if(id > -1){
+                
+                console.log(
+                    
+                    putCourses({
+    
+                        course: document.getElementById("course").value,
+                        description: document.getElementById("description").value,
+                        coursePlan: document.getElementById("coursePlan").value,
+                        guidancePlan: document.getElementById("guidancePlan").value,
+                        workload: document.getElementById("workload").value,
+                        userId:0,
+                            
+                    },id)
+                );
+                document.getElementById('id').value = -1
+            }else{
+                console.log("erro");
+            }
+            listCourses(courses);
         }
+         
+        function editCourses(id){
+            console.log()
+            let course = courses.find(c => c.id == id )
+                document.getElementById("course").value = course.course,
+                document.getElementById("description").value = course.description,
+                document.getElementById("coursePlan").value = course.coursePlan,
+                document.getElementById("guidancePlan").value = course.guidancePlan,
+                document.getElementById("workload").value = course.workload
+                document.getElementById("id").value = course.id
+        }
+
+        function deleteCourse(id){
+            const index = courses.findIndex(c => c.id === id);
+            if(index > -1 ){
+                courses.splice(index, 1)
+            }
+            listCourses(courses);
+        }
+
         function listCourses(pList){
             const tbody = document.querySelector("#tablebody")
             tbody.innerHTML =""
@@ -151,16 +220,25 @@
                 courseCell.textContent = p.course
 
                 const editButton = document.createElement("button");
+                editButton.className = "edit roud"
+                editButton.onclick = function (){
+                    editCourses(p.id)
+                };
                 const cellEdit =document.createElement("td");
                 cellEdit.appendChild(editButton)
 
-                const viewButton = document.createElement("button");
-                const cellView =document.createElement("td");
-                cellView.appendChild(viewButton)
-
-                row.appendChild(cellView);
-                row.appendChild(cellEdit);
+                const dellButton = document.createElement("button");
+                const cellDell =document.createElement("td");
+                dellButton.className ="dell"
+                dellButton.onclick= function(){
+                    deleteCourse(p.id)
+                }
+                cellDell.appendChild(dellButton)
+                
                 row.appendChild(courseCell);
+                row.appendChild(cellDell);
+                row.appendChild(cellEdit);
+
                 tbody.appendChild(row);
 
             })
