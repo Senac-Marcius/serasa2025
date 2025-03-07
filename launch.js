@@ -59,7 +59,7 @@ function getLaunchs(req) {
 function showLaunch(id) {
     return launchs.find((launch) => launch.id == id);
 }  
- 
+ // para baixo ela esta declarada
 function putLaunch(req, id){
     let idx = launchs.findIndex(p => p.id == id)
 
@@ -116,10 +116,10 @@ setLaunch({
 
 let show = showLaunch(1)
 
-// let segundo = putLaunch({
-//     observation: "segundo horario",
-//     note: "C",
-// } , 1)
+ let segundo = putLaunch({
+     observation: "segundo horario",
+     note: "C",
+ } , 1)
 
 
 
