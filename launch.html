@@ -77,7 +77,7 @@
                 border-radius: 50%;
             }
 
-            button.dell {
+            button.del {
                 background: #ff0000;
 
             }
@@ -146,19 +146,39 @@
             //     return "Campo observation deve conter apenas letras, números e espaços"
             // }
             
-            let l = {
-                id: launchs.length,
+            let l = { 
+                id: launchs.length ? (launchs[launchs.length - 1].id + 1) : 0,
                 createAt: req.createAt,
                 note: req.note,
                 observation: req.observation,
                 presence: req.presence,
                 indicator: req.indicator
             }
+
+           
           
             launchs.push(l)
 
         }
         
+                   // TIRAR DUVIDA SE APAGA ESSA E DEIXA A DE CIMA 
+                   function putLaunch(req, id){
+
+                        if(id == -1) return "Não encontrado"
+
+                        if (req.userId != undefined) launchs[id].userId = req.userId 
+                        if (req.observation != undefined) launchs[id].observation = req.observation 
+                        if (req.presence != undefined) launchs[id].presence = req.presence 
+                        if (req.indicator != undefined) launchs[id].indicator = req.indicator 
+
+                        return launchs[id]
+                        }
+
+                        document.getElementById('id').value = -1
+                        listLaunchs(launchs)
+
+                    // ATE AQUI
+
         function handleRegister(){
             let id = document.getElementById('id').value
 
@@ -178,7 +198,6 @@
             }else if(id > -1){
     
               putLaunch({
-                createAt: "2000-12-31",
                 note: document.getElementById("note").value,
                 observation: document.getElementById("observation").value,
                 presence: document.getElementById("presence").value,
@@ -203,23 +222,21 @@
             document.getElementById("id").value = launch.id
         }
 
-            // TIRAR DUVIDA SE APAGA ESSA E DEIXA A DE CIMA 
-            function putLaunch(req, id){
+// essa função debaixo tem que deletar da lista e mandar listar novamente (atividade de agora 07/03)
+       
+        function delLaunch(id){
+            let idx = launchs.findIndex(l => l.id == id)
 
-                    if(id == -1) return "Não encontrado"
+            if(idx == -1) return "Não encontrado"
 
-                    if (req.userId != undefined) launchs[id].userId = req.userId 
-                    if (req.observation != undefined) launchs[id].observation = req.observation 
-                    if (req.presence != undefined) launchs[id].presence = req.presence 
-                    if (req.indicator != undefined) launchs[id].indicator = req.indicator 
-                
-                    return launchs[id]
-            }
-                   
-                document.getElementById('id').value = -1
-                listLaunchs(launchs)
+            launchs.splice(idx, 1)
 
-  // ATE AQUI
+            listLaunchs(launchs)
+            return "Deletado"
+
+}
+// acaba aqui a função!!!!!!!!!!!!!!!!!!
+
 
 
         function listLaunchs(plist){
@@ -230,8 +247,8 @@
                 const row = document.createElement("tr");
                 const indicatorCell = document.createElement("td");
                 indicatorCell.textContent = l.indicator;
+            
 
-              
                 
                 const editcell = document.createElement("td");
                 const editbutton = document.createElement("button");
@@ -239,21 +256,23 @@
                 editbutton.onclick = function(){
                     editLaunch (l.id)
                 };
-
                 editcell.appendChild(editbutton);
 
+                // aula de hoje 07/03
+                const delcell = document.createElement("td");
+                const delbutton = document.createElement("button");
+                delbutton.className = "round del"
+                delbutton.onclick = function(){
+                    delLaunch (l.id)
+                }
 
-
-                const dellcell = document.createElement("td"); //criou uma td na variavel
-                const dellbutton = document.createElement("button");
-                dellbutton.className = "round dell" //criou um botão na variavel
-                dellcell.appendChild(dellbutton); // criou um botão na td
-
-
-
-                row.appendChild(indicatorCell);
-                row.appendChild(editcell); //adicionou a td na tela
-                row.appendChild(dellcell);
+                delcell.appendChild(delbutton);
+             
+                
+                row.appendChild(indicatorCell); 
+                row.appendChild(editcell);
+                row.appendChild(delcell);
+                
                 tbody.appendChild(row);
         })
     }
