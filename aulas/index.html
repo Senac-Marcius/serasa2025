@@ -11,16 +11,8 @@
     <section class="cadastroAluno">
       <h1>Cadastro de aluno</h1>
 
-      <form id="formCadastro" action="" method="post">
-        <label for="search">Pesquisar</label>
-        <input
-          name="search"
-          type="search"
-          id="inputSearch"
-          class="inputsFormCadastro"
-          placeholder="Procure pelo aluno"
-        />
-
+      <form id="formCadastro" action="" method="post" >
+        
         <label for="nome">Nome</label>
         <input
           id="studentName"
@@ -64,10 +56,25 @@
     <section class="editarAluno">
         <h1>Alunos Cadastrados</h1>
         
-        <ul id="listaAlunos">
-          
-        </ul>
+    <table class="tableStudents">
+
+      <thead class="cabecalhoTable">
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Data de Nascimento</th>
+
+          <th>Editar</th>
+          <th>Excluir</th>
+        </tr>
+      </thead>
+      <tbody class="corpoTable" id="listaAlunos">
        
+       
+      </tbody>
+    </table>
+      
     </section>
 
     <script src="script.js" module defer></script>

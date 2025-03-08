@@ -1,5 +1,6 @@
 //Const CATCH_ID = document.getElementById("studentId");
 let last_id = 0
+let current_id = 0
 const STUDENT_NAME = document.getElementById("studentName");
 const AGE = document.getElementById("studentAge");
 // const GRADE = document.getElementById("studentGrade");
@@ -18,16 +19,16 @@ const LISTA = document.getElementById("listaAlunos");
 const EMAIL = document.getElementById("studentEmail");
 
 
-
+let students = [];
 
 const BTN_CADASTRAR = document
   .getElementById("btnEnviar")
   .addEventListener("click", () => {
-    setStudent();
-    
+    handleStudent();
+
   });
 
-let students = [];
+
 
 function testaCep(cep) {
   const testeCep = /^\d{5}-\d{3}$/;
@@ -49,7 +50,16 @@ function testaEmail(email) {
   return testeEmail.test(email);
 }
 
-function setStudent() {
+function handleStudent() {
+
+
+
+
+  if (current_id != 0) {
+    putStudent(current_id)
+    return
+  }
+
   //   if (!testaCep(CEP.value)) {
   //     alert("CEP em formato invalido");
   //     return;
@@ -84,35 +94,76 @@ function setStudent() {
   };
   students.push(student);
 
-  let li = document.createElement("li");
+
+  let new_line = document.createElement("tr")
+  new_line.id = `line${last_id}`
+  new_line.value = last_id
+  let student_id = document.createElement("td")
+  student_id.id = `id${last_id}`
+  student_id.value = last_id
+  student_id.innerHTML = `${last_id}`
+  new_line.append(student_id)
+  let student_name = document.createElement("td")
+  student_name.innerHTML = STUDENT_NAME.value
+  student_name.id = `name${last_id}`
+  new_line.append(student_name)
+  let student_email = document.createElement("td")
+  student_email.innerHTML = EMAIL.value
+  student_email.id = `email${last_id}`
+  new_line.append(student_email)
+  let student_age = document.createElement("td")
+  student_age.innerHTML = AGE.value
+  student_age.id = `age${last_id}`
+  new_line.append(student_age)
+
+
+
   let button_delete = document.createElement("input");
   let button_editar = document.createElement("input");
   button_delete.type = "button";
   button_editar.type = "button";
-  button_delete.value = "Deletar";
-  button_editar.value = "Editar";
+
   button_delete.className = "buttonDeletar";
   button_editar.className = "buttonEditar";
 
   button_delete.id = last_id;
   button_editar.id = last_id;
-  li.innerHTML = STUDENT_NAME.value;
 
-  button_delete.addEventListener("click", () => {deleteStudent(button_delete.id)})
-  button_editar.addEventListener("click",() => putStudent(button_editar.id))
-  
+  button_delete.addEventListener("click", () => {    
+    current_id = button_delete.id
+    deleteStudent(button_delete.id)    
+    current_id = 0
+  })
+  button_editar.addEventListener("click", () => {
+    current_id = button_editar.id
+    getStudentById(button_editar.id)
+  })
+
+  let buttonEd = document.createElement("td")
+  let buttonDel = document.createElement("td")
+  buttonEd.append(button_editar)
+  buttonDel.append(button_delete)
+  new_line.append(buttonEd)
+  new_line.append(buttonDel)
+
+  LISTA.append(new_line)
 
 
-  LISTA.append(li);
-  LISTA.append(button_delete);
-  LISTA.append(button_editar)
 }
 
 function getStudentById(id) {
-  return students.find((student) => student.id == id);
+  let stu = students.find((student) => student.id == id);
+  STUDENT_NAME.value = stu.name
+  AGE.value = stu.age
+  PASSWORD.value = stu.password
+  EMAIL.value = stu.email
 }
 
-function putStudent( id) {
+
+
+
+
+function putStudent(id) {
   let idx = students.findIndex((student) => student.id == id);
 
   if (STUDENT_NAME.value != undefined) students[idx].name = STUDENT_NAME.value;
@@ -123,9 +174,19 @@ function putStudent( id) {
   // if (req.classes != undefined) students[idx].classes = req.classes;
   // if (req.userId != undefined) students[idx].userId = req.userId;
   // if (req.login != undefined) students[idx].login = req.login;
-  if (EMAIL.value != undefined) students[idx].login = EMAIL.value;
+  if (EMAIL.value != undefined) students[idx].email = EMAIL.value;
   if (PASSWORD.value != undefined) students[idx].password = PASSWORD.value;
   // if (req.address != undefined) students[idx].address = req.address;
+  
+  let name = document.getElementById(`name${id}`)
+  let age = document.getElementById(`age${id}`)
+  let email = document.getElementById(`email${id}`)
+  name.innerHTML = STUDENT_NAME.value
+  age.innerHTML = AGE.value
+  email.innerHTML = EMAIL.value
+
+  current_id = 0
+  
 }
 
 function getStudents(req) {
@@ -154,6 +215,9 @@ function deleteStudent(id) {
   if (index !== -1) {
     students.splice(index, 1);
   }
+  let line = document.getElementById(`line${current_id}`)
+  line.remove()
+  
 }
 
 function showStudent(req) {

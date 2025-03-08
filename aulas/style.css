@@ -32,8 +32,7 @@ body {
 }
 .editarAluno{
     width: 50vw;
-    height: 100vh;
-    background-color: aqua;
+    height: 100vh;   
     display: flex;
     align-items: center;
     justify-content: center;
@@ -41,9 +40,9 @@ body {
 }
 
 .cadastroAluno form{
-    width: 100%;
+    width: 75%;
     height: 100%;
-    margin: 0 auto;
+   
     padding: 20px;
     background-color: #fff;
     border-radius: 10px;
@@ -87,19 +86,47 @@ body {
 }
 .buttonDeletar{
     background-color: red;
+    width: 20px;
+    height: 10px;
+
 }
 
 .buttonEditar{
     background-color: orange;
+    width: 20px;
+    height: 10px;
 }
 
 .btnEditar,.buttonDeletar,.btnEnviar{
     scale: 1.1;
+}
+.editarAluno{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 75%;
+    background-color: white;
+    height: 100%;
+    border-radius: 10px;
+    padding: 10px;
+
+    
 }
 #btnEnviar{
     color: white;
     background-color: green;
     margin-top: 50px;
 }
+.cabecalhoTable th{ 
+    border: 10px black;
+    
+}
+.tableStudents{
+    border-collapse: collapse;
+    margin-top: 25px;
+}
 
-
+table, th, td {
+    border: 1px solid;
+  }
