@@ -4,11 +4,11 @@
     <meta Schedule="UTF-8" />
     <title>Cronograma</title>
     <style>
-        body{
+        body {
             margin: 0;
         }
 
-        h1{
+        h1 {
             text-align: center;
             color: #BF54A3;
             background-color: #85eeb1;
@@ -20,16 +20,10 @@
             margin: 0 auto;
             flex-direction: column;
         }
-        
-        #scRegister {
 
+        #scRegister {}
 
-        }
-
-        #scList {
-
-
-        }
+        #scList {}
 
         .row {
             display: flex;
@@ -44,41 +38,56 @@
         }
 
         button {
-                background: linear-gradient(135deg, #6e8efb, #a777e3);
-                color: white;
-                border: none;
-                padding: 12px 24px;
-                font-size: 16px;
-                font-weight: bold;
-                border-radius: 8px;
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-                cursor: pointer;
-                transition: all 0.3s ease-in-out;
-                position: relative;
-                overflow: hidden;
-                margin: 20px auto 0;
-                display: block;
-            }
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+            margin: 20px auto 0;
+            display: block;
+        }
 
-            button:hover {
-                background: linear-gradient(135deg, #5b77e0, #925ec4);
-                box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
-                transform: translateY(-2px);
-            }
+        button:hover {
+            background: linear-gradient(135deg, #5b77e0, #925ec4);
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
 
-            button:active {
-                transform: translateY(1px);
-                box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
-            }
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+        }
 
-        form{
+        form {
             background-color: #f2f2f2;
             padding: 40px;
-            border-radius: 20px ;
+            border-radius: 20px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 
         }
 
+        button.round {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+        }
+
+        button.del {
+            background: #ff0000;
+
+        }
+
+        button.edit {
+            background: #ffff00;
+
+        }
     </style>
 </head>
 
@@ -87,35 +96,36 @@
     <div class="row">
         <section id="scRegister">
 
-        <h2>Cronograma</h2>
-       
+            <h2>Cronograma</h2>
+
             <form>
-            <label>Url </label><input id="url" type="text" /><br>
-            <label>User </label><input id="userId" type="text" /><br>
-            <label>Turma </label><input id="class" type="text" /><br>
-            <label>Disciplina </label><input id="discipline" type="text" /><br>
-            <label>Data </label><input id="date" type="date" /><br>
-            <label>Local </label><input id="location" type="text" /><br>
-            <label>Horario de entrada </label><input id="start_time" type="time" /><br>
-            <label>Horario de término </label><input id="end_time" type="time" /><br>
-            <button type="button" id="register" onclick="handleRegister()">cadastrar</button>
+                <input type="hidden" id="id" value="-1">
+                <label>Url </label><input id="url" type="text" /><br>
+                <label>User </label><input id="userId" type="text" /><br>
+                <label>Turma </label><input id="class" type="text" /><br>
+                <label>Disciplina </label><input id="discipline" type="text" /><br>
+                <label>Data </label><input id="date" type="date" /><br>
+                <label>Local </label><input id="location" type="text" /><br>
+                <label>Horario de entrada </label><input id="start_time" type="time" /><br>
+                <label>Horario de término </label><input id="end_time" type="time" /><br>
+                <button type="button" id="register" onclick="handleRegister()">cadastrar</button>
             </form>
-        </section> 
+        </section>
 
-    <section id="scList">
-        <table>
-            <thead>
-                <th>URL</th>
-            </thead>
-                 <tbody>
+        <section id="scList">
+            <table>
+                <thead>
+                    <th>URL</th>
+                </thead>
+                <tbody>
 
-             
+
                 </tbody>
-        </table>
+            </table>
 
-        </section>      
-    </div> 
-</body>   
+        </section>
+    </div>
+</body>
 <script>
     var schedules = []
 
@@ -124,18 +134,20 @@
         const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
         const timeRegex = /^([01]?[0-9]|2[0-3]):([0-5]?[0-9])$/
 
+        /*
+                if (!urlRegex.test(req.url)) () => {
+                    return "Campo url deve conter o formato https:siteorganizador"
+                }
+                if (!dateRegex.test(req.date)) () => { alert("Campo deve conter o formato yyyy-mm-dd")
+                 return };
+                if (!timeRegex.test(req.starttime) || !timeRegex.test(req.endtime)) () => {
+                    return "Campo deve conter o formato 13:00"
+                }
+                */
 
-        if (!urlRegex.test(req.url)) () => {
-            return "Campo url deve conter o formato https:siteorganizador"
-        }
-        /*if (!dateRegex.test(req.date)) () => { alert("Campo deve conter o formato yyyy-mm-dd")
-         return };*/
-        if (!timeRegex.test(req.starttime) || !timeRegex.test(req.endtime)) () => {
-            return "Campo deve conter o formato 13:00"
-        }
 
         let s = {
-            id: schedules.length,
+            id: schedules.length? schedules[schedules.length - 1].id + 1 : 0,
             url: req.url,
             createAt: req.createAt,
             userId: req.userId,
@@ -147,55 +159,131 @@
             endtime: req.endtime
 
 
-        }
+        }       
 
         schedules.push(s)
         return "cadastrado"
     }
 
-    function handleRegister() {
-        console.log(
-            setSchedule({
-                id: 1,
-                url: document.getElementById("url").value,
-                createAt: "2000-12-31",
-                userId: 0,
-                date:  document.getElementById("date").value,
-                disciplineId: 0,
-                classId: 0,
-                locationId: 0,
-                starttime: document.getElementById("start_time").value,
-                endtime: document.getElementById("end_time").value
+    function putSchedule(req, id) {
+        let idx = schedules.findIndex(s => s.id == id)
 
-            })
-        )
+        if (idx == -1) return "Não encontrado"
+
+        if (req.url != undefined) schedules[idx].url = req.url
+        if (req.userId != undefined) schedules[idx].userId = req.userId
+        if (req.class != undefined) schedules[idx].class = req.class
+        if (req.discipline != undefined) schedules[idx].discipline = req.discipline
+        if (req.date != undefined) schedules[idx].date = req.date
+        if (req.location != undefined) schedules[idx].location = req.location
+        if (req.start_time != undefined) schedules[idx].start_time = req.start_time
+        if (req.end_time != undefined) schedules[idx].end_time = req.end_time
+
+        return schedules[idx]
+    }
+
+    function handleRegister() {
+        let id = document.getElementById("id").value
+
+        if (id == -1) {
+            console.log(
+                setSchedule({
+                    url: document.getElementById("url").value,
+                    createAt: "2000-12-31",
+                    userId: 0,
+                    date: document.getElementById("date").value,
+                    disciplineId: 0,
+                    classId: 0,
+                    locationId: 0,
+                    starttime: document.getElementById("start_time").value,
+                    endtime: document.getElementById("end_time").value
+
+                })
+            )
+        } else if (id > -1) {
+            console.log(
+                putSchedule({
+                    url: document.getElementById("url").value,
+                    createAt: "2000-12-31",
+                    userId: 0,
+                    date: document.getElementById("date").value,
+                    disciplineId: 0,
+                    classId: 0,
+                    locationId: 0,
+                    starttime: document.getElementById("start_time").value,
+                    endtime: document.getElementById("end_time").value
+
+                }, id)
+            )
+        } else {
+            console.log("erro")
+        }
+
+        document.getElementById('id').value = -1
 
         listShedules(schedules)
     }
+    
+    function delSchedule(id) {
+        let idx = schedules.findIndex(s => s.id == id)
 
-    function listShedules(slist){
+        console.log(idx)
+
+        if (idx == -1) return "id não encontrado"
+        schedules.splice(idx, 1)
+
+        listShedules(schedules)
+
+        return "deletado com sucesso"
+
+    }
+
+    function editSchedule(id) {
+        let schedule = schedules.find(s => s.id == id)
+
+        document.getElementById("id").value = schedule.id
+        document.getElementById("url").value = schedule.url
+        document.getElementById('userId').value = schedule.userId
+        document.getElementById('class').value = schedule.class
+        document.getElementById("discipline").value = schedule.discipline
+        document.getElementById("date").value = schedule.date
+        document.getElementById("location").value = schedule.location
+        document.getElementById("start_time").value = schedule.start_time
+        document.getElementById("end_time").value = schedule.end_time
+    }
+
+
+    function listShedules(pList) {
         const tbody = document.querySelector("#scList tbody")
         tbody.innerHTML = ""
 
         schedules.forEach(s => {
             const row = document.createElement("tr");
-
-            const urlcell = document.createElement ("td");
+            const urlcell = document.createElement("td");
             urlcell.textContent = s.url
 
-            
-            const viewcell = document.createElement ("td"); //criou uma td na variavel const
-            const viewbutton = document.createElement ("button"); //cadrastrou um botão no td
-            viewcell.appendChild(viewbutton); //chamou o botão 
 
-            const dellcell = document.createElement ("td"); //criou uma td na variavel const
-            const dellbutton = document.createElement ("button"); //cadrastrou um botão no td
-            dellcell.appendChild(dellbutton);
-            
-            
-            row.appendChild(urlcell);  
-            row.appendChild(viewcell);  
-            row.appendChild(dellcell);
+            const editcell = document.createElement("td"); //criou uma td na variavel const
+            const editButton = document.createElement("button"); //cadrastrou um botão no td
+            editButton.className = "round edit"
+            editButton.onclick = function () {
+                editSchedule(s.id)
+            };
+            editcell.appendChild(editButton); //chamou o botão 
+
+
+            const delcell = document.createElement("td"); //criou uma td na variavel const
+            const delbutton = document.createElement("button"); //cadrastrou um botão no td
+            delbutton.className = "roud del"
+            delbutton.onclick = function () {
+                delSchedule(s.id)
+            };
+            delcell.appendChild(delbutton);
+
+
+            row.appendChild(urlcell);
+            row.appendChild(editcell);
+            row.appendChild(delcell);
             tbody.appendChild(row);
         })
     }
