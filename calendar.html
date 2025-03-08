@@ -182,6 +182,19 @@
             width: 40%;
         }
 
+        /* interface de cronograma de calendário,
+        onde os usuários podem cadastrar,
+        editar e excluir informações relacionadas a alunos,
+        cursos e períodos de matrícula*/
+
+        /*setCalendars(): Adiciona um novo aluno ao calendário.
+        putCalendars(): Atualiza as informações de um aluno existente.
+        deleteCalendar(): Remove um aluno do calendário.
+        handleRegister(): Verifica se um aluno é novo (para cadastrar) ou se precisa ser atualizado (para editar).
+        editCalendars(): Carrega os dados de um aluno para o formulário para edição.
+        listCalendars(): Exibe todos os alunos cadastrados na tabela.*/
+
+
         /* Responsividade */
         @media screen and (max-width: 768px) {
             section {
@@ -242,7 +255,7 @@
 
     function setCalendars(req) {
         let c = {
-            id: calendars.length,
+            id: calendars.length? calendars[calendars.length-1].id + 1 : 0,
             StudentName: req.StudentName,
             Course: req.Course,
             Period: req.Period,
@@ -281,7 +294,6 @@
         } else if (id > -1) {
             // Atualiza o cronograma com o ID existente
             putCalendars({
-                id: id,
                 StudentName: document.getElementById("StudentName").value,
                 Course: document.getElementById("course").value,
                 Period: document.getElementById("period").value,
@@ -304,36 +316,38 @@
     }
 
     function listCalendars(cList) {
-        const tbody = document.querySelector("#scList tbody");
-        tbody.innerHTML = "";
+        const tbody = document.querySelector("#scList tbody")
+        tbody.innerHTML = ""
         cList.forEach(c => {
-            const row = document.createElement("tr");
+            const row = document.createElement("tr")
 
-            const studentCell = document.createElement("td");
-            studentCell.textContent = c.StudentName;
+            const studentCell = document.createElement("td")
+            studentCell.textContent = c.StudentName
 
-            const actionsCell = document.createElement("td");
-            const actionButtons = document.createElement("div");
-            actionButtons.className = "action-buttons";
+            const actionsCell = document.createElement("td")
+            const actionButtons = document.createElement("div")
+            actionButtons.className = "action-buttons"
 
-            const editButton = document.createElement("button");
-            editButton.textContent = "Editar";
-            editButton.className = "edit-button";
-            editButton.onclick = function () { editCalendars(c.id); };
-            actionButtons.appendChild(editButton);
+            const editButton = document.createElement("button")
+            editButton.textContent = "Editar"
+            editButton.className = "edit-button"
+            editButton.onclick = function () { editCalendars(c.id); }
+            actionButtons.appendChild(editButton)
 
-            const deleteButton = document.createElement("button");
-            deleteButton.textContent = "Excluir";
-            deleteButton.className = "delete-button";
-            deleteButton.onclick = function () { deleteCalendar(c.id); };
-            actionButtons.appendChild(deleteButton);
+            const deleteButton = document.createElement("button")
+            deleteButton.textContent = "Excluir"
+            deleteButton.className = "delete-button"
+            deleteButton.onclick = function () { deleteCalendar(c.id); }
+            actionButtons.appendChild(deleteButton)
 
-            actionsCell.appendChild(actionButtons);
+            actionsCell.appendChild(actionButtons)
 
-            row.appendChild(studentCell);
-            row.appendChild(actionsCell);
-            tbody.appendChild(row);
+            row.appendChild(studentCell)
+            row.appendChild(actionsCell)
+            tbody.appendChild(row)
         });
     }
 </script>
 </html>
+
+
