@@ -1,110 +1,307 @@
 <!DOCTYPE html>
-    <head>
-       <meta charset = "UTF8" /> 
-        <title>Turmas</title>
-        <style>
-           body{
+
+<head>
+    <meta charset="UTF8" />
+    <title>Turmas</title>
+    <style>
+        * {
             margin: 0;
-           }
-           
-           h1{
-                text-align: center;
-                color: #6251D2;
-                background-color: #F2F2F2;
-                margin: 0;
-             }
-             #scRegister{
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
 
-             }
-             #scList{
-                
-             }
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+        }
+
+        h1 {
+            width: 100vw;
+            text-align: center;
+            color: #6251D2;
+            background-color: #F2F2F2;
+            margin: 0;
+
+        }
+
+        section {
+            display: flex;
+            margin: 0 auto;
+            flex-direction: column;
+        }
+
+
+        #scRegister {}
+
+        #scList {}
+
+        .row {
+            display: flex;
+            margin-top: 50px;
+            padding: 20px;
+        }
+
+        lebel {
+            font-weight: 600;
+        }
+
+        br {
+            margin: 10px;
+        }
+
+
+        button {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+            margin: 20px auto 0;
+            display: block;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #5b77e0, #925ec4);
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        button.round {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+
+        }
+
+        button.dell {
+            background-color: #ffff00;
+        }
+
+        button.edit {
+            background-color: #ff0000;
+        }
+
+        form {
+            background-color: #ebe3e3;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+
+</head>
+
+<body>
+
+
+
+
+    </form>
+
+    <section id="scList">
+
+
         </style>
-    </head>
-    <body>
-        <h1>Cadastro de turma</h1>
-        <section id="scRegister">
-            <form>
-            <label>Nome da turma: </label><input id="name" type="text"/><br>
-            <label>ID da turma: </label><input id="classid" type="text"/><br>
-            <label>Id do aluno: </label><input id="userid"type="text"/><br>
-            <label>Quantidade de Alunos: </label><input id="quant"type="text"/><br>
-            <label>Data de inicio: </label><input id="startDate" type="date"/><br>
-            <label>Data de finalização: </label><input id= "endDate"type="date"/><br>
-            <button type ="button" id="register" onclick="handleregister()">CADASTRAR</button><br>
-        </form>
-        </section>
-        
-        <section id="scList">
-            <table>
-                <thead>
-                    <th>Nome</th>
+        </head>
 
-                </thead>
-                <tbody>
-                    
-                </tbody>
-            </table>
+        <body>
+            <h1>Cadastro de turma</h1>
+            <div class="row">
+                <section id="scRegister">
 
-        </section>
-    
-    </body>
-    <script>
-        var classes = []
+                    <form>
+                        <input id="id" type="hidden" value="-1" />
+                        <label>Nome da turma: </label><input id="name" type="text" /><br>
+                        <label>ID da turma: </label><input id="classid" type="text" /><br>
+                        <label>Id do aluno: </label><input id="userid" type="text" /><br>
+                        <label>Quantidade de Alunos: </label><input id="quant" type="text" /><br>
+                        <label>Data de inicio: </label><input id="startDate" type="date" /><br>
+                        <label>Data de finalização: </label><input id="endDate" type="date" /><br>
+                        <button type="button" id="register" onclick="handleregister()">CADASTRAR</button><br>
+                    </form>
+                </section>
 
-        function setClass(req){
-            const nameRegex = /^[A-Za-z\s]+$/; 
-            const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+                <section id="scList">
+                    <table>
+                        <thead>
+                            <th>Nome da turma</th>
 
-            if(!nameRegex.test(req.name)) return "Nome inválido, deve conter apenas letras e espaços"
-            if(!dateRegex.test(req.createAt)) return "Data de criação inválida, deve estar no formato yyyy-mm-dd"   
-            if(!dateRegex.test(req.startDate)) return "Data de início inválida, deve estar no formato yyyy-mm-dd"
-            if(!dateRegex.test(req.endDate)) return "Data de término inválida, deve estar no formato yyyy-mm-dd"
+                        </thead>
+                        <tbody>
 
-            let c = {
-                name: req.name, 
-                id: classes.length,
-                quant: req.quant,
-                createAt: req.createAt,
-                startDate:req.startDate,
-                endDate: req.endDate                    
+                        </tbody>
+                    </table>
+
+                </section>
+            </div>
+        </body>
+        <script>
+            var classes = []
+
+            function setClass(req) {
+                const nameRegex = /^[A-Za-z\s]+$/;
+                const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+                if (!nameRegex.test(req.name)) return "Nome inválido, deve conter apenas letras e espaços"
+                if (!dateRegex.test(req.createAt)) return "Data de criação inválida, deve estar no formato yyyy-mm-dd"
+                if (!dateRegex.test(req.startDate)) return "Data de início inválida, deve estar no formato yyyy-mm-dd"
+                if (!dateRegex.test(req.endDate)) return "Data de término inválida, deve estar no formato yyyy-mm-dd"
+
+                let c = {
+                    name: req.name,
+                    id: classes.length? classes[classes.length - 1].id+1 : 0,
+                    quant: req.quant,
+                    createAt: req.createAt,
+                    startDate: req.startDate,
+                    endDate: req.endDate
+                }
+
+                classes.push(c)
+                return "Turma cadastrada com sucesso"
             }
 
-            classes.push(c)
-            return "Turma cadastrada com sucesso"
-        }
+            function putClass(req, id){
+                let idx = classes.findIndex(c => c.id == id)
+                if(idx == -1) return "Não encontrado"    
+                
+                    if (req.name != undefined) classes[idx].name = req.name
+                    if (req.id != undefined) classes[idx].id = req.id
+                    if (req.userId != undefined) classes[idx].userId = req.userId   
+                    if (req.quant != undefined) classes[idx].quant = req.quant
+                    if (req.createAt != undefined) classes[idx].createAt = req.createAt
+                    if (req.startDate != undefined) classes[idx].startdate = req.startDate
+                    if (req.endDate != undefined) classes[idx].end_date = req.endDate
 
-        function handleregister (){
-            console.log(
-                setClass({
-                    name: document.getElementById("name").value,
-                    quant:document.getElementById("quant").value,
-                    createAt:"2024-01-05",
-                    startDate:document.getElementById("startDate").value,
-                    endDate:document.getElementById("endDate").value
+                    return classes[idx]
+            }
+                     
+
+
+            function delClass(id){
+                let idx = classes.findIndex(c => c.id == id)
+                if(idx == -1) return "Não encontrado"
+                classes.splice(idx, 1)
+
+                listClasses(classes)
+
+                return "Deletado com sucesso"
+                
+                
+           
+            }
+
+
+
+            function handleregister() {
+                let id = document.getElementById("id").value
+                if (id == -1) {
+                    console.log(
+                        setClass({
+                            name: document.getElementById("name").value,
+                            quant: document.getElementById("quant").value,
+                            createAt: "2024-01-05",
+                            startDate: document.getElementById("startDate").value,
+                            endDate: document.getElementById("endDate").value
+                        })
+                    )
+
+                } else if (id > -1) {
+                    console.log(
+                        putClass({
+                            name: document.getElementById("name").value,
+                            quant: document.getElementById("quant").value,
+                            createAt: "2024-01-05",
+                            startDate: document.getElementById("startDate").value,
+                            endDate: document.getElementById("endDate").value
+                        }, id)
+                    )
+                } else {
+                    console.log("Erro")
+                }
+
+                document.getElementById("id").value = -1
+                listClasses(classes)
+            }
+
+            function editClasses(id) {
+                    let c = classes.find(c => c.id == id)
+                    document.getElementById("name").value = c.name
+                    document.getElementById("quant").value = c.quant
+                    document.getElementById("id").value = c.id
+            }
+
+            function listClasses(clist) {
+                const tbody = document.querySelector("#scList tbody")
+                tbody.innerHTML = ""
+
+                clist.forEach(c => {
+                    const row = document.createElement("tr")
+                    const nameCell = document.createElement("td")
+                    nameCell.textContent = c.name
+                    row.appendChild(nameCell)
+                    tbody.appendChild(row)
                 })
-            )
-
-            listClasses(classes)
-        }
-        function listClasses(clist){
-            const tbody = document.querySelector("#scList tbody")
-            tbody.innerHTML = ""
-            
-            clist.forEach(c => {
-                const row = document.createElement("tr")
-                const nameCell = document.createElement("td")
-                nameCell.textContent = c.name
-                row.appendChild(nameCell)
-                tbody.appendChild(row)
-            })
 
 
-              } 
+            }
+
+            function listClasses(plist) {
+                const tbody = document.querySelector("#scList tbody");
+                tbody.innerHTML = "";
+
+                plist.forEach(c => {
+                    const row = document.createElement("tr");
+                    const indicatorCell = document.createElement("td");
+                    indicatorCell.textContent = c.name;
 
 
 
+                    const editcell = document.createElement("td");
+                    const editbutton = document.createElement("button");
+                    editbutton.className = "round edit";
+                    editbutton.onclick = function () {
+                        editClasses(c.id);
+                    };
+                    editcell.appendChild(editbutton);
 
-        
-    </script>
-</html>
+
+
+                    const dellcell = document.createElement("td");
+                    const dellbutton = document.createElement("button");
+                    dellbutton.onclick = function () {
+                        delClass(c.id);
+                    };
+                    dellcell.appendChild(dellbutton);
+
+
+
+                    row.appendChild(indicatorCell);
+                    row.appendChild(editcell);
+                    row.appendChild(dellcell);
+                    tbody.appendChild(row);
+                })
+            }
+
+
+
+
+
+        </script>
+
+        </html>
