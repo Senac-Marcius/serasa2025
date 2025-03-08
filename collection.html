@@ -48,6 +48,7 @@
         #scList{
             height: 400px;
             width:300px;
+            flex-direction: column;
             display: flex;
             padding:20px;
             border-radius:20px;
@@ -120,10 +121,10 @@
             background:gold;
         }
         .img{
-            display: flex;
+            display:flex;
             justify-content: end;
             align-items:center;
-            position: relative;
+            margin:auto;
             margin-right: 10%;
             margin-top: 8%;
             z-index: 25;
@@ -176,18 +177,18 @@
       
       
         function handleRegister(){ // handle chama o botão register
-            let id = document.getElementById('id').value
+            let id = document.getElementById('id').value 
             if(id == -1){
                 console.log(
-                setCollections({ //atribuição de req 
+                setCollections({ // essa função coloca os dados do id dentro do input
                 name: document.getElementById("name").value,
                 quantity:document.getElementById("quantity").value,
                 createAt: "2000-12-23",
                 stars:document.getElementById("stars").value
             })
         )
-            }else if (id > -1){
-              let editcollection = putCollection({ //atribuição de req 
+            }else if (id > -1){ //passagem de informações da função put
+              let editcollection = putCollection({ //
                 id:0,
                 name: document.getElementById("name").value,
                 quantity:document.getElementById("quantity").value,
@@ -202,14 +203,14 @@
             }
             listCollections(collections)
         }
-        function editCollections(id){
+        function editCollections(id){ //essa função pega os dados do id e coloca dentro do input
             let collection = collections.find(c => c.id == id)
                 document.getElementById("id").value = collection.id 
                 document.getElementById("name").value = collection.name 
                 document.getElementById("stars").value = collection.stars
                 document.getElementById("quantity").value = collection.quantity
         }
-        function putCollection(req, id){ 
+        function putCollection(req, id){ //essa função modifica os itens desejados 
                 let idx = collections.findIndex(c=> c.id == id) 
                 if(idx == -1) return "não encontrado"
                 if(req.name!= undefined) collections[idx].name = req.name
@@ -217,8 +218,17 @@
                 if(req.quantity!= undefined) collections[idx].quantity = req.quantity
                 
                 return collections[idx]
-                }
-           
+        }
+        function dellCollections(id){
+                let idx = collections.findIndex(c=> c.id ==id)
+                if(idx == -1) return "nao encontrado"
+
+                collections.splice(idx , 1)
+
+                listCollections(collections)
+                
+                return "excluido"
+        }  
                 
             function listCollections(clist){
                 const tbody = document.querySelector("#scList tbody")
@@ -236,12 +246,13 @@
                     const dellButton = document.createElement ("button")
                     dellButton.textContent = "Deletar"
                     dellButton.className = "round Dell"
-
-
+                    dellButton.onclick = function () {
+                        dellCollections(c.id)
+                    }
 
                     const buttonEdit = document.createElement("button")
                     buttonEdit.textContent = "Editar"
-                      buttonEdit.className = "round Edit"
+                    buttonEdit.className = "round Edit"
 
                     buttonEdit.onclick = function () {
                         editCollections(c.id)
@@ -252,7 +263,7 @@
                     buttonEdittd.appendChild(buttonEdit);
                     row.appendChild(buttonEdittd);
 
-                    dellButtontd.appendChild(dellButton);
+                    dellButtontd.appendChild(dellButton)
                     row.appendChild(dellButtontd);
 
                     tbody.appendChild(row);
