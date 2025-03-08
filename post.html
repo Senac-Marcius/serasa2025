@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Postagem</title>
+        <style>
+            /*
+            #BF54A3
+            #0B0C0D
+            #4EB1D9
+            #04ADBF
+            #F2F2F2
+            */
+            body{
+                margin: 0;
+            }
+
+            h1 {
+                text-align: center;
+                color: #BF54A3;
+                background-color: #F2F2F2;
+                margin: 0;
+                padding: 20px;
+            }
+
+            h2{
+                text-align: center;
+            }
+
+            section {
+                display: flex;
+                margin: 0 auto;
+                flex-direction: column;
+            }
+
+            #scRegister{
+
+            }
+
+            #scList {
+
+            }
+
+            .row {
+                display: flex;
+                margin-top: 50px;
+                padding: 20px;
+            }
+
+            label {
+                font-weight: 600;
+            }
+
+            br {
+                margin: 10px;
+            }
+
+            button {
+                background: linear-gradient(135deg, #6e8efb, #a777e3);
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                font-size: 16px;
+                font-weight: bold;
+                border-radius: 8px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+                cursor: pointer;
+                transition: all 0.3s ease-in-out;
+                position: relative;
+                overflow: hidden;
+                margin: 20px auto 0;
+                display: block;
+            }
+
+            button:hover {
+                background: linear-gradient(135deg, #5b77e0, #925ec4);
+                box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+                transform: translateY(-2px);
+            }
+
+            button:active {
+                transform: translateY(1px);
+                box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            button.round {
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+            }
+
+            button.dell{
+                background: #ff0000;
+            }
+
+            button.edit{
+                background: #ffff00;
+            }
+
+            form {
+                background-color: #F2F2F2;
+                padding: 40px;
+                border-radius: 20px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            }
+
+        </style>
+    </head>
+    <body>
+        <h1>Seus Feed</h1>
+        <div class="row">
+            <section id="scRegister">
+                <form>
+                    <input id="id" type="hidden" value="-1"/>
+                    <label>Descrição: </label><textarea id="description" type="text"></textarea><br>
+                    <label>URL: </label><input id="url" type="text" /><br>
+                    <button type="button" id="register" onclick="handleRegister()">CADASTRAR</button>
+                </form> 
+            </section>
+            
+            <section id="scList">
+                <table>
+                    <thead>
+                        <th>URL</th>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </body>
+    <script>
+        var posts = []
+
+        function setPost(req){
+            const urlPattern = /^(https?:\/\/)[^\s$.?#].[^\s]*$/;
+            const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+
+            if(!urlPattern.test(req.url)) return "Campo url deve conter o seguinte formato https://dominio."
+            if(!datePattern.test(req.createAt)) return "Campo createAt deve conter o seguinte formato YYYY-MM-DD"
+            if(req.description.length > 244) return "Campo description deve conter até 244 caracters"
+
+            let p = {
+                id: posts.length,
+                description: req.description,
+                url:req.url,
+                createAt: req.createAt,
+                userId: req.userId
+            }
+
+            posts.push(p)
+            return "Cadastrado"
+        }
+   
+        
+        function putPost(req, id){
+            let idx = posts.findIndex(p => p.id == id)
+
+            if(idx == -1) return "Não encontrado"
+
+            if(req.description != undefined) posts[idx].description = req.description
+            if(req.url != undefined) posts[idx].url = req.url
+            if(req.userId != undefined) posts[idx].userId = req.userId
+
+            return posts[idx]
+        }
+        
+        function handleRegister(){
+            let id = document.getElementById('id').value
+
+            if(id == -1){
+                console.log(
+                    setPost({
+                        description: document.getElementById("description").value,
+                        url: document.getElementById("url").value,
+                        createAt: "2000-12-31",
+                        userId: 0
+                    })
+                )
+            }else if(id > -1){
+                //chamar a função de put
+                console.log(
+                    putPost({
+                        description: document.getElementById("description").value,
+                        url: document.getElementById("url").value,
+                        userId: 0
+                    }, id)
+                )
+
+                document.getElementById('id').value = -1
+            }else{
+                console.log("erro")
+            }
+
+            listPosts(posts)
+        }
+
+        function editPost(id){
+            let post = posts.find(p => p.id == id)
+
+            document.getElementById("description").value = post.description
+            document.getElementById("url").value = post.url
+            document.getElementById("id").value = post.id
+        }
+
+        //tem que criar a função de dell
+        //essa função tem que deletar da lista e mandar listar novamente
+   
+        function listPosts(pList){
+            const tbody = document.querySelector("#scList tbody")
+            tbody.innerHTML = ""
+
+            pList.forEach(p => {
+                const row = document.createElement("tr")
+
+                const urlCell = document.createElement("td")
+                urlCell.textContent = p.url
+
+                const editCell = document.createElement("td")
+                const editButton = document.createElement("button")
+                editButton.className = "round edit"
+                editButton.onclick = function() {
+                    editPost(p.id)
+                };
+                editCell.appendChild(editButton)
+
+                const dellCell = document.createElement("td")
+                const dellButton = document.createElement("button")
+                dellButton.className = "round dell"
+                //o onclick tem que receber um função
+                dellCell.appendChild(dellButton)
+
+                row.appendChild(urlCell)
+                row.appendChild(editCell)
+                row.appendChild(dellCell)
+                tbody.appendChild(row)
+            })
+        }
+   </script>
+</html>
