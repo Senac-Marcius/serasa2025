@@ -153,7 +153,7 @@
             }
 
             let e = {
-                id: expenses.length,
+                id: expenses.length ? expenses[expenses.length -1].id + 1 : 0,
                 name: req.name,
                 description: req.description,
                 url: req.url,
@@ -212,7 +212,9 @@
             }
 
            listExpenses(expenses)
+           document.getElementById("id") = -1
         }
+
 
         function editExpenses(id){
             let e = expenses.find(e => e.id == id)
@@ -222,6 +224,26 @@
             document.getElementById("url").value = e.url
             document.getElementById("value").value = e.value
             document.getElementById("id").value = e.id
+        }
+
+        function dellExpenses(id){
+            let e = expenses.find(e => e.id == id)
+
+            document.getElementById("name").value = e.name
+            document.getElementById("description").value = e.description
+            document.getElementById("url").value = e.url
+            document.getElementById("value").value = e.value
+            document.getElementById("id").value = e.id
+
+            let idx = expenses.findIndex(e => e.id == id)
+
+            if(idx == -1) return "Não encontrado"
+
+            expenses.splice(idx, 1)
+
+            return listExpenses()
+
+        
         }
    
         function listExpenses(){
@@ -235,21 +257,24 @@
                 nameCell.textContent = e.name
 
                 const editCell = document.createElement("td");
-                const editButton = document.createElement("button")
+                const editButton = document.createElement("button");
                 editButton.className = "round edit"
                 editButton.onclick = function () {
                     editExpenses(e.id)
                 };
                 editCell.appendChild(editButton)
 
-                const delCell = document.createElement("td");
-                const delButton = document.createElement("button");
-                delButton.className = "round dell"
-                delCell.appendChild(delButton)
+                const dellCell = document.createElement("td");
+                const dellButton = document.createElement("button");
+                dellButton.className = "round dell"
+                dellButton.onclick = function(){
+                    dellExpenses(e.id)
+                }
+                dellCell.appendChild(dellButton)
 
                 row.appendChild(nameCell)
                 row.appendChild(editCell)
-                row.appendChild(delCell)
+                row.appendChild(dellCell)
                 tbody.appendChild(row)
             })
         }
