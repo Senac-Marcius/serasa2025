@@ -210,7 +210,7 @@
 
 
     let u = {
-      id: users.length,
+      id: users.length? users[users.length - 1].id + 1: 0,
       name: req.name,
       password: req.password,
       cpf: req.cpf,
@@ -234,6 +234,7 @@
     if (id == -1) {
       console.log(
         setUser({
+          //Qando cadastra o valor do id é -1
           name: document.getElementById("userName").value,
           password: document.getElementById("userPassword").value,
           cpf: document.getElementById("userCPF").value,
@@ -244,19 +245,20 @@
           createAT: "2023-02-15"
         })
       )
+         
     } else if (id > -1) {
-      //chamar a função put
+      //chamar a função put para atualizar as informações
       let put = putUser({
-          name: document.getElementById("userName").value,
-          password: document.getElementById("userPassword").value,
-          cpf: document.getElementById("userCPF").value,
-          age: document.getElementById("userAge").value,
-          phone: document.getElementById("userPhone").value,
-          email: document.getElementById("userEmail").value,
-          address: document.getElementById("userAddress").value,
-          createAT: "2023-02-15"
-        }, id)
-      
+        name: document.getElementById("userName").value,
+        password: document.getElementById("userPassword").value,
+        cpf: document.getElementById("userCPF").value,
+        age: document.getElementById("userAge").value,
+        phone: document.getElementById("userPhone").value,
+        email: document.getElementById("userEmail").value,
+        address: document.getElementById("userAddress").value,
+        createAT: "2023-02-15"
+      }, id)
+
 
       document.getElementById('id').value = -1
 
@@ -268,20 +270,24 @@
   }
 
   function putUser(req, id) {
-        let idx = users.findIndex(u => u.id == id)
-        if (idx == -1) return "Não encontrado"
-        if (req.name != undefined) users[idx].name = req.name
-        if (req.address != undefined) users[idx].address = req.address
-        if (req.password != undefined) users[idx].password = req.password
-        if (req.cpf != undefined) users[idx].cpf = req.cpf
-        if (req.age != undefined) users[idx].age = req.age
-        if (req.phone != undefined) users[idx].phone = req.phone
-        if (req.email != undefined) users[idx].email = req.email
-        if (req.createAT != undefined) users[idx].email = req.email
-        return users[idx]
-      }
+    let idx = users.findIndex(u => u.id == id)
+    if (idx == -1) return "Não encontrado"
+    if (req.name != undefined) users[idx].name = req.name
+    if (req.address != undefined) users[idx].address = req.address
+    if (req.password != undefined) users[idx].password = req.password
+    if (req.cpf != undefined) users[idx].cpf = req.cpf
+    if (req.age != undefined) users[idx].age = req.age
+    if (req.phone != undefined) users[idx].phone = req.phone
+    if (req.email != undefined) users[idx].email = req.email
+    if (req.createAT != undefined) users[idx].email = req.email
+    return users[idx]
+  }
+
+  
 
   function editUser(id) {
+    //pega cada informações do user onde o id é equivalente e joga  para o forms
+    //Quando clica no botão
     let user = users.find(u => u.id == id)
     document.getElementById("userName").value = user.name
     document.getElementById("userPassword").value = user.password
@@ -293,6 +299,18 @@
     document.getElementById('id').value = user.id
   }
 
+  //DELETAR USUARIO
+  function delUser(id) {
+      let idx = users.findIndex(u => u.id === id);
+      if (idx === -1) {
+          alert("Id não encontrado");
+          return;
+      }
+      users.splice(idx, 1);
+      alert("Usuário excluído");
+      listUsers(users); 
+
+  }
 
 
   function listUsers(ulist) {
@@ -320,13 +338,16 @@
       buttonDelete.textContent = "Deletar"
       buttonEdit.textContent = "Editar"
 
-      // buttonDelete.addEventListener("click", function () {
-      //       delUser(u.id); 
-      //       listUsers(users); 
-      //   });
+      //BOTÃO DELETE
+      buttonDelete.addEventListener("click", function () {
+            delUser(u.id); 
+            
+        });
 
       buttonEdit.className = "round edit"
       buttonDelete.className = "round dell"
+
+      //função anonima que chama o editUser e passa o u.id como parametro
       buttonEdit.onclick = function () {
         editUser(u.id)
 
@@ -345,25 +366,7 @@
     })
 
   }
-  //   function delUser(id) {
-  //     let idx = users.findIndex(u => u.id === id);
-  //     if (idx === -1) {
-  //         alert("Id não encontrado");
-  //         return;
-  //     }
-  //     users.splice(idx, 1);
-  //     alert("Usuário excluído");
-  // }
-  //   function delUser(id) {
-  //     let idx = users.findIndex(u => u.id === id);
-  //     if (idx === -1) {
-  //         alert("Id não encontrado");
-  //         return;
-  //     }
-  //     users.splice(idx, 1);
-  //     alert("Usuário excluído");
-
-  // }
+ 
 
 
 </script>
