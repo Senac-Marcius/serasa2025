@@ -1,249 +1,254 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8" />
-        <title>investimento</title>
-        <style>
-            body{
-                margin: 0;
-                padding: 0;
-                
-                
-            }
-            
-            h1{
-                text-align: center;
-                color: fuchsia;
-                background-color: darkmagenta;
-                margin: 0;
-                font-size: xxx-large;
-                font-style: oblique;
-                padding: 20px
-            }
+<head>
+    <meta charset="UTF-8" />
+    <title>investimento</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+        }
+        
+        h1{
+            text-align: center;
+            color: fuchsia;
+            background-color: darkmagenta;
+            margin: 0;
+            font-size: xxx-large;
+            font-style: oblique;
+            padding: 20px;
+        }
 
-            h2{
-                text-align: center;
-                color: fuchsia;
-                background-color: darkmagenta;
-                margin: 0;
-                font-size: xx-large;
-                font-style: oblique;
-            }
+        h2{
+            text-align: center;
+            color: fuchsia;
+            background-color: darkmagenta;
+            margin: 0;
+            font-size: xx-large;
+            font-style: oblique;
+        }
 
-            section{
-                margin: 10px;
-                padding: 10px;
-                width: 45%;
-                height: 30vh;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-            }
+        section{
+            margin: 10px;
+            padding: 10px;
+            width: 45%;
+            height: 30vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
 
-            #scRegister{
-                background-color: fuchsia;
-                color: darkmagenta;
-            }  
-            
-            #scList{
-                background-color: fuchsia;
-                color: darkmagenta;
-            }
+        #scRegister, #scList{
+            background-color: fuchsia;
+            color: darkmagenta;
+        }
 
-            .row {
-                display: flex;
-            }
+        .row {
+            display: flex;
+        }
 
-            label {
-                font-weight: 600;
-            }
+        label {
+            font-weight: 600;
+        }
 
-            br {
-                margin: 5px;
-            }
+        br {
+            margin: 5px;
+        }
 
-            button:hover {
-                margin: 10px;
-                padding: 10px;
-                background-color: darkmagenta;
-                color: fuchsia;
-                border: none;
-                border-radius: 100px;
-                font-style: italic;
-            }
+        button:hover {
+            margin: 10px;
+            padding: 10px;
+            background-color: darkmagenta;
+            color: fuchsia;
+            border: none;
+            border-radius: 100px;
+            font-style: italic;
+        }
 
-            button:active {
-                transform: translateY(1px);
-                box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
-            }
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+        }
 
-            button.round {
-                width: 35px;
-                height: 35px;
-                border-radius: 50%;
-            }
+        button.round {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+        }
 
-            button.dell {
-                background: #ff0000;
-            }
+        button.dell {
+            background: #ff0000;
+        }
 
-            button.edit {
-                background: #ffff00;
-            }
+        button.edit {
+            background: #ffff00;
+        }
 
-        </style>
-    </head>
-    <body>
-        <h1>Cadastre seu investimento</h1>
-        <div class="row">
-            <section id="scRegister">
+    </style>
+</head>
+<body>
+    <h1>Cadastre seu investimento</h1>
+    <div class="row">
+        <section id="scRegister">
             <form>
-            <input id ="id" type="hidden" value="-1">
-            <label>Nome: </label><input id="name" type="text"/><br>
-            <label>Descrição: </label><input id="description" type="text"/><br>
-            <label>Data: </label><input id="date" type="date"><br>
-            <label>Url: </label><input id="url" type="text"/><br>
-            <label>Valor investido: </label><input id="amountInvested" type="number"/><br>
-            <label>Renda mensal: </label><input id="monthlyIncome" type="number"/><br>
-            <label>Valor total: </label><input id="totalValue" type="number"/><br>
-            <button type="button" id="register" onclick="handleRegister()">Cadastrar</button><br>
-        </form>
+                <input id="id" type="hidden" value="-1">
+                <label>Nome: </label><input id="name" type="text"/><br>
+                <label>Descrição: </label><input id="description" type="text"/><br>
+                <label>Data: </label><input id="date" type="date"><br>
+                <label>Url: </label><input id="url" type="text"/><br>
+                <label>Valor investido: </label><input id="amountInvested" type="number"/><br>
+                <label>Renda mensal: </label><input id="monthlyIncome" type="number"/><br>
+                <label>Valor total: </label><input id="totalValue" type="number"/><br>
+                <button type="button" id="register" onclick="handleRegister()">Cadastrar</button><br>
+            </form>
         </section>
         <section id="scList">
             <table>
                 <thead>
                     <th>Nome</th>
-                    
                 </thead>
                 <tbody>
-                
+
                 </tbody>
             </table>
         </section>
-        </div>
- 
-        
-    </body>
-    <script>
-        var invests = []
-        function setInvest(req){
-            const idDescription = /^[A-Za-z\s]+$/;
-            const idUrl = /^(https?:\/\/[^\s]+)$/;
-            const idCreateAt = /^\d{4},\d{2}-\d{2}$/;
+    </div>
+</body>
+<script>
+    var invests = []
 
-            if (!idDescription.test(req.description)){
-                return "Campo description deve conter apenas letras";
-            }
+    function setInvest(req){
+        const idDescription = /^[A-Za-z\s]+$/;
+        const idUrl = /^(https?:\/\/[^\s]+)$/;
+
+        if (!idDescription.test(req.description)){
+            return "Campo description deve conter apenas letras";
+        }
+
+        if (!idUrl.test(req.url)){
+            return "Campo url deve conter o seguinte formato https://dominio.com";
+        }
+
+        let i = {
+            name: req.name,
+            id:invests.length? invests [invests.length-1].id + 1 : 0,
+            description: req.description,
+            url: req.url,
+            createAt: req.createAt,
+            userId: req.userId,
+            num: req.num
+        }
+        invests.push(i)
+        return "Investimento cadastrado com sucesso";
+    }
+
+    function putInvest(req, id){
+        let idx = invests.findIndex(i => i.id == id)
+
+        if(idx == -1) return "Não encontrado"
+
+        if(req.description != undefined) invests[idx].description = req.description
+        if(req.url != undefined) invests[idx].url = req.url
+        if(req.createAt != undefined) invests[idx].createAt = req.createAt
+        if(req.userId != undefined) invests[idx].userId = req.userId
+        if(req.num != undefined) invests[idx].num = req.num
+
+        return invests[idx]
+    }
+
+    function handleRegister(){
+        let id = document.getElementById("id").value
+
+        if (id == -1){
+           console.log(
+        setInvest({
+                name: document.getElementById("name").value,
+                description: document.getElementById("description").value,
+                url: document.getElementById("url").value,
+                createAt: "2025-02-12",
+                userId: 0,
+                num: 100
+                 })
+            );
 
 
-            console.log(req.url)
-            if (!idUrl.test(req.url)){
-                return "Campo url deve conter o seguinte formato https://dominio.com";
-            }
 
-            let i = {
-                name: req.name,
-                id: invests.length,
-                description: req.description,
-                url: req.url,
-                createAt: req.createAt,
-                userId: req.userId,
-                num: req.num
-            }
-            invests.push(i)
-            return "investido"
-        } 
-        
-   
-        function handleRegister(){
-            let id = document.getElementById("id").value
-
-            if (id == -1){
-               console.log(
-                   setInvest({
-                       name: document.getElementById("name").value,
-                       description: document.getElementById("description").value,
-                       url: document.getElementById("url").value,
-                       createAt: "2025-02-12",
-                       userId: 0,
-                       num: 100
-                   })
-               )
-            }else if(id >-1){
+        }else if(id > -1){
             putInvest({
-                       name: document.getElementById("name").value,
-                       description: document.getElementById("description").value,
-                       url: document.getElementById("url").value,
-                       createAt: "2025-02-12",
-                       userId: 0,
-                       num: 100
-                    },id)
+                name: document.getElementById("name").value,
+                description: document.getElementById("description").value,
+                url: document.getElementById("url").value,
+                createAt: "2025-02-12",
+                userId: 0,
+                num: 100
+            }, id);
 
-                document.getElementById("id").value = -1
-            }else{
-                    console.log("error")
-            }        
-            listInvests(invests)
-        
-            console.log(
-
-                setInvest({
-                    name: document.getElementById("name").value,
-                    description: document.getElementById("description").value,
-                    url: document.getElementById("url").value,
-                    createAt: "2025-02-12",
-                    userId: 0,
-                    num: 100
-                })
-            )
-            
-            listInvests(invests)
-            
+            document.getElementById("id").value = -1;
+        }else{
+            console.log("error");
         }
 
-        function editInvests(id){
-            let i = invests.find(i => i.id = id)
-            document.getElementById("description").value = i.description
-            document.getElementById("url").value = i.url
-            document.getElementById("id").value = i.id
+        listInvests(invests);
+        document.getElementById("id").value = -1;
+    }
 
-        }
+    function editInvests(id){
+        let i = invests.find(i => i.id == id);
+        document.getElementById("name").value = i.name;
+        document.getElementById("description").value = i.description;
+        document.getElementById("url").value = i.url;
+        document.getElementById("id").value = i.id;
+    }
 
-        function listInvests(){
-            const tbody = document.querySelector("#scList tbody")
-            tbody.innerHTML = ""
-            
-            invests.forEach(i => {
-                const row = document.createElement("tr")
+    function deleteInvest(id){
+        let i = invests.find(i => i.id == id);
+        document.getElementById("name").value = i.name;
+        document.getElementById("description").value = i.description;
+        document.getElementById("url").value = i.url;
+        document.getElementById("id").value = i.id;
 
-                const tdName = document.createElement("td")
-                tdName.textContent = i.name
-                
-                const editCell = document.createElement("td")
-                const buttonEdit = document.createElement("button")
-                buttonEdit.className = "round edit"
-                buttonEdit.onclick = function() {
-                    editInvests(i.id)
-                };
-                editCell.appendChild(buttonEdit)
-                 
-                
-                const dellCell = document.createElement("td")
-                const buttonDell = document.createElement("button")
-                buttonDell.className = "round dell"
-                dellCell.appendChild(buttonDell)
-                
-                row.appendChild(tdName)
-                dellCell.appendChild(editCell)
-                buttonDell.appendChild(buttonEdit)
-                row.appendChild(dellCell)
-                row.appendChild(buttonDell)
-                tbody.appendChild(row)
+        let idx = posts.findIndex(p => p.id == id)
 
-                
-            })
-        }
+    if(idx == -1) return "Não encontrado"
 
-    </script>
+    posts.splice(idx, 1)
+
+    return listInvests()
+    }
+
+    function listInvests(){
+        const tbody = document.querySelector("#scList tbody");
+        tbody.innerHTML = "";
+
+        invests.forEach(i => {
+            const row = document.createElement("tr");
+
+            const tdName = document.createElement("td");
+            tdName.textContent = i.name;
+
+            const editCell = document.createElement("td");
+            const buttonEdit = document.createElement("button");
+            buttonEdit.className = "round edit";
+            buttonEdit.textContent = "Editar";
+            buttonEdit.onclick = function() {
+                editInvests(i.id);
+            };
+            editCell.appendChild(buttonEdit);
+
+            const actionsDell = document.createElement("td");
+            const buttonDell = document.createElement("button");
+            buttonDell.className = "round dell";
+            buttonDell.onclick = function() {
+                deleteInvest(i.id);
+            };
+            actionsDell.appendChild(buttonDell);
+
+            row.appendChild(tdName);
+            row.appendChild(editCell);
+            row.appendChild(actionsDell);
+            tbody.appendChild(row);
+        });
+    }
+</script>
 </html>
