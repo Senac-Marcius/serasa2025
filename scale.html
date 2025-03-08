@@ -82,13 +82,11 @@
             }
 
             button.edit {
-                background: #ff0000;
-
+                background: #ffeb3b;
             }
             
             button.dell {
-                background: #ffff00;
-                
+                background: #ff0000;
             }
 
         </style>
@@ -163,54 +161,60 @@
             }
 
             let s = {
-                id: scales.length -1,
+                id: scales.length? scales[scales.length-1].id+1 : 0 ,
                 day: req.day,
                 starttime: req.starttime,
                 endtime: req.endtime,
-                
-                
+                createAt: req.createAt,
                 userId: req.userId
+            }
+        
+            scales.push(s)
+            return "Escala Cadastrada"
         }
         
-        scales.push(s)
-        return "Escala Cadastrada"
+        function putScale(req, id){
+            let idx = scales.findIndex(s => s.id == id)
+
+            if(idx == -1) return "Não encontrado!"
+
+            if(req.day != undefined)scales[idx].day = req.day
+            if(req.starttime != undefined)scales[idx].starttime = req.starttime
+            if(req.endtime != undefined)scales[idx].endtime = req.endtime
+            if(req.userId!= undefined)scales[idx].userId = req.userId
+
+            return scales[idx]
         }
-        
-        function handleRegister(req,id){
-            let idx = document.getElementById("id").value
+
+        function handleRegister(){
+            let id = document.getElementById('id').value
 
             if(id == -1){
+
                 console.log(
                 setScales({
                     day: document.getElementById("day").value,
                     starttime: document.getElementById("starttime").value,
                     endtime: document.getElementById("endtime").value,
-                    createAt: document.getElementById("createAt").value,
                     userId: "0"
                 })
                 )
 
-            }else if(id > -1){
-                putScale(req,id)
-                    
-                        if(req.day != undefined)scales[idx].day = req.day
-                        if(req.starttime != undefined)scales[idx].starttime = req.starttime
-                        if(req.endtime != undefined)scales[idx].endtime = req.endtime
-                        if(req.createAt != undefined)scales[idx].createAt= req.createAt
-                        if(req.userId!= undefined)scales[idx].userId = req.userId
+            }else if(id >-1){
 
-                        return scales[idx]
-
-                        scales[idx]
-                
-                
-                document.getElementById('id').value = -1
-                
-
+                console.log(
+                    putScale({
+                        day: document.getElementById("day").value,
+                        starttime: document.getElementById("starttime").value,
+                        endtime: document.getElementById("endtime").value,
+                        userId: "0"
+                    },id)
+                )
             }else{
                 console.log("Erro")
             }
-            
+
+            document.getElementById('id').value = -1
             listScales(scales)
         }
     
@@ -221,7 +225,18 @@
             document.getElementById("day").value = scale.day
             document.getElementById("starttime").value = scale.starttime
             document.getElementById("endtime").value = scale.endtime
-            document.getElementById("createAt").value = scale.createAt
+        }
+
+        function dellScale(id){
+
+            let idx =  scales.findIndex(s => s.id == id )
+
+            if(idx == -1) return "Não encontrado"
+
+            scales.splice(idx, 1)
+
+            listScales(scales)
+            return "Dado excluído."
         }
 
         function listScales(sList){
@@ -236,7 +251,7 @@
 
                 const editButton = document.createElement("button");
                 const editCell = document.createElement("td");
-                editButton.className = " roud edit"
+                editButton.className = "roud edit"
                 editButton.onclick = function(){
                     editScale(s.id)
                 };
@@ -244,7 +259,10 @@
 
                 const dellButton = document.createElement("button");
                 const dellCell = document.createElement("td");
-                dellButton.className = " roud dell"
+                dellButton.className = "roud dell"
+                dellButton.onclick = function(){
+                    dellScale(s.id)
+                };
                 dellCell.appendChild(dellButton);
                 
 
