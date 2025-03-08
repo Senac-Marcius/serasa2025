@@ -129,6 +129,7 @@
 
   var products = []
   function setProduct(req){
+    
     const namePattern = /^.+$/; // Aceita qualquer caractere, incluindo espaços
     const datePattern = /^\d{4}-\d{2}-\d{2}$/; // Formato de data YYYY-MM-DD
     const descriptionPattern = /^.+$/; // Aceita qualquer caractere, incluindo espaços
@@ -146,7 +147,7 @@
         return"Formato de descrição inválido. A descrição deve conter apenas letras, números, espaços e alguns caracteres especiais."
     }
     let p = {
-        id: products.length,
+        id: products.length ? products[products.length - 1].id + 1 : 0,
         name: req.name,
         createAt: req.createAt,
         description: req.description
