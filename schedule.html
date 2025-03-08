@@ -52,7 +52,7 @@
 
 </body>
 <script>
-    var posts = JSON.parse(localStorage.getItem('posts')) || []
+    var posts = []
 
     function setPost(req) {
 
@@ -79,14 +79,14 @@
         }
 
         let p = {
-            id: posts.length - 1,
+            id: posts.length? posts[posts.length - 1].id + 1 : 0,
             description: req.description,
             titles: req.titles, // http://qualquercoisa. ou https://qualquercoisa.
             createAt: req.createAt, // YYYY-MM-DD
             userId: req.userId
         }
         posts.push(p)
-        localStorage.setItem('posts', JSON.stringify(posts))
+        // localStorage.setItem('posts', JSON.stringify(posts))
         console.log('Cadastrado!!')
     }
 
@@ -94,12 +94,12 @@
         let id = document.getElementById('id').value
 
         if(id == -1){
-            console.log(setPost({
+            setPost({
             description: document.getElementById('description').value,
             titles: document.getElementById('titles').value,
             createAt: '2000-12-31',
             userId: 0
-        }))
+        })
     }else if(id > -1){
         editPost({
             id: document.getElementById('id').value,
@@ -111,9 +111,8 @@
         console.log('erro!')
     }
         
-
         listPosts(posts)
-        console.log(posts)
+        
     }
 
     function putPosts(id){
@@ -133,9 +132,17 @@
     if(req.description != undefined) posts[idx].description = req.description
     if(req.titles != undefined) posts[idx].titles = req.titles
 
-    localStorage.setItem('posts', JSON.stringify(posts))
+    // localStorage.setItem('posts', JSON.stringify(posts))
 
-    return posts[idx]
+    listPosts(posts)
+}
+
+function deletePost(id){
+    let idx = posts.findIndex(p => p.id == id)
+
+    if(idx == -1) return "Não encontrado"
+    posts.splice(idx, 1)
+    listPosts(posts)
 }
 
     function listPosts(pList){
@@ -172,9 +179,9 @@
             buttonDell.style.padding = '0'; // Removendo o padding para dar forma mais quadrada
             buttonDell.style.fontSize = '12px'; // Definindo uma fonte menor para caber o texto
             buttonDell.style.lineHeight = '1';
-            buttonDell.addEventListener('click', () => {
-                
-            })
+            buttonDell.onclick = function(){
+                deletePost(p.id)
+            }
 
             actionCell.appendChild(buttonEdit)
             actionCell.appendChild(buttonDell)
@@ -189,9 +196,9 @@
 
     
 
-    window.onload = function() {
-        listPosts(posts);
-    }
+    // window.onload = function() {
+    //     listPosts(posts);
+    // }
 </script>
 
 </html>
