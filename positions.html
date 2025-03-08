@@ -143,7 +143,7 @@
             }
 
             let p = {
-                id: positions.length, 
+                id: positions.length? positions[positions.length - 1].id + 1 : 0, 
                 name: req.name,
                 description: req.description,
                 salary: req.salary,
@@ -170,9 +170,21 @@
                 if(req.creatAt != undefined) positions[idx].creatAt = req.creatAt
             }
             return positions[idx]
-
-            
         }
+            
+        function delPositions(id){
+            let idx = positions.findIndex(p => p.id == id);
+            
+            if(idx == -1) return "Não encontrado"
+
+            positions.splice(idx, 1)
+
+            listPositions(positions)
+
+            return "Excluido com sucesso"
+        }
+        
+        
 
         function handleRegister(){
             let id = document.getElementById("id").value
@@ -188,7 +200,7 @@
                         creatAt: document.getElementById("date").value,
                     })
                     listPositions(positions)
-                }else{
+            }else if(id > -1){
                 putPosition({
                         name: document.getElementById("positions").value,
                         description: document.getElementById("description").value,
@@ -198,15 +210,19 @@
                         supervisor: document.getElementById("supervisor").value,
                         creatAt: document.getElementById("date").value,
                 },id)
-                        listPositions(positions)
-                        document.getElementById("id").value = -1
-                console.log("Erro")
+                        
+            }else{
+                console.log("erro")
             }
-            
+
+            listPositions(positions)
+            document.getElementById("id").value = -1
         }
 
         function editPosition (id){
+            console.log(id)
             let  position = positions.find(p => p.id == id);
+            console.log(position)
             document.getElementById("id").value = position.id
             document.getElementById("positions").value = position.name
             document.getElementById("description").value = position.description
@@ -231,6 +247,9 @@
                 const cellDell = document.createElement("td");
                 const buttonDel = document.createElement("button");
                 buttonDel.className = "round dell";
+                buttonDel.onclick = function(){
+                    delPositions(p.id);
+                };
                 cellDell.appendChild(buttonDel);
 
                 const editCell = document.createElement("td");
