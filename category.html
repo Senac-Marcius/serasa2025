@@ -11,29 +11,22 @@
            color: #BF54A3;
            background-color: #f2f2f2;
             margin:0;
-
-
-}
+      }
       section{
         display:flex;
         margin: 0 auto;
         flex-direction:column;
       }
       
-
-      
       #scRegister{
-
         text-align: center;
-
       }
       #scList{
-
       }
       .row {
         display: flex;
-      margin-top: 50px;
-      padding: 20px;
+        margin-top: 50px;
+        padding: 20px;
       } 
       label{
         font-weight:600;
@@ -41,167 +34,186 @@
       br{
         margin: 10px;
       } 
-            button {
-                background: linear-gradient(135deg, #6e8efb, #a777e3);
-                color: white;
-                border: none;
-                padding: 12px 24px;
-                font-size: 16px;
-                font-weight: bold;
-                border-radius: 8px;
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-                cursor: pointer;
-                transition: all 0.3s ease-in-out;
-                position: relative;
-                overflow: hidden;
-                margin: 20px auto 0;
-                display: block;
-            }
+      button {
+        background: linear-gradient(135deg, #6e8efb, #a777e3);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 8px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        position: relative;
+        overflow: hidden;
+        margin: 20px auto 0;
+        display: block;
+      }
 
-            button:hover {
-                background: linear-gradient(135deg, #5b77e0, #925ec4);
-                box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
-                transform: translateY(-2px);
-            }
+      button:hover {
+        background: linear-gradient(135deg, #5b77e0, #925ec4);
+        box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+        transform: translateY(-2px);
+      }
 
-            button:active {
-                transform: translateY(1px);
-                box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
-            }
-            button.round {
-              width: 35px;
-              height: 35px;
-              border-radius: 50%;
-            }
+      button:active {
+        transform: translateY(1px);
+        box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+      }
+      button.round {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+      }
 
-            button.edit {
-              background: #ffff00;
-            }
-            button.dell {
-              background: #ff0000;
-            }
-            
- form {
-  background-color: #f2f2f2;
-  padding:40px;
-  border-radius: 20px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-}
-    </style>
-    </head>
-    <body>
-      <h1>cadastre sua categoria!</h1>
-      <div class="row">
-        <section id="scRegister">
-          <form> 
-            <input><input id="id" type="hidden" value ="-1"/>
-            <label>nome: </label><input id="name" type="text" /><br><br>
-          <button type="button" id="register" onclick="handleEnviar()">cadastrar</button>
-        </form>
-
-        </section>
+      button.edit {
+        background: #ffff00;
+      }
+      button.dell {
+        background: #ff0000;
+      }
       
-        <section id="scList">
-          <table>
-            <thead>
-              <th>nome</th>
-            </thead>
-            <tbody>
+      form {
+        background-color: #f2f2f2;
+        padding:40px;
+        border-radius: 20px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+      }
+    </style>
+</head>
+<body>
+  <h1>cadastre sua categoria!</h1>
+  <div class="row">
+    <section id="scRegister">
+      <form> 
+        <input id="id" type="hidden" value ="-1" />
+        <label>nome: </label><input id="name" type="text" /><br><br>
+        <button type="button" id="register" onclick="handleEnviar()">cadastrar</button>
+      </form>
+    </section>
 
-            </tbody>
-          </table>
-      </section>
-      </div>
-    </body>
-    <script>
-      var categories = []
+    <section id="scList">
+      <table>
+        <thead>
+          <th>nome</th>
+        </thead>
+        <tbody>
 
-      function setCategory(req){
-        const namePattern = /^[a-zA-Z\s]{2,50}$/;
-        const datePattern = /^\d{4}-\d{2}-\d{2}$/;
-        if(!namePattern.test(req.name)){
-            return "campo inserido deve conter apenas letras"
-        }
-        if(!datePattern.test(req.createAt)){
-            return "o campo deve ser somente data"
-            
-        }
-        
-        let c ={
-            id: categories.length,
-            name: req.name,
-            createAt: req.createAt
-        }
+        </tbody>
+      </table>
+    </section>
+  </div>
+</body>
+<script>
+  var categories = []
+
+  function setCategory(req){
+    const namePattern = /^[a-zA-Z\s]{2,50}$/;
+    const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+    if(!namePattern.test(req.name)){
+        return "campo inserido deve conter apenas letras"
+    }
+    if(!datePattern.test(req.createAt)){
+        return "o campo deve ser somente data"
+    }
     
-        categories.push(c)    //push é empurrar
-        return "cadastrado"
-      }
-   
-      function handleEnviar(){
-        let id = document.getElementById("id").value
+    let c ={
+        id: categories.length,
+        name: req.name,
+        createAt: req.createAt
+    }
 
-        if(id== -1){
-          console.log(
-            setCategory({ 
-             description: document.getElementById("description").value,
-              createAt: "1980-01-01",
-              userId : 0
-          
-            })
-          )
-          }
-        }else if(id > -1){
-          //chamar a funçao put
-          putCategories({ 
-
-        })
-        console.log(
-          setCategory ({      
-              name: document.getElementById("name").value,
-              createAt: "1980-01-01"
-          })
-        )
-//criar um formulario com botao usando filtro
-        listCategory(categories)
-      }
-  function editCategory(id){
-    let category= category.find(c =>c.id == id)
-
-    document.getElementById("description").value = c.description
-    document.getElementById("url").value = category.url
-    document.getElementById("id").value = category.id
-
+    categories.push(c)    //push é empurrar
+    return "cadastrado"
   }
-      function listCategory(cList){
-          const tbody = document.querySelector("#scList tbody")
-          tbody.innerHTML = ""
 
-          cList.forEach(c => {
-            const row = document.createElement("tr")
+  function putCategory(req, id){
+    let idx = categories.findIndex(c => c.id == id)
 
-            const nameCell = document.createElement("td")
-            nameCell.textContent = c.name
+    if(idx == -1) return "Nao encontrado"
+    
+    if(req.name != undefined) categories [idx].name = req.name
+    if(req.createAt != undefined) categories[idx].createAt = req.createAt
+    
+    return categories[idx]
+  }
 
-            const editCell = document.createElement("td")
-            const editButton = document.createElement("button");
-            editButton.className = "round edit"
-            editButton.onclick = function(){
-              editCategory(c.id)
-            };
-            editCell.appendChild(editButton)
+  function deleteCategory(id){
+    
+    let idx = categories.findIndex(c => c.id == id)
 
+    if(idx == -1) return "Categoria não encontrada"
+    
+  
+    categories.splice(idx, 1)
 
-            const dellCell = document.createElement("td")
-            const dellButton = document.createElement("button")
-             dellButton.className = "round dell"
-            dellCell.appendChild(dellButton)
+   
+    lisietCategory(categors)
+  }
 
-            
-            row.appendChild(nameCell)
-            row.appendChild(editCell)
-            row.appendChild(dellCell)
-            tbody.appendChild(row)
-          })
-        }
-    </script>
- </html>
+  function handleEnviar(){
+    let id = document.getElementById("id").value
+
+    if(id == -1){
+      console.log(
+        setCategory({ 
+          name: document.getElementById("name").value,
+          createAt: "1980-01-01"
+        })
+      )
+    } else if(id > -1){
+    
+      putCategory({ 
+        name: document.getElementById("name").value,
+        createAt: "1980-01-01"
+      }, id)
+
+      document.getElementById("id").value = -1
+    }
+
+    listCategory(categories)
+  }
+
+  function editCategory(id){
+    let category = categories.find(c => c.id == id)
+
+    document.getElementById("name").value = category.name
+    document.getElementById("id").value = category.id
+  }
+
+  function listCategory(cList){
+    const tbody = document.querySelector("#scList tbody")
+    tbody.innerHTML = ""
+
+    cList.forEach(c => {
+      const row = document.createElement("tr")
+
+      const nameCell = document.createElement("td")
+      nameCell.textContent = c.name
+
+      const editCell = document.createElement("td")
+      const editButton = document.createElement("button")
+      editButton.className = "round edit"
+      editButton.onclick = function(){
+        editCategory(c.id)
+      }
+      editCell.appendChild(editButton)
+
+      const dellCell = document.createElement("td")
+      const dellButton = document.createElement("button")
+      dellButton.className = "round dell"
+      dellButton.onclick = function(){
+      
+        deleteCategory(c.id)
+      }
+      dellCell.appendChild(dellButton)
+
+      row.appendChild(nameCell)
+      row.appendChild(editCell)
+      row.appendChild(dellCell)
+      tbody.appendChild(row)
+    })
+  }
+</script>
+</html>
