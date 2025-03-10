@@ -142,7 +142,7 @@
             if(req.description.length > 244) return "Campo description deve conter até 244 caracters"
 
             let p = {
-                id: posts.length,
+                id: posts.length? posts[posts.length - 1].id + 1 : 0,
                 description: req.description,
                 url:req.url,
                 createAt: req.createAt,
@@ -153,6 +153,19 @@
             return "Cadastrado"
         }
    
+        
+        function putPost(req, id){
+            let idx = posts.findIndex(p => p.id == id)
+
+            if(idx == -1) return "Não encontrado"
+
+            if(req.description != undefined) posts[idx].description = req.description
+            if(req.url != undefined) posts[idx].url = req.url
+            if(req.userId != undefined) posts[idx].userId = req.userId
+
+            return posts[idx]
+        }
+        
         function handleRegister(){
             let id = document.getElementById('id').value
 
@@ -167,6 +180,13 @@
                 )
             }else if(id > -1){
                 //chamar a função de put
+                console.log(
+                    putPost({
+                        description: document.getElementById("description").value,
+                        url: document.getElementById("url").value,
+                        userId: 0
+                    }, id)
+                )
 
                 document.getElementById('id').value = -1
             }else{
@@ -182,6 +202,18 @@
             document.getElementById("description").value = post.description
             document.getElementById("url").value = post.url
             document.getElementById("id").value = post.id
+        }
+
+        function delPost(id){
+            let idx = posts.findIndex(p => p.id == id)
+
+            if(idx == -1) return "Não encontrado"
+
+            posts.splice(idx, 1)
+
+            listPosts(posts)
+
+            return "Postagem excluida"
         }
    
         function listPosts(pList){
@@ -205,6 +237,9 @@
                 const dellCell = document.createElement("td")
                 const dellButton = document.createElement("button")
                 dellButton.className = "round dell"
+                editButton.onclick = function() {
+                    delPost(p.id)
+                };
                 dellCell.appendChild(dellButton)
 
                 row.appendChild(urlCell)
