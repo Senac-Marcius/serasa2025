@@ -15,7 +15,7 @@
                 font-family: Arial, sans-serif;
                 margin: 0px;
                 padding: 20px;
-                background-color: #f4f4f4;
+                background-color: #eeeeee;
             }
             h1 {
                 text-align: center;
@@ -235,7 +235,7 @@
                 callNumber: /^[\w\d\s.-]*$/,  // Aceita letras, números, espaços, pontos e traços
                 date: /^\d{4}-\d{2}-\d{2}$/, // Data no formato YYYY-MM-DD (Ex: 2019-12-05 / 2025-01-15)
                 duration: /^([0-9]{2}):([0-5][0-9]):([0-5][0-9])$/ //formato HH:MM:SS (horas, minutos e segundos)
-            };
+            }
             // Valida os campos com regras específicas
             if (!patterns.numberIntFields.test(req.numberPages) || !patterns.numberIntFields.test(req.volume) || !patterns.numberIntFields.test(req.year)){
                 return "O campo deve conter apenas números"
