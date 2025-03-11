@@ -115,7 +115,7 @@
                     <label>Nome do Projeto:</label>  
                     <input id="namep" type="text" />
                     <label>Site:</label>  
-                    <input id="website" type="url" placeholder=" https://siteprojeto.org.br"/><br><br>
+                    <input id="website" type="url" placeholder=" https://siteprojeto.org.br" onblur="ensureProtocol()" /><br><br>
                     
                     <label>Previsao de início:</label>  
                     <input id="createAt" type="date" /><br><br>
@@ -162,6 +162,17 @@
         </div>
     </body>
     <script>
+        function ensureProtocol() {
+                let websiteInput = document.getElementById("website");
+                let websiteValue = websiteInput.value.trim();
+
+                // Verifica se a URL começa com http:// ou https://
+                if (websiteValue && !/^https?:\/\//i.test(websiteValue)) {
+                    // Adiciona https:// se não tiver o protocolo
+                    websiteInput.value = "https://" + websiteValue;
+                }
+            }
+        
         function 
             formatCPF(campo) {
                 let cpf = campo.value.replace(/\D/g, ''); // Remove tudo o que não for número
