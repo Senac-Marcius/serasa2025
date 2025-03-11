@@ -1,59 +1,148 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f3f3f3;
+/* Reset e Estilização Global */
+* {
     margin: 0;
-    padding: 20px;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
-h2 {
-    color: #252323;
+
+body {
+    background-color: #f4f7f6;
+    color: #333;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar estilizada */
+.sidebar {
+    width: 250px;
+    background-color: #1B2838;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sidebar .logo {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.sidebar nav ul {
+    list-style: none;
+    width: 100%;
+}
+
+.sidebar nav ul li {
+    margin: 15px 0;
+}
+
+.sidebar nav ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 12px;
+    border-radius: 5px;
+    transition: 0.3s;
     text-align: center;
 }
+
+.sidebar nav ul li a:hover {
+    background-color: #17202A;
+}
+
+/* Conteúdo principal */
+.content {
+    flex-grow: 1;
+    padding: 30px;
+    background-color: #ECF0F1;
+    overflow-y: auto;
+}
+
+h2 {
+    color: #2C3E50;
+    margin-bottom: 15px;
+}
+
+/* Formulário */
 form {
     background: white;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
-    margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
-label {
-    display: block;
+
+form label {
     font-weight: bold;
+    display: block;
     margin-top: 10px;
 }
-input, button {
+
+form input {
     width: 100%;
-    padding: 8px;
+    padding: 10px;
     margin-top: 5px;
-    border: 1px solid #4b474d;
+    border: 1px solid #ccc;
     border-radius: 5px;
 }
+
 button {
-    background-color: #BF54A3;
+    margin-top: 15px;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #3498DB;
     color: white;
-    font-size: 16px;
     cursor: pointer;
-    
-    
+    transition: 0.3s;
+    font-size: 16px;
 }
+
 button:hover {
-    background-color:#ff00bb;
+    background-color: #2980B9;
 }
-#disciplineList {
+
+/* Tabela interativa */
+table {
+    width: 100%;
+    border-collapse: collapse;
     background: white;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
-    margin: 20px auto;
+    margin-top: 20px;
+    border-radius: 10px;
+    overflow: hidden;
 }
-.discipline-item {
+
+table th, table td {
+    padding: 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+table th {
+    background-color: #2980B9;
+    color: white;
+}
+
+/* Barra de busca */
+.search-bar {
     display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    
+    gap: 10px;
+    margin-top: 20px;
 }
-.discipline-item button {
-    background-color: red;
+
+.search-bar input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.search-bar button {
+    padding: 10px 15px;
 }

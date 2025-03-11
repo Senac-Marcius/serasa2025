@@ -4,40 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <script src="discipline.js"></script>
     <title>Gerenciador de Disciplinas</title>
 </head>
 <body>
 
-    <h2>Cadastro de Disciplina</h2>
-    <form id="disciplineForm">
-        <input type="hidden" id="editIndex"> <!-- Campo oculto para identificar edição -->
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">LOGO</div>
+            <nav>
+                <ul>
+                    <li><a href="#">Início</a></li>
+                    <li><a href="#">Disciplinas</a></li>
+                    <li><a href="#">Professores</a></li>
+                    <li><a href="#">Configurações</a></li>
+                </ul>
+            </nav>
+        </aside>
 
-        <label for="name">Nome da Disciplina:</label>
-        <input type="text" id="name" name="name" required><br><br>
+        <main class="content">
+            <h2>Cadastro de Disciplina</h2>
+            <form id="disciplineForm">
+                <input type="hidden" id="editIndex">
 
-        <label for="url">URL:</label>
-        <input type="text" id="url" name="url" required><br><br>
+                <label for="name">Nome da Disciplina:</label>
+                <input type="text" id="name" required>
 
-        <label for="workload">Carga Horária:</label>
-        <input type="number" id="workload" name="workload" required><br><br>
+                <label for="url">URL:</label>
+                <input type="text" id="url" required>
 
-        <label for="created_at">Data de Criação:</label>
-        <input type="date" id="created_at" name="created_at" required><br><br>
+                <label for="workload">Carga Horária:</label>
+                <input type="number" id="workload" required>
 
-        <label for="teacher">Professor Responsável:</label>
-        <input type="text" id="teacher" name="teacher" required><br><br>
+                <label for="created_at">Data de Criação:</label>
+                <input type="date" id="created_at" required>
 
-        <button type="button" onclick="handleSet()">Cadastrar</button>
-        <button type="button" onclick="updateDiscipline()" style="display:none;">Atualizar</button>
-    </form>
+                <label for="teacher">Professor Responsável:</label>
+                <input type="text" id="teacher" required>
 
-    <h2>Disciplinas Cadastradas</h2>
-    <div id="disciplineList"></div>
+                <button type="button" onclick="handleSet()">Cadastrar</button>
+                <button type="button" onclick="updateDiscipline()" style="display:none;">Atualizar</button>
+            </form>
 
-    <h2>Buscar Disciplinas</h2>
-    <input type="text" id="searchQuery" placeholder="Buscar por nome da disciplina">
-    <button onclick="searchDisciplines()">Buscar</button>
+            <h2>Disciplinas Cadastradas</h2>
+            <div class="search-bar">
+                <input type="text" id="searchQuery" placeholder="Buscar por nome da disciplina">
+                <button onclick="searchDisciplines()">Buscar</button>
+            </div>
 
+            <table id="disciplineTable">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Professor</th>
+                        <th>Carga Horária</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="disciplineList"></tbody>
+            </table>
+        </main>
+    </div>
+
+    <script src="disicipline.js"></script>
 </body>
 </html>

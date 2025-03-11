@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="discipline.js"></script>
+    <title>Gerenciador de Disciplinas</title>
+</head>
+<body>
+
+    <h2>Cadastro de Disciplina</h2>
+    <form id="disciplineForm">
+        <input type="hidden" id="editIndex"> <!-- Campo oculto para identificar edição -->
+
+        <label for="name">Nome da Disciplina:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="url">URL:</label>
+        <input type="text" id="url" name="url" required><br><br>
+
+        <label for="workload">Carga Horária:</label>
+        <input type="number" id="workload" name="workload" required><br><br>
+
+        <label for="created_at">Data de Criação:</label>
+        <input type="date" id="created_at" name="created_at" required><br><br>
+
+        <label for="teacher">Professor Responsável:</label>
+        <input type="text" id="teacher" name="teacher" required><br><br>
+
+        <button type="button" onclick="handleSet()">Cadastrar</button>
+        <button type="button" onclick="updateDiscipline()" style="display:none;">Atualizar</button>
+    </form>
+
+    <h2>Disciplinas Cadastradas</h2>
+    <div id="disciplineList"></div>
+
+    <h2>Buscar Disciplinas</h2>
+    <input type="text" id="searchQuery" placeholder="Buscar por nome da disciplina">
+    <button onclick="searchDisciplines()">Buscar</button>
+
+</body>
+</html>
