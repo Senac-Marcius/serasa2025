@@ -40,20 +40,6 @@
             font-family: Arial, Helvetica, sans-serif;
             
         }
-        section#searchEs{
-            background-color: #f2f2f2;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            white-space: nowrap; /* Impede quebra de linha */
-            overflow: hidden; /* Oculta o excesso de texto */
-            text-overflow: ellipsis; /* Adiciona "..." se o texto for muito grande */
-            display: flex;
-            justify-content: horizontal;
-            align-items: vertical;
-            color:#000000;
-            font-family: Arial, Helvetica, sans-serif;
-        }
 
         .row{
             display: flex;
@@ -188,16 +174,6 @@
             </select><br>
             <button type="button" id="register" onclick="handleRegister()">CADASTRAR</button><br>
         </form>
-    </section>
-    <section id="searchEs">
-        <table>
-            <thead>
-                <th>RESULTADO DA BUSCA</th>
-            </thead>
-            <tbody>
-
-            </tbody>
-        </table>
     </section>
     <section id="esList">
         <table>
@@ -427,23 +403,8 @@
     employees.splice(idx,1)
     listEmployees(employees)
     }
-    function showEmployye(name){
-    const t = document.querySelector("#searchEs tbody")
-    t.innerHTML = "" //limpa o body da tabela 
-    if((employees.find(e => e.name == name))){
-        const row = document.createElement("tr")
-            const nameCell = document.createElement("td")
-            const age = document.createElement("td")
-            //const tell
 
-            nameCell.textContent = e.name
-            
-            
-            row.appendChild(nameCell)
-            t.appendChild(row)
-    }
        
-    }
 
     function listEmployees(elist) {
         
