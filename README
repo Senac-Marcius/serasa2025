@@ -17,7 +17,7 @@ npm install @ui-kitten/components @eva-design/eva react-native-svg @ui-kitten/ev
 npm install --legacy-peer-deps
 
 # Sempre antes de começar a aula
-npm updade
+npm updade --legacy-peer-deps
 
 # Se tiver dando erro em alguma importação use esse comandos abaixo
 npm audit fix --force
@@ -28,3 +28,11 @@ npx expo -c
 rmdir /s /q node_modules
 del package-lock.json
 npm install
+
+#aula 12/03/25
+npm updade --legacy-peer-deps
+npm cache clean --force
+npm install react@18 react-dom@18 react-native@0.78 react-native-web@0.19 --force
+npx expo -c
+
+
