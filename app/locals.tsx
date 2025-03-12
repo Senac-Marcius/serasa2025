@@ -46,8 +46,7 @@ const styles = StyleSheet.create({              //ESTILIZAÇÃO: aqui convidamos
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
     },
-}) 
-
+})
 
 
 
