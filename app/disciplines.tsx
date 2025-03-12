@@ -8,26 +8,20 @@ export default function DisciplineScreen(){ // func que será exportada
 
 return (   
        
-     <View>
+        <View>
+
          {/*Aqui é o typeScript dentro do front*/}
          <Text>Minha tela das postagens</Text>
-         <View style = {Styles.row}>
-          <View style = {Styles.form}>
+         <View style = {styles.row}>
 
 
-          <TextInput placeholder='Nome'/>
-
+         <View style = {styles.form}>
+            <TextInput placeholder='Nome'/>
             <TextInput placeholder='url'/>
-
             <TextInput placeholder='Carga Horaria'/>
-
             <TextInput placeholder='Data Criacao'/>
-
             <TextInput placeholder='Professor'/>
-
-            <Button title= 'Cadastrar'/>
-
-            
+            <Button style = {styles.button} title='Cadastrar'/>
 
           </View>
           
@@ -37,7 +31,7 @@ return (
   );
 }
 
-const Styles = StyleSheet.create({ // minha const e meu parametro 
+const styles = StyleSheet.create({ // minha const e meu parametro 
   row: {
     flexDirection : 'row',
     justifyContent: 'space-between',
@@ -55,5 +49,9 @@ const Styles = StyleSheet.create({ // minha const e meu parametro
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 5,
 },
+
+button:{
+  
+}
 
 });
