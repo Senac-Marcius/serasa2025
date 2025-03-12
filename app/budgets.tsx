@@ -5,18 +5,24 @@ export default function BudgetScreen(){
 
 //aqui é typescriot
 
+    const [name, setName] = useState('');
+
     return (
         <View>
             {/* aqui é typescriot dentro do front*/}
             <Text>Minha tela das postagens</Text>
             <View style={styles.row}>
                 <View style={styles.form}>
-                    <TextInput placeholder = "nome" />
+                    <TextInput
+                            placeholder = "nome" 
+                            value={name}
+                            onChangeText={setName}
+                     />
                     <TextInput placeholder = "url"  />
                     <TextInput placeholder = "Valor"  />
                     
                     <Button title='cadastrar'/>
-
+                    {name}
                 </View>
                 
             </View>
