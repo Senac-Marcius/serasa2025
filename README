@@ -27,12 +27,12 @@ npx expo -c
 # Se precisar reinstalar as dependências do zero
 rmdir /s /q node_modules
 del package-lock.json
-npm install
+npm install --legacy-peer-deps
 
 #aula 12/03/25
 npm updade --legacy-peer-deps
 npm cache clean --force
-npm install react@18 react-dom@18 react-native@0.78 react-native-web@0.19 --force
+npm install react-native-safe-area-context --legacy-peer-deps
 npx expo -c
 
 
