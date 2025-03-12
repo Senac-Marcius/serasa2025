@@ -12,13 +12,9 @@ export default function LocalScreen(){
             <View style={styles.row}>
                 <View style={styles.form}>
                     <TextInput placeholder= "name" />        {/*  "placeholder" é um texto   */}
-
                     <TextInput placeholder= "area"/>
-
-                    <TextInput placeholder= "description"/>
-
+                    <TextInput placeholder= "description"/> 
                     <TextInput placeholder= "adress"/>
-
                     <Button title='Cadastrar' />          {/*  o código que deve ser utilizado para criar o botão  */} 
 
                 </View>
