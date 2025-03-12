@@ -1,29 +1,36 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button} from 'react-native';
 
+
 export default function NotificationScreen(){
 // aqui é typNotificationScreenescript
-
-
-    return (
-        <View>
-            {/* aqui é typescript dentro do front*/ }
-            <Text>Minha tela das notificações</Text>
-        <View style={style.row}>
-            <View style={style.form}>
-                <TextInput placeholder="Nome" />
-                <TextInput placeholder="Descrição"/>
-                <TextInput placeholder="Nivel de urgência"/>
-                <Button title="Cadastrar"/>
+const [name, setName] = useState('');
+ 
+return (
+    <View>
+        {/* aqui é typescriot dentro do front*/}
+        <Text>Minha tela de notificações</Text>
+        <View style={styles.row}>
+            <View style={styles.form}>
+                <TextInput
+                        placeholder = "nome"
+                        value={name}
+                        onChangeText={setName}
+                 />
+                <TextInput placeholder = "descrição"  />
+                <TextInput placeholder = "nével de urgência"  />
+                <TextInput placeholder = "url"  />
+               
+                <Button title='cadastrar'/>
+                {name}
             </View>
-
+           
         </View>
+    </View>
+);
+}
 
-        </View>
-    );
-} 
-
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
