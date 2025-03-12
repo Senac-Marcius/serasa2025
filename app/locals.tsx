@@ -1,5 +1,5 @@
 import React, { useState } from 'react'; 
-import { View, Text, StyleSheet, TextInput, Button } from 'react-native'; 
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native'; 
 
 export default function LocalScreen(){
 
@@ -8,7 +8,7 @@ export default function LocalScreen(){
     return (  //  *  sempre retornará um html.     * view com o "v" minúsculo é utilizado, apenas, no HTML puro.     * Para comentar no HYML, é necessário utilizar "{/* */}"
         <View>
             {/* aqui é typescript dentro do front */} 
-            <Text>Minha tela dos locais:</Text>
+            <Text>Minha tela dos Locais:</Text>
             <View style={styles.row}>
                 <View style={styles.form}>
                     <TextInput placeholder= "name" />        {/*  "placeholder" é um texto   */}
