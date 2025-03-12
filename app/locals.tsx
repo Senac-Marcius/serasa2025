@@ -25,8 +25,8 @@ export default function LocalScreen(){
               {/*  <FlatList
                 /> */}
             </View>
-        </View>
-    ); 
+        </View> 
+    );   
 } 
 
 const styles = StyleSheet.create({              //ESTILIZAÇÃO: aqui convidamos funções que criam estilos para fontes
@@ -46,6 +46,8 @@ const styles = StyleSheet.create({              //ESTILIZAÇÃO: aqui convidamos
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
     },
-})
+}) 
+
+
 
 
