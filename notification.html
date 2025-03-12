@@ -39,7 +39,7 @@
         }
 
         br {
-            margin: 10px;
+            margin: 5px;
         }
 
         button {
@@ -56,8 +56,7 @@
             position: relative;
             overflow: hidden;
             margin: 20px auto 0;
-            display: inline-block;
-            margin-right: 10px;
+            display: block;
         }
 
         button:hover {
@@ -75,6 +74,11 @@
             width: 35px;
             height: 35px;
             border-radius: 50%;
+            font-size: 10px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         button.dell {
@@ -129,7 +133,7 @@
     </div>
 
     <script>
-        var notifications = [];
+       let notifications = [];
 
         function setNotification(req) {
             const urlPattern = /^(https?:\/\/)?([a-z0-9-]+\.)+[a-z]{2,6}(\/[^\s]*)?$/;
@@ -148,7 +152,7 @@
             }
 
             let n = {
-                id: notifications.length,
+                id: notifications.length? notifications [notifications.length - 1].id + 1 : 0,
                 description: req.description,
                 categoryId: req.categoryId,
                 url: req.url,
