@@ -2,8 +2,28 @@ import React, { useState } from 'react';
 import { View, Text,StyleSheet, FlatList, TextInput, Button  } from 'react-native';
 
 export default function CategoryScreen(){
-//Aqui é typescript
+    const [req, setReq] = useState({
+        name: '',
+        description:'', 
+        category:'',
+        color:'',
+    });
+    const [categories, setCategories] = useState<{
+        name: string,
+        description:string, 
+        category:string,
+        color:string,
+    }[]>([]);
 
+    function handleRegister(){
+        setCategories([...categories, req])
+        setReq({
+            name: '',
+            description:'', 
+            category:'',
+            color:'',
+        })
+    }
 
     return (
         <View>
@@ -11,17 +31,36 @@ export default function CategoryScreen(){
             <Text>Minha tela das postagens</Text>
             <View style={styles.row}>
 
-        <View  style={styles.form}>
-            <TextInput placeholder="Nome"/>
-            <TextInput placeholder="Categoria"/>
-            <TextInput placeholder="Descrição"/>
-            <TextInput placeholder="Cor"/>
+                <View  style={styles.form}>
+                    <TextInput placeholder="Nome"
+                        value={req.name}
+                        onChangeText={(text) => setReq({...req,name:text})}
+                    />
+                    {req.name}
 
-            <Button title="Cadastrar"/> 
+                    <TextInput placeholder="Descrição"
+                         value={req.description}
+                         onChangeText={(text) => setReq({...req,description:text})}
+                    />
+                    {req.description}
 
-        </View>
+                    <TextInput placeholder="Categoria"
+                       value={req.category}
+                       onChangeText={(text) => setReq({...req,category:text})}
+                    />
+                    {req.category}
+
+                    <TextInput placeholder="cor"
+                        value={req.color}
+                        onChangeText={(text) => setReq({...req,color:text})}
+                    />
+                    {req.color}
+
+                     <Button title="Cadastrar" onPress={handleRegister}/> 
+                    
+                </View>
+            </View>
             
-              </View>
         </View>
     );
 }
