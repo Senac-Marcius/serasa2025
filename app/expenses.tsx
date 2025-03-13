@@ -4,7 +4,36 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function ExpenseScreen(){
 // aqui é typescript
+    const [req, setReq] = useState({
+            name: '',
+            url: '',
+            description: '',
+            id: 0,
+            cost: '',
+            creatAt : new Date(). toISOString(),
+            userId: '',
+    });
+    const [expense, setExpense ] = useState<{
+        name: string,
+        url: string,
+        description: string,
+        cost: string,
+        creatAt: string,
+        userId: string,
+    }[]>([]) 
 
+    function handleRegister(){
+        setExpense([...expense, req])
+        setReq({
+            name: '',
+            url: '',
+            description: '',
+            id: 0,
+            cost: '',
+            creatAt : new Date(). toISOString(),
+            userId: '',
+        })
+    }
 
     return (
         <View>
@@ -12,8 +41,42 @@ export default function ExpenseScreen(){
             <Text>tela de despesas</Text>
             <View style={styles.row}>
                 <View style={styles.form}>
-                    <TextInput placeholder="Nome"/><TextInput placeholder="url"/><TextInput placeholder="descrição"/>
-                    <Button title='Cadastrar'/>
+                    <TextInput placeholder="nome"
+                    value ={req.name}
+                    onChangeText ={(text) => setReq({...req ,name: text}) 
+                    }/>
+
+                    {req.name}
+
+                    <TextInput placeholder="url"
+                    value ={req.url}
+                    onChangeText={(text)=>setReq({...req ,url: text})
+                    }/>
+
+                    {req.url}
+
+                    <TextInput placeholder="description"
+                    value ={req.url}
+                    onChangeText={(text)=>setReq({...req ,description: text})
+                    }/>
+
+                    {req.description}
+
+                    <TextInput placeholder="valor"
+                    value ={req.cost}
+                    onChangeText ={(text) => setReq({...req ,cost: text}) 
+                    }/>
+
+                    {req.cost}
+
+                    <TextInput placeholder="userid"
+                    value ={req.userId}
+                    onChangeText ={(text) => setReq({...req ,userId: text}) 
+                    }/>
+
+                    {req.userId}
+
+                    <Button title='Cadastrar' onPress= { handleRegister }/>
                 </View>
                 
             </View>
