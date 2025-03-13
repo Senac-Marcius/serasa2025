@@ -2,19 +2,54 @@ import React, { useState } from 'react';
 import { View,Text, StyleSheet,FlatList, Button,TextInput} from 'react-native';
 
 export default function PostScreen(){
-//aqui é typer scypt
+    const [req, setReq] = useState({
+        name: '',
+        description : '',
+        id: 0,
+        createAt: new Date().toISOString(),
+        userId : 0,
+        
+    });
 
+    const[categories, setCategories] = useState<{ 
+        name: string,
+        description: string,
+        id: number,
+        createAt: string,
+        userId: number,
+    }[]>([])
+    
+    function handleRegister (){
+        setCategories([...categories, req])
+        setReq({   name: '',
+            description : '',
+            id: 0,
+            createAt: new Date().toISOString(),
+            userId : 0,
+
+        })
+    }
 
     return (
         <View>
             {/* aqui é typerscrypt dentro do front */}
-            <Text>minha tela das postagens</Text>
+
             <view style={styles.row}>
                 <View style={styles.form}>
-                    <TextInput placeholder="nome" />
-                    <TextInput placeholder="CATEGORIA" />
+                    <TextInput placeholder="nome" 
+                        value={req.name}
+                        onChangeText={(text) => setReq({...req ,name: text})}
+                    /> 
+                    {req.name}
+
+                    <TextInput placeholder="description" 
+                        value={req.description}
+                        onChangeText={(text) => setReq({...req ,description: text})}
+                        />
+                        {req.description}
+                    
                       
-                   <Button title='Cadastrar' />
+                   <Button title= 'Cadastrar' onPress= {handleRegister}/>
                                  
                 </View>
            
