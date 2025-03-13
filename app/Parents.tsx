@@ -4,8 +4,36 @@ import { View, Text, StyleSheet, TextInput, Button} from 'react-native';
 //npm run web → chamar pagina web pelo terminal
 export default function ParentScreen (){
 //Aqui é TypeScript
+    const [req, setReq] = useState({
+        Nome: '',
+        Email:'',
+        Parentesco:'',
+        //id:0,
+        //createAt: new Date().toiSOString(),
+        //userId: 0,
 
+    });
 
+    const [Parents,setParents] = useState<{
+        Nome: string,
+        Email: string,
+        Parentesco: string,
+        /*userId: number*/
+    
+    }[]>([])/* <> → usado para tipar uma função */
+
+    function handleRegister(){
+        setParents([...Parents, req])
+        setReq({
+            Nome: '',
+            Email:'',
+            Parentesco:'',
+            //id:0,
+            //createAt: new Date().toiSOString(),
+            //userId: 0,
+        })
+    }
+    
     return (
         <View>{/*aqui é typeScript dentro do Front*/}
             {/*View → esse view é diferente do HTML ele contém DIVs e outros atributos,*/}
@@ -15,14 +43,35 @@ export default function ParentScreen (){
                 {/*<FlatList/> → atibuto para possivel criação de lista */}
                     <TextInput 
                         placeholder="Nome:"
+                        value={req.Nome}
+                        onChangeText={(Text) => setReq({...req ,Nome: Text})}
+            
                     />
                     <TextInput
                         placeholder="Email:"
+                        value={req.Email}
+                        onChangeText={(Text) => setReq({...req ,Email: Text})}
                     />
                     <TextInput
                         placeholder="Parentesco:"
+                        value={req.Parentesco}
+                        onChangeText={(Text) => setReq({...req ,Parentesco: Text})}
                     />
-                    <Button title="Cadastrar" />
+                    <Button 
+                    title='Cadastrar' 
+                    color='blue'
+                    onPress={handleRegister}/>
+
+                    <Button 
+                        title="Excluir" 
+                        color="red"
+                        onPress={ () => {} }
+                    />
+                    
+                    {req.Nome}<br/>
+                    {req.Email}<br/>
+                    {req.Parentesco}{/*foi aberto uma area de codigo chamar a variavel, equivale o inder do html*/}
+                    
                 </View>
             </View>
         </View>
@@ -49,7 +98,8 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 10,
     },
-    Button: { 
-        backgroundColor: '#F2F2F2'
-    }
+    button: { 
+       borderBlockColor:''
+
+    },
 })
