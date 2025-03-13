@@ -7,7 +7,7 @@ export default function HomeScreen() {
     return (
         <View>
             <Text>Bem-vindo ao App!</Text>
-            <Button title="Ir para Postagens" onPress={() => router.push('/calendar')} />
+            <Button title="Ir para Cronograma" onPress={() => router.push('/calendar')} />
         </View>
-    );
+    );  
 }
