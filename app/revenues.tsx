@@ -1,10 +1,48 @@
 
 import React, {useState} from 'react';
-import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
-import  RNDateTimePicker from '@react-native-community/datetimepicker';
+import { View, Text, StyleSheet, TextInput, Button, } from 'react-native';
+
 
 export default function RevenueScreen(){
 // aqui é typescript
+    const [req, setReq] = useState({
+        id: 0,
+        description: '',
+        name: '',
+        url: '', 
+        createAt: new Date().toISOString(),
+        userId: 0,
+        value: 0,
+        scholarshipStatus: '',
+        discountPercentage: 0,
+    });
+
+    const [revenues, setRevenues] = useState<{
+        id: number,
+        description : string,
+        name: string,
+        url: string,     
+        createAt: string,
+        userId: number,
+        value: number,
+        scholarshipStatus: string,
+        discountPercentage: number,
+    }[]>([]);
+    
+    function handleRegister(){
+        setRevenues([...revenues ,req]);
+        setReq({
+        id: 0,
+        description: '' ,
+        name: '',
+        url: '', 
+        createAt: new Date().toISOString(),
+        userId: 0,
+        value: 0,
+        scholarshipStatus: '',
+        discountPercentage: 0,  
+        })
+    }
 
     return (
         <View>
@@ -16,24 +54,38 @@ export default function RevenueScreen(){
                 
                 
                 <TextInput
-                    placeholder="descrição"
+                    placeholder=" digite aqui a Descrição"
+                    value = {req.description}
+                    onChangeText={(text) => setReq({...req,description:text})}
                 />
+                {req.description}
 
                 <TextInput
-                    placeholder="url"
+                    placeholder=" digite aqui o Name"
+                    value = {req.name}
+                    onChangeText={(text) => setReq({...req,name:text})}
                 />
-
-                <RNDateTimePicker 
-                    value={new Date()} 
-                />
+                {req.name}
 
                 <TextInput
-                    placeholder="value"
+                    placeholder=" digite aqui a URL"
+                    value = {req.url}
+                    onChangeText={(text) => setReq({...req,url:text})}
+                />
+                {req.url}
+
+                <TextInput
+                    placeholder=" digite aqui o STATUS DA BOLSA"
+                    value = {req.scholarshipStatus}
+                    onChangeText={(text) => setReq({...req,scholarshipStatus:text})}
+                />
+                {req.scholarshipStatus}
+
+                <Button 
+                    title= 'Cadastrar' onPress={handleRegister}
                 />
 
-                <Button title= 'cadastrar'
-                />
-
+            
 
             </View>
             
