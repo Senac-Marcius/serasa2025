@@ -1,46 +1,93 @@
 import React, {useState} from "react";
-import{View,Text, StyleSheet, FlatList, TextInput} from "react-native";
+import{View,Text, StyleSheet, FlatList, TextInput, Button} from "react-native";
 import CurrencyInput from 'react-native-currency-input';
 import {TimeInput} from "@heroui/date-input";
-
-import { Button } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 export default function PositionScreen(){
 /*Aqui é TypeScript*/
 
+    const[req, setReq] = useState({
+        id:0,
+        name:"",
+        description:"",
+        salary: 0,
+        workHours:"",
+        departament:"",
+        supervisor:"",
+        creatAt: new Date().toISOString(),
+    });
+
+    const [positions, setPositions] = useState <{name: string, description: string, salary: number, id: number, workHours: string, departament: string, supervisor: string, creatAt: string }[]> ([])
+    function handleRegister (){
+        setPositions([...positions,req])
+        setReq ({
+            id:0,
+            name:"",
+            description:"",
+            salary: 0,
+            workHours:"",
+            departament:"",
+            supervisor:"",
+            creatAt: new Date().toISOString()
+        })
+    }
 
     return (
         <View>
             {/*Aqui é TypeScript dentro do front*/}
             <Text>Minha tela dos cargos</Text>
             <View style = {styles.row}>
-                <view style={styles.form}>
+                <View style={styles.form}>
                     <TextInput 
-                        placeholder="Cargo" />
+                        placeholder="Cargo"
+                        value = {req.name}
+                        onChangeText={(text)=> setReq({...req ,name: text })}/>
+
+                        {req.name}
 
                     <TextInput 
-                        placeholder="Descrição" />
+                        placeholder="Digite a descrição"
+                        value = {req.description}
+                        onChangeText={(text)=> setReq({...req ,description: text })}/>
+
+                        {req.description}
                         
                     {/*<CurrencyInput 
-                        placeholder="Salário" />*/}
+                        placeholder="Salário" />
+                        value = {req.salary}
+                        onChangeText={(text)=> setReq({...req ,salary: text })}/>
+
+                        {req.salary}*/}
 
                     {/*<TimeInput 
-                        placeholder="Horas trabalhadas" />*/}
+                        placeholder="Horas trabalhadas" />
+                        value = {req.workHours}
+                        onChangeText={(text)=> setReq({...req ,workHours: text })}/>
+
+                        {req.workHours}*/}
 
                     <TextInput 
-                        placeholder="Departamento" />
+                        placeholder="Departamento"
+                        value = {req.departament}
+                        onChangeText={(text)=> setReq({...req ,departament: text })}/>
+
+                        {req.departament}
 
                     <TextInput 
-                        placeholder="Supervisor" />
+                        placeholder="Supervisor"
+                        value = {req.supervisor}
+                        onChangeText={(text)=> setReq({...req ,supervisor: text })}/>
+
+                        {req.supervisor}
 
                     {/*<DateTimePickerModal 
                         placeholder="Data de cadastro" />*/}
 
-                    <Button title = "Cadastrar"/>
+                    <Button title = "Cadastrar" onPress={handleRegister}/>
                         
 
-                    </view>                 
+                    </View>                 
             </View>
 
         </View>
