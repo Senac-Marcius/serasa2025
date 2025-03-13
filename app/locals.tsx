@@ -4,28 +4,72 @@ import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 export default function LocalScreen(){
 
     //onde vou criar a variavel do useState:            é const pq a usestate so aceita const
-    const [name, setName] = useState('');      //ses a variavel for com letra, usa-se '', se for com numero comeca com 0 (é o contador)
-// variavel=caixa   function=funil
+    const [req, setReq] = useState({
+    
+        name: '',
+        area: '',
+        description: '', 
+        adress:'',
+        createAt: new Date().toISOString(),
+    });      
+
+    const [locals, setLocals] = useState<{
+        name: string,
+        area: string,
+        description: string,
+        adress: string,
+        createAt: string,
+    }[]>([])        //  '< >' -> recebe um tipo. torna-se tipada   -> 
+
+    function handleRegister(){
+        setLocals([...locals, req])
+        setReq({
+            name: '',
+            area: '',
+            description: '', 
+            adress:'',
+            createAt: new Date().toISOString(),
+
+        })
+    }
+
     return (  //  *  sempre retornará um html.     * view com o "v" minúsculo é utilizado, apenas, no HTML puro.     * Para comentar no HYML, é necessário utilizar "{/* */}"
         <View>
             {/* aqui é typescript dentro do front */} 
-            <Text>Minha tela dos Locais:</Text>
+            <Text>Tela dos Locais:</Text>
             <View style={styles.row}>
                 <View style={styles.form}>
-                    <TextInput placeholder= "name"             /*  "placeholder" é um texto   */
-                        value={name}
-                        onChangeText={setName}  
+
+
+                    <TextInput placeholder= "Digite o nome do local"             /*  "placeholder" é um texto   */
+                        value={req.name}
+                        onChangeText={(t) => setReq({...req ,name: t })}   //onchange precisa receber uma funcao
                     /> 
 
-                    {name}
+                    {req.name}
 
-                    <TextInput placeholder= "area"/>
+                    <TextInput placeholder= "Digite a área em cm:"
+                    value={req.area}
+                    onChangeText={(n) => setReq({...req, area: n })}   //... significa-> TODOS OS CAMPOS DE "REQ"     
+                    />     {/*  é disparado sempre que o valor do campo de entrada é alterado  */}
+ 
+                    {req.area}  
 
-                    <TextInput placeholder= "description"/> 
+                    <TextInput placeholder= "Digite a descrição:"
+                    value={req.description}
+                    onChangeText={(t) => setReq({...req, description: t })}
+                    /> 
 
-                    <TextInput placeholder= "adress"/>
+                    {req.description}
 
-                    <Button title='Cadastrar' />          {/*  o código que deve ser utilizado para criar o botão  */} 
+                    <TextInput placeholder= "Digite o endereço:"
+                    value={req.adress}
+                    onChangeText={(t) => setReq({...req, adress: t })}
+                    />
+
+                    {req.adress} 
+
+                    <Button title='Cadastrar' onPress={ handleRegister } />          {/*  o código que deve ser utilizado para criar o botão  */} 
 
                 </View>
               {/*  <FlatList
@@ -55,6 +99,7 @@ const styles = StyleSheet.create({              //ESTILIZAÇÃO: aqui convidamos
 })
 
 
-//usestate: a funcao da uma update, a funcao atualiza a variavel +1        é uma variavel + function
-
+//useState: a funcao da uma update, a funcao atualiza a variavel +1        é uma variavel + function
+//na useState, a variavel=caixa   function=funil para entrar na caixa
+//se a variável for com letra, usa-se '', se for com numero comeca com 0 (é o contador)
 
