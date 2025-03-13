@@ -5,7 +5,34 @@ export default function BudgetScreen(){
 
 //aqui é typescriot
 
-    const [name, setName] = useState('');
+    const [req, setReq] = useState({
+
+        name:'',
+        url:'',
+        id: 0,
+        createAt: new Date().toISOString(),
+        velue:'',
+        userId: 0,
+        startDate: '',
+        endDate:'',
+        
+    });
+
+    const [budgets, setBudgets]= useState<{
+        name: string,
+        url:string,
+        id: number,
+        createAt: string,
+        velue: string,
+        userId: number,
+        startDate: string,
+        endDate: string,
+
+    }[]>([])
+
+    function  handleRegister(){
+        setBudgets([...budgets, req])
+    }
 
     return (
         <View>
@@ -15,14 +42,41 @@ export default function BudgetScreen(){
                 <View style={styles.form}>
                     <TextInput
                             placeholder = "nome" 
-                            value={name}
-                            onChangeText={setName}
+                            value={req.name}
+                            onChangeText={(text) => setReq({...req ,name: text})}
+                   />
+                    <TextInput 
+                    placeholder = "url"
+                    value={req.url}
+                    onChangeText={(text) => setReq({...req ,url: text})} 
                      />
-                    <TextInput placeholder = "url"  />
-                    <TextInput placeholder = "Valor"  />
+                     
+                     <TextInput 
+                    placeholder = "valor"
+                    value={req.velue}
+                    onChangeText={(text) => setReq({...req ,velue: text})} 
+                     />
+                    <TextInput 
+                    placeholder = "Data Inicial"
+                    value={req.startDate}
+                    onChangeText={(text) => setReq({...req ,startDate: text})} 
+                     />
+                    <TextInput 
+                    placeholder = "Data Final" 
+                    value={req.endDate}
+                    onChangeText={(text) => setReq({...req ,endDate: text})}
+                     />
+                   
                     
                     <Button title='cadastrar'/>
-                    {name}
+                    {req.name}
+                    {req.id}
+                    {req.url}
+                    {req.startDate}
+                    {req.endDate}
+                    {req.userId}
+
+                    <Button title ='CADASTRAR' onPress={ handleRegister }/>
                 </View>
                 
             </View>
