@@ -4,8 +4,39 @@ import { View, Text, StyleSheet, TextInput, Button} from 'react-native';
 
 export default function NotificationScreen(){
 // aqui é typNotificationScreenescript
-const [name, setName] = useState('');
- 
+    const [req, setReq] = useState({
+        name:'',
+        url:'',
+        description:'',
+        classification:'',
+        id: 0,
+        creatAt: new Date().toISOString(),
+        userId: 0,
+    });
+    
+    const [notifications, setNotifications] = useState<{
+        name: string,
+        url: string,
+        description: string,
+        classification: string,
+        id: number,
+        creatAt: string,
+        userId: number,
+    }[]>([])
+
+    function handleRegister(){
+        setNotifications([...notifications, req])
+        setReq({
+            name:'',
+            url:'',
+            description:'',
+            classification:'',
+            id: 0,
+            creatAt: new Date().toISOString(),
+            userId: 0,
+        })
+    }
+        
 return (
     <View>
         {/* aqui é typescriot dentro do front*/}
@@ -14,15 +45,29 @@ return (
             <View style={styles.form}>
                 <TextInput
                         placeholder = "nome"
-                        value={name}
-                        onChangeText={setName}
+                        value={req.name}
+                        onChangeText={(text) => setReq({...req ,name: text  })}
                  />
-                <TextInput placeholder = "descrição"  />
-                <TextInput placeholder = "nével de urgência"  />
-                <TextInput placeholder = "url"  />
+                <TextInput 
+                        placeholder = "descrição"  
+                        value={req.description}
+                        onChangeText={(text) => setReq({...req ,description: text  })}
+                />
+                <TextInput 
+                placeholder = "classificação"  
+                value={req.classification}
+                onChangeText={(text) => setReq({...req ,classification: text  })}
+                />
+
+                <TextInput placeholder = "url" 
+                         value={req.url}
+                         onChangeText={(text) => setReq({...req ,url: text  })}
+                />
                
-                <Button title='cadastrar'/>
-                {name}
+                {req.name}
+
+                <Button title="cadastrar" onPress={handleRegister}/>
+
             </View>
            
         </View>
