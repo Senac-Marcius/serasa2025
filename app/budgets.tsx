@@ -78,14 +78,6 @@ export default function BudgetScreen(){
                     onChangeText={(text) => setReq({...req ,endDate: text})}
                      />
                    
-                    
-                    <Button title='cadastrar'/>
-                    {req.name}
-                    {req.id}
-                    {req.url}
-                    {req.startDate}
-                    {req.endDate}
-                    {req.userId}
 
                     <Button title ='CADASTRAR' onPress={ handleRegister }/>
                 </View>
