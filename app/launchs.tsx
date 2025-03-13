@@ -2,37 +2,82 @@ import React, { useState } from 'react';
 import {View, Text, StyleSheet, TextInput, Button} from 'react-native';
 
 export default function LaunchScreen() {
-// aqui é typescript
+    const [req, setReq] = useState({
+        observation:'',
+        presence:'',
+        indicator:'',
+        note: '',
+        createAt: new Date().toISOString(),
+        userId: 0,
+    });
 
+    const [launchs, setLaunchs] = useState<{
+        observation: string,
+        presence: string,
+        indicator: string,
+        note: string,
+        createAt: string,
+        userId: number,
+    
+    }[]>([]);
 
+    function handleRegister() {
+        setLaunchs([...launchs, req])
+        setReq({ 
+            observation:'',
+            presence:'',
+            indicator:'',
+            note: '',
+            createAt: new Date().toISOString(),
+            userId: 0,
+
+    })
+
+    }
     return(
         <View>
-            {/*aqui é javascript dentro do front*/}
-            <Text>Minha tela das postagens</Text>
-            <View style={style.row}>
-                <View style={style.form}>
-                    <TextInput placeholder="Nota" />       
+            <Text>Lançamentos de Alunos:</Text>
+           
+                    <TextInput 
+                        placeholder="Digite a Observação:"      
+                        value={req.observation}
+                        onChangeText={(text) => setReq({...req, observation: text})} 
+                    />
+                    {req.observation}
 
-                    <TextInput placeholder="Observação"/>
+                    <TextInput 
+                     placeholder="Digite a Nota:"      
+                     value={req.note}
+                     onChangeText={(text) => setReq({...req, note: text})} 
+                 />
+                 {req.note}
 
-                    <TextInput placeholder="Presença"/>
+                    <TextInput
+                     placeholder="Presença:"   
+                     value={req.presence}
+                     onChangeText={(text) => setReq({...req, presence: text})} 
+                 />
+                 {req.presence}
 
-                    <TextInput placeholder="Indicador"/>
+                    <TextInput 
+                    placeholder="Indicador"
+                    value={req.indicator}
+                    onChangeText={(text) => setReq({...req, indicator: text})} 
 
-                    <Button title='Cadastrar' />
+                    />
+
+                    <Button title="CADASTRAR" onPress={ handleRegister } color="purple" />
 
                 </View>
-
-              </View>
-           </View>
     );
-}
 
+}
 const style = StyleSheet.create({
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start', 
+        
     },
 
     form: {
