@@ -32,6 +32,17 @@ export default function BudgetScreen(){
 
     function  handleRegister(){
         setBudgets([...budgets, req])
+            setReq({
+                
+        name:'',
+        url:'',
+        id: 0,
+        createAt: new Date().toISOString(),
+        velue:'',
+        userId: 0,
+        startDate: '',
+        endDate:'',
+            })
     }
 
     return (
