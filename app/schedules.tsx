@@ -19,6 +19,11 @@ export default function ScheduleScreen(){
 
     function handleRegister(){
         setPost([...posts, req])
+        setReq({id: 0,
+            userId: 0,
+            createAt: new Date().toISOString(),
+            titles:'',
+            description:''})
     }
     
     return(
