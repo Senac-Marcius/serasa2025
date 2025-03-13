@@ -1,39 +1,67 @@
-import React, {useState} from 'react'; // atualiza o objeto sozinho
-import { View, Text, StyleSheet, TextInput, Button, } from 'react-native';
+import React, { useState } from 'react'; 
+import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
 
 
-export default function DisciplineScreen(){ // func que será exportada
-//Aqui é typeScript
+
+export default function DisciplineScreen() {
+       // caixa // braço mecanico   só entra na caixa se passar pelo braço mecanico
+  const [req, setReq] = useState ({
+
+            id: 0 ,
+            name: '' ,
+            url: '' ,
+            workload: '',
+            createdAt: new Date().toISOString(),
+            teacher: '',
+  });
+
+    function handRegister(){
+      setDisciplines([...disciplines, req])
+    }
+  
 
 
-return (   
-       
-        <View>
+    const [disciplines , setDisciplines] = useState<{
 
-         {/*Aqui é o typeScript dentro do front*/}
-         <Text>Minha tela das postagens</Text>
-         <View style = {styles.row}>
+      id: number,
+      name: string,
+      url:string,
+      workload: string,
+      createdAt: string,
+      teacher: string ,
+    }[]>([]);
 
 
-         <View style = {styles.form}>
-            <TextInput placeholder='Nome'/>
-            <TextInput placeholder='url'/>
-            <TextInput placeholder='Carga Horaria'/>
-            <TextInput placeholder='Data Criacao'/>
-            <TextInput placeholder='Professor'/>
-            <Button style = {styles.button} title='Cadastrar'/>
+
+
+  return (   
+    <View>
+      <Text>Disciplinas</Text>
+      <View style={styles.row}>
+        <View style={styles.form}>
+
+          <TextInput placeholder='Nome' value= {req.name} onChangeText={(text) => setReq({...req, name: text })} />
+    
+          <TextInput placeholder='url' value= {req.url} onChangeText={(text) => setReq({...req, url: text })}/>
+
+          <TextInput placeholder='Carga Horaria'/>
+
+          <TextInput placeholder='Professor' value= {req.teacher} onChangeText={(text) => setReq({...req, teacher: text })}/>
+
+          
+          {/* alterando a cor, color dentro do button*/}
+          <Button title='Cadastrar' color='#4CAF50' onPress={() => handRegister }/> 
 
           </View>
-          
-         </View>
-     </View>
-       
+
+      </View>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({ // minha const e meu parametro 
+const styles = StyleSheet.create({
   row: {
-    flexDirection : 'row',
+    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
   },
@@ -48,10 +76,9 @@ const styles = StyleSheet.create({ // minha const e meu parametro
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 5,
-},
+  },
 
-button:{
-  
-}
-
+  button: {
+    marginTop: 10,
+  }
 });
