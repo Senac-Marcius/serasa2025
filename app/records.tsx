@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, TextInput, Button} from 'react-native';
+import {View, Text, StyleSheet, TextInput, Button, FlatList} from 'react-native';
 
 export default function RecordScreen(){
 {/*Aqui é typescript COMENTÁRIO dentro do front */}
@@ -13,6 +13,7 @@ export default function RecordScreen(){
         allergy:'',
         medication:'',
         userId:0,
+        createAt: new Date().toISOString(),
     });
 
     const [records, setRecords] = useState<{
@@ -24,11 +25,23 @@ export default function RecordScreen(){
         allergy: string, 
         medication: string,
         userId: number,
+        createAt: string,
 
     }[]>([]);
 
     function handleRegister() {
         setRecords([...records, req])
+        setReq({
+            id: req.id + 1,
+            name:'',
+            description:'',
+            sick:'',
+            health:'',
+            allergy:'',
+            medication:'',
+            userId:0,
+            createAt: new Date().toISOString(),
+        })
     }
 
     return (
@@ -37,7 +50,7 @@ export default function RecordScreen(){
 
             <View style={styles.row}>
 
-            <View style={styles.form}>
+                <View style={styles.form}>
 
 
                     <TextInput
@@ -78,16 +91,24 @@ export default function RecordScreen(){
 
 
                 <Button title="Cadastrar:" onPress={ handleRegister } />
-
-                {req.name}
-                {req.description}
-                {req.sick}
-                {req.health}
-                {req.allergy}
-                {req.medication}
                 
                 </View>
-              
+                <FlatList
+                    data={records}
+                    keyExtractor={( item ) => item.id.toString()} 
+                    renderItem={({ item }) => (
+                        <View style={styles.recordsItem}>
+
+                            <Text>{item.name}</Text>
+                            <Text>{item.description}</Text>
+                            <Text>{item.sick}</Text>
+                            <Text>{item.health}</Text>
+                            <Text>{item.allergy}</Text>
+                            <Text>{item.medication}</Text>
+                            <Text>{item.userId}</Text>
+                        </View>
+                    )}                                                                           
+                />
             </View>
         </View>
     );
@@ -111,5 +132,17 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
     },
-
+    recordsItem:{
+    flex: 1,
+    marginRight: 20,
+    marginLeft: 20,
+    marginBottom: 20,
+    padding: 60,
+    backgroundColor: '#F2F2F2',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 5,
+    }
 })
