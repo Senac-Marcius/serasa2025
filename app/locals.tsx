@@ -80,7 +80,13 @@ export default function LocalScreen(){
                     data={locals}                   
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
-                        <View>{item.description}</View>
+                        <View>
+                            <Text>{item.name}</Text>
+                            <Text>{item.area}</Text>
+                            <Text>{item.description}</Text>
+                            <Text>{item.adress}</Text>
+                            <Text>{item.createAt}</Text>
+                        </View>
                     )}
 
                  /> 
