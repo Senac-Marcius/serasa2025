@@ -1,5 +1,5 @@
 import react, {useState} from 'react';
-import {View, Text, StyleSheet, TextInput, Button} from 'react-native';
+import {View, Text, StyleSheet, TextInput, Button, FlatList} from 'react-native';
 
 export default function BudgetScreen(){
 
@@ -36,7 +36,7 @@ export default function BudgetScreen(){
                 
         name:'',
         url:'',
-        id: 0,
+        id: req.id + 1,
         createAt: new Date().toISOString(),
         velue:'',
         userId: 0,
@@ -81,7 +81,25 @@ export default function BudgetScreen(){
 
                     <Button title ='CADASTRAR' onPress={ handleRegister }/>
                 </View>
-                
+                <FlatList
+
+                    data={budgets}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({item}) => (
+                    
+                        <View style={styles.budetStyle}>
+                            <Text>{item.name}</Text>
+                            <Text>{item.url}</Text>
+                            <Text>{item.velue}</Text>
+                            <Text>{item.userId}</Text>
+                            <Text>{item.startDate}</Text>
+                            <Text>{item.endDate}</Text>
+                            <Text>{item.createAt}</Text>
+                            <Text>{item.createAt}</Text>
+                           
+                        </View>
+                    )}
+                />
             </View>
         </View>
     );
@@ -104,4 +122,18 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
     },
+    budetStyle:{
+        flex: 1,
+        marginRight: 10,
+        padding: 20,
+        backgroundColor: '#F2F2F2',
+        borderRadius: 15,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 4 },
+        shadowRadius: 5,
+        margin: 10,
+        width: 400,
+
+        }
 })
