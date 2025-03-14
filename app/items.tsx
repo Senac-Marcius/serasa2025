@@ -88,15 +88,14 @@ export default function ItemScreen(){ // aqui é TS
             notes: '',
             narrator: '',
             duration: '', 
-
         });
     }
     
-    return ( //encapsulamento
+    return( //encapsulamento
       <View> {/* aqui é typescript dentro do front*/}  
-        <Text>Minha tela de cadastro</Text>
-        <View style={ styles.row }>
-            <View style={styles.form}>
+            <Text>Tela de cadastro</Text>
+            <View style={ styles.row }>
+                <View style={styles.form}>
 
                     <TextInput 
                         placeholder="Título" 
@@ -238,18 +237,41 @@ export default function ItemScreen(){ // aqui é TS
                     {req.duration}
 
                     <Button title= 'Cadastrar' onPress={ handleRegister } color="purple" />
+                </View>
 
+                <FlatList
+                    data={items}
+                    keyExtractor={(item) => item.id.toString() }
+                    renderItem={({ item }) => (
+                        <View>
+                            <View>{item.title}</View>
+                            <View>{item.subtitle}</View>
+                            <View>{item.uniformTitle}</View>
+                            <View>{item.responsible}</View>
+                            <View>{item.translation}</View>
+                            <View>{item.year}</View>
+                            <View>{item.edition}</View>
+                            <View>{item.publisher}</View>
+                            <View>{item.location}</View>
+                            <View>{item.numberPages}</View>
+                            <View>{item.dimensions}</View>
+                            <View>{item.serie}</View>
+                            <View>{item.volume}</View>
+                            <View>{item.isbn}</View>
+                            <View>{item.issn}</View>
+                            <View>{item.cdd}</View>
+                            <View>{item.callNumber}</View>
+                            <View>{item.subject}</View>
+                            <View>{item.keywords}</View>
+                            <View>{item.summary}</View>
+                            <View>{item.notes}</View>
+                            <View>{item.narrator}</View>
+                            <View>{item.duration}</View>
+                        <View/>
+                    )}
+                />
             </View>
-
-            <FlatList
-                data={items}
-                keyExtractor={(item) => item.id.toString() }
-                renderItem={({ item }) =>(
-                    <View>{item.title}</View>
-                )}
-            />
-        </View>
-      </View>  
+        </View>  
     );
 }
 
@@ -268,7 +290,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         shadowColor: '#000',
         shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
+        shadowOffset: {width: 0, height: 4},
         shadowRadius: 5,
     },
     
