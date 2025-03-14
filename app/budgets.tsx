@@ -88,6 +88,8 @@ export default function BudgetScreen(){
                     renderItem={({item}) => (
                     
                         <View style={styles.budetStyle}>
+                       
+
                             <Text>{item.name}</Text>
                             <Text>{item.url}</Text>
                             <Text>{item.velue}</Text>
