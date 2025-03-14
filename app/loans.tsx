@@ -3,6 +3,7 @@ import { FlatList, View, Text, StyleSheet, TextInput, Button} from 'react-native
 
 export default function LoanScreen() {
     const[req, setReq]= useState({ //useState retorna uma variavel e uma função para alteral a variavel (req e setReq)
+        id: 0,
         bookId: '',
         loanDate: '',
         expectedLoanDate:'',
@@ -13,7 +14,9 @@ export default function LoanScreen() {
         observation: ''
 
     });
+
     const [loans, setLoans] = useState<{
+        id: number,
         bookId: string,
         loanDate:string,
         expectedLoanDate: string,
@@ -22,11 +25,25 @@ export default function LoanScreen() {
         creatAt:string,
         statusLoan:string,
         observation:string,
-        }[]>([])
+        
+    }[]>([])
 
-        function handleRegister (){
-            setLoans([...loans,req])
-        }
+    function handleRegister (){
+        console.log('aqui')
+        setLoans([...loans,req])
+        setReq({
+            id: req.id + 1,
+            bookId: '',
+            loanDate: '',
+            expectedLoanDate:'',
+            effectiveLoanDate:'',
+            renewal: '',
+            creatAt: new Date().toISOString(),
+            statusLoan: '',
+            observation: '',
+            
+        })
+    }
 //aqui é typescript
     return (
         <View>
@@ -37,64 +54,84 @@ export default function LoanScreen() {
                 
                     <TextInput placeholder="Nome do Livro:"
                     value={req.bookId} 
-                    onChangeText={(text) => setReq({...req,bookId: text })}
+                    onChangeText={(text) => setReq({...req, bookId: text })}
                     />
-                    {req.bookId}
+                    
 
                     <TextInput 
                         placeholder="Status de Empréstimo:"
                         value={req.statusLoan} 
                         onChangeText={(text) => setReq({...req, statusLoan: text })} //onChangeText recebe uma função, uma função anonima,a set req pede um objeto, (...) pega todos os objetos e tras de volta
                     />
-                    {req.statusLoan}
+                    
 
                     <TextInput 
                         placeholder="Data de Empréstimo:"
                         value={req.loanDate} 
                         onChangeText={(text) => setReq({...req, loanDate: text })}
                     />
-                    {req.loanDate}
+                    
 
                      <TextInput 
                         placeholder="Data Prevista de Devolução:"
                         value={req.expectedLoanDate} 
                         onChangeText={(text) => setReq({...req, expectedLoanDate: text })}
                     />
-                    {req.expectedLoanDate}
+                    
 
                      <TextInput 
                         placeholder="Data de Devolução Efetuada:"
                         value={req.effectiveLoanDate} 
                         onChangeText={(text) => setReq({...req, effectiveLoanDate: text })}
                     />
-                    {req.effectiveLoanDate}
+                    
 
                      <TextInput 
                         placeholder="Renovar:"
                         value={req.renewal}         //(...req) cria uma cópia do req atual
                         onChangeText={(text) => setReq({...req, renewal: text })}//O que está acontecendo aqui é que o estado de req está sendo atualizado de forma imutável (sem alterar diretamente o valor antigo).
                     /> 
-                     {req.renewal}
+                    
 
                     <TextInput 
                         placeholder="Observação:"
                         value={req.observation} 
                         onChangeText={(text) => setReq({...req, observation: text })}
                     />
-                    {req.observation}
+                    
 
-                    <Button title="Emprestar" onPress={ () => { handleRegister }}
+                    <Button title="Emprestar" onPress={handleRegister}
                     color="purple"
                      />
+                      
                 </View> 
             
-            
+                <FlatList //data significa o parametro que vai receber o vetor (data = dados)
+                    data={loans}                  //toString tranforma em string  
+                    keyExtractor={(item) => item.id.toString()}//vai pegar no loans cada elemento
+                    renderItem={({ item }) => ( //return aceita somente um argumento
+                        <View style={styles.itemContainer}>
+                            <Text>{item.bookId}</Text>
+                            <Text>{item.loanDate}</Text>
+                            <Text>{item.expectedLoanDate}</Text>
+                            <Text>{item.effectiveLoanDate}</Text>
+                            <Text>{item.renewal}</Text>
+                            <Text>{item.statusLoan}</Text>
+                            <Text>{item.observation}</Text>
+                            <Text>{item.creatAt}</Text>
+                            
+                        </View>
+                    )}
+                    
+                />
             </View>
         </View>
     ); //encapsulamento
 
 
 }
+
+
 
 const styles = StyleSheet.create({ 
     row: {
@@ -112,7 +149,17 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
-},
+    },
+    itemContainer: {
+        marginRight: 10,
+        padding: 20,
+        borderRadius: 10,
+        shadowOffset: { width: 0, height: 4 },
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+    },
+           
 })
 
 
