@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View,Text, StyleSheet,FlatList, Button,TextInput} from 'react-native';
 
-export default function PostScreen(){
+export default function categoryScreen(){
     const [req, setReq] = useState({
         name: '',
         description : '',
@@ -9,20 +9,20 @@ export default function PostScreen(){
         createAt: new Date().toISOString(),
         userId : 0,
         
-    });
-
+ });
+ 
     const[categories, setCategories] = useState<{ 
         name: string,
         description: string,
         id: number,
         createAt: string,
         userId: number,
-    }[]>([])
+        }[]>([])
     
     function handleRegister (){
         setCategories([...categories, req])
-        setReq({   name: '',
-            description : '',
+        setReq({name:'',
+            description:'',
             id: 0,
             createAt: new Date().toISOString(),
             userId : 0,
@@ -32,7 +32,7 @@ export default function PostScreen(){
 
     return (
         <View>
-            {/* aqui é typerscrypt dentro do front */}
+    {/* aqui é typerscrypt dentro do front */}
 
             <view style={styles.row}>
                 <View style={styles.form}>
@@ -40,19 +40,32 @@ export default function PostScreen(){
                         value={req.name}
                         onChangeText={(text) => setReq({...req ,name: text})}
                     /> 
-                    {req.name}
+                   
 
                     <TextInput placeholder="description" 
                         value={req.description}
                         onChangeText={(text) => setReq({...req ,description: text})}
                         />
-                        {req.description}
+                        
                     
                       
                    <Button title= 'Cadastrar' onPress= {handleRegister}/>
                                  
                 </View>
-           
+           <FlatList
+           data={categories}
+           keyExtractor={(item) => item.id.toString()}
+           renderItem={({item}) =>(
+            <view>
+                <text>{item.name}</text>
+              <text>{item.createAt}</text> 
+              <text>{item.name}</text>
+              <text>{item.userId}</text>  
+            </view>
+           )
+        }
+
+           />
             </view>
         </View>
    
