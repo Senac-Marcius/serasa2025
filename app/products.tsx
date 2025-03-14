@@ -1,5 +1,5 @@
 import React, { useState }  from 'react';  //importando objeto react e useState da biblioteca do react
-import {View, Text, StyleSheet, TextInput, Button} from 'react-native';
+import {View, Text, StyleSheet, TextInput, Button, FlatList} from 'react-native';
 
 
 export default function productScreen(){
@@ -12,7 +12,7 @@ export default function productScreen(){
         createAt:  new Date().toISOString(),
         userId: 0,
     });
-
+    
     const [products, setProducts] = useState<{ 
         description: string,
         name: string,
@@ -26,38 +26,56 @@ export default function productScreen(){
             setReq({
                 description:'',
                 name:'',
-                id: 0,
+                id: req.id+1,
                 createAt:  new Date().toISOString(),
                 userId: 0,})  
         }
 
     return (
         <View>
+              <Text style={styles.form}> Produtos </Text>
                 {/*aqui é typescript dentro do front */ }
-                <Text>
-                    Minha tela dos Produtos</Text>
+                <Text>Minha tela dos Produtos</Text>
                     <View style={styles.row}>
                         <View style={styles.form}>
-                            
+                              
                             <TextInput
                             placeholder="Digite o nome"
                             value={req.name}
                             onChangeText={(text)=> setReq({...req, name: text})}
                             />
-                            {req.name}
+                            
                             <TextInput
                             placeholder="Digite a descrição" 
                             value={req.description}
                             onChangeText={(text)=> setReq({...req, description: text})}
                             />
-                            {req.description}
+                            
 
-                            <Button color="purple" title="Cadastrar" onPress={handleRegister} />
+                            <Button title="Cadastrar" onPress={handleRegister} />
 
                         </View>
-                        
+
+                       <View  style={styles.form}>
+                        <FlatList
+                            data={products}
+                            keyExtractor={(item) => item.id.toString() }
+                            renderItem={({item}) => (
+                                <View  style={styles.cadastroForm}>
+                                    <Text>{item.description}</Text>
+                                    <Text>{item.name}</Text>
+                                    <Text>{item.createAt}</Text>
+                                    <Text>{item.userId}</Text>
+                                    </View>  
+                                    
+                            )
+                            
+                            }
+                        />
+                        </View>
+                        </View> 
                     </View> 
-            </View>
+            
     );
 }
 
@@ -84,8 +102,20 @@ const styles = StyleSheet.create({
         padding: 20,
         borderRadius: 8,
         boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    },
+    h1: {
+        textAlign: 'center',
+        marginRight: 10,
+        padding: 20,
+        backgroundColor: '#F2F2F2',
+        borderRadius: 10,
+        
+        
+    },
+    cadastroForm: {
+        padding: 20,
+        
     }
-    
 })
     
 
