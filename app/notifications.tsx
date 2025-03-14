@@ -31,7 +31,7 @@ export default function NotificationScreen(){
 
             setNotifications([...notifications, newNotification]);
         }else{
-            setNotifications(notifications.map(n => (n.id == req.id ? req : n)))
+            setNotifications(notifications.map(n => (n.id == req.id ? req : n)));
         }
         
         setReq({
