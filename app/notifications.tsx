@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, FlatList, Text, StyleSheet, TextInput, Button} from 'react-native';
+import { View, FlatList, Text, StyleSheet, TextInput, Button, TouchableOpacity} from 'react-native';
 
 
 export default function NotificationScreen(){
@@ -25,18 +25,37 @@ export default function NotificationScreen(){
     }[]>([])
 
     function handleRegister(){
-        setNotifications([...notifications, req])
+        if( req.id == -1){
+            const newId = notifications.length ? notifications[notifications.length -1].id +1 : 0;
+            const newNotification = {...req, id: newId};
+
+            setNotifications([...notifications, newNotification]);
+        }else{
+            setNotifications(notifications.map(n => (n.id == req.id ? req : n)))
+        }
+        
         setReq({
             name:'',
             url:'',
             description:'',
             classification:'',
-            id: 0,
+            id: -1,
             creatAt: new Date().toISOString(),
             userId: 0,
         })
     }
-        
+
+    function editNotification(id:number){
+        const notification = notifications.find( n => n.id == id)
+        if(notification)
+            setReq(notification)
+    }
+
+    function deleteNotification(id:number){
+        const list = notifications.filter(n => n.id != id )
+            setNotifications(list)
+    }
+
 return (
     <View>
         {/* aqui é typescriot dentro do front*/}
@@ -44,26 +63,31 @@ return (
         <View style={styles.row}>
             <View style={styles.form}>
                 <TextInput
+                        style={styles.input}
                         placeholder = "Nome:"
                         value={req.name}
                         onChangeText={(text) => setReq({...req ,name: text  })}
                  />
                 <TextInput 
+                        style={styles.input}
                         placeholder = "Descrição:"  
                         value={req.description}
                         onChangeText={(text) => setReq({...req ,description: text  })}
                 />
                 <TextInput 
-                placeholder = "classificação:"  
-                value={req.classification}
-                onChangeText={(text) => setReq({...req ,classification: text  })}
+                        style={styles.input}
+                        placeholder = "classificação:"  
+                        value={req.classification}
+                        onChangeText={(text) => setReq({...req ,classification: text  })}
                 />
 
-                <TextInput placeholder = "Url:" 
+                <TextInput 
+                        style={styles.input}
+                        placeholder = "Url:" 
                          value={req.url}
                          onChangeText={(text) => setReq({...req ,url: text  })}
                 />
--+
+
                 <Button title="cadastrar:" onPress={handleRegister}/>
 
             </View>
@@ -81,6 +105,11 @@ return (
                            <text> UserId: {item.userId}</text>
                            <text> CreatAt: {item.creatAt}</text>
 
+                            <View style={styles.buttonsContainer}>
+                                <TouchableOpacity onPress={() => {editNotification(item.id)}}>EDIT</TouchableOpacity>
+                                <TouchableOpacity onPress={() => {deleteNotification(item.id)}} >DELETE</TouchableOpacity>
+                            </View>
+                           
                         </View>
 
                     )}
@@ -123,5 +152,21 @@ const styles = StyleSheet.create({
     margin: 10, 
     width: 400,
 
+    },
+
+    buttonsContainer:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap:20,
+        alignContent:'space-around',
+
+    },
+
+    input: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        padding: 10,
+        marginBottom: 10,
     },
 })
