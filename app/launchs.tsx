@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import {View, Text, StyleSheet, TextInput, Button} from 'react-native';
+import {View, Text, StyleSheet, TextInput, Button, FlatList} from 'react-native';
 
 export default function LaunchScreen() {
     const [req, setReq] = useState({
+        Id: 0,
         observation:'',
         presence:'',
         indicator:'',
@@ -12,6 +13,7 @@ export default function LaunchScreen() {
     });
 
     const [launchs, setLaunchs] = useState<{
+        Id: number, 
         observation: string,
         presence: string,
         indicator: string,
@@ -24,6 +26,7 @@ export default function LaunchScreen() {
     function handleRegister() {
         setLaunchs([...launchs, req])
         setReq({ 
+            Id: req.Id + 1,
             observation:'',
             presence:'',
             indicator:'',
@@ -34,30 +37,32 @@ export default function LaunchScreen() {
     })
 
     }
+    
     return(
-        <View>
-            <Text>Lançamentos de Alunos:</Text>
+        <View style={styles.row}>
+            <View style={styles.form}>
+                <Text>Lançamentos de Alunos:</Text>
            
                     <TextInput 
                         placeholder="Digite a Observação:"      
                         value={req.observation}
                         onChangeText={(text) => setReq({...req, observation: text})} 
                     />
-                    {req.observation}
+                    
 
                     <TextInput 
                      placeholder="Digite a Nota:"      
                      value={req.note}
                      onChangeText={(text) => setReq({...req, note: text})} 
                  />
-                 {req.note}
+                
 
                     <TextInput
                      placeholder="Presença:"   
                      value={req.presence}
                      onChangeText={(text) => setReq({...req, presence: text})} 
                  />
-                 {req.presence}
+                
 
                     <TextInput 
                     placeholder="Indicador"
@@ -68,11 +73,35 @@ export default function LaunchScreen() {
 
                     <Button title="CADASTRAR" onPress={ handleRegister } color="purple" />
 
-                </View>
-    );
 
+            </View>
+
+            <FlatList 
+            data={launchs}
+            keyExtractor={(item) => item.Id.toString()}
+            renderItem={({item}) => (
+                <View
+                style={styles.card}
+             >
+
+
+                  <Text>{item.observation}</Text> 
+                  <Text>{item.note}</Text>
+                  <Text>{item.presence}</Text>
+                  <Text>{item.indicator}</Text>
+                  <Text>{item.createAt}</Text>
+                  <Text>{item.userId}</Text>
+                </View>
+                
+
+                )}
+             />
+         </View>
+     );
 }
-const style = StyleSheet.create({
+
+
+const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -92,4 +121,18 @@ const style = StyleSheet.create({
         shadowRadius: 5,
     },
 
-})
+    card: {
+        flex: 5,
+        marginRight: 15,
+        padding: 25,
+        backgroundColor: '#F2F2F2',
+        borderRadius: 16,
+        shadowColor: '#000',
+        shadowOpacity: 0.6,
+        shadowOffset: { width: 2, height: 6 },
+        shadowRadius: 6,
+        marginBottom: 10,
+    },
+
+    }
+)
