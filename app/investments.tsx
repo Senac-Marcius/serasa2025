@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, FlatList, } from 'react-native';
 
 export default function investmentScreen(){
  //aqui é typescript   
@@ -21,6 +21,7 @@ export default function investmentScreen(){
         createAt: string,
         userId: string,
     }[]>([]);
+    
 
     function handleRegister(){
         setInvestments([...investments, req]);
@@ -28,7 +29,7 @@ export default function investmentScreen(){
             description: '',
             name: '',
             url: '',
-            id: 0,
+            id: req.id + 1,
             createAt: new Date().toISOString(),
             userId: '',
             value: '',
@@ -38,7 +39,7 @@ export default function investmentScreen(){
 
     return (
       <View>
-        {/* Aqui é typescript dentro do fron */}
+        {/* Aqui é typescript dentro do front */}
         <Text>Meus Investimentos</Text>
         <View style={styles.row}>
             <View style={styles.form}>
@@ -67,12 +68,25 @@ export default function investmentScreen(){
                     value={req.userId}
                     onChangeText={(text) => setReq({...req, userId: text })}
                 />
+                    
 
                 <Button title='Cadastrar' onPress={ handleRegister }/> 
             </View>
-            
+            <FlatList
+                data={investments}
+                keyExtractor={ (item) => item.id.toString() }
+                renderItem={({item}) => (
+                    <view style={styles.form}>
+                       <Text> {item.description}</Text>
+                       <Text> {item.name}</Text>
+                       <Text> {item.url}</Text>
+                       <Text> {item.createAt}</Text>
+                       <Text> {item.userId}</Text>
+                        </view>
+                )}
+            />
         </View>
-      </View>  
+      </View>   
     );
 } 
 
@@ -91,6 +105,6 @@ const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
+        shadowRadius: 20,
     },
 })
