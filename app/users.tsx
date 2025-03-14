@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Button } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Button, FlatList } from 'react-native';
+
 
 
 export default function UserScreen() {
@@ -8,11 +9,13 @@ export default function UserScreen() {
         password: '',
         cpf: '',
         age: '',
+        
         contact: '',
         email: '',
         address: '',
         createAt: new Date().toISOString(),
-        userId: 0
+        id: 0,
+        Userid: 0
 
     });
 
@@ -26,12 +29,24 @@ export default function UserScreen() {
         email: string,
         address: string,
         createAt: string,
-        userId: number
+        id: number,
+        Userid: number
     }[]>([])
 
-    function handleRegister(){
+    function handleRegister() {
         setUsers([...users, req])
-        
+        setReq({
+            name: '',
+            password: '',
+            cpf: '',
+            age: '',
+            contact: '',
+            email: '',
+            address: '',
+            createAt: new Date().toISOString(),
+            id: req.id + 1,
+            Userid: 0
+        })
 
     }
 
@@ -39,8 +54,9 @@ export default function UserScreen() {
     //aqui é typescript
     return (
         <View>
-            <Text>Minha tela de usuários</Text>
+            
             <View style={styles.row}>
+            
                 <View style={styles.form}>
 
                     <TextInput
@@ -49,9 +65,7 @@ export default function UserScreen() {
                         onChangeText={(text) => setReq({ ...req, name: text })} //Ele recebe o texto digitado pelo usuário como argumento e o passa para a função setName
 
                     />
-                    {req.name}
-
-
+                    
 
 
                     <TextInput
@@ -60,28 +74,28 @@ export default function UserScreen() {
                         onChangeText={(text) => setReq({ ...req, password: text })} //Ele recebe o texto digitado pelo usuário como argumento e o passa para a função setName
 
                     />
-                    {req.password}
+
 
                     <TextInput
                         placeholder="CPF:"
                         value={req.cpf} //O atributo value vincula o campo de texto ao estado name
                         onChangeText={(text) => setReq({ ...req, cpf: text })}
                     />
-                    {req.cpf}
+
 
                     <TextInput
                         placeholder="Idade:"
                         value={req.age} //O atributo value vincula o campo de texto ao estado name
                         onChangeText={(text) => setReq({ ...req, age: text })}
                     />
-                    {req.age}
+
 
                     <TextInput
                         placeholder="Contato:"
                         value={req.contact} //O atributo value vincula o campo de texto ao estado name
                         onChangeText={(text) => setReq({ ...req, contact: text })}
                     />
-                    {req.contact}
+
 
                     <TextInput
                         placeholder="Email:"
@@ -89,20 +103,37 @@ export default function UserScreen() {
                         onChangeText={(text) => setReq({ ...req, email: text })}
 
                     />
-                    {req.email}
+
 
                     <TextInput
                         placeholder="Endereço:"
                         value={req.address} //O atributo value vincula o campo de texto ao estado name
                         onChangeText={(text) => setReq({ ...req, address: text })}
                     />
-                    {req.address}
 
-                    <Button title='CADASTRAR' color="purple" onPress={ handleRegister} />
+
+                    <Button title='CADASTRAR' color="purple" onPress={handleRegister} />
 
 
                 </View>
 
+                <FlatList
+                    data={users}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <View style={styles.itemContainer}>
+                            <Text>Nome: {item.name}</Text>
+                            <Text>CPF: {item.cpf}</Text>
+                            <Text>Email: {item.email}</Text>
+                            <Text>Idade: {item.age}</Text>
+                            <Text>Endereço: {item.address}</Text>
+                            <Text>Contato: {item.contact}</Text>
+                            <Text>Criação: {item.createAt}</Text>
+
+                        </View>
+
+                    )}
+                />
 
             </View>
 
@@ -116,18 +147,21 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
+       
     },
 
     form: {
         flex: 1,
         marginRight: 10,
         padding: 20,
-        backgroundColor: '#F2F2F2',
+        backgroundColor: 'white',
         borderRadius: 10,
         shadowColor: '#000',
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
+        marginLeft:50,
+        marginTop:50
     },
 
     button: {
@@ -143,5 +177,28 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
     },
+
+    itemContainer: {
+    padding: 15,
+    marginBottom: 5,
+    borderRadius: 30, 
+    backgroundColor: '#ffffff', 
+    borderColor: 'purple', 
+    borderWidth: 0.1, 
+
+    shadowColor: 'purple', // Cor da sombra
+    shadowOffset: { width: 1, height: 10 }, 
+    shadowOpacity: 0.5, 
+    shadowRadius: 10, 
+    marginLeft:50,
+    marginRight:50,
+    marginTop:50,
+    width:500
+    
+
+    }
+    
+
+
 
 })
