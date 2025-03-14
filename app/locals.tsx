@@ -1,11 +1,12 @@
 import React, { useState } from 'react'; 
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native'; 
+import { View, Text, TextInput, Button, FlatList, StyleSheet  } from 'react-native'; 
 
 export default function LocalScreen(){
 
     //onde vou criar a variavel do useState:            é const pq a usestate so aceita const
     const [req, setReq] = useState({
     
+        id: 0,
         name: '',
         area: '',
         description: '', 
@@ -14,6 +15,7 @@ export default function LocalScreen(){
     });      
 
     const [locals, setLocals] = useState<{
+        id: number,
         name: string,
         area: string,
         description: string,
@@ -24,6 +26,7 @@ export default function LocalScreen(){
     function handleRegister(){
         setLocals([...locals, req])
         setReq({
+            id: req.id +1,
             name: '',
             area: '',
             description: '', 
@@ -41,39 +44,46 @@ export default function LocalScreen(){
                 <View style={styles.form}>
 
 
-                    <TextInput placeholder= "Digite o nome do local"             /*  "placeholder" é um texto   */
+                    <TextInput placeholder= "Digite o nome do local:"             /*  "placeholder" é um texto   */
                         value={req.name}
-                        onChangeText={(t) => setReq({...req ,name: t })}   //onchange precisa receber uma funcao
+                        onChangeText={(t) => setReq({...req, name: t })}   //onchange precisa receber uma funcao
                     /> 
 
-                    {req.name}
+                    
 
-                    <TextInput placeholder= "Digite a área em cm:"
+                    <TextInput placeholder= "Digite a área do local em metros:"
                     value={req.area}
                     onChangeText={(n) => setReq({...req, area: n })}   //... significa-> TODOS OS CAMPOS DE "REQ"     
                     />     {/*  é disparado sempre que o valor do campo de entrada é alterado  */}
  
-                    {req.area}  
+                      
 
-                    <TextInput placeholder= "Digite a descrição:"
+                    <TextInput placeholder= "Digite a sua descrição:"
                     value={req.description}
                     onChangeText={(t) => setReq({...req, description: t })}
                     /> 
 
-                    {req.description}
+                    
 
-                    <TextInput placeholder= "Digite o endereço:"
+                    <TextInput placeholder= "Digite o seu respectivo endereço:"
                     value={req.adress}
                     onChangeText={(t) => setReq({...req, adress: t })}
                     />
 
-                    {req.adress} 
+                   
 
                     <Button title='Cadastrar' onPress={ handleRegister } />          {/*  o código que deve ser utilizado para criar o botão  */} 
 
                 </View>
-              {/*  <FlatList
-                /> */}
+ {/*   o ROW abraça o -> FORM  e o FLATLIST   */} {/* data recebe locals, o locals recebe dados */} 
+                <FlatList                         
+                    data={locals}                   
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <View>{item.description}</View>
+                    )}
+
+                 /> 
             </View>
         </View> 
     );   
