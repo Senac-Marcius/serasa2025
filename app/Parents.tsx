@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button} from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, FlatList} from 'react-native';
 //import dateTimepicker
 //npm run web → chamar pagina web pelo terminal
 export default function ParentScreen (){
@@ -7,30 +7,32 @@ export default function ParentScreen (){
     const [req, setReq] = useState({
         Nome: '',
         Email:'',
-        Parentesco:'',
-        //id:0,
-        //createAt: new Date().toiSOString(),
-        //userId: 0,
+        parentesco:'',
+        id:0,
+        createAt: new Date().toISOString(),
+        userId: 0,
 
     });
 
-    const [Parents,setParents] = useState<{
+    const [parents,setParents] = useState<{
         Nome: string,
         Email: string,
-        Parentesco: string,
-        /*userId: number*/
+        parentesco: string,
+        id: number,
+        createAt: string,
+        userId: number,
     
     }[]>([])/* <> → usado para tipar uma função */
 
-    function handleRegister(){
-        setParents([...Parents, req])
+    function handleRegister() {
+        setParents([...parents, req])
         setReq({
+            id:req.id + 1,
             Nome: '',
             Email:'',
-            Parentesco:'',
-            //id:0,
-            //createAt: new Date().toiSOString(),
-            //userId: 0,
+            parentesco:'',
+            createAt: new Date().toISOString(),
+            userId: 0,
         })
     }
     
@@ -38,42 +40,56 @@ export default function ParentScreen (){
         <View>{/*aqui é typeScript dentro do Front*/}
             {/*View → esse view é diferente do HTML ele contém DIVs e outros atributos,*/}
             <Text>Minha tela das postagens </Text>
-            <View style = {styles.form}>
+            <View style = {styles.row}>
                 <View style={styles.form}>{/*View no Type pode ser usado para substituir o Form */}
                 {/*<FlatList/> → atibuto para possivel criação de lista */}
                     <TextInput 
                         placeholder="Nome:"
                         value={req.Nome}
-                        onChangeText={(Text) => setReq({...req ,Nome: Text})}
+                        onChangeText={(Text) => setReq({...req, Nome: Text})}
             
                     />
                     <TextInput
                         placeholder="Email:"
                         value={req.Email}
-                        onChangeText={(Text) => setReq({...req ,Email: Text})}
+                        onChangeText={(Text) => setReq({...req, Email: Text})}
                     />
                     <TextInput
                         placeholder="Parentesco:"
-                        value={req.Parentesco}
-                        onChangeText={(Text) => setReq({...req ,Parentesco: Text})}
+                        value={req.parentesco}
+                        onChangeText={(Text) => setReq({...req, parentesco: Text})}
                     />
+                
                     <Button 
-                    title='Cadastrar' 
-                    color='blue'
-                    onPress={handleRegister}/>
-
-                    <Button 
-                        title="Excluir" 
-                        color="red"
-                        onPress={ () => {} }
-                    />
+                        title='Cadastrar' 
+                        color='blue'
+                        onPress={handleRegister}/>
                     
-                    {req.Nome}<br/>
-                    {req.Email}<br/>
-                    {req.Parentesco}{/*foi aberto uma area de codigo chamar a variavel, equivale o inder do html*/}
+                
+
+                  
+                   {/*foi aberto uma area de codigo chamar a variavel, equivale o inder do html*/}
                     
                 </View>
+
+                <FlatList
+                    data={parents}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({item}) => (
+                        <View style={styles.parentsItem}>
+
+                            <Text>{item.id}</Text>
+                            <Text>{item.Nome}</Text>
+                            <Text>{item.Email}</Text>
+                            <Text>{item.parentesco}</Text>
+                            <Text>{item.createAt}</Text>
+                            <Text>{item.userId}</Text> 
+                        </View>
+                    )}
+                />
+                {/*parâmetro FlatList é parecido com o forEach do html */}
             </View>
+
         </View>
         
     );
@@ -88,18 +104,27 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
     },
     form: {
         flex: 1,
-        marginRight: 30,
-        marginLeft:30,
+        marginRight: 20,
+        marginLeft:20,
         padding: 20,
         backgroundColor: '#F2F2F2',
-        borderRadius: 100,
+        borderRadius: 10,
         shadowColor: '#000',
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 10,
+        shadowRadius: 5,
     },
-    button: { 
-       borderBlockColor:''
-
-    },
+    parentsItem: {
+        flex: 1,
+        marginRight: 20,
+        marginLeft:20,
+        marginBottom:20,
+        padding: 30,
+        backgroundColor: '#F2F2F2',
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 4 },
+        shadowRadius: 5,
+    }
 })
