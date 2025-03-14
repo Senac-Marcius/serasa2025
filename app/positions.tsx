@@ -19,10 +19,11 @@ export default function PositionScreen(){
     });
 
     const [positions, setPositions] = useState <{name: string, description: string, salary: number, id: number, workHours: string, departament: string, supervisor: string, creatAt: string }[]> ([])
+    
     function handleRegister (){
         setPositions([...positions,req])
         setReq ({
-            id:0,
+            id: req.id +1,
             name:"",
             description:"",
             salary: 0,
@@ -43,16 +44,12 @@ export default function PositionScreen(){
                         placeholder="Cargo"
                         value = {req.name}
                         onChangeText={(text)=> setReq({...req ,name: text })}/>
-
-                        {req.name}
-
+ 
                     <TextInput 
                         placeholder="Digite a descrição"
                         value = {req.description}
                         onChangeText={(text)=> setReq({...req ,description: text })}/>
 
-                        {req.description}
-                        
                     {/*<CurrencyInput 
                         placeholder="Salário" />
                         value = {req.salary}
@@ -72,29 +69,43 @@ export default function PositionScreen(){
                         value = {req.departament}
                         onChangeText={(text)=> setReq({...req ,departament: text })}/>
 
-                        {req.departament}
-
                     <TextInput 
                         placeholder="Supervisor"
                         value = {req.supervisor}
                         onChangeText={(text)=> setReq({...req ,supervisor: text })}/>
 
-                        {req.supervisor}
-
                     {/*<DateTimePickerModal 
                         placeholder="Data de cadastro" />*/}
 
                     <Button title = "Cadastrar" onPress={handleRegister}/>
-                        
-
-                    </View>                 
-            </View>
+                </View> 
+                    <FlatList
+                        data={positions}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={({item}) => (
+                            <View style={styles.form}>
+                                <Text>{item.name}</Text>
+                                <Text>{item.description}</Text>
+                                <Text>{item.salary}</Text>
+                                <Text>{item.workHours}</Text>
+                                <Text>{item.departament}</Text>
+                                <Text>{item.supervisor}</Text>
+                                <Text>{item.creatAt}</Text>
+                                   
+                            </View>
+                        )}  />                
+                    </View>
 
         </View>
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 20,
+        backgroundColor: '#fff',
+    },
     row: {
         flexDirection: "row",
         justifyContent: "space-between",
