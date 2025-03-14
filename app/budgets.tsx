@@ -1,5 +1,5 @@
 import react, {useState} from 'react';
-import {View, Text, StyleSheet, TextInput, Button, FlatList} from 'react-native';
+import {View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity} from 'react-native';
 
 export default function BudgetScreen(){
 
@@ -9,7 +9,7 @@ export default function BudgetScreen(){
 
         name:'',
         url:'',
-        id: 0,
+        id: -1,
         createAt: new Date().toISOString(),
         velue:'',
         userId: 0,
@@ -31,12 +31,19 @@ export default function BudgetScreen(){
     }[]>([])
 
     function  handleRegister(){
-        setBudgets([...budgets, req])
-            setReq({
-                
+        if(req.id == -1){
+            const newId = budgets.length ? budgets[budgets.length -1].id +1: 0;
+            const newBudget = {...req, id: newId};
+
+            setBudgets([...budgets, newBudget]);
+        }else{
+            setBudgets(budgets.map(b => (b.id == req.id ? req: b)));
+        }
+        
+        setReq({ 
+        id: -1,
         name:'',
         url:'',
-        id: req.id + 1,
         createAt: new Date().toISOString(),
         velue:'',
         userId: 0,
@@ -44,6 +51,18 @@ export default function BudgetScreen(){
         endDate:'',
             })
     }
+
+    function editBudget(id:number){
+        const budget = budgets.find (b => b.id == id)
+        if(budget)
+        setReq(budget)
+    }
+
+    function delBudget(id:number){
+        const list = budgets.filter(b => b.id != id)
+        setBudgets(list)
+    }
+
 
     return (
         <View>
@@ -77,7 +96,7 @@ export default function BudgetScreen(){
                     value={req.endDate}
                     onChangeText={(text) => setReq({...req ,endDate: text})}
                      />
-                   
+                     
 
                     <Button title ='CADASTRAR' onPress={ handleRegister }/>
                 </View>
@@ -89,15 +108,19 @@ export default function BudgetScreen(){
                     
                         <View style={styles.budetStyle}>
                        
-
-                            <Text>{item.name}</Text>
-                            <Text>{item.url}</Text>
-                            <Text>{item.velue}</Text>
-                            <Text>{item.userId}</Text>
-                            <Text>{item.startDate}</Text>
-                            <Text>{item.endDate}</Text>
-                            <Text>{item.createAt}</Text>
-                            <Text>{item.createAt}</Text>
+                       <Text> Nome: {item.name}</Text>
+                           <Text> Url: {item.url}</Text>
+                           <Text> CreateAt: {item.createAt}</Text>
+                           <Text> Valor: {item.velue}</Text>
+                           <Text> UserId: {item.userId}</Text>
+                           <Text> Data Inicial: {item.startDate}</Text>
+                           <Text> Data Final: {item.endDate}</Text>
+                        
+                        <View style={styles.buttonsContanier}>
+                        <TouchableOpacity onPress={()=> {editBudget(item.id)}}>EDIT</TouchableOpacity>
+                        <TouchableOpacity onPress={()=> {delBudget(item.id)}}>DELITE</TouchableOpacity>
+                        </View>
+ 
                            
                         </View>
                     )}
@@ -137,5 +160,16 @@ const styles = StyleSheet.create({
         margin: 10,
         width: 400,
 
-        }
-})
+        },
+
+        
+        buttonsContanier:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap:20,
+        alignContent:'space-around',
+
+        },
+
+});
+
