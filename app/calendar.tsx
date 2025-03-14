@@ -55,10 +55,10 @@ return (
                 renderItem={({item})=> (
                     <View style ={styles.list}>
                     
-                        <Text style ={styles.code}>Nome do aluno:  {item.studentname}</Text>
-                        <Text style ={styles.code}>Curso: {item.course}</Text>
-                        <Text style ={styles.code}>Data da matricula: {item.registrationdate}</Text>
-                        <Text style ={styles.code}>Periodo: {item.period}</Text>
+                        <Text style ={styles.item}>Nome do aluno:  {item.studentname}</Text>
+                        <Text style ={styles.item}>Curso: {item.course}</Text>
+                        <Text style ={styles.item}>Data da matricula: {item.registrationdate}</Text>
+                        <Text style ={styles.item}>Periodo: {item.period}</Text>
                     
                    
                     </View>
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     
-    code:{
+    item:{
         fontSize:14,
         marginBottom: 4,
         
