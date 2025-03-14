@@ -7,7 +7,7 @@ export default function HomeScreen() {
     return (
         <View>
             <Text>Bem-vindo ao App!</Text>
-            <Button title="Ir para Postagens" onPress={() => router.push('/posts')} />
+            <Button title="Ir para Categorias" onPress={() => router.push('/categories')} />
         </View>
     );
 }
