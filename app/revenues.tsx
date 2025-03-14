@@ -1,6 +1,6 @@
 
 import React, {useState} from 'react';
-import { View, Text, StyleSheet, TextInput, Button, } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, FlatList, } from 'react-native';
 
 
 export default function RevenueScreen(){
@@ -32,7 +32,7 @@ export default function RevenueScreen(){
     function handleRegister(){
         setRevenues([...revenues ,req]);
         setReq({
-        id: 0,
+        id: req.id + 1,
         description: '' ,
         name: '',
         url: '', 
@@ -45,7 +45,7 @@ export default function RevenueScreen(){
     }
 
     return (
-        <View>
+        <View style={styles.container}>
             {/* aqui é typescript dentro do front*/}
             <Text> Minha tela das postagem</Text>
             <View style={styles.row}>
@@ -58,57 +58,113 @@ export default function RevenueScreen(){
                     value = {req.description}
                     onChangeText={(text) => setReq({...req,description:text})}
                 />
-                {req.description}
+                
 
                 <TextInput
                     placeholder=" digite aqui o Name"
                     value = {req.name}
                     onChangeText={(text) => setReq({...req,name:text})}
                 />
-                {req.name}
+                
 
                 <TextInput
                     placeholder=" digite aqui a URL"
                     value = {req.url}
                     onChangeText={(text) => setReq({...req,url:text})}
                 />
-                {req.url}
+                
 
                 <TextInput
                     placeholder=" digite aqui o STATUS DA BOLSA"
                     value = {req.scholarshipStatus}
                     onChangeText={(text) => setReq({...req,scholarshipStatus:text})}
                 />
-                {req.scholarshipStatus}
+
 
                 <Button 
                     title= 'Cadastrar' onPress={handleRegister}
                 />
 
             
-
             </View>
+
+            <FlatList
+                data={revenues}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({item}) => (
+                    <   View style={styles.revenueStyle}>
+                        <Text>{item.description}</Text>
+                        <Text>{item.name}</Text>
+                        <Text>{item.url}</Text>
+                        <Text>{item.createAt}</Text>
+                        <Text>{item.userId}</Text>
+                        <Text>{item.value}</Text>
+                        <Text>{item.scholarshipStatus}</Text>
+                        <Text>{item.discountPercentage}</Text>
+                    </View>
+                )}
             
+            />
             </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    row:{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start'
+    container: {
+      flex: 1,
+      padding: 20,
+      backgroundColor: '#f5f5f5', // Fundo da tela
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      marginBottom: 20,
+      color: '#333',
+    },
+    row: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start',
     },
     form: {
-        flex: 1,
-        marginRight: 10,
-        padding: 20,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
+      flex: 1,
+      marginRight: 10,
+      padding: 20,
+      backgroundColor: '#fff', // Fundo branco
+      borderRadius: 10,
+      shadowColor: '#000',
+      shadowOpacity: 0.1,
+      shadowOffset: { width: 0, height: 4 },
+      shadowRadius: 5,
+      elevation: 3, // Sombra no Android
     },
-})
+    input: {
+      height: 40,
+      borderColor: '#ccc',
+      borderWidth: 1,
+      borderRadius: 5,
+      marginBottom: 15,
+      paddingHorizontal: 10,
+      backgroundColor: '#f9f9f9', // Fundo do input
+    },
+    revenueStyle: {
+      flex: 1,
+      marginRight: 10,
+      padding: 15,
+      backgroundColor: '#808080', // Fundo branco
+      borderRadius: 10,
+      shadowColor: '#000',
+      shadowOpacity: 0.1,
+      shadowOffset: { width: 0, height: 4 },
+      shadowRadius: 5,
+      elevation: 3, // Sombra no Android
+      marginBottom: 10, // Espaçamento entre os itens
+    },
+    revenueText: {
+      fontSize: 14,
+      color: '#555',
+      marginBottom: 5, // Espaçamento entre os textos
+    },
+  });
