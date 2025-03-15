@@ -37,7 +37,7 @@ export default function BudgetScreen(){
 
             setBudgets([...budgets, newBudget]);
         }else{
-            setBudgets(budgets.map(jTNL=> (jTNL.id == req.id ? req: jTNL)));
+            setBudgets(budgets.map(jTNL=> (jTNL.id == req.id)? req: jTNL));
         }
         
         setReq({ 
