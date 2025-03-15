@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import{View,Text, StyleSheet, FlatList, TextInput, Button} from "react-native";
+import{View,Text, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} from "react-native";
 import CurrencyInput from 'react-native-currency-input';
 import {TimeInput} from "@heroui/date-input";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -8,30 +8,49 @@ export default function PositionScreen(){
 /*Aqui é TypeScript*/
 
     const[req, setReq] = useState({
-        id:0,
+        id:-1,
         name:"",
         description:"",
         salary: 0,
         workHours:"",
         departament:"",
         supervisor:"",
-        creatAt: new Date().toISOString(),
+        creatAt: new Date().toString(),
     });
 
     const [positions, setPositions] = useState <{name: string, description: string, salary: number, id: number, workHours: string, departament: string, supervisor: string, creatAt: string }[]> ([])
     
     function handleRegister (){
-        setPositions([...positions,req])
+        if(req.id == -1){
+            const newId = positions.length ? positions [positions.length - 1].id + 1 : 0;
+            const newPosition = {...req, id: newId};
+
+            setPositions([...positions,newPosition]);
+        }else{
+            setPositions(positions.map(p => (p.id == req.id ? req : p)));
+        }
         setReq ({
-            id: req.id +1,
+            id: -1,
             name:"",
             description:"",
             salary: 0,
             workHours:"",
             departament:"",
             supervisor:"",
-            creatAt: new Date().toISOString()
+            creatAt: new Date().toString()
         })
+    }
+
+    function editPosition (id:number){
+        const position = positions.find(p => p.id == id)
+        if(position)
+            setReq(position)
+
+    }
+
+    function delPosition (id:number){
+        const list = positions.filter(p => p.id != id)
+        setPositions(list)
     }
 
     return (
@@ -83,7 +102,7 @@ export default function PositionScreen(){
                         data={positions}
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={({item}) => (
-                            <View style={styles.form}>
+                            <View style={styles.card}>
                                 <Text>{item.name}</Text>
                                 <Text>{item.description}</Text>
                                 <Text>{item.salary}</Text>
@@ -91,6 +110,11 @@ export default function PositionScreen(){
                                 <Text>{item.departament}</Text>
                                 <Text>{item.supervisor}</Text>
                                 <Text>{item.creatAt}</Text>
+
+                                <View style = {styles.buttonsContanier}>
+                                    <TouchableOpacity onPress={()=> { editPosition(item.id) }}>Edit</TouchableOpacity>
+                                    <TouchableOpacity onPress={()=> { delPosition(item.id) }}>Delete</TouchableOpacity>
+                                </View>
                                    
                             </View>
                         )}  />                
@@ -122,4 +146,24 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
     },
+    card: {
+        flex: 3,
+        marginRight: 10,
+        marginHorizontal: 8,
+        marginVertical: 4,
+        padding: 10,
+        backgroundColor: '#F2F2F3',
+        borderRadius: 20,
+        shadowColor: '#0001',
+        shadowOpacity: 0.2,
+        shadowOffset: { width: 2, height: 6 },
+        shadowRadius: 8
+    },
+    buttonsContanier: {
+        flexDirection: "row",
+        justifyContent: "space-around",
+        gap: 20,
+        alignItems: "center",
+        backgroundColor: '#A020F0'
+    }
 })
