@@ -1,5 +1,5 @@
 import React, { useState } from 'react'; //react é uma biblioteca e essa função esta importando ela, puxando
-import { FlatList, View, Text, StyleSheet, TextInput, Button} from 'react-native'; //react native é uma biblioteca dentro de react 
+import { FlatList, View, Text, StyleSheet, TextInput, Button, TouchableOpacity} from 'react-native'; //react native é uma biblioteca dentro de react 
 
 export default function LoanScreen() {
     const[req, setReq]= useState({ //useState retorna uma variavel e uma função para alteral a variavel (req e setReq)
@@ -28,11 +28,33 @@ export default function LoanScreen() {
         
     }[]>([])
 
+    function editLoans(id:number){
+        const loans = loans.find(p =>p.id == id)
+        if(loans)
+        setReq(loans)
+                                        //operador ternario ?
+    }
+    function deletLoans(id:number){
+        const list = loans.filter((p) => p.id != id) 
+            setLoans(list)
+    }
+    }
+
+
     function handleRegister (){
-        console.log('aqui')
-        setLoans([...loans,req])
+        if(req.id == -1){
+            const newId = postMessage.length ? loans[loans.length -1].id + 1 : 0;
+            const newLoans = {...req, id: newId}
+
+            setLoans([...loans, newLoans]);
+
+        }else{
+            setLoans(post.map(p => (p.id == req.id ? req : p)));
+
+        }
+            
         setReq({
-            id: req.id + 1,
+            id: -1,
             bookId: '',
             loanDate: '',
             expectedLoanDate:'',
@@ -45,9 +67,13 @@ export default function LoanScreen() {
         })
     }
 //aqui é typescript
+
+
+
+
     return (
         <View>
-             {/* comentario, tudo aq dentro é codigo, do lado de fora é html, aqui é typescript dentro do front */}
+             
             <Text>Tela de Empréstimo</Text>
             <View style={styles.row}>
                 <View style={styles.form}>
@@ -103,9 +129,9 @@ export default function LoanScreen() {
                     <Button title="Emprestar" onPress={handleRegister}
                     color="purple"
                      />
-                      
+                    
                 </View> 
-            
+                    
                 <FlatList //data significa o parametro que vai receber o vetor (data = dados)
                     data={loans}                  //toString tranforma em string  
                     keyExtractor={(item) => item.id.toString()}//vai pegar no loans cada elemento
@@ -119,18 +145,19 @@ export default function LoanScreen() {
                             <Text>{item.statusLoan}</Text>
                             <Text>{item.observation}</Text>
                             <Text>{item.creatAt}</Text>
-                            
+                            <View style ={styles.buttonContainer}>
+                                <TouchableOpacity onPress={ () => {editLoans(item.id)}}>EDITAR</TouchableOpacity>
+                                <TouchableOpacity onPress={ () => {deletLoans(item.id)}}>DELETE</TouchableOpacity>
+                            </View>
                         </View>
+                        
                     )}
-                    
+                   
                 />
             </View>
         </View>
     ); //encapsulamento
-
-
 }
-
 
 
 const styles = StyleSheet.create({ 
@@ -158,7 +185,11 @@ const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowOpacity: 0.1,
         shadowRadius: 5,
+        color: "pink"
     },
+    buttonContainer: {
+       color: "blue"
+    }
            
 })
 
