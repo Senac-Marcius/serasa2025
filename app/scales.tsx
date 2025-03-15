@@ -1,8 +1,8 @@
 import React, {useState} from 'react'; //Importa o react e atualiza a lista Automaticamente.
-import { View, Text, StyleSheet, TextInput, Button, FlatList, FlatListComponent} from 'react-native';//Une  os objetos e o react-native faz a função de trasformar o codigo em multiplas plataformas.
+import { View, Text, StyleSheet, TextInput, Button, FlatList, FlatListComponent, TouchableOpacity} from 'react-native';//Une  os objetos e o react-native faz a função de trasformar o codigo em multiplas plataformas.
 
 export default function ScaleScreen(){
-    
+
     const [req, setReq] = useState({
         id:0,
         day:'',
@@ -10,21 +10,48 @@ export default function ScaleScreen(){
         endtime:'',
         creatAt: new Date().toISOString(),
         userId: 0,
-    })
+    });
+
+    const [scales, setScales] = useState<{
+        id:number,
+        day: string,
+        starttime:string,
+        endtime:string,
+        creatAt: string,
+        userId: number,
+    }[]>([]);
 
     function handleRegister(){
-        setScales([...scales, req])
+        if(req.id == -1){
+            const newId = scales.length ? scales[scales.length - 1].id +1 : 0;
+            const newScale = {...req, id: newId };
+            
+            setScales([...scales, newScale]);
+        }else{
+            setScales(scales.map(s => (s.id == req.id)? req: s ) );
+        }
+
         setReq({
-            id:0,
+            id: -1,
             day:'',
             starttime:'',
             endtime:'',
             creatAt:new Date().toISOString(),
             userId: 0,
     })   
-}
+    function editScale(id: number){
+        const scale = scales.find(s => s.id = id);
+        if (scale) {
+            setReq(scale);
+        }
+    }
 
-    const[scales,setScales] = useState<{id: number, day: string, starttime: string, endtime: string, creatAt: string, userId: 0}[]>([])
+
+    function deleteScale(id?: number){
+        const list = scales.filter(s => s.id != id);
+        setScales(list);
+
+    }
 
     return (
         <View style={styles.container}> {/* Aqui é typecript dentro do html*/}
@@ -62,6 +89,11 @@ export default function ScaleScreen(){
                                     <Text>Horario de termino: {item.endtime}</Text>
                                     <Text>Id do Usuário: {item.userId}</Text>
                                     <Text>Data da criação: {item.creatAt}</Text>
+
+                                    <View style={styles.buttonContainer}>
+                                       <TouchableOpacity onPress={() => { editScale(item.id)}}>EDIT</TouchableOpacity>
+                                       <TouchableOpacity onPress={() => { deleteScale(item.id)}}>DELETE</TouchableOpacity>
+                                    </View>
                                 </View>
                             )}
                     />
@@ -71,6 +103,7 @@ export default function ScaleScreen(){
         </View> 
     );
 }
+    
 
 const styles = StyleSheet.create({
     
@@ -78,9 +111,14 @@ const styles = StyleSheet.create({
         flex: 1,
         gap: 10,
         padding: 20,
-        backgroundColor: '#FFF',
+        backgroundColor: '#FFFFFF',
     },
-
+    buttonContainer: {
+        flexDirection: 'row',
+        gap: 10,
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+    },
     listContainer: {
         flex: 1,
         padding: 20,
@@ -101,19 +139,15 @@ const styles = StyleSheet.create({
         flex: 1,
         marginRight: 10,
         padding: 20,
-        backgroundColor: '#F2F2F2',
+        backgroundColor: '#FFFFFF',
         borderRadius: 10,
         shadowColor: '#000',
         shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-    },
-    Button: {
-
+        shadowOffset: { width: 0, height: 4 },  
     },
     input: {
         height: 40,
-        borderColor: '#FFF',
+        borderColor: '#FFFFFF',
         borderWidth: 1,
         borderRadius: 5,
         paddingHorizontal: 10,
@@ -125,11 +159,11 @@ const styles = StyleSheet.create({
         marginRight: 10,
         padding: 20,
         marginBottom: 10,
-        backgroundColor: '#00A8FF',
+        backgroundColor: '#D3D3D3',
         borderRadius: 10,
-        shadowColor: '#000',
+        shadowColor: '#FFF',
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
-    }
-}) 
+    },
+})
