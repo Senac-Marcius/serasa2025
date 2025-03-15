@@ -1,20 +1,20 @@
 
 import React, {useState} from 'react';
-import { View, Text, StyleSheet, TextInput, Button, FlatList, } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity  } from 'react-native';
 
 
 export default function RevenueScreen(){
 // aqui é typescript
     const [req, setReq] = useState({
-        id: 0,
+        id: -1,
         description: '',
         name: '',
         url: '', 
         createAt: new Date().toISOString(),
         userId: 0,
-        value: 0,
+        value: '',
         scholarshipStatus: '',
-        discountPercentage: 0,
+        discountPercentage: '',
     });
 
     const [revenues, setRevenues] = useState<{
@@ -24,24 +24,48 @@ export default function RevenueScreen(){
         url: string,     
         createAt: string,
         userId: number,
-        value: number,
+        value: string,
         scholarshipStatus: string,
-        discountPercentage: number,
+        discountPercentage: string,
     }[]>([]);
     
     function handleRegister(){
-        setRevenues([...revenues ,req]);
+        if(req.id ==-1){
+            const newId = revenues.length ? revenues[revenues.length - 1].id + 1 : 0;
+            const newRevenue = {...req,id: newId};
+            setRevenues([...revenues, newRevenue]);
+        }else{
+            setRevenues(revenues.map(r => (r.id == req.id ? req : r)));
+        }
+        
         setReq({
-        id: req.id + 1,
-        description: '' ,
+        id: -1,
+        description: '',
         name: '',
         url: '', 
         createAt: new Date().toISOString(),
         userId: 0,
-        value: 0,
+        value: '',
         scholarshipStatus: '',
-        discountPercentage: 0,  
+        discountPercentage: '',  
         })
+    }
+
+
+
+
+
+
+    function editRevenue(id:Number){
+        const revenue = revenues.find(r => r.id == id)
+        if(revenue)
+        setReq(revenue)
+    
+    }
+    
+    function delRevenue(id:number){
+        const list = revenues.filter(r => r.id != id)
+            setRevenues(list)
     }
 
     return (
@@ -50,8 +74,6 @@ export default function RevenueScreen(){
             <Text> Minha tela das postagem</Text>
             <View style={styles.row}>
             <View style={styles.form}>
-                
-                
                 
                 <TextInput
                     placeholder=" digite aqui a Descrição"
@@ -73,13 +95,27 @@ export default function RevenueScreen(){
                     onChangeText={(text) => setReq({...req,url:text})}
                 />
                 
+                <TextInput
+                    placeholder=" digite aqui o Valor"
+                    value = {req.value}
+                    onChangeText={(text) => setReq({...req,value:text})}
+                />
+
 
                 <TextInput
-                    placeholder=" digite aqui o STATUS DA BOLSA"
+                    placeholder=" digite aqui o status da Bolsa"
                     value = {req.scholarshipStatus}
                     onChangeText={(text) => setReq({...req,scholarshipStatus:text})}
                 />
 
+                <TextInput
+                    placeholder=" digite aqui o desconto"
+                    value = {req.discountPercentage}
+                    onChangeText={(text) => setReq({...req,discountPercentage:text})}
+                />
+
+                
+                
 
                 <Button 
                     title= 'Cadastrar' onPress={handleRegister}
@@ -93,14 +129,30 @@ export default function RevenueScreen(){
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({item}) => (
                     <   View style={styles.revenueStyle}>
-                        <Text>{item.description}</Text>
-                        <Text>{item.name}</Text>
-                        <Text>{item.url}</Text>
-                        <Text>{item.createAt}</Text>
-                        <Text>{item.userId}</Text>
-                        <Text>{item.value}</Text>
-                        <Text>{item.scholarshipStatus}</Text>
-                        <Text>{item.discountPercentage}</Text>
+                        <Text style={styles.revenueText}>Descrição: {item.description}</Text>
+                        <Text style={styles.revenueText}>Nome: {item.name}</Text>
+                        <Text style={styles.revenueText}>URL: {item.url}</Text>
+                        <Text style={styles.revenueText}>Data: {item.createAt}</Text>
+                        <Text style={styles.revenueText}>ID do Usuário: {item.userId}</Text>
+                        <Text style={styles.revenueText}>Valor: {item.value}</Text>
+                        <Text style={styles.revenueText}>Status da Bolsa: {item.scholarshipStatus}</Text>
+                        <Text style={styles.revenueText}>Desconto: {item.discountPercentage}%</Text>
+
+                        <View style={styles.buttonsContanier}>
+                            <TouchableOpacity 
+                               style={styles.editButton} 
+                               onPress= {()=>{editRevenue(item.id)}}
+                               >
+                               <Text style={styles.buttonText}>EDIT</Text>
+                               </TouchableOpacity>   
+                            <TouchableOpacity 
+                                style={styles.deleteButton} 
+                                onPress= {()=>{delRevenue(item.id)}}
+                                >
+                                 <Text style={styles.buttonText}>DELETE</Text>
+                                 </TouchableOpacity>
+                        </View>
+
                     </View>
                 )}
             
@@ -153,7 +205,7 @@ const styles = StyleSheet.create({
       flex: 1,
       marginRight: 10,
       padding: 15,
-      backgroundColor: '#808080', // Fundo branco
+      backgroundColor: '#fff', // Fundo branco
       borderRadius: 10,
       shadowColor: '#000',
       shadowOpacity: 0.1,
@@ -164,7 +216,32 @@ const styles = StyleSheet.create({
     },
     revenueText: {
       fontSize: 14,
-      color: '#555',
+      color: '#000000',
       marginBottom: 5, // Espaçamento entre os textos
     },
+
+    buttonsContanier:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 20,
+        alignContent:'space-around',
+    },
+    editButton: {
+        backgroundColor: '#FFFF00', // Cor de fundo AMARELO
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      deleteButton: {
+        backgroundColor: '#f44336', // Cor de fundo vermelho
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      buttonText: {
+        color: '#000000', // Texto branco
+        fontWeight: 'bold',
+      },
   });
