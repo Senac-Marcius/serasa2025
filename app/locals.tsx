@@ -30,8 +30,8 @@ export default function LocalScreen(){
 
             setLocals([...locals, newLocal]);
         }else{
-             // map recebe iterador, uma posicao do vetor e anda por ele. faz a func anonima, a cada posicao do iterador, ele verifica se p.id é = a req.id. pq? esta encapsulandoa operacao p fazer um operador ternario nela. registrou. a cada passo, ele verifica se o elemento do passo é = ao elemwnto do registro. quer colocalo na lista, ent REQ. se for false, quero add o l na lista, por isso else l. //se for =, add o req na lista, se for != add l. //criou uma nova lista e so jogar dentro
-            setLocals(locals.map(l => (l.id == req.id) ? req : l)); //map = for ir, percorre a losta
+             
+            setLocals(locals.map(l => (l.id == req.id) ? req : l));          //map = for it, percorre a lista
         }
         setReq({ 
             id: -1,
