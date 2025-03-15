@@ -1,5 +1,5 @@
 import React, { useState } from 'react'; // Esta importando da biblioteca do react para atualizar automaticamente 
-import { StyleSheet, View, Text, TextInput, Button, FlatList, } from 'react-native'; 
+import { StyleSheet, View, Text, TextInput, Button, FlatList, TouchableOpacity, } from 'react-native'; 
 
 
 export default function ProjectScreen(){
@@ -7,7 +7,7 @@ export default function ProjectScreen(){
     const [req, setReq] = useState ({
         name: '',
         namep: '',
-        id: 0,
+        id: -1,
         url: '',
         createAt: new Date().toISOString(),
         userId: 0,
@@ -35,14 +35,32 @@ export default function ProjectScreen(){
         methodology: string,
     } []>( [] );
 
-    
-
     function handleRegister(){
-        setProjects([... projects, req])
+        /*let cpf =req.userId.replace(/\D/g, ''); // Remove tudo o que não for número
+                if (cpf.length <= 3) {
+                    req.userId = cpf;
+                } else if (cpf.length <= 6) {
+                    req.userId = cpf.replace(/(\d{3})(\d{1,})/, '$1.$2');
+                } else if (cpf.length <= 9) {
+                    req.userId = cpf.replace(/(\d{3})(\d{3})(\d{1,})/, '$1.$2.$3');
+                } else if (cpf.length <= 11) {
+                    req.userId = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{1,})/, '$1.$2.$3-$4');
+                }*/
+
+
+        if(req.id == -1){ //aqui é quando esta cadastrando
+            const newid = projects.length ? projects[projects.length -1].id + 1 : 0;
+            const newProjects = { ...req, id: newid };
+
+            setProjects([... projects, newProjects])
+        }else{ //aqui é quando esta editando id esta maior do que -1
+            setProjects(projects.map(jTNL => (jTNL.id == req.id)? req : jTNL )); 
+        }
+        
         setReq({
             name: '',
             namep: '',
-            id: 0,
+            id: -1,
             url: '',
             createAt: new Date().toISOString(),
             userId: 0,
@@ -53,22 +71,20 @@ export default function ProjectScreen(){
             objective: '',
             methodology: '',
         })
+
     }
-    /* Usar quando for possivel colocar numeros 
-    function 
-            formatCPF(campo) {
-                let cpf = campo.value.replace(/\D/g, ''); // Remove tudo o que não for número
-                if (cpf.length <= 3) {
-                    campo.value = cpf;
-                } else if (cpf.length <= 6) {
-                    campo.value = cpf.replace(/(\d{3})(\d{1,})/, '$1.$2');
-                } else if (cpf.length <= 9) {
-                    campo.value = cpf.replace(/(\d{3})(\d{3})(\d{1,})/, '$1.$2.$3');
-                } else if (cpf.length <= 11) {
-                    campo.value = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{1,})/, '$1.$2.$3-$4');
-                }
-            }
-    */
+
+    function editProject(id: number){
+        const project = projects.find(item => item.id == id)
+        if(project)
+            setReq(project)
+    }
+
+    function dellProject(id:number){
+        const list = projects.filter((item => item.id !== id));
+        setProjects(list)
+    }
+    
     // Criando o textinput para receber e exibir o texto "placeholder" para o usuario digitar
     return ( // Esta sendo feito um emcapsulamento com a abertura da () / {req.description}= usado para mostar o codigo em baixo
         <View>
@@ -86,7 +102,6 @@ export default function ProjectScreen(){
                     CPF:
                     <TextInput
                         placeholder=""
-                        
                     />
                     </Text>
 
@@ -162,23 +177,31 @@ export default function ProjectScreen(){
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
                         <View style={styles.projectContainer}> 
-                            <Text style={projectText}> Criador: {item.name} </Text>
-                            <Text style={projectText}> Nome do Projeto: {item.namep} </Text> 
-                            <Text style={projectText}> Url: {item.url} </Text>
-                            <Text style={projectText}> Numero do Usuario: {item.userId} </Text>
-                            <Text style={projectText}> Recursos: {item.recurces} </Text>
-                            <Text style={projectText}> Descrição: {item.description} </Text>
-                            <Text style={projectText}> Atividade: {item.activity} </Text>
-                            <Text style={projectText}> Tempo Esperado: {item.timeline} </Text>
-                            <Text style={projectText}> Objetivo: {item.objective} </Text>
-                            <Text style={projectText}> Metodologia: {item.methodology} </Text>
+                            <Text style={styles.projectText}> Criador: {item.name} </Text>
+                            <Text style={styles.projectText}> Nome do Projeto: {item.namep} </Text> 
+                            <Text style={styles.projectText}> Url: {item.url} </Text>
+                            <Text style={styles.projectText}> Numero do Usuario: {item.userId} </Text>
+                            <Text style={styles.projectText}> Recursos: {item.recurces} </Text>
+                            <Text style={styles.projectText}> Descrição: {item.description} </Text>
+                            <Text style={styles.projectText}> Atividade: {item.activity} </Text>
+                            <Text style={styles.projectText}> Tempo Esperado: {item.timeline} </Text>
+                            <Text style={styles.projectText}> Objetivo: {item.objective} </Text>
+                            <Text style={styles.projectText}> Metodologia: {item.methodology} </Text>
+
+                            <View style={styles.buttonsContainer}>
+                                <TouchableOpacity style={styles.buttonEdit} onPress={ () =>  editProject(item.id) }> EDIT </TouchableOpacity>
+                                <TouchableOpacity style={styles.buttonDelete} onPress={ () =>  dellProject( item.id)}> DELETE </TouchableOpacity>
+                            </View>
                         </View>
                     )}
                 />
             </View>
         </View>
-    );
+    ); 
 }
+
+/** <Button title='EDIT' />
+    <Button title='DELETE' /> - Esse botão não permite modificar a forma de vizualizar o botão*/ 
 
 const styles = StyleSheet.create({
     row: {
@@ -186,6 +209,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'flex-start',
     },
+
     form: {
         flex: 1,
         marginRight: 10,
@@ -214,6 +238,34 @@ const styles = StyleSheet.create({
         color: '#333',           // Cor do texto
         marginBottom: 5,         // Espaço entre os textos
         flexWrap: 'wrap',        // Permite quebra de linha se necessário
+    },
+
+    buttonsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        gap: 10,
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+     
+    },
+
+    buttonEdit: {
+        backgroundColor: '#ffff00', 
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+        borderRadius: 2,
+        color: '#ffffff',
+    },
+    buttonDelete: {
+        backgroundColor: '#F44336', 
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+        borderRadius: 2,
+        color: '#ffffff',
+    },
+    buttonText: {
+        color: '#fff',
+        fontWeight: 'bold',
     },
 
 });
