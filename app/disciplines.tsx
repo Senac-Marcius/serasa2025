@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
 
 export default function DisciplineScreen() {
   const [req, setReq] = useState({
@@ -11,17 +11,55 @@ export default function DisciplineScreen() {
     teacher: '',
   });
 
-  const [disciplines, setDisciplines] = useState<{
-    id: number;
-    name: string;
-    url: string;
-    workload: string;
-    createdAt: string;
-    teacher: string;
+  const [disciplines, setDisciplines] = useState<{ 
+    id: number; 
+    name: string; 
+    url: string; 
+    workload: string; 
+    createdAt: string; 
+    teacher: string 
   }[]>([]);
 
-  function handRegister() {
-    setDisciplines([...disciplines, req]);
+  const [isEditing, setIsEditing] = useState(false);
+
+  function handleRegister() {
+    if (!req.name?.trim() || !req.url?.trim() || !req.workload?.trim() || !req.teacher?.trim()) {
+      alert('Preencha todos os campos!');
+      return;
+    }
+
+    if (isEditing) {
+      handleUpdate()
+      return;
+    }
+
+    const newDiscipline = {
+      ...req,
+      id: new Date().getTime(), 
+    };
+
+    setDisciplines([...disciplines, newDiscipline])
+    resetForm()
+  }
+
+  function handleUpdate() {
+    setDisciplines(disciplines.map((d) => (d.id === req.id ? req : d)))
+    resetForm()
+  }
+
+  function handleDelete(id: number) {
+    setDisciplines(disciplines.filter((d) => d.id !== id))
+  }
+
+  function handleEdit(id: number) {
+    const discipline = disciplines.find((d) => d.id === id)
+    if (discipline) {
+      setReq(discipline)
+      setIsEditing(true) 
+    }
+  }
+
+  function resetForm() {
     setReq({
       id: 0,
       name: '',
@@ -30,19 +68,19 @@ export default function DisciplineScreen() {
       createdAt: new Date().toISOString(),
       teacher: '',
     });
+    setIsEditing(false)
   }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Disciplinas</Text>
       <View style={styles.row}>
-        
-        {/* Formulário do lado esquerdo nao vai esquecer mula */}
+        {/* Formulário */}
         <View style={styles.form}>
-          <Text style={styles.formTitle}>Nova Disciplina</Text>
+          <Text style={styles.formTitle}>{isEditing ? 'Editar Disciplina' : 'Nova Disciplina'}</Text>
           <TextInput
             style={styles.input}
-            placeholder="Nome"
+            placeholder="Nome da disciplina"
             value={req.name}
             onChangeText={(text) => setReq({ ...req, name: text })}
           />
@@ -65,11 +103,10 @@ export default function DisciplineScreen() {
             onChangeText={(text) => setReq({ ...req, teacher: text })}
           />
 
-          <Button title="Cadastrar" color="#4CAF50" onPress={() => handRegister()} />
+          <Button title={isEditing ? 'Atualizar' : 'Cadastrar'} color="#4CAF50" onPress={handleRegister} />
         </View>
 
-        {/* Lista de disciplinas do lado direito ou é pra ir */}
-        
+        {/* Lista de Disciplinas */}
         <View style={styles.listContainer}>
           <FlatList
             data={disciplines}
@@ -80,6 +117,21 @@ export default function DisciplineScreen() {
                 <Text style={styles.cardText}>URL: {item.url}</Text>
                 <Text style={styles.cardText}>Carga Horária: {item.workload}</Text>
                 <Text style={styles.cardText}>Professor: {item.teacher}</Text>
+
+                <View style={styles.actions}>
+                  <TouchableOpacity style={styles.editButton} onPress={() => handleEdit(item.id)}>
+
+                    <Text style={styles.buttonText}>EDIT</Text>
+
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(item.id)}>
+
+                    <Text style={styles.buttonText}>DELETE</Text>
+
+                  </TouchableOpacity>
+
+                </View>
               </View>
             )}
           />
@@ -163,5 +215,26 @@ const styles = StyleSheet.create({
   cardText: {
     fontSize: 14,
     color: '#555',
+  },
+  actions: {
+    flexDirection: 'row',
+    marginTop: 10,
+    gap: 20,
+  },
+  editButton: {
+    backgroundColor: '#FFC107',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+  },
+  deleteButton: {
+    backgroundColor: '#F44336',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: '#FFF',
+    fontWeight: 'bold',
   },
 });
