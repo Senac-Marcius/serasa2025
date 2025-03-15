@@ -7,10 +7,11 @@ import {
   ScrollView,
   TextInput,
   Button,
+  TouchableOpacity,
 } from "react-native";
 
 export default function StudentsScreen() {
-  const [req, setRec] = useState({
+  const [req, setReq] = useState({
     id: 0,
     name: "",
     password: "",
@@ -18,80 +19,150 @@ export default function StudentsScreen() {
     createdAt: Date.now().toString(),
   });
 
-  const [student, setStudent] = useState<{
-      id: number,
-      name: string,
-      password: string,
-      email: string,
-      createdAt: string,
-    }[]>([]);
+  const [student, setStudent] = useState<
+    {
+      id: number;
+      name: string;
+      password: string;
+      email: string;
+      createdAt: string;
+    }[]
+  >([]);
+  
 
   function handleRegister() {
-    setStudent([...student, req])
-    setRec({
-      id: 0,
+    if (req.id == -1) {
+      setStudent([...student, req]);
+      
+    } else {
+      setStudent(student.map(item => ))
+    }
+    setReq({
+      id: -1,
       name: "",
       password: "",
       email: "",
       createdAt: Date().toString(),
-    })
+    });
+  }
+
+  function editStudent(id: number) {
+    let stu = student.find((s) => {
+      if (s.id == id) return s;
+    });
+    if (stu != undefined) {
+      setReq();
+    }
+  }
+
+  function deleteStudent(id: number) {
+    setStudent((prevItems) => prevItems.filter((item) => item.id !== id));
   }
 
   return (
-   
+    <ScrollView>
       <View style={styles.container}>
         <View style={styles.formtxt}>
-          <Text>Cadastre-se</Text>
+          <Text style={styles.titulos}>Cadastre-se</Text>
 
           <TextInput
             style={styles.textinput}
             placeholder="Digite seu nome"
             value={req.name}
-            onChangeText={(text) => setRec({ ...req, name: text })}
+            onChangeText={(text) => setReq({ ...req, name: text })}
           />
           <TextInput
             style={styles.textinput}
             placeholder="Digite sua senha"
             value={req.password}
-            onChangeText={(text) => setRec({ ...req, password: text })}
+            onChangeText={(text) => setReq({ ...req, password: text })}
           />
           <TextInput
             style={styles.textinput}
             placeholder="Digite seu email"
             value={req.email}
-            onChangeText={(text) => setRec({ ...req, email: text })}
+            onChangeText={(text) => setReq({ ...req, email: text })}
           />
 
-          <Button
-            onPress={handleRegister          
-           }
-            title="Cadastrar"
-            color="#049e11"
-            accessibilityLabel="Botão para cadastrar usuario"
+          <TouchableOpacity
+            onPress={handleRegister}
+            style={styles.button_handle}
+          >
+            Cadastrar
+          </TouchableOpacity>
+
+          <FlatList
+            data={student}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <View style={styles.output}>
+                <Text>{item.name}</Text>
+                <Text>{item.email}</Text>
+                <Text>{item.createdAt}</Text>
+                <View style={styles.row}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      deleteStudent(item.id);
+                    }}
+                    style={styles.button_deletar}
+                  >
+                    Deletar
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      editStudent(item.id);
+                    }}
+                    style={styles.button_editar}
+                  >
+                    Editar
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
           />
         </View>
-
-        <FlatList
-          data={student}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <View>
-              <Text>{item.name}</Text>
-              <Text>{item.email}</Text>
-              <Text>{item.createdAt}</Text>
-            </View>
-          )}
-        />
       </View>
-   
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  output: {
+    boxShadow:
+      "rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px",
+    borderRadius: 25,
+    width: 250,
+    height: 150,
+    textAlign: "center",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
+    gap: 5,
+  },
+  titulos: {
+    fontSize: 34,
+    fontWeight: 600,
+  },
+  button_handle: {
+    width: 150,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: "green",
+    textAlign: "center",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    fontSize: 18,
+    color: "white",
+  },
+
   textinput: {
     border: "1px solid",
-    borderRadius: "25px",
+    borderRadius: "5px",
     padding: 5,
+    width: 400,
   },
   container: {
     display: "flex",
@@ -101,6 +172,43 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",
+  },
+  row: {
+    textAlign: "center",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+
+  button_editar: {
+    backgroundColor: "yellow",
+    borderRadius: 25,
+    width: 80,
+    height: 40,
+    color: "black",
+    textAlign: "center",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  button_deletar: {
+    backgroundColor: "red",
+    borderRadius: 25,
+    width: 80,
+    height: 40,
+    color: "black",
+    textAlign: "center",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  row: {
+    display: "flex",
+    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
   },
 
   formtxt: {
