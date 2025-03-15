@@ -1,9 +1,9 @@
 import React ,{ useState }from 'react';
-import { Text, View, StyleSheet, FlatList, TextInput, Button} from 'react-native';
+import { Text, View, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} from 'react-native';
 
 export default  function itemScreen(){
      const[req,setReq] = useState({ 
-        id: 0,
+        id: -1,
         name:'',
         mark:'',
         assetNumber:0,
@@ -22,14 +22,34 @@ export default  function itemScreen(){
      }[]>([])
 
      function handleRegister(){
+       if(req.id == -1){
+        const newid= itens.length ? itens[itens.length-1].id=1:0;
+        const newItem = {... itens,req};
         setItens([...itens, req])
-        setReq({id: 0,
+
+       }else{
+        setItens(itens.map(i =>(i.id == req.id)? req: i )  );
+
+       }
+
+        setReq({id: -1,
             name:'',
             mark:'',
             assetNumber:0,
             amount: 0,  
             createAt: new Date().toISOString(),
         })
+     }
+
+     function editItem(id:number){
+        let item= itens.find(i => i.id== id)
+        if(item)
+        setReq(item)
+     }
+     function delItem(id:number){
+        const list= itens.filter(i => i.id != id)
+        if(list)
+        setItens(list)
      }
 
     return (
@@ -60,13 +80,15 @@ export default  function itemScreen(){
             data={itens}
             keyExtractor={(i) => i.id.toString()}
             renderItem={({item})=>(
-                <Viewstyle={styles.itensItem}>
-                    <text style={styles.item.name}>{item.name}</text>
-                    <text style={styles.item.mark>{item.mark}</text>
-                    <textstyle={styles.item.assetNumber>{item.assetNumber}</text>
+                <View >
+                    <text >{item.name}</text>
+                    <text >{item.mark}</text>
+                    <text>{item.assetNumber}</text>
                     <text>{item.amount}</text>
-                
-                
+
+                    <View>
+                        <TouchableOpacity onPress={ () => { editItem(item.id)} }></TouchableOpacity>
+                    </View>
                 </View>
 
             )}
@@ -100,42 +122,27 @@ const styles= StyleSheet.create({
             shadowOffset: { width: 0, height: 4 },
             shadowRadius: 5,
     },
-            listContainer: {
-                flex: 1, 
-                padding: 10,
-            },
-            title: {
-                fontSize: 22,
-                fontWeight: 'bold',
-                textAlign: 'center',
-                marginBottom: 20,
-            },
-            subtitle: {
-                fontSize: 18,
-                fontWeight: 'bold',
-                marginBottom: 10,
-            },
-            input: {
-                borderWidth: 1,
-                borderColor: '#ccc',
-                borderRadius: 5,
-                padding: 10,
-                marginBottom: 10,
-            },
-            item.name: {
-                padding: 10,
-                marginVertical: 5,
-                backgroundColor: '#f8f8f8',
-                borderRadius: 5,
-            },
-            AmonText: {
-                fontSize: 16,
-                fontWeight: 'bold',
-            },
-            postUrl: {
-                fontSize: 14,
-                color: '#007BFF',
-                marginBottom: 5,
+    listContainer: {
+        flex: 1, 
+        padding: 10,
+    },
+    title: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 20,
+    },
+    subtitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        padding: 10,
+        marginBottom: 10,
     },
 })
 
