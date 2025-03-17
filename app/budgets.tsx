@@ -117,8 +117,18 @@ export default function BudgetScreen(){
                            <Text> Data Final: {item.endDate}</Text>
                         
                         <View style={styles.buttonsContanier}>
-                        <TouchableOpacity onPress={()=> {editBudget(item.id)}}>EDIT</TouchableOpacity>
-                        <TouchableOpacity onPress={()=> {delBudget(item.id)}}>DELITE</TouchableOpacity>
+
+                        <TouchableOpacity
+                        style ={styles.editButton}
+                        onPress={()=> {editBudget(item.id)}}>
+                        <Text style={styles.buttonText}>EDIT</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity 
+                        style ={styles.delButton}
+                        onPress={()=> {delBudget(item.id)}}>
+                        <Text style={styles.buttonText}>DELETE</Text>
+                        </TouchableOpacity>
                         </View>
  
                            
@@ -170,6 +180,28 @@ const styles = StyleSheet.create({
         alignContent:'space-around',
 
         },
+
+        editButton:{
+        backgroundColor:'#FFFF00',
+        padding:10,
+        borderRadius:5,
+        alignItems: 'center',
+        justifyContent:'center',
+        },
+
+        delButton:{
+        backgroundColor:'#f44336',
+        padding: 10,
+        borderRadius:5,
+        alignItems: 'center',
+        justifyContent:'center',
+        },
+
+        buttonText:{
+        color:'#000000',
+        fontWeight:'bold',
+         },
+
 
 });
 
