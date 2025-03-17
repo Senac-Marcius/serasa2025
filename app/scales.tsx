@@ -1,7 +1,10 @@
 import React, {useState} from 'react'; //Importa o react e atualiza a lista Automaticamente.
 import {View, Text, StyleSheet, TextInput, Button, FlatList, FlatListComponent, TouchableOpacity} from 'react-native';//Une  os objetos e o react-native faz a função de trasformar o codigo em multiplas plataformas.
+import { useRouter } from 'expo-router';
 
 export default function ScaleScreen(){
+    const router = useRouter();
+
     const [req, setReq] = useState({
         id:0,
         day:'',
