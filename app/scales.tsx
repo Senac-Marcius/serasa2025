@@ -1,8 +1,7 @@
 import React, {useState} from 'react'; //Importa o react e atualiza a lista Automaticamente.
-import { View, Text, StyleSheet, TextInput, Button, FlatList, FlatListComponent, TouchableOpacity} from 'react-native';//Une  os objetos e o react-native faz a função de trasformar o codigo em multiplas plataformas.
+import {View, Text, StyleSheet, TextInput, Button, FlatList, FlatListComponent, TouchableOpacity} from 'react-native';//Une  os objetos e o react-native faz a função de trasformar o codigo em multiplas plataformas.
 
 export default function ScaleScreen(){
-
     const [req, setReq] = useState({
         id:0,
         day:'',
@@ -40,20 +39,20 @@ export default function ScaleScreen(){
             userId: 0,
     })   
     function editScale(id: number){
-        const scale = scales.find(s => s.id = id);
+        const scale = scales.find(s => s.id === id);
         if (scale) {
             setReq(scale);
         }
     }
 
 
-    function deleteScale(id?: number){
-        const list = scales.filter(s => s.id != id);
+    function deleteScale(id: number){
+        const list = scales.filter(s => s.id !== id);
         setScales(list);
 
     }
 
-    return (
+    return(
         <View style={styles.container}> {/* Aqui é typecript dentro do html*/}
         {/*Aqui é HTML*/}
             <Text>Minha tela das escalas</Text>
@@ -91,18 +90,18 @@ export default function ScaleScreen(){
                                     <Text>Data da criação: {item.creatAt}</Text>
 
                                     <View style={styles.buttonContainer}>
-                                       <TouchableOpacity onPress={() => { editScale(item.id)}}>EDIT</TouchableOpacity>
-                                       <TouchableOpacity onPress={() => { deleteScale(item.id)}}>DELETE</TouchableOpacity>
+                                       <TouchableOpacity onPress={() => {editScale(item.id)}}>EDIT</TouchableOpacity>
+                                       <TouchableOpacity onPress={() => {deleteScale(item.id)}}>DELETE</TouchableOpacity>
                                     </View>
                                 </View>
                             )}
                     />
                     </View>
-            </View>
-        {/*Só pode uma TAG por retorn, mas dentro dessa tag pode ter outras*/}        
+            </View>       
         </View> 
     );
-}
+}};
+
     
 
 const styles = StyleSheet.create({
@@ -166,4 +165,4 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
     },
-})
+});
