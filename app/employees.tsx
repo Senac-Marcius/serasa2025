@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import { View , Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Button } from 'react-native';
+import { DatePickerOptions } from '@react-native-community/datetimepicker';
+
 
 export default function EmployeeScreen(){
 //aqui é typescript 
@@ -50,6 +52,20 @@ export default function EmployeeScreen(){
             }else{
                 setEmployees(employees.map(e =>(e.id == req.id ? req:e)))
             }
+            resetForms();
+        }
+        function editEmployee(id:number){
+            let employee = employees.find(e => e.id == id)
+            if(employee)
+                SetReq(employee)
+        }
+        function deleteEmployee(id:number){
+            const list = employees.filter(e=> e.id != id)
+            if(list) setEmployees(list);
+            resetForms();
+    
+        }
+        function resetForms(){
             SetReq({
                 id: -1,
                 urls:'',
@@ -70,17 +86,6 @@ export default function EmployeeScreen(){
                 isActive: '0',
                 })
         }
-        function editEmployee(id:number){
-            let employee = employees.find(e => e.id == id)
-            if(employee)
-                SetReq(employee)
-        }
-        function deleteEmployee(id:number){
-            const list = employees.filter(e=> e.id != id)
-            if(list)
-                setEmployees(list)
-    
-        }
 
     
 
@@ -90,91 +95,107 @@ export default function EmployeeScreen(){
             <Text>Hello world</Text>
             <View style={style.row}>
                 <View style={style.form}>
+                    <Text style={style.label}>Perfil do likendin:</Text>
                     <TextInput
-                        placeholder='Pefril do likendin:'
+                        style={style.inputs}
+                        placeholder='insira uma url valida'
                         value={req.urls}
                         onChangeText={(text) => SetReq({...req , urls:text})}
                     />
-                    
+                    <Text style={style.label}>Nome:</Text>
                     <TextInput
-                        placeholder='Nome:'
+                        style={style.inputs}
+                        placeholder='Digite seu nome'
                         value={req.name}
                         onChangeText={(text) => SetReq({...req , name:text})}
                     />
-                   
+                    <Text style={style.label}>Data de Nascimento:</Text>
                     <TextInput
-                        placeholder='Idade:'
+                        style={style.inputs}
+                        placeholder='Insira a data ANO/MES/DIA'
                         value={req.datebirth}
                         onChangeText={(int) => SetReq({...req , datebirth:int})}
                     />
-                    
+                    <Text style={style.label}>Telefone:</Text>
                     <TextInput
-                        placeholder='Telefone:'
+                        style={style.inputs}
+                        placeholder='(XX) XXXXX-XXXX'
                         value={req.tell}
                         onChangeText={(int) => SetReq({...req , tell:int})}
                     />
-                    
+                    <Text style={style.label}>Telefone:</Text>
                     <TextInput
+                        style={style.inputs}
                         placeholder='Email:'
                         value={req.email}
                         onChangeText={(text) => SetReq({...req , email:text})}
                     />
-                    
+                    <Text style={style.label}>Endereço/Cep:</Text>
                     <TextInput
+                        style={style.inputs}
                         placeholder='Endereço:'
                         value={req.address}
                         onChangeText={(text) => SetReq({...req , address:text})}
                     />
-                    
+                    <Text style={style.label}>Nacionalidade:</Text>
                     <TextInput
+                        style={style.inputs}
                         placeholder='Nacionalidade:'
                         value={req.nationality}
                         onChangeText={(text) => SetReq({...req , nationality:text})}
                     />
-                    
+                    <Text style={style.label}>Personalidade:</Text>
                     <TextInput
+                        style={style.inputs}
                         placeholder='Personalidade:'
                         value={req.discPersonality}
                         onChangeText={(text) => SetReq({...req , discPersonality:text})}
                     />
-                    
+                    <Text style={style.label}>C.P.F:</Text>
                     <TextInput
+                        style={style.inputs}
                         placeholder='C.P.F:'
                         value={req.cpf}
                         onChangeText={(int) => SetReq({...req , cpf:int})}
                     />
-                    
+                    <Text style={style.label}>Genêro:</Text>
                     <TextInput
+                        style={style.inputs}
                         placeholder='Genêro:'
                         value={req.sex}
                         onChangeText={(text) => SetReq({...req , sex:text})}
                     />
-                    
+                    <Text style={style.label}>Estado civil:</Text>
                     <TextInput
+                        style={style.inputs}
                         placeholder='Estado civil:'
                         value={req.martinalStatus}
                         onChangeText={(text) => SetReq({...req , martinalStatus:text})}
                     />
-                    
+                    <Text style={style.label}>Cargo:</Text>
                     <TextInput
+                        style={style.inputs}
                         placeholder='Cargo:'
                         value={req.position}
                         onChangeText={(text) => SetReq({...req , position:text})}
                     />
-                    
+                    <Text style={style.label}>Etnia:</Text>
                     <TextInput
+                        style={style.inputs}
                         placeholder='Etnia:'
                         value={req.ethnicity}
                         onChangeText={(text) => SetReq({...req , ethnicity:text})}
                     />
-                    
+                    <Text style={style.label}>Deficiência:</Text>
                     <TextInput
+                        style={style.inputs}    
                         placeholder='Deficiência:'
                         value={req.deficiency}
                         onChangeText={(text) => SetReq({...req , deficiency:text})}
                     />
-                    
+                    <Text style={style.label}>Está ativo:</Text>
                     <TextInput
+                        style={style.inputs}
                         placeholder='Está ativo:'
                         value={req.isActive}
                         onChangeText={(text) => SetReq({...req , isActive:text})}
@@ -182,31 +203,32 @@ export default function EmployeeScreen(){
                    <Button title='Cadastrar Funcionário' color = '#800080'  onPress={handleRegister}/>
                 </View>
                 
+                <FlatList
+                    data={employees}
+                    keyExtractor={(item)=> item.id.toString() }
+                    renderItem = {({item}) => {
+                        return <View style={style.itemContainer}>
+                        <Text style={style.itemText}>Nome:{item.name} / Cargo:{item.position}</Text>
+                        <Text style={style.itemText}>{item.isActive}</Text>
+
+                        <View style={style.buttonsContainer}>
+                                    <TouchableOpacity style={style.deleteButton} onPress={() => {deleteEmployee(item.id)}}>
+                                    <Text style={style.buttonText}>⚠ Deletar ⚠</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity style={style.editButton} onPress={() => {editEmployee(item.id)}}>
+                                    <Text style={style.buttonText}>Editar📃✍</Text>
+
+                                    </TouchableOpacity>
+
+                        </View>
+
+                        </View>
+                        }}
+                />
                 
             </View>
-            <FlatList
-                data={employees}
-                keyExtractor={(item)=> item.id.toString() }
-                renderItem = {({item}) => {
-                    return <View style={style.itemContainer}>
-                    <Text style={style.itemText}>Nome:{item.name} / Cargo:{item.position}</Text>
-                    <Text style={style.itemText}>{item.isActive}</Text>
-
-                    <View style={style.buttonsContainer}>
-                                <TouchableOpacity style={style.deleteButton} onPress={() => {deleteEmployee(item.id)}}>
-                                <Text style={style.buttonText}>X</Text>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity style={style.editButton} onPress={() => {editEmployee(item.id)}}>
-                                <Text style={style.buttonText}>Edit</Text>
-
-                                </TouchableOpacity>
-
-                    </View>
-
-                    </View>
-                    }}
-            />
+            
             
         </View>
     );
@@ -298,5 +320,23 @@ const style = StyleSheet.create({
         color: '#fff', // Texto branco
         fontSize: 16,
         fontWeight: 'bold',
+    },
+    inputContainer: {
+        marginBottom: 15, // Espaço entre os campos
+    },
+    label: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 5, // Espaço entre o nome do campo e o input
+        color: '#333', // Cor escura para o texto
+    },
+    inputs: {
+        height: 40,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingLeft: 10,
+        fontSize: 16,
+        backgroundColor: '#f9f9f9',
     }     
 })
