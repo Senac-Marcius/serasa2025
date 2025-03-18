@@ -81,7 +81,7 @@ export default function ProjectScreen(){
     }
 
     function dellProject(id:number){
-        const list = projects.filter((item => item.id !== id));
+        const list = projects.filter((item => item.id !== id));<Text> ⚠ </Text>
         setProjects(list)
     }
     
