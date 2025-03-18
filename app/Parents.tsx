@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, FlatList} from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity} from 'react-native';
 //import dateTimepicker
 //npm run web → chamar pagina web pelo terminal
 export default function ParentScreen (){
@@ -25,7 +25,14 @@ export default function ParentScreen (){
     }[]>([])/* <> → usado para tipar uma função */
 
     function handleRegister() {
-        setParents([...parents, req])
+        if(req.id == -1){
+            const newId = parents.length ? parents [parents.length -1].id +1 : 0;
+            const newParents = {...req, id: newId}
+        }else{
+            setParents(parents.map( p =>(p.id == req.id ? req : p)))
+        }
+
+        //setParents([...parents, req])
         setReq({
             id:req.id + 1,
             Nome: '',
@@ -35,6 +42,16 @@ export default function ParentScreen (){
             userId: 0,
         })
     }
+     function editParent(id:number){
+        const parent = parents.find (p => p.id == id)
+        if(parent)
+            setReq(parent)
+     }
+     function delParent(id:number){
+        const list = parents.filter (p=> p.id != id)
+        if (list)
+            setParents(list)
+     }
     
     return (
         <View>{/*aqui é typeScript dentro do Front*/}
@@ -64,12 +81,15 @@ export default function ParentScreen (){
                         title='Cadastrar' 
                         color='blue'
                         onPress={handleRegister}/>
-                    
-                
-
-                  
                    {/*foi aberto uma area de codigo chamar a variavel, equivale o inder do html*/}
-                    
+                   <Button 
+                        title='Editar'
+                        color='red'
+                        onPress={editParent}/>
+                    <Button
+                        title='Deletar'
+                        color='red'
+                        onPress={delParent}/>
                 </View>
 
                 <FlatList
@@ -84,6 +104,10 @@ export default function ParentScreen (){
                             <Text>{item.parentesco}</Text>
                             <Text>{item.createAt}</Text>
                             <Text>{item.userId}</Text> 
+                                <View style ={styles.buttonContainer}>
+                                    <TouchableOpacity onPress={()=> {editParent(item.id)}}>EDIT</TouchableOpacity>
+                                    <TouchableOpacity onPress={()=> {delParent(item.id)}}>DELETE</TouchableOpacity>
+                                </View>
                         </View>
                     )}
                 />
@@ -126,5 +150,11 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
-    }
+    },
+    buttonContainer: {
+        flexDirection:'row',
+        alignItems: 'center',
+        gap: 20,
+        alignContent: 'space-around'
+    },
 })
