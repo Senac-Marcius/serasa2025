@@ -1,6 +1,6 @@
-import { List } from '@ui-kitten/components';
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Button, TextInput, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text } from '@ui-kitten/components';
 
 export default function PostScreen() {
     const [req, setReq] = useState({
@@ -79,7 +79,7 @@ export default function PostScreen() {
                         <View style={styles.item}>
                                 <Text>Description: {item.description} </Text>
                                 <Text>Url: {item.url} </Text>
-                                <Text>Data de Criação: {item.createAt} </Text>
+                                <Text>Data de Criação: {new Date(item.createAt).toLocaleString()} </Text>
                                 <Text>Userid: {item.userId} </Text>
 
                                 <View style={styles.buttonsContanier}>
