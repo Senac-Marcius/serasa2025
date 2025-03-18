@@ -9,7 +9,7 @@ export default function NotificationScreen(){
         url:'',
         description:'',
         classification:'',
-        id: 0,
+        id: -1,
         creatAt: new Date().toISOString(),
         userId: 0,
     });
@@ -106,12 +106,19 @@ return (
                            <text> CreatAt: {item.creatAt}</text>
 
                             <View style={styles.buttonsContainer}>
-                                <TouchableOpacity onPress={() => {editNotification(item.id)}}>EDIT</TouchableOpacity>
-                                <TouchableOpacity onPress={() => {deleteNotification(item.id)}} >DELETE</TouchableOpacity>
-                            </View>
+                                <TouchableOpacity 
+                                    style ={styles.editButton} 
+                                    onPress={() => {editNotification(item.id)}}>
+                                    <Text style={styles.buttonText}>EDIT</Text>
+                                    </TouchableOpacity>
+                                <TouchableOpacity 
+                                    style ={styles.delButton} 
+                                    onPress={() => {deleteNotification(item.id)}}>
+                                    <Text style={styles.buttonText}>DELETE</Text>
+                                </TouchableOpacity>
                            
+                            </View>
                         </View>
-
                     )}
            />
            
@@ -161,6 +168,27 @@ const styles = StyleSheet.create({
         alignContent:'space-around',
 
     },
+
+    editButton:{
+        backgroundColor:'#FFFF00',
+        padding:10,
+        borderRadius:5,
+        alignItems: 'center',
+        justifyContent:'center',
+        },
+ 
+        delButton:{
+        backgroundColor:'#f44336',
+        padding: 10,
+        borderRadius:5,
+        alignItems: 'center',
+        justifyContent:'center',
+        },
+ 
+        buttonText:{
+        color:'#000000',
+        fontWeight:'bold',
+         },
 
     input: {
         borderWidth: 1,
