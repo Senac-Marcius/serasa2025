@@ -1,90 +1,59 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { Button, Input, Datepicker, Select, SelectItem, IndexPath, Toggle, RadioGroup, Radio, CheckBox } from '@ui-kitten/components';
+import { ScrollView } from 'react-native';
+import { Button, Input, Select, Text, VStack, HStack, Checkbox, Radio } from 'native-base';
 import { useRouter } from 'expo-router';
 
 export default function PostScreen() {
     const router = useRouter();
-
     const [description, setDescription] = useState('');
     const [url, setUrl] = useState('');
-    const [date, setDate] = useState(new Date());
-    const [selectedIndex, setSelectedIndex] = useState<IndexPath>(new IndexPath(0));
-    const [toggleChecked, setToggleChecked] = useState(false);
-    const [selectedRadio, setSelectedRadio] = useState(0);
-    const [checked, setChecked] = useState(false);
+    const [category, setCategory] = useState("Notícia");
+    const [isChecked, setIsChecked] = useState(false);
+    const [selectedRadio, setSelectedRadio] = useState("0");
 
     return (
-        <ScrollView style={styles.container}>
-            <Button onPress={() => router.back()}>Voltar</Button>
+        <ScrollView>
+            <VStack space={4} padding={5}>
+                <Button onPress={() => router.back()}>Voltar</Button>
 
-            <View style={styles.formContainer}>
+                <Text fontSize="lg" fontWeight="bold">Cadastro de Postagem</Text>
+
                 <Input
-                    label="Descrição"
                     placeholder="Digite a descrição"
                     value={description}
                     onChangeText={setDescription}
                 />
+
                 <Input
-                    label="URL"
-                    placeholder="https://exemplo.com"
+                    placeholder="Digite a URL"
                     value={url}
                     onChangeText={setUrl}
                 />
 
-                <Datepicker
-                    label="Data da Postagem"
-                    date={date}
-                    onSelect={nextDate => setDate(nextDate)}
-                />
-
-                <Select
-                    label="Categoria"
-                    selectedIndex={selectedIndex}
-                    onSelect={(index) => setSelectedIndex(index as IndexPath)}
-                >
-                    <SelectItem title="Notícia" />
-                    <SelectItem title="Blog" />
-                    <SelectItem title="Dicas" />
+                {/* Select corrigido */}
+                <Select selectedValue={category} onValueChange={setCategory}>
+                    <Select.Item label="Notícia" value="Notícia" />
+                    <Select.Item label="Blog" value="Blog" />
+                    <Select.Item label="Dicas" value="Dicas" />
                 </Select>
 
-                <Toggle
-                    checked={toggleChecked}
-                    onChange={setToggleChecked}
-                >
-                    Marcar como Destaque
-                </Toggle>
+                {/* Checkbox agora tem um valor correto */}
+                <Checkbox value="destaque" isChecked={isChecked} onChange={setIsChecked}>
+                    Destaque
+                </Checkbox>
 
-                <RadioGroup
-                    selectedIndex={selectedRadio}
-                    onChange={index => setSelectedRadio(index)}
-                >
-                    <Radio>Opção 1</Radio>
-                    <Radio>Opção 2</Radio>
-                </RadioGroup>
-
-                <CheckBox
-                    checked={checked}
-                    onChange={nextChecked => setChecked(nextChecked)}
-                >
-                    Concordo com os Termos
-                </CheckBox>
+                {/* Radio Group corrigido */}
+                <Radio.Group name="radioGroup" value={selectedRadio} onChange={setSelectedRadio}>
+                    <HStack space={4}>
+                        <Radio value="0">Opção 1</Radio>
+                        <Radio value="1">Opção 2</Radio>
+                    </HStack>
+                </Radio.Group>
 
                 <Button onPress={() => console.log("Post enviado!")}>
                     Cadastrar
                 </Button>
-            </View>
+            </VStack>
         </ScrollView>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#fff',
-    },
-    formContainer: {
-        marginTop: 20,
-    },
-});

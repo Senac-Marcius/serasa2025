@@ -1,16 +1,13 @@
-import * as eva from '@eva-design/eva';
-import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
-import { EvaIconsPack } from '@ui-kitten/eva-icons';
-import { customTheme } from './styles/theme';
+import { NativeBaseProvider, extendTheme } from 'native-base';
 import { Slot } from 'expo-router';
+import { theme } from './styles/theme';
+
+const customTheme = extendTheme(theme);
 
 export default function App() {
     return (
-        <>
-            <IconRegistry icons={EvaIconsPack} />
-            <ApplicationProvider {...eva} theme={{ ...customTheme }}>
-                <Slot />
-            </ApplicationProvider>
-        </>
+        <NativeBaseProvider theme={customTheme}>
+            <Slot />
+        </NativeBaseProvider>
     );
 }
