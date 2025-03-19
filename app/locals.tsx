@@ -105,8 +105,8 @@ export default function LocalScreen(){
 
 
                                 <View style={styles.buttonsContainer}>
-                                    <TouchableOpacity onPress={ () => {editLocal(item.id)} }>edit</TouchableOpacity>
-                                    <TouchableOpacity onPress={ () => (delLocal(item.id))}>del</TouchableOpacity>
+                                    <TouchableOpacity style={styles.edit} onPress={ () => {editLocal(item.id)} }>edit</TouchableOpacity>
+                                    <TouchableOpacity style={styles.del} onPress={ () => (delLocal(item.id))}>del</TouchableOpacity>
                                 </View>
 
                             </View>
@@ -123,10 +123,33 @@ export default function LocalScreen(){
 
 const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos funções que criam estilos para fontes
 
+    
+     edit: {
+        flex: 5,
+        marginRight: 15,
+        padding: 10,
+        backgroundColor: '#F2F2F2',
+        borderRadius: 15,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 8, height: 4 },
+        shadowRadius: 7,
+    },
+     del: {
+        flex: 5,
+        marginRight: 15,
+        padding: 10,
+        backgroundColor: '#F2F2F2',
+        borderRadius: 15,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 8, height: 4 },
+        shadowRadius: 7,
+    },
     container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#fff',
+        flex: 20,
+        padding: 15,
+        backgroundColor: '#F2F2F2',
     },
     row: {
         flexDirection: 'row',
@@ -136,7 +159,7 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
     },
     formContainer: {
         flex: 5,
-        marginRight: 15,
+        marginRight: 50,
         padding: 25,
         backgroundColor: '#F2F2F2',
         borderRadius: 15,
@@ -148,7 +171,7 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
     form: {
         flex: 6,
         marginRight: 15,
-        padding: 25,
+        padding: 50,
         backgroundColor: '#F2F2F2',
         borderRadius: 15,
         shadowColor: '#000',
@@ -157,8 +180,12 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
         shadowRadius: 7,
     },
     buttonsContainer: {
+        flex: 100,
+        padding: 50,
+        backgroundColor: '#F2F2F2',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
+        
     },
     title:{
         fontSize: 22,
