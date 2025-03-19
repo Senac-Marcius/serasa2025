@@ -26,7 +26,7 @@ export default function ProjectScreen(){
         id: number,
         url: string,
         createAt: string,
-        userId: number,
+        userId: string,
         recurces: number,
         description: string,
         activity: string,
@@ -36,7 +36,8 @@ export default function ProjectScreen(){
     } []>( [] );
 
     function handleRegister(){
-        /*let cpf =req.userId.replace(/\D/g, ''); // Remove tudo o que não for número
+        let cpf =req.userId.replace(/\D/g, ''); // Remove tudo o que não for número
+                
                 if (cpf.length <= 3) {
                     req.userId = cpf;
                 } else if (cpf.length <= 6) {
@@ -45,7 +46,7 @@ export default function ProjectScreen(){
                     req.userId = cpf.replace(/(\d{3})(\d{3})(\d{1,})/, '$1.$2.$3');
                 } else if (cpf.length <= 11) {
                     req.userId = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{1,})/, '$1.$2.$3-$4');
-                }*/
+                }
 
 
         if(req.id == -1){ //aqui é quando esta cadastrando
@@ -63,7 +64,7 @@ export default function ProjectScreen(){
             id: -1,
             url: '',
             createAt: new Date().toISOString(),
-            userId: 0,
+            userId: '',
             recurces: 0,
             description: '',
             activity: '',
@@ -101,9 +102,12 @@ export default function ProjectScreen(){
                     />
                     CPF:
                     <TextInput
-                        placeholder=""
-                    />
-                    </Text>
+                        placeholder="Digite o CPF"
+                        value={req.userId}
+                        onChangeText={(text) => setReq({ ...req, userId: text })}
+                        keyboardType="numeric" // Para que o usuário só possa digitar números
+                />
+
 
                     <Text> Nome do projeto:
                     <TextInput 
