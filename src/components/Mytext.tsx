@@ -4,7 +4,7 @@ import  { textStyles }  from '../../styles/textStyles';
 
 interface MytextProps {
   children: ReactNode;
-  style?: TextStyle | TextStyle[]; // Permite receber um ou mais estilos
+  style?: TextStyle | TextStyle[]; 
 }
 
 const Mytext: React.FC<MytextProps> = ({ children, style }) => {
