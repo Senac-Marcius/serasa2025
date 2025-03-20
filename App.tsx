@@ -1,13 +1,13 @@
-import { NativeBaseProvider, extendTheme } from 'native-base';
+import 'react-native-gesture-handler';
+import 'react-native-reanimated';
+import React from 'react';
+import { Provider as PaperProvider } from 'react-native-paper';
 import { Slot } from 'expo-router';
-import { theme } from './styles/theme';
-
-const customTheme = extendTheme(theme);
 
 export default function App() {
-    return (
-        <NativeBaseProvider theme={customTheme}>
-            <Slot />
-        </NativeBaseProvider>
-    );
+  return (
+    <PaperProvider>
+      <Slot />
+    </PaperProvider>
+  );
 }
