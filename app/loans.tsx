@@ -29,27 +29,27 @@ export default function LoanScreen() {
     }[]>([])
 
     function editLoans(id:number){
-        const loans = loans.find(p =>p.id == id)
-        if(loans)
-        setReq(loans)
+        const loan = loans.find(p =>p.id == id)
+        if(loan)
+        setReq(loan)
                                         //operador ternario ?
     }
     function deletLoans(id:number){
         const list = loans.filter((p) => p.id != id) 
             setLoans(list)
     }
-    }
+    
 
 
     function handleRegister (){
         if(req.id == -1){
-            const newId = postMessage.length ? loans[loans.length -1].id + 1 : 0;
+            const newId = loans.length ? loans[loans.length -1].id + 1 : 0;
             const newLoans = {...req, id: newId}
 
             setLoans([...loans, newLoans]);
 
         }else{
-            setLoans(post.map(p => (p.id == req.id ? req : p)));
+            setLoans(loans.map(p => (p.id == req.id ? req : p)));
 
         }
             
@@ -145,7 +145,7 @@ export default function LoanScreen() {
                             <Text>{item.statusLoan}</Text>
                             <Text>{item.observation}</Text>
                             <Text>{item.creatAt}</Text>
-                            <View style ={styles.buttonContainer}>
+                            <View style={styles.itemContainer} >
                                 <TouchableOpacity onPress={ () => {editLoans(item.id)}}>EDITAR</TouchableOpacity>
                                 <TouchableOpacity onPress={ () => {deletLoans(item.id)}}>DELETE</TouchableOpacity>
                             </View>
@@ -157,8 +157,8 @@ export default function LoanScreen() {
             </View>
         </View>
     ); //encapsulamento
-}
 
+}
 
 const styles = StyleSheet.create({ 
     row: {
