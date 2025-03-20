@@ -35,7 +35,7 @@ export default function StudentsScreen() {
       setStudent([...student, req]);
       
     } else {
-      setStudent(student.map(item => ))
+      setStudent(student.map(i => (i.id == req.id)? req: i )  );
     }
     setReq({
       id: -1,
@@ -51,7 +51,7 @@ export default function StudentsScreen() {
       if (s.id == id) return s;
     });
     if (stu != undefined) {
-      setReq();
+      setReq(stu);
     }
   }
 
@@ -159,7 +159,6 @@ const styles = StyleSheet.create({
   },
 
   textinput: {
-    border: "1px solid",
     borderRadius: "5px",
     padding: 5,
     width: 400,
@@ -167,8 +166,6 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     backgroundColor: "white",
-    width: "100vw",
-    height: "100vh",
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",
@@ -204,18 +201,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  row: {
-    display: "flex",
-    justifyContent: "center",
-    flexDirection: "row",
-    alignItems: "center",
-  },
 
   formtxt: {
-    width: "500px",
-    height: "600px",
+    width: 500,
+    height: 600,
     backgroundColor: "white",
-    padding: "25px",
+    padding: 25,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",

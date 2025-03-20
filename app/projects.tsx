@@ -26,7 +26,7 @@ export default function ProjectScreen(){
         id: number,
         url: string,
         createAt: string,
-        userId: string,
+        userId: number,
         recurces: number,
         description: string,
         activity: string,
@@ -36,18 +36,6 @@ export default function ProjectScreen(){
     } []>( [] );
 
     function handleRegister(){
-        let cpf =req.userId.replace(/\D/g, ''); // Remove tudo o que não for número
-                
-                if (cpf.length <= 3) {
-                    req.userId = cpf;
-                } else if (cpf.length <= 6) {
-                    req.userId = cpf.replace(/(\d{3})(\d{1,})/, '$1.$2');
-                } else if (cpf.length <= 9) {
-                    req.userId = cpf.replace(/(\d{3})(\d{3})(\d{1,})/, '$1.$2.$3');
-                } else if (cpf.length <= 11) {
-                    req.userId = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{1,})/, '$1.$2.$3-$4');
-                }
-
 
         if(req.id == -1){ //aqui é quando esta cadastrando
             const newid = projects.length ? projects[projects.length -1].id + 1 : 0;
@@ -64,7 +52,7 @@ export default function ProjectScreen(){
             id: -1,
             url: '',
             createAt: new Date().toISOString(),
-            userId: '',
+            userId: 0,
             recurces: 0,
             description: '',
             activity: '',
@@ -94,20 +82,12 @@ export default function ProjectScreen(){
             <View style={styles.row}>
                 <View style={styles.form}> 
                     
-                    <Text> Criador do projeto:
+                    <Text> Criador do projeto:</Text>
                     <TextInput 
                         placeholder=""
                         value={req.name}
                         onChangeText={(text) => setReq({...req ,name: text})}
                     />
-                    CPF:
-                    <TextInput
-                        placeholder="Digite o CPF"
-                        value={req.userId}
-                        onChangeText={(text) => setReq({ ...req, userId: text })}
-                        keyboardType="numeric" // Para que o usuário só possa digitar números
-                />
-
 
                     <Text> Nome do projeto:
                     <TextInput 
