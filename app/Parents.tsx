@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity} from 'react-native';
 //import dateTimepicker
 //npm run web → chamar pagina web pelo terminal
+//batatinha
 export default function ParentScreen (){
 //Aqui é TypeScript
     const [req, setReq] = useState({
