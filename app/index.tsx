@@ -59,5 +59,5 @@ export default function HomeScreen() {
                 <Text>Bem-vindo ao Serasa App!</Text>
             </View>
         </View>
-    );
+    );  
 }
