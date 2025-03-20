@@ -259,16 +259,16 @@ const styles = StyleSheet.create({
     },
 
     editButton: {
-        backgroundColor: '#281259', // Cor do botão de editar
+        backgroundColor: '#281259',
         paddingVertical: 12,
         paddingHorizontal: 24,
-        borderRadius: 30, // Bordas arredondadas
+        borderRadius: 30, 
         marginBottom: 10,
         alignItems: 'center',
 
     },
     buttonText: {
-        color: '#fff', // Texto branco
+        color: '#fff', 
         fontSize: 16,
         fontWeight: 'bold',
     }
