@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
 import { View , Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Button } from 'react-native';
-import { DatePickerOptions } from '@react-native-community/datetimepicker';
-
 
 export default function EmployeeScreen(){
 //aqui é typescript 
