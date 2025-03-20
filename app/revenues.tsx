@@ -152,7 +152,7 @@ export default function RevenueScreen() {
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
