@@ -6,7 +6,13 @@ import { DatePickerModal } from 'react-native-paper-dates';
 import { globalStyles } from '../styles/globalStyles';
 
 export default function PostScreen() {
-    const router = useRouter();
+    const [req, setReq] = useState({
+        description: '',
+        url: '',
+        id: -1,
+        createAt: new Date().toISOString(),
+        userId: 0,
+    });
 
     const [description, setDescription] = useState('');
     const [url, setUrl] = useState('');
@@ -85,6 +91,7 @@ export default function PostScreen() {
                     Cadastrar
                 </Button>
             </View>
-        </ScrollView>
+        </View>
+
     );
 }
