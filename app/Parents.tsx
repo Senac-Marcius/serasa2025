@@ -82,14 +82,14 @@ export default function ParentScreen (){
                         color='blue'
                         onPress={handleRegister}/>
                    {/*foi aberto uma area de codigo chamar a variavel, equivale o inder do html*/}
-                   <Button 
+                   {/*<Button 
                         title='Editar'
                         color='red'
                         onPress={editParent}/>
                     <Button
                         title='Deletar'
                         color='red'
-                        onPress={delParent}/>
+                        onPress={delParent}/>*/}
                 </View>
 
                 <FlatList
