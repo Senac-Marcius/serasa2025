@@ -3,23 +3,15 @@ import { ScrollView, View } from 'react-native';
 import { Button, TextInput, RadioButton, Checkbox } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { DatePickerModal } from 'react-native-paper-dates';
-import { globalStyles } from '../styles/globalStyles';
 
 export default function PostScreen() {
-    const [req, setReq] = useState({
-        description: '',
-        url: '',
-        id: -1,
-        createAt: new Date().toISOString(),
-        userId: 0,
-    });
+    const router = useRouter();
 
     const [description, setDescription] = useState('');
     const [url, setUrl] = useState('');
     const [isChecked, setIsChecked] = useState(false);
     const [selectedRadio, setSelectedRadio] = useState("0");
 
-    // Estado para o calendário
     const [date, setDate] = useState<Date | undefined>(undefined);
     const [open, setOpen] = useState(false);
 
@@ -91,7 +83,6 @@ export default function PostScreen() {
                     Cadastrar
                 </Button>
             </View>
-        </View>
-
+        </ScrollView>
     );
 }
