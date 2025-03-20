@@ -36,6 +36,14 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
+                        label="Cursos"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/courses');
+                        }}
+                    />
+                    <Drawer.Item
                         label="Configurações"
                         icon="cog"
                         onPress={() => {
