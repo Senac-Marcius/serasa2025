@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, FlatList, StyleSheet, ScrollView } from 'react-native';
-
+import MyDocument from '../src/components/Mydocuments' //nome do arquivo
+//nome da variavel
 
 export default function RecordScreen() {
     // Estados individuais para os inputs
@@ -61,7 +62,13 @@ export default function RecordScreen() {
 
 
     return (
+        
         <View style={styles.container}>
+
+            <MyDocument style={{ flex: 1 }}>
+                <></>
+            </MyDocument>
+
             <View style={styles.row}>
                 <View style={styles.formContainer}>
                     <Text style={styles.title}>Solicitação de Documentos</Text>
