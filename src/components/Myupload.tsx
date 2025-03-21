@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import {View, ViewStyle} from 'react-native';
+import {View, ViewStyle, Text} from 'react-native';
 
 interface MyUploadProps {
     children: ReactNode
@@ -8,7 +8,11 @@ interface MyUploadProps {
 
 const MyUpload: React.FC < MyUploadProps > = ({children, style}) => {
     return (
-        <View style={style}>{children}</View> 
+        <View style={style}>
+            <Text> fdfs</Text>
+            {children}
+            <Text> </Text>
+        </View> 
 
     );
 }

@@ -31,6 +31,8 @@ export default function ParentScreen (){
         if(req.id == -1){
             const newId = parents.length ? parents [parents.length -1].id +1 : 0;
             const newParents = {...req, id: newId}
+
+            setParents([... parents, newParents])
         }else{
             setParents(parents.map( p =>(p.id == req.id ? req : p)))
         }
@@ -45,7 +47,7 @@ export default function ParentScreen (){
             userId: 0,
         })
     }
-     function editParent(id:number){
+    function editParent(id:number){
         const parent = parents.find (p => p.id == id)
         if(parent)
             setReq(parent)
@@ -58,8 +60,18 @@ export default function ParentScreen (){
     
     return (
         <View>{/*aqui é typeScript dentro do Front*/}
-            <MyUpload style={{ backgroundColor: 'red', padding: 10}}> Olá Mundo</MyUpload>
-            {/*View → esse view é diferente do HTML ele contém DIVs e outros atributos,*/}
+          {/*View → esse view é diferente do HTML ele contém DIVs e outros atributos,*/}  
+          <MyUpload style={{ 
+            backgroundColor:'#AD6CD9', 
+            padding: 10, 
+            margin:20,
+            borderRadius:20,
+            shadowRadius:5,
+            shadowOpacity:5,
+            }}> 
+            Cadastro dos responsaveis
+            </MyUpload>
+            
             <Text>Minha tela das postagens </Text>
             <View style = {styles.row}>
                 <View style={styles.form}>{/*View no Type pode ser usado para substituir o Form */}
