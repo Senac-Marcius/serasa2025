@@ -1,15 +1,32 @@
-import React, { ReactNode } from 'react';
-import { TextInput, TextStyle } from 'react-native';
-import { inputStyles } from '../../styles/inputStyles';  
+import React, { ReactNode, useState } from 'react';
+import { TextInput, TextStyle, StyleProp, View, Text } from 'react-native';
+import { inputStyles } from '../../styles/inputStyles';
+
 
 interface MyinputProps {
-  children: ReactNode;
-  style?: TextStyle | TextStyle[];  
+  value: string;  // valor do input
+  onChangeText: (text: string) => void;
+  placeholder?: string;
+  style?: TextStyle | TextStyle[];
+  label: string;
+
+
 }
 
-const Myinput: React.FC<MyinputProps> = ({ children, style }) => {
-  return <TextInput style={[inputStyles.input, style]}>{children}</TextInput>;
+const Myinput: React.FC<MyinputProps> = ({ value, onChangeText, placeholder, style,label }) => {
+  return (
+    <View>
+      <Text>{label}</Text>
+      <TextInput
+        style={[inputStyles.input, style]}
+        value={value}  // valor do input
+        onChangeText={onChangeText}
+        placeholder={placeholder}  // função para atualizar o texto
+      />
+    </View>
+  );
 };
 
-export default Myinput;
 
+
+export default Myinput;
