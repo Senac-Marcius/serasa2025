@@ -78,7 +78,9 @@ export default function ProjectScreen(){
     // Criando o textinput para receber e exibir o texto "placeholder" para o usuario digitar
     return ( // Esta sendo feito um emcapsulamento com a abertura da () / {req.description}= usado para mostar o codigo em baixo
         <View>
-            <MySearch />
+            <MySearch style={{padding: 20}}>
+                <></>
+            </MySearch>
             
             {/* Aqui é typescript dentro do front */}
             <Text> PROJETOS </Text>

@@ -1,12 +1,14 @@
-import { View } from 'react-native';
+import React, {Children, ReactNode} from 'react';
+import { View, ViewStyle } from 'react-native';
 
-
-const MySearch = () => {
-    return (
-        <View>
-            Óla Componet !!
-        </View>
-    );
+interface MySearchProps {
+    children: ReactNode;
+    style: ViewStyle;
 }
 
-export default MySearch
+const MySearch: React.FC < MySearchProps > = ({children, style}) => {
+    return (<View style={style}>{children}</View>);
+    
+}
+
+export default MySearchProps
