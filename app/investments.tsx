@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
+import MyAccess from '../src/components/myAccessibility'
 
 export default function investmentScreen(){
  //aqui é typescript   
@@ -63,6 +64,7 @@ export default function investmentScreen(){
     return (
       <View>
         {/* Aqui é typescript dentro do front */}
+        <MyAccess style={({padding:20})}> </MyAccess>
         <Text>Meus Investimentos</Text>
         <View style={styles.row}>
             <View style={styles.form}>
