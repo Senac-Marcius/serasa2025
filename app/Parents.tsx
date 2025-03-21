@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity} f
 //import dateTimepicker
 //npm run web → chamar pagina web pelo terminal
 //batatinha
+import MyUpload from '../src/components/Myupload'
+import { color } from 'native-base/lib/typescript/theme/styled-system';
 export default function ParentScreen (){
 //Aqui é TypeScript
     const [req, setReq] = useState({
@@ -56,6 +58,7 @@ export default function ParentScreen (){
     
     return (
         <View>{/*aqui é typeScript dentro do Front*/}
+            <MyUpload style={{ backgroundColor: 'red', padding: 10}}> Olá Mundo</MyUpload>
             {/*View → esse view é diferente do HTML ele contém DIVs e outros atributos,*/}
             <Text>Minha tela das postagens </Text>
             <View style = {styles.row}>
