@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity} from 'react-native';
+import MyMore from '../src/components/Mymore'
 
 export default function RecordScreen(){
 {/*Aqui é typescript COMENTÁRIO dentro do front */}
@@ -67,6 +68,11 @@ export default function RecordScreen(){
     return (
 
         <View>
+
+            <MyMore style = {{padding: 20}}> 
+                <></>
+            </MyMore>
+
             <Text>Tela dos Registros</Text>
 
             <View style={styles.row}>
