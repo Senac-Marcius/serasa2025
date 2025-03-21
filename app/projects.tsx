@@ -1,5 +1,6 @@
 import React, { useState } from 'react'; // Esta importando da biblioteca do react para atualizar automaticamente 
-import { StyleSheet, View, Text, TextInput, Button, FlatList, TouchableOpacity, } from 'react-native'; 
+import { StyleSheet, View, Text, TextInput, Button, FlatList, TouchableOpacity,  } from 'react-native'; 
+import MySearch from '../src/components/Mysearch'
 
 
 export default function ProjectScreen(){
@@ -77,6 +78,10 @@ export default function ProjectScreen(){
     // Criando o textinput para receber e exibir o texto "placeholder" para o usuario digitar
     return ( // Esta sendo feito um emcapsulamento com a abertura da () / {req.description}= usado para mostar o codigo em baixo
         <View>
+            <MySearch style={{padding: 20}}>
+                <></>
+            </MySearch>
+            
             {/* Aqui é typescript dentro do front */}
             <Text> PROJETOS </Text>
             <View style={styles.row}>
