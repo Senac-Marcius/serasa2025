@@ -1,8 +1,9 @@
 import React, {useState} from "react";
 import{View,Text, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} from "react-native";
-import CurrencyInput from 'react-native-currency-input';
+import MyView from "../src/components/MyView";
+/*import CurrencyInput from 'react-native-currency-input';
 import {TimeInput} from "@heroui/date-input";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import DateTimePickerModal from "react-native-modal-datetime-picker";*/
 
 export default function PositionScreen(){
 /*Aqui é TypeScript*/
@@ -55,6 +56,7 @@ export default function PositionScreen(){
 
     return (
         <View>
+            <MyView></MyView>
             {/*Aqui é TypeScript dentro do front*/}
             <Text>Minha tela dos cargos</Text>
             <View style = {styles.row}>
