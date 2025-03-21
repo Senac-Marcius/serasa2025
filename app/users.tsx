@@ -83,7 +83,8 @@ export default function UserScreen() {
 
                 <View style={styles.form}>
 
-                <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text } )} placeholder="Digite seu nome" label="teste" />
+                <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text } )} placeholder="Digite seu nome..." label="Login" />
+               
                
 
                     <TextInput

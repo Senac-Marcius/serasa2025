@@ -4,22 +4,41 @@ export const inputStyles = StyleSheet.create({
   input: {
     height: 50, 
     margin: 12,
-    width: 300, 
+    width: 300,  
     borderRadius: 25, 
-    paddingHorizontal: 15, 
+    paddingHorizontal: 15,
     fontSize: 16,
     backgroundColor: 'white', 
     color: '#666', 
     borderWidth: 2,
-    borderColor: '#ddd', //ou purple
+    borderColor: 'purple', 
     shadowColor: 'purple', 
-    shadowOffset: { width: 1, height: 3 }, 
+    shadowOffset: { width: 2, height: 1 }, 
     shadowOpacity: 0.6, 
-    shadowRadius: 4, // Espalhamento
+    shadowRadius: 4, 
     elevation: 4,
-   
+    
   },
- 
+
+  label: {
+    fontSize: 18,
+    marginLeft:25,
+    color:"#666",
+    marginBottom: -10,
+    
+    
+
+  },
+  icon: {
+    color:'purple',
+    
+  },
+  container:{
+  display: 'flex',
+  justifyContent:'center',
+
+  }
+
 
 });
 
