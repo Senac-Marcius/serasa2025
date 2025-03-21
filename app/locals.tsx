@@ -1,6 +1,6 @@
 import React, { useState } from 'react'; 
 import { View, Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity  } from 'react-native';
-import MySelect from '../src/components/myselect' 
+import MySelect from '../src/components/Myselect' 
 
 export default function LocalScreen(){
 
