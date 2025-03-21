@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
+import MySupport from '../src/components/Mysupport';
 
 export default function LaunchScreen() {
     const [req, setReq] = useState({
@@ -65,6 +66,12 @@ export default function LaunchScreen() {
 
     return (
         <View style={styles.row}>
+            
+            <MySupport style=({padding: 20})>
+                <></>
+            </MySupport>
+
+
             <View style={styles.form}>
                 <Text>Lançamentos de Alunos:</Text>
 
