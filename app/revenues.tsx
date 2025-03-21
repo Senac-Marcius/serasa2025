@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
+import Mydownload from '../src/components/mydownload'
 
 export default function RevenueScreen() {
   // Estado para o formulário
@@ -67,10 +68,17 @@ export default function RevenueScreen() {
   }
 
   return (
+    
     <View style={styles.container}>
+      <Mydownload style={styles.row}>
+          <text>hh</text>
+      </Mydownload>
+
+
        <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#333', textAlign: 'center' }}>
        cadastre as receitas
   </Text>
+      
 
       {/* Formulário */}
       <View style={styles.row}>
@@ -113,6 +121,8 @@ export default function RevenueScreen() {
           />
 
           <Button title="Cadastrar" onPress={handleRegister} />
+
+          
         </View>
 
         {/* Lista de Receitas */}
