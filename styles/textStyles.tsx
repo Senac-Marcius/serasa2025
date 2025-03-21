@@ -2,18 +2,47 @@ import { StyleSheet } from 'react-native';
 
 export const textStyles = StyleSheet.create({
   text: {
-    fontSize: 20,
+    fontSize: 36,
     fontWeight: 'bold',
-    color: '#333',
+  },
+  login: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    
   },
   title: {
     fontSize: 36,
     fontWeight: 'bold',
     
   },
-  subtitle: {
-    fontSize: 18,
-    fontWeight: '600',
+  buttonMenores: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    
+  },
+  buttonMaiores: {
+    fontSize: 14,
+    fontWeight: 'bold',
+
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    
+  },
+  hepl: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    
+  },
+  textBody: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    
+  }, 
+  titleTopbar: {
+    fontSize: 13,
+    fontWeight: 'bold',
     
   },
 });
