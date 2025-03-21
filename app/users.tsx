@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Button, FlatList } from 'react-native';
-
+import Myinput from '../src/components/Myinputs';
 
 
 
@@ -77,12 +77,15 @@ export default function UserScreen() {
     //aqui é typescript
     return (
         <View>
+            
 
             <View style={styles.row}>
 
                 <View style={styles.form}>
+               
 
                     <TextInput
+                    
                         style={styles.input}
                         placeholder="Nome:"
                         value={req.name} //O atributo value vincula o campo de texto ao estado name
@@ -93,6 +96,7 @@ export default function UserScreen() {
 
 
                     <TextInput
+                    
                         style={styles.input}
                         placeholder="Senha:"
                         value={req.password} //O atributo value vincula o campo de texto ao estado name
@@ -104,8 +108,10 @@ export default function UserScreen() {
                     <TextInput
                         style={styles.input}
                         placeholder="CPF:"
+                        
                         value={req.cpf} //O atributo value vincula o campo de texto ao estado name
                         onChangeText={(text) => setReq({ ...req, cpf: text })}
+                       
                     />
 
 
