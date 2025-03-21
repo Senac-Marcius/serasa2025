@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, FlatList, Text, StyleSheet, TextInput, Button, TouchableOpacity} from 'react-native';
-
+import MyTheme from '../src/components/Mytheme';
 
 export default function NotificationScreen(){
 // aqui é typNotificationScreenescript
@@ -58,6 +58,9 @@ export default function NotificationScreen(){
 
 return (
     <View>
+        <MyTheme style={styles.row}>
+            <text></text>
+        </MyTheme>
         {/* aqui é typescriot dentro do front*/}
         <Text>Minha tela de notificações</Text>
         <View style={styles.row}>
