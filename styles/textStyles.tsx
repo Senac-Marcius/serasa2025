@@ -1,6 +1,10 @@
 import { StyleSheet } from 'react-native';
 
 export const textStyles = StyleSheet.create({
+  text: {
+    fontSize: 36,
+    fontWeight: 'bold',
+  },
   login: {
     fontSize: 36,
     fontWeight: 'bold',
