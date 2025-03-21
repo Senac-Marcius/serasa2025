@@ -3,6 +3,7 @@ import { ScrollView, View } from 'react-native';
 import { Button, TextInput, RadioButton, Checkbox } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { DatePickerModal } from 'react-native-paper-dates';
+import MyTest from '../src/components/Mytest'
 
 export default function PostScreen() {
     const router = useRouter();
@@ -17,6 +18,10 @@ export default function PostScreen() {
 
     return (
         <ScrollView>
+            <MyTest style={{padding: 20}}>
+                <></>
+            </MyTest>
+
             <View style={{ padding: 20 }}>
                 <Button mode="contained" onPress={() => router.back()}>
                     Voltar
@@ -83,6 +88,7 @@ export default function PostScreen() {
                     Cadastrar
                 </Button>
             </View>
+
         </ScrollView>
     );
 }
