@@ -4,7 +4,7 @@ export const textStyles = StyleSheet.create({
   login: {
     fontSize: 36,
     fontWeight: 'bold',
-    color: '#333',
+    
   },
   title: {
     fontSize: 36,
