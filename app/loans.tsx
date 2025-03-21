@@ -1,6 +1,6 @@
 import React, { useState } from 'react'; //react é uma biblioteca e essa função esta importando ela, puxando
 import { FlatList, View, Text, StyleSheet, TextInput, Button, TouchableOpacity} from 'react-native'; //react native é uma biblioteca dentro de react 
-
+import {MyCalendar,  MyCalendar2}  from '../src/components/MyCalendar';
 export default function LoanScreen() {
     const[req, setReq]= useState({ //useState retorna uma variavel e uma função para alteral a variavel (req e setReq)
         id: 0,
@@ -73,7 +73,10 @@ export default function LoanScreen() {
 
     return (
         <View>
-             
+            <MyCalendar>
+             </MyCalendar>
+             <MyCalendar2>
+             </MyCalendar2>
             <Text>Tela de Empréstimo</Text>
             <View style={styles.row}>
                 <View style={styles.form}>
