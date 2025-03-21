@@ -11,4 +11,4 @@ const MySelect: React.FC< MySelectProps > = ({children, style}) => {
     
 }
 
-export default MySelect         ddddsd                      //estamos exportando una variável
+export default MySelect                           //estamos exportando una variável
