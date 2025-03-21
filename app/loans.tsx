@@ -62,7 +62,7 @@ export default function LoanScreen() {
             renewal: '',
             creatAt: new Date().toISOString(),
             statusLoan: '',
-            observation: '',
+            observation: '',  
             
         })
     }

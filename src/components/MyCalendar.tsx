@@ -5,7 +5,7 @@ import React, {ReactNode}  from "react";
 interface MyCalendarProp {
     style: ViewStyle;
     children: ReactNode;
-}
+} 
  
 
 const MyCalendar: React.FC <MyCalendarProp> = ({children, style}) => {
