@@ -1,9 +1,14 @@
 import React, {useState} from 'react';
-import{View, Text, StyleSheet, FlatList, TextInput,Button,TouchableOpacity,} from 'react-native';
-import { text } from 'stream/consumers';
+import{View, Text, StyleSheet, FlatList,TouchableOpacity,} from 'react-native';
+import { Button, TextInput, RadioButton, Checkbox } from 'react-native-paper';
+import { useRouter } from 'expo-router';
+import { DatePickerModal } from 'react-native-paper-dates';
+import MyModel from '../src/components/Mymodel';
+
  //função userState só retorna para uma variavel const
 
 export default function CollectionScreen(){
+        const router = useRouter();
     const [req, setReq] = useState({
         id: 0,
         name:'',
@@ -53,7 +58,11 @@ export default function CollectionScreen(){
         }
     
         return (//encapsulamento 
-            <View>{/* modo de comentar, aqui é typescript dentro do front */}
+            <View style = {styles.row}>
+            <MyModel style={{ padding: 20 }}>
+                           <Button mode="contained" onPress={() => router.back()}>
+                               Voltar
+                           </Button>
                 <Text>Tela de acervo</Text>
                 <View style= {styles.row}>
                     <View style= {styles.form}>
@@ -201,3 +210,4 @@ export default function CollectionScreen(){
      
      
     })
+    
