@@ -1,5 +1,6 @@
 import React, { useState } from 'react'; 
 import { View, Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity  } from 'react-native';
+import MySelect from '../src/components/myselect' 
 
 export default function LocalScreen(){
 
@@ -58,6 +59,10 @@ export default function LocalScreen(){
 
     return (  //  *  sempre retornará um html.     * view com o "v" minúsculo é utilizado, apenas, no HTML puro.     * Para comentar no HYML, é necessário utilizar "{/* */}"
         <View>
+            <MySelect style={{padding: 20}}>
+                <></>
+            </MySelect>
+
             <View style={styles.container}>
 
             <Text style={styles.title}>TELA DOS LOCAIS</Text>
@@ -202,5 +207,5 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
         color: "blue",
     }
 
-})
+}) 
 
