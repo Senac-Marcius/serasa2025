@@ -1,5 +1,5 @@
 import React, { useState } from 'react'; 
-import { View, Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity  } from 'react-native';
+import { Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, View  } from 'react-native';
 import MySelect from '../src/components/Myselect' 
 
 export default function LocalScreen(){
@@ -63,6 +63,8 @@ export default function LocalScreen(){
                 <></>
             </MySelect>
 
+            
+
             <View style={styles.container}>
 
             <Text style={styles.title}>TELA DOS LOCAIS</Text>
@@ -106,7 +108,7 @@ export default function LocalScreen(){
                                 <Text style={styles.label} > {item.area} </Text>
                                 <Text style={styles.label} > {item.description} </Text>
                                 <Text style={styles.label} > {item.createAt} </Text>
-
+                            
 
 
                                 <View style={styles.buttonsContainer}>
