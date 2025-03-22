@@ -66,11 +66,7 @@ export default function LaunchScreen() {
 
     return (
         <View style={styles.row}>
-            
-            <MySupport style=({padding: 20})>
-                <></>
-            </MySupport>
-
+          
 
             <View style={styles.form}>
                 <Text>Lançamentos de Alunos:</Text>

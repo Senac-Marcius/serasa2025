@@ -1,16 +1,18 @@
-import React, { ReactNode } from 'react';
-import { View, ViewStyle } from 'react-native';
+import React, {ReactNode} from 'react';
+import { Text, View, ViewStyle } from 'react-native';
 
 interface MySupportProps {
-    children: ReactNode;
     style: ViewStyle;
+    children: ReactNode;
 }
 
-
-
-const MySupport: React.FC<MySupportProps> = ({ children, style }) => {
-    return ( <View style={style}>{children}</View>);
-
-
+const MySupport: React.FC<MySupportProps> = ({children, style}) => {
+    return ( 
+        <View style={style}>
+        <Text>Ola Componente</Text>
+        {children}
+        <Text>Tchau Componente</Text>
+        </View>
+);
 }
 export default MySupport
