@@ -1,21 +1,27 @@
 import React, {ReactNode} from 'react';
-import { Text, View, ViewStyle } from "react-native";
+import { Text, View, ViewStyle, TouchableOpacity, StyleSheet } from "react-native";
 
 interface MydownloadProps {
-    children: ReactNode;
-    style: ViewStyle;
+    style?: ViewStyle;
+    url: string;
 }
 
 
-const Mydownload: React.FC< MydownloadProps> = ({children, style}) => {
-    return (
-        <View style= {style}>
-            <Text>OLA COMPONENTE</Text>
-            {children}
-            <Text>TCHAU COMPONENTE</Text>
-            </View>
+const Mydownload: React.FC< MydownloadProps> = ({ style, url}) => {
 
+    function onDownload(){
+
+    }
+
+    return (
+        <TouchableOpacity style={[style, styles.button]} onPress={onDownload}> Download <></>  </TouchableOpacity>
     );
 }
+
+const styles = StyleSheet.create({
+    button: {
+        backgroundColor: '#000000'
+    },
+});
 
 export default Mydownload

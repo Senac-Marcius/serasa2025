@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
-import Mydownload from '../src/components/mydownload';
+import Mydownload from '../src/components/Mydownload';
 
 export default function RevenueScreen() {
   // Estado para o formulário
@@ -70,9 +70,8 @@ export default function RevenueScreen() {
   return (
     
     <View style={styles.container}>
-      <Mydownload style={styles.row}>
-          <text>texte</text>
-      </Mydownload>
+      <Mydownload style={styles.row} url="jkdhfskjdhfkjshd" />
+     
 
 
        <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#333', textAlign: 'center' }}>
