@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
-import Mydownload from '../src/components/mydownload'
+import Mydownload from '../src/components/mydownload';
 
 export default function RevenueScreen() {
   // Estado para o formulário
@@ -71,7 +71,7 @@ export default function RevenueScreen() {
     
     <View style={styles.container}>
       <Mydownload style={styles.row}>
-          <text>hh</text>
+          <text>texte</text>
       </Mydownload>
 
 

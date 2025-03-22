@@ -1,5 +1,5 @@
-import react, {ReactNode} from 'react';
-import { View, ViewStyle } from "react-native";
+import React, {ReactNode} from 'react';
+import { Text, View, ViewStyle } from "react-native";
 
 interface MydownloadProps {
     children: ReactNode;
@@ -9,7 +9,11 @@ interface MydownloadProps {
 
 const Mydownload: React.FC< MydownloadProps> = ({children, style}) => {
     return (
-        <View style= {style}>{children}</View>
+        <View style= {style}>
+            <Text>OLA COMPONENTE</Text>
+            {children}
+            <Text>TCHAU COMPONENTE</Text>
+            </View>
 
     );
 }
