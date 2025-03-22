@@ -1,5 +1,5 @@
 import React, {ReactNode } from 'react';
-import { View, ViewStyle } from 'react-native';
+import { Text, View, ViewStyle } from 'react-native';
 
 interface MyAccessProps {
     children: ReactNode;
@@ -7,7 +7,9 @@ interface MyAccessProps {
 }
 const MyAccess: React.FC< MyAccessProps >  = ({children, style}) => {
     return ( <View style={style}>
+        <Text>Olá componente</Text>
         {children}
+        <Text>Tchau componente</Text>
         </View>
     );
 }
