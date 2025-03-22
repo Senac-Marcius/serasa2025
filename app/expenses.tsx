@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { Children, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity, } from 'react-native' ;
-
+import Myiten from '../src/components/myItenlist'
 export default function ExpenseScreen(){
 // aqui é typescript
     const [req, setReq] = useState({
@@ -58,6 +58,9 @@ export default function ExpenseScreen(){
 
     return (
         <View>
+            <Myiten style={{margin : 20}}> 
+                <Text></Text>
+            </Myiten> 
             {/* aqui é typecript dentro do front */}
             <Text style={styles.title}>tela de despesas</Text>
             <View style={styles.row}>
