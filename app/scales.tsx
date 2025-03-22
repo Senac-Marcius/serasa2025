@@ -1,6 +1,7 @@
 import React, {useState} from 'react'; //Importa o react e atualiza a lista Automaticamente.
 import {View, Text, StyleSheet, TextInput, Button, FlatList, FlatListComponent, TouchableOpacity} from 'react-native';//Une  os objetos e o react-native faz a função de trasformar o codigo em multiplas plataformas.
 import { useRouter } from 'expo-router';
+import MyFilter from '../src/components/Myfilter';
 
 export default function ScaleScreen(){
     const router = useRouter();
@@ -40,7 +41,9 @@ export default function ScaleScreen(){
             endtime:'',
             creatAt:new Date().toISOString(),
             userId: 0,
-    })   
+        })   
+    }
+
     function editScale(id: number){
         const scale = scales.find(s => s.id === id);
         if (scale) {
@@ -57,7 +60,10 @@ export default function ScaleScreen(){
 
     return(
         <View style={styles.container}> {/* Aqui é typecript dentro do html*/}
-        {/*Aqui é HTML*/}
+            <MyFilter style= {{padding:20}}>
+                <Text></Text>
+            </MyFilter>
+            {/*Aqui é HTML*/}
             <Text>Minha tela das escalas</Text>
             <View style={styles.row}>
                 <View style={styles.form}>
@@ -103,7 +109,7 @@ export default function ScaleScreen(){
             </View>       
         </View> 
     );
-}};
+};
 
     
 
