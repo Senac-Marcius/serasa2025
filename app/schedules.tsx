@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, TextInputBase, FlatList, TouchableOpacity } from 'react-native';
+import Myvoltar from '../src/components/Myvoltar';  
 
 
 export default function ScheduleScreen(){
