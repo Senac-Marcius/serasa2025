@@ -1,5 +1,6 @@
-import react, {useState} from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity} from 'react-native';
+import MyLogin from '../src/components/myLogin';
 
 export default function BudgetScreen(){
 
@@ -66,6 +67,9 @@ export default function BudgetScreen(){
 
     return (
         <View>
+            <MyLogin style={styles.row}>
+            <text></text>
+        </MyLogin>
             {/* aqui é typescriot dentro do front*/}
             <Text>Minha tela das postagens</Text>
             <View style={styles.row}>

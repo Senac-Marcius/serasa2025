@@ -28,11 +28,11 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
-                        label="Postagens"
+                        label="Orçamento"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/posts');
+                            router.push('/budgets');
                         }}
                     />
                     <Drawer.Item
@@ -43,6 +43,19 @@ export default function HomeScreen() {
                             router.push('/courses');
                         }}
                     />
+                     <Drawer.Item
+                        label="orçamento"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/budgets');
+                        }}
+                    />
+
+
+
+
+
                     <Drawer.Item
                         label="Configurações"
                         icon="cog"
