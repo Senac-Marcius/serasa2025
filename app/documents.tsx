@@ -65,7 +65,7 @@ export default function RecordScreen() {
         
         <View style={styles.container}>
 
-            <MyDocument style={{ flex: 1 }}>
+            <MyDocument style={{ padding: 0}}>
                 <></>
             </MyDocument>
 
