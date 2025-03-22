@@ -1,6 +1,8 @@
-import React, { useState } from 'react'; // Esta importando da biblioteca do react para atualizar automaticamente 
-import { StyleSheet, View, Text, TextInput, Button, FlatList, TouchableOpacity,  } from 'react-native'; 
+import React, { Children, useState } from 'react'; // Esta importando da biblioteca do react para atualizar automaticamente 
+import { StyleSheet, View, Text, TextInput, Button, FlatList, TouchableOpacity, } from 'react-native'; 
 import MySearch from '../src/components/Mysearch'
+import { ScrollView } from 'react-native-gesture-handler';
+/*import { textStyles } from '../styles/textStyles';*/
 
 
 export default function ProjectScreen(){
@@ -77,22 +79,27 @@ export default function ProjectScreen(){
     
     // Criando o textinput para receber e exibir o texto "placeholder" para o usuario digitar
     return ( // Esta sendo feito um emcapsulamento com a abertura da () / {req.description}= usado para mostar o codigo em baixo
-        <View>
-            <MySearch style={{padding: 20}}>
-                <></>
+        <ScrollView>
+            <MySearch style={{padding: 20, }}>
+                <Text> Atenção nos detalhes!! </Text>
+                
             </MySearch>
+            
+            <View style={{padding: 20, }}>
+            </View>
             
             {/* Aqui é typescript dentro do front */}
             <Text> PROJETOS </Text>
             <View style={styles.row}>
                 <View style={styles.form}> 
                     
-                    <Text> Criador do projeto:</Text>
+                    <Text> Criador do projeto:
                     <TextInput 
                         placeholder=""
                         value={req.name}
                         onChangeText={(text) => setReq({...req ,name: text})}
                     />
+                    </Text>
 
                     <Text> Nome do projeto:
                     <TextInput 
@@ -185,7 +192,7 @@ export default function ProjectScreen(){
                     )}
                 />
             </View>
-        </View>
+        </ScrollView>
     ); 
 }
 
