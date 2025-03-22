@@ -1,5 +1,6 @@
 import React, {ReactNode} from 'react';
-import {View, ViewStyle} from 'react-native';
+import {View, ViewStyle, Text} from 'react-native';
+
 
 
 interface MyMoreProps {
@@ -9,7 +10,11 @@ interface MyMoreProps {
 
 const MyMore: React.FC < MyMoreProps > = ({children, style}) => {
     return (
-        <View style = {style}>{children}</View>
+        <View style = {style}>
+            <Text> Bem Vindo</Text>
+            {children}
+        </View>
+
     ); 
 }
 
