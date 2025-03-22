@@ -1,6 +1,9 @@
-import React, { useState }  from 'react';  //importando objeto react e useState da biblioteca do react
-import {View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity} from 'react-native';
-
+import React, { Children, useState } from 'react';
+import { View, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
+import { TextInput, Text} from 'react-native-paper';
+import { useRouter } from 'expo-router';
+import { DatePickerModal } from 'react-native-paper-dates';
+import MyPerfil from '../src/components/Myperfil'
 
 export default function productScreen(){
 //aqui é typescript
@@ -53,6 +56,9 @@ export default function productScreen(){
         }
     return (
         <View>
+            <MyPerfil style={{padding: 20}}>
+                <Text>Filho</Text>
+            </MyPerfil>
             <Text style={styles.h1}> Produtos </Text>
                 {/*aqui é typescript dentro do front */ }
             <Text style={styles.h2}>Minha tela dos Produtos</Text>
