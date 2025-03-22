@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import { Text, View, ViewStyle } from 'react-native';
+import { Text, View, ViewStyle, TouchableOpacity } from 'react-native';
 
 interface MySupportProps {
     style: ViewStyle;
@@ -7,12 +7,8 @@ interface MySupportProps {
 }
 
 const MySupport: React.FC<MySupportProps> = ({children, style}) => {
-    return ( 
-        <View style={style}>
-        <Text>Ola Componente</Text>
-        {children}
-        <Text>Tchau Componente</Text>
-        </View>
-);
+    return (
+        <TouchableOpacity></TouchableOpacity>
+)
 }
 export default MySupport
