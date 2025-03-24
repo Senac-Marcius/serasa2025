@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react';
 import { Text, View, TextStyle,TouchableOpacity, ViewStyle, StyleSheet } from 'react-native';
-import Mylist from '../ '
 
 interface MytextProps {
   children?: ReactNode;

@@ -1,6 +1,7 @@
 import React, { Children, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity, } from 'react-native' ;
 import Myiten from '../src/components/myItenlist'
+import MyList from '../src/components/mylist';
 export default function ExpenseScreen(){
 // aqui é typescript
     const [req, setReq] = useState({
@@ -57,10 +58,7 @@ export default function ExpenseScreen(){
     }
 
     return (
-        <View>
-            <Myiten style={{margin : 20}}> 
-                <Text></Text>
-            </Myiten> 
+        <View> 
             {/* aqui é typecript dentro do front */}
             <Text style={styles.title}>tela de despesas</Text>
             <View style={styles.row}>
@@ -92,33 +90,22 @@ export default function ExpenseScreen(){
                     <TouchableOpacity style={styles.buttonRegister} onPress= { handleRegister }>Cadastrar</TouchableOpacity>
                 </View>
 
-                <FlatList
+                <MyList
                     data={expense}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
-                        <View style={styles.card} >
+                        <Myiten style={styles.card} 
+                            onEdit={()=> editExpense}
+                            onDel={() => delExpense}
+                        >
                             <Text style={styles.textlis} >{item.name}</Text>
                             <Text style={styles.textlis} >{item.url}</Text> 
                             <Text style={styles.textlis} >{item.description}</Text>  
                             <Text style={styles.textlis} >{item.cost}</Text> 
                             <Text style={styles.textlis} >{item.userId}</Text>
                             
-                            <View style= {styles.buttonsContainer}>
-
-                                <TouchableOpacity
-                                 style={styles.editButton}
-                                  onPress={() => {editExpense(item.id)}}
-                                  >Edit
-                                  </TouchableOpacity>
-
-                                <TouchableOpacity
-                                 style={styles.delButton}
-                                  onPress={()=>{delExpense(item.id)}}
-                                  >Delete
-                                  </TouchableOpacity>
-
-                            </View> 
-                        </View>
+    
+                        </Myiten>
                     )}
                 /> 
             </View>
