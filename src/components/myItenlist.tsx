@@ -1,20 +1,46 @@
 import React, { ReactNode } from 'react';
-import { Text, View, TextStyle } from 'react-native';
-import  { textStyles }  from '../../styles/textStyles';
+import { Text, View, TextStyle,TouchableOpacity, ViewStyle, StyleSheet } from 'react-native';
+import Mylist from '../ '
 
 interface MytextProps {
-  children: ReactNode;
-  style: TextStyle | TextStyle[]; 
+  children?: ReactNode;
+  style?: ViewStyle | ViewStyle[];
+  onEdit?(): void
+  onDel?(): void
 }
 
-const Myiten: React.FC<MytextProps> = ({ children, style }) => {
+const Myiten: React.FC<MytextProps> = ({ children, style, onEdit, onDel }) => {
   return (
-        <View style = {style}>
-            <Text>olá componente</Text>
+          <TouchableOpacity style={style}>
             {children}
-            <Text>Tchau componete</Text>
-        </View>
+            <View>
+              <TouchableOpacity style={styles.edit} onPress={onEdit}
+              >Editar
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.del} onPress={onDel}
+              >Deletar
+              </TouchableOpacity> 
+            </View>
+        </TouchableOpacity>
         );
 }
 
 export default Myiten;
+ 
+const styles = StyleSheet.create({
+  edit: {
+
+    backgroundColor: "#3498DB",
+  } as ViewStyle,
+
+  del:{
+    backgroundColor: "#E74C3C",
+  } as ViewStyle,
+
+  buttonText: {
+    color: "#FFF",
+    fontSize: 16,
+    fontWeight: "bold"
+  } as TextStyle,
+  
+})
