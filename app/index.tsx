@@ -44,6 +44,14 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
+                        label="Despesa"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/expenses');
+                        }}
+                    />
+                    <Drawer.Item
                         label="Configurações"
                         icon="cog"
                         onPress={() => {
