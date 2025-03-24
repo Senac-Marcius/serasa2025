@@ -27,12 +27,21 @@ export default function HomeScreen() {
                             router.push('/');
                         }}
                     />
+                    
                     <Drawer.Item
                         label="Postagens"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/posts');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="Parents"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/Parents');
                         }}
                     />
                     <Drawer.Item
@@ -43,6 +52,7 @@ export default function HomeScreen() {
                             router.push('/courses');
                         }}
                     />
+            
                     <Drawer.Item
                         label="Configurações"
                         icon="cog"
@@ -51,6 +61,7 @@ export default function HomeScreen() {
                             console.log("Configurações");
                         }}
                     />
+                  
                 </Drawer.Section>
             )}
 
