@@ -36,6 +36,15 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
+                        label="Calendario"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/calendar');
+                        }}
+                    />
+                    
+                    <Drawer.Item
                         label="Cursos"
                         icon="post"
                         onPress={() => {
@@ -51,6 +60,7 @@ export default function HomeScreen() {
                             console.log("Configurações");
                         }}
                     />
+                    
                 </Drawer.Section>
             )}
 
