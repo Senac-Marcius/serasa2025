@@ -66,7 +66,7 @@ export default function LaunchScreen() {
 
     return (
         <View style={styles.row}>
-          
+
 
             <View style={styles.form}>
                 <Text>Lançamentos de Alunos:</Text>
@@ -112,8 +112,6 @@ export default function LaunchScreen() {
                     <View
                         style={styles.card}
                     >
-
-
                         <Text>{item.observation}</Text>
                         <Text>{item.note}</Text>
                         <Text>{item.presence}</Text>
@@ -122,16 +120,18 @@ export default function LaunchScreen() {
                         <Text>{item.userId}</Text>
 
                         <View style={styles.buttonsContanier}>
-                            <TouchableOpacity style={styles.buttonedit} onPress={() => { editLaunch(item.Id) }} >EDIT</TouchableOpacity>
-                            <TouchableOpacity style={styles.buttondelete} onPress={() => { delLaunch(item.Id) }} >DELETE</TouchableOpacity>
+                            <TouchableOpacity style={styles.buttonedit} onPress={() => { editLaunch(item.Id) }}>EDIT</TouchableOpacity>
+                            <TouchableOpacity style={styles.buttondelete} onPress={() => { delLaunch(item.Id) }}>DELETE</TouchableOpacity>
                         </View>
-
+                    
 
                     </View>
 
 
                 )}
             />
+            <MySupport></MySupport>
+
         </View>
     );
 }
