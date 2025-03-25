@@ -60,9 +60,12 @@ export default function ScaleScreen(){
 
     return(
         <View style={styles.container}> {/* Aqui é typecript dentro do html*/}
-            <MyFilter style= {{padding:20}}>
-                <Text></Text>
-            </MyFilter>
+            <MyFilter
+                style={styles.container}
+                itens={['Day']}
+                onSend={(filter) => console.log('Filtro aplicado:', filter)}
+                onPress={(item) => console.log('Filtro pressionado:', item)}
+                />
             {/*Aqui é HTML*/}
             <Text>Minha tela das escalas</Text>
             <View style={styles.row}>
@@ -142,6 +145,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
+        marginBottom: 400,
     }, 
     form: {
         flex: 1,
