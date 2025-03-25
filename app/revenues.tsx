@@ -67,10 +67,11 @@ export default function RevenueScreen() {
     setRevenues(list); // Remove a receita da lista
   }
 
+
   return (
     
     <View style={styles.container}>
-      <Mydownload style={styles.row} url="jkdhfskjdhfkjshd" />
+      
      
 
 
@@ -119,7 +120,7 @@ export default function RevenueScreen() {
             style={styles.input}
           />
 
-          <Button title="Cadastrar" onPress={handleRegister} />
+          <Button title="cadastrar" onPress={handleRegister} />
 
           
         </View>
@@ -153,6 +154,8 @@ export default function RevenueScreen() {
                   onPress={() => delRevenue(item.id)}
                 ><Text style={styles.buttonText}>DELETE</Text>
                 </TouchableOpacity>
+
+                <Mydownload style={styles.downloadButton} url="https://www.youtube.com/" />
 
               </View>
             </View>
@@ -237,4 +240,12 @@ const styles = StyleSheet.create({
     color: '#000000', // Texto preto
     fontWeight: 'bold',
   },
+
+  downloadButton:{
+    backgroundColor: '#A020F0', 
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 });
