@@ -1,6 +1,10 @@
 import React ,{ useState }from 'react';
 import { Text, View, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} from 'react-native';
-import MyLink from '../src/components/Mylink'
+import MyLink from '../src/components/Mylink';
+import Myiten from '../src/components/myItenlist';
+import MyList from '../src/components/mylist';
+
+
 export default  function itemScreen(){
      const[req,setReq] = useState({ 
         id: -1,
@@ -77,11 +81,11 @@ export default  function itemScreen(){
             
             </View>
 
-            <FlatList
+            <MyList
             data={itens}
-            keyExtractor={(i) => i.id.toString()}
+            keyItem={(i) => i.id.toString()}
             renderItem={({item})=>(
-                <View >
+                <Myiten >
                     <text >{item.name}</text>
                     <text >{item.mark}</text>
                     <text>{item.assetNumber}</text>
@@ -89,8 +93,9 @@ export default  function itemScreen(){
 
                     <View>
                         <TouchableOpacity onPress={ () => { editItem(item.id)} }></TouchableOpacity>
+                        <TouchableOpacity onPress={ () => { delItem(item.id)} }></TouchableOpacity>
                     </View>
-                </View>
+                </Myiten>
 
             )}
             
