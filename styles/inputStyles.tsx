@@ -84,7 +84,9 @@ export const inputStyles = StyleSheet.create({
   flexDirection: 'row', 
   alignItems: 'center', 
   marginLeft: 20, 
-  marginBottom: 0, 
+  marginBottom: 2, 
 }
+
+
 
 });

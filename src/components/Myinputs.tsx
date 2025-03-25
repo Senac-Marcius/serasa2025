@@ -3,6 +3,7 @@ import { TextInput, TextStyle, View, Text, Pressable } from 'react-native';
 import { inputStyles } from '../../styles/inputStyles';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+
 //npm install react-native-vector-icons @types/react-native-vector-icons
 
 /*
