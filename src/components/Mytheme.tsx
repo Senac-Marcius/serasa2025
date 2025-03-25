@@ -32,4 +32,3 @@ const styles = StyleSheet.create({
         alignContent:'space-around',
     }
 })
-
