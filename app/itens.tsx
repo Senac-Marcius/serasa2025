@@ -1,6 +1,6 @@
 import React ,{ useState }from 'react';
 import { Text, View, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} from 'react-native';
-
+import MyLink from '../src/components/Mylink'
 export default  function itemScreen(){
      const[req,setReq] = useState({ 
         id: -1,
@@ -54,7 +54,7 @@ export default  function itemScreen(){
 
     return (
         <View>
-        {}
+       
         <Text>Minha tela de itens</Text>
         
         <View style={styles.row}>
@@ -71,7 +71,8 @@ export default  function itemScreen(){
                    onChangeText={(text)=>setReq({...req,name:text})}
                    />
 
-                   
+                <MyLink style={{ padding : 20}} url="http://gyuguyg" label="Esqueci minha senha"/>
+
                 <Button title='Cadastrar' onPress={ handleRegister}/>
             
             </View>
@@ -144,6 +145,11 @@ const styles= StyleSheet.create({
         padding: 10,
         marginBottom: 10,
     },
+    form: { 
+        flex:1
+
+    }
 })
+
 
 
