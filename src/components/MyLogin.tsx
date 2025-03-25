@@ -1,6 +1,5 @@
 import {TouchableOpacity, View, ViewStyle, StyleSheet,} from 'react-native';
 import React, {ReactNode} from 'react';
-import { TextInput} from 'react-native-gesture-handler';
 import MyLink from '../components/Mylink'
 
  
