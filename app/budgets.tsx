@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity} from 'react-native';
-import MyLogin from '../src/components/myLogin';
+import MyLogin from '../src/components/MyLogin';
 
 export default function BudgetScreen(){
 
