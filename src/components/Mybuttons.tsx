@@ -60,7 +60,9 @@ const MyButton: React.FC<MyButtonProps> = ({
       style={[getButtonType(button_type), style]}
       onPress={onPressIntenal}
     >
-      <Text style={styles.button_text}>{loading && (<Icon></Icon>) }{title}</Text>
+      {/* <Text style={styles.button_text}>{loading && (<Icon></Icon>) }{title}</Text> */}
+      <Text style={styles.button_text}>{title}</Text>
+
     </TouchableOpacity>
   );
 };
