@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Button, FlatList } from 'react-native';
-import Myinput from '../src/components/Myinputs';
+import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs'
 
 
+// Define o estado inicial como false
+//isChecked = valor atual da váriavel, SetIsChecked ele altera o valor da isChecked
+//useState(false), define o valor inicial do isChecked como true
 
 export default function UserScreen() {
+
+    const [isChecked, setIsChecked] = useState(true);
+
     const [req, setReq] = useState({
         name: '',
         password: '',
@@ -34,16 +40,16 @@ export default function UserScreen() {
     }[]>([])
 
     function handleRegister() {
-        if(req.id == -1){
-            const newId = users.length ? users[users.length - 1].id +1:0
-            const newUser = {...req, id:newId}
+        if (req.id == -1) {
+            const newId = users.length ? users[users.length - 1].id + 1 : 0
+            const newUser = { ...req, id: newId }
             setUsers([...users, newUser])
 
-        }else{
-            setUsers(users.map(p=>(p.id == req.id ? req:p)))
+        } else {
+            setUsers(users.map(p => (p.id == req.id ? req : p)))
 
         }
-        
+
         setReq({
             name: '',
             password: '',
@@ -58,48 +64,59 @@ export default function UserScreen() {
         })
 
     }
-    function editUser(id:number){
+    function editUser(id: number) {
         let user = users.find(u => u.id == id)
-        if(user)
+        if (user)
             setReq(user)
 
 
     }
 
-    function deleteUser(id:number){
+    function deleteUser(id: number) {
         const list = users.filter(u => u.id != id)
-        if(list)
+        if (list)
             setUsers(list)
 
     }
 
     //criar outras funções, sempre retorna html
     //aqui é typescript
+
+
+    //CHECKBOX:
+    //setIsChecked: é uma função usada para atualizar o estado de isChecked.
+    //!isChecked: o operador ! inverte o valor atual de isChecked. Se isChecked era true (checkbox marcada), ele se torna false (checkbox desmarcada), e vice-versa.
     return (
         <View>
-            
+
 
             <View style={styles.row}>
 
                 <View style={styles.form}>
+                    
+                    <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text })} placeholder="Digite seu nome..." label="Login" iconName='person' />
+                    <MyCheck label={isChecked ? "Presente" : "Faltou"} checked={isChecked} onToggle={() => setIsChecked(!isChecked)} />
+                    {/* checked busca o valor inicial/atual do estado. onToggle */}
 
-                <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text } )} placeholder="Digite seu nome..." label="Login" />
-               
-               
+                    <MyTextArea
+                               iconName='message' 
+                               label="Descrição"
+                               value={req.address} // Passa o estado como valor
+                               onChangeText={(text) => setReq({ ...req, address: text })} // Atualiza o estado ao digitar
+                               placeholder="Digite sua mensagem aqui..."
+                               style={{ height: 150 }} // Ajusta a altura, se necessário
+                    />
 
                     <TextInput
-                    
                         style={styles.input}
                         placeholder="Nome:"
                         value={req.name} //O atributo value vincula o campo de texto ao estado name
                         onChangeText={(text) => setReq({ ...req, name: text })} //Ele recebe o texto digitado pelo usuário como argumento e o passa para a função setName
-
                     />
 
 
-
                     <TextInput
-                    
+
                         style={styles.input}
                         placeholder="Senha:"
                         value={req.password} //O atributo value vincula o campo de texto ao estado name
@@ -111,10 +128,10 @@ export default function UserScreen() {
                     <TextInput
                         style={styles.input}
                         placeholder="CPF:"
-                        
+
                         value={req.cpf} //O atributo value vincula o campo de texto ao estado name
                         onChangeText={(text) => setReq({ ...req, cpf: text })}
-                       
+
                     />
 
 
@@ -171,12 +188,12 @@ export default function UserScreen() {
 
                             <View style={styles.buttonsContainer}>
 
-                                <TouchableOpacity style={styles.deleteButton} onPress={() => {deleteUser(item.id)}}>
-                                <Text style={styles.buttonText}>X</Text>
+                                <TouchableOpacity style={styles.deleteButton} onPress={() => { deleteUser(item.id) }}>
+                                    <Text style={styles.buttonText}>X</Text>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.editButton} onPress={() => {editUser(item.id)}}>
-                                <Text style={styles.buttonText}>Edit</Text>
+                                <TouchableOpacity style={styles.editButton} onPress={() => { editUser(item.id) }}>
+                                    <Text style={styles.buttonText}>Edit</Text>
 
                                 </TouchableOpacity>
 
@@ -271,18 +288,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#281259',
         paddingVertical: 12,
         paddingHorizontal: 24,
-        borderRadius: 30, 
+        borderRadius: 30,
         marginBottom: 10,
         alignItems: 'center',
 
     },
     buttonText: {
-        color: '#fff', 
+        color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
     }
-
-
-
-
 })

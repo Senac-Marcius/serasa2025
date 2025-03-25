@@ -1,8 +1,22 @@
 import React, { ReactNode, useState } from 'react';
-import { TextInput, TextStyle, StyleProp, View, Text } from 'react-native';
+import { TextInput, TextStyle, View, Text, Pressable } from 'react-native';
 import { inputStyles } from '../../styles/inputStyles';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+//npm install react-native-vector-icons @types/react-native-vector-icons
+
+
+/*
+//Exemplo de uso do TextArea
+<MyTextArea
+  iconName='message'
+  label="Descrição"
+  value={req.address} // Passa o estado como valor
+  onChangeText={(text) => setReq({ ...req, ..... })} // Atualiza o estado ao digitar
+  placeholder="Digite sua mensagem aqui..."
+  style={{ height: 150 }}
+/>
+*/
 
 interface MyinputProps {
   value: string;  // valor do input
@@ -10,33 +24,77 @@ interface MyinputProps {
   placeholder?: string;
   style?: TextStyle | TextStyle[];
   label: string;
-
+  iconName: string;
 
 }
 
-const Myinput: React.FC<MyinputProps> = ({ value, onChangeText, placeholder, style, label }) => {
+interface MyCheckProps {
+  label: string;
+  checked: boolean;
+  onToggle: () => void;
+  //função que será chamada quando a checkbox for alterada
+}
+
+interface MyTextAreaProps {
+  value: string;
+  onChangeText: (text: string) => void;
+  placeholder?: string;
+  style?: TextStyle | TextStyle[];
+  label: string;
+  iconName: string;
+}
+
+const Myinput: React.FC<MyinputProps> = ({ value, onChangeText, placeholder, style, label, iconName }) => {
   return (
-    <View style={[inputStyles.container, style]} >
+    <View style={[inputStyles.container]} >
 
-
-      <Text style={[inputStyles.label, style]}>
-        <Icon style={[inputStyles.icon]} name="person" size={20} />
-        {label}
-      </Text>
+      <View style={inputStyles.labelContainer}>
+        <Icon style={[inputStyles.icon]} name={iconName} size={18} />
+        <Text style={inputStyles.label}>{label}</Text>
+      </View>
 
       <TextInput
-
         style={[inputStyles.input, style]}
         value={value}  // valor do input
         onChangeText={onChangeText}
         placeholder={placeholder}
-      // função para atualizar o texto
-
       />
 
     </View>
   );
 };
 
+const MyTextArea: React.FC<MyTextAreaProps> = ({ value, onChangeText, placeholder, style, label, iconName }) => {
+  return (
+    <View style={inputStyles.container}>
+      
+      <View style={inputStyles.labelContainer}>
+        {/*<Icon style={inputStyles.icon} name="message" size={18} /> */}
+        <Icon style={[inputStyles.icon]} name={iconName} size={18} />
+        <Text style={inputStyles.label}>{label}</Text>
+      </View>
+      <TextInput
+        style={[inputStyles.textArea, style]}
+        value={value}
+        onChangeText={onChangeText}
+        placeholder={placeholder}
+        multiline={true}
+      />
+    </View>
+  );
+};
 
-export default Myinput;
+const MyCheck: React.FC<MyCheckProps> = ({ label, checked, onToggle }) => {
+  return (
+    <Pressable style={inputStyles.checkboxContainer} onPress={onToggle}>
+
+      <View style={[inputStyles.checkbox, checked && inputStyles.checkboxChecked]}>
+        {checked && <Icon name="check" size={16} color="white" />}
+        {!checked && <Icon name="close" size={16} color="white" />}
+      </View>
+      <Text style={inputStyles.checkboxLabel}>{label}</Text>
+    </Pressable>
+  );
+};
+
+export { Myinput, MyCheck, MyTextArea };
