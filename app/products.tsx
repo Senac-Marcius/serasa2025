@@ -56,7 +56,7 @@ export default function productScreen(){
         }
     return (
         <View>
-            <MyPerfil style={{padding: 20}}>
+            <MyPerfil>
                 <Text>Filho</Text>
             </MyPerfil>
             <Text style={styles.h1}> Produtos </Text>

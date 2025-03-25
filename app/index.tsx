@@ -35,12 +35,28 @@ export default function HomeScreen() {
                             router.push('/posts');
                         }}
                     />
+                     <Drawer.Item
+                        label="Perfil"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/perfil');
+                        }}
+                    />
                     <Drawer.Item
                         label="Cursos"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/courses');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="products"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/products');
                         }}
                     />
                     <Drawer.Item
