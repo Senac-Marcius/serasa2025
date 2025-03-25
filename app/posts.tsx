@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { ScrollView, View, Text } from 'react-native';
-import { Button, TextInput, RadioButton, Checkbox } from 'react-native-paper';
+import { Button, ScrollView, View, Text,TouchableOpacity } from 'react-native';
+import { TextInput, RadioButton, Checkbox } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { DatePickerModal,TimePickerModal } from 'react-native-paper-dates';
-import MyTest from '../src/components/Mytest'
+//import MyTest from '../src/components/Mytest'
+import MyList from '../src/components/mylist'
 
 export default function PostScreen() {
     const router = useRouter();
@@ -16,16 +17,62 @@ export default function PostScreen() {
     const [date, setDate] = useState<Date | undefined>(undefined);
     const [open, setOpen] = useState(false);
 
+    const[req,setReq] = useState({ 
+        id: -1,
+        name:'',
+        mark:'',
+        assetNumber:0,
+        amount: 0,
+        createAt: new Date().toISOString ()
+        
+    });
+    const [itens,setItens]= useState<{
+        id: number,
+        name: string,
+        mark: string,
+        assetNumber: number,
+        amount: number, 
+        createAt:string,
+
+    }[]>([])
+
+    function handleRegister(){
+        if(req.id == -1){
+            const newid= itens.length ? itens[itens.length-1].id=1:0;
+            const newItem = {... itens,req};
+            setItens([...itens, req])
+
+        }else{
+         setItens(itens.map(i =>(i.id == req.id)? req: i )  );
+
+        }
+
+        setReq({id: -1,
+            name:'',
+            mark:'',
+            assetNumber:0,
+            amount: 0,  
+            createAt: new Date().toISOString(),
+        })
+    }
+
+    function editItem(id:number){
+        let item= itens.find(i => i.id== id)
+        if(item)
+            setReq(item)
+    }
+    function delItem(id:number){
+        const list= itens.filter(i => i.id != id)
+        if(list)
+            setItens(list)
+    }
+    
+    
     return (
         <ScrollView>
-            <MyTest>
-                <Button>Filho</Button>
-            </MyTest>
-
+         
             <View style={{ padding: 20 }}>
-                <Button mode="contained" onPress={() => router.back()}>
-                    Voltar
-                </Button>
+                
 
                 <TextInput
                     label="Descrição"
@@ -56,11 +103,7 @@ export default function PostScreen() {
                     </View>
                 </RadioButton.Group>
 
-                {/* Botão para abrir o calendário */}
-                <Button mode="outlined" onPress={() => setOpen(true)}>
-                    Selecionar Data
-                </Button>
-
+              
                 {/* Modal do Calendário */}
                 <DatePickerModal
                     locale="pt"
@@ -94,10 +137,45 @@ export default function PostScreen() {
                     />
                 )}
 
-                <Button mode="contained" onPress={() => console.log("Post enviado!")}>
-                    Cadastrar
-                </Button>
+
+                <View >
+                    <TextInput placeholder="Marca"
+                    value={req.mark}
+                    onChangeText={(text)=>setReq({...req,mark:text})}
+                    />
+                    
+    
+    
+                    <TextInput placeholder= "Digite o nome"
+                        value={req.name}
+                        onChangeText={(text)=>setReq({...req,name:text})}
+                        />
+    
+                        
+                    <Button title='Cadastrar' onPress={ handleRegister}/>
+                
+                </View>
             </View>
+
+            <MyList
+                data={itens}
+                keyItem={(item) => item.id.toString()}
+                renderItem={({item})=>(
+                    <View >
+                        <text >{item.name}</text>
+                        <text >{item.mark}</text>
+                        <text>{item.assetNumber}</text>
+                        <text>{item.amount}</text>
+    
+                        <View>
+                            <TouchableOpacity onPress={ () => { editItem(item.id)} }>Editar</TouchableOpacity>
+                            <TouchableOpacity onPress={ () => { delItem(item.id)} }>Excluir</TouchableOpacity>
+                        </View>
+                    </View>
+    
+                )}
+                        
+            />
 
         </ScrollView>
     );

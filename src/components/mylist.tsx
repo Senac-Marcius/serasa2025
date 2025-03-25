@@ -1,17 +1,22 @@
-import React, { ReactNode } from 'react';
-import { ScrollView, View, ViewStyle } from 'react-native';
-
+import React from 'react';
+import { FlatList, ViewStyle } from 'react-native';
 
 interface MyListProps {
-    children: ReactNode;
-    style: ViewStyle;
+    data: any[];
+    style?: ViewStyle;
+    renderItem: (args: { [key: string]: any }) => JSX.Element; 
+    keyItem: (item: any, index: number) => string;
 }
 
-const myList :  React.FC< MyListProps > = ({children, style}) => {
-    return (<View  style= {style}>{children}</View>);
+const MyList: React.FC<MyListProps> = ({ data, style, renderItem, keyItem }) => {
+    return (
+        <FlatList 
+            data={data} 
+            renderItem={renderItem}
+            keyExtractor={keyItem}
+            style={style} 
+        />
+    );
+};
 
-}
-
-
-export default myList
-
+export default MyList;
