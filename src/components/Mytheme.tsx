@@ -2,21 +2,20 @@ import {TouchableOpacity, View, ViewStyle, StyleSheet} from 'react-native';
 import React, {ReactNode} from 'react';
 import { styleText } from 'util';
 
-
 interface MyThemeProps{
     style: ViewStyle;
-    chendTheme(): void;
-    fontSize(): void;
+    chendTheme(theme:string): void;
+    fontSize(som:number): void;
 }
 const MyTheme: React.FC<MyThemeProps> = ({style, chendTheme, fontSize}) => {
    return(
    <View>
         
-        <TouchableOpacity> +1 </TouchableOpacity>
-        <TouchableOpacity> -1</TouchableOpacity>
-        <TouchableOpacity> A </TouchableOpacity>
-        <TouchableOpacity> B </TouchableOpacity>
-        <TouchableOpacity> C </TouchableOpacity>
+        <TouchableOpacity style ={styles.buttonsContainer} onPress={() => fontSize(+1)}> +1 </TouchableOpacity>
+        <TouchableOpacity style ={styles.buttonsContainer} onPress={() => fontSize(-1)}> -1</TouchableOpacity>
+        <TouchableOpacity style ={styles.buttonsContainer} onPress={() => chendTheme("A")}> A </TouchableOpacity>
+        <TouchableOpacity style ={styles.buttonsContainer} onPress={() => chendTheme("B")}> B </TouchableOpacity>
+        <TouchableOpacity style ={styles.buttonsContainer} onPress={() => chendTheme("C")}> C </TouchableOpacity>
 
     </View>
    )
@@ -34,10 +33,3 @@ const styles = StyleSheet.create({
     }
 })
 
-function chendTheme(){
-
-}
-
-function fontSize(){
-    
-}
