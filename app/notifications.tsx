@@ -58,9 +58,6 @@ export default function NotificationScreen(){
 
 return (
     <View>
-        <MyTheme style={styles.row}>
-            <text></text>
-        </MyTheme>
         {/* aqui é typescriot dentro do front*/}
         <Text>Minha tela de notificações</Text>
         <View style={styles.row}>
