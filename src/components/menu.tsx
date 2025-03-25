@@ -7,7 +7,7 @@ import { useState } from 'react';
 export default function HomeScreen() {
     const router = useRouter();
     const [drawerOpen, setDrawerOpen] = useState(false);
-
+/* esse é o menu */
     return (
         <View style={{ flex: 1 }}>
             {/* Menu Hambúrguer no Topo */}
