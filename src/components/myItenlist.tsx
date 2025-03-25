@@ -28,12 +28,22 @@ export default Myiten;
  
 const styles = StyleSheet.create({
   edit: {
-
-    backgroundColor: "#3498DB",
+    backgroundColor: "#ab66f9",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 5,
+    color: '#ffffff',
+    width:100,
   } as ViewStyle,
 
   del:{
-    backgroundColor: "#E74C3C",
+    backgroundColor: "#ab66f9",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 5,
+    color: '#ffffff',
+    marginTop: 20,
+    width:100,
   } as ViewStyle,
 
   buttonText: {
