@@ -1,6 +1,7 @@
-import {TouchableOpacity, View, ViewStyle, StyleSheet} from 'react-native';
+import {TouchableOpacity, View, ViewStyle, StyleSheet,} from 'react-native';
 import React, {ReactNode} from 'react';
-import { TextInput } from 'react-native-gesture-handler';
+import { TextInput} from 'react-native-gesture-handler';
+import MyLink from '../components/Mylink'
 
  
 interface MyLoginProps{
@@ -10,9 +11,11 @@ interface MyLoginProps{
 const MyLogin: React.FC<MyLoginProps> = ({children, style}) => {
     return (
     <View style={styles.container}>
-        <TextInput/>
-        <TextInput/>
-        <MyLink label="Recurperar minha senha"/>
+       
+        <MyLink 
+            url="http://google.com"
+            label="Esqueci minha senha"
+        />
 
         <TouchableOpacity style={styles.LoginContainer} >
             Login
