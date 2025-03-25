@@ -1,21 +1,23 @@
-import React, { ReactNode } from 'react';
-import { Text, View, ViewStyle } from 'react-native'; 
+import React, { ReactNode } from 'react'
+import { ViewStyle } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
+import { Button, List } from 'react-native-paper'; 
 
 interface MySelectProps {
-    children: ReactNode;
-    style: ViewStyle;
+    style?: ViewStyle;
+    onPress(): void;
+    props: []
 }
 
-const MySelect: React.FC< MySelectProps > = ({children, style}) => {    //para passar uma parametro para a função, precisa-se utilizar "( )"
-    return (<View style={style}>
-        <Text>Ola componente</Text>
-        {children}
-        <Text>Tchau componente</Text>
-        {children}
-        
-        
-        </View>); 
-    
-}
+const MySelect: React.FC<MySelectProps> = ({style, onPress}) => {     //para passar uma parametro para a função, precisa-se utilizar "( )"
+    return (
+        <List.Item
+            title= "Selecionar"
+            style= {style}
+            description= "Item description"
+            onPress= {onPress}
+            left= {props => <List.Icon {...props} icon ="folder"/>}
+        />   
+    );
+}   
 
-export default MySelect                           //estamos exportando una variável  //tsc => type script expo

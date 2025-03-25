@@ -59,7 +59,7 @@ export default function LocalScreen(){
 
     return (  //  *  sempre retornará um html.     * view com o "v" minúsculo é utilizado, apenas, no HTML puro.     * Para comentar no HYML, é necessário utilizar "{/* */}"
         <View>
-            <MySelect style={{padding: 20}}>
+            <MySelect >
                 <></>
             </MySelect>
 
@@ -111,7 +111,7 @@ export default function LocalScreen(){
                             
 
 
-                                <View style={styles.buttonsContainer}>
+                                /*<View style={styles.buttonsContainer}>
                                     <TouchableOpacity style={styles.edit} onPress={ () => {editLocal(item.id)} }>edit</TouchableOpacity>
                                     <TouchableOpacity style={styles.del} onPress={ () => (delLocal(item.id))}>del</TouchableOpacity>
                                 </View>
@@ -130,50 +130,24 @@ export default function LocalScreen(){
 
 const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos funções que criam estilos para fontes
 
-    
-     edit: {
-        flex: 5,
-        marginRight: 15,
-        padding: 10,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 15,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 8, height: 4 },
-        shadowRadius: 7,
-    },
-     del: {
-        flex: 5,
-        marginRight: 15,
-        padding: 10,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 15,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 8, height: 4 },
-        shadowRadius: 7,
-    },
     container: {
         flex: 20,
         padding: 15,
         backgroundColor: '#F2F2F2',
+    },
+    title:{
+        fontSize: 22,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 20,
+        color: "green"
+        
     },
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
 
-    },
-    formContainer: {
-        flex: 5,
-        marginRight: 50,
-        padding: 25,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 15,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 7,
     },
     form: {
         flex: 6,
@@ -186,6 +160,24 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 7,
     },
+
+    formContainer: {
+        flex: 5,
+        marginRight: 50,
+        padding: 25,
+        backgroundColor: '#F2F2F2',
+        borderRadius: 15,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 4 },
+        shadowRadius: 7,
+    },
+    input: {
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+    marginBottom: 10,
+    paddingVertical: 4,
+  },
     buttonsContainer: {
         flex: 100,
         padding: 50,
@@ -194,14 +186,7 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
         alignItems: 'flex-start',
         
     },
-    title:{
-        fontSize: 22,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 20,
-        color: "green"
-        
-    },
+    
     item:{
 
     },
