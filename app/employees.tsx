@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import { View , Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Button } from 'react-native';
-
+import { ScrollView, View } from 'react-native';
+import { Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Button } from 'react-native';
+import MyTimePicker  from '../src/components/MyTimePicker'
 export default function EmployeeScreen(){
 //aqui é typescript 
     const [req, SetReq] = useState({
@@ -20,7 +21,7 @@ export default function EmployeeScreen(){
         ethnicity:'',
         deficiency:'',
         createAt: new Date().toISOString(),
-        isActive: '',
+        isActive: ''
         
     });
     const [employees, setEmployees]= useState<{
@@ -40,7 +41,7 @@ export default function EmployeeScreen(){
         ethnicity: string,
         deficiency: string,
         createAt: string,
-    isActive: string,}[]>([])
+        isActive: string,}[]>([])
 
         function handleRegister(){
             if(req.id == -1){
@@ -49,18 +50,19 @@ export default function EmployeeScreen(){
                 setEmployees([...employees,newEmployee])
             }else{
                 setEmployees(employees.map(e =>(e.id == req.id ? req:e)))
+                
             }
             resetForms();
+            
         }
         function editEmployee(id:number){
             let employee = employees.find(e => e.id == id)
-            if(employee)
-                SetReq(employee)
+            if(employee)SetReq(employee)
         }
         function deleteEmployee(id:number){
             const list = employees.filter(e=> e.id != id)
             if(list) setEmployees(list);
-            resetForms();
+            
     
         }
         function resetForms(){
@@ -81,16 +83,18 @@ export default function EmployeeScreen(){
                 ethnicity:'',
                 deficiency:'',
                 createAt: '',
-                isActive: '0',
+                isActive: '',
                 })
         }
 
     
 
     return(
+    <ScrollView>
         <View>
             {/* aqui é typescript dentro da front*/}
-            <Text>Hello world</Text>
+            <Text>Cadastro de Funcionários</Text>
+            
             <View style={style.row}>
                 <View style={style.form}>
                     <Text style={style.label}>Perfil do likendin:</Text>
@@ -192,14 +196,15 @@ export default function EmployeeScreen(){
                         onChangeText={(text) => SetReq({...req , deficiency:text})}
                     />
                     <Text style={style.label}>Está ativo:</Text>
-                    <TextInput
-                        style={style.inputs}
-                        placeholder='Está ativo:'
-                        value={req.isActive}
-                        onChangeText={(text) => SetReq({...req , isActive:text})}
+                    <MyTimePicker 
+                        onTimeSelected={(time) => SetReq({ ...req, isActive: time })}
+                        initialTime={req.isActive}
                     />
+
+                    
                    <Button title='Cadastrar Funcionário' color = '#800080'  onPress={handleRegister}/>
                 </View>
+                
                 
                 <FlatList
                     data={employees}
@@ -207,7 +212,7 @@ export default function EmployeeScreen(){
                     renderItem = {({item}) => {
                         return <View style={style.itemContainer}>
                         <Text style={style.itemText}>Nome:{item.name} / Cargo:{item.position}</Text>
-                        <Text style={style.itemText}>{item.isActive}</Text>
+                        <Text style={style.itemText}>ativo desde de:{item.isActive}</Text>
 
                         <View style={style.buttonsContainer}>
                                     <TouchableOpacity style={style.deleteButton} onPress={() => {deleteEmployee(item.id)}}>
@@ -225,10 +230,10 @@ export default function EmployeeScreen(){
                         }}
                 />
                 
-            </View>
-            
-            
+            </View>      
         </View>
+        </ScrollView>
+        
     );
 
     
