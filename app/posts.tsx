@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, Text } from 'react-native';
 import { Button, TextInput, RadioButton, Checkbox } from 'react-native-paper';
 import { useRouter } from 'expo-router';
-import { DatePickerModal } from 'react-native-paper-dates';
+import { DatePickerModal,TimePickerModal } from 'react-native-paper-dates';
 import MyTest from '../src/components/Mytest'
 
 export default function PostScreen() {
@@ -18,8 +18,8 @@ export default function PostScreen() {
 
     return (
         <ScrollView>
-            <MyTest style={{padding: 20}}>
-                <></>
+            <MyTest>
+                <Button>Filho</Button>
             </MyTest>
 
             <View style={{ padding: 20 }}>
@@ -71,6 +71,16 @@ export default function PostScreen() {
                     onConfirm={(params) => {
                         setOpen(false);
                         setDate(params.date);
+                    }}
+                />
+
+                <TimePickerModal 
+                    locale="pt"
+                    visible={false}
+                    onDismiss={() => setOpen(false)}
+                    hours={date?.getHours()}
+                    minutes={date?.getMinutes()}
+                    onConfirm={(params) => {
                     }}
                 />
 

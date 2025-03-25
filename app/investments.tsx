@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
-import MyAccess from '../src/components/myAccessibility'
+import MyAccess from '../src/components/MyAccessibility'
 
 export default function investmentScreen(){
  //aqui é typescript   
