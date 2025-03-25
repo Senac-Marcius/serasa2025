@@ -38,24 +38,24 @@ export default MyLogin
 
 const styles = StyleSheet.create({
     container: {
-      padding: 20,
-      backgroundColor: '#fff',
-      flex: 1,
+        padding: 16,
+        backgroundColor: '#fff',
+        width: '90%',
+        maxWidth: 400, 
+        alignSelf: 'center',
+        borderRadius: 8,
+        gap: 16, 
     },
-
-    LoginContainer:{
-        backgroundColor:'#2563EB',
-        padding:10,
-        borderRadius:5,
+    LoginContainer: {
+        backgroundColor: '#2563EB',
+        padding: 12,
+        borderRadius: 5,
         alignItems: 'center',
-        justifyContent:'center',
-        },
-
-        CadastrarContainer:{
-            backgroundColor:'#3B82F6',
-            padding:10,
-            borderRadius:5,
-            alignItems: 'center',
-            justifyContent:'center',
-            },
-})
+    },
+    CadastrarContainer: {
+        backgroundColor: '#3B82F6',
+        padding: 12,
+        borderRadius: 5,
+        alignItems: 'center',
+    },
+});
