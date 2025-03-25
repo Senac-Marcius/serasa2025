@@ -5,7 +5,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 //npm install react-native-vector-icons @types/react-native-vector-icons
 
-
 /*
 //Exemplo de uso do TextArea
 <MyTextArea
