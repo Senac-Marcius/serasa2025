@@ -1,8 +1,11 @@
 import React, {useState} from "react";
 import{View,Text, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} from "react-native";
-import CurrencyInput from 'react-native-currency-input';
+import MyView from "../src/components/MyView";
+import MyList from "../src/components/mylist";
+import Myiten from "../src/components/myItenlist";
+/*import CurrencyInput from 'react-native-currency-input';
 import {TimeInput} from "@heroui/date-input";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import DateTimePickerModal from "react-native-modal-datetime-picker";*/
 
 export default function PositionScreen(){
 /*Aqui é TypeScript*/
@@ -54,7 +57,7 @@ export default function PositionScreen(){
     }
 
     return (
-        <View>
+        <MyView>
             {/*Aqui é TypeScript dentro do front*/}
             <Text>Minha tela dos cargos</Text>
             <View style = {styles.row}>
@@ -96,13 +99,15 @@ export default function PositionScreen(){
                     {/*<DateTimePickerModal 
                         placeholder="Data de cadastro" />*/}
 
-                    <Button title = "Cadastrar" onPress={handleRegister}/>
+                    <Button  title = "Cadastrar" onPress={handleRegister}/>
                 </View> 
-                    <FlatList
-                        data={positions}
-                        keyExtractor={(item) => item.id.toString()}
+                    <MyList
+                        data = {positions}
+                        keyItem = {(item) => item.id.toString()}
                         renderItem={({item}) => (
-                            <View style={styles.card}>
+                            <Myiten style={styles.card}
+                                onEdit={() => editPosition(item.id)}
+                                onDel={() => delPosition(item.id)}>
                                 <Text>{item.name}</Text>
                                 <Text>{item.description}</Text>
                                 <Text>{item.salary}</Text>
@@ -111,16 +116,16 @@ export default function PositionScreen(){
                                 <Text>{item.supervisor}</Text>
                                 <Text>{item.creatAt}</Text>
 
-                                <View style = {styles.buttonsContanier}>
+                                {/*<View style = {styles.buttonsContanier}>
                                     <TouchableOpacity onPress={()=> { editPosition(item.id) }}>Edit</TouchableOpacity>
                                     <TouchableOpacity onPress={()=> { delPosition(item.id) }}>Delete</TouchableOpacity>
-                                </View>
+                                </View>  MINHA FUNÇÃO DEL E EDIT*/}
                                    
-                            </View>
+                            </Myiten>
                         )}  />                
                     </View>
 
-        </View>
+        </MyView>
     )
 }
 
