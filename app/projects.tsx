@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, TextInput, Button, FlatList, TouchableOpacity, 
 import MySearch from '../src/components/Mysearch'
 import { ScrollView } from 'react-native-gesture-handler';
 import { Input, TextArea } from 'native-base';
+import {MyTextArea} from '../src/components/Myinputs'
 /*import { textStyles } from '../styles/textStyles';*/
 
 interface Project {
@@ -173,6 +174,15 @@ export default function ProjectScreen(){
                             onChangeText={(text) => setReq({ ...req, methodology: text })}
                         />
 
+                        <MyTextArea
+                        iconName='message'
+                        label="Descrição"
+                        value={req.methodology} // Passa o estado como valor
+                        onChangeText={(text) => setReq({ ...req, methodology: text })} // Atualiza o estado ao digitar
+                        placeholder="Digite sua mensagem aqui..."
+                        style={{ height: 150 }}
+                        />
+
                         <Button title="Cadastrar" onPress={ handleRegister }/>  
                     </View> 
 
@@ -296,15 +306,15 @@ const styles = StyleSheet.create({
     buttonEdit: {
         backgroundColor: '#ffff00', 
         paddingVertical: 10,
-        paddingHorizontal: 10,
-        borderRadius: 2,
+        paddingHorizontal: 20,
+        borderRadius: 10,
         color: '#ffffff',
     },
     buttonDelete: {
         backgroundColor: '#F44336', 
         paddingVertical: 10,
-        paddingHorizontal: 10,
-        borderRadius: 2,
+        paddingHorizontal: 20,
+        borderRadius: 10,
         color: '#ffffff',
     },
     buttonText: {
