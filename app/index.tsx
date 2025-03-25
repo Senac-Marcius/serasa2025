@@ -44,6 +44,14 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
+                        label="notificação"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/notifications');
+                        }}
+                    />
+                    <Drawer.Item
                         label="Configurações"
                         icon="cog"
                         onPress={() => {
