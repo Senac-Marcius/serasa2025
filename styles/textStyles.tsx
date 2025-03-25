@@ -3,46 +3,46 @@ import { StyleSheet } from 'react-native';
 export const textStyles = StyleSheet.create({
   text: {
     fontSize: 36,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins_400Regular',
   },
   login: {
     fontSize: 36,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins_400Regular',
     
   },
   title: {
     fontSize: 36,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins_400Regular',
     
   },
   buttonMenores: {
     fontSize: 10,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins_400Regular',
     
   },
   buttonMaiores: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins_400Regular',
 
   },
   label: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins_400Regular',
     
   },
   hepl: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins_400Regular',
     
   },
   textBody: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins_400Regular',
     
   }, 
   titleTopbar: {
     fontSize: 13,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins_400Regular',
     
   },
 });
