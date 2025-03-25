@@ -57,7 +57,7 @@ return (
             <text>text</text>
         </MyTopbar>
         {/*aqui é typescript dentro do front*/}
-        <Text>Tela de Cronograma</Text>
+        <Text>Informações sobre o curso</Text>
         <View style={styles.row}>
             <View style ={styles.form}>
                 
