@@ -137,7 +137,7 @@ export default function RecordScreen() {
                 
 
                 <View style={styles.listContainer}>
-                    <Text style={styles.subtitle}>Registros Cadastrados</Text>
+                    <Text style={styles.title}>Registros Cadastrados</Text>
                     <ScrollView style={{ flex: 1 }}>
                         <FlatList
                             data={records}
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginRight: 10,
         padding: 20,
-        backgroundColor: '#F2F2F2',
+        backgroundColor: '#FFF',
         borderRadius: 10,
         shadowColor: '#000',
         shadowOpacity: 0.1,
@@ -202,19 +202,15 @@ const styles = StyleSheet.create({
     listContainer: {
         flex: 1, 
         padding: 10,
-        backgroundColor:'#E6E6FA'
+        backgroundColor:'#FFF',
+        borderRadius: 10,
     },
     title: {
         fontSize: 22,
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 20,
-    },
-    subtitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
+    },   
     input: {
         borderWidth: 1,
         borderColor: '#ccc',
@@ -223,14 +219,17 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     recordItem: {
-        flex: 1,
-        padding: 10,
-        marginVertical: 5,
         backgroundColor: '#E6E6FA',
+        padding: 10,
         borderRadius: 5,
-        borderEndColor:'red',
         marginBottom: 10,
-        
+        borderLeftWidth: 5,
+        borderLeftColor: '#813AB1',
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 3,
+
     },
     recordText: {
         fontSize: 16,
