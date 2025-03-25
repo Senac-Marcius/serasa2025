@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons'; // Biblioteca de ícones
 interface MyTopbarProps {
     children: ReactNode;
 }
- 
+
 const MyTopbar: React.FC<MyTopbarProps> = ({ children }) => {
     return (
         <View style={styles.container}>
@@ -15,7 +15,7 @@ const MyTopbar: React.FC<MyTopbarProps> = ({ children }) => {
             </TouchableOpacity>
 
             {/* Nome da tela */}
-            <Text style={styles.screenName}>Inicio</Text>
+            <Text style={styles.screenName}>Tela de inico</Text>
 
             {/* Botão de perfil */}
             <TouchableOpacity style={styles.iconButton}>
