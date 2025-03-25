@@ -37,7 +37,7 @@ export default function HomeScreen() {
                     />
                     <Drawer.Item
                         label="Cursos"
-                        icon="post"
+                        icon="book-open-variant"
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/courses');
@@ -51,6 +51,23 @@ export default function HomeScreen() {
                             console.log("Configurações");
                         }}
                     />
+                    <Drawer.Item
+                        label="Setor de Apoio"
+                        icon="account"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/records');
+                        }}
+                        />
+
+                    <Drawer.Item
+                        label="Saiba Mais"
+                        icon="plus-circle"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/more');
+                        }}
+                        />
                 </Drawer.Section>
             )}
 
