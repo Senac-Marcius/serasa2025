@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
-import { MyAccess, MyAccess2 } from '../src/components/MyAccessibility'
+import  MyAccess from '../src/components/MyAccessibility'
 
-export default function investmentScreen(){
+export default function investment(){
  //aqui é typescript   
     const [req, setReq] = useState({
         description: '',
@@ -22,6 +22,7 @@ export default function investmentScreen(){
         id: number,
         createAt: string,
         userId: string,
+        value: string,
     }[]>([]);
     
 
@@ -48,8 +49,9 @@ export default function investmentScreen(){
 
     function editInvestment(id:number){
         const investment = investments.find(i => i.id == id)
-        if(investment)
-        setReq(investment)
+        if(investment){
+            setReq(investment)
+            }
     }
 
 
@@ -63,11 +65,10 @@ export default function investmentScreen(){
      /* Aqui é typescript dentro do front */
     return (
       <View>
-        <MyAccess> style={styles.form}</MyAccess>
-        <MyAccess2> style={styles.item}</MyAccess2>
+   
         <View style={({padding:20})}> </View>
         <Text>Meus Investimentos</Text>
-        <View style={styles.row}>
+        <View style={styles.row}> 
             <View style={styles.form}>
                 <TextInput
                     placeholder='Descrição'
@@ -96,7 +97,7 @@ export default function investmentScreen(){
                 />
                     
 
-                <Button title='Cadastrar' onPress={ handleRegister }/> 
+                <Button title='cadastrar' onPress={ handleRegister }/> 
             </View>
             <FlatList
                 data={investments}
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
     delButton : {
         backgroundColor: '#FF0000',
         padding: 10,
-        borderRadius: 10,
+        borderRadius8: 10,
         shadowColor: '#000',
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
