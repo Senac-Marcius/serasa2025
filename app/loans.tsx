@@ -1,6 +1,7 @@
 import React, { useState } from 'react'; //react é uma biblioteca e essa função esta importando ela, puxando
 import { FlatList, View, Text, StyleSheet, TextInput, Button, TouchableOpacity} from 'react-native'; //react native é uma biblioteca dentro de react 
 import MyCalendar  from '../src/components/MyCalendar';
+import { MdCalendarToday } from 'react-icons/md';
 
 
 export default function LoanScreen() {
@@ -91,7 +92,7 @@ export default function LoanScreen() {
                     onChangeText={(text) => setReq({...req, bookId: text })}
                     />
                     
-                    <MyCalendar date={date}   setDate={setDate} />
+                    <MyCalendar date={date}   setDate={setDate} icon="FaCalendarDays"/>
 
                     <TextInput 
                         placeholder="Status de Empréstimo:"
@@ -104,6 +105,7 @@ export default function LoanScreen() {
                         placeholder="Data de Empréstimo:"
                         value={req.loanDate} 
                         onChangeText={(text) => setReq({...req, loanDate: text })}
+                        
                     />
                     
 
