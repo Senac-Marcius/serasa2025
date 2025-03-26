@@ -3,6 +3,7 @@ import { ScrollView, View } from 'react-native';
 import { TimePickerModal } from 'react-native-paper-dates';
 import { Button, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MyButton from './Mybuttons';
 
 
 interface MyTimePickerProps {
@@ -28,23 +29,20 @@ export default function MyTimePicker({ onTimeSelected, initialTime = '' }: MyTim
         editable={false}
         style={{ flex: 1, backgroundColor: '#f9f9f9' }}
       />
-      <Button
-        mode="contained"
+      <MyButton
+        button_type = "round"
         onPress={() => setOpen(true)}
-        style={{ backgroundColor: '#6200ee' }}
-      >
-        <Icon name="clock-outline" size={20} color="#FFF" />
-      </Button>  
+        icon="clock-outline"
+      />
+        
       <TimePickerModal
         locale="pt"
         visible={open}
         onDismiss={() => setOpen(false)}
         onConfirm={handleConfirm}
         animationType="fade" 
-        inputStyle={{ 
-          textAlign: 'center',
-          width: '100%',      
-        }}
+        
+        
       />
     </View>
   );

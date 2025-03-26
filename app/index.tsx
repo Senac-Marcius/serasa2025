@@ -52,6 +52,14 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
+                        label="Funcionários"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/employees');
+                        }}
+                    />
+                    <Drawer.Item
                         label="Configurações"
                         icon="cog"
                         onPress={() => {
