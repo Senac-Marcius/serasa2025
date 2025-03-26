@@ -130,7 +130,7 @@ export default function LaunchScreen() {
 
                 )}
             />
-            <MySupport></MySupport>
+            <MySupport label='dgsdgsd' />
 
         </View>
     );
