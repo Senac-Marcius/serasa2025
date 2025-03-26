@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 interface AccessButtonProps {
   label: string;
@@ -51,6 +52,8 @@ const MyAccess: React.FC<MyAccessProps> = ({ children, style }) => {
     </View>
   );
 };
+
+<FontAwesome name="universal-access" size={24} color="black" />
 
 const styles = StyleSheet.create({
   container: {
