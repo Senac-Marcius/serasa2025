@@ -46,13 +46,10 @@ const myView: React.FC< MySearchProps > = ({children}) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text>Olá componente</Text>
       {children}
-      <Text>Tchau componente</Text>
       {/* Conteúdo da tela (pode ser adicionado aqui) */}
       {/* Botão de suporte */}
       <TouchableOpacity style={styles.suporteButton} onPress={handleSuporte}>
-        .
       </TouchableOpacity>
       
     </ScrollView>
