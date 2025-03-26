@@ -1,7 +1,8 @@
 import {TouchableOpacity, View, ViewStyle, StyleSheet,} from 'react-native';
 import React, {ReactNode} from 'react';
 import { TextInput} from 'react-native-gesture-handler';
-import MyLink from '../components/Mylink'
+import MyLink from '../components/Mylink';
+import MyView from '../components/MyView'
 
  
 interface MyLoginProps{
@@ -10,7 +11,7 @@ interface MyLoginProps{
 }
 const MyLogin: React.FC<MyLoginProps> = ({children, style}) => {
     return (
-    <View style={styles.container}>
+    <MyView>
     <TextInput>
         
     </TextInput>
@@ -27,7 +28,7 @@ const MyLogin: React.FC<MyLoginProps> = ({children, style}) => {
             Cadastrar
         </TouchableOpacity>
         
-    </View>
+    </MyView>
     );
     
    

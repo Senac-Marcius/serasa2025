@@ -36,6 +36,15 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
+                        label="Orçamentos"
+                        icon="budget"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/budgets');
+                        }}
+                    />
+                    
+                    <Drawer.Item
                         label="Cursos"
                         icon="post"
                         onPress={() => {
