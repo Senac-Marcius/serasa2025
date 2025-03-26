@@ -1,22 +1,30 @@
 
 import React from 'react';
-import {Text, View, ViewStyle} from "react-native";
+import {Text, TextInputKeyPressEventData, View, ViewStyle} from "react-native";
 import { TextInput } from 'react-native-gesture-handler';
 import { IconButton } from 'react-native-paper';
 
 interface MySearchProps {
     style: ViewStyle;
-   onKeyPress(): void; 
+    onChangeText(busca: string): void; 
+    onPress(): void;
 }
 
-const MySearch: React.FC<MySearchProps> = ({onKeyPress, style}) => {
+const MySearch: React.FC<MySearchProps> = ({onChangeText, style, onPress}) => {
+
+    function keyPress(event: any){
+        if(event.nativeEvent.key === 'Enter'){
+            onPress();
+        }
+    }
+
     return (
         <View style={[{padding: 10, flexDirection: 'row', alignItems: 'center' }, style]}>
             <Text> </Text>
             <IconButton 
                 icon="magnify" // Ícone de pesquisa do react-native-paper
                 size={20}
-                onPress={onKeyPress}
+                onPress={onPress}
                 style={{ position: 'absolute', left: 10 }} // Colocando o ícone à esquerda da TextInput
             />           
             <TextInput 
@@ -31,8 +39,9 @@ const MySearch: React.FC<MySearchProps> = ({onKeyPress, style}) => {
                     fontSize: 19,
                 }}
                 placeholder="Pesquisar..."
-                onKeyPress={(e) => onKeyPress()}
-            />
+                onChangeText={(text) => onChangeText(text)}
+                onKeyPress= {keyPress}
+                />
         </View>
     );
 };

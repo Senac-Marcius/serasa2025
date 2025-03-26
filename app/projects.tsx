@@ -2,8 +2,8 @@ import React, { Children, useState } from 'react'; // Esta importando da bibliot
 import { StyleSheet, View, Text, TextInput, Button, FlatList, TouchableOpacity, } from 'react-native'; 
 import MySearch from '../src/components/Mysearch'
 import { ScrollView } from 'react-native-gesture-handler';
-import { Input, TextArea } from 'native-base';
-import {MyTextArea} from '../src/components/Myinputs'
+import {MyTextArea } from '../src/components/Myinputs'
+import MyButton from '../src/components/Mybuttons';
 /*import { textStyles } from '../styles/textStyles';*/
 
 interface Project {
@@ -20,6 +20,8 @@ interface Project {
     objective: string;
     methodology: string;
 }
+
+const [visible, setVisible] = useState(false)
 
 
 export default function ProjectScreen(){
@@ -75,25 +77,31 @@ export default function ProjectScreen(){
             setReq(project)
     }
 
-    function dellProject(id:number){
+    function dellProject(id: number){
         const list = projects.filter((item) => item.id !== id);
         setProjects(list);
 
     }
 
-    function adicionarProtocolo(url) {
+    function adicionarProtocolo(url: string){
         if (!/^https?:\/\//i.test(url)) {
             return 'https://' + url;  // Adiciona 'https://' se não estiver presente
         }
         return url;
     }
 
+    const onKeyPress = (event: any) => {
+        
+    };
+
     // Criando o textinput para receber e exibir o texto "placeholder" para o usuario digitar
     return ( // Esta sendo feito um emcapsulamento com a abertura da () / {req.description}= usado para mostar o codigo em baixo
         <ScrollView>
-            <MySearch style={{padding: 20, }}>
-                <Text> Responda de Maneira Objetiva </Text>
-            </MySearch>
+            <MySearch 
+                style={{ padding: 20 }} 
+                onKeyPress={onKeyPress}
+            />
+                
             
             <View style={styles.contentContainer}>
                 <Text style={styles.title}>PROJETOS</Text>
@@ -118,7 +126,7 @@ export default function ProjectScreen(){
                             value={req.namep}
                             onChangeText={(text) => setReq({ ...req, namep: text })}
                         />
-                        Site:
+                        <Text style={styles.label}> Site: </Text>
                         <TextInput
                             style={styles.input}
                             placeholder=""
@@ -183,7 +191,9 @@ export default function ProjectScreen(){
                         style={{ height: 150 }}
                         />
 
-                        <Button title="Cadastrar" onPress={ handleRegister }/>  
+                        <View style={styles.buttonContainer}> 
+                            <MyButton title="Cadastrar" onPress={handleRegister} />
+                        </View>
                     </View> 
 
                     
@@ -227,6 +237,11 @@ export default function ProjectScreen(){
 const styles = StyleSheet.create({
     contentContainer: {
         padding: 20,
+    },
+
+    buttonContainer: {
+            alignItems: 'center', // Alinha o botão horizontalmente no centro
+            marginTop: 20,        // Dá um espaço acima do botão
     },
 
     row: {
