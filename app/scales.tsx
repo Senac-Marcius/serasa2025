@@ -2,6 +2,7 @@ import React, {useState} from 'react'; //Importa o react e atualiza a lista Auto
 import {View, Text, StyleSheet, TextInput, Button, FlatList, FlatListComponent, TouchableOpacity} from 'react-native';//Une  os objetos e o react-native faz a função de trasformar o codigo em multiplas plataformas.
 import { useRouter } from 'expo-router';
 import MyFilter from '../src/components/Myfilter';
+import MyView from '../src/components/MyView';
 
 export default function ScaleScreen(){
     const router = useRouter();
@@ -59,10 +60,10 @@ export default function ScaleScreen(){
     }
 
     return(
-        <View style={styles.container}> {/* Aqui é typecript dentro do html*/}
+        <MyView > {/* Aqui é typecript dentro do html*/}
             <MyFilter
                 style={styles.container}
-                itens={['Day']}
+                itens={['day', 'starttime']}
                 onSend={(filter) => console.log('Filtro aplicado:', filter)}
                 onPress={(item) => console.log('Filtro pressionado:', item)}
                 />
@@ -110,7 +111,7 @@ export default function ScaleScreen(){
                     />
                     </View>
             </View>       
-        </View> 
+        </MyView> 
     );
 };
 
