@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View,Text, StyleSheet,FlatList, Button,TextInput, Touchable, TouchableOpacity} from 'react-native';
-import MyNotify from '../src/components/Mynotify';
 
 export default function levelsScreen(){
     const [req, setReq] = useState({
@@ -60,13 +59,12 @@ export default function levelsScreen(){
 
     return (
         <View>
-            < MyNotify style={styles.row}>
-               <></>
-            </MyNotify>
+            
     {/* aqui é typerscrypt dentro do front */}
 
             <View style={styles.row}>
                 <View style={styles.form}>
+                    
                     <TextInput style={styles.fundo} placeholder="NOME" 
                         value={req.name}
                         onChangeText={(text) => setReq({...req ,name: text})}

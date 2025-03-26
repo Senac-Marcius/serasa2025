@@ -1,10 +1,11 @@
 import { View, ViewStyle, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; 
+import Entypo from '@expo/vector-icons/Entypo';
+//https://icons.expo.fyi/Index
 import React, { ReactNode } from 'react';
 
 interface MyNotifyProps {
   children: ReactNode;
-  style: ViewStyle;
+  style?: ViewStyle;
 }
 
 const MyNotify: React.FC<MyNotifyProps> = ({ children, style }) => {
@@ -13,10 +14,6 @@ const MyNotify: React.FC<MyNotifyProps> = ({ children, style }) => {
       {children}
       <TouchableOpacity
         style={{
-          position:'absolute',
-          right: 20,
-          bottom: 20,
-          backgroundColor:'yellow',
           borderRadius: 20,
           width: 40,
           height: 40,
@@ -25,7 +22,7 @@ const MyNotify: React.FC<MyNotifyProps> = ({ children, style }) => {
         }}
         onPress={() => console.log('Abrir notificações')}
       >
-        <Ionicons name="notifications" size={24} color="black" />
+          <Entypo name="bell" size={24} color="black" />
       </TouchableOpacity>
     </View>
   );
