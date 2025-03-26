@@ -58,6 +58,9 @@ export default function NotificationScreen(){
 
 return (
     <View>
+           <MyTheme style={styles.row} chendTheme={(theme) => {}}  fontSize={ (som)=>{} }/>
+           
+ 
         {/* aqui é typescriot dentro do front*/}
         <Text>Minha tela de notificações</Text>
         <View style={styles.row}>

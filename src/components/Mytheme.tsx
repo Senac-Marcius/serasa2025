@@ -3,14 +3,14 @@ import React, {ReactNode} from 'react';
 import { styleText } from 'util';
 
 interface MyThemeProps{
-    style: ViewStyle;
+    style?: ViewStyle;
     chendTheme(theme:string): void;
     fontSize(som:number): void;
 }
 const MyTheme: React.FC<MyThemeProps> = ({style, chendTheme, fontSize}) => {
    return(
    <View>
-        
+     
         <TouchableOpacity style ={styles.buttonsContainer} onPress={() => fontSize(+1)}> +1 </TouchableOpacity>
         <TouchableOpacity style ={styles.buttonsContainer} onPress={() => fontSize(-1)}> -1</TouchableOpacity>
         <TouchableOpacity style ={styles.buttonsContainer} onPress={() => chendTheme("A")}> A </TouchableOpacity>
@@ -30,5 +30,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap:20,
         alignContent:'space-around',
+        borderRadius:5,
     }
 })
