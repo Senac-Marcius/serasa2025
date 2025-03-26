@@ -1,12 +1,15 @@
 import React,{ReactNode} from 'react';
 import { View, TouchableOpacity, StyleSheet, Dimensions, Text } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
+import { Button } from 'react-native-paper';
+import { router } from 'expo-router';
 
 interface MySearchProps {
   children: ReactNode;
 }
 
-const MyView: React.FC< MySearchProps > = ({children}) => { 
+const myView: React.FC< MySearchProps > = ({children}) => { 
  
   const handleSuporte = () => {
     console.log('Botão de suporte clicado!');
@@ -42,16 +45,15 @@ const MyView: React.FC< MySearchProps > = ({children}) => {
   });
 
   return (
-    <View style={styles.container}>
-      <Text>Olá componente</Text>
+    <ScrollView style={styles.container}>
       {children}
-      <Text>Tchau componente</Text>
       {/* Conteúdo da tela (pode ser adicionado aqui) */}
       {/* Botão de suporte */}
       <TouchableOpacity style={styles.suporteButton} onPress={handleSuporte}>
       </TouchableOpacity>
-    </View>
+      
+    </ScrollView>
   );
 };
 
-export default MyView;
+export default myView;
