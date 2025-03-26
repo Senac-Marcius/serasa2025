@@ -8,10 +8,8 @@ export default function MoreScreen() {
     const [visible, setVisible] = useState(false); 
 
     return (
-        <View style={styles.container}> {/* Envolvendo tudo para aplicar style corretamente */}
-
+        <View style={styles.container}> 
             <MyView>
-
                 {/* Botão Saiba Mais */}
                 <MyButton 
                     title="SAIBA MAIS"
@@ -31,19 +29,21 @@ export default function MoreScreen() {
                         <TouchableOpacity style={styles.option}>
                             <Text>RECLAMAÇÕES</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.exitButton}>
-                            <Text style={{ color: 'white' }}>SAIR</Text>
-                        </TouchableOpacity>
+                        
+                        {/* Botão Sair com MyButton */}
+                        <MyButton 
+                            title="SAIR"
+                            button_type="round"
+                            onPress={() => setVisible(false)}
+                        />
                     </View>
                 )}
-
                 
                 <View style={styles.footer}>
                     <IconButton icon="github" size={30} iconColor="black" onPress={() => {}} />
                     <IconButton icon="facebook" size={30} iconColor="blue" onPress={() => {}} />
                     <IconButton icon="instagram" size={30} iconColor="purple" onPress={() => {}} />
                 </View>
-
             </MyView>
         </View>
     );
@@ -53,21 +53,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFF',
-    },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: '#813AB1',
-        paddingVertical: 15,
-        paddingHorizontal: 20,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-    },
-    headerTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: 'white',
     },
     optionsContainer: {
         marginTop: 10,
@@ -87,14 +72,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#F3F3F3',
         borderRadius: 10,
         marginVertical: 5,
-    },
-    exitButton: {
-        padding: 10,
-        width: 200,
-        alignItems: 'center',
-        backgroundColor: '#813AB1',
-        borderRadius: 10,
-        marginTop: 10,
     },
     footer: {
         flexDirection: 'row',
