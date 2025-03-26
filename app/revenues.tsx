@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
 import Mydownload from '../src/components/mydownload';
 import MyView from '../src/components/MyView';
+import MyList from '../src/components/mylist';
+import MyButton from '../src/components/Mybuttons';
 
 
 export default function RevenueScreen() {
@@ -128,9 +130,9 @@ export default function RevenueScreen() {
         </View>
 
         {/* Lista de Receitas */}
-        <FlatList
+        <MyList        /* Lista componente*/
           data={revenues}
-          keyExtractor={(item) => item.id.toString()}
+          keyItem={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <View style={styles.revenueStyle}>
               <Text style={styles.revenueText}>Descrição: {item.description}</Text>
@@ -145,17 +147,21 @@ export default function RevenueScreen() {
               {/* Botões de Editar e Excluir */}
               <View style={styles.buttonsContanier}>
 
-                <TouchableOpacity
+                <MyButton
+                  title='EDIT'
+                  button_type='default'
                   style={styles.editButton}
                   onPress={() => editRevenue(item.id)}
-                ><Text style={styles.buttonText}>EDIT</Text>
-                </TouchableOpacity>
+                  icon=''
+                />
                 
-                <TouchableOpacity
-                  style={styles.deleteButton}
-                  onPress={() => delRevenue(item.id)}
-                ><Text style={styles.buttonText}>DELETE</Text>
-                </TouchableOpacity>
+               <MyButton
+                title='DELETE'
+                button_type='default'
+                style={styles.deleteButton}
+                onPress={() => delRevenue(item.id)}
+                icon=''
+                />
 
                 <Mydownload style={styles.downloadButton} url="https://img.freepik.com/vetores-premium/baixe-a-ilustracao-vetorial-baixe-o-arquivo-50-por-cento-do-grafico-da-internet-com-o-carregamento-do-texto-de-download-da-seta-armazenamento-em-nuvem-conceito-de-carregamento-icone-de-linha-preta-do-vetor-em-um-fundo-branco_748571-116.jpg?w=1060" />
 
@@ -227,14 +233,12 @@ const styles = StyleSheet.create({
   editButton: {
     backgroundColor: '#FFFF00', // Cor de fundo AMARELO
     padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
+    
   },
   deleteButton: {
     backgroundColor: '#f44336', // Cor de fundo vermelho
     padding: 10,
-    borderRadius: 5,
+  
     alignItems: 'center',
     justifyContent: 'center',
   },
