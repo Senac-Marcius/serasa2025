@@ -4,9 +4,12 @@ import Myiten from '../src/components/myItenlist';
 import MyList from '../src/components/mylist';
 import MyView from '../src/components/MyView';
 import MyButton from '../src/components/Mybuttons'
+import {Myinput, MyTextArea} from '../src/components/Myinputs';
+
 export default function ExpenseScreen(){
 // aqui é typescript
     const [req, setReq] = useState({
+            contact:"",
             name: '',
             email: '',
             description: '',
@@ -16,6 +19,7 @@ export default function ExpenseScreen(){
             userId: 0,
     });
     const [expense, setExpense ] = useState<{
+        contact: string,
         name: string,
         email: string,
         description: string,
@@ -35,6 +39,7 @@ export default function ExpenseScreen(){
         }
 
         setReq({
+            contact:"",
             name: '',
             email: '',
             description: '',
@@ -65,29 +70,16 @@ export default function ExpenseScreen(){
             <Text style={styles.title}>tela de despesas</Text>
             <View style={styles.row}>
                 <View style={styles.form}>
-                    <TextInput 
-                        placeholder="nome" 
-                        value={req.name}
-                        onChangeText ={(text) => setReq({...req ,name: text}) }
-                    />
+                    <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text })} placeholder="Nome" label="Nomes:" iconName='' />
 
-                    <TextInput 
-                        placeholder="Email"
-                        value={req.email}
-                        onChangeText={(text)=>setReq({...req ,email: text})}
-                    />
+                    <Myinput value={req.contact} onChangeText={(text) => setReq({ ...req, contact: text })} placeholder="(XX) XXXXX-XXXX" label="Contato:" iconName='phone' />    
 
-                    <TextInput
-                        placeholder="description"
-                        value={req.description}
-                        onChangeText={(text)=>setReq({...req ,description: text})}
-                    />
+                    <Myinput value={req.email} onChangeText={(text) => setReq({ ...req, email: text })} placeholder="domain@domain.com" label="Email:" iconName='mail' /> 
 
-                    <TextInput
-                        placeholder="valor"
-                        value={req.cost}
-                        onChangeText ={(text) => setReq({...req ,cost: text}) }
-                    />
+                    <MyTextArea value={req.description} onChangeText={(text)=>setReq({...req ,description: text})} iconName='' placeholder=''   label=''/>
+
+                   <Myinput value={req.cost} onChangeText={(text) => setReq({ ...req, cost: text })} placeholder="R$" label="Valores:" iconName='' /> 
+
 
                     <MyButton onPress={handleRegister} title='Cadastrar'></MyButton>
                 </View>
