@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <title>despesas</title>
+        <style>
+            body{
+                margin: 0;
+                font-family: Arial, sans-serif;
+
+            }
+
+            h1{
+                text-align: center;
+                color: #04ADBF;
+                background-color: #0B0C0D;
+                margin: 0;
+                padding: 20px;
+            }
+
+            section{
+                display: flex;
+                margin: 0 auto;
+                flex-direction: column;
+            }
+
+            
+               
+                
+            
+
+            
+
+            .row{
+                display:flex;
+                justify-content: space-around;
+                padding: 20px;
+                margin-top: 50px;
+            }
+
+            form{
+                background-color: #f2f2f2;
+                padding: 40px;
+                border-radius: 20px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            }
+
+            label{
+                font-weight: 600;
+            }
+
+            br{
+                margin: 10px;
+            }
+
+            button {
+                background: linear-gradient(135deg, #6e8efb, #a777e3);
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                font-size: 16px;
+                font-weight: bold;
+                border-radius: 8px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+                cursor: pointer;
+                transition: all 0.3s ease-in-out;
+                position: relative;
+                overflow: hidden;
+                margin: 20px auto 0;
+                display: block;
+            }
+
+            button:hover {
+                background: linear-gradient(135deg, #5b77e0, #925ec4);
+                box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+                transform: translateY(-2px);
+            }
+
+            button:active {
+                transform: translateY(1px);
+                box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            button.round{
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+            }
+
+            button.dell{
+                background: #ff0000;
+            }
+
+            button.edit{
+                background: #ffff00;
+            }
+
+        </style>
+
+    </head>
+    <body>
+        <h1>Cadastre a suas despesas</h1>
+        <div class ="row">
+            <section id =" scRegister">
+                <form>
+                    <input id = "id" type = "hidden" value = "-1"/>
+                    <label>Nome: </label><input id="name" type="text" /><br>
+                    <label>Descrição: </label><input id="description" type="text" /><br>
+                    <label>Url: </label><input id="url" type="text" /><br>
+                    <label>Data: </label><input id="date" type="date" /><br>
+                    <label>Valor: </label><input id="value" type="number" /><br>
+                    <button type="button" id="register" onclick="handleRegister()">Cadastrar</button>
+                </form> 
+            </section>
+
+            <section id="scList">
+
+                <table>
+                    <thead>
+                        <th>Nome</th>
+                    </thead>
+                    <tbody>
+                       
+                      
+                    </tbody>
+                </table>
+
+            </section>
+        </div>
+        
+    </body>
+    <script>
+        var expenses = []
+        
+        function setExpense(req){
+
+            const idRegex = /^\d+$/;
+            const urlRegex = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+            const dateRegex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
+
+            if(! idRegex.test(req.userId)){
+                return("Campo userId deve apenas conter números")
+            }
+
+            if (! urlRegex.test(req.url)){
+                return("Campo url deve conter o seguinte formato https://dominio.")
+            }
+
+            if(! dateRegex.test(req.createAt)){
+                return("Campo crateaAt deve coter o seguinte formato YYYY-MM-DD")
+            }
+
+            let e = {
+                id: expenses.length ? expenses[expenses.length -1].id + 1 : 0,
+                name: req.name,
+                description: req.description,
+                url: req.url,
+                createAt: req.createAt,
+                userId: req.userId,
+                value: req.value
+            }
+            expenses.push(e)
+            return "cadastrado sucesso"
+        }   
+        
+        function putExpense(req, id){
+            let idx = expenses.findIndex(e => e.id == id)
+
+            if(idx == -1 ) return "Não encotrado"
+
+            if(req.name != undefined) expenses[idx].name = req.name
+            if(req.description != undefined) expenses[idx].description = req.description
+            if(req.createAt != undefined) expenses[idx].createAt = req.createAt
+            if(req.userId != undefined) expenses[idx].userId = req.userId
+            if(req.value != undefined) expenses[idx].value = req.value
+            if(req.url != undefined) expenses[idx].url = req.url
+
+            return expenses[idx]
+        }
+
+        function handleRegister(){
+            let id = document.getElementById('id').value
+
+            if(id == -1){
+                console.log(
+                    setExpense({
+                        name: document.getElementById("name").value,
+                        description: document.getElementById("description").value,
+                        url: document.getElementById("url").value,
+                        createAt: "2025-03-06",
+                        userId: 0,
+                        value: document.getElementById("value").value
+                        
+                    })
+                )
+            }else if(id >-1){
+
+                putExpense({
+                        name: document.getElementById("name").value,
+                        description: document.getElementById("description").value,
+                        url: document.getElementById("url").value,
+                        createAt: "2025-03-06",
+                        userId: 0,
+                        value: document.getElementById("value").value,
+                    },id)
+
+                document.getElementById('id').value = -1
+            }else{
+                console.log("error")
+            }
+
+           listExpenses(expenses)
+           document.getElementById("id") = -1
+        }
+
+
+        function editExpenses(id){
+            let e = expenses.find(e => e.id == id)
+
+            document.getElementById("name").value = e.name
+            document.getElementById("description").value = e.description
+            document.getElementById("url").value = e.url
+            document.getElementById("value").value = e.value
+            document.getElementById("id").value = e.id
+        }
+
+        function dellExpenses(id){
+            let e = expenses.find(e => e.id == id)
+
+            document.getElementById("name").value = e.name
+            document.getElementById("description").value = e.description
+            document.getElementById("url").value = e.url
+            document.getElementById("value").value = e.value
+            document.getElementById("id").value = e.id
+
+            let idx = expenses.findIndex(e => e.id == id)
+
+            if(idx == -1) return "Não encontrado"
+
+            expenses.splice(idx, 1)
+
+            return listExpenses()
+
+        
+        }
+   
+        function listExpenses(){
+            const tbody = document.querySelector("#scList tbody")
+            tbody.innerHTML = ""
+
+            expenses.forEach(e =>{
+                const row = document.createElement("tr");
+
+                const nameCell = document.createElement("td");
+                nameCell.textContent = e.name
+
+                const editCell = document.createElement("td");
+                const editButton = document.createElement("button");
+                editButton.className = "round edit"
+                editButton.onclick = function () {
+                    editExpenses(e.id)
+                };
+                editCell.appendChild(editButton)
+
+                const dellCell = document.createElement("td");
+                const dellButton = document.createElement("button");
+                dellButton.className = "round dell"
+                dellButton.onclick = function(){
+                    dellExpenses(e.id)
+                }
+                dellCell.appendChild(dellButton)
+
+                row.appendChild(nameCell)
+                row.appendChild(editCell)
+                row.appendChild(dellCell)
+                tbody.appendChild(row)
+            })
+        }
+   </script>
+</html>
