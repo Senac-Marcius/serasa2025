@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View,Text, StyleSheet,FlatList, Button,TextInput} from 'react-native';
 import MyList from '../src/components/mylist'
+import MyView from '../src/components/MyView';
 export default function categoryScreen(){
     const [req, setReq] = useState({
         name: '',
@@ -31,13 +32,10 @@ export default function categoryScreen(){
     }
 
     return (
-        <View>
-        <MyList style={{padding : 20 }}>
-            <></>
-            </MyList>
+        <MyView>
     {/* aqui é typerscrypt dentro do front */}
 
-            <view style={styles.row}>
+            <View style={styles.row}>
                 <View style={styles.form}>
                     <TextInput placeholder="nome" 
                         value={req.name}
@@ -59,18 +57,18 @@ export default function categoryScreen(){
            data={categories}
            keyExtractor={(item) => item.id.toString()}
            renderItem={({item}) =>(
-            <view>
-                <text>{item.name}</text>
-              <text>{item.createAt}</text> 
-              <text>{item.name}</text>
-              <text>{item.userId}</text>  
-            </view>
+            <View>
+                <Text>{item.name}</Text>
+              <Text>{item.createAt}</Text> 
+              <Text>{item.name}</Text>
+              <Text>{item.userId}</Text>  
+            </View>
            )
         }
 
            />
-            </view>
-        </View>
+            </View>
+        </MyView>
    
     );
 }
