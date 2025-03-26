@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, FlatList, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import MyDocument from '../src/components/Mydocuments' //nome do arquivo
+import MySwitch from '../src/components/MySwitch' //nome do arquivo
+import { isEnabled } from 'react-native/Libraries/Performance/Systrace';
 //nome da variavel
 
 export default function RecordScreen() {
@@ -84,9 +85,8 @@ export default function RecordScreen() {
         
         <View style={styles.container}>
 
-            <MyDocument style={{ padding: 0}}>
-                <></>
-            </MyDocument>
+            <MySwitch /*isEnabled={isEnabled} onToggle={setIsEnabled}*//>
+                
 
             <View style={styles.row}>
                 <View style={styles.formContainer}>
