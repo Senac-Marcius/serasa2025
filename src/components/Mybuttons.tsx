@@ -51,7 +51,7 @@ const MyButton: React.FC<MyButtonProps> = ({
                 setLoading(false)
             }, 2000)
         }else{
-            () => {onPress && onPress()};
+            onPress != undefined ? onPress() : ""
             setLoading(true)
         }
         
