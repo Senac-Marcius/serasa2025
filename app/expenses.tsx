@@ -1,12 +1,13 @@
 import React, { Children, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity, } from 'react-native' ;
-import Myiten from '../src/components/myItenlist'
+import Myiten from '../src/components/myItenlist';
 import MyList from '../src/components/mylist';
+import MyView from '../src/components/MyView'
 export default function ExpenseScreen(){
 // aqui é typescript
     const [req, setReq] = useState({
             name: '',
-            url: '',
+            email: '',
             description: '',
             id: -1,
             cost: '',
@@ -15,7 +16,7 @@ export default function ExpenseScreen(){
     });
     const [expense, setExpense ] = useState<{
         name: string,
-        url: string,
+        email: string,
         description: string,
         id: number,
         cost: string,
@@ -34,7 +35,7 @@ export default function ExpenseScreen(){
 
         setReq({
             name: '',
-            url: '',
+            email: '',
             description: '',
             id: -1,
             cost: '',
@@ -58,7 +59,7 @@ export default function ExpenseScreen(){
     }
 
     return (
-        <View> 
+        <MyView> 
             {/* aqui é typecript dentro do front */}
             <Text style={styles.title}>tela de despesas</Text>
             <View style={styles.row}>
@@ -70,9 +71,9 @@ export default function ExpenseScreen(){
                     />
 
                     <TextInput 
-                        placeholder="url"
-                        value={req.url}
-                        onChangeText={(text)=>setReq({...req ,url: text})}
+                        placeholder="Email"
+                        value={req.email}
+                        onChangeText={(text)=>setReq({...req ,email: text})}
                     />
 
                     <TextInput
@@ -99,7 +100,7 @@ export default function ExpenseScreen(){
                             onDel={() => delExpense}
                         >
                             <Text style={styles.textlis} >{item.name}</Text>
-                            <Text style={styles.textlis} >{item.url}</Text> 
+                            <Text style={styles.textlis} >{item.email}</Text> 
                             <Text style={styles.textlis} >{item.description}</Text>  
                             <Text style={styles.textlis} >{item.cost}</Text> 
                             <Text style={styles.textlis} >{item.userId}</Text>
@@ -109,7 +110,7 @@ export default function ExpenseScreen(){
                     )}
                 /> 
             </View>
-        </View>
+        </MyView>
     );
 }
 
