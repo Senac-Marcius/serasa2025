@@ -4,6 +4,7 @@ import { TimePickerModal } from 'react-native-paper-dates';
 import { Button, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+
 interface MyTimePickerProps {
   onTimeSelected: (time: string) => void; // Callback para atualizar o estado no pai
   initialTime?: string; // Valor inicial (opcional)
@@ -20,7 +21,7 @@ export default function MyTimePicker({ onTimeSelected, initialTime = '' }: MyTim
   };
 
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+    <View style={{ flexDirection: 'row', gap: 8  }}>
       <TextInput
         placeholder="HH:MM"
         value={initialTime}
@@ -33,12 +34,17 @@ export default function MyTimePicker({ onTimeSelected, initialTime = '' }: MyTim
         style={{ backgroundColor: '#6200ee' }}
       >
         <Icon name="clock-outline" size={20} color="#FFF" />
-      </Button>
+      </Button>  
       <TimePickerModal
         locale="pt"
         visible={open}
         onDismiss={() => setOpen(false)}
         onConfirm={handleConfirm}
+        animationType="fade" 
+        inputStyle={{ 
+          textAlign: 'center',
+          width: '100%',      
+        }}
       />
     </View>
   );
