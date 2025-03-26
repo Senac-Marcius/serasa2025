@@ -2,7 +2,7 @@
 import React,{ useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
 import  Mytext  from '../src/components/Mytext';
-
+//fuction
 export default function CoursesScreen(){
     const [req, setReq] = useState({
         description: '',
