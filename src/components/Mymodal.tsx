@@ -21,8 +21,32 @@ const MyModal: React.FC<MyModalprops> = ({ children, style, visible, setVisible,
                 sndkksnd
             </Button>
             {visible && (<Modal transparent={true} visible={visible} animationType="fade"   >
-                <View style={styles.test} >
+                <View style={styles.background} >
                     <View style={styles.modalContent}  >
+                        {children}
+                        <Button onPress={onClose}>
+                            Close
+                        </Button>
+                    </View>                
+                </View>
+            </Modal>)}
+        </View>
+    );
+
+}
+const MyModal2: React.FC<MyModalprops> = ({ children, style, visible, setVisible, }) => { //
+    function onClose() {
+        setVisible(false)
+    };
+
+    return (
+        <View >
+            <Button onPress={() => { setVisible(true) }}>
+                sndkksnd
+            </Button>
+            {visible && (<Modal transparent={true} visible={visible} animationType="fade"   >
+                <View style={styles.background} >
+                    <View style={styles.modalContent2}  >
                         {children}
                         <Button onPress={onClose}>
                             Close
@@ -49,7 +73,21 @@ const styles = StyleSheet.create({
 
 
     },
-    test: {
+    modalContent2: {
+        display: 'flex',
+        width: 375,
+        height: 700,
+        padding: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        borderWidth: 4,
+        borderColor: 'purple',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+
+
+    },
+    background: {
         display: 'flex',
         justifyContent: 'center',
         width: '100%',
@@ -61,4 +99,4 @@ const styles = StyleSheet.create({
 
 
 
-export default MyModal
+export default MyModal2
