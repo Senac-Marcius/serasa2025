@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
 import MySupport from '../src/components/Mysupport';
+import MyView from '../src/components/MyView';
 
 export default function LaunchScreen() {
     const [req, setReq] = useState({
@@ -65,7 +66,7 @@ export default function LaunchScreen() {
 
 
     return (
-        <View style={styles.row}>
+        <MyView>
 
 
             <View style={styles.form}>
@@ -132,7 +133,7 @@ export default function LaunchScreen() {
             />
             <MySupport label='dgsdgsd' />
 
-        </View>
+        </MyView>
     );
 }
 
