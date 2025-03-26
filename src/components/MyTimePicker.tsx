@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { TimePickerModal } from 'react-native-paper-dates';
 import { Button, TextInput } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MyButton from './Mybuttons';
-import MyView from './MyView';
+import Mytext from './Mytext';
 
 
 interface MyTimePickerProps {
@@ -23,7 +22,7 @@ export default function MyTimePicker({ onTimeSelected, initialTime = '' }: MyTim
   };
 
   return (
-    <MyView>
+      <View>
       <TextInput
         placeholder="HH:MM"
         value={initialTime}
@@ -45,6 +44,6 @@ export default function MyTimePicker({ onTimeSelected, initialTime = '' }: MyTim
         
         
       />
-    </MyView>
+    </View>
   );
 }

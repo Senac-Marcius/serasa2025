@@ -3,6 +3,7 @@ import { ScrollView, View } from 'react-native';
 import { Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Button } from 'react-native';
 import MyTimePicker  from '../src/components/MyTimePicker'
 import MyButton from '../src/components/Mybuttons';
+import MyView from '../src/components/MyView';
 export default function EmployeeScreen(){
 //aqui é typescript 
     const [req, SetReq] = useState({
@@ -92,7 +93,7 @@ export default function EmployeeScreen(){
 
     return(
     <ScrollView>
-        <View>
+        <MyView>
             {/* aqui é typescript dentro da front*/}
             <Text>Cadastro de Funcionários</Text>
             
@@ -232,7 +233,7 @@ export default function EmployeeScreen(){
                 />
                 
             </View>      
-        </View>
+        </MyView>
         </ScrollView>
         
     );

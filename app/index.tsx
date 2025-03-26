@@ -28,11 +28,11 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
-                        label="Postagens"
+                        label="CATEGORIES"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/posts');
+                            router.push('/categories');
                         }}
                     />
                     <Drawer.Item
@@ -50,14 +50,21 @@ export default function HomeScreen() {
                             setDrawerOpen(false);
                             router.push('/courses');
                         }}
+                       
                     />
+                      <Drawer.Item
+                         label="Despesa"
+                         icon="post"
+                         onPress={() => {
+                             setDrawerOpen(false);
+                             router.push('/expenses');
+                        }}/>
                     <Drawer.Item
                         label="Funcionários"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/employees');
-                        }}
+                            router.push('/employees');}}
                     />
                     <Drawer.Item
                         label="Configurações"
