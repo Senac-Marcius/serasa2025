@@ -1,30 +1,17 @@
 import React from 'react';
-import { ScrollView} from 'react-native';
-
-export default function ProfileScreen() {
-    
-    return (
-        <ScrollView>
-            
-        </ScrollView>
-    );
-}
+import {ScrollView} from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 
-/*yimport React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-
-const ProfileScreen = () => {
+const Perfil = () => { 
   return (
+    <ScrollView>
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Component 9</Text>
+        <Text style={styles.headerText}>Perfil</Text>
       </View>
       <View style={styles.profileCard}>
         <View style={styles.profileImageContainer}>
-          <Image
-            source={require('./assets/profile-placeholder.png')} 
-          />
           <Text style={styles.profileImageLabel}>"Foto do cadastro"</Text>
         </View>
         <Text style={styles.profileName}>Nome do cadastro</Text>
@@ -32,9 +19,9 @@ const ProfileScreen = () => {
         <View style={styles.personalDataContainer}>
           <Text style={styles.personalDataLabel}>Dados Pessoais</Text>
           <Text style={styles.email}>E-mail: nome@exemplo.com.br</Text>
-          <Text style={styles.phone}>Telefone: (16) 932324400</Text>
+          <Text style={styles.phone}>Telefone: (16) 988443750</Text>
           <Text style={styles.birthdate}>Data de Nascimento: dd/mm/aaaa</Text>
-          <TouchableOpacity style={styles.changePasswordButton}>
+          <TouchableOpacity style={styles.changepassbuton}>
             <Text style={styles.changePasswordButtonText}>Alterar Senha</Text>
           </TouchableOpacity>
         </View>
@@ -43,13 +30,14 @@ const ProfileScreen = () => {
           <Text style={styles.editProfileButtonText}>Editar Perfil</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.whatsappButton}>
+      <TouchableOpacity style={styles.wppButton}>
         <Image
-          source={require('./assets/whatsapp-icon.png')} 
-          style={styles.whatsappIcon}
+          source={require('../assets/whatsapp.png')}
+          style={styles.wppIcon}
         />
       </TouchableOpacity>
     </View>
+    </ScrollView>
   );
 };
 
@@ -123,7 +111,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 10,
   },
-  changePasswordButton: {
+  changepassbuton: {
     backgroundColor: '#e0e0e0',
     padding: 10,
     borderRadius: 5,
@@ -145,8 +133,11 @@ const styles = StyleSheet.create({
   editProfileButtonText: {
     fontSize: 16,
     color: '#fff',
+    padding: 10,
+    borderRadius: 100,
+    fontFamily: 'arial'
   },
-  whatsappButton: {
+  wppButton: {
     position: 'absolute',
     bottom: 20,
     right: 20,
@@ -154,10 +145,73 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     padding: 15,
   },
-  whatsappIcon: {
+  wppIcon: {
     width: 30,
     height: 30,
   },
 });
 
-export default ProfileScreen*/
+export default Perfil
+
+
+
+
+/*import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+
+const Profile: React.FC<ProfileProps> = ({ user, onEdit, onSave }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedUser, setEditedUser] = useState<UserProfile>(user);
+
+  const handleSave = () => {
+    if (onSave) onSave(editedUser);
+    setIsEditing(false);
+  };
+
+  return (
+    <View style={styles.container}>
+      //{Foto do Perfil }
+      <Image 
+        source={{ uri: editedUser.photo || 'https://placeholder.com/150' }} 
+        style={styles.profileImage} 
+      />
+
+      //{ Modo Edição vs Modo Visualização }
+      {isEditing ? (
+        <>
+          <TextInput
+            value={editedUser.name}
+            onChangeText={(text) => setEditedUser({ ...editedUser, name: text })}
+            style={styles.input}
+          />
+          <TextInput
+            value={editedUser.email}
+            onChangeText={(text) => setEditedUser({ ...editedUser, email: text })}
+            style={styles.input}
+          />
+        </>
+      ) : (
+        <>
+          <Text style={styles.name}>{editedUser.name}</Text>
+          <Text style={styles.email}>{editedUser.email}</Text>
+        </>
+      )}
+
+      //{Botões }
+      <View style={styles.buttonContainer}>
+        {isEditing ? (
+          <TouchableOpacity style={styles.button} onPress={handleSave}>
+            <Text>Salvar</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.button} onPress={() => setIsEditing(true)}>
+            <Text>Editar Perfil</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    </View>
+  );
+};
+
+export default Profile;
+*/

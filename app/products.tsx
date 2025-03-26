@@ -3,7 +3,7 @@ import { View, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
 import { TextInput, Text} from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { DatePickerModal } from 'react-native-paper-dates';
-import MyPerfil from '../src/components/Myperfil'
+import Perfil from '../src/components/Myperfil'
 
 export default function productScreen(){
 //aqui é typescript
@@ -56,9 +56,7 @@ export default function productScreen(){
         }
     return (
         <View>
-            <MyPerfil>
-                <Text>Filho</Text>
-            </MyPerfil>
+            
             <Text style={styles.h1}> Produtos </Text>
                 {/*aqui é typescript dentro do front */ }
             <Text style={styles.h2}>Minha tela dos Produtos</Text>
