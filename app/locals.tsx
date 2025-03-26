@@ -57,9 +57,11 @@ export default function LocalScreen(){
             setLocals(list)            //'item 1', 'item 2'
     }
 
+    const [unity, setUnit] = useState("metros")
+
     return (  //  *  sempre retornará um html.     * view com o "v" minúsculo é utilizado, apenas, no HTML puro.     * Para comentar no HYML, é necessário utilizar "{/* */}"
         <View>
-            <MySelect onPress={ () =>{} }  list={['item 1', 'item 2']} />  
+           
 
            
 
@@ -76,8 +78,15 @@ export default function LocalScreen(){
                         onChangeText={(t) => setReq({...req, name: t })}                    
                         />  
 
+                        <MySelect label={unity} setLabel={setUnit }  list={
+                            [
+                                {key:0, option: 'metro'},
+                                {key:1, option: 'polegada'},
+                            ]
+                        } />  
+
                         <TextInput 
-                        placeholder= "Digite a área do local em metros:"
+                        placeholder={ `Digite a área do local em ${unity}:`}
                         value={req.area}
                         onChangeText={(n) => setReq({...req, area: n })}                   
                         />                                                              
@@ -91,6 +100,8 @@ export default function LocalScreen(){
                         value={req.adress}
                         onChangeText={(t) => setReq({...req, adress: t })}
                         />
+
+                        
 
                         <Button title='Cadastrar' onPress={ handleRegister } />         
 

@@ -44,6 +44,14 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
+                        label="Locais"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/locals');
+                        }}
+                    /> 
+                    <Drawer.Item
                         label="Configurações"
                         icon="cog"
                         onPress={() => {
@@ -51,6 +59,7 @@ export default function HomeScreen() {
                             console.log("Configurações");
                         }}
                     />
+                      
                 </Drawer.Section>
             )}
 
@@ -60,4 +69,4 @@ export default function HomeScreen() {
             </View>
         </View>
     );  
-}
+} 

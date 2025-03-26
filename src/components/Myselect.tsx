@@ -5,30 +5,31 @@ import { Button, List } from 'react-native-paper';
 
 interface MySelectProps {
     label: string;
-    list: {key: any; option: string}[];
+    list: {key:any, option:string}[];
     setLabel(item:string):void;
     setKey?(key:any):void;
 }
 
-const [visible, setVisible] = useState(false) 
+const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {  
+    const [visible, setVisible] = useState(false) 
 
-const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {     //para passar uma parametro para a função, precisa-se utilizar "( )"
     return (
         <View>
-            <Button onPress={ ()=> {setVisible(true)} }>{label}</Button>
+            <Button onPress={ ()=> {setVisible(!visible)} }>{label}</Button>
             {
                 visible &&
                 (<FlatList 
                     data={list}
                     keyExtractor={(item) => item.key}
-                    renderItem={(item) => (
+                    renderItem={(i) => (
                         <TouchableOpacity onPress={()=>{
-                            setLabel(item.item.option);
+                            setLabel(i.item.option);
                             if(setKey){
-                                setKey(item.item.option)
+                                setKey(i.item.option)
                             }
+                            setVisible(false)
                         }}>
-                        <Text>{item.item.option}</Text>
+                        <Text>{i.item.option}</Text>
                     </TouchableOpacity>
                     )}
                 />)
