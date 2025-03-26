@@ -44,11 +44,11 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
-                        label="Despesa"
+                        label="receitas"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/expenses');
+                            router.push('/revenues');
                         }}
                     />
                     <Drawer.Item

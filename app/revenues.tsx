@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
-import Mydownload from '../src/components/Mydownload';
+import Mydownload from '../src/components/mydownload';
 import MyView from '../src/components/MyView';
+
 
 export default function RevenueScreen() {
   // Estado para o formulário
