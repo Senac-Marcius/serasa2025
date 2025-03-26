@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { TouchableOpacity, Text, StyleSheet, ViewStyle } from "react-native";
-import { Icon } from "react-native-paper";
+import { Icon , MD3Colors} from "react-native-paper";
 
 type Button_type = "default" | "round" | "circle" | "rect" | "capsule" |"loading";
 
 interface MyButtonProps {
-  title: string;
+  title?: string;
   onPress?: () => void;
   button_type?: Button_type;
-  Icon?: string;
+  icon?: string;
   style?: ViewStyle;
 }
 
@@ -37,6 +37,7 @@ const MyButton: React.FC<MyButtonProps> = ({
   title,
   onPress,
   button_type = "default",
+  icon,
   style,
 }) => {
 
@@ -60,7 +61,7 @@ const MyButton: React.FC<MyButtonProps> = ({
       style={[getButtonType(button_type), style]}
       onPress={onPressIntenal}
     >
-      {/* <Text style={styles.button_text}>{loading && (<Icon></Icon>) }{title}</Text> */}
+     { icon && <Icon size={20} source={icon} color={MD3Colors.error50}></Icon>}
       <Text style={styles.button_text}>{title}</Text>
 
     </TouchableOpacity>
