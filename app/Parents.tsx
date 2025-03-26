@@ -39,7 +39,7 @@ export default function ParentScreen (){
 
         //setParents([...parents, req])
         setReq({
-            id:req.id + 1,
+            id:-1,
             Nome: '',
             Email:'',
             parentesco:'',
@@ -69,7 +69,7 @@ export default function ParentScreen (){
             shadowRadius:5,
             shadowOpacity:5,
             }}> 
-            Cadastro dos responsaveis
+            Adicione um arquivo
             </MyUpload>
             
             <Text>Minha tela das postagens </Text>
@@ -113,7 +113,6 @@ export default function ParentScreen (){
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({item}) => (
                         <View style={styles.parentsItem}>
-
                             <Text>{item.id}</Text>
                             <Text>{item.Nome}</Text>
                             <Text>{item.Email}</Text>
@@ -121,7 +120,7 @@ export default function ParentScreen (){
                             <Text>{item.createAt}</Text>
                             <Text>{item.userId}</Text> 
                                 <View style ={styles.buttonContainer}>
-                                    <TouchableOpacity onPress={()=> {editParent(item.id)}}>EDIT</TouchableOpacity>
+                                    <TouchableOpacity  onPress={()=> {editParent(item.id)}}>EDIT</TouchableOpacity>
                                     <TouchableOpacity onPress={()=> {delParent(item.id)}}>DELETE</TouchableOpacity>
                                 </View>
                         </View>
@@ -174,3 +173,4 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         alignContent: 'space-around'
     },
 })
+//Motificar o componente para que o mesmo esteja adequado para uso, estilização do figma e do HTML, otimizar o botão upload para uso no codigo. Pesquisa de objeto anonimo.

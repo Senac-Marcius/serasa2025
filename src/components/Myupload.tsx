@@ -1,5 +1,6 @@
 import React, {ReactNode} from 'react';
 import {View, ViewStyle, Text} from 'react-native';
+//import{button, list} from "react-native-paper"; utilizada para estilização do botom
 
 interface MyUploadProps {
     children: ReactNode
@@ -9,9 +10,13 @@ interface MyUploadProps {
 const MyUpload: React.FC < MyUploadProps > = ({children, style}) => {
     return (
         <View style={style}>
-            <Text> fdfs</Text>
+            <Text>
+            
+            </Text>
             {children}
-            <Text> </Text>
+            <Text>
+
+            </Text>
         </View> 
 
     );
