@@ -3,6 +3,8 @@ import { Text, View, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} 
 import MyLink from '../src/components/Mylink';
 import Myiten from '../src/components/myItenlist';
 import MyList from '../src/components/mylist';
+import { Myinput } from '../src/components/Myinputs';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 
 export default  function itemScreen(){
@@ -63,16 +65,23 @@ export default  function itemScreen(){
         
         <View style={styles.row}>
             <View style={styles.form}>
-                <TextInput placeholder="Marca"
+                <Myinput 
+                placeholder="Marca"
                 value={req.mark}
-                onChangeText={(text)=>setReq({...req,mark:text})}
+                onChangeText={(text) => setReq({ ...req, mark:text })}
+                label="Item" iconName='close' 
+            
                 />
                 
 
 
-                <TextInput placeholder= "Digite o nome"
+                <Myinput 
+                   placeholder= "Digite o nome"
                    value={req.name}
                    onChangeText={(text)=>setReq({...req,name:text})}
+                   label="I
+                   
+                   tem" iconName='user' 
                    />
 
                 <MyLink style={{ padding : 20}} url="http://gyuguyg" label="Esqueci minha senha"/>
