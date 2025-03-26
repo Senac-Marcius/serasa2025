@@ -1,144 +1,88 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet, ScrollView } from 'react-native';
+import { ScrollView, View } from 'react-native';
+import { Button, TextInput, RadioButton, Checkbox } from 'react-native-paper';
 import { useRouter } from 'expo-router';
+import { DatePickerModal } from 'react-native-paper-dates';
 
 export default function PostScreen() {
     const router = useRouter();
 
-    // Estado para armazenar as postagens
-    const [posts, setPosts] = useState<{ id: number; description: string; url: string }[]>([]);
-
-    // Estado para armazenar os inputs do formulário
     const [description, setDescription] = useState('');
     const [url, setUrl] = useState('');
+    const [isChecked, setIsChecked] = useState(false);
+    const [selectedRadio, setSelectedRadio] = useState("0");
 
-    // Função para adicionar um novo post
-    const addPost = () => {
-        if (!description.trim() || !url.trim()) {
-            alert('Preencha todos os campos!');
-            return;
-        }
-
-        const newPost = {
-            id: posts.length ? posts[posts.length - 1].id + 1 : 1,
-            description,
-            url,
-        };
-
-        setPosts([...posts, newPost]); 
-    };
-
-    // Função para deletar um post
-    const deletePost = (id: number) => {
-        setPosts(posts.filter((post) => post.id !== id));
-    };
+    const [date, setDate] = useState<Date | undefined>(undefined);
+    const [open, setOpen] = useState(false);
 
     return (
-        <View style={styles.container}>
-            <Button title="Voltar" onPress={() => router.back()} />
+        <ScrollView>
+            <View style={{ padding: 20 }}>
+                <Button mode="contained" onPress={() => router.back()}>
+                    Voltar
+                </Button>
 
-            <View style={styles.row}>
-                <View style={styles.formContainer}>
-                    <Text style={styles.title}>Cadastro de Postagens</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Descrição"
-                        value={description}
-                        onChangeText={setDescription}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="URL"
-                        value={url}
-                        onChangeText={setUrl}
-                    />
-                    <Button title="Cadastrar" onPress={addPost} />
-                </View>
+                <TextInput
+                    label="Descrição"
+                    value={description}
+                    onChangeText={setDescription}
+                    mode="outlined"
+                />
 
-                <View style={styles.listContainer}>
-                    <Text style={styles.subtitle}>Lista de Postagens</Text>
-                    <ScrollView style={{ flex: 1 }}>
-                        <FlatList
-                            data={posts}
-                            keyExtractor={(item) => item.id.toString()}
-                            renderItem={({ item }) => (
-                                <View style={styles.postItem}>
-                                    <Text style={styles.postText}>{item.description}</Text>
-                                    <Text style={styles.postUrl}>{item.url}</Text>
-                                    <Button title="Excluir" color="red" onPress={() => deletePost(item.id)} />
-                                </View>
-                            )}
-                            showsVerticalScrollIndicator={true}
-                            contentContainerStyle={{ paddingBottom: 20 }}
-                        />
-                    </ScrollView>
-                    
-                </View>
+                <TextInput
+                    label="URL"
+                    value={url}
+                    onChangeText={setUrl}
+                    mode="outlined"
+                />
+
+                {/* Checkbox */}
+                <Checkbox.Item
+                    label="Destaque"
+                    status={isChecked ? 'checked' : 'unchecked'}
+                    onPress={() => setIsChecked(!isChecked)}
+                />
+
+                {/* Radio */}
+                <RadioButton.Group onValueChange={setSelectedRadio} value={selectedRadio}>
+                    <View>
+                        <RadioButton.Item label="Opção 1" value="0" />
+                        <RadioButton.Item label="Opção 2" value="1" />
+                    </View>
+                </RadioButton.Group>
+
+                {/* Botão para abrir o calendário */}
+                <Button mode="outlined" onPress={() => setOpen(true)}>
+                    Selecionar Data
+                </Button>
+
+                {/* Modal do Calendário */}
+                <DatePickerModal
+                    locale="pt"
+                    mode="single"
+                    visible={open}
+                    onDismiss={() => setOpen(false)}
+                    date={date}
+                    onConfirm={(params) => {
+                        setOpen(false);
+                        setDate(params.date);
+                    }}
+                />
+
+                {/* Mostrando a data selecionada */}
+                {date && (
+                    <TextInput
+                        label="Data Selecionada"
+                        value={date.toLocaleDateString()}
+                        mode="outlined"
+                        editable={false}
+                    />
+                )}
+
+                <Button mode="contained" onPress={() => console.log("Post enviado!")}>
+                    Cadastrar
+                </Button>
             </View>
-
-            
-        </View>
+        </ScrollView>
     );
 }
-
-// Estilos
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#fff',
-    },
-    row: {
-        flexDirection: 'row', 
-        justifyContent: 'space-between', 
-        alignItems: 'flex-start', 
-    },
-    formContainer: {
-        flex: 1,
-        marginRight: 10,
-        padding: 20,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-    },
-    listContainer: {
-        flex: 1, 
-        padding: 10,
-    },
-    title: {
-        fontSize: 22,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 20,
-    },
-    subtitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
-        padding: 10,
-        marginBottom: 10,
-    },
-    postItem: {
-        padding: 10,
-        marginVertical: 5,
-        backgroundColor: '#f8f8f8',
-        borderRadius: 5,
-    },
-    postText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    postUrl: {
-        fontSize: 14,
-        color: '#007BFF',
-        marginBottom: 5,
-    },
-});

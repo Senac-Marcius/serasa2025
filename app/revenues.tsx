@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
+import Mydownload from '../src/components/Mydownload';
+import MyView from '../src/components/MyView';
 
 export default function RevenueScreen() {
   // Estado para o formulário
@@ -66,13 +68,20 @@ export default function RevenueScreen() {
     setRevenues(list); // Remove a receita da lista
   }
 
+
   return (
-    <View style={styles.container}>
+    
+    <MyView>
+     
+
+
        <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#333', textAlign: 'center' }}>
        cadastre as receitas
   </Text>
+      
 
       {/* Formulário */}
+      
       <View style={styles.row}>
         <View style={styles.form}>
           <TextInput
@@ -112,7 +121,9 @@ export default function RevenueScreen() {
             style={styles.input}
           />
 
-          <Button title="Cadastrar" onPress={handleRegister} />
+          <Button title="cadastrar" onPress={handleRegister} />
+
+          
         </View>
 
         {/* Lista de Receitas */}
@@ -145,12 +156,14 @@ export default function RevenueScreen() {
                 ><Text style={styles.buttonText}>DELETE</Text>
                 </TouchableOpacity>
 
+                <Mydownload style={styles.downloadButton} url="https://img.freepik.com/vetores-premium/baixe-a-ilustracao-vetorial-baixe-o-arquivo-50-por-cento-do-grafico-da-internet-com-o-carregamento-do-texto-de-download-da-seta-armazenamento-em-nuvem-conceito-de-carregamento-icone-de-linha-preta-do-vetor-em-um-fundo-branco_748571-116.jpg?w=1060" />
+
               </View>
             </View>
           )}
         />
       </View>
-    </View>
+    </MyView>
   );
 };
 
@@ -228,4 +241,12 @@ const styles = StyleSheet.create({
     color: '#000000', // Texto preto
     fontWeight: 'bold',
   },
+
+  downloadButton:{
+    backgroundColor: '#A020F0', 
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 });

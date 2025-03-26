@@ -1,0 +1,38 @@
+# Uma unica vez instalação global
+npm install -g expo-cli
+npm install -g npm-check-updates
+
+# pacotes que foram instalados até agora para serem usados somente neste projeto
+npm uninstall react react-dom react-native react-native-web --force
+npm cache clean --force
+npm install react@18 react-dom@18 react-native@0.78 react-native-web@0.19 --force
+npm install --legacy-peer-deps
+
+npm install expo-router
+
+npm install react-native-screens react-native-safe-area-context
+
+npm install @ui-kitten/components @eva-design/eva react-native-svg @ui-kitten/eva-icons
+
+npm install --legacy-peer-deps
+
+# Sempre antes de começar a aula
+npm updade --legacy-peer-deps
+
+# Se tiver dando erro em alguma importação use esse comandos abaixo
+npm audit fix --force
+npm cache clean --force
+npx expo -c
+
+# Se precisar reinstalar as dependências do zero
+rmdir /s /q node_modules
+del package-lock.json
+npm install --legacy-peer-deps
+
+#aula 12/03/25
+npm updade --legacy-peer-deps
+npm cache clean --force
+npm install react-native-safe-area-context --legacy-peer-deps
+npx expo -c
+
+
