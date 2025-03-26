@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View,Text, StyleSheet,FlatList, Button,TextInput} from 'react-native';
-
+import MyList from '../src/components/mylist'
 export default function categoryScreen(){
     const [req, setReq] = useState({
         name: '',
@@ -32,6 +32,9 @@ export default function categoryScreen(){
 
     return (
         <View>
+        <MyList style={{padding : 20 }}>
+            <></>
+            </MyList>
     {/* aqui é typerscrypt dentro do front */}
 
             <view style={styles.row}>
