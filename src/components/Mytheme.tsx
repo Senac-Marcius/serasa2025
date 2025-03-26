@@ -26,10 +26,13 @@ export default MyTheme
 
 const styles = StyleSheet.create({
     buttonsContainer:{
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap:20,
-        alignContent:'space-around',
-        borderRadius:5,
+        boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.3)',
+        backgroundColor: "#fffff",
+        padding: 10,
+        borderRadius: 50,
+        width: 20,
+        height: 20,
+        alignItems: "center",
+        justifyContent: "center"
     }
 })
