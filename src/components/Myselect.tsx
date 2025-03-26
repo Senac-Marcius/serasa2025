@@ -1,23 +1,42 @@
-import React, { ReactNode } from 'react'
-import { ViewStyle } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import React, { Children, ReactNode, useState } from 'react'
+import { Text, TouchableOpacity, View, ViewStyle, StyleSheet } from 'react-native';
+import { FlatList, TextInput } from 'react-native-gesture-handler';
 import { Button, List } from 'react-native-paper'; 
 
 interface MySelectProps {
-    style?: ViewStyle;
-    onPress(): void;
-    props: []
+    label: string;
+    list: {key: any; option: string}[];
+    setLabel(item:string):void;
+    setKey?(key:any):void;
 }
 
-const MySelect: React.FC<MySelectProps> = ({style, onPress}) => {     //para passar uma parametro para a função, precisa-se utilizar "( )"
-    return (
-        <List.Item
-            title= "Selecionar"
-            style= {style}
-            description= "Item description"
-            onPress= {onPress}
-            left= {props => <List.Icon {...props} icon ="folder"/>}
-        />   
-    );
-}   
+const [visible, setVisible] = useState(false) 
 
+const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {     //para passar uma parametro para a função, precisa-se utilizar "( )"
+    return (
+        <View>
+            <Button onPress={ ()=> {setVisible(true)} }>{label}</Button>
+            {
+                visible &&
+                (<FlatList 
+                    data={list}
+                    keyExtractor={(item) => item.key}
+                    renderItem={(item) => (
+                        <TouchableOpacity onPress={()=>{
+                            setLabel(item.item.option);
+                            if(setKey){
+                                setKey(item.item.option)
+                            }
+                        }}>
+                        <Text>{item.item.option}</Text>
+                    </TouchableOpacity>
+                    )}
+                />)
+            }
+        </View>
+    );
+}
+
+export default MySelect
+
+    

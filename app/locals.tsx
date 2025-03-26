@@ -54,16 +54,14 @@ export default function LocalScreen(){
     function delLocal(id:number){
         const list = locals.filter(l => l.id != id)
         if(list)
-            setLocals(list)
+            setLocals(list)            //'item 1', 'item 2'
     }
 
     return (  //  *  sempre retornará um html.     * view com o "v" minúsculo é utilizado, apenas, no HTML puro.     * Para comentar no HYML, é necessário utilizar "{/* */}"
         <View>
-            <MySelect >
-                <></>
-            </MySelect>
+            <MySelect onPress={ () =>{} }  list={['item 1', 'item 2']} />  
 
-            
+           
 
             <View style={styles.container}>
 
@@ -111,7 +109,7 @@ export default function LocalScreen(){
                             
 
 
-                                /*<View style={styles.buttonsContainer}>
+                                <View style={styles.buttonsContainer}>
                                     <TouchableOpacity style={styles.edit} onPress={ () => {editLocal(item.id)} }>edit</TouchableOpacity>
                                     <TouchableOpacity style={styles.del} onPress={ () => (delLocal(item.id))}>del</TouchableOpacity>
                                 </View>
@@ -130,6 +128,28 @@ export default function LocalScreen(){
 
 const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos funções que criam estilos para fontes
 
+    edit: {
+        flex: 5,
+        marginRight: 15,
+        padding: 10,
+        backgroundColor: '#F2F2F2',
+        borderRadius: 15,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 8, height: 4 },
+        shadowRadius: 7,
+    },
+     del: {
+        flex: 5,
+        marginRight: 15,
+        padding: 10,
+        backgroundColor: '#F2F2F2',
+        borderRadius: 15,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 8, height: 4 },
+        shadowRadius: 7,
+    },
     container: {
         flex: 20,
         padding: 15,
@@ -140,7 +160,7 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 20,
-        color: "green"
+        color: "purple"
         
     },
     row: {
@@ -186,7 +206,6 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
         alignItems: 'flex-start',
         
     },
-    
     item:{
 
     },
