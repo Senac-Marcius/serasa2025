@@ -52,6 +52,14 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
+                        label="Cursos"
+                        icon="acervo"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/collections');
+                        }}
+                    />
+                    <Drawer.Item
                         label="Configurações"
                         icon="cog"
                         onPress={() => {
