@@ -1,10 +1,13 @@
 import React, { useState } from 'react'; //função useState só retorna para uma variavel const
-import { View, Text, StyleSheet, Button, TextInput, FlatList, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { Button } from 'react-native-paper';
 import { Picker } from "@react-native-picker/picker";
 import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
 import MyTabsbar from '../src/components/MyTabsBar';
+import { Icon } from "react-native-paper";
+import MyButton from '../src/components/Mybuttons';
 
 export default function ItemScreen() { // aqui é TS
     const router = useRouter();
@@ -193,6 +196,13 @@ export default function ItemScreen() { // aqui é TS
     return ( //encapsulamento
         <ScrollView style={styles.container}>
            <Text style={styles.h1}>Cadastro de Itens no Acervo</Text>
+
+           
+           
+           <Button mode="contained" onPress={() => router.push('/courses')}>
+                    Cursos
+                </Button>
+
            <MyTabsbar
                 items={tabs}
                 style={styles.tabsContainer}
@@ -206,6 +216,8 @@ export default function ItemScreen() { // aqui é TS
             <View> {/* aqui é typescript dentro do front*/}
                 <View style={styles.row}>
                     <View style={styles.form}>
+                    
+
                         {/* Conteúdo condicional baseado na aba ativa */}
                         {activeTab === 0 && (
                             <>
@@ -256,10 +268,16 @@ export default function ItemScreen() { // aqui é TS
                                     <Picker.Item label="Espanhol" value="Espanhol" />
                                     <Picker.Item label="Francês" value="Francês" />
                                 </Picker>
-                                <Text>Selecione uma Imagem de Capa:</Text>
+                                {/*<Text>Selecione uma Imagem de Capa:</Text>
                                 <TouchableOpacity style={styles.button} onPress={pickImage}>
                                     <Text style={{ color: '#FFF' }}>Selecionar Imagem</Text>
-                                </TouchableOpacity>
+                                </TouchableOpacity>*/}
+                                <MyButton
+                                    title="Selecionar Imagem"
+                                    onPress={pickImage}
+                                    button_type="capsule"
+                                    style={styles.button_capsule}
+                                />
 
                                 {selectedImage && (
                                 <Image source={{ uri: selectedImage }} style={{ width: 200, height: 200, marginTop: 10 }} />
@@ -490,11 +508,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontFamily: 'sans-serif',
         fontSize: 30,
+        fontStyle: 'italic',
         fontWeight: 'bold',
         color: '#0F2259',
         backgroundColor: '#F2F2F2',
         margin: 0,
-        padding: 20,
+        padding: 18,
         borderRadius: 10,
     },
     form: {
@@ -510,15 +529,16 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
     },
     picker: {
-        height: 50,
+        height: 40,
         backgroundColor: "#FFF",
         borderColor: "#0C1DA0",
         borderWidth: 1,
         borderRadius: 5,
+        paddingHorizontal: 10,
         marginBottom: 10,
     },
     input: {
-        height: 35,
+        height: 40,
         backgroundColor: '#FFF',
         borderColor: '#0C1DA0',
         borderWidth: 1,
@@ -527,12 +547,13 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     button: {
-        backgroundColor: '#2A17A6',
+        backgroundColor: '#0F2259',
         color: '#FFF',
         fontWeight: 'bold',
         fontFamily: 'sans-serif',
-        fontSize: 15,
+        fontSize: 20,
         padding: 15,
+        marginVertical: 15,
         borderRadius: 5,
         alignItems: 'center',
         cursor: 'pointer'
@@ -573,24 +594,47 @@ const styles = StyleSheet.create({
     },
     // estilos para as abas:
     tabsContainer: {
+        flex: 1,
+        padding: 15,
         backgroundColor: '#F2F2F2',
         height: 50,
         marginBottom: 10,
+        borderRadius: 10,
+        marginVertical: 20
+        ,
     },
-    tabItem: {
+    tabItem: { // Estilo para cada aba
         paddingHorizontal: 15,
         paddingVertical: 10,
+        marginRight: 20,
+        height: 50,
+        width: 300,
+        borderRadius: 50,
+        backgroundColor: '#F2F2F2',
+        borderWidth: 2,
+        borderColor: '#0F2259',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    activeTabItem: {
-        borderBottomWidth: 3,
-        borderBottomColor: '#2A17A6',
+    activeTabItem: { // Estilo quando a aba está ativa
+        backgroundColor: '#AD6CD9',
+        borderBottomWidth: 5,
+        borderBottomColor: '#0F2259',
     },
-    tabText: {
-        color: '#666',
-        fontSize: 14,
+    tabText: { // Estilo do texto normal
+        fontSize: 18,
+        color: 'black',
     },
-    activeTabText: {
-        color: '#2A17A6',
+    activeTabText: { // Estilo do texto quando a aba está ativa
         fontWeight: 'bold',
+        color: 'white',
     },
+    // estilos para os botões
+    button_capsule: {
+        borderRadius: 50,
+        backgroundColor: "#813AB1",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+
 });

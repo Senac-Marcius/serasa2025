@@ -59,6 +59,14 @@ export default function HomeScreen() {
                             console.log("Configurações");
                         }}
                     />
+                    <Drawer.Item
+                        label="Biblioteca - Cadastramento"
+                        icon="book"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/librarie');
+                        }}
+                    />
                 </Drawer.Section>
             )}
 

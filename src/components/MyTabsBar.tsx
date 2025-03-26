@@ -6,8 +6,8 @@ import { FlatList } from 'react-native-gesture-handler';
 
 interface MyTabsbarProps {
   items: string[]; // Lista de nomes das abas (ex: ["Identificação", "Publicação"]
-  style: ViewStyle // Estilo personalizado para o container principal
-  itemStyle: ViewStyle;    // Estilo para cada item/aba normal
+  style: ViewStyle; // Estilo personalizado para o container principal
+  itemStyle: ViewStyle;   // Estilo para cada item/aba normal
   activeItemStyle: ViewStyle; // Estilo para o item/aba selecionado
   textStyle?: TextStyle;  // Estilo para cada texto/aba normal
   activeTextStyle?: TextStyle; // Estilo para o texto/aba selecionado
@@ -33,17 +33,17 @@ const MyTabsbar: React.FC<MyTabsbarProps> = ({ items, style, itemStyle, activeIt
         renderItem={({item, index}) => (
           <TouchableOpacity 
             style={[
-            styles.item,
+            styles.tabItem,
             itemStyle,
-            activeIndex == index && [styles.activeItem, activeItemStyle] // Estilos diferentes se for a aba ativa
+            activeIndex == index && [styles.activeTabItem, activeItemStyle] // Estilos diferentes se for a aba ativa
             ]}
             onPress={() => handlePress(item, index)} // Chamando a função
             >
             <Text
             style={[
-              styles.text,
+              styles.tabText,
               textStyle,
-              activeIndex == index && [styles.activeText, activeTextStyle] // Estilos diferentes se for a aba ativa
+              activeIndex == index && [styles.activeTabText, activeTextStyle] // Estilos diferentes se for a aba ativa
             ]}
           >
             {item}
@@ -55,29 +55,41 @@ const MyTabsbar: React.FC<MyTabsbarProps> = ({ items, style, itemStyle, activeIt
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      padding: 20,
-      backgroundColor: '#FFF',
-    },
-    item: { // Estilo para cada aba
-      padding: 10,
-      marginRight: 10,
-      backgroundColor: '#ffffff',
+  tabsContainer: {
+    flex: 1,
+    padding: 15,
+    backgroundColor: '#F2F2F2',
+    height: 50,
+    marginBottom: 10,
+    borderRadius: 10,
+    marginVertical: 20,
+  },
+  tabItem: { // Estilo para cada aba
+      paddingHorizontal: 15,
+      paddingVertical: 10,
+      marginRight: 20,
+      height: 50,
+      width: 300,
+      borderRadius: 50,
+      backgroundColor: '#F2F2F2',
+      borderWidth: 2,
+      borderColor: '#0F2259',
       justifyContent: 'center',
       alignItems: 'center',
-    },
-    activeItem: { // Estilo quando a aba está ativa
-      backgroundColor: '#55219A',
-    },
-    text: { // Estilo do texto normal
-      fontSize: 12,
+  },
+  activeTabItem: { // Estilo quando a aba está ativa
+      backgroundColor: '#AD6CD9',
+      borderBottomWidth: 5,
+      borderBottomColor: '#0F2259',
+  },
+  tabText: { // Estilo do texto normal
+      fontSize: 18,
       color: 'black',
-    },
-    activeText: { // Estilo do texto quando a aba está ativa
+  },
+  activeTabText: { // Estilo do texto quando a aba está ativa
       fontWeight: 'bold',
-      color: '#813AB1',
-    },
-  });
+      color: 'white',
+  },
+});
 
 export default MyTabsbar  
