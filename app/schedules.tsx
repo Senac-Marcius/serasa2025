@@ -90,10 +90,11 @@ export default function ScheduleScreen(){
                         <View style={ styles.item}>
                         
                          
-                            <Text> {item.discipline} </Text>
+                            
                             <Text> {item.userId} </Text>
                             <Text> {item.url} </Text>
                             <Text> {item.class} </Text>
+                            <Text> {item.discipline} </Text>
                             <Text> {item.location} </Text>
                             <Text> {item.start_time} </Text>
                             <Text> {item.end_time} </Text>
