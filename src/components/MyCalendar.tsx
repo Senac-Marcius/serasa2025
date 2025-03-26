@@ -1,40 +1,34 @@
-import { View } from 'native-base';
-import { Text, ViewStyle, ScrollView } from 'react-native';
-import React, {ReactNode, useState }  from "react";
+import React, { useState }  from "react";
+import { View, Text, Touchable, TouchableOpacity } from 'react-native';
 import { DatePickerModal } from 'react-native-paper-dates';
-import { useRouter } from 'expo-router';
-
-export default function LoanScreen() {
-    const router = useRouter();
-
-    const [date, setDate] = useState<Date | undefined>(undefined);
-    const [open, setOpen] = useState(false);
-}
 
 /*interface MyCalendarProp { //teste aula
     style: ViewStyle;
     children: ReactNode;
-} */
+} 
 interface CalendarDate {
     year: number;
     month: number;
     day: number;
   }
   const [calendarDate, setCalendarDate] = useState<CalendarDate | null>(null); //tipo modificado para aceitar valores nulos
-
-// Tipagem para o modal de data
+*/
 interface MyCalendarProps {
     date?: string;
-    setDate(date:String | undefined): void;
+    setDate(date:string): void;
 }
 
 const MyCalendar : React.FC<MyCalendarProps> = ({ date, setDate }) => {
     const [open, setOpen] = useState(false);
 
-return (
-    <ScrollView>
-    <View>
+    function setAuxDate(date:Date | undefined){
+        if(date)
+            setDate(date.toISOString().split('T')[0])
+    }
+    
 
+return (
+    <View>
         <DatePickerModal
             locale="pt"
             mode="single"
@@ -42,16 +36,16 @@ return (
             onDismiss={() => setOpen(false)}
             date={date? new Date(date): new Date()}
             onConfirm={(params) => {
-                setDate(params.date?.toString());
+                setAuxDate(params.date);
                 setOpen(false);
             }}
         />
-
         {date && (
-            <Text>{`Data Selecionada: ${date}`}</Text> //está exibindo um texto em um componente React Native usando a tag <Text>
+            <TouchableOpacity onPress={()=> {setOpen(true)}}>
+                <Text>{`Data Selecionada: ${date}`}</Text>
+            </TouchableOpacity>
         )}
     </View>
-    </ScrollView>
 )};
 
 
@@ -70,4 +64,4 @@ const MyCalendar2 = () => { //teste aula
     );
 }*/
 
-export {MyCalendar}
+export default MyCalendar
