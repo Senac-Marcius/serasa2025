@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
-import  MyAccess from '../src/components/MyAccessibility'
+import  {MyAccess, AccessButton} from '../src/components/MyAccessibility'
 
 export default function investment(){
  //aqui é typescript   
@@ -98,34 +98,48 @@ export default function investment(){
                     
 
                 <Button title='cadastrar' onPress={ handleRegister }/> 
+                <MyAccess></MyAccess>
+                
             </View>
             <FlatList
-                data={investments}
-                keyExtractor={ (item) => item.id.toString() }
-                renderItem={({item}) => (
-                    <View style={styles.item}>
-                       <Text> Descrição: {item.description}</Text>
-                       <Text> Nome: {item.name}</Text>
-                       <Text> Url: {item.url}</Text>
-                       <Text> Data: {item.createAt}</Text>
-                       <Text> ID de Usuario: {item.userId}</Text>
+          data={investments}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.item}>
+              <Text>Descrição: {item.description}</Text>
+              <Text>Nome: {item.name}</Text>
+              <Text>URL: {item.url}</Text>
+              <Text>Data: {item.createAt}</Text>
+              <Text>ID de Usuário: {item.userId}</Text>
 
-                        <View style={styles.buttons}>
-                            <TouchableOpacity 
-                            style={styles.editButton} onPress={ () => { editInvestment(item.id) } }><Text style={styles.editButtonText}> editar</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                            style={styles.delButton} onPress={ () => { delInvestment(item.id) } }> <Text style={styles.delButtonText}> excluir</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        </View> 
-                )}
-            />
-        </View>
-      </View>   
-    );
-} 
+              <View style={styles.buttons}>
+                <TouchableOpacity
+                  style={styles.editButton}
+                  onPress={() => editInvestment(item.id)}
+                  accessible={true}
+                  accessibilityLabel="Editar investimento"
+                  accessibilityRole="button"
+                >
+                  <Text style={styles.editButtonText}>Editar</Text>
+                </TouchableOpacity>
+                
+                <TouchableOpacity
+                  style={styles.delButton}
+                  onPress={() => delInvestment(item.id)}
+                  accessible={true}
+                  accessibilityLabel="Excluir investimento"
+                  accessibilityRole="button"
+                >
+                  <Text style={styles.delButtonText}>Excluir</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        />
+      </View>
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
     row: {
@@ -181,7 +195,7 @@ const styles = StyleSheet.create({
     delButton : {
         backgroundColor: '#FF0000',
         padding: 10,
-        borderRadius8: 10,
+        borderRadius: 10,
         shadowColor: '#000',
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
