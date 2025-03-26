@@ -1,29 +1,31 @@
 import React, { useState } from 'react';
 import { View,Text, StyleSheet,FlatList, Button,TextInput} from 'react-native';
-import MyList from '../src/components/mylist'
-import MyView from '../src/components/MyView';
+
 export default function categoryScreen(){
     const [req, setReq] = useState({
         name: '',
         description : '',
+        color: '',
         id: 0,
         createAt: new Date().toISOString(),
         userId : 0,
         
  });
  
-    const[categories, setCategories] = useState<{ 
+    const[leves, setleves] = useState<{ 
         name: string,
         description: string,
+        color: string,
         id: number,
         createAt: string,
         userId: number,
         }[]>([])
     
     function handleRegister (){
-        setCategories([...categories, req])
+        setleves([...leves, req])
         setReq({name:'',
             description:'',
+            color: '',
             id: 0,
             createAt: new Date().toISOString(),
             userId : 0,
@@ -32,7 +34,7 @@ export default function categoryScreen(){
     }
 
     return (
-        <MyView>
+        <View>
     {/* aqui é typerscrypt dentro do front */}
 
             <View style={styles.row}>
@@ -46,29 +48,34 @@ export default function categoryScreen(){
                     <TextInput placeholder="description" 
                         value={req.description}
                         onChangeText={(text) => setReq({...req ,description: text})}
-                        />
+                    />
+
+                    <TextInput placeholder="color" 
+                        value={req.color}
+                        onChangeText={(text) => setReq({...req ,color: text})}
+                    />
                         
                     
                       
                    <Button title= 'Cadastrar' onPress= {handleRegister}/>
                                  
                 </View>
-           <FlatList
-           data={categories}
-           keyExtractor={(item) => item.id.toString()}
-           renderItem={({item}) =>(
-            <View>
-                <Text>{item.name}</Text>
-              <Text>{item.createAt}</Text> 
-              <Text>{item.name}</Text>
-              <Text>{item.userId}</Text>  
-            </View>
-           )
-        }
+                <FlatList
+                    data={leves}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({item}) =>(
+                        <view>
+                            <text>{item.name}</text>
+                        <text>{item.createAt}</text> 
+                        <text>{item.name}</text>
+                        <text>{item.color}</text>
+                        <text>{item.userId}</text>  
+                        </view>
+                    )}
 
-           />
+                />
             </View>
-        </MyView>
+        </View>
    
     );
 }
