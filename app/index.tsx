@@ -44,6 +44,14 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
+                        label="levels"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/levels');
+                        }}
+                    />
+                    <Drawer.Item
                         label="Configurações"
                         icon="cog"
                         onPress={() => {
