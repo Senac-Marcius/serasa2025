@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
 import Mydownload from '../src/components/Mydownload';
+import MyView from '../src/components/MyView';
 
 export default function RevenueScreen() {
   // Estado para o formulário
@@ -70,8 +71,7 @@ export default function RevenueScreen() {
 
   return (
     
-    <View style={styles.container}>
-      
+    <MyView>
      
 
 
@@ -81,6 +81,7 @@ export default function RevenueScreen() {
       
 
       {/* Formulário */}
+      
       <View style={styles.row}>
         <View style={styles.form}>
           <TextInput
@@ -155,14 +156,14 @@ export default function RevenueScreen() {
                 ><Text style={styles.buttonText}>DELETE</Text>
                 </TouchableOpacity>
 
-                <Mydownload style={styles.downloadButton} url="https://www.youtube.com/" />
+                <Mydownload style={styles.downloadButton} url="https://img.freepik.com/vetores-premium/baixe-a-ilustracao-vetorial-baixe-o-arquivo-50-por-cento-do-grafico-da-internet-com-o-carregamento-do-texto-de-download-da-seta-armazenamento-em-nuvem-conceito-de-carregamento-icone-de-linha-preta-do-vetor-em-um-fundo-branco_748571-116.jpg?w=1060" />
 
               </View>
             </View>
           )}
         />
       </View>
-    </View>
+    </MyView>
   );
 };
 
