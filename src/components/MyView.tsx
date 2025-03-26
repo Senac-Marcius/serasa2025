@@ -54,6 +54,7 @@ const myView: React.FC< MySearchProps > = ({children}) => {
       <TouchableOpacity style={styles.suporteButton} onPress={handleSuporte}>
         .
       </TouchableOpacity>
+      
     </ScrollView>
   );
 };
