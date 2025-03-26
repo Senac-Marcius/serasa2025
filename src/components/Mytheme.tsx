@@ -9,7 +9,7 @@ interface MyThemeProps{
 }
 const MyTheme: React.FC<MyThemeProps> = ({style, chendTheme, fontSize}) => {
    return(
-   <View>
+   <View style={styles.row}>
      
         <TouchableOpacity style ={styles.buttonsContainer} onPress={() => fontSize(+1)}> +1 </TouchableOpacity>
         <TouchableOpacity style ={styles.buttonsContainer} onPress={() => fontSize(-1)}> -1</TouchableOpacity>
@@ -34,5 +34,10 @@ const styles = StyleSheet.create({
         height: 20,
         alignItems: "center",
         justifyContent: "center"
-    }
+    },
+    row: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start'
+    },
 })
