@@ -4,6 +4,8 @@ import MySearch from '../src/components/Mysearch'
 import { ScrollView } from 'react-native-gesture-handler';
 import {MyTextArea } from '../src/components/Myinputs'
 import MyButton from '../src/components/Mybuttons';
+import Mytext from '../src/components/Mytext';
+import MyView from '../src/components/MyView';
 /*import { textStyles } from '../styles/textStyles';*/
 
 interface Project {
@@ -67,6 +69,7 @@ export default function ProjectScreen(){
             timeline: '',
             objective: '',
             methodology: '',
+            /** Criar Processos, tecnicas, Estratégias e Planejamento aqui e puxar la embaixo para poder funcionar  */
         })
 
     }
@@ -90,28 +93,31 @@ export default function ProjectScreen(){
         return url;
     }
 
-    const onKeyPress = (event: any) => {
-        
-    };
+    function buscar(){
 
+    }
+
+    const [busca, setBusca] = useState('')
     // Criando o textinput para receber e exibir o texto "placeholder" para o usuario digitar
     return ( // Esta sendo feito um emcapsulamento com a abertura da () / {req.description}= usado para mostar o codigo em baixo
-        <ScrollView>
+        <MyView>
             <MySearch 
                 style={{ padding: 20 }} 
-                onKeyPress={onKeyPress}
+                onChangeText={setBusca}
+                onPress={buscar}
+                busca={busca}
             />
                 
             
             <View style={styles.contentContainer}>
-                <Text style={styles.title}>PROJETOS</Text>
+                <Mytext style={styles.title}>PROJETOS</Mytext>
             
                 {/* Aqui é typescript dentro do front */}
-                <Text>  Responda de Maneira Objetiva  </Text>
+                <Mytext>  Responda de Maneira Objetiva  </Mytext>
                 <View style={styles.row}> 
                         
                     <View style={styles.form}>
-                        <Text style={styles.label}>Criador do projeto:</Text>
+                        <Mytext style={styles.label}>Criador do projeto:</Mytext>
                         <TextInput
                             style={styles.input}
                             placeholder=""
@@ -119,14 +125,14 @@ export default function ProjectScreen(){
                             onChangeText={(text) => setReq({ ...req, name: text })}
                         />
 
-                        <Text style={styles.label}> Nome do projeto: </Text>
+                        <Mytext style={styles.label}> Nome do projeto: </Mytext>
                         <TextInput
                             style={styles.input}
                             placeholder=""
                             value={req.namep}
                             onChangeText={(text) => setReq({ ...req, namep: text })}
                         />
-                        <Text style={styles.label}> Site: </Text>
+                        <Mytext style={styles.label}> Site: </Mytext>
                         <TextInput
                             style={styles.input}
                             placeholder=""
@@ -134,7 +140,7 @@ export default function ProjectScreen(){
                             onChangeText={(text) => setReq({ ...req, url: adicionarProtocolo(text) })}
                         />
                         
-                        <Text  style={styles.label}> Previsão de Inicio: </Text>
+                        <Mytext  style={styles.label}> Previsão de Inicio: </Mytext>
                         <TextInput
                             style={styles.input}
                             placeholder=""
@@ -142,7 +148,7 @@ export default function ProjectScreen(){
                             onChangeText={(text) => setReq({ ...req, createAt: text })}
                         />
                         
-                        <Text style={styles.label}> Periodo Esperado: </Text>
+                        <Mytext style={styles.label}> Periodo Esperado: </Mytext>
                         <TextInput
                             style={styles.input}
                             placeholder=""
@@ -150,7 +156,7 @@ export default function ProjectScreen(){
                             onChangeText={(text) => setReq({ ...req, timeline: text })}
                         />
                         
-                        <Text style={styles.label}> Descrição: </Text>
+                        <Mytext style={styles.label}> Descrição: </Mytext>
                         <TextInput
                             style={styles.input}
                             placeholder=""
@@ -158,7 +164,7 @@ export default function ProjectScreen(){
                             onChangeText={(TextArea) => setReq({ ...req, description: TextArea })}
                         />
                         
-                        <Text style={styles.label}> Objetivo: </Text>
+                        <Mytext style={styles.label}> Objetivo: </Mytext>
                         <TextInput
                             style={styles.input}
                             placeholder=""
@@ -166,7 +172,7 @@ export default function ProjectScreen(){
                             onChangeText={(text) => setReq({ ...req, objective: text })}
                         />
                         
-                        <Text style={styles.label}> Qual Atividade proposta: </Text>
+                        <Mytext style={styles.label}> Qual Atividade proposta: </Mytext>
                         <TextInput
                             style={styles.input}
                             placeholder=""
@@ -174,22 +180,49 @@ export default function ProjectScreen(){
                             onChangeText={(text) => setReq({ ...req, activity: text })}
                         />
                         
-                        <Text style={styles.label}> Quais as Metodologias abordadas: </Text>
+                        <Mytext style={styles.label}> Quais as Metodologias abordadas: </Mytext>
                         <TextInput
-                            style={styles.input}
+                            
                             placeholder=""
                             value={req.methodology}
                             onChangeText={(text) => setReq({ ...req, methodology: text })}
                         />
 
-                        <MyTextArea
-                        iconName='message'
-                        label="Descrição"
-                        value={req.methodology} // Passa o estado como valor
-                        onChangeText={(text) => setReq({ ...req, methodology: text })} // Atualiza o estado ao digitar
-                        placeholder="Digite sua mensagem aqui..."
-                        style={{ height: 150 }}
-                        />
+                        <View style={styles.row}>
+                            <MyTextArea
+                                iconName='message'
+                                label="Técnicas"
+                                value={req.methodology} // Passa o estado como valor
+                                onChangeText={(text) => setReq({ ...req, methodology: text })} // Atualiza o estado ao digitar
+                                placeholder="Digite sua mensagem aqui..."
+                                style={{ height: 50 }}
+                            />
+                            <MyTextArea
+                                iconName='message'
+                                label="Processos"
+                                value={req.methodology} // Passa o estado como valor
+                                onChangeText={(text) => setReq({ ...req, methodology: text })} // Atualiza o estado ao digitar
+                                placeholder="Digite sua mensagem aqui..."
+                                style={{ height: 50 }}
+                            />
+                            <MyTextArea
+                                iconName='message'
+                                label="Descrição"
+                                value={req.methodology} // Passa o estado como valor
+                                onChangeText={(text) => setReq({ ...req, methodology: text })} // Atualiza o estado ao digitar
+                                placeholder="Digite sua mensagem aqui..."
+                                style={{ height: 50 }}
+                            />
+                            <MyTextArea
+                                iconName='message'
+                                label="Descrição"
+                                value={req.methodology} // Passa o estado como valor
+                                onChangeText={(text) => setReq({ ...req, methodology: text })} // Atualiza o estado ao digitar
+                                placeholder="Digite sua mensagem aqui..."
+                                style={{ height: 50 }}
+                            />
+
+                        </View>
 
                         <View style={styles.buttonContainer}> 
                             <MyButton title="Cadastrar" onPress={handleRegister} />
@@ -203,23 +236,23 @@ export default function ProjectScreen(){
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={({ item }) => (
                             <View style={styles.projectContainer}> 
-                                <Text style={styles.projectText}> Criador: {item.name} </Text>
-                                <Text style={styles.projectText}> Nome do Projeto: {item.namep} </Text> 
-                                <Text style={styles.projectText}> Url: {item.url} </Text>
-                                <Text style={styles.projectText}> Numero do Usuario: {item.userId} </Text>
-                                <Text style={styles.projectText}> Recursos: {item.recurces} </Text>
-                                <Text style={styles.projectText}> Descrição: {item.description} </Text>
-                                <Text style={styles.projectText}> Atividade: {item.activity} </Text>
-                                <Text style={styles.projectText}> Tempo Esperado: {item.timeline} </Text>
-                                <Text style={styles.projectText}> Objetivo: {item.objective} </Text>
-                                <Text style={styles.projectText}> Metodologia: {item.methodology} </Text>
+                                <Mytext style={styles.projectText}> Criador: {item.name} </Mytext>
+                                <Mytext style={styles.projectText}> Nome do Projeto: {item.namep} </Mytext> 
+                                <Mytext style={styles.projectText}> Url: {item.url} </Mytext>
+                                <Mytext style={styles.projectText}> Numero do Usuario: {item.userId} </Mytext>
+                                <Mytext style={styles.projectText}> Recursos: {item.recurces} </Mytext>
+                                <Mytext style={styles.projectText}> Descrição: {item.description} </Mytext>
+                                <Mytext style={styles.projectText}> Atividade: {item.activity} </Mytext>
+                                <Mytext style={styles.projectText}> Tempo Esperado: {item.timeline} </Mytext>
+                                <Mytext style={styles.projectText}> Objetivo: {item.objective} </Mytext>
+                                <Mytext style={styles.projectText}> Metodologia: {item.methodology} </Mytext>
 
                                 <View style={styles.buttonsContainer}>
                                     <TouchableOpacity style={styles.buttonEdit} onPress={ () =>  editProject(item.id) }>  
-                                        <Text style={styles.buttonText}>EDIT</Text>
+                                        <Mytext style={styles.buttonText}>EDIT</Mytext>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.buttonDelete} onPress={ () =>  dellProject( item.id)}>  
-                                        <Text style={styles.buttonText}>DELETE</Text>
+                                        <Mytext style={styles.buttonText}>DELETE</Mytext>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -227,7 +260,7 @@ export default function ProjectScreen(){
                     />
                 </View>
             </View>
-        </ScrollView>
+        </MyView>
     ); 
 }
 
@@ -259,9 +292,9 @@ const styles = StyleSheet.create({
 
     label: {
         fontSize: 14,
-        fontWeight: 'bold',
-        marginBottom: 5,
-    },
+        fontFamily: 'Poppins_400Regular',
+        
+      },
 
     input: {
         height: 40,
