@@ -34,12 +34,10 @@ interface MyPerfilProps {
               <Mytext>E-mail: nome@exemplo.com.br</Mytext>
               <Mytext>Telefone: (16) 988443750</Mytext>
               <Mytext>Data de Nascimento: dd/mm/aaaa</Mytext>
-              <MyButton>
-                <Mytext>Alterar Senha</Mytext>
+              <MyButton title="Alterar Perfil">
               </MyButton>
             </View>
-            <MyButton>
-              <Text style={styles.editProfileButtonText}>Editar Perfil</Text>
+            <MyButton title="Editar Perfil">
             </MyButton>
           </View>
           <TouchableOpacity style={styles.wppButton}>
