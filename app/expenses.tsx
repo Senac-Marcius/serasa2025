@@ -5,6 +5,7 @@ import MyList from '../src/components/mylist';
 import MyView from '../src/components/MyView';
 import MyButton from '../src/components/Mybuttons'
 import {Myinput, MyTextArea} from '../src/components/Myinputs';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function ExpenseScreen(){
 // aqui é typescript
@@ -65,45 +66,47 @@ export default function ExpenseScreen(){
     }
 
     return (
-        <MyView> 
-            {/* aqui é typecript dentro do front */}
-            <Text style={styles.title}>tela de despesas</Text>
-            <View style={styles.row}>
-                <View style={styles.form}>
-                    <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text })} placeholder="Nome" label="Nomes:" iconName='' />
+        <ScrollView>
+            <MyView> 
+                {/* aqui é typecript dentro do front */}
+                <Text style={styles.title}>tela de despesas</Text>
+                <View style={styles.row}>
+                    <View style={styles.form}>
+                        <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text })} placeholder="Nome" label="Nomes:" iconName='' />
 
-                    <Myinput value={req.contact} onChangeText={(text) => setReq({ ...req, contact: text })} placeholder="(XX) XXXXX-XXXX" label="Contato:" iconName='phone' />    
+                        <Myinput value={req.contact} onChangeText={(text) => setReq({ ...req, contact: text })} placeholder="(XX) XXXXX-XXXX" label="Contato:" iconName='phone' />    
 
-                    <Myinput value={req.email} onChangeText={(text) => setReq({ ...req, email: text })} placeholder="domain@domain.com" label="Email:" iconName='mail' /> 
+                        <Myinput value={req.email} onChangeText={(text) => setReq({ ...req, email: text })} placeholder="domain@domain.com" label="Email:" iconName='mail' /> 
 
-                    <MyTextArea value={req.description} onChangeText={(text)=>setReq({...req ,description: text})} iconName='' placeholder=''   label=''/>
+                        <MyTextArea value={req.description} onChangeText={(text)=>setReq({...req ,description: text})} iconName='' placeholder='Descrição'   label=''/>
 
-                   <Myinput value={req.cost} onChangeText={(text) => setReq({ ...req, cost: text })} placeholder="R$" label="Valores:" iconName='' /> 
+                    <Myinput value={req.cost} onChangeText={(text) => setReq({ ...req, cost: text })} placeholder="R$" label="Valores:" iconName='' /> 
 
 
-                    <MyButton onPress={handleRegister} title='Cadastrar'></MyButton>
+                        <MyButton onPress={handleRegister} title='Cadastrar'></MyButton>
+                    </View>
+
+                    <MyList
+                        data={expense}
+                        keyItem={(item) => item.id.toString()}
+                        renderItem={({item}) => (
+                            <Myiten style={styles.card} 
+                                onEdit={()=> editExpense(item.id)}
+                                onDel={() => delExpense(item.id)}
+                            >
+                                <Text style={styles.textlis} >{item.name}</Text>
+                                <Text style={styles.textlis} >{item.email}</Text> 
+                                <Text style={styles.textlis} >{item.description}</Text>  
+                                <Text style={styles.textlis} >{item.cost}</Text> 
+                                <Text style={styles.textlis} >{item.userId}</Text>
+                                
+        
+                            </Myiten>
+                        )}
+                    /> 
                 </View>
-
-                <MyList
-                    data={expense}
-                    keyItem={(item) => item.id.toString()}
-                    renderItem={({item}) => (
-                        <Myiten style={styles.card} 
-                            onEdit={()=> editExpense(item.id)}
-                            onDel={() => delExpense(item.id)}
-                        >
-                            <Text style={styles.textlis} >{item.name}</Text>
-                            <Text style={styles.textlis} >{item.email}</Text> 
-                            <Text style={styles.textlis} >{item.description}</Text>  
-                            <Text style={styles.textlis} >{item.cost}</Text> 
-                            <Text style={styles.textlis} >{item.userId}</Text>
-                            
-    
-                        </Myiten>
-                    )}
-                /> 
-            </View>
-        </MyView>
+            </MyView>
+        </ScrollView>
     );
 }
 
@@ -141,40 +144,7 @@ const styles = StyleSheet.create({
         color: "#555",
         marginVertical: 4,
       },
-
-      buttonRegister:{
-        backgroundColor: "#ab66f9",
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        borderRadius: 5,
-        color: '#ffffff'
-      },
-      
-      buttonsContainer:{
-       
-        textAlign: 'center',
-        fontSize: 20,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        gap: 20,
-        alignContent: 'space-between',
-        
-      },
-      editButton: {
-        backgroundColor: "#9a47f8",
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        borderRadius: 5,
-        color: '#ffffff'
-     },
-     delButton:{
-        backgroundColor: "#36046e",
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        borderRadius: 5,
-        color: '#ffffff'
-     },
+     
      title:{
         marginBottom: 8,
         fontSize: 30,
@@ -188,11 +158,5 @@ const styles = StyleSheet.create({
         textShadowColor: "rgba(0, 0, 0, 0.2)",
         fontStyle: "italic",
      },
-     titleBase: {
-        backgroundColor: "#222", 
-        paddingVertical: 12, 
-        paddingHorizontal: 24,
-        borderRadius: 8, 
-      },
      
     });
