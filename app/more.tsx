@@ -12,25 +12,32 @@ export default function MoreScreen() {
             <MyView>
                 {/* Botão Saiba Mais */}
                 <MyButton 
+                    style = {styles.option}
                     title="SAIBA MAIS"
                     button_type="round"
                     onPress={() => setVisible(!visible)}
                 />
                 
-                {/* Opções quando o botão é pressionado */}
+               
                 {visible && (
                     <View style={styles.optionsContainer}>
-                        <TouchableOpacity style={styles.option}>
-                            <Text>CONFIGURAÇÕES</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.option}>
-                            <Text>ELOGIOS</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.option}>
-                            <Text>RECLAMAÇÕES</Text>
-                        </TouchableOpacity>
-                        
-                        {/* Botão Sair com MyButton */}
+                        <MyButton 
+                            style = {styles.option}
+                            button_type="round"
+                            title = "CONFIGURAÇÕES"
+                        />
+                        <MyButton 
+                            style = {styles.option}
+                            button_type="round"
+                            title = "ELOGIOS"
+                        />
+                        <MyButton 
+                            style = {styles.option}
+                            button_type="round"
+                            title = "RECLAMAÇÕES"
+                        />
+                      
+
                         <MyButton 
                             title="SAIR"
                             button_type="round"
@@ -64,12 +71,12 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 5,
         alignItems: 'center',
+        justifyContent: 'center',
     },
     option: {
-        padding: 10,
         width: 200,
         alignItems: 'center',
-        backgroundColor: '#F3F3F3',
+        backgroundColor: '#813AB1',
         borderRadius: 10,
         marginVertical: 5,
     },
@@ -79,5 +86,6 @@ const styles = StyleSheet.create({
         padding: 15,
         backgroundColor: '#FFF',
         marginTop: 20,
-    }
+    } 
+    
 });
