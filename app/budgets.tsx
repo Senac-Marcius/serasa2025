@@ -1,7 +1,11 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity} from 'react-native';
 import MyLogin from '../src/components/MyLogin';
-import MyButton from '../src/components/Mybuttons'
+import MyButton from '../src/components/Mybuttons';
+import MyList from '../src/components/mylist';
+import  { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
+
+
 export default function BudgetScreen(){
 
 //aqui é typescriot
@@ -104,10 +108,10 @@ export default function BudgetScreen(){
 
                     <MyButton title ='CADASTRAR' onPress={ handleRegister }/>
                 </View>
-                <FlatList
+                <MyList
 
                     data={budgets}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
                     
                         <View style={styles.budetStyle}>

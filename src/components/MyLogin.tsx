@@ -2,8 +2,9 @@ import {TouchableOpacity, View, ViewStyle, StyleSheet,} from 'react-native';
 import React, {ReactNode} from 'react';
 import { TextInput} from 'react-native-gesture-handler';
 import MyLink from '../components/Mylink';
-import MyView from '../components/MyView'
-
+import MyView from '../components/MyView';
+import MyButton from '../components/Mybuttons';
+import  { Myinput, MyCheck, MyTextArea } from '../components/Myinputs'; 
  
 interface MyLoginProps{
     children: ReactNode;
@@ -12,21 +13,20 @@ interface MyLoginProps{
 const MyLogin: React.FC<MyLoginProps> = ({children, style}) => {
     return (
     <MyView>
-    <TextInput>
-        
-    </TextInput>
+    
+    
         <MyLink 
             url="http://google.com"
             label="Esqueci minha senha"
         />
 
-        <TouchableOpacity style={styles.LoginContainer} >
-            Login
-        </TouchableOpacity>
+        <MyButton  title='Login'>
+            
+        </MyButton>
 
-        <TouchableOpacity style={styles.CadastrarContainer}>
-            Cadastrar
-        </TouchableOpacity>
+        <MyButton title='Cadastrar'>
+            
+        </MyButton>
         
     </MyView>
     );
