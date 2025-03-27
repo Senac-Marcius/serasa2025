@@ -11,4 +11,5 @@ const Mytext: React.FC<MytextProps> = ({ children, style }) => {
   return <Text style={[textStyles.text, style]}>{children}</Text>;
 };
 
+
 export default Mytext;

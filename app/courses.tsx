@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins_400Regular',
     marginBottom: 20,
   },
   row: {
@@ -160,6 +160,7 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
   },
   listText: {
+    fontFamily: 'Poppins_400Regular',
     fontSize: 14,
     marginBottom: 4,
   },
