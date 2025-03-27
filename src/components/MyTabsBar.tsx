@@ -4,7 +4,7 @@ import { FlatList } from 'react-native-gesture-handler';
 
 
 
-interface MyTabsbarProps {
+interface MyTabsbarProps {  //copia isso
   items: string[]; // Lista de nomes das abas (ex: ["Identificação", "Publicação"]
   style: ViewStyle; // Estilo personalizado para o container principal
   itemStyle: ViewStyle;   // Estilo para cada item/aba normal
@@ -17,8 +17,9 @@ interface MyTabsbarProps {
 
 const MyTabsbar: React.FC<MyTabsbarProps> = ({ items, style, itemStyle, activeItemStyle, textStyle, activeTextStyle, onPress, initialActiveIndex = 0 }) => {
 
-  const [activeIndex, setActiveIndex] = useState(initialActiveIndex); //(começa com a primeira ou outra que a pessoa definir)
+  const [activeIndex, setActiveIndex] = useState(initialActiveIndex); //(começa com a primeira ou outra que a pessoa definir) COPIA ISSO E DECLARA A SUA TABS COM UMA const
   
+  // copia isso aqui tbm
   const handlePress = (item: string, index: number) => {
     setActiveIndex(index); // Atualiza a aba ativa
     onPress(item, index);   // Chama a função onPress passada (avisa que shouve clique)
@@ -53,7 +54,7 @@ const MyTabsbar: React.FC<MyTabsbarProps> = ({ items, style, itemStyle, activeIt
     />
   ); 
 }
-
+// copia isso aqui tudo
 const styles = StyleSheet.create({
   tabsContainer: {
     flex: 1,

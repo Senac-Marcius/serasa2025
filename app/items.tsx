@@ -1,5 +1,5 @@
-import React, { useState } from 'react'; //função useState só retorna para uma variavel const
-import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, ScrollView, Image } from 'react-native';
+import React, { ReactNode, useState } from 'react'; //função useState só retorna para uma variavel const
+import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, ScrollView, Image, Modal } from 'react-native';
 import { Button } from 'react-native-paper';
 import { Picker } from "@react-native-picker/picker";
 import { useRouter } from 'expo-router';
@@ -8,6 +8,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import MyTabsbar from '../src/components/MyTabsBar';
 import { Icon } from "react-native-paper";
 import MyButton from '../src/components/Mybuttons';
+import MyModal2 from '../src/components/Mymodal';
 
 export default function ItemScreen() { // aqui é TS
     const router = useRouter();
@@ -15,6 +16,11 @@ export default function ItemScreen() { // aqui é TS
      // Estados para as abas
      const [activeTab, setActiveTab] = useState(0);
      const tabs = ["Identificação da Obra", "Publicação e Edição", "Descrição e Classificação", "Conteúdo e Acesso"];
+
+      // Função para lidar com o clique nas abas
+    const handleTabPress = (item: string, index: number) => {
+        setActiveTab(index);
+    };
 
     const [req, setReq] = useState({
         id: 0,
@@ -79,11 +85,6 @@ export default function ItemScreen() { // aqui é TS
         createAt: string,
         id: number,
     }[]>([]);
-
-    // Função para lidar com o clique nas abas
-    const handleTabPress = (item: string, index: number) => {
-        setActiveTab(index);
-    };
 
     function handleRegister() {
 
@@ -182,22 +183,30 @@ export default function ItemScreen() { // aqui é TS
         }
     }
 
-    function editItem(id: number) {
-        const item = items.find(i => i.id == id)
-        if (item)
-            setReq(item)
-    }
-
-    function dellItem(id: number) {
-        const list = items.filter(i => i.id != id)
-        setItems(list)
-    }
-
     return ( //encapsulamento
         <ScrollView style={styles.container}>
            <Text style={styles.h1}>Cadastro de Itens no Acervo</Text>
+            <View style={styles.buttonContainer}>
+            <MyButton   //VOU CHAMAR AQUI UM MODAL PARA MOSTRAR QUE O REGISTRO FOI SALVO
+                title="Salvar"
+                onPress={pickFile}
+                button_type="capsule"
+                style={styles.button_capsule1}
+            />
+            <MyButton
+                title="Prévia"
+                onPress={() => router.push('/preview') }
+                button_type="capsule"
+                style={styles.button_capsule1}
+            />
 
-           
+            </View>
+
+
+
+
+
+
            
            <Button mode="contained" onPress={() => router.push('/courses')}>
                     Cursos
@@ -216,8 +225,6 @@ export default function ItemScreen() { // aqui é TS
             <View> {/* aqui é typescript dentro do front*/}
                 <View style={styles.row}>
                     <View style={styles.form}>
-                    
-
                         {/* Conteúdo condicional baseado na aba ativa */}
                         {activeTab === 0 && (
                             <>
@@ -276,7 +283,7 @@ export default function ItemScreen() { // aqui é TS
                                     title="Selecionar Imagem"
                                     onPress={pickImage}
                                     button_type="capsule"
-                                    style={styles.button_capsule}
+                                    style={styles.button_capsule1}
                                 />
 
                                 {selectedImage && (
@@ -445,47 +452,6 @@ export default function ItemScreen() { // aqui é TS
                         )}
                     <TouchableOpacity style={styles.button} onPress={handleRegister}>INCORPORAR ITEM NO ACERVO</TouchableOpacity>
                     </View>
-
-                    <FlatList
-                        data={items}
-                        keyExtractor={(item) => item.id.toString()}
-                        renderItem={({ item }) => (
-                            <View style={styles.card}>
-                                <Text style={styles.cardText}>Tipologia: {item.typology}</Text>
-                                <Text style={styles.cardText}>Título: {item.title}</Text>
-                                <Text style={styles.cardText}>Subtítulo: {item.subtitle}</Text>
-                                <Text style={styles.cardText}>Responsáveis: {item.responsible}</Text>
-                                <Text style={styles.cardText}>Tradução: {item.translation}</Text>
-                                <Text style={styles.cardText}>Idioma: {item.language}</Text>
-                                <Text style={styles.cardText}>Ano: {item.year}</Text>
-                                <Text style={styles.cardText}>Edição: {item.edition}</Text>
-                                <Text style={styles.cardText}>Editora: {item.publisher}</Text>
-                                <Text style={styles.cardText}>Local: {item.location}</Text>
-                                <Text style={styles.cardText}>Número de Páginas: {item.numberPages}</Text>
-                                <Text style={styles.cardText}>Série: {item.serie}</Text>
-                                <Text style={styles.cardText}>Volume: {item.volume}</Text>
-                                <Text style={styles.cardText}>Formato: {item.format}</Text>
-                                <Text style={styles.cardText}>ISBN: {item.isbn}</Text>
-                                <Text style={styles.cardText}>ISSN: {item.issn}</Text>
-                                <Text style={styles.cardText}>CDD: {item.cdd}</Text>
-                                <Text style={styles.cardText}>Número de Chamada: {item.callNumber}</Text>
-                                <Text style={styles.cardText}>Assunto: {item.subject}</Text>
-                                <Text style={styles.cardText}>Palavras-chave: {item.keywords}</Text>
-                                <Text style={styles.cardText}>Resumo: {item.summary}</Text>
-                                <Text style={styles.cardText}>Notas: {item.notes}</Text>
-                                <Text style={styles.cardText}>Número de Exemplares: {item.numberCopies}</Text>
-                                <Text style={styles.cardText}>Status: {item.status}</Text>
-                                <Text style={styles.cardText}>URL: {item.url}</Text>
-                                <Text style={styles.cardText}>Arquivo: {item.file}</Text>
-                                <Text style={styles.cardText}>Tipo de Empréstimo: {item.typeLoan}</Text>
-
-                                <View style={styles.buttonContanier}>
-                                    <TouchableOpacity style={styles.edit} onPress={() => { editItem(item.id) }}>EDITAR</TouchableOpacity>
-                                    <TouchableOpacity style={styles.dell} onPress={() => { dellItem(item.id) }}>DELETAR</TouchableOpacity>
-                                </View>
-                            </View>
-                        )}
-                    />
                 </View>
             </View>
         </ScrollView>
@@ -558,40 +524,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         cursor: 'pointer'
     },
-    card: {
-        backgroundColor: '#F2F2F2',
-        padding: 20,
-        marginVertical: 10,
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.2,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-    },
-    cardText: {
-        fontSize: 15,
-    },
-    buttonContanier: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        gap: 10,
-        color: '#FFF',
-        fontWeight: 'bold',
-        fontFamily: 'sans-serif',
-        fontSize: 14,
-        margin: 20,
-    },
-    edit: {
-        backgroundColor: '#2A17A6',
-        padding: 8,
-        borderRadius: 15,
-    },
-    dell: {
-        backgroundColor: '#e30707',
-        padding: 8,
-        borderRadius: 15,
-    },
     // estilos para as abas:
     tabsContainer: {
         flex: 1,
@@ -630,11 +562,39 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     // estilos para os botões
-    button_capsule: {
+    buttonContainer: {
+        display: 'flex',
+        flexDirection: 'row', // Alinha na horizontal
+        justifyContent: 'space-between', // Separa os botões
+        alignItems: 'center', // Alinha verticalmente
+        paddingHorizontal: 20, // Espaçamento interno
+        marginVertical: 20, // Margem superior e inferior
+        width: 300, // Ajuste conforme necessário
+        backgroundColor: "transparent", // Evita que o container pareça um botão único
+    },
+    
+    button_capsule1: {
         borderRadius: 50,
         backgroundColor: "#813AB1",
         alignItems: "center",
         justifyContent: "center",
+        paddingVertical: 10, // Melhor ajuste no espaçamento interno
+        paddingHorizontal: 20,
+        minWidth: 100, // Define um tamanho mínimo para evitar botões colados
+    },
+    
+    
+    modalContent2: {
+        display: 'flex',
+        width: 375,
+        height: 700,
+        padding: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        borderWidth: 4,
+        borderColor: 'purple',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
     },
 
 });
