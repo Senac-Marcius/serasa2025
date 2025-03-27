@@ -9,9 +9,11 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo-google-fonts/poppins": "^0.2.3",
     "@expo/metro-runtime": "~4.0.1",
     "@heroui/date-input": "^2.3.15",
     "expo": "~52.0.38",
+    "expo-font": "~13.0.4",
     "expo-router": "^4.0.19",
     "expo-status-bar": "~2.0.1",
     "native-base": "^3.4.28",
