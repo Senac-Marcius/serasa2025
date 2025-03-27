@@ -1,5 +1,6 @@
 import React from 'react';
 import { FlatList, ViewStyle } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface MyListProps {
     data: any[];
@@ -10,12 +11,14 @@ interface MyListProps {
 
 const MyList: React.FC<MyListProps> = ({ data, style, renderItem, keyItem }) => {
     return (
+        <ScrollView>
         <FlatList 
             data={data} 
             renderItem={renderItem}
             keyExtractor={keyItem}
             style={style} 
         />
+        </ScrollView>
     );
 };
 

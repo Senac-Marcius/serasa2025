@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Text, View, TextStyle,TouchableOpacity, ViewStyle, StyleSheet } from 'react-native';
-import Mylist from '../ '
+import MyButton from './Mybuttons';
 
 interface MytextProps {
   children?: ReactNode;
@@ -14,12 +14,8 @@ const Myiten: React.FC<MytextProps> = ({ children, style, onEdit, onDel }) => {
           <TouchableOpacity style={style}>
             {children}
             <View>
-              <TouchableOpacity style={styles.edit} onPress={onEdit}
-              >Editar
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.del} onPress={onDel}
-              >Deletar
-              </TouchableOpacity> 
+              <MyButton onPress={onEdit} title='Editar'></MyButton>
+              <MyButton onPress={onDel} title='Deletar'></MyButton> 
             </View>
         </TouchableOpacity>
         );
@@ -29,12 +25,22 @@ export default Myiten;
  
 const styles = StyleSheet.create({
   edit: {
-
-    backgroundColor: "#3498DB",
+    backgroundColor: "#ab66f9",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 5,
+    color: '#ffffff',
+    width:100,
   } as ViewStyle,
 
   del:{
-    backgroundColor: "#E74C3C",
+    backgroundColor: "#ab66f9",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 5,
+    color: '#ffffff',
+    marginTop: 20,
+    width:100,
   } as ViewStyle,
 
   buttonText: {
