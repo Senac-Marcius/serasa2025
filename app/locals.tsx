@@ -54,7 +54,7 @@ export default function LocalScreen(){
     function delLocal(id:number){
         const list = locals.filter(l => l.id != id)
         if(list)
-            setLocals(list)            //'item 1', 'item 2'
+            setLocals(list)           
     }
 
     const [unity, setUnit] = useState("metros")
@@ -164,15 +164,21 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
     container: {
         flex: 20,
         padding: 15,
-        backgroundColor: '#F2F2F2',
+        backgroundColor: "white",
     },
     title:{
-        fontSize: 22,
+        fontSize: 20,
         fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 20,
-        color: "purple"
-        
+        textAlign: 'left',
+        marginBottom: 5,
+        color: "purple",
+        backgroundColor: "white",
+        padding: 2,
+        borderRadius: 10,
+        shadowColor: "#000",
+        shadowOpacity: 0.3,
+        shadowOffset: { width: 2, height: 2 },
+        shadowRadius: 5,
     },
     row: {
         flexDirection: 'row',
@@ -184,35 +190,35 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
         flex: 6,
         marginRight: 15,
         padding: 50,
-        backgroundColor: '#F2F2F2',
+        backgroundColor: "black",
         borderRadius: 15,
-        shadowColor: '#000',
+        shadowColor: "black",
         shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
+        shadowOffset: { width: 3, height: 4 },
         shadowRadius: 7,
     },
 
     formContainer: {
         flex: 5,
-        marginRight: 50,
-        padding: 25,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 15,
-        shadowColor: '#000',
+        marginRight: 3,
+        padding: 10,
+        backgroundColor: "white",
+        borderRadius: 10,
+        shadowColor: "white",
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 7,
     },
     input: {
     borderBottomWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "black",
     marginBottom: 10,
     paddingVertical: 4,
   },
     buttonsContainer: {
         flex: 100,
         padding: 50,
-        backgroundColor: '#F2F2F2',
+        backgroundColor: "white",
         justifyContent: 'space-between',
         alignItems: 'flex-start',
         
@@ -221,7 +227,7 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
 
     },
     label:{
-        color: "blue",
+        color: "black",
     }
 
 }) 
