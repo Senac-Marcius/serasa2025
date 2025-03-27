@@ -2,7 +2,8 @@ import React, {useState} from 'react';
 import{View, Text, StyleSheet, FlatList,TouchableOpacity,} from 'react-native';
 import { Button, TextInput, RadioButton, Checkbox } from 'react-native-paper';
 import { useRouter } from 'expo-router';
-import MyModal2 from '../src/components/Mymodal';
+import {MyModal_mobile1, MyModal_mobile2, MyModal_mobile3, MyModal_mobilefullscreen,MyModal1_desktop} from '../src/components/Mymodal';
+import MyButton from '../src/components/Mybuttons';
 
  //função userState só retorna para uma variavel const
 
@@ -61,11 +62,11 @@ export default function CollectionScreen(){
     
         return (//encapsulamento 
             <View>
-                <MyModal2 visible={visible} setVisible={setVisible}>
+                <MyModal1_desktop visible={visible} setVisible={setVisible}>
                     <Text>
                         dknfkldsnf
                     </Text>
-                </MyModal2>
+                </MyModal1_desktop>
                           
                 <Text>Tela de acervo</Text>
                 <View style= {styles.row}>
