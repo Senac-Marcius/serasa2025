@@ -4,6 +4,8 @@ import { Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Button } from 
 import MyTimePicker  from '../src/components/MyTimePicker'
 import MyButton from '../src/components/Mybuttons';
 import MyView from '../src/components/MyView';
+import Myiten from '../src/components/myItenlist';
+import MyList from '../src/components/mylist';
 export default function EmployeeScreen(){
 //aqui é typescript 
     const [req, SetReq] = useState({
@@ -54,20 +56,6 @@ export default function EmployeeScreen(){
                 setEmployees(employees.map(e =>(e.id == req.id ? req:e)))
                 
             }
-            resetForms();
-            
-        }
-        function editEmployee(id:number){
-            let employee = employees.find(e => e.id == id)
-            if(employee)SetReq(employee)
-        }
-        function deleteEmployee(id:number){
-            const list = employees.filter(e=> e.id != id)
-            if(list) setEmployees(list);
-            
-    
-        }
-        function resetForms(){
             SetReq({
                 id: -1,
                 urls:'',
@@ -87,6 +75,17 @@ export default function EmployeeScreen(){
                 createAt: '',
                 isActive: '',
                 })
+            
+        }
+        function editEmployee(id:number){
+            let employee = employees.find(e => e.id == id)
+            if(employee)SetReq(employee)
+        }
+        function deleteEmployee(id:number){
+            const list = employees.filter(e=> e.id != id)
+            if(list) setEmployees(list);
+            
+    
         }
 
     
@@ -208,28 +207,19 @@ export default function EmployeeScreen(){
                 </View>
                 
                 
-                <FlatList
+                <MyList
                     data={employees}
-                    keyExtractor={(item)=> item.id.toString() }
-                    renderItem = {({item}) => {
-                        return <View style={style.itemContainer}>
-                        <Text style={style.itemText}>Nome:{item.name} / Cargo:{item.position}</Text>
-                        <Text style={style.itemText}>ativo desde de:{item.isActive}</Text>
-
-                        <View style={style.buttonsContainer}>
-                                    <TouchableOpacity style={style.deleteButton} onPress={() => {deleteEmployee(item.id)}}>
-                                    <Text style={style.buttonText}>⚠ Deletar ⚠</Text>
-                                    </TouchableOpacity>
-
-                                    <TouchableOpacity style={style.editButton} onPress={() => {editEmployee(item.id)}}>
-                                    <Text style={style.buttonText}>Editar📃✍</Text>
-
-                                    </TouchableOpacity>
-
-                        </View>
-
-                        </View>
-                        }}
+                    keyItem={(item)=> item.id.toString() }
+                    renderItem = {({item}) => (
+                
+                        <Myiten style={style.itemText}
+                         onDel={() => {deleteEmployee(item.id)}}
+                         onEdit={() => {editEmployee(item.id)}}
+                        >
+                        Nome:{item.name} / Cargo:{item.position}
+                        ativo desde de:{item.isActive}
+                        </Myiten>
+                    )}
                 />
                 
             </View>      
