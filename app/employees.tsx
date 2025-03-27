@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { ScrollView, View } from 'react-native';
 import { Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Button } from 'react-native';
 import MyTimePicker  from '../src/components/MyTimePicker'
+import MyButton from '../src/components/Mybuttons';
 export default function EmployeeScreen(){
 //aqui é typescript 
     const [req, SetReq] = useState({
@@ -202,7 +203,7 @@ export default function EmployeeScreen(){
                     />
 
                     
-                   <Button title='Cadastrar Funcionário' color = '#800080'  onPress={handleRegister}/>
+                   <MyButton title='Cadastrar Funcionário' button_type ='round'  onPress={handleRegister}/>
                 </View>
                 
                 
