@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity} from 'react-native';
 import MyLogin from '../src/components/MyLogin';
-
+import MyButton from '../src/components/Mybuttons'
 export default function BudgetScreen(){
 
 //aqui é typescriot
@@ -102,7 +102,7 @@ export default function BudgetScreen(){
                      />
                      
 
-                    <Button title ='CADASTRAR' onPress={ handleRegister }/>
+                    <MyButton title ='CADASTRAR' onPress={ handleRegister }/>
                 </View>
                 <FlatList
 
@@ -122,17 +122,13 @@ export default function BudgetScreen(){
                         
                         <View style={styles.buttonsContanier}>
 
-                        <TouchableOpacity
-                        style ={styles.editButton}
+                        <MyButton title ='Editar'
                         onPress={()=> {editBudget(item.id)}}>
-                        <Text style={styles.buttonText}>EDIT</Text>
-                        </TouchableOpacity>
+                        </MyButton>
 
-                        <TouchableOpacity 
-                        style ={styles.delButton}
+                        <MyButton title='DELETAR'
                         onPress={()=> {delBudget(item.id)}}>
-                        <Text style={styles.buttonText}>DELETE</Text>
-                        </TouchableOpacity>
+                        </MyButton>
                         </View>
  
                            
