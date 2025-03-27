@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
 import MySupport from '../src/components/Mysupport';
 import MyView from '../src/components/MyView';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function LaunchScreen() {
     const [req, setReq] = useState({
@@ -72,7 +73,7 @@ export default function LaunchScreen() {
             <View style={styles.form}>
                 <Text>Lançamentos de Alunos:</Text>
 
-                <TextInput
+                <TextInput //Myinput
                     placeholder="Digite a Observação:"
                     value={req.observation}
                     onChangeText={(text) => setReq({ ...req, observation: text })}
@@ -100,17 +101,17 @@ export default function LaunchScreen() {
 
                 />
 
-                <Button title="CADASTRAR" onPress={handleRegister} color="purple" />
+                <Button title="CADASTRAR" onPress={handleRegister} color="purple" /> {/*Mybutton*/ }
 
 
 
             </View>
 
-            <FlatList
+            <FlatList //Mylist
                 data={launchs}
                 keyExtractor={(item) => item.Id.toString()}
                 renderItem={({ item }) => (
-                    <View
+                    <View //Mylistitem
                         style={styles.card}
                     >
                         <Text>{item.observation}</Text>
@@ -131,7 +132,6 @@ export default function LaunchScreen() {
 
                 )}
             />
-            <MySupport label='dgsdgsd' />
 
         </MyView>
     );
