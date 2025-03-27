@@ -3,9 +3,6 @@ import{View,Text, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} fro
 import MyView from "../src/components/MyView";
 import MyList from "../src/components/mylist";
 import Myiten from "../src/components/myItenlist";
-/*import CurrencyInput from 'react-native-currency-input';
-import {TimeInput} from "@heroui/date-input";
-import DateTimePickerModal from "react-native-modal-datetime-picker";*/
 
 export default function PositionScreen(){
 /*Aqui é TypeScript*/
@@ -15,7 +12,7 @@ export default function PositionScreen(){
         name:"",
         description:"",
         salary: 0,
-        workHours:"",
+        workHours: "",
         departament:"",
         supervisor:"",
         creatAt: new Date().toString(),
@@ -37,7 +34,7 @@ export default function PositionScreen(){
             name:"",
             description:"",
             salary: 0,
-            workHours:"",
+            workHours: "",
             departament:"",
             supervisor:"",
             creatAt: new Date().toString()
@@ -61,7 +58,7 @@ export default function PositionScreen(){
             {/*Aqui é TypeScript dentro do front*/}
             <Text>Minha tela dos cargos</Text>
             <View style = {styles.row}>
-                <View style={styles.form}>
+                <View style = {styles.form}>
                     <TextInput 
                         placeholder="Cargo"
                         value = {req.name}
@@ -72,19 +69,15 @@ export default function PositionScreen(){
                         value = {req.description}
                         onChangeText={(text)=> setReq({...req ,description: text })}/>
 
-                    {/*<CurrencyInput 
-                        placeholder="Salário" />
-                        value = {req.salary}
-                        onChangeText={(text)=> setReq({...req ,salary: text })}/>
+                    <TextInput 
+                        placeholder="Salário"
+                        value = {(req.salary).toString()}
+                        onChangeText={(text)=> setReq({...req ,salary: Number(text) })}/> 
 
-                        {req.salary}*/}
-
-                    {/*<TimeInput 
-                        placeholder="Horas trabalhadas" />
+                    <TextInput
+                        placeholder="Horas de trabalho" 
                         value = {req.workHours}
-                        onChangeText={(text)=> setReq({...req ,workHours: text })}/>
-
-                        {req.workHours}*/}
+                        onChangeText={(value:string)=> setReq({...req ,workHours: value })}/>
 
                     <TextInput 
                         placeholder="Departamento"
@@ -96,8 +89,7 @@ export default function PositionScreen(){
                         value = {req.supervisor}
                         onChangeText={(text)=> setReq({...req ,supervisor: text })}/>
 
-                    {/*<DateTimePickerModal 
-                        placeholder="Data de cadastro" />*/}
+                  
 
                     <Button  title = "Cadastrar" onPress={handleRegister}/>
                 </View> 
