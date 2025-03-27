@@ -24,12 +24,12 @@ interface MyPerfilProps {
             <Mytext>Perfil</Mytext>
           </View>
           <View style={styles.profileCard}>
-            <View style={styles.profileImageContainer}>
+            <View>
               <Mytext>"Foto do cadastro"</Mytext>
             </View>
             <Mytext>Nome do cadastro</Mytext>
             <Mytext>Nome</Mytext>
-            <View style={styles.personalDataContainer}>
+            <View>
               <Mytext>Dados Pessoais</Mytext>
               <Mytext>E-mail: nome@exemplo.com.br</Mytext>
               <Mytext>Telefone: (16) 988443750</Mytext>
