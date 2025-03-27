@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, FlatList, Text, StyleSheet, TextInput, Button, TouchableOpacity} from 'react-native';
 import MyTheme from '../src/components/Mytheme';
+//import Myinputs from '../src/components/Myinputs'; 
 
 export default function NotificationScreen(){
 // aqui é typNotificationScreenescript
