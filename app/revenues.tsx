@@ -5,6 +5,7 @@ import MyView from '../src/components/MyView';
 import MyList from '../src/components/mylist';
 import MyButton from '../src/components/Mybuttons';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
+import MyTopbar from '../src/components/mytopbar';
 
 
 export default function RevenueScreen() {
