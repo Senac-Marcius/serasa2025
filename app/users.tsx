@@ -89,7 +89,8 @@ export default function UserScreen() {
     //!isChecked: o operador ! inverte o valor atual de isChecked. Se isChecked era true (checkbox marcada), ele se torna false (checkbox desmarcada), e vice-versa.
     return (
         <ScrollView>
-        <MyView>
+        <MyView >
+            
 
             <View style ={styles.formContainer} >
                 <View style={styles.form}>
@@ -115,14 +116,16 @@ export default function UserScreen() {
 
                      <Myinput value={req.address} onChangeText={(text) => setReq({ ...req, address: text })} placeholder="Digite o seu endereço" label="Endereço" iconName='house' />      
                     
-                     <Button title='CADASTRAR' color="purple" onPress={handleRegister} />
+                    
 
                     <MyButton
-                    title = "Cadastrar"
+                    title = "CADASTRAR"
+
                     onPress={handleRegister}
                     button_type = "round"
                     style = {styles.button_round}
                     />
+
                     
                 </View>
 
@@ -196,6 +199,9 @@ const styles = StyleSheet.create({
         flex: 1,  // Isso faz com que o componente ocupe toda a tela
         justifyContent: 'center', // Centraliza verticalmente
         alignItems: 'center',
+    },
+    tela:{
+        backgroundColor:'purple'
     },
 
 
