@@ -32,12 +32,10 @@ export default function categoryScreen(){
 
     return (
         <View>
-        <MyList style={{padding : 20 }}>
-            <></>
-            </MyList>
+       
     {/* aqui é typerscrypt dentro do front */}
 
-            <view style={styles.row}>
+            <View style={styles.row}>
                 <View style={styles.form}>
                     <TextInput placeholder="nome" 
                         value={req.name}
@@ -55,21 +53,17 @@ export default function categoryScreen(){
                    <Button title= 'Cadastrar' onPress= {handleRegister}/>
                                  
                 </View>
-           <FlatList
-           data={categories}
-           keyExtractor={(item) => item.id.toString()}
-           renderItem={({item}) =>(
-            <view>
-                <text>{item.name}</text>
-              <text>{item.createAt}</text> 
-              <text>{item.name}</text>
-              <text>{item.userId}</text>  
-            </view>
-           )
-        }
-
-           />
-            </view>
+                <MyList
+                    data={categories}
+                    keyItem={(item) => item.id.toString()}
+                    renderItem={({item}) => (
+                        <Myiten >
+                            <Text >{item.name}</Text>
+                            <Text >{item.description}</Text>  
+                        </Myiten>
+                    )}
+                /> 
+            </View>
         </View>
    
     );
