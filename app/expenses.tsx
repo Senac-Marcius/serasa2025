@@ -66,18 +66,6 @@ export default function ExpenseScreen(){
     }
 
     return (
-<<<<<<< HEAD
-        <MyView> 
-            {/* aqui é typecript dentro do front */}
-            <Text style={styles.title}>Cadastro de despesas</Text>
-            <View style={styles.row}>
-                <View style={styles.form}>
-                    <TextInput 
-                        placeholder="nome" 
-                        value={req.name}
-                        onChangeText ={(text) => setReq({...req ,name: text}) }
-                    />
-=======
         <ScrollView>
             <MyView> 
                 {/* aqui é typecript dentro do front */}
@@ -85,7 +73,6 @@ export default function ExpenseScreen(){
                 <View style={styles.row}>
                     <View style={styles.form}>
                         <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text })} placeholder="Nome" label="Nomes:" iconName='' />
->>>>>>> e4ecd75eebe093680d4378f44eb9dbc8b42491b7
 
                         <Myinput value={req.contact} onChangeText={(text) => setReq({ ...req, contact: text })} placeholder="(XX) XXXXX-XXXX" label="Contato:" iconName='phone' />    
 
