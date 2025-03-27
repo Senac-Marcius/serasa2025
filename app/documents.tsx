@@ -80,12 +80,14 @@ export default function RecordScreen() {
             setEditingId(id);// qual id eu quero editar
         }
     };
+
+    const[isEnabled, setIsEnabled] = useState(false)
     
     return (
         
         <View style={styles.container}>
 
-            <MySwitch /*isEnabled={isEnabled} onToggle={setIsEnabled}*//>
+            <MySwitch isEnabled={isEnabled} onToggle={setIsEnabled} />
                 
 
             <View style={styles.row}>
