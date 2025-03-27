@@ -44,6 +44,14 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
+                        label="Empréstimo"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/loans');
+                        }}
+                    />
+                    <Drawer.Item
                         label="Cursos"
                         icon="post"
                         onPress={() => {
