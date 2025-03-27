@@ -28,11 +28,11 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
-                        label="Postagens"
+                        label="CATEGORIES"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/posts');
+                            router.push('/categories');
                         }}
                     />
                     <Drawer.Item
@@ -57,6 +57,14 @@ export default function HomeScreen() {
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/collections');
+                    }}
+                    />
+                    <Drawer.Item
+                        label="Despesa"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/expenses');
                         }}
                     />
                     <Drawer.Item

@@ -187,6 +187,10 @@ export default function ItemScreen() { // aqui é TS
         <ScrollView style={styles.container}>
            <Text style={styles.h1}>Cadastro de Itens no Acervo</Text>
             <View style={styles.buttonContainer}>
+            
+            
+            
+            
             <MyButton   //VOU CHAMAR AQUI UM MODAL PARA MOSTRAR QUE O REGISTRO FOI SALVO
                 title="Salvar"
                 onPress={pickFile}
