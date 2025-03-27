@@ -4,6 +4,7 @@ import Mydownload from '../src/components/mydownload';
 import MyView from '../src/components/MyView';
 import MyList from '../src/components/mylist';
 import MyButton from '../src/components/Mybuttons';
+import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
 
 
 export default function RevenueScreen() {
@@ -87,44 +88,70 @@ export default function RevenueScreen() {
       
       <View style={styles.row}>
         <View style={styles.form}>
-          <TextInput
-            placeholder="Digite aqui a Descrição"
-            value={req.description}
-            onChangeText={(text) => setReq({ ...req, description: text })}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Digite aqui o Name"
-            value={req.name}
-            onChangeText={(text) => setReq({ ...req, name: text })}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Digite aqui a URL"
-            value={req.url}
-            onChangeText={(text) => setReq({ ...req, url: text })}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Digite aqui o Valor"
-            value={req.value}
-            onChangeText={(text) => setReq({ ...req, value: text })}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Digite aqui o status da Bolsa"
-            value={req.scholarshipStatus}
-            onChangeText={(text) => setReq({ ...req, scholarshipStatus: text })}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Digite aqui o desconto"
-            value={req.discountPercentage}
-            onChangeText={(text) => setReq({ ...req, discountPercentage: text })}
-            style={styles.input}
-          />
+        <View style={styles.form}>
+  {/* Campo de Nome */}
+  <Myinput
+    value={req.name}
+    onChangeText={(text) => setReq({ ...req, name: text })}
+    iconName=''
+    placeholder='Digite o nome'
+    label='Nome'
+  />
+  
+  
+  
+  {/* Campo de Descrição */}
+  <MyTextArea 
+    value={req.description} 
+    onChangeText={(text) => setReq({...req, description: text})}  
+    iconName='' 
+    placeholder='Digite a descrição'
+    label='Descrição'
+  />
 
-          <Button title="cadastrar" onPress={handleRegister} />
+  
+
+  {/* Campo de URL */}
+  <Myinput
+  value={req.url}
+  onChangeText={(text) => setReq({ ...req, url: text })}
+  iconName='link'
+  placeholder='Digite a URL'
+  label='URL'
+ 
+/>
+
+  {/* Campo de Valor */}
+  <Myinput
+    value={req.value}
+    onChangeText={(text) => setReq({ ...req, value: text })}
+    iconName=''
+    placeholder='Digite o valor'
+    label='Valor'
+    
+  />
+
+  {/* Campo de Status da Bolsa */}
+  <Myinput
+    value={req.scholarshipStatus}
+    onChangeText={(text) => setReq({ ...req, scholarshipStatus: text })}
+    iconName=''
+    placeholder='Status da bolsa'
+    label='Status Bolsa'
+  />
+
+  {/* Campo de Desconto */}
+  <Myinput
+    value={req.discountPercentage}
+    onChangeText={(text) => setReq({ ...req, discountPercentage: text })}
+    iconName='percent'
+    placeholder='Porcentagem de desconto'
+    label='Desconto'
+    
+  />
+
+  <Button title="Cadastrar" onPress={handleRegister} />
+</View>
 
           
         </View>
