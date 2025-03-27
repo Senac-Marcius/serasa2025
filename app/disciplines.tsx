@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
+import MyView from '../src/components/MyView';
 
 
 //esse é o certo
@@ -75,7 +76,7 @@ export default function DisciplineScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <MyView style={styles.container}>
       <Text style={styles.title}>Disciplinas</Text>
       <View style={styles.row}>
         {/* Formulário */}
@@ -140,7 +141,7 @@ export default function DisciplineScreen() {
           />
         </View>
       </View>
-    </View>
+    </MyView>
   );
 }
 
