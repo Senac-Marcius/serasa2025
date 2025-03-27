@@ -9,14 +9,20 @@ interface MyThemeProps{
 }
 const MyTheme: React.FC<MyThemeProps> = ({style, chendTheme, fontSize}) => {
    return(
-   <View style={styles.row}>
-     
-        <TouchableOpacity style ={styles.buttonsContainer} onPress={() => fontSize(+1)}> +1 </TouchableOpacity>
-        <TouchableOpacity style ={styles.buttonsContainer} onPress={() => fontSize(-1)}> -1</TouchableOpacity>
-        <TouchableOpacity style ={styles.buttonsContainer} onPress={() => chendTheme("A")}> A </TouchableOpacity>
-        <TouchableOpacity style ={styles.buttonsContainer} onPress={() => chendTheme("B")}> B </TouchableOpacity>
-        <TouchableOpacity style ={styles.buttonsContainer} onPress={() => chendTheme("C")}> C </TouchableOpacity>
 
+    <View style={styles.row}>
+
+        <View style={{ flexDirection: "row", marginRight: 20 }}>
+            <TouchableOpacity style={styles.buttonsContainer} onPress={() => fontSize(+1)}> +1 </TouchableOpacity>
+            <TouchableOpacity style={styles.buttonsContainer} onPress={() => fontSize(-1)}> -1</TouchableOpacity>
+        </View>
+     
+        <View style={{ flexDirection: "row" }}>
+
+            <TouchableOpacity style={styles.buttonsContainer} onPress={() => chendTheme("A")}> A </TouchableOpacity>
+            <TouchableOpacity style={styles.buttonsContainer} onPress={() => chendTheme("B")}> B </TouchableOpacity>
+            <TouchableOpacity style={styles.buttonsContainer} onPress={() => chendTheme("C")}> C </TouchableOpacity>
+        </View>
     </View>
    )
     
@@ -33,11 +39,12 @@ const styles = StyleSheet.create({
         width: 20,
         height: 20,
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+    
     },
     row: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start'
+        justifyContent: 'center',
+        alignItems: 'flex-start',
     },
 })
