@@ -8,13 +8,14 @@ interface MySearchProps {
     style: ViewStyle;
     onChangeText(busca: string): void; 
     onPress(): void;
+    busca: string;
 }
 
-const MySearch: React.FC<MySearchProps> = ({onChangeText, style, onPress}) => {
+const MySearch: React.FC<MySearchProps> = ({onChangeText, style, onPress, busca}) => {
 
     function keyPress(event: any){
-        if(event.nativeEvent.key === 'Enter'){
-            onPress();
+        if(event.nativeEvent.key == 'Enter'){
+            onPress()
         }
     }
 
@@ -38,6 +39,7 @@ const MySearch: React.FC<MySearchProps> = ({onChangeText, style, onPress}) => {
                     height: 40,
                     fontSize: 19,
                 }}
+                value={busca}
                 placeholder="Pesquisar..."
                 onChangeText={(text) => onChangeText(text)}
                 onKeyPress= {keyPress}
