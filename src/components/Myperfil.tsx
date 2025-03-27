@@ -1,8 +1,8 @@
 import React, {ReactNode, useState} from "react";
-import { Text, TouchableOpacity, Image, View, ViewStyle, StyleSheet, ScrollView, TextStyle } from "react-native";
-import {Button} from "react-native-paper";
+import { Text,  TouchableOpacity, Image, View, ViewStyle, StyleSheet, ScrollView, TextStyle } from "react-native";
 import MyView from "./MyView";
-
+import MyButton from "./Mybuttons";
+import Mytext from "./Mytext";
 
 
 
@@ -19,29 +19,28 @@ interface MyPerfilProps {
     const Perfil = () => { 
       return (
         <ScrollView>
-        <View style={styles.container}>
+        <MyView>
           <View style={styles.header}>
-            <Text style={styles.headerText}>Perfil</Text>
+            <Mytext>Perfil</Mytext>
           </View>
           <View style={styles.profileCard}>
             <View style={styles.profileImageContainer}>
-              <Text style={styles.profileImageLabel}>"Foto do cadastro"</Text>
+              <Mytext>"Foto do cadastro"</Mytext>
             </View>
-            <Text style={styles.profileName}>Nome do cadastro</Text>
-            <Text style={styles.name}>Nome</Text>
+            <Mytext>Nome do cadastro</Mytext>
+            <Mytext>Nome</Mytext>
             <View style={styles.personalDataContainer}>
-              <Text style={styles.personalDataLabel}>Dados Pessoais</Text>
-              <Text style={styles.email}>E-mail: nome@exemplo.com.br</Text>
-              <Text style={styles.phone}>Telefone: (16) 988443750</Text>
-              <Text style={styles.birthdate}>Data de Nascimento: dd/mm/aaaa</Text>
-              <TouchableOpacity style={styles.changepassbuton}>
-                <Text style={styles.changePasswordButtonText}>Alterar Senha</Text>
-              </TouchableOpacity>
+              <Mytext>Dados Pessoais</Mytext>
+              <Mytext>E-mail: nome@exemplo.com.br</Mytext>
+              <Mytext>Telefone: (16) 988443750</Mytext>
+              <Mytext>Data de Nascimento: dd/mm/aaaa</Mytext>
+              <MyButton>
+                <Mytext>Alterar Senha</Mytext>
+              </MyButton>
             </View>
-            <Text style={styles.credits}>Créditos: 100</Text>
-            <TouchableOpacity style={styles.editProfileButton}>
+            <MyButton>
               <Text style={styles.editProfileButtonText}>Editar Perfil</Text>
-            </TouchableOpacity>
+            </MyButton>
           </View>
           <TouchableOpacity style={styles.wppButton}>
             <Image
@@ -49,16 +48,12 @@ interface MyPerfilProps {
               style={styles.wppIcon}
             />
           </TouchableOpacity>
-        </View>
+        </MyView>
         </ScrollView>
       );
     };
     
     const styles = StyleSheet.create({
-      container: {
-        flex: 1,
-        backgroundColor: '#fff',
-      },
       header: {
         padding: 20,
         alignItems: 'center',

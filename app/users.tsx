@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Button, FlatList } from 'react-native';
-
-
-
+import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs'
+import MyView from '../src/components/MyView'
+import { ScrollView } from 'react-native-gesture-handler';
+// Define o estado inicial como false
+//isChecked = valor atual da váriavel, SetIsChecked ele altera o valor da isChecked
+//useState(false), define o valor inicial do isChecked como true
 
 export default function UserScreen() {
+
+    const [isChecked, setIsChecked] = useState(true);
+
     const [req, setReq] = useState({
         name: '',
         password: '',
@@ -34,16 +40,16 @@ export default function UserScreen() {
     }[]>([])
 
     function handleRegister() {
-        if(req.id == -1){
-            const newId = users.length ? users[users.length - 1].id +1:0
-            const newUser = {...req, id:newId}
+        if (req.id == -1) {
+            const newId = users.length ? users[users.length - 1].id + 1 : 0
+            const newUser = { ...req, id: newId }
             setUsers([...users, newUser])
 
-        }else{
-            setUsers(users.map(p=>(p.id == req.id ? req:p)))
+        } else {
+            setUsers(users.map(p => (p.id == req.id ? req : p)))
 
         }
-        
+
         setReq({
             name: '',
             password: '',
@@ -58,91 +64,53 @@ export default function UserScreen() {
         })
 
     }
-    function editUser(id:number){
+    function editUser(id: number) {
         let user = users.find(u => u.id == id)
-        if(user)
+        if (user)
             setReq(user)
 
 
     }
 
-    function deleteUser(id:number){
+    function deleteUser(id: number) {
         const list = users.filter(u => u.id != id)
-        if(list)
+        if (list)
             setUsers(list)
-
     }
 
     //criar outras funções, sempre retorna html
     //aqui é typescript
+
+
+    //CHECKBOX:
+    //setIsChecked: é uma função usada para atualizar o estado de isChecked.
+    //!isChecked: o operador ! inverte o valor atual de isChecked. Se isChecked era true (checkbox marcada), ele se torna false (checkbox desmarcada), e vice-versa.
     return (
-        <View>
+        <ScrollView>
+        <MyView>
 
-            <View style={styles.row}>
-
+            <View style ={styles.formContainer} >
                 <View style={styles.form}>
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Nome:"
-                        value={req.name} //O atributo value vincula o campo de texto ao estado name
-                        onChangeText={(text) => setReq({ ...req, name: text })} //Ele recebe o texto digitado pelo usuário como argumento e o passa para a função setName
+                    <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text })} placeholder="Digite seu nome..." label="Login" iconName='person' />
 
-                    />
+                    {/* <MyCheck label={isChecked ? "Presente" : "Faltou"} checked={isChecked} onToggle={() => setIsChecked(!isChecked)} />
+                    checked busca o valor inicial/atual do estado. onToggle */}
 
+                    <Myinput value={req.password} onChangeText={(text) => setReq({ ...req, password: text })} placeholder="Digite a sua senha..." label="Password" iconName='password' />
+                    
+                    <Myinput value={req.cpf} onChangeText={(text) => setReq({ ...req, cpf: text })} placeholder="Digite o seu CPF" label="CPF:" iconName='article' /> 
 
+                     <Myinput value={req.age} onChangeText={(text) => setReq({ ...req, age: text })} placeholder="Digite a sua idade" label="Idade:" iconName='celebration' /> 
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Senha:"
-                        value={req.password} //O atributo value vincula o campo de texto ao estado name
-                        onChangeText={(text) => setReq({ ...req, password: text })} //Ele recebe o texto digitado pelo usuário como argumento e o passa para a função setName
+                     <Myinput value={req.contact} onChangeText={(text) => setReq({ ...req, contact: text })} placeholder="(XX) XXXXX-XXXX" label="Contato:" iconName='phone' />
 
-                    />
+                     <Myinput value={req.email} onChangeText={(text) => setReq({ ...req, email: text })} placeholder="domain@domain.com" label="Email:" iconName='mail' /> 
 
-
-                    <TextInput
-                        style={styles.input}
-                        placeholder="CPF:"
-                        value={req.cpf} //O atributo value vincula o campo de texto ao estado name
-                        onChangeText={(text) => setReq({ ...req, cpf: text })}
-                    />
-
-
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Idade:"
-                        value={req.age} //O atributo value vincula o campo de texto ao estado name
-                        onChangeText={(text) => setReq({ ...req, age: text })}
-                    />
-
-
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Contato:"
-                        value={req.contact} //O atributo value vincula o campo de texto ao estado name
-                        onChangeText={(text) => setReq({ ...req, contact: text })}
-                    />
-
-
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Email:"
-                        value={req.email} //O atributo value vincula o campo de texto ao estado name
-                        onChangeText={(text) => setReq({ ...req, email: text })}
-
-                    />
-
-
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Endereço:"
-                        value={req.address} //O atributo value vincula o campo de texto ao estado name
-                        onChangeText={(text) => setReq({ ...req, address: text })}
-                    />
-
+                     <Myinput value={req.address} onChangeText={(text) => setReq({ ...req, address: text })} placeholder="Digite o seu endereço" label="Endereço" iconName='house' />      
 
                     <Button title='CADASTRAR' color="purple" onPress={handleRegister} />
+                    
 
 
                 </View>
@@ -162,12 +130,12 @@ export default function UserScreen() {
 
                             <View style={styles.buttonsContainer}>
 
-                                <TouchableOpacity style={styles.deleteButton} onPress={() => {deleteUser(item.id)}}>
-                                <Text style={styles.buttonText}>X</Text>
+                                <TouchableOpacity style={styles.deleteButton} onPress={() => { deleteUser(item.id) }}>
+                                    <Text style={styles.buttonText}>X</Text>
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.editButton} onPress={() => {editUser(item.id)}}>
-                                <Text style={styles.buttonText}>Edit</Text>
+                                <TouchableOpacity style={styles.editButton} onPress={() => { editUser(item.id) }}>
+                                    <Text style={styles.buttonText}>Edit</Text>
 
                                 </TouchableOpacity>
 
@@ -181,10 +149,12 @@ export default function UserScreen() {
 
             </View>
 
-        </View>
+        </MyView>
+        </ScrollView>
 
     );
 }
+
 
 const styles = StyleSheet.create({
     row: {
@@ -195,18 +165,26 @@ const styles = StyleSheet.create({
     },
 
     form: {
-        flex: 1,
         marginRight: 10,
         padding: 20,
-        backgroundColor: 'white',
+        backgroundColor: '#f9f9f9',
         borderRadius: 10,
         shadowColor: '#000',
         shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-        marginLeft: 50,
-        marginTop: 50,
+        width:400,
+        
+        
+        // shadowOffset: { width: 0, height: 4 },
+        // shadowRadius: 5,
+        // marginLeft: 50,
+        // marginTop: 50,
 
+    },
+
+    formContainer:{
+        flex: 1,  // Isso faz com que o componente ocupe toda a tela
+        justifyContent: 'center', // Centraliza verticalmente
+        alignItems: 'center',
     },
 
 
@@ -262,18 +240,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#281259',
         paddingVertical: 12,
         paddingHorizontal: 24,
-        borderRadius: 30, 
+        borderRadius: 30,
         marginBottom: 10,
         alignItems: 'center',
 
     },
     buttonText: {
-        color: '#fff', 
+        color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
     }
-
-
-
-
 })
