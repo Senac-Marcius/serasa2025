@@ -92,11 +92,12 @@ export default function CollectionScreen(){
                         />
                        
 
-                        <Button 
-                        onPress={handleRegister}
-                        >
-                            Cadastrar
-                        </Button>
+                        <MyButton 
+                          title = "cadastrar"
+                          onPress={handleRegister}
+                          button_type = "capsule"
+                          style = {styles.button_capsule}
+                        />
                     </View>
                     <FlatList // data faz um foreach (data recebe collections)
                         data={collections}
@@ -126,6 +127,14 @@ export default function CollectionScreen(){
         );
     }
     const styles = StyleSheet.create({
+        button_capsule: {
+            borderRadius: 50,
+            height: 45,
+            margin:30,
+            backgroundColor: "#813AB1",
+            alignItems: "center",
+            justifyContent: "center",
+          },
         row: {
             flexDirection: 'row',
             justifyContent: 'space-between',

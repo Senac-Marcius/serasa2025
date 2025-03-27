@@ -61,7 +61,6 @@ const MyModal_mobile1: React.FC<MyModalprops> = ({ children, style, visible, set
     function onClose() {
         setVisible(false)
     };
-
     return (
         <View >
             <Button onPress={() => { setVisible(true) }}>
