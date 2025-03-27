@@ -1,5 +1,5 @@
 import React,{ReactNode} from 'react';
-import { View, TouchableOpacity, StyleSheet, Dimensions, TextStyle } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Dimensions, TextStyle,  } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
 import { Button } from 'react-native-paper';
@@ -46,8 +46,8 @@ const myView: React.FC< MySearchProps > = ({children}) => {
     },
 
     tView:{
-      width: 100,
-      height: 100
+      width: width,
+      height: height,
     }
   });
 
