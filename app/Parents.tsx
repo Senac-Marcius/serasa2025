@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity,fileURL} from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity} from 'react-native';
+import styled from 'styled-components'
 //import dateTimepicker
 //npm run web → chamar pagina web pelo terminal
 //batatinha
@@ -69,6 +70,8 @@ export default function ParentScreen (){
             borderRadius:20,
             shadowRadius:5,
             shadowOpacity:5,
+        
+            
             }}> 
             Adicione um arquivo
             </MyUpload>
@@ -175,48 +178,4 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
     },
 })
 //Motificar o componente para que o mesmo esteja adequado para uso, estilização do figma e do HTML, 
-// otimizar o botão upload para uso no codigo. Pesquisa de objeto anonimo.
-const UploadFile = () => {
-  const [file, setFile] = useState(null);
-  const [preview, setView] = useState(null)}
-
-  /*const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0]
-
-    if (selectedFile) {
-      setFile(selectedFile)
-
-      // Criando uma URL de pré-visualização para imagens
-      if (selectedFile.type.startsWith("image/")) {
-        const fileURL = URL.createObjectURL(selectedFile)
-        setView(fileURL)
-      } else {
-        setParents(null)
-      }
-    }
-  };
-
-  const handleUpload = () => {
-    if (!file) {
-      alert("Selecione um arquivo primeiro!");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    // Simulação de envio (aqui você pode integrar com uma API real)
-    console.log("Arquivo pronto para upload:", file);
-
-    alert(`Arquivo pronto para envio!`);
-  };
-
-  return (
-    <div style={{ textAlign: "center", padding: "20px", border: "1px solid #ccc" }}>
-      <h2>Upload de Arquivo</h2>
-      <input type="file" onChange={handleFileChange} />
-      {preview && <img src={preview} alt="Prévia" width="200" style={{ marginTop: "10px" }} />}
-      <br />
-      <button onClick={handleUpload} style={{ marginTop: "10px" }}>Enviar</button>
-    </div>
-  );
+// otimizar o botão upload para uso no codigo. Pesquisa de objeto anonimo. 
