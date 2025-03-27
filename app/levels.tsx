@@ -46,16 +46,13 @@ export default function levelsScreen(){
         const notification = leves.find( l => l.id == id)
         if(notification)
             setReq(notification)
-
     }
 
     function deleteLevels (id:number){
 
         const list = leves.filter(l => l.id != id )
         setleves(list)
-    
     }
-
 
     return (
         <View>
