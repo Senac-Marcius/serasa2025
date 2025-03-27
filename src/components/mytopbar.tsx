@@ -1,26 +1,72 @@
 import { ReactNode } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Biblioteca de ícones
+import { View,  StyleSheet } from 'react-native';
+import { Appbar, Drawer } from 'react-native-paper';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
+
+
 
 interface MyTopbarProps {
-    children: ReactNode;
+    title: string;
 }
 
-const MyTopbar: React.FC<MyTopbarProps> = ({ children }) => {
+const MyTopbar: React.FC<MyTopbarProps> = ({ title }) => {
+      const router = useRouter();
+        const [drawerOpen, setDrawerOpen] = useState(false);
     return (
         <View style={styles.container}>
-            {/* Botão de voltar */}
-            <TouchableOpacity style={styles.iconButton}>
-                <Ionicons name="arrow-back" size={24} color="white" />
-            </TouchableOpacity>
-
-            {/* Nome da tela */}
-            <Text style={styles.screenName}>Tela de inico</Text>
-
-            {/* Botão de perfil */}
-            <TouchableOpacity style={styles.iconButton}>
-                <Ionicons name="person" size={24} color="white" />
-            </TouchableOpacity>
+            <Appbar.Header>
+                <Appbar.Action icon="menu" onPress={() => setDrawerOpen (!drawerOpen)} />
+                <Appbar.Content title={title}/>
+                {/* Anelisa */}
+            </Appbar.Header>
+            {/* importar do misael */}
+             {drawerOpen && (
+                <Drawer.Section style={{ backgroundColor: 'white', padding: 10 }}>
+                    <Drawer.Item
+                        label="Início"
+                        icon="home"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="Postagens"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/posts');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="Calendario"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/calendar');
+                        }}
+                    />
+                    
+                    <Drawer.Item
+                        label="Cursos"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/courses');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="Configurações"
+                        icon="cog"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            console.log("Configurações");
+                        }}
+                    />
+                    
+                </Drawer.Section>
+            )}
         </View>
     );
 };
