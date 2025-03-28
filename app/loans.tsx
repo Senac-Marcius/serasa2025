@@ -2,6 +2,7 @@ import React, { useState } from 'react'; //react é uma biblioteca e essa funç�
 import { FlatList, View, Text, StyleSheet, TextInput, Button, TouchableOpacity } from 'react-native'; //react native é uma biblioteca dentro de react 
 import MyCalendar from '../src/components/MyCalendar';
 import MyView from '../src/components/MyView';
+import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
 
 
 export default function LoanScreen() {
@@ -87,30 +88,35 @@ export default function LoanScreen() {
             <View style={styles.row}>
                 <View style={styles.form}>
 
-                    <TextInput placeholder="Nome do Livro:"
-                        value={req.bookId}
-                        onChangeText={(text) => setReq({ ...req, bookId: text })}
+                    <Myinput 
+                     value={req.bookId}
+                      onChangeText={(text) => setReq({ ...req, bookId: text })}
+                      placeholder="Nome do Livro:"
+                      label ="Nome do Livro:"
+                      iconName="book"
                     />
 
+                    
+                     <Myinput 
+                     value={req.renewal}
+                      onChangeText={(text) => setReq({ ...req, renewal: text })}
+                      placeholder="Renovar:"
+                      label ="Renovar:"
+                      iconName="check"
+                    />
+
+                    <Myinput 
+                    value={req.observation}
+                     onChangeText={(text) => setReq({ ...req, observation: text })}
+                     placeholder="Observação:"
+                     label ="Observação:"
+                     iconName="question"
+                   />
                     <MyCalendar date={date} setDate={setDate} icon="FaCalendarDays" />
 
                     <MyCalendar date={date} setDate={setDate} icon="FaCalendarDays" />
 
                     <MyCalendar date={date} setDate={setDate} icon="FaCalendarDays" />
-
-
-                    <TextInput
-                        placeholder="Renovar:"
-                        value={req.renewal}         //(...req) cria uma cópia do req atual
-                        onChangeText={(text) => setReq({ ...req, renewal: text })}//O que está acontecendo aqui é que o estado de req está sendo atualizado de forma imutável (sem alterar diretamente o valor antigo).
-                    />
-
-
-                    <TextInput
-                        placeholder="Observação:"
-                        value={req.observation}
-                        onChangeText={(text) => setReq({ ...req, observation: text })}
-                    />
 
 
                     <Button title="Emprestar" onPress={handleRegister}
