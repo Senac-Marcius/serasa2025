@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
   label="Descrição"
   value={req.address} // Passa o estado como valor
   onChangeText={(text) => setReq({ ...req, ..... })} // Atualiza o estado ao digitar
-  placeholder="Digite sua mensagem aqui..."
+  placeholder="Digite sua mensagem aqui"
   style={{ height: 150 }}
 />
 */
