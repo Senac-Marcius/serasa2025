@@ -4,7 +4,7 @@ import MyTheme from '../src/components/Mytheme';
 import {Myinput} from '../src/components/Myinputs'; 
 import MyView from '../src/components/MyView';
 import MyButton from '../src/components/Mybuttons';
-import MyItenlist from '../src/components/myItenlist';
+import Myiten from '../src/components/myItenlist';
 import MyList from '../src/components/mylist';
 import Mytext from '../src/components/Mytext';
 
@@ -112,9 +112,14 @@ return (
 
            <MyList 
                     data={notifications}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
-                        <MyItenlist style={styles.notificationStyle}  > {/* pedro */}
+                        <Myiten 
+                            style={styles.notificationStyle} 
+                                onEdit={() => {editNotification(item.id)}}
+                                onDel={() => {deleteNotification(item.id)}}
+                                
+                        > {/* pedro */}
 
                            <Mytext> Nome: {item.name}</Mytext> {/* alex */}
                            <Mytext> Descrição: {item.description}</Mytext>
@@ -123,6 +128,8 @@ return (
                            <Mytext> UserId: {item.userId}</Mytext>
                            <Mytext> CreatAt: {item.creatAt}</Mytext>
 
+
+                            {/*
                             <View style={styles.buttonsContainer}>
                                 <TouchableOpacity 
                                     style ={styles.editButton} 
@@ -136,7 +143,9 @@ return (
                                 </TouchableOpacity>
                            
                             </View>
-                        </MyItenlist>
+                            */}
+
+                        </Myiten>
                     )}
            />
            
