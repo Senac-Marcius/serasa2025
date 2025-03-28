@@ -4,6 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
 import { Button } from 'react-native-paper';
 import { router } from 'expo-router';
+import MyTopbar from './mytopbar';
 
 interface MySearchProps {
   children: ReactNode;
@@ -53,7 +54,8 @@ const myView: React.FC< MySearchProps > = ({children}) => {
 
   return (
     <ScrollView style={styles.container}>
-      <View style = {styles.tView}>
+      <View>
+        <MyTopbar  title='Cargos' />
       {children}
       {/* Conteúdo da tela (pode ser adicionado aqui) */}
       {/* Botão de suporte */}
