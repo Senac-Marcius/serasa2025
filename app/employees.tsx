@@ -6,6 +6,9 @@ import MyButton from '../src/components/Mybuttons';
 import MyView from '../src/components/MyView';
 import Myiten from '../src/components/myItenlist';
 import MyList from '../src/components/mylist';
+import { Myinput,MyCheck } from '../src/components/Myinputs';
+
+
 export default function EmployeeScreen(){
 //aqui é typescript 
     const [req, SetReq] = useState({
@@ -97,106 +100,105 @@ export default function EmployeeScreen(){
             <Text>Cadastro de Funcionários</Text>
             
             <View style={style.row}>
-                <View style={style.form}>
-                    <Text style={style.label}>Perfil do likendin:</Text>
-                    <TextInput
-                        style={style.inputs}
-                        placeholder='insira uma url valida'
+                <View  style={style.form}>
+                    <Myinput
                         value={req.urls}
                         onChangeText={(text) => SetReq({...req , urls:text})}
+                        placeholder='insira uma url valida'
+                        label='Perfil do likendin:'
+                        iconName = 'link'
                     />
-                    <Text style={style.label}>Nome:</Text>
-                    <TextInput
-                        style={style.inputs}
+                    <Myinput
+                        label = 'Nome:'
                         placeholder='Digite seu nome'
                         value={req.name}
+                        iconName='badge'
                         onChangeText={(text) => SetReq({...req , name:text})}
                     />
-                    <Text style={style.label}>Data de Nascimento:</Text>
-                    <TextInput
-                        style={style.inputs}
+                    <Myinput
+                        label = 'Data de Nascimento:'
+                        iconName='event'
                         placeholder='Insira a data ANO/MES/DIA'
                         value={req.datebirth}
                         onChangeText={(int) => SetReq({...req , datebirth:int})}
                     />
-                    <Text style={style.label}>Telefone:</Text>
-                    <TextInput
-                        style={style.inputs}
+                    <Myinput
+                        label='Telefone:'
+                        iconName='call'
                         placeholder='(XX) XXXXX-XXXX'
                         value={req.tell}
                         onChangeText={(int) => SetReq({...req , tell:int})}
                     />
-                    <Text style={style.label}>Telefone:</Text>
-                    <TextInput
-                        style={style.inputs}
+                    <Myinput
                         placeholder='Email:'
+                        iconName='email'
+                        label='Email:'
                         value={req.email}
                         onChangeText={(text) => SetReq({...req , email:text})}
                     />
-                    <Text style={style.label}>Endereço/Cep:</Text>
-                    <TextInput
-                        style={style.inputs}
+                    <Myinput
+                        label='Endereço:'
+                        iconName='home'
                         placeholder='Endereço:'
                         value={req.address}
                         onChangeText={(text) => SetReq({...req , address:text})}
                     />
-                    <Text style={style.label}>Nacionalidade:</Text>
-                    <TextInput
-                        style={style.inputs}
+                    <Myinput
+                        label='Nacionalidade:'
+                        iconName='person'
                         placeholder='Nacionalidade:'
                         value={req.nationality}
                         onChangeText={(text) => SetReq({...req , nationality:text})}
                     />
-                    <Text style={style.label}>Personalidade:</Text>
-                    <TextInput
-                        style={style.inputs}
+                    <Myinput
+                        label='Personalidade:'
+                        iconName='stack'
                         placeholder='Personalidade:'
                         value={req.discPersonality}
                         onChangeText={(text) => SetReq({...req , discPersonality:text})}
                     />
-                    <Text style={style.label}>C.P.F:</Text>
-                    <TextInput
-                        style={style.inputs}
-                        placeholder='C.P.F:'
+                    <Myinput
+                        label='C.P.F:'
+                        iconName='badge'
+                        placeholder='XXX-XXX-XXX-XX'
                         value={req.cpf}
                         onChangeText={(int) => SetReq({...req , cpf:int})}
                     />
-                    <Text style={style.label}>Genêro:</Text>
-                    <TextInput
-                        style={style.inputs}
-                        placeholder='Genêro:'
+                    <Myinput
+                        label='Gênero:'
+                        iconName='badge'
+                        placeholder='Insira seu gênero'
                         value={req.sex}
                         onChangeText={(text) => SetReq({...req , sex:text})}
                     />
-                    <Text style={style.label}>Estado civil:</Text>
-                    <TextInput
-                        style={style.inputs}
+                    <Myinput
+                        label='Estado Civil:'
+                        iconName='favorite'
                         placeholder='Estado civil:'
                         value={req.martinalStatus}
                         onChangeText={(text) => SetReq({...req , martinalStatus:text})}
                     />
-                    <Text style={style.label}>Cargo:</Text>
-                    <TextInput
-                        style={style.inputs}
-                        placeholder='Cargo:'
+                    <Myinput
+                        label='Cargo:'
+                        iconName='inventory'
+                        placeholder='Insira um Cargo'
                         value={req.position}
                         onChangeText={(text) => SetReq({...req , position:text})}
                     />
-                    <Text style={style.label}>Etnia:</Text>
-                    <TextInput
-                        style={style.inputs}
-                        placeholder='Etnia:'
+                    <Myinput
+                        label='Etnia'
+                        iconName='face'
+                        placeholder='Insira a etnia'
                         value={req.ethnicity}
                         onChangeText={(text) => SetReq({...req , ethnicity:text})}
                     />
-                    <Text style={style.label}>Deficiência:</Text>
-                    <TextInput
-                        style={style.inputs}    
-                        placeholder='Deficiência:'
+                    <Myinput
+                        label='Deficiência:'
+                        iconName='diversity'    
+                        placeholder='Insira algo'
                         value={req.deficiency}
                         onChangeText={(text) => SetReq({...req , deficiency:text})}
                     />
-                    <Text style={style.label}>Está ativo:</Text>
                     <MyTimePicker 
                         onTimeSelected={(time) => SetReq({ ...req, isActive: time })}
                         initialTime={req.isActive}
