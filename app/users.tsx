@@ -120,7 +120,6 @@ export default function UserScreen() {
 
                     <MyButton
                     title = "CADASTRAR"
-
                     onPress={handleRegister}
                     button_type = "round"
                     style = {styles.button_round}
