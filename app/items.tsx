@@ -186,14 +186,11 @@ export default function ItemScreen() { // aqui é TS
 
     return ( //encapsulamento
         <ScrollView style={styles.container}>
-        <myView
+       
            <Text style={styles.h1}>Cadastro de Itens no Acervo</Text>
             <View style={styles.buttonContainer}>
-            <MyView 
             
-            />
-            
-            
+
             
             <MyButton   //VOU CHAMAR AQUI UM MODAL PARA MOSTRAR QUE O REGISTRO FOI SALVO
                 title="Salvar"
@@ -462,7 +459,6 @@ export default function ItemScreen() { // aqui é TS
                     </View>
                 </View>
             </View>  
-        </myView>
         </ScrollView>
     );
 }

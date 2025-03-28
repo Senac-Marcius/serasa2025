@@ -9,12 +9,14 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo-google-fonts/poppins": "^0.2.3",
     "@expo/metro-runtime": "~4.0.1",
     "@expo/vector-icons": "^14.0.4",
     "@react-native-picker/picker": "^2.11.0",
     "expo": "~52.0.38",
     "expo-document-picker": "~13.0.3",
     "expo-image-picker": "~16.0.6",
+    "expo-font": "~13.0.4",
     "expo-router": "^4.0.19",
     "expo-status-bar": "~2.0.1",
     "native-base": "^3.4.28",
