@@ -5,6 +5,7 @@ import MyButton from '../src/components/Mybuttons';
 import MyList from '../src/components/mylist';
 import  { Myinput} from '../src/components/Myinputs';
 import MyView from '../src/components/MyView';
+import Mytext from '../src/components/Mytext';
 
 
 export default function BudgetScreen(){
@@ -73,10 +74,10 @@ export default function BudgetScreen(){
     return (
         <MyView>
             <MyLogin style={styles.row}>
-            <text></text>
+            <Mytext> </Mytext>
         </MyLogin>
             {/* aqui é typescriot dentro do front*/}
-            <Text>Minha tela das postagens</Text>
+            <Mytext>Minha tela das postagens</Mytext>
             <View style={styles.row}>
                 <View style={styles.form}>
                     <Myinput
