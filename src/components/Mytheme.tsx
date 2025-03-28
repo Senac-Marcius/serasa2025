@@ -40,11 +40,14 @@ const styles = StyleSheet.create({
         height: 20,
         alignItems: "center",
         justifyContent: "center",
+        
     
     },
     row: {
         flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
+        justifyContent: 'flex-end',
+        alignItems: 'flex-end',
+        padding: 20,
     },
+
 })

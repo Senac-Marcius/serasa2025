@@ -7,6 +7,7 @@ import MyButton from '../src/components/Mybuttons';
 import Myiten from '../src/components/myItenlist';
 import MyList from '../src/components/mylist';
 import Mytext from '../src/components/Mytext';
+import {textStyles}  from '../styles/textStyles';
 
 export default function NotificationScreen(){
 // aqui é typNotificationScreenescript
@@ -64,7 +65,7 @@ export default function NotificationScreen(){
 
 return (
     <MyView>
-           <MyTheme style={styles.row} chendTheme={(theme) => {}}  fontSize={ (som)=>{} }/>
+          
            
 
         {/* aqui é typescriot dentro do front*/}
@@ -77,7 +78,7 @@ return (
                         value={req.name}
                         onChangeText={(text) => setReq({...req ,name: text  })}
                         label="Nome"
-                        iconName=''
+                        iconName='person'
                  />
                 <Myinput
                         style={styles.input}
@@ -85,7 +86,7 @@ return (
                         value={req.description}
                         onChangeText={(text) => setReq({...req ,description: text  })}
                         label="Descrição"
-                        iconName=''
+                        iconName='pending'
                     
                 />
                 <Myinput
@@ -94,7 +95,7 @@ return (
                         value={req.classification}
                         onChangeText={(text) => setReq({...req ,classification: text  })}
                         label="Classificação"
-                        iconName=''
+                        iconName= 'pending'
                 />
 
                 <Myinput
@@ -103,7 +104,7 @@ return (
                          value={req.url}
                          onChangeText={(text) => setReq({...req ,url: text  })}
                          label="Url"
-                         iconName=''
+                         iconName='pending'
                 />
 
                 <MyButton title="cadastrar:" onPress={handleRegister}/>
@@ -121,12 +122,11 @@ return (
                                 
                         > {/* pedro */}
 
-                           <Mytext> Nome: {item.name}</Mytext> {/* alex */}
-                           <Mytext> Descrição: {item.description}</Mytext>
-                           <Mytext> Url: {item.url}</Mytext>
-                           <Mytext> Classificação: {item.classification}</Mytext>
-                           <Mytext> UserId: {item.userId}</Mytext>
-                           <Mytext> CreatAt: {item.creatAt}</Mytext>
+                           <Mytext style={textStyles.hepl} > Nome: {item.name}</Mytext> {/* alex */}
+                           <Mytext style={textStyles.hepl}> Descrição: {item.description}</Mytext>
+                           <Mytext style={textStyles.hepl}> Url: {item.url}</Mytext>
+                           <Mytext style={textStyles.hepl}> UserId: {item.userId}</Mytext>
+                           <Mytext style={textStyles.hepl}> CreatAt: {item.creatAt}</Mytext>
 
 
                             {/*
