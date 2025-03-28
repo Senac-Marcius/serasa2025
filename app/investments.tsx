@@ -21,6 +21,7 @@ export default function investmentScreen(){
         id: number,
         createAt: string,
         userId: string,
+        value: string,
     }[]>([]);
     
 
