@@ -4,8 +4,8 @@ import MyLink from '../src/components/Mylink';
 import Myiten from '../src/components/myItenlist';
 import MyList from '../src/components/mylist';
 import { Myinput } from '../src/components/Myinputs';
-
-
+import MyButton from '../src/components/Mybuttons';
+import MyView from '../src/components/MyView';
 
 
 export default  function itemScreen(){
@@ -60,7 +60,7 @@ export default  function itemScreen(){
      }
 
     return (
-        <View>
+        <MyView>
        
         <Text>Minha tela de itens</Text>
         
@@ -87,7 +87,7 @@ export default  function itemScreen(){
 
                 <MyLink style={{ padding : 20}} url="http://gyuguyg" label="Esqueci minha senha"/>
 
-                <Button title='Cadastrar' onPress={ handleRegister}/>
+                <MyButton title='Cadastrar' onPress={ handleRegister}/>
             
             </View>
 
@@ -111,7 +111,7 @@ export default  function itemScreen(){
             
             />
         </View>
-    </View>
+    </MyView>
 
     );
 }
