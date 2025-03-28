@@ -9,6 +9,7 @@ import MyTabsbar from '../src/components/MyTabsBar';
 import { Icon } from "react-native-paper";
 import MyButton from '../src/components/Mybuttons';
 import MyModal2 from '../src/components/Mymodal';
+import myView from '../src/components/MyView';
 
 export default function ItemScreen() { // aqui é TS
     const router = useRouter();
@@ -185,11 +186,11 @@ export default function ItemScreen() { // aqui é TS
 
     return ( //encapsulamento
         <ScrollView style={styles.container}>
+       
            <Text style={styles.h1}>Cadastro de Itens no Acervo</Text>
             <View style={styles.buttonContainer}>
             
-            
-            
+
             
             <MyButton   //VOU CHAMAR AQUI UM MODAL PARA MOSTRAR QUE O REGISTRO FOI SALVO
                 title="Salvar"
@@ -457,7 +458,7 @@ export default function ItemScreen() { // aqui é TS
                     <TouchableOpacity style={styles.button} onPress={handleRegister}>INCORPORAR ITEM NO ACERVO</TouchableOpacity>
                     </View>
                 </View>
-            </View>
+            </View>  
         </ScrollView>
     );
 }
