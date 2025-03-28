@@ -18,6 +18,7 @@ interface MyCalendarProps {
     date?: string;
     setDate(date:string): void;
     icon: React.ReactNode;
+  
 }
 
 const MyCalendar : React.FC<MyCalendarProps> = ({ date, setDate, icon }) => {
@@ -46,7 +47,7 @@ return (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <FaCalendarDays style={{ marginRight: 8 }}/> 
             <TouchableOpacity onPress={()=> {setOpen(true)}}>
-             <Text>{`Data selecionada: ${date}`}</Text>
+             <Text>{`emprestimo: ${date}`}</Text>
             </TouchableOpacity>
             </View>
         )}

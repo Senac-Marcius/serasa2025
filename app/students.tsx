@@ -10,6 +10,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+import MyButton from "../src/components/Mybuttons";
+
 export default function StudentsScreen() {
   const [req, setReq] = useState({
     id: 0,
@@ -100,14 +102,8 @@ export default function StudentsScreen() {
                 <Text>{item.email}</Text>
                 <Text>{item.createdAt}</Text>
                 <View style={styles.row}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      deleteStudent(item.id);
-                    }}
-                    style={styles.button_deletar}
-                  >
-                    Deletar
-                  </TouchableOpacity>
+                 <MyButton title="Deletar" onPress={() => deleteStudent(item.id) } button_type="capsule" style={{width:100,height:100}}></MyButton>
+                
                   <TouchableOpacity
                     onPress={() => {
                       editStudent(item.id);

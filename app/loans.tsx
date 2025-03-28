@@ -1,7 +1,6 @@
 import React, { useState } from 'react'; //react é uma biblioteca e essa função esta importando ela, puxando
 import { FlatList, View, Text, StyleSheet, TextInput, Button, TouchableOpacity } from 'react-native'; //react native é uma biblioteca dentro de react 
 import MyCalendar from '../src/components/MyCalendar';
-import { MdCalendarToday } from 'react-icons/md';
 import MyView from '../src/components/MyView';
 
 
@@ -95,33 +94,9 @@ export default function LoanScreen() {
 
                     <MyCalendar date={date} setDate={setDate} icon="FaCalendarDays" />
 
-                    <TextInput
-                        placeholder="Status de Empréstimo:"
-                        value={req.statusLoan}
-                        onChangeText={(text) => setReq({ ...req, statusLoan: text })} //onChangeText recebe uma função, uma função anonima,a set req pede um objeto, (...) pega todos os objetos e tras de volta
-                    />
+                    <MyCalendar date={date} setDate={setDate} icon="FaCalendarDays" />
 
-
-                    <TextInput
-                        placeholder="Data de Empréstimo:"
-                        value={req.loanDate}
-                        onChangeText={(text) => setReq({ ...req, loanDate: text })}
-
-                    />
-
-
-                    <TextInput
-                        placeholder="Data Prevista de Devolução:"
-                        value={req.expectedLoanDate}
-                        onChangeText={(text) => setReq({ ...req, expectedLoanDate: text })}
-                    />
-
-
-                    <TextInput
-                        placeholder="Data de Devolução Efetuada:"
-                        value={req.effectiveLoanDate}
-                        onChangeText={(text) => setReq({ ...req, effectiveLoanDate: text })}
-                    />
+                    <MyCalendar date={date} setDate={setDate} icon="FaCalendarDays" />
 
 
                     <TextInput

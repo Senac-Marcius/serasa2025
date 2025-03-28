@@ -3,6 +3,8 @@ import{View,Text, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} fro
 import CurrencyInput from 'react-native-currency-input';
 import {TimeInput} from "@heroui/date-input";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import MyView from '../src/components/MyView';
+
 
 export default function PositionScreen(){
 /*Aqui é TypeScript*/
@@ -120,7 +122,7 @@ export default function PositionScreen(){
                         )}  />                
                     </View>
 
-        </View>
+        </MyView>
     )
 }
 
