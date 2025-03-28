@@ -54,9 +54,9 @@ export default MySelect
 
 const styles = StyleSheet.create({
     container: {
-        padding: 10,
+      /*  padding: ,
         backgroundColor: '#f8f8f8',
-        borderRadius: 8,
+        borderRadius: 8, */
       },
       button: {
         backgroundColor: "purple",
@@ -86,5 +86,4 @@ const styles = StyleSheet.create({
         fontSize: 16,
       },
 
-});
-
+}); 

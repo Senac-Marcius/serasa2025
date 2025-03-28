@@ -67,7 +67,7 @@ export default function LocalScreen(){
 
             <View style={styles.container}>
 
-            <Text style={styles.title}>TELA DOS LOCAIS</Text>
+            <Text style={styles.title}>LOCAL</Text>
 
                 <View style={styles.row}>
                     <View style={styles.formContainer}>
@@ -118,11 +118,11 @@ export default function LocalScreen(){
                                 <Text style={styles.label} > {item.description} </Text>
                                 <Text style={styles.label} > {item.createAt} </Text>
                             
-
-
                                 <View style={styles.buttonsContainer}>
                                     <TouchableOpacity style={styles.edit} onPress={ () => {editLocal(item.id)} }>edit</TouchableOpacity>
                                     <TouchableOpacity style={styles.del} onPress={ () => (delLocal(item.id))}>del</TouchableOpacity>
+                                  
+
                                 </View>
 
                             </View>
@@ -162,23 +162,19 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
         shadowRadius: 7,
     },
     container: {
-        flex: 20,
+        flex: 1000,
         padding: 15,
-        backgroundColor: "white",
+        backgroundColor: "pink", 
     },
     title:{
-        fontSize: 20,
+        fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'left',
-        marginBottom: 5,
-        color: "purple",
+        color: "BLACK",
         backgroundColor: "white",
-        padding: 2,
-        borderRadius: 10,
-        shadowColor: "#000",
-        shadowOpacity: 0.3,
-        shadowOffset: { width: 2, height: 2 },
-        shadowRadius: 5,
+        padding: 10,
+        borderRadius: 5,
+       
     },
     row: {
         flexDirection: 'row',
