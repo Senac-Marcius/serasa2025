@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { View, FlatList, Text, StyleSheet, TextInput, Button, TouchableOpacity} from 'react-native';
 import MyTheme from '../src/components/Mytheme';
-//import Myinputs from '../src/components/Myinputs'; 
+import {Myinput} from '../src/components/Myinputs'; 
+import MyView from '../src/components/MyView';
+import MyButton from '../src/components/Mybuttons';
+import MyItenlist from '../src/components/myItenlist';
+import MyList from '../src/components/mylist';
 
 export default function NotificationScreen(){
 // aqui é typNotificationScreenescript
@@ -58,7 +62,7 @@ export default function NotificationScreen(){
     }
 
 return (
-    <View>
+    <MyView>
            <MyTheme style={styles.row} chendTheme={(theme) => {}}  fontSize={ (som)=>{} }/>
            
  
@@ -66,43 +70,52 @@ return (
         <Text>Minha tela de notificações</Text>
         <View style={styles.row}>
             <View style={styles.form}>
-                <TextInput
+                <Myinput
                         style={styles.input}
-                        placeholder = "Nome:"
+                        placeholder = "Digite o nome:"
                         value={req.name}
                         onChangeText={(text) => setReq({...req ,name: text  })}
+                        label="Nome"
+                        iconName=''
                  />
-                <TextInput 
+                <Myinput
                         style={styles.input}
-                        placeholder = "Descrição:"  
+                        placeholder = "Digite a descrição:"  
                         value={req.description}
                         onChangeText={(text) => setReq({...req ,description: text  })}
+                        label="Descrição"
+                        iconName=''
+                    
                 />
-                <TextInput 
+                <Myinput
                         style={styles.input}
-                        placeholder = "classificação:"  
+                        placeholder = "Digite a classificação:"  
                         value={req.classification}
                         onChangeText={(text) => setReq({...req ,classification: text  })}
+                        label="Classificação"
+                        iconName=''
                 />
 
-                <TextInput 
+                <Myinput
                         style={styles.input}
-                        placeholder = "Url:" 
+                        placeholder = "Digite o Url:" 
                          value={req.url}
                          onChangeText={(text) => setReq({...req ,url: text  })}
+                         label="Url"
+                         iconName=''
                 />
 
-                <Button title="cadastrar:" onPress={handleRegister}/>
+                <MyButton title="cadastrar:" onPress={handleRegister}/>
 
             </View>
 
-           <FlatList
+           <MyList 
                     data={notifications}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({item}) => (
-                        <View style={styles.notificationStyle}>
+                        <MyItenlist style={styles.notificationStyle}  > {/* pedro */}
 
-                           <text> Nome: {item.name}</text> 
+                           <text> Nome: {item.name}</text> {/* alex */}
                            <text> Descrição: {item.description}</text>
                            <text> Url: {item.url}</text>
                            <text> Classificação: {item.classification}</text>
@@ -122,13 +135,13 @@ return (
                                 </TouchableOpacity>
                            
                             </View>
-                        </View>
+                        </MyItenlist>
                     )}
            />
            
         </View>
 
-    </View>
+    </MyView>
 );
 }
 
