@@ -6,6 +6,7 @@ import {MyTextArea } from '../src/components/Myinputs'
 import MyButton from '../src/components/Mybuttons';
 import Mytext from '../src/components/Mytext';
 import MyView from '../src/components/MyView';
+import { Myinput } from '../src/components/Myinputs';
 /*import { textStyles } from '../styles/textStyles';*/
 
 interface Project {
@@ -69,6 +70,9 @@ export default function ProjectScreen(){
             timeline: '',
             objective: '',
             methodology: '',
+            techniques: '',
+            strategies: '',
+            planning: '',
             /** Criar Processos, tecnicas, Estratégias e Planejamento aqui e puxar la embaixo para poder funcionar  */
         })
 
@@ -181,48 +185,41 @@ export default function ProjectScreen(){
                         />
                         
                         <Mytext style={styles.label}> Quais as Metodologias abordadas: </Mytext>
-                        <TextInput
-                            
-                            placeholder=""
-                            value={req.methodology}
-                            onChangeText={(text) => setReq({ ...req, methodology: text })}
-                        />
+                            <View style={styles.row}>
+                                <MyTextArea
+                                    iconName='message'
+                                    label="Técnicas"
+                                    value={req.methodology} // Passa o estado como valor
+                                    onChangeText={(text) => setReq({ ...req, techniques: text })} // Atualiza o estado ao digitar
+                                    placeholder="Digite sua mensagem aqui..."
+                                    style={{ height: 50 }}
+                                />
+                                <MyTextArea
+                                    iconName='message'
+                                    label="Processos"
+                                    value={req.methodology} // Passa o estado como valor
+                                    onChangeText={(text) => setReq({ ...req, objective: text })} // Atualiza o estado ao digitar
+                                    placeholder="Digite sua mensagem aqui..."
+                                    style={{ height: 50 }}
+                                />
+                                <MyTextArea
+                                    iconName='message'
+                                    label="Descrição"
+                                    value={req.methodology} // Passa o estado como valor
+                                    onChangeText={(text) => setReq({ ...req, strategies: text })} // Atualiza o estado ao digitar
+                                    placeholder="Digite sua mensagem aqui..."
+                                    style={{ height: 50 }}
+                                />
+                                <MyTextArea
+                                    iconName='message'
+                                    label="Descrição"
+                                    value={req.methodology} // Passa o estado como valor
+                                    onChangeText={(text) => setReq({ ...req, planning: text })} // Atualiza o estado ao digitar
+                                    placeholder="Digite sua mensagem aqui..."
+                                    style={{ height: 50 }}
+                                />
 
-                        <View style={styles.row}>
-                            <MyTextArea
-                                iconName='message'
-                                label="Técnicas"
-                                value={req.methodology} // Passa o estado como valor
-                                onChangeText={(text) => setReq({ ...req, methodology: text })} // Atualiza o estado ao digitar
-                                placeholder="Digite sua mensagem aqui..."
-                                style={{ height: 50 }}
-                            />
-                            <MyTextArea
-                                iconName='message'
-                                label="Processos"
-                                value={req.methodology} // Passa o estado como valor
-                                onChangeText={(text) => setReq({ ...req, methodology: text })} // Atualiza o estado ao digitar
-                                placeholder="Digite sua mensagem aqui..."
-                                style={{ height: 50 }}
-                            />
-                            <MyTextArea
-                                iconName='message'
-                                label="Descrição"
-                                value={req.methodology} // Passa o estado como valor
-                                onChangeText={(text) => setReq({ ...req, methodology: text })} // Atualiza o estado ao digitar
-                                placeholder="Digite sua mensagem aqui..."
-                                style={{ height: 50 }}
-                            />
-                            <MyTextArea
-                                iconName='message'
-                                label="Descrição"
-                                value={req.methodology} // Passa o estado como valor
-                                onChangeText={(text) => setReq({ ...req, methodology: text })} // Atualiza o estado ao digitar
-                                placeholder="Digite sua mensagem aqui..."
-                                style={{ height: 50 }}
-                            />
-
-                        </View>
+                            </View>
 
                         <View style={styles.buttonContainer}> 
                             <MyButton title="Cadastrar" onPress={handleRegister} />
