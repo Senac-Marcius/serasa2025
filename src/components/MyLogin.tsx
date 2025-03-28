@@ -4,7 +4,7 @@ import { TextInput} from 'react-native-gesture-handler';
 import MyLink from '../components/Mylink';
 import MyView from '../components/MyView';
 import MyButton from '../components/Mybuttons';
-import  { Myinput, MyCheck, MyTextArea } from '../components/Myinputs'; 
+import  { Myinput} from '../components/Myinputs'; 
  
 interface MyLoginProps{
     children: ReactNode;
@@ -13,7 +13,7 @@ interface MyLoginProps{
 }
 const MyLogin: React.FC<MyLoginProps> = ({children, style}) => {
     return (
-    <MyView>
+    <View>
     <TextInput>
         
     </TextInput>
@@ -31,7 +31,7 @@ const MyLogin: React.FC<MyLoginProps> = ({children, style}) => {
             
         </MyButton>
         
-    </MyView>
+    </View>
     );
     
    
