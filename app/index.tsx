@@ -28,11 +28,19 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
-                        label="Postagens"
+                        label="CATEGORIES"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/posts');
+                            router.push('/categories');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="Area do Aluno"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/students');
                         }}
                     />
                     <Drawer.Item
@@ -50,6 +58,14 @@ export default function HomeScreen() {
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/launchs');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="Despesa"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/expenses');
                         }}
                     />
                     <Drawer.Item
