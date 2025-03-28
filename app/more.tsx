@@ -2,54 +2,80 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import MyView from '../src/components/MyView';
 import MyButton from '../src/components/Mybuttons';
-import { IconButton } from 'react-native-paper'; 
+import { IconButton } from 'react-native-paper';
 
-export default function MoreScreen() {  
-    const [visible, setVisible] = useState(false); 
+export default function MoreScreen() {
+    const [visible, setVisible] = useState(false);
 
     return (
-        <View style={styles.container}> 
+        <View style={styles.container}>
             <MyView>
                 {/* Botão Saiba Mais */}
-                <MyButton 
-                    style = {styles.option}
-                    title="SAIBA MAIS"
-                    button_type="round"
-                    onPress={() => setVisible(!visible)}
-                />
-                
-               
+                <View style={styles.optionsContainer}>
+                    <MyButton
+                        style={styles.option}
+                        title="SAIBA MAIS"
+                        button_type="round"
+                        onPress={() => setVisible(!visible)}
+                    />
+
+
+
+                </View>
+
+
                 {visible && (
                     <View style={styles.optionsContainer}>
-                        <MyButton 
-                            style = {styles.option}
+                        <MyButton
+                            style={styles.option}
                             button_type="round"
-                            title = "CONFIGURAÇÕES"
+                            title="CONFIGURAÇÕES"
                         />
-                        <MyButton 
-                            style = {styles.option}
+                        <MyButton
+                            style={styles.option}
                             button_type="round"
-                            title = "ELOGIOS"
+                            title="ELOGIOS"
                         />
-                        <MyButton 
-                            style = {styles.option}
+                        <MyButton
+                            style={styles.option}
                             button_type="round"
-                            title = "RECLAMAÇÕES"
+                            title="RECLAMAÇÕES"
                         />
-                      
 
-                        <MyButton 
+                        <MyButton
                             title="SAIR"
                             button_type="round"
                             onPress={() => setVisible(false)}
                         />
+
+                        <MyButton
+                            style={styles.icon}
+                            title=""
+                            button_type="circle"
+                            onPress={() => setVisible(false)}
+                            icon = "github"
+                        />
+                        <MyButton
+                            style={styles.icon}
+                            title=""
+                            button_type="circle"
+                            onPress={() => setVisible(false)}
+                            icon = "facebook"
+                        />
+                           <MyButton
+                            style={styles.icon}
+                            title=""
+                            button_type="circle"
+                            onPress={() => setVisible(false)}
+                            icon = "instagram"
+                        />
                     </View>
                 )}
-                
+
                 <View style={styles.footer}>
-                    <IconButton icon="github" size={30} iconColor="black" onPress={() => {}} />
-                    <IconButton icon="facebook" size={30} iconColor="blue" onPress={() => {}} />
-                    <IconButton icon="instagram" size={30} iconColor="purple" onPress={() => {}} />
+                    <IconButton icon="github" size={30} iconColor="black" onPress={() => { }} />
+                    <IconButton icon="facebook" size={30} iconColor="blue" onPress={() => { }} />
+                    <IconButton icon="instagram" size={30} iconColor="purple" onPress={() => { }} />
                 </View>
             </MyView>
         </View>
@@ -64,17 +90,17 @@ const styles = StyleSheet.create({
     optionsContainer: {
         marginTop: 10,
         padding: 10,
-        backgroundColor: '#FFF',
+        backgroundColor: '#123456',
         borderRadius: 10,
-        elevation: 3, 
-        shadowColor: '#000', 
+        elevation: 3,
+        shadowColor: '#000',
         shadowOpacity: 0.1,
         shadowRadius: 5,
         alignItems: 'center',
         justifyContent: 'center',
     },
     option: {
-        width: 200,
+        width: 500,
         alignItems: 'center',
         backgroundColor: '#813AB1',
         borderRadius: 10,
@@ -86,6 +112,9 @@ const styles = StyleSheet.create({
         padding: 15,
         backgroundColor: '#FFF',
         marginTop: 20,
-    } 
-    
+    },
+    icon: {
+
+    },
+
 });
