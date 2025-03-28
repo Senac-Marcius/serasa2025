@@ -1,5 +1,6 @@
 import React, { useState } from 'react'; 
-import { View, Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity  } from 'react-native';
+import { Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, View  } from 'react-native';
+import MySelect from '../src/components/Myselect' 
 
 export default function LocalScreen(){
 
@@ -53,14 +54,20 @@ export default function LocalScreen(){
     function delLocal(id:number){
         const list = locals.filter(l => l.id != id)
         if(list)
-            setLocals(list)
+            setLocals(list)           
     }
+
+    const [unity, setUnit] = useState("metros")
 
     return (  //  *  sempre retornará um html.     * view com o "v" minúsculo é utilizado, apenas, no HTML puro.     * Para comentar no HYML, é necessário utilizar "{/* */}"
         <View>
+           
+
+           
+
             <View style={styles.container}>
 
-            <Text style={styles.title}>TELA DOS LOCAIS</Text>
+            <Text style={styles.title}>LOCAL</Text>
 
                 <View style={styles.row}>
                     <View style={styles.formContainer}>
@@ -71,8 +78,15 @@ export default function LocalScreen(){
                         onChangeText={(t) => setReq({...req, name: t })}                    
                         />  
 
+                        <MySelect label={unity} setLabel={setUnit }  list={
+                            [
+                                {key:0, option: 'metro'},
+                                {key:1, option: 'polegada'},
+                            ]
+                        } />  
+
                         <TextInput 
-                        placeholder= "Digite a área do local em metros:"
+                        placeholder={ `Digite a área do local em ${unity}:`}
                         value={req.area}
                         onChangeText={(n) => setReq({...req, area: n })}                   
                         />                                                              
@@ -86,6 +100,8 @@ export default function LocalScreen(){
                         value={req.adress}
                         onChangeText={(t) => setReq({...req, adress: t })}
                         />
+
+                        
 
                         <Button title='Cadastrar' onPress={ handleRegister } />         
 
@@ -101,12 +117,12 @@ export default function LocalScreen(){
                                 <Text style={styles.label} > {item.area} </Text>
                                 <Text style={styles.label} > {item.description} </Text>
                                 <Text style={styles.label} > {item.createAt} </Text>
-
-
-
+                            
                                 <View style={styles.buttonsContainer}>
                                     <TouchableOpacity style={styles.edit} onPress={ () => {editLocal(item.id)} }>edit</TouchableOpacity>
                                     <TouchableOpacity style={styles.del} onPress={ () => (delLocal(item.id))}>del</TouchableOpacity>
+                                  
+
                                 </View>
 
                             </View>
@@ -123,8 +139,7 @@ export default function LocalScreen(){
 
 const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos funções que criam estilos para fontes
 
-    
-     edit: {
+    edit: {
         flex: 5,
         marginRight: 15,
         padding: 10,
@@ -147,9 +162,19 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
         shadowRadius: 7,
     },
     container: {
-        flex: 20,
+        flex: 1000,
         padding: 15,
-        backgroundColor: '#F2F2F2',
+        backgroundColor: "pink", 
+    },
+    title:{
+        fontSize: 24,
+        fontWeight: 'bold',
+        textAlign: 'left',
+        color: "BLACK",
+        backgroundColor: "white",
+        padding: 10,
+        borderRadius: 5,
+       
     },
     row: {
         flexDirection: 'row',
@@ -157,50 +182,49 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
         alignItems: 'flex-start',
 
     },
-    formContainer: {
-        flex: 5,
-        marginRight: 50,
-        padding: 25,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 15,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 7,
-    },
     form: {
         flex: 6,
         marginRight: 15,
         padding: 50,
-        backgroundColor: '#F2F2F2',
+        backgroundColor: "black",
         borderRadius: 15,
-        shadowColor: '#000',
+        shadowColor: "black",
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 3, height: 4 },
+        shadowRadius: 7,
+    },
+
+    formContainer: {
+        flex: 5,
+        marginRight: 3,
+        padding: 10,
+        backgroundColor: "white",
+        borderRadius: 10,
+        shadowColor: "white",
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 7,
     },
+    input: {
+    borderBottomWidth: 1,
+    borderColor: "black",
+    marginBottom: 10,
+    paddingVertical: 4,
+  },
     buttonsContainer: {
         flex: 100,
         padding: 50,
-        backgroundColor: '#F2F2F2',
+        backgroundColor: "white",
         justifyContent: 'space-between',
         alignItems: 'flex-start',
-        
-    },
-    title:{
-        fontSize: 22,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 20,
-        color: "green"
         
     },
     item:{
 
     },
     label:{
-        color: "blue",
+        color: "black",
     }
 
-})
+}) 
 
