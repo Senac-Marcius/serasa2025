@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Appbar, Drawer } from 'react-native-paper';
 import { useState } from 'react';
+import  MyTheme from '../src/components/Mytheme'
 
 export default function HomeScreen() {
     const router = useRouter();
@@ -14,6 +15,8 @@ export default function HomeScreen() {
             <Appbar.Header>
                 <Appbar.Action icon="menu" onPress={() => setDrawerOpen(!drawerOpen)} />
                 <Appbar.Content title="Serasa App" />
+                 <MyTheme chendTheme={() => {}}  fontSize={ ()=>{} }/>
+                    
             </Appbar.Header>
 
             {/* Drawer Menu */}
