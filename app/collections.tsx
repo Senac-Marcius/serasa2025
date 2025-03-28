@@ -1,9 +1,16 @@
 import React, {useState} from 'react';
-import{View, Text, StyleSheet, FlatList, TextInput,Button,TouchableOpacity,} from 'react-native';
-import { text } from 'stream/consumers';
+import{View, Text, StyleSheet, FlatList,TouchableOpacity,} from 'react-native';
+import { Button, TextInput, RadioButton, Checkbox } from 'react-native-paper';
+import { useRouter } from 'expo-router';
+import MyModal2 from '../src/components/Mymodal';
+
  //função userState só retorna para uma variavel const
 
 export default function CollectionScreen(){
+
+    const [visible, setVisible] = useState(false);
+
+    const router = useRouter();
     const [req, setReq] = useState({
         id: 0,
         name:'',
@@ -53,7 +60,13 @@ export default function CollectionScreen(){
         }
     
         return (//encapsulamento 
-            <View>{/* modo de comentar, aqui é typescript dentro do front */}
+            <View>
+                <MyModal2 visible={visible} setVisible={setVisible}>
+                    <Text>
+                        dknfkldsnf
+                    </Text>
+                </MyModal2>
+                          
                 <Text>Tela de acervo</Text>
                 <View style= {styles.row}>
                     <View style= {styles.form}>
@@ -78,10 +91,11 @@ export default function CollectionScreen(){
                         />
                        
 
-                        <Button title='Cadastrar'
+                        <Button 
                         onPress={handleRegister}
-                        color="pink"
-                        />
+                        >
+                            Cadastrar
+                        </Button>
                     </View>
                     <FlatList // data faz um foreach (data recebe collections)
                         data={collections}
@@ -201,3 +215,4 @@ export default function CollectionScreen(){
      
      
     })
+    

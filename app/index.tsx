@@ -35,6 +35,14 @@ export default function HomeScreen() {
                             router.push('/categories');
                         }}
                     />
+                     <Drawer.Item
+                        label="Itens"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/itens');
+                        }}
+                    />
                     <Drawer.Item
                         label="Area do Aluno"
                         icon="post"
@@ -52,6 +60,14 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
+                        label="Cursos"
+                        icon="acervo"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/collections');
+                    }}
+                    />
+                    <Drawer.Item
                         label="Despesa"
                         icon="post"
                         onPress={() => {
@@ -65,6 +81,14 @@ export default function HomeScreen() {
                         onPress={() => {
                             setDrawerOpen(false);
                             console.log("Configurações");
+                        }}
+                    />
+                    <Drawer.Item
+                        label="Biblioteca - Cadastramento"
+                        icon="book"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/librarie');
                         }}
                     />
                 </Drawer.Section>
