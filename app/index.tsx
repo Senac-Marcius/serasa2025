@@ -36,6 +36,14 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
+                        label="Cronograma"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/timelines');
+                        }}
+                    />
+                    <Drawer.Item
                         label="Area do Aluno"
                         icon="post"
                         onPress={() => {
