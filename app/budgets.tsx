@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity} f
 import MyLogin from '../src/components/MyLogin';
 import MyButton from '../src/components/Mybuttons';
 import MyList from '../src/components/mylist';
-import  { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
+import  { Myinput} from '../src/components/Myinputs';
 
 
 export default function BudgetScreen(){
@@ -78,33 +78,44 @@ export default function BudgetScreen(){
             <Text>Minha tela das postagens</Text>
             <View style={styles.row}>
                 <View style={styles.form}>
-                    <TextInput
+                    <Myinput
                             placeholder = "nome" 
                             value={req.name}
                             onChangeText={(text) => setReq({...req ,name: text})}
+                            label="Nome"
+                            iconName="person"
                    />
-                    <TextInput 
+                    <Myinput 
                     placeholder = "url"
                     value={req.url}
                     onChangeText={(text) => setReq({...req ,url: text})} 
+                    label="Valor"
+                    iconName="pin"
                      />
                      
-                     <TextInput 
-                    placeholder = "valor"
+                     <Myinput 
+                    placeholder = "Digite o valor"
                     value={req.velue}
                     onChangeText={(text) => setReq({...req ,velue: text})} 
+                    label="valor"
+                    iconName="pin"
                      />
-                    <TextInput 
+                    <Myinput 
                     placeholder = "Data Inicial"
                     value={req.startDate}
                     onChangeText={(text) => setReq({...req ,startDate: text})} 
+                    label="Data Inicial"
+                    iconName="pin"
                      />
-                    <TextInput 
+                    <Myinput 
                     placeholder = "Data Final" 
                     value={req.endDate}
                     onChangeText={(text) => setReq({...req ,endDate: text})}
+                    label="Data Final"
+                    iconName="pin"
                      />
                      
+
 
                     <MyButton title ='CADASTRAR' onPress={ handleRegister }/>
                 </View>

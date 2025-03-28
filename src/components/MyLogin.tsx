@@ -9,11 +9,14 @@ import  { Myinput, MyCheck, MyTextArea } from '../components/Myinputs';
 interface MyLoginProps{
     children: ReactNode;
     style: ViewStyle | ViewStyle[];
+    
 }
 const MyLogin: React.FC<MyLoginProps> = ({children, style}) => {
     return (
     <MyView>
-    
+    <TextInput>
+        
+    </TextInput>
     
         <MyLink 
             url="http://google.com"
