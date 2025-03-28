@@ -15,7 +15,7 @@ const Myiten: React.FC<MytextProps> = ({ children, style, onEdit, onDel }) => {
             {children}
             <View>
               <MyButton onPress={onEdit} title='Editar'></MyButton>
-              <MyButton onPress={onDel} title='Deletar'></MyButton> 
+              <MyButton  style={{marginTop: 20 }} onPress={onDel} title='Deletar'></MyButton> 
             </View>
         </TouchableOpacity>
         );
@@ -23,30 +23,3 @@ const Myiten: React.FC<MytextProps> = ({ children, style, onEdit, onDel }) => {
 
 export default Myiten;
  
-const styles = StyleSheet.create({
-  edit: {
-    backgroundColor: "#ab66f9",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 5,
-    color: '#ffffff',
-    width:100,
-  } as ViewStyle,
-
-  del:{
-    backgroundColor: "#ab66f9",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 5,
-    color: '#ffffff',
-    marginTop: 20,
-    width:100,
-  } as ViewStyle,
-
-  buttonText: {
-    color: "#FFF",
-    fontSize: 16,
-    fontWeight: "bold"
-  } as TextStyle,
-  
-})
