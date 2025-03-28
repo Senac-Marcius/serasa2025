@@ -6,6 +6,9 @@ import MyList from '../src/components/mylist';
 import MyButton from '../src/components/Mybuttons';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
 import MyTopbar from '../src/components/mytopbar';
+import Myiten from '../src/components/myItenlist';
+import Mytext from '../src/components/Mytext';
+
 
 
 export default function RevenueScreen() {
@@ -76,14 +79,16 @@ export default function RevenueScreen() {
 
   return (
     
+
+    
     <MyView>
      
 
 
-       <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#333', textAlign: 'center' }}>
+       <Mytext style={{ fontSize: 24, fontWeight: 'bold', color: '#333', textAlign: 'center' }}>
        cadastre as receitas
-  </Text>
-      
+       </Mytext>
+       
 
       {/* Formulário */}
       
@@ -162,39 +167,21 @@ export default function RevenueScreen() {
           data={revenues}
           keyItem={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <View style={styles.revenueStyle}>
-              <Text style={styles.revenueText}>Descrição: {item.description}</Text>
-              <Text style={styles.revenueText}>Nome: {item.name}</Text>
-              <Text style={styles.revenueText}>URL: {item.url}</Text>
-              <Text style={styles.revenueText}>Data: {item.createAt}</Text>
-              <Text style={styles.revenueText}>ID do Usuário: {item.userId}</Text>
-              <Text style={styles.revenueText}>Valor: {item.value}</Text>
-              <Text style={styles.revenueText}>Status da Bolsa: {item.scholarshipStatus}</Text>
-              <Text style={styles.revenueText}>Desconto: {item.discountPercentage}%</Text>
+            <Myiten 
+              style={styles.revenueStyle}
+              onEdit={()=> {editRevenue(item.id)}}
+              onDel={()=> {delRevenue(item.id)}}
+            >
+               <Mytext style={styles.revenueText}>Descrição: {item.description}</Mytext>
+                <Mytext style={styles.revenueText}>Nome: {item.name}</Mytext>
+               <Mytext style={styles.revenueText}>ID do Usuário: {item.userId}</Mytext>
+               <Mytext style={styles.revenueText}>Valor: {item.value}</Mytext>
+               <Mytext style={styles.revenueText}>Status da Bolsa: {item.scholarshipStatus}</Mytext>
+               <Mytext style={styles.revenueText}>Desconto: {item.discountPercentage}%</Mytext>
+               <Mytext style={styles.revenueText}>Data: {item.createAt}</Mytext>
+               <Mydownload style={styles.revenueText} url={item.url}/>
 
-              {/* Botões de Editar e Excluir */}
-              <View style={styles.buttonsContanier}>
-
-                <MyButton
-                  title='EDIT'
-                  button_type='default'
-                  style={styles.editButton}
-                  onPress={() => editRevenue(item.id)}
-                  icon=''
-                />
-                
-               <MyButton
-                title='DELETE'
-                button_type='default'
-                style={styles.deleteButton}
-                onPress={() => delRevenue(item.id)}
-                icon=''
-                />
-
-                <Mydownload style={styles.downloadButton} url="https://img.freepik.com/vetores-premium/baixe-a-ilustracao-vetorial-baixe-o-arquivo-50-por-cento-do-grafico-da-internet-com-o-carregamento-do-texto-de-download-da-seta-armazenamento-em-nuvem-conceito-de-carregamento-icone-de-linha-preta-do-vetor-em-um-fundo-branco_748571-116.jpg?w=1060" />
-
-              </View>
-            </View>
+            </Myiten>
           )}
         />
       </View>
