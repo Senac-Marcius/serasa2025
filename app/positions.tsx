@@ -54,7 +54,7 @@ export default function PositionScreen(){
     }
 
     return (
-        <MyView>
+        <MyView style={styles.container}>
             {/*Aqui é TypeScript dentro do front*/}
             <Text>Minha tela dos cargos</Text>
             <View style = {styles.row}>
