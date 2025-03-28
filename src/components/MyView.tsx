@@ -1,12 +1,15 @@
 import React,{ReactNode} from 'react';
-import { View, TouchableOpacity, StyleSheet, Dimensions, Text } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Dimensions, TextStyle,  } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
 import { Button } from 'react-native-paper';
 import { router } from 'expo-router';
+import MyTopbar from './mytopbar';
 
 interface MySearchProps {
   children: ReactNode;
+  style?: TextStyle | TextStyle[]; 
+
 }
 
 const myView: React.FC< MySearchProps > = ({children}) => { 
@@ -42,19 +45,22 @@ const myView: React.FC< MySearchProps > = ({children}) => {
       shadowRadius: 4,
       elevation: 5,
     },
+
+    tView:{
+      width: width,
+      height: height,
+    }
   });
 
   return (
     <ScrollView style={styles.container}>
-      <Text>Olá componente</Text>
+      <View>
+        <MyTopbar  title='Cargos' />
       {children}
-      <Text>Tchau componente</Text>
       {/* Conteúdo da tela (pode ser adicionado aqui) */}
       {/* Botão de suporte */}
-      <TouchableOpacity style={styles.suporteButton} onPress={handleSuporte}>
-        .
-      </TouchableOpacity>
-      
+      <TouchableOpacity style={styles.suporteButton} onPress={handleSuporte}>      </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
