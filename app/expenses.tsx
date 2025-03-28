@@ -62,7 +62,7 @@ export default function ExpenseScreen(){
     return (
         <MyView> 
             {/* aqui é typecript dentro do front */}
-            <Text style={styles.title}>tela de despesas</Text>
+            <Text style={styles.title}>Cadastro de despesas</Text>
             <View style={styles.row}>
                 <View style={styles.form}>
                     <TextInput 
