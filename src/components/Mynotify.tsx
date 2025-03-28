@@ -2,6 +2,7 @@ import { View, ViewStyle, TouchableOpacity } from 'react-native';
 import Entypo from '@expo/vector-icons/Entypo';
 //https://icons.expo.fyi/Index
 import React, { ReactNode } from 'react';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface MyNotifyProps {
   children: ReactNode;
