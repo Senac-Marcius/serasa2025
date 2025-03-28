@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, FlatList, Text, StyleSheet, TextInput, Button, TouchableOpacity} from 'react-native';
+import { View, FlatList, Text, StyleSheet, TextInput, Button, TouchableOpacity,} from 'react-native';
 import MyTheme from '../src/components/Mytheme';
 import {Myinput} from '../src/components/Myinputs'; 
 import MyView from '../src/components/MyView';
 import MyButton from '../src/components/Mybuttons';
 import MyItenlist from '../src/components/myItenlist';
 import MyList from '../src/components/mylist';
+import Mytext from '../src/components/Mytext';
 
 export default function NotificationScreen(){
 // aqui é typNotificationScreenescript
@@ -115,12 +116,12 @@ return (
                     renderItem={({item}) => (
                         <MyItenlist style={styles.notificationStyle}  > {/* pedro */}
 
-                           <text> Nome: {item.name}</text> {/* alex */}
-                           <text> Descrição: {item.description}</text>
-                           <text> Url: {item.url}</text>
-                           <text> Classificação: {item.classification}</text>
-                           <text> UserId: {item.userId}</text>
-                           <text> CreatAt: {item.creatAt}</text>
+                           <Mytext> Nome: {item.name}</Mytext> {/* alex */}
+                           <Mytext> Descrição: {item.description}</Mytext>
+                           <Mytext> Url: {item.url}</Mytext>
+                           <Mytext> Classificação: {item.classification}</Mytext>
+                           <Mytext> UserId: {item.userId}</Mytext>
+                           <Mytext> CreatAt: {item.creatAt}</Mytext>
 
                             <View style={styles.buttonsContainer}>
                                 <TouchableOpacity 
