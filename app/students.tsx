@@ -103,12 +103,13 @@ export default function StudentsScreen() {
                 <Text>{item.email}</Text>
                 <Text>{item.createdAt}</Text>
                 <View style={styles.row}>
-                  <MyButton
-                   
+                  <MyButton                   
                     onPress={() => deleteStudent(item.id)}
-                    button_type="capsule"
-                    style={{ width: 50, height: 50 }}
-                    icon="camera"
+                    button_type="circle"                    
+                    icon="arrow-left"
+                    iconSize={20}
+                    width={40}
+                    height={40}
                   ></MyButton>
 
                   <TouchableOpacity

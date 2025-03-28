@@ -1,8 +1,15 @@
+import { Flex, Row } from "native-base";
 import React, { useState } from "react";
 import { TouchableOpacity, Text, StyleSheet, ViewStyle } from "react-native";
-import { Icon , MD3Colors} from "react-native-paper";
+import { Icon } from "react-native-paper";
 
-type Button_type = "default" | "round" | "circle" | "rect" | "capsule" |"loading";
+type Button_type =
+  | "default"
+  | "round"
+  | "circle"
+  | "rect"
+  | "capsule"
+  | "loading";
 
 interface MyButtonProps {
   title?: string;
@@ -10,6 +17,14 @@ interface MyButtonProps {
   button_type?: Button_type;
   icon?: string;
   style?: ViewStyle;
+  iconSize?: number;
+  iconColor?: string;
+  color?: string;
+  width?: number;
+  height?: number;
+  font_size?:number;
+  text_color?:string;
+  gap?:number;
 }
 
 function getButtonType(button_type: Button_type): any {
@@ -23,90 +38,92 @@ function getButtonType(button_type: Button_type): any {
     case "rect":
       return styles.button_rect;
     case "loading":
-        return styles.button_rect;
+      return styles.button_rect;
     default:
       return styles.button_default;
   }
 }
 
-
-
-
-
 const MyButton: React.FC<MyButtonProps> = ({
   title,
   onPress,
   button_type = "default",
+  color = "#813AB1",
   icon,
   style,
+  font_size = 16,
+  text_color = "white",
+  iconSize = 30,
+  gap = 10,
+  iconColor = "white",
+  height = button_type == "circle" ? 50 : 50,
+  width = button_type == "circle" ? 50 : 190,
 }) => {
+  const [loading, setLoading] = useState(false);
 
-    const [loading, setLoading] = useState(false)
-
-    function onPressIntenal(){
-        if(button_type == "loading"){
-            setLoading(true)
-            setTimeout(() => {
-                () => {onPress && onPress()};
-                setLoading(false)
-            }, 2000)
-        }else{
-            onPress != undefined ? onPress() : ""
-            setLoading(true)
-        }
-        
+  function onPressIntenal() {
+    if (button_type == "loading") {
+      setLoading(true);
+      setTimeout(() => {
+        () => {
+          onPress && onPress();
+        };
+        setLoading(false);
+      }, 2000);
+    } else {
+      onPress != undefined ? onPress() : "";
+      setLoading(true);
     }
+  }
   return (
     <TouchableOpacity
-      style={[getButtonType(button_type), style]}
+      style={[
+        getButtonType(button_type),
+        style,
+        { backgroundColor: color, height: height, width: width,gap:gap },
+      ]}
       onPress={onPressIntenal}
     >
-     { icon && <Icon size={20} source={icon} color={MD3Colors.error50}></Icon>}
-      <Text style={styles.button_text}>{title}</Text>
-
+      {icon && <Icon size={iconSize} source={icon} color={iconColor}></Icon>}
+      {title && <Text style={{ fontSize: font_size, color: text_color }}>{title}</Text>}
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   button_circle: {
-    backgroundColor: "#813AB1",
-    padding: 10,
     borderRadius: 100,
-    width: 70,
-    height: 70,
+    display: "flex",
+    gap: 5,
     alignItems: "center",
     justifyContent: "center",
   },
   button_capsule: {
     borderRadius: 50,
-    backgroundColor: "#813AB1",
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
+    
   },
   button_round: {
-    backgroundColor: "#813AB1",
-    padding: 10,
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
+    
   },
   button_rect: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#813AB1",
-    padding: 10,
+    flexDirection: "row",
     borderRadius: 0,
+    
   },
   button_default: {
-    backgroundColor: "#813AB1",
-    padding: 10,
     borderRadius: 15,
     alignItems: "center",
-  },
-  button_text: {
-    color: "#FFFFFF",
-    fontSize: 16,
+    flexDirection: "row",
+    
   },
 });
 
