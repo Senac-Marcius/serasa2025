@@ -4,6 +4,7 @@ import MyLogin from '../src/components/MyLogin';
 import MyButton from '../src/components/Mybuttons';
 import MyList from '../src/components/mylist';
 import  { Myinput} from '../src/components/Myinputs';
+import MyView from '../src/components/MyView';
 
 
 export default function BudgetScreen(){
@@ -70,7 +71,7 @@ export default function BudgetScreen(){
 
 
     return (
-        <View>
+        <MyView>
             <MyLogin style={styles.row}>
             <text></text>
         </MyLogin>
@@ -79,17 +80,17 @@ export default function BudgetScreen(){
             <View style={styles.row}>
                 <View style={styles.form}>
                     <Myinput
-                            placeholder = "nome" 
+                            
                             value={req.name}
                             onChangeText={(text) => setReq({...req ,name: text})}
                             label="Nome"
                             iconName="person"
                    />
                     <Myinput 
-                    placeholder = "url"
+                    
                     value={req.url}
                     onChangeText={(text) => setReq({...req ,url: text})} 
-                    label="Valor"
+                    label="url"
                     iconName="pin"
                      />
                      
@@ -101,14 +102,14 @@ export default function BudgetScreen(){
                     iconName="pin"
                      />
                     <Myinput 
-                    placeholder = "Data Inicial"
+                  
                     value={req.startDate}
                     onChangeText={(text) => setReq({...req ,startDate: text})} 
                     label="Data Inicial"
                     iconName="pin"
                      />
                     <Myinput 
-                    placeholder = "Data Final" 
+                  
                     value={req.endDate}
                     onChangeText={(text) => setReq({...req ,endDate: text})}
                     label="Data Final"
@@ -151,7 +152,7 @@ export default function BudgetScreen(){
                     )}
                 />
             </View>
-        </View>
+        </MyView>
     );
 }
 
