@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import{View, Text, StyleSheet, FlatList,TouchableOpacity,} from 'react-native';
+import{View, Text, StyleSheet, FlatList,TouchableOpacity,TextStyle} from 'react-native';
 import { Button, TextInput, RadioButton, Checkbox } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import {MyModal_mobile1, MyModal_mobile2, MyModal_mobile3, MyModal_mobilefullscreen,MyModal1_desktop} from '../src/components/Mymodal';
 import MyButton from '../src/components/Mybuttons';
+import MyView from '../src/components/MyView';
 
  //função userState só retorna para uma variavel const
 
@@ -61,6 +62,8 @@ export default function CollectionScreen(){
         }
     
         return (//encapsulamento 
+            <MyView>
+
             <View>
                 <MyModal1_desktop visible={visible} setVisible={setVisible}>
                     <Text>
@@ -123,10 +126,11 @@ export default function CollectionScreen(){
                     />
                 </View>
             </View>
-
+            </MyView>
         );
     }
     const styles = StyleSheet.create({
+        
         button_capsule: {
             borderRadius: 50,
             height: 45,
@@ -153,8 +157,7 @@ export default function CollectionScreen(){
             shadowOffset: { width: 0, height: 4 },
             shadowRadius: 5,
             marginLeft: 50,
-            marginTop: 50,
-     
+            marginTop: 50,    
         },
      
      
