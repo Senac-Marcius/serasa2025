@@ -60,22 +60,13 @@ export default function ParentScreen (){
             setParents(list)
      }
     
+
+    const[urlDocument, setDocument] = useState('')
+    
     return (
         <View>{/*aqui é typeScript dentro do Front*/}
           {/*View → esse view é diferente do HTML ele contém DIVs e outros atributos,*/}  
-          <MyUpload style={{ 
-            backgroundColor:'#AD6CD9', 
-            padding: 10, 
-            margin:20,
-            borderRadius:20,
-            shadowRadius:5,
-            shadowOpacity:5,
-        
-            
-            }}> 
-            Adicione um arquivo
-            </MyUpload>
-            
+          
             <Text>Minha tela das postagens </Text>
             <View style = {styles.row}>
                 <View style={styles.form}>{/*View no Type pode ser usado para substituir o Form */}
@@ -86,17 +77,21 @@ export default function ParentScreen (){
                         onChangeText={(Text) => setReq({...req, Nome: Text})}
             
                     />
+
                     <TextInput
                         placeholder="Email:"
                         value={req.Email}
                         onChangeText={(Text) => setReq({...req, Email: Text})}
                     />
+
                     <TextInput
                         placeholder="Parentesco:"
                         value={req.parentesco}
                         onChangeText={(Text) => setReq({...req, parentesco: Text})}
                     />
-                
+
+                    <MyUpload setUrl={setDocument} url={urlDocument}/>
+                    
                     <Button 
                         title='Cadastrar' 
                         color='blue'
@@ -156,6 +151,8 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     parentsItem: {
         flex: 1,
