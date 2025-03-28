@@ -9,20 +9,26 @@ import { color } from 'native-base/lib/typescript/theme/styled-system';
 export default function ParentScreen (){
 //Aqui é TypeScript
     const [req, setReq] = useState({
+        id:0,
         Nome: '',
+        rg:'',
+        cpf:'',
+        phone:'',
         Email:'',
         parentesco:'',
-        id:0,
         createAt: new Date().toISOString(),
         userId: 0,
 
     });
 
     const [parents,setParents] = useState<{
+        id: number,
         Nome: string,
+        rg:string,
+        cpf:string,
+        phone:string,
         Email: string,
         parentesco: string,
-        id: number,
         createAt: string,
         userId: number,
     
@@ -31,17 +37,20 @@ export default function ParentScreen (){
     function handleRegister() {
         if(req.id == -1){
             const newId = parents.length ? parents [parents.length -1].id +1 : 0;
-            const newParents = {...req, id: newId}
+            const newParents = {...req, id:newId}
 
-            setParents([... parents, newParents])
+            setParents([...parents, newParents])
         }else{
-            setParents(parents.map( p =>(p.id == req.id ? req : p)))
+            setParents(parents.map(p =>(p.id == req.id?req:p)))
         }
 
         //setParents([...parents, req])
         setReq({
             id:-1,
             Nome: '',
+            rg:'',
+            cpf:'',
+            phone:'',
             Email:'',
             parentesco:'',
             createAt: new Date().toISOString(),
@@ -75,7 +84,21 @@ export default function ParentScreen (){
                         placeholder="Nome:"
                         value={req.Nome}
                         onChangeText={(Text) => setReq({...req, Nome: Text})}
-            
+                    />
+                    <TextInput
+                        placeholder="RG:"
+                        value={req.rg}
+                        onChangeText={(Text) => setReq({...req, rg: Text})}
+                    />
+                    <TextInput
+                        placeholder="CPF:"
+                        value={req.cpf}
+                        onChangeText={(Text) => setReq({...req, cpf: Text})}
+                    />
+                    <TextInput
+                        placeholder="Phone:"
+                        value={req.phone}
+                        onChangeText={(Text) => setReq({...req, phone: Text})}
                     />
 
                     <TextInput
@@ -89,8 +112,6 @@ export default function ParentScreen (){
                         value={req.parentesco}
                         onChangeText={(Text) => setReq({...req, parentesco: Text})}
                     />
-
-                    <MyUpload setUrl={setDocument} url={urlDocument}/>
                     
                     <Button 
                         title='Cadastrar' 
@@ -105,6 +126,9 @@ export default function ParentScreen (){
                         title='Deletar'
                         color='red'
                         onPress={delParent}/>*/}
+
+                    <MyUpload setUrl={setDocument} url={urlDocument}/>
+
                 </View>
 
                 <FlatList
@@ -112,12 +136,16 @@ export default function ParentScreen (){
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({item}) => (
                         <View style={styles.parentsItem}>
-                            <Text>{item.id}</Text>
-                            <Text>{item.Nome}</Text>
-                            <Text>{item.Email}</Text>
-                            <Text>{item.parentesco}</Text>
-                            <Text>{item.createAt}</Text>
-                            <Text>{item.userId}</Text> 
+                            <Text style={styles.itemText}>Id: {item.id}</Text> 
+                            <Text style={styles.itemText}>Nome: {item.Nome}</Text>
+                            <Text style={styles.itemText}>RG: {item.rg}</Text>
+                            <Text style={styles.itemText}>CPF: {item.cpf}</Text>
+                            <Text style={styles.itemText}>Phone: {item.phone}</Text>
+                            <Text style={styles.itemText}>Email: {item.Email}</Text>
+                            <Text style={styles.itemText}>Parentesco: {item.Email}</Text>
+                            <Text style={styles.itemText}>UserId: {item.userId}</Text>
+                            
+                            
                                 <View style ={styles.buttonContainer}>
                                     <TouchableOpacity  onPress={()=> {editParent(item.id)}}>EDIT</TouchableOpacity>
                                     <TouchableOpacity onPress={()=> {delParent(item.id)}}>DELETE</TouchableOpacity>
@@ -151,8 +179,8 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
-        alignItems: 'center',
-        justifyContent: 'center',
+      
+
     },
     parentsItem: {
         flex: 1,
@@ -167,12 +195,20 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
     },
+    itemText: {
+        color: 'black',
+        fontSize: 16,
+        marginBottom: 5,
+    },
+
     buttonContainer: {
+        marginBottom:10,
         flexDirection:'row',
         alignItems: 'center',
         gap: 20,
         alignContent: 'space-around'
     },
+
 })
 //Motificar o componente para que o mesmo esteja adequado para uso, estilização do figma e do HTML, 
 // otimizar o botão upload para uso no codigo. Pesquisa de objeto anonimo. 
