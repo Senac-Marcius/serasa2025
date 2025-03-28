@@ -4,7 +4,8 @@ import MyLink from '../src/components/Mylink';
 import Myiten from '../src/components/myItenlist';
 import MyList from '../src/components/mylist';
 import { Myinput } from '../src/components/Myinputs';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+
+
 
 
 export default  function itemScreen(){
