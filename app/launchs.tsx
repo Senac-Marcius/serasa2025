@@ -5,24 +5,29 @@ import MyView from '../src/components/MyView';
 import { ScrollView } from 'react-native-gesture-handler';
 import Myiten from '../src/components/myItenlist';
 import MyList from '../src/components/mylist';
-import {Myinput} from '../src/components/Myinputs';
+import { Myinput, MyCheck } from '../src/components/Myinputs';
 import Mybutton from '../src/components/Mybuttons';
+import MyCalendar from '../src/components/MyCalendar';
+
+
+
 
 export default function LaunchScreen() {
+    const [isChecked, setIsChecked] = useState(true);
     const [req, setReq] = useState({
         Id: -1,
         observation: '',
-        presence: '',
+        presence: true,
         indicator: '',
         note: '',
-        createAt: new Date().toISOString(),
+        createAt: new Date().toString(),
         userId: 0,
     });
 
     const [launchs, setLaunchs] = useState<{
         Id: number,
         observation: string,
-        presence: string,
+        presence: boolean,
         indicator: string,
         note: string,
         createAt: string,
@@ -46,7 +51,7 @@ export default function LaunchScreen() {
         setReq({
             Id: -1,
             observation: '',
-            presence: '',
+            presence: true,
             indicator: '',
             note: '',
             createAt: new Date().toISOString(),
@@ -75,7 +80,19 @@ export default function LaunchScreen() {
 
 
             <View style={styles.form}>
+
+                {/*aqui chamar o calendario*/}
+                <MyCalendar
+                    date='2021-10-10'
+                    setDate={(date) => console.log(date)}
+                />
+
                 <Text>Lançamentos de Alunos:</Text>
+
+                <MyCheck
+                    label={isChecked ? "Presente" : "Faltou"} checked={isChecked}
+                    onToggle={() => setIsChecked(!isChecked)}
+                />
 
                 <Myinput //Myinput
                     placeholder="Digite a Observação:"
@@ -95,14 +112,6 @@ export default function LaunchScreen() {
                 />
 
 
-                <Myinput
-                    placeholder="Presença:"
-                    value={req.presence}
-                    onChangeText={(text) => setReq({ ...req, presence: text })}
-                    label=""
-                    iconName=""
-                />
-
 
                 <Myinput
                     placeholder="Indicador"
@@ -112,7 +121,7 @@ export default function LaunchScreen() {
                     iconName=""
                 />
 
-                <Mybutton title="CADASTRAR" onPress={handleRegister} /> {/*Mybutton*/ }
+                <Mybutton title="CADASTRAR" onPress={handleRegister} /> {/*Mybutton*/}
 
 
 
@@ -122,6 +131,7 @@ export default function LaunchScreen() {
                 data={launchs}
                 keyItem={(item) => item.Id.toString()}
                 renderItem={({ item }) => (
+
                     <Myiten //Mylistitem
                         style={styles.card}
                     >
@@ -136,7 +146,7 @@ export default function LaunchScreen() {
                             <TouchableOpacity style={styles.buttonedit} onPress={() => { editLaunch(item.Id) }}>EDIT</TouchableOpacity>
                             <TouchableOpacity style={styles.buttondelete} onPress={() => { delLaunch(item.Id) }}>DELETE</TouchableOpacity>
                         </View>
-                    
+
 
                     </Myiten>
 
