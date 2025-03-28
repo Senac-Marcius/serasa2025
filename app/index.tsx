@@ -40,7 +40,7 @@ export default function HomeScreen() {
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/Myperfil');
+                            router.push('/perfil');
                         }}
                     />
                     <Drawer.Item

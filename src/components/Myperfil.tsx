@@ -10,13 +10,15 @@ import Mytext from "./Mytext";
 
 
 interface MyPerfilProps {
-    style?: ViewStyle | ViewStyle []
-    label?: string
-    
+    style?: ViewStyle | ViewStyle [],
+    label?: string,
+    children: ReactNode,
 };
 
 
-    const Perfil = () => { 
+
+
+    const Perfil: React.FC<MyPerfilProps> = ({ children, style}) => { 
       return (
         <ScrollView>
         <MyView>
