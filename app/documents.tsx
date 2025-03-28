@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, FlatList, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import MySwitch from '../src/components/MySwitch' //nome do arquivo
-import { isEnabled } from 'react-native/Libraries/Performance/Systrace';
 import MyView from '../src/components/MyView';
 //nome da variavel
 
