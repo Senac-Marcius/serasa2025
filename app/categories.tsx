@@ -8,7 +8,7 @@ export default function categoryScreen(){
     const [req, setReq] = useState({
         name: '',
         description : '',
-        id: 0,
+        id: -1,
         createAt: new Date().toISOString(),
         userId : 0,
         
@@ -22,15 +22,35 @@ export default function categoryScreen(){
         userId: number,
         }[]>([])
     
-    function handleRegister (){
-        setCategories([...categories, req])
-        setReq({name:'',
-            description:'',
-            id: 0,
+    function handleRegister(){
+        if(req.id == -1){
+            const newid= categories.length ? categories[categories.length-1].id=1:0;
+            const newCategorie = {... categories,req};
+            setCategories([...categories, req])
+    
+        }else{
+            setCategories(categories.map(i =>(i.id == req.id)? req: i )  );
+    
+        }
+    
+        setReq({
+            id: -1,
+            name: '',
+            description : '',
             createAt: new Date().toISOString(),
             userId : 0,
-
         })
+    }
+    
+    function editCategorie(id:number){
+        let item= categories.find(i => i.id== id)
+        if(item)
+        setReq(item)
+    }
+    function delCategorie(id:number){
+        const list= categories.filter(i => i.id != id)
+        if(list)
+        setCategories(list)
     }
 
     return (
@@ -60,8 +80,11 @@ export default function categoryScreen(){
                     data={categories}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
-                        <Myiten >
-                            <Text >{item.name}</Text>
+                        <Myiten 
+                            onDel={()=>{delCategorie(item.id)}}
+                            onEdit={()=>{editCategorie(item.id)}}
+                        >
+                                            <Text >{item.name}</Text>
                             <Text >{item.description}</Text>  
                         </Myiten>
                     )}
@@ -116,7 +139,7 @@ const styles = StyleSheet.create({
         padding: 10,
         marginBottom: 10,
     },
-    postItem: {
+    postCategorie: {
         padding: 10,
         marginVertical: 5,
         backgroundColor: '#f8f8f8',
