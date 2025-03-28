@@ -7,7 +7,7 @@ import { useState } from 'react';
 export default function HomeScreen() {
     const router = useRouter();
     const [drawerOpen, setDrawerOpen] = useState(false);
-
+/* esse é o menu */
     return (
         <View style={{ flex: 1 }}>
             {/* Menu Hambúrguer no Topo */}
@@ -28,167 +28,68 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
-                        label="CATEGORIES"
+                        label="Secretaria"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/categories');
+                            router.push('/disciplines');
                         }}
                     />
+                    
                     <Drawer.Item
-                        label="Area do Aluno"
-                        icon="post"
-                        onPress={() => {
-                            setDrawerOpen(false);
-                            router.push('/students');
-                        }}
-                    />
-                    <Drawer.Item
-                        label="Cursos"
+                        label="Salas"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/courses');
                         }}
                     />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     <Drawer.Item
-                        label="Documentos"
+                        label="Alunos"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/documents');
-                        }}
-                    />
-
-                    <Drawer.Item
-                        label="Cursos"
-                        icon="acervo"
-                        onPress={() => {
-                            setDrawerOpen(false);
-                            router.push('/collections');
+                            router.push('/posts');
                         }}
                     />
                     <Drawer.Item
-                        label="notificação"
+                        label="Investimento"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/notifications');
+                            router.push('/posts');
                         }}
                     />
                     <Drawer.Item
-                        label="Despesa"
+                        label="Administração"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/expenses');
+                            router.push('/posts');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="Rede de Apoio"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/posts');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="Infraestrutura"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/posts');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="Biblioteca"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/posts');
                         }}
                     />
                     <Drawer.Item
