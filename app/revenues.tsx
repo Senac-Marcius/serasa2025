@@ -8,6 +8,7 @@ import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
 import MyTopbar from '../src/components/mytopbar';
 import Myiten from '../src/components/myItenlist';
 import Mytext from '../src/components/Mytext';
+import { Center } from 'native-base';
 
 export default function RevenueScreen() {
   // Estado para o formulário
@@ -74,7 +75,22 @@ export default function RevenueScreen() {
     setRevenues(list); // Remove a receita da lista
   }
 
+  function handleCancel() {
+    setReq({
+      id: -1,
+      description: '',
+      name: '',
+      url: '',
+      createAt: new Date().toISOString(),
+      userId: 0,
+      value: '',
+      scholarshipStatus: '',
+      discountPercentage: '',
+    });
+  }
+
   return (
+
     <MyView>
       <Mytext style={{ fontSize: 24, fontWeight: 'bold', color: '#333', textAlign: 'center' }}>
         cadastre as receitas
@@ -92,12 +108,12 @@ export default function RevenueScreen() {
               placeholder='Digite o nome'
               label='Nome'
             />
-            
+
             {/* Campo de Descrição */}
-            <MyTextArea 
-              value={req.description} 
-              onChangeText={(text) => setReq({...req, description: text})}  
-              iconName='' 
+            <MyTextArea
+              value={req.description}
+              onChangeText={(text) => setReq({ ...req, description: text })}
+              iconName=''
               placeholder='Digite a descrição'
               label='Descrição'
             />
@@ -137,8 +153,9 @@ export default function RevenueScreen() {
               placeholder='Porcentagem de desconto'
               label='Desconto'
             />
-            <MyButton title= "cadastrar" onPress={handleRegister}/>
-            
+            <MyButton title="cadastrar" onPress={handleRegister} style={styles.buttons} />
+            <MyButton title="Cancelar" onPress={handleCancel} style={styles.buttons} />
+
           </View>
         </View>
 
@@ -147,10 +164,11 @@ export default function RevenueScreen() {
           data={revenues}
           keyItem={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <Myiten 
+            <Myiten
               style={styles.revenueStyle}
-              onEdit={()=> {editRevenue(item.id)}}
-              onDel={()=> {delRevenue(item.id)}}
+              onEdit={() => { editRevenue(item.id) }} 
+              onDel={() => { delRevenue(item.id) }}
+              
             >
               <Mytext style={styles.revenueText}>Descrição: {item.description}</Mytext>
               <Mytext style={styles.revenueText}>Nome: {item.name}</Mytext>
@@ -159,7 +177,7 @@ export default function RevenueScreen() {
               <Mytext style={styles.revenueText}>Status da Bolsa: {item.scholarshipStatus}</Mytext>
               <Mytext style={styles.revenueText}>Desconto: {item.discountPercentage}%</Mytext>
               <Mytext style={styles.revenueText}>Data: {item.createAt}</Mytext>
-              <Mydownload style={styles.revenueText} url={item.url}/>
+              <Mydownload style={styles.revenueText} url={item.url} />
             </Myiten>
           )}
         />
@@ -174,6 +192,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-start',
   },
+  buttons: {
+     alignItems:"center",
+     justifyContent:"center",
+     flexDirection: 'row',
+     gap: 10,
+     marginTop: 10,
+     width: '100%',
+     
+  }
+  ,
   form: {
     flex: 1,
     marginRight: 10,
@@ -198,10 +226,11 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 3,
     marginBottom: 10,
+    
   },
   revenueText: {
     fontSize: 14,
     color: '#000000',
     marginBottom: 5,
-  }
+  },
 });
