@@ -1,6 +1,9 @@
 import React, { useState } from 'react'; 
 import { Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, View  } from 'react-native';
 import MySelect from '../src/components/Myselect' 
+import MyView from '../src/components/MyView';
+import MyList from '../src/components/mylist';
+import Myiten from '../src/components/myItenlist';
 
 export default function LocalScreen(){
 
@@ -62,7 +65,7 @@ export default function LocalScreen(){
 
     return (
 
-            <View style={styles.container}>
+            <MyView style={styles.container}>
 
             
 
@@ -77,7 +80,7 @@ export default function LocalScreen(){
                         />  
 
                         <TextInput 
-                        placeholder={ `Digite a área do local em ${unity}:`}
+                        placeholder={ `Digite a dimensão do local em ${unity}:`}
                         value={req.area}
                         onChangeText={(n) => setReq({...req, area: n })}  
                                     
@@ -109,138 +112,34 @@ export default function LocalScreen(){
 
                     </View>
 
-                    <View style={styles.formContainer}>
-                        <Text style={styles.title}>Pesquisa de locais:</Text>
-                       
-                       <TextInput 
-                       placeholder= "Nome:"                                 
-                       value={req.name}
-                       onChangeText={(t) => setReq({...req, name: t })}                    
-                       />  
-                                                             
-                       <TextInput 
-                       placeholder= "Opção 1"
-                       value={req.description}
-                       onChangeText={(t) => setReq({...req, description: t })}
-                       /> 
-
-                       <TextInput placeholder= "Opção 2"
-                       value={req.adress}
-                       onChangeText={(t) => setReq({...req, adress: t })}
-                       />
-
-                        <TextInput placeholder= "Opção 3"
-                       value={req.adress}
-                       onChangeText={(t) => setReq({...req, adress: t })}
-                       />
-
-
-
-
-                        <TextInput 
-                       placeholder= "Dimensão:"                                 
-                       value={req.name}
-                       onChangeText={(t) => setReq({...req, name: t })}                    
-                       />  
-                                                             
-                       <TextInput 
-                       placeholder= "Opção 1"
-                       value={req.description}
-                       onChangeText={(t) => setReq({...req, description: t })}
-                       /> 
-
-                       <TextInput placeholder= "Opção 2"
-                       value={req.adress}
-                       onChangeText={(t) => setReq({...req, adress: t })}
-                       />
-
-                        <TextInput placeholder= "Opção 3"
-                       value={req.adress}
-                       onChangeText={(t) => setReq({...req, adress: t })}
-                       />
-                       
-
-
-
-                       <TextInput 
-                       placeholder= "Descrição:"                                 
-                       value={req.name}
-                       onChangeText={(t) => setReq({...req, name: t })}                    
-                       />  
-                                                             
-                       <TextInput 
-                       placeholder= "Opção 1"
-                       value={req.description}
-                       onChangeText={(t) => setReq({...req, description: t })}
-                       /> 
-
-                       <TextInput placeholder= "Opção 2"
-                       value={req.adress}
-                       onChangeText={(t) => setReq({...req, adress: t })}
-                       />
-
-                        <TextInput placeholder= "Opção 3"
-                       value={req.adress}
-                       onChangeText={(t) => setReq({...req, adress: t })}
-                       />
-                       
-
-
-
-                       <TextInput 
-                       placeholder= "Endereço:"                                 
-                       value={req.name}
-                       onChangeText={(t) => setReq({...req, name: t })}                    
-                       />  
-                                                             
-                       <TextInput 
-                       placeholder= "Opção 1"
-                       value={req.description}
-                       onChangeText={(t) => setReq({...req, description: t })}
-                       /> 
-
-                       <TextInput placeholder= "Opção 2"
-                       value={req.adress}
-                       onChangeText={(t) => setReq({...req, adress: t })}
-                       />
-
-                        <TextInput placeholder= "Opção 3"
-                       value={req.adress}
-                       onChangeText={(t) => setReq({...req, adress: t })}
-                       />
-
-                </View>
-
-                <View style={styles.row}>
-                    
-                        
-                </View>
-
-                                        
-                    <FlatList                         
+                    <MyList                         
                         data={locals}                   
-                        keyExtractor={(item) => item.id.toString()}                
+                        keyItem={(item) => item.id.toString()}                
                         renderItem={({ item }) => (
-                            <View style={styles.item}>
+                            <Myiten
+                                style={styles.formContainer}
+                                onEdit={ () => {editLocal(item.id)} }
+                                onDel={ () => (delLocal(item.id))}
+                            >
                                 <Text style={styles.label} > {item.name} </Text>
                                 <Text style={styles.label} > {item.adress} </Text>
                                 <Text style={styles.label} > {item.area} </Text>
                                 <Text style={styles.label} > {item.description} </Text>
                                 <Text style={styles.label} > {item.createAt} </Text>
                             
-                                <View style={styles.buttonsContainer}>
-                                    <TouchableOpacity style={styles.edit} onPress={ () => {editLocal(item.id)} }>edit</TouchableOpacity>
-                                    <TouchableOpacity style={styles.del} onPress={ () => (delLocal(item.id))}>del</TouchableOpacity>
-                                  
 
-                                </View>
-
-                            </View>
+                            </Myiten>
                         ) }
                     />
+
+                </View>
                     
-                </View>            
-            </View>  
+               
+                                        
+                   
+                    
+                         
+            </MyView>  
        
         
     )   
@@ -294,20 +193,9 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
         backgroundColor: "gray"
 
     },
-    form: {
-        flex: 6,
-        marginRight: 15,
-        padding: 50,
-        backgroundColor: "black",
-        borderRadius: 15,
-        shadowColor: "black",
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 3, height: 4 },
-        shadowRadius: 7,
-    },
 
     formContainer: {
-        flex: 5,
+        flex: 1,
         marginRight: 50,
         padding: 10,
         backgroundColor: "white",
@@ -315,6 +203,7 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 7,
+        marginBottom: 10
     },
     input: {
         borderBottomWidth: 1,

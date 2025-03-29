@@ -28,29 +28,21 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
-                        label="Postagens"
+                        label="CATEGORIES"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/posts');
+                            router.push('/categories');
                         }}
                     />
                     <Drawer.Item
-                        label="Cursos"
-                        icon="post"
-                        onPress={() => {
-                            setDrawerOpen(false);
-                            router.push('/courses');
-                        }}
-                    />
-                    <Drawer.Item
-                        label="Locais"
+                        label="locals"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/locals');
                         }}
-                    /> 
+                    />
                     <Drawer.Item
                         label="Configurações"
                         icon="cog"
