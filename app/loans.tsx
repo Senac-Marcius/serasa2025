@@ -1,14 +1,10 @@
 import React, { useState } from 'react'; //react é uma biblioteca e essa função esta importando ela, puxando
-<<<<<<< HEAD
-import { FlatList, View, Text, StyleSheet, TextInput, Button, TouchableOpacity} from 'react-native'; //react native é uma biblioteca dentro de react 
-=======
 import { FlatList, View, Text, StyleSheet, TextInput, Button, TouchableOpacity } from 'react-native'; //react native é uma biblioteca dentro de react 
 import MyCalendar from '../src/components/MyCalendar';
 import MyView from '../src/components/MyView';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
 import MyButton from '../src/components/Mybuttons';
 
->>>>>>> 4b6cb33182d2a8cc858d4703322da75278567a0e
 
 export default function LoanScreen() {
     const[req, setReq]= useState({ //useState retorna uma variavel e uma função para alteral a variavel (req e setReq)
@@ -81,17 +77,6 @@ export default function LoanScreen() {
 
 
     return (
-<<<<<<< HEAD
-        <View>
-             
-            <Text>Tela de Empréstimo</Text>
-            <View style={styles.row}>
-                <View style={styles.form}>
-                
-                    <TextInput placeholder="Nome do Livro:"
-                    value={req.bookId} 
-                    onChangeText={(text) => setReq({...req, bookId: text })}
-=======
 
 
         <MyView>
@@ -106,60 +91,9 @@ export default function LoanScreen() {
                       placeholder="Nome do Livro:"
                       label ="Nome do Livro:"
                       iconName="book"
->>>>>>> 4b6cb33182d2a8cc858d4703322da75278567a0e
                     />
                     
 
-<<<<<<< HEAD
-                    <TextInput 
-                        placeholder="Status de Empréstimo:"
-                        value={req.statusLoan} 
-                        onChangeText={(text) => setReq({...req, statusLoan: text })} //onChangeText recebe uma função, uma função anonima,a set req pede um objeto, (...) pega todos os objetos e tras de volta
-                    />
-                    
-
-                    <TextInput 
-                        placeholder="Data de Empréstimo:"
-                        value={req.loanDate} 
-                        onChangeText={(text) => setReq({...req, loanDate: text })}
-                    />
-                    
-
-                     <TextInput 
-                        placeholder="Data Prevista de Devolução:"
-                        value={req.expectedLoanDate} 
-                        onChangeText={(text) => setReq({...req, expectedLoanDate: text })}
-                    />
-                    
-
-                     <TextInput 
-                        placeholder="Data de Devolução Efetuada:"
-                        value={req.effectiveLoanDate} 
-                        onChangeText={(text) => setReq({...req, effectiveLoanDate: text })}
-                    />
-                    
-
-                     <TextInput 
-                        placeholder="Renovar:"
-                        value={req.renewal}         //(...req) cria uma cópia do req atual
-                        onChangeText={(text) => setReq({...req, renewal: text })}//O que está acontecendo aqui é que o estado de req está sendo atualizado de forma imutável (sem alterar diretamente o valor antigo).
-                    /> 
-                    
-
-                    <TextInput 
-                        placeholder="Observação:"
-                        value={req.observation} 
-                        onChangeText={(text) => setReq({...req, observation: text })}
-                    />
-                    
-
-                    <Button title="Emprestar" onPress={handleRegister}
-                    color="purple"
-                     />
-                    
-                </View> 
-                    
-=======
                     
                      <Myinput 
                      value={req.renewal}
@@ -186,7 +120,6 @@ export default function LoanScreen() {
 
                 </View>
 
->>>>>>> 4b6cb33182d2a8cc858d4703322da75278567a0e
                 <FlatList //data significa o parametro que vai receber o vetor (data = dados)
                     data={loans}                  //toString tranforma em string  
                     keyExtractor={(item) => item.id.toString()}//vai pegar no loans cada elemento
@@ -200,19 +133,6 @@ export default function LoanScreen() {
                             <Text>{item.statusLoan}</Text>
                             <Text>{item.observation}</Text>
                             <Text>{item.creatAt}</Text>
-<<<<<<< HEAD
-                            <View style={styles.itemContainer} >
-                                <TouchableOpacity onPress={ () => {editLoans(item.id)}}>EDITAR</TouchableOpacity>
-                                <TouchableOpacity onPress={ () => {deletLoans(item.id)}}>DELETE</TouchableOpacity>
-                            </View>
-                        </View>
-                        
-                    )}
-                   
-                />
-            </View>
-        </View>
-=======
 
                             <MyButton  
                                 title='Editar'
@@ -232,7 +152,6 @@ export default function LoanScreen() {
             </View>
             </View>
         </MyView>
->>>>>>> 4b6cb33182d2a8cc858d4703322da75278567a0e
     ); //encapsulamento
 
 }
@@ -274,13 +193,6 @@ const styles = StyleSheet.create({
         color: "pink"
     },
     buttonContainer: {
-<<<<<<< HEAD
-       color: "blue"
-    }
-           
-})
-
-=======
         color: "blue"
     },
     button_circle: {
@@ -318,7 +230,6 @@ const styles = StyleSheet.create({
       
     },
   });
->>>>>>> 4b6cb33182d2a8cc858d4703322da75278567a0e
 
 
 
