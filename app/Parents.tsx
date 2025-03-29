@@ -6,6 +6,7 @@ import styled from 'styled-components'
 //batatinha
 import MyUpload from '../src/components/Myupload'
 import { color } from 'native-base/lib/typescript/theme/styled-system';
+import MyButton from '../src/components/Mybuttons';
 export default function ParentScreen (){
 //Aqui é TypeScript
     const [req, setReq] = useState({
@@ -41,7 +42,7 @@ export default function ParentScreen (){
 
             setParents([...parents, newParents])
         }else{
-            setParents(parents.map(p =>(p.id == req.id?req:p)))
+            setParents(parents.map(p =>(p.id == req.id ? req:p)))
         }
 
         //setParents([...parents, req])
@@ -76,7 +77,7 @@ export default function ParentScreen (){
         <View>{/*aqui é typeScript dentro do Front*/}
           {/*View → esse view é diferente do HTML ele contém DIVs e outros atributos,*/}  
           
-            <Text>Minha tela das postagens </Text>
+            <Text style={styles.itemText}>Minha tela das postagens </Text>
             <View style = {styles.row}>
                 <View style={styles.form}>{/*View no Type pode ser usado para substituir o Form */}
                 {/*<FlatList/> → atibuto para possivel criação de lista */}
@@ -112,24 +113,18 @@ export default function ParentScreen (){
                         value={req.parentesco}
                         onChangeText={(Text) => setReq({...req, parentesco: Text})}
                     />
-                    
-                    <Button 
-                        title='Cadastrar' 
-                        color='blue'
-                        onPress={handleRegister}/>
-                   {/*foi aberto uma area de codigo chamar a variavel, equivale o inder do html*/}
-                   {/*<Button 
-                        title='Editar'
-                        color='red'
-                        onPress={editParent}/>
-                    <Button
-                        title='Deletar'
-                        color='red'
-                        onPress={delParent}/>*/}
-
-                    <MyUpload setUrl={setDocument} url={urlDocument}/>
-
+                    <View style={styles.buttonRegister}>
+                        <Button
+                            title='Cadastrar' 
+                            color='blue'
+                            onPress={handleRegister}/>
+                    {/*foi aberto uma area de codigo chamar a variavel, equivale o inder do html*/}
+                        <MyUpload setUrl={setDocument} url={urlDocument}/>
+                   </View>
                 </View>
+
+                
+
 
                 <FlatList
                     data={parents}
@@ -179,9 +174,8 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
-      
-
     },
+
     parentsItem: {
         flex: 1,
         marginRight: 20,
@@ -195,14 +189,26 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
     },
+
     itemText: {
         color: 'black',
         fontSize: 16,
         marginBottom: 5,
     },
 
-    buttonContainer: {
-        marginBottom:10,
+    buttonContainer:{
+        flexDirection:'row',
+        alignItems: 'center',
+        gap: 20,
+        alignContent: 'space-around',
+        borderRadius: 80,
+        marginRight: 20,
+        marginLeft:20,
+        marginBottom:20,
+    },
+
+    buttonRegister: {
+        
         flexDirection:'row',
         alignItems: 'center',
         gap: 20,

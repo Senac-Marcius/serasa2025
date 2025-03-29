@@ -56,7 +56,7 @@ const MyUpload: React.FC<MyuploadProps> = ({ style, setUrl, url  }) => {
   return (
     <View style={style}>
       <Button title="Selecionar Arquivo" onPress={pickDocument}/>
-      {loading && <ActivityIndicator size="large" color="#0000ff"/>}
+      {loading && <ActivityIndicator size="large" color="#A020F0"/>}
       {url && (<Text>Arquivo enviado: {url}</Text>)}
       {alert && (<Text> {alert} </Text>)}
     </View>
