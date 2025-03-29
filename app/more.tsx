@@ -44,6 +44,7 @@ export default function MoreScreen() {
                         />
 
                         <MyButton
+                            style={styles.option}
                             title="SAIR"
                             button_type="round"
                             onPress={() => setVisible(false)}
