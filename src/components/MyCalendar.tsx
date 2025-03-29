@@ -47,7 +47,7 @@ return (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <FaCalendarDays style={{ marginRight: 8 }}/> 
             <TouchableOpacity onPress={()=> {setOpen(true)}}>
-             <Text>{`emprestimo: ${date}`}</Text>
+             <Text>{`Data: ${date}`}</Text>
             </TouchableOpacity>
             </View>
         )}

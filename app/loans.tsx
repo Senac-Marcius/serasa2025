@@ -1,5 +1,14 @@
 import React, { useState } from 'react'; //react é uma biblioteca e essa função esta importando ela, puxando
+<<<<<<< HEAD
 import { FlatList, View, Text, StyleSheet, TextInput, Button, TouchableOpacity} from 'react-native'; //react native é uma biblioteca dentro de react 
+=======
+import { FlatList, View, Text, StyleSheet, TextInput, Button, TouchableOpacity } from 'react-native'; //react native é uma biblioteca dentro de react 
+import MyCalendar from '../src/components/MyCalendar';
+import MyView from '../src/components/MyView';
+import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
+import MyButton from '../src/components/Mybuttons';
+
+>>>>>>> 4b6cb33182d2a8cc858d4703322da75278567a0e
 
 export default function LoanScreen() {
     const[req, setReq]= useState({ //useState retorna uma variavel e uma função para alteral a variavel (req e setReq)
@@ -72,6 +81,7 @@ export default function LoanScreen() {
 
 
     return (
+<<<<<<< HEAD
         <View>
              
             <Text>Tela de Empréstimo</Text>
@@ -81,9 +91,26 @@ export default function LoanScreen() {
                     <TextInput placeholder="Nome do Livro:"
                     value={req.bookId} 
                     onChangeText={(text) => setReq({...req, bookId: text })}
+=======
+
+
+        <MyView>
+            <View style={styles.formConteiner}>
+            <Text>Tela de Empréstimo</Text>
+            <View style={styles.row}>
+                <View style={styles.form}>
+
+                    <Myinput 
+                     value={req.bookId}
+                      onChangeText={(text) => setReq({ ...req, bookId: text })}
+                      placeholder="Nome do Livro:"
+                      label ="Nome do Livro:"
+                      iconName="book"
+>>>>>>> 4b6cb33182d2a8cc858d4703322da75278567a0e
                     />
                     
 
+<<<<<<< HEAD
                     <TextInput 
                         placeholder="Status de Empréstimo:"
                         value={req.statusLoan} 
@@ -132,6 +159,34 @@ export default function LoanScreen() {
                     
                 </View> 
                     
+=======
+                    
+                     <Myinput 
+                     value={req.renewal}
+                      onChangeText={(text) => setReq({ ...req, renewal: text })}
+                      placeholder="Renovar:"
+                      label ="Renovar:"
+                      iconName="check"
+                    />
+
+                    <Myinput 
+                    value={req.observation}
+                     onChangeText={(text) => setReq({ ...req, observation: text })}
+                     placeholder="Observação:"
+                     label ="Observação:"
+                     iconName="question"
+                   />
+                    <MyCalendar date={date} setDate={setDate} icon="FaCalendarDays" />
+
+                    <MyButton  
+                        title='Emprestar'
+                        onPress={handleRegister}
+                         button_type='round'
+                               />
+
+                </View>
+
+>>>>>>> 4b6cb33182d2a8cc858d4703322da75278567a0e
                 <FlatList //data significa o parametro que vai receber o vetor (data = dados)
                     data={loans}                  //toString tranforma em string  
                     keyExtractor={(item) => item.id.toString()}//vai pegar no loans cada elemento
@@ -145,6 +200,7 @@ export default function LoanScreen() {
                             <Text>{item.statusLoan}</Text>
                             <Text>{item.observation}</Text>
                             <Text>{item.creatAt}</Text>
+<<<<<<< HEAD
                             <View style={styles.itemContainer} >
                                 <TouchableOpacity onPress={ () => {editLoans(item.id)}}>EDITAR</TouchableOpacity>
                                 <TouchableOpacity onPress={ () => {deletLoans(item.id)}}>DELETE</TouchableOpacity>
@@ -156,6 +212,27 @@ export default function LoanScreen() {
                 />
             </View>
         </View>
+=======
+
+                            <MyButton  
+                                title='Editar'
+                                onPress={() => { editLoans(item.id) }}
+                                button_type='round'
+                               />
+                            <MyButton  
+                                title='Deletar'
+                                onPress={() => { deletLoans(item.id) }}
+                                button_type='round'
+                               />
+
+                        </View>
+                        
+                    )}
+                />
+            </View>
+            </View>
+        </MyView>
+>>>>>>> 4b6cb33182d2a8cc858d4703322da75278567a0e
     ); //encapsulamento
 
 }
@@ -176,6 +253,15 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
+        width: 700
+        
+    },
+    formConteiner:{
+        flex:8,
+        justifyContent: 'center',
+        alignItems:'center',
+        
+        
     },
     itemContainer: {
         marginRight: 10,
@@ -188,11 +274,51 @@ const styles = StyleSheet.create({
         color: "pink"
     },
     buttonContainer: {
+<<<<<<< HEAD
        color: "blue"
     }
            
 })
 
+=======
+        color: "blue"
+    },
+    button_circle: {
+      borderRadius: 100,
+      display: "flex",
+      gap: 5,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    button_capsule: {
+      borderRadius: 50,
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "row",
+      
+    },
+    button_round: {
+      borderRadius: 20,
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "row",
+      
+    },
+    button_rect: {
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "row",
+      borderRadius: 0,
+      
+    },
+    button_default: {
+      borderRadius: 15,
+      alignItems: "center",
+      flexDirection: "row",
+      
+    },
+  });
+>>>>>>> 4b6cb33182d2a8cc858d4703322da75278567a0e
 
 
 
