@@ -56,19 +56,19 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
-<<<<<<< HEAD
                         label="levels"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/levels');
-=======
+                    }}
+                    />
+                    <Drawer.Item
                         label="Despesa"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/expenses');
->>>>>>> bd6ef54d1ef62e2a4b56753d3e748405ff1f2bd6
                         }}
                     />
                     <Drawer.Item

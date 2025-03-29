@@ -11,11 +11,8 @@
   "dependencies": {
     "@expo-google-fonts/poppins": "^0.2.3",
     "@expo/metro-runtime": "~4.0.1",
-<<<<<<< HEAD
     "@expo/vector-icons": "^14.0.4",
-=======
     "@heroui/date-input": "^2.3.15",
->>>>>>> bd6ef54d1ef62e2a4b56753d3e748405ff1f2bd6
     "expo": "~52.0.38",
     "expo-font": "~13.0.4",
     "expo-router": "^4.0.19",
