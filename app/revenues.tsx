@@ -232,5 +232,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#000000',
     marginBottom: 5,
+    
   },
 });
