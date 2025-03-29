@@ -1,162 +1,78 @@
 import React, {ReactNode, useState} from "react";
-import { Text,  TouchableOpacity, Image, View, ViewStyle, StyleSheet, ScrollView, TextStyle } from "react-native";
+import { Text,  TouchableOpacity, View, ViewStyle, StyleSheet, ScrollView, TextStyle, Image } from "react-native";
 import MyView from "../src/components/MyView";
 import MyButton from "../src/components/Mybuttons";
 import Mytext from "../src/components/Mytext";
+import { Myinput } from "../src/components/Myinputs";
 
-
-
-
+interface iUser {
+  photo: string,
+  name: string,
+  email: string,
+  contact: string,
+  birth: string,
+}
 
 
 interface MyPerfilProps {
-    style?: ViewStyle | ViewStyle [],
-    label?: string,
-    children: ReactNode,
+    user: iUser,
+    setUser(user: iUser):void,
+    saveUser(id:number, user: iUser):void,
+    id:number,
 };
 
+    const Perfil: React.FC<MyPerfilProps> = ({user, setUser, id, saveUser}) => { 
+      const [ editing, setEditing] = useState(false)
 
-
-
-    const Perfil: React.FC<MyPerfilProps> = ({ children, style}) => { 
       return (
-        <ScrollView>
         <MyView>
-          <View style={styles.header}>
-            <Mytext>Perfil</Mytext>
+          <View>
+            <Mytext style={styles.h1}>Perfil</Mytext>
           </View>
-          <View style={styles.profileCard}>
+          <View>
             <View>
-              <Mytext>"Foto do cadastro"</Mytext>
+            {!editing && (<Image src={user.photo? user.photo:''}/>)}
+            {/* editing && (<MyUpload   />) aguardar commit atualizado do Igor */}
             </View>
-            <Mytext>Nome do cadastro</Mytext>
-            <Mytext>Nome</Mytext>
+            {!editing && (<Mytext style={styles.title}>{user.name? user.name:''}</Mytext>)}
+            {editing && (<Myinput value={user.name} onChangeText={(text)=>{setUser({...user, name: text})}} label="Nome"/>)}
             <View>
-              <Mytext>Dados Pessoais</Mytext>
-              <Mytext>E-mail: nome@exemplo.com.br</Mytext>
-              <Mytext>Telefone: (16) 988443750</Mytext>
-              <Mytext>Data de Nascimento: dd/mm/aaaa</Mytext>
-              <MyButton title="Alterar Perfil">
-              </MyButton>
+              <Mytext style={styles.title}>Dados Pessoais</Mytext>
+
+              <Mytext style={styles.title}>E-mail: {user.email? user.email:''}</Mytext>
+              {!editing && (<Mytext style={styles.title}>{user.email? user.email:''}</Mytext>)}
+              {editing && (<Myinput value={user.email} onChangeText={(text)=>{setUser({...user, email: text})}} label="E-mail"/>)}
+
+              <Mytext style={styles.title}>Telefone: {user.contact? user.contact:''}</Mytext>
+              {!editing && (<Mytext style={styles.title}>{user.contact? user.contact:''}</Mytext>)}
+              {editing && (<Myinput value={user.contact} onChangeText={(text)=>{setUser({...user, contact: text})}} label="Número"/>)}
+                
+              <Mytext style={styles.title}>Data de Nascimento:{user.birth? user.birth:''}</Mytext>
+              {!editing && (<Mytext style={styles.title}>{user.birth? user.birth:''}</Mytext>)}
+              {editing && (<Myinput value={user.birth} onChangeText={(text)=>{setUser({...user, birth: text})}} label="Data de Nascimento"/>)}
+
+              {!editing && (<MyButton title="Editar Perfil" onPress ={() => {setEditing(true)}} />)}
+              {editing && (<MyButton title="Salvar Perfil" onPress ={() => {setEditing(false); saveUser(id, user) }} />)}
             </View>
-            <MyButton title="Editar Perfil">
-            </MyButton>
           </View>
-          <TouchableOpacity style={styles.wppButton}>
-            <Image
-              source={require('../assets/whatsapp.png')}
-              style={styles.wppIcon}
-            />
-          </TouchableOpacity>
         </MyView>
-        </ScrollView>
       );
     };
     
     const styles = StyleSheet.create({
-      header: {
-        padding: 20,
-        alignItems: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-      } as TextStyle,
-      headerText: {
-        fontSize: 18,
-        fontWeight: 'bold',
-      },
-      profileCard: {
-        margin: 20,
-        padding: 20,
-        backgroundColor: '#f0f0f0',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 2,
-        elevation: 2,
-      },
-      profileImageContainer: {
-        alignItems: 'center',
+      title: {
+        justifyContent: 'center',
+        marginBlock: 'auto',
+        display: 'flex',
         marginBottom: 20,
       },
-      profileImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-        backgroundColor: '#ddd',
-      },
-      profileImageLabel: {
-        marginTop: 10,
-        fontSize: 12,
-        color: '#888',
-      },
-      profileName: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 5,
-      },
-      name: {
-        fontSize: 16,
+      h1:{
+        justifyContent: 'center',
+        marginBlock: 'auto',
+        display: 'flex',
         marginBottom: 20,
       },
-      personalDataContainer: {
-        marginBottom: 20,
-      },
-      personalDataLabel: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginBottom: 10,
-      },
-      email: {
-        fontSize: 14,
-        marginBottom: 5,
-      },
-      phone: {
-        fontSize: 14,
-        marginBottom: 5,
-      },
-      birthdate: {
-        fontSize: 14,
-        marginBottom: 10,
-      },
-      changepassbuton: {
-        backgroundColor: '#e0e0e0',
-        padding: 10,
-        borderRadius: 5,
-        alignSelf: 'flex-start',
-      },
-      changePasswordButtonText: {
-        fontSize: 14,
-      },
-      credits: {
-        fontSize: 16,
-        marginBottom: 20,
-      },
-      editProfileButton: {
-        backgroundColor: '#9c27b0',
-        padding: 15,
-        borderRadius: 5,
-        alignItems: 'center',
-      },
-      editProfileButtonText: {
-        fontSize: 16,
-        color: '#fff',
-        padding: 10,
-        borderRadius: 100,
-        fontFamily: 'arial'
-      },
-      wppButton: {
-        position: 'absolute',
-        bottom: 20,
-        right: 20,
-        backgroundColor: '#25d366',
-        borderRadius: 30,
-        padding: 15,
-      },
-      wppIcon: {
-        width: 30,
-        height: 30,
-      },
+      
     });
     
     export default Perfil
