@@ -2,22 +2,38 @@ import {TouchableOpacity, View, ViewStyle, StyleSheet,} from 'react-native';
 import React, {ReactNode} from 'react';
 import { TextInput} from 'react-native-gesture-handler';
 import MyLink from '../components/Mylink';
-import MyView from '../components/MyView';
 import MyButton from '../components/Mybuttons';
 import  { Myinput} from '../components/Myinputs'; 
  
 interface MyLoginProps{
     children: ReactNode;
     style: ViewStyle | ViewStyle[];
+    email:string;
+    pass:string;
+    changeEmail(): void;
     
 }
-const MyLogin: React.FC<MyLoginProps> = ({children, style}) => {
+
+const MyLogin: React.FC<MyLoginProps> = ({children, style, email, pass,changeEmail }) => {
     return (
     <View>
-    <TextInput>
-        
-    </TextInput>
+    <Myinput
+        label="Email"
+        value={email}
+        onChangeText={changeEmail}
+        iconName="person"
     
+        
+    />
+
+<Myinput
+        label="Senha"
+        value={pass}
+        onChangeText={changeEmail}
+        iconName="key"
+        
+    />
+
         <MyLink 
             url="http://google.com"
             label="Esqueci minha senha"

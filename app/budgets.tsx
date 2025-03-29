@@ -73,9 +73,10 @@ export default function BudgetScreen(){
 
     return (
         <MyView>
-            <MyLogin style={styles.row}>
+            <MyLogin style={styles.row} email='Email' pass='Senha' changeEmail={() => {}}>
+
             <Mytext> </Mytext>
-        </MyLogin>
+            </MyLogin>
             {/* aqui é typescriot dentro do front*/}
             <Mytext>Minha tela das postagens</Mytext>
             <View style={styles.row}>
@@ -92,7 +93,7 @@ export default function BudgetScreen(){
                     value={req.url}
                     onChangeText={(text) => setReq({...req ,url: text})} 
                     label="url"
-                    iconName="pin"
+                    iconName="link"
                      />
                      
                      <Myinput 
@@ -141,6 +142,7 @@ export default function BudgetScreen(){
 
                         <MyButton title ='Editar'
                         onPress={()=> {editBudget(item.id)}}>
+                    
                         </MyButton>
 
                         <MyButton title='DELETAR'
