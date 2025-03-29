@@ -9,7 +9,8 @@ import MyTabsbar from '../src/components/MyTabsBar';
 import { Icon } from "react-native-paper";
 import MyButton from '../src/components/Mybuttons';
 import MyModal2 from '../src/components/Mymodal';
-import myView from '../src/components/MyView';
+import MyView from '../src/components/MyView';
+
 
 export default function ItemScreen() { // aqui é TS
     const router = useRouter();
@@ -148,6 +149,10 @@ export default function ItemScreen() { // aqui é TS
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [selectedFile, setSelectedFile] = useState<string | null>(null);
 
+    const save = () => {
+        console.log("Item salvo:", req);
+      };
+
     async function pickImage() {
     // Solicita permissão para acessar a galeria
         let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -166,7 +171,7 @@ export default function ItemScreen() { // aqui é TS
         if (!result.canceled) {
             setSelectedImage(result.assets[0].uri);
         }
-    }
+    };
 
     async function pickFile() {
         let result = await DocumentPicker.getDocumentAsync({
@@ -182,42 +187,74 @@ export default function ItemScreen() { // aqui é TS
         if (!result.canceled && result.assets[0]) {
             setSelectedFile(result.assets[0].uri);
         }
-    }
+    };
+
+    const cancel = () => {
+        setReq({
+            id: 0,
+            createAt: new Date().toISOString(),
+            typology: '',
+            title: '',
+            subtitle: '',
+            responsible: '',
+            translation: '',
+            language: '',
+            year: '',
+            edition: '',
+            publisher: '',
+            location: '',
+            numberPages: '',
+            serie: '',
+            volume: '',
+            format: '',
+            isbn: '',
+            issn: '',
+            cdd: '',
+            callNumber: '',
+            subject: '',
+            keywords: '',
+            summary: '',
+            notes: '',
+            numberCopies: '',
+            status: '',
+            url: '',
+            file: '',
+            typeLoan: '',
+        });
+        router.push('/librarie-home');
+    };
+
+    
 
     return ( //encapsulamento
-        <ScrollView style={styles.container}>
-       
-           <Text style={styles.h1}>Cadastro de Itens no Acervo</Text>
+        <MyView>
+            <Text style={styles.h1}>Cadastro de Itens no Acervo</Text>
             <View style={styles.buttonContainer}>
-            
-
-            
-            <MyButton   //VOU CHAMAR AQUI UM MODAL PARA MOSTRAR QUE O REGISTRO FOI SALVO
-                title="Salvar"
-                onPress={pickFile}
-                button_type="capsule"
-                style={styles.button_capsule1}
-            />
-            <MyButton
-                title="Prévia"
-                onPress={() => router.push('/preview') }
-                button_type="capsule"
-                style={styles.button_capsule1}
-            />
-
+                <ScrollView 
+                    horizontal 
+                    showsHorizontalScrollIndicator={false}
+                    style={styles.scrollRow}>
+                    <MyButton   
+                        title="Salvar"
+                        onPress={save}
+                        button_type="capsule"
+                        style={styles.button_capsule1}
+                    />
+                    <MyButton
+                        title="Prévia"
+                        onPress={() => router.push('/preview') }
+                        button_type="capsule"
+                        style={styles.button_capsule1}
+                    />
+                    <MyButton
+                        title="Cancelar"
+                        onPress={cancel}
+                        button_type="capsule"
+                        style={styles.button_capsule1}
+                    />
+                </ScrollView>
             </View>
-
-
-
-
-
-
-           
-           <Button mode="contained" onPress={() => router.push('/courses')}>
-                    Cursos
-                </Button>
-
-           <MyTabsbar
+            <MyTabsbar
                 items={tabs}
                 style={styles.tabsContainer}
                 itemStyle={styles.tabItem}
@@ -250,26 +287,22 @@ export default function ItemScreen() { // aqui é TS
                                     placeholder="Título"
                                     value={req.title}
                                     onChangeText={(text) => setReq({ ...req, title: text })}
-                                />
-                                {req.title}
+                                />                    
                                 <TextInput style={styles.input}
                                     placeholder="Subtítulo"
                                     value={req.subtitle}
                                     onChangeText={(text) => setReq({ ...req, subtitle: text })}
                                 />
-                                {req.subtitle}
                                 <TextInput style={styles.input}
                                     placeholder="Responsáveis"
                                     value={req.responsible}
                                     onChangeText={(text) => setReq({ ...req, responsible: text })}
                                 />
-                                {req.responsible}
                                 <TextInput style={styles.input}
                                     placeholder="Tradução"
                                     value={req.translation}
                                     onChangeText={(text) => setReq({ ...req, translation: text })}
                                 />
-                                {req.translation}
                                 <Picker style={styles.picker}
                                     selectedValue={req.language}
                                     onValueChange={(itemValue) => setReq({ ...req, language: itemValue })}
@@ -280,20 +313,12 @@ export default function ItemScreen() { // aqui é TS
                                     <Picker.Item label="Espanhol" value="Espanhol" />
                                     <Picker.Item label="Francês" value="Francês" />
                                 </Picker>
-                                {/*<Text>Selecione uma Imagem de Capa:</Text>
-                                <TouchableOpacity style={styles.button} onPress={pickImage}>
-                                    <Text style={{ color: '#FFF' }}>Selecionar Imagem</Text>
-                                </TouchableOpacity>*/}
                                 <MyButton
                                     title="Selecionar Imagem"
                                     onPress={pickImage}
                                     button_type="capsule"
                                     style={styles.button_capsule1}
                                 />
-
-                                {selectedImage && (
-                                <Image source={{ uri: selectedImage }} style={{ width: 200, height: 200, marginTop: 10 }} />
-                                )}
                             </>
                         )}
                             {/* outros campos de identificação */}
@@ -304,37 +329,31 @@ export default function ItemScreen() { // aqui é TS
                                     value={req.year}
                                     onChangeText={(text) => setReq({ ...req, year: text })}
                                 />
-                                {req.year}
                                 <TextInput style={styles.input}
                                     placeholder="Edição"
                                     value={req.edition}
                                     onChangeText={(text) => setReq({ ...req, edition: text })}
                                 />
-                                {req.edition}
                                 <TextInput style={styles.input}
                                     placeholder="Editora"
                                     value={req.publisher}
                                     onChangeText={(text) => setReq({ ...req, publisher: text })}
                                 />
-                                {req.publisher}
                                 <TextInput style={styles.input}
                                     placeholder="Local"
                                     value={req.location}
                                     onChangeText={(text) => setReq({ ...req, location: text })}
                                 />
-                                {req.location}
                                 <TextInput style={styles.input}
                                     placeholder="Série"
                                     value={req.serie}
                                     onChangeText={(text) => setReq({ ...req, serie: text })}
                                 />
-                                {req.serie}
                                 <TextInput style={styles.input}
                                     placeholder="Volume"
                                     value={req.volume}
                                     onChangeText={(text) => setReq({ ...req, volume: text })}
                                 />
-                                {req.volume}
                             </>
                         )}
                             {/* outros campos de identificação */}
@@ -353,31 +372,26 @@ export default function ItemScreen() { // aqui é TS
                                     value={req.numberPages}
                                     onChangeText={(text) => setReq({ ...req, numberPages: text })}
                                 />
-                                {req.numberPages}
                                 <TextInput style={styles.input}
                                     placeholder="ISBN"
                                     value={req.isbn}
                                     onChangeText={(text) => setReq({ ...req, isbn: text })}
                                 />
-                                {req.isbn}
                                 <TextInput style={styles.input}
                                     placeholder="ISSN"
                                     value={req.issn}
                                     onChangeText={(text) => setReq({ ...req, issn: text })}
                                 />
-                                {req.issn}
                                 <TextInput style={styles.input}
                                     placeholder="CDD"
                                     value={req.cdd}
                                     onChangeText={(text) => setReq({ ...req, cdd: text })}
                                 />
-                                {req.cdd}
                                 <TextInput style={styles.input}
                                     placeholder="Número de Chamada"
                                     value={req.callNumber}
                                     onChangeText={(text) => setReq({ ...req, callNumber: text })}
                                 />
-                                {req.callNumber}
                             </>
                         )}
                             {/* outros campos de identificação */}
@@ -390,7 +404,6 @@ export default function ItemScreen() { // aqui é TS
                                     value={req.subject}
                                     onChangeText={(text) => setReq({ ...req, subject: text })}
                                 />
-                                {req.subject}
                                 <TextInput style={styles.input}
                                     multiline={true}
                                     numberOfLines={2}
@@ -398,7 +411,6 @@ export default function ItemScreen() { // aqui é TS
                                     value={req.keywords}
                                     onChangeText={(text) => setReq({ ...req, keywords: text })}
                                 />
-                                {req.keywords}
                                 <TextInput style={styles.input}
                                     multiline={true}
                                     numberOfLines={10}
@@ -406,7 +418,6 @@ export default function ItemScreen() { // aqui é TS
                                     value={req.summary}
                                     onChangeText={(text) => setReq({ ...req, summary: text })}
                                 />
-                                {req.summary}
                                 <TextInput style={styles.input}
                                     multiline={true}
                                     numberOfLines={10}
@@ -414,13 +425,11 @@ export default function ItemScreen() { // aqui é TS
                                     value={req.notes}
                                     onChangeText={(text) => setReq({ ...req, notes: text })}
                                 />
-                                {req.notes}
                                 <TextInput style={styles.input}
                                     placeholder="Número de exemplares"
                                     value={req.numberCopies}
                                     onChangeText={(text) => setReq({ ...req, numberCopies: text })}
                                 />
-                                {req.numberCopies}
                                 <Picker style={styles.picker}
                                     selectedValue={req.status}
                                     onValueChange={(itemValue) => setReq({ ...req, status: itemValue })}
@@ -441,30 +450,39 @@ export default function ItemScreen() { // aqui é TS
                                     <Picker.Item label="Acesso Digital" value="Acesso Digital" />
                                 </Picker>
                                 <TextInput style={styles.input}
-                                    placeholder="url"
+                                    placeholder="Url"
                                     value={req.url}
                                     onChangeText={(text) => setReq({ ...req, url: text })}
                                 />
-                                {req.url}
-                                <Text>Upload do Material:</Text>
-                                <TouchableOpacity style={styles.button} onPress={pickFile}>
-                                    <Text style={{ color: '#FFF' }}>Selecionar Arquivo</Text>
-                                </TouchableOpacity>
-                                {selectedFile && (
-                                    <Text style={{ marginTop: 10, color: 'purple' }}>Arquivo: {selectedFile}</Text>
-                                )}
+                                <MyButton
+                                    title="Upload do Material"
+                                    onPress={pickFile}
+                                    button_type="capsule"
+                                    style={styles.button_capsule1}
+                                />
                             </>
                         )}
-                    <TouchableOpacity style={styles.button} onPress={handleRegister}>INCORPORAR ITEM NO ACERVO</TouchableOpacity>
+
+                        <MyButton
+                            title="INCORPORAR ITEM NO ACERVO"
+                            onPress={handleRegister}
+                            button_type="capsule"
+                            style={styles.button}
+                        />    
                     </View>
                 </View>
-            </View>  
-        </ScrollView>
+            </View> 
+        </MyView>
     );
 }
 
 const styles = StyleSheet.create({
 
+    viewContainer: {
+        flex: 1,
+        backgroundColor: '#ffffff', 
+        position: 'relative', 
+    },
     container: {
         flex: 1,
         padding: 20,
@@ -475,15 +493,21 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'flex-start',
     },
+    scrollRow: {
+        flexDirection: 'row',
+        paddingHorizontal: 10,
+        flexGrow: 1, 
+
+    },
     h1: {
         textAlign: 'center',
         fontFamily: 'sans-serif',
-        fontSize: 30,
+        fontSize: 25,
         fontStyle: 'italic',
         fontWeight: 'bold',
         color: '#0F2259',
         backgroundColor: '#F2F2F2',
-        margin: 0,
+        margin: 20,
         padding: 18,
         borderRadius: 10,
     },
@@ -491,6 +515,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginRight: 10,
         marginVertical: 10,
+        marginHorizontal: 20,
         padding: 20,
         backgroundColor: '#AD6CD9',
         borderRadius: 10,
@@ -537,13 +562,14 @@ const styles = StyleSheet.create({
         height: 50,
         marginBottom: 10,
         borderRadius: 10,
-        marginVertical: 20
-        ,
+        marginVertical: 20,
+        marginHorizontal: 20,
     },
     tabItem: { // Estilo para cada aba
         paddingHorizontal: 15,
         paddingVertical: 10,
         marginRight: 20,
+        marginHorizontal: 5,
         height: 50,
         width: 300,
         borderRadius: 50,
@@ -574,32 +600,22 @@ const styles = StyleSheet.create({
         alignItems: 'center', // Alinha verticalmente
         paddingHorizontal: 20, // Espaçamento interno
         marginVertical: 20, // Margem superior e inferior
-        width: 300, // Ajuste conforme necessário
+        marginHorizontal: 20,
+        width: 400, // Ajuste conforme necessário
         backgroundColor: "transparent", // Evita que o container pareça um botão único
     },
-    
     button_capsule1: {
         borderRadius: 50,
         backgroundColor: "#813AB1",
         alignItems: "center",
         justifyContent: "center",
+        marginRight: 20,
+        marginHorizontal: 5,
+        height: 45,
         paddingVertical: 10, // Melhor ajuste no espaçamento interno
         paddingHorizontal: 20,
-        minWidth: 100, // Define um tamanho mínimo para evitar botões colados
+        width: 250, // Define um tamanho mínimo para evitar botões colados
     },
-    
-    
-    modalContent2: {
-        display: 'flex',
-        width: 375,
-        height: 700,
-        padding: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        borderWidth: 4,
-        borderColor: 'purple',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-    },
+
 
 });
