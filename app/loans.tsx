@@ -115,10 +115,6 @@ export default function LoanScreen() {
                    />
                     <MyCalendar date={date} setDate={setDate} icon="FaCalendarDays" />
 
-                    <MyCalendar date={date} setDate={setDate} icon="FaCalendarDays" />
-            
-                    <MyCalendar date={date} setDate={setDate} icon="FaCalendarDays" />
-
                     <MyButton  
                         title='Emprestar'
                         onPress={handleRegister}
