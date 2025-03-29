@@ -11,7 +11,7 @@ export default function MoreScreen() {
         <View style={styles.container}>
             <MyView>
                 {/* Botão Saiba Mais */}
-                <View style={styles.optionsContainer}>
+                <View style ={styles.optionsContainer}>
                     <MyButton
                         style={styles.option}
                         title="SAIBA MAIS"
@@ -30,6 +30,7 @@ export default function MoreScreen() {
                             style={styles.option}
                             button_type="round"
                             title="CONFIGURAÇÕES"
+                            
                         />
                         <MyButton
                             style={styles.option}
@@ -47,36 +48,32 @@ export default function MoreScreen() {
                             button_type="round"
                             onPress={() => setVisible(false)}
                         />
-
-                        <MyButton
-                            style={styles.icon}
-                            title=""
-                            button_type="circle"
-                            onPress={() => setVisible(false)}
-                            icon = "github"
-                        />
-                        <MyButton
-                            style={styles.icon}
-                            title=""
-                            button_type="circle"
-                            onPress={() => setVisible(false)}
-                            icon = "facebook"
-                        />
-                           <MyButton
-                            style={styles.icon}
-                            title=""
-                            button_type="circle"
-                            onPress={() => setVisible(false)}
-                            icon = "instagram"
-                        />
+                        <View style = {styles.row}> 
+                            <MyButton
+                                style={styles.icon}
+                                title=""
+                                button_type="circle"
+                                onPress={() => setVisible(false)}
+                                icon = "github"
+                            />
+                            <MyButton
+                                style={styles.icon}
+                                title=""
+                                button_type="circle"
+                                onPress={() => setVisible(false)}
+                                icon = "facebook"
+                            />
+                            <MyButton
+                                style={styles.icon}
+                                title=""
+                                button_type="circle"
+                                onPress={() => setVisible(false)}
+                                icon = "instagram"
+                            />
+                        </View>
                     </View>
                 )}
 
-                <View style={styles.footer}>
-                    <IconButton icon="github" size={30} iconColor="black" onPress={() => { }} />
-                    <IconButton icon="facebook" size={30} iconColor="blue" onPress={() => { }} />
-                    <IconButton icon="instagram" size={30} iconColor="purple" onPress={() => { }} />
-                </View>
             </MyView>
         </View>
     );
@@ -90,7 +87,7 @@ const styles = StyleSheet.create({
     optionsContainer: {
         marginTop: 10,
         padding: 10,
-        backgroundColor: '#123456',
+        backgroundColor: '#FFF',
         borderRadius: 10,
         elevation: 3,
         shadowColor: '#000',
@@ -98,6 +95,16 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         alignItems: 'center',
         justifyContent: 'center',
+        gap: 20,
+        alignContent: 'space-around',
+    },
+    row: {
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        alignItems: 'flex-start', 
+        padding: 10,
+        gap: 20,
+        alignContent: 'space-around',
     },
     option: {
         width: 500,
@@ -114,7 +121,13 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     icon: {
-
+        padding: 10,
+        marginTop: 10,
+        justifyContent: 'center', 
+        alignItems: 'center',
+        flexDirection: 'row', 
+       
     },
+
 
 });
