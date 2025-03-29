@@ -3,6 +3,7 @@ import { FlatList, View, Text, StyleSheet, TextInput, Button, TouchableOpacity }
 import MyCalendar from '../src/components/MyCalendar';
 import MyView from '../src/components/MyView';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
+import MyButton from '../src/components/Mybuttons';
 
 
 export default function LoanScreen() {
@@ -83,7 +84,7 @@ export default function LoanScreen() {
 
 
         <MyView>
-
+            <View style={styles.formConteiner}>
             <Text>Tela de Empréstimo</Text>
             <View style={styles.row}>
                 <View style={styles.form}>
@@ -115,13 +116,14 @@ export default function LoanScreen() {
                     <MyCalendar date={date} setDate={setDate} icon="FaCalendarDays" />
 
                     <MyCalendar date={date} setDate={setDate} icon="FaCalendarDays" />
-
+            
                     <MyCalendar date={date} setDate={setDate} icon="FaCalendarDays" />
 
-
-                    <Button title="Emprestar" onPress={handleRegister}
-                        color="purple"
-                    />
+                    <MyButton  
+                        title='Emprestar'
+                        onPress={handleRegister}
+                         button_type='round'
+                               />
 
                 </View>
 
@@ -138,15 +140,23 @@ export default function LoanScreen() {
                             <Text>{item.statusLoan}</Text>
                             <Text>{item.observation}</Text>
                             <Text>{item.creatAt}</Text>
-                            <View style={styles.itemContainer} >
-                                <TouchableOpacity onPress={() => { editLoans(item.id) }}>EDITAR</TouchableOpacity>
-                                <TouchableOpacity onPress={() => { deletLoans(item.id) }}>DELETE</TouchableOpacity>
-                            </View>
+
+                            <MyButton  
+                                title='Editar'
+                                onPress={() => { editLoans(item.id) }}
+                                button_type='round'
+                               />
+                            <MyButton  
+                                title='Deletar'
+                                onPress={() => { deletLoans(item.id) }}
+                                button_type='round'
+                               />
+
                         </View>
-
+                        
                     )}
-
                 />
+            </View>
             </View>
         </MyView>
     ); //encapsulamento
@@ -169,6 +179,15 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
+        width: 700
+        
+    },
+    formConteiner:{
+        flex:8,
+        justifyContent: 'center',
+        alignItems:'center',
+        
+        
     },
     itemContainer: {
         marginRight: 10,
@@ -182,10 +201,42 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         color: "blue"
-    }
-
-})
-
+    },
+    button_circle: {
+      borderRadius: 100,
+      display: "flex",
+      gap: 5,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    button_capsule: {
+      borderRadius: 50,
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "row",
+      
+    },
+    button_round: {
+      borderRadius: 20,
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "row",
+      
+    },
+    button_rect: {
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "row",
+      borderRadius: 0,
+      
+    },
+    button_default: {
+      borderRadius: 15,
+      alignItems: "center",
+      flexDirection: "row",
+      
+    },
+  });
 
 
 
