@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, TextInputBase, FlatList, TouchableOpacity } from 'react-native';
+import MyColorPicker from '../src/components/MyColorPicker';
 
 
 export default function ScheduleScreen(){
@@ -80,6 +81,8 @@ export default function ScheduleScreen(){
                      <TextInput placeholder="Digite o horário do fim:" value={req.end_time} onChangeText={(text) => setReq({...req, end_time:text})} /> 
                      
                      <Button title="CADASTRAR" onPress={ handleRegister } color="purple" />
+
+                     <MyColorPicker/>
                 </View>
 
                 <FlatList 

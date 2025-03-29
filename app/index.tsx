@@ -60,6 +60,14 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
+                        label="Agendamentos"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/schedules');
+                        }}
+                    />
+                    <Drawer.Item
                         label="Configurações"
                         icon="cog"
                         onPress={() => {

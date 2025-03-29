@@ -5,6 +5,8 @@ import { Provider as PaperProvider, ActivityIndicator } from 'react-native-paper
 import { Slot } from 'expo-router';
 import * as Font from 'expo-font';
 import { View, StyleSheet } from 'react-native';
+import MyColorPicker from './src/components/MyColorPicker';
+import ScheduleScreen from './app/schedules';
 
 // Importando fontes manualmente
 import {
@@ -38,6 +40,7 @@ export default function App() {
   return (
     <PaperProvider>
       <Slot />
+      <ScheduleScreen/>
     </PaperProvider>
   );
 }
