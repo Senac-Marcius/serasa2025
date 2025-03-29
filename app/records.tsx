@@ -1,5 +1,8 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity} from 'react-native';
+import MyView from '../src/components/MyView';
+import MyButton from '../src/components/Mybuttons';
+import { IconButton } from 'react-native-paper';
 
 export default function RecordScreen(){
 {/*Aqui é typescript COMENTÁRIO dentro do front */}
@@ -66,7 +69,7 @@ export default function RecordScreen(){
 
     return (
 
-        <View>
+        <MyView>
 
         <Text> Tela dos Registros </Text>
 
@@ -138,7 +141,7 @@ export default function RecordScreen(){
                     )}                                                                        
                 />
             </View>
-        </View>
+        </MyView>
     );
 }
 
