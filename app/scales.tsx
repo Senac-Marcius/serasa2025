@@ -6,6 +6,7 @@ import MyView from '../src/components/MyView';
 import MySelect from '../src/components/Myselect';
 import MyTimePicker from '../src/components/MyTimePicker';
 import MyButton from '../src/components/Mybuttons';
+import Myiten from '../src/components/myItenlist';
 
 export default function ScaleScreen(){
     const router = useRouter();
@@ -86,7 +87,7 @@ export default function ScaleScreen(){
 
     }
 
-    return(
+    return (
         <MyView > {/* Aqui é typecript dentro do html*/}
             <MyFilter
                 style={styles.container}
@@ -118,25 +119,24 @@ export default function ScaleScreen(){
                     />
                 </View >
                 <View style={styles.listContainer}>
-                    <FlatList
-                        data={scales}
-                        keyExtractor={(item) => item.id.toString()}
-                            renderItem={({item}) =>  (
-                                <View style={styles.response}>
-                                    <Text>Dia da semana: {item.day}</Text>
-                                    <Text>Horario de início: {item.starttime}</Text>
-                                    <Text>Horario de termino: {item.endtime}</Text>
-                                    <Text>Id do Usuário: {item.userId}</Text>
-                                    <Text>Data da criação: {item.creatAt}</Text>
-
-                                    <View style={styles.buttonContainer}>
-                                       <TouchableOpacity onPress={() => {editScale(item.id)}}>EDIT</TouchableOpacity>
-                                       <TouchableOpacity onPress={() => {deleteScale(item.id)}}>DELETE</TouchableOpacity>
-                                    </View>
-                                </View>
-                            )}
-                    />
-                    </View>
+                <FlatList
+                    data={scales}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <Myiten
+                            style={styles.response}
+                            onEdit={() => editScale(item.id)}
+                            onDel={() => deleteScale(item.id)}
+                        >
+                            <Text>Dia da semana: {item.day}</Text>
+                            <Text>Horário de início: {item.starttime}</Text>
+                            <Text>Horário de término: {item.endtime}</Text>
+                            <Text>Id do Usuário: {item.userId}</Text>
+                            <Text>Data da criação: {item.creatAt}</Text>
+                        </Myiten>
+                    )}
+                />
+                </View> 
             </View>       
         </MyView> 
     );
