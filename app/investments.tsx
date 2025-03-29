@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView,  } from 'react-native';
+import MyView from '../src/components/MyView';
+import MySupport from'../src/components/MyAccessbility';
 
 export default function investmentScreen(){
  //aqui é typescript   
@@ -62,16 +64,18 @@ export default function investmentScreen(){
     
     
     return (
-      <View>
-        {/* Aqui é typescript dentro do front */}
-        <Text>Meus Investimentos</Text>
+      <MyView>  
+              {/* Aqui é typescript dentro do front */}
+        
+          <MySupport/>
+        <Text>Investimentos</Text>
         <View style={styles.row}>
             <View style={styles.form}>
                 <TextInput
                     placeholder='Descrição'
                     value={req.description}
                     onChangeText={(text) => setReq({...req, description: text })}
-                />
+                  />
                 <TextInput
                     placeholder='Nome'
                     value={req.name}
@@ -109,7 +113,7 @@ export default function investmentScreen(){
 
                         <View style={styles.buttons}>
                             <TouchableOpacity 
-                            style={styles.editButton} onPress={ () => { editInvestment(item.id) } }><Text style={styles.editButtonText}> editar</Text>
+                            style={styles.editButton} onPress={ () => { editInvestment(item.id) } } activeOpacity={0.7}><Text style={styles.editButtonText}> editar</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                             style={styles.delButton} onPress={ () => { delInvestment(item.id) } }> <Text style={styles.delButtonText}> excluir</Text>
@@ -120,7 +124,7 @@ export default function investmentScreen(){
                 )}
             />
         </View>
-      </View>   
+      </MyView>   
     );
 } 
 
@@ -136,43 +140,64 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 10,
     },
-    form : {
+    form: {
         flex: 1,
         marginRight: 10,
         padding: 20,
         backgroundColor: '#F2F2F2',
         borderRadius: 10,
         shadowColor: '#000',
-        shadowOpacity: 0.1,
+        shadowOpacity: 0.2,
         shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 20,
-    },
-    item : {
-        flex: 1,
-        marginRight: 10,
-        padding: 20,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 20,
-        marginBottom: 20,
+        shadowRadius: 10,
     },
 
-    editButton : {
-        backgroundColor: '#FFD700',
+    formInput: {
+        height: 45,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderRadius: 10,
+        marginBottom: 10,
+        paddingHorizontal: 10,
+        backgroundColor: '#fff',
+    },
+      formInputFocus: {
+        borderColor: '#FFD700',
+        backgroundColor: '#F7F7F7',
+    },
+
+    item: {
+        flex: 1,
+        marginRight: 10,
+        padding: 20,
+        backgroundColor: '#F9F9F9',
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 4 },
+        shadowRadius: 10,
+        marginBottom: 15,
+        borderWidth: 1,
+        borderColor: '#ddd',
+      },
+
+      editButton: {
+        backgroundColor: '#ffff00',
         padding: 10,
         borderRadius: 10,
         shadowColor: '#000',
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 20,
-    },
+        shadowRadius: 10,
+      },
 
     editButtonText: {
         color: '#000',
         fontWeight: 'bold',
+    },
+
+    editButtonActive: {
+        transform: [{ scale: 1.05 }],
     },
 
     delButton : {
@@ -188,6 +213,19 @@ const styles = StyleSheet.create({
     delButtonText: {
         color: '#000',
         fontWeight: 'bold',
-    }
+    },
+
+    text: {
+        fontSize: 16,
+        fontFamily: 'Roboto',
+        color: '#333',
+      },
+      
+    textBold: {
+        fontSize: 18,
+        fontFamily: 'Roboto-Bold',
+        color: '#000',
+      },
 
 });
+

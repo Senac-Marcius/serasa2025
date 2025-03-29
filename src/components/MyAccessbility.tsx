@@ -25,7 +25,7 @@ const MySupport: React.FC<MyAcessProps> = ({label, style }) => {
                     <TouchableOpacity onPress={() => setVisible(true)}
                     accessibilityLabel="Botão de Acessibilidade">                                    
                         <MaterialIcons name="accessibility" style={styles.accessbutton} size={40} color="green" />
-                    <Text>{label ? label : 'Suporte'}</Text>,
+                    <Text>{label ? label : 'acessibilidade'}</Text>,
                 </TouchableOpacity>
                 )
             }
