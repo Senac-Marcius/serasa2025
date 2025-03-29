@@ -24,7 +24,7 @@ interface MyinputProps {
   placeholder?: string;
   style?: TextStyle | TextStyle[];
   label: string;
-  iconName: string;
+  iconName?: string;
 
 }
 
