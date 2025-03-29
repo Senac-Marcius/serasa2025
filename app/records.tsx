@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity} f
 import MyView from '../src/components/MyView';
 import MyButton from '../src/components/Mybuttons';
 import { IconButton } from 'react-native-paper';
+import { Myinput } from '../src/components/Myinputs';
 
 export default function RecordScreen(){
 {/*Aqui é typescript COMENTÁRIO dentro do front */}
