@@ -118,6 +118,7 @@ export default function StudentsScreen() {
                     }}
                     style={styles.button_editar}
                   >
+                    
                     Editar
                   </TouchableOpacity>
                 </View>
