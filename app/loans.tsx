@@ -4,6 +4,7 @@ import MyCalendar from '../src/components/MyCalendar';
 import MyView from '../src/components/MyView';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
 import MyButton from '../src/components/Mybuttons';
+import MyList from '../src/components/MyList';
 
 
 export default function LoanScreen() {
@@ -123,7 +124,7 @@ export default function LoanScreen() {
 
                 </View>
 
-                <FlatList //data significa o parametro que vai receber o vetor (data = dados)
+                <MyList //data significa o parametro que vai receber o vetor (data = dados)
                     data={loans}                  //toString tranforma em string  
                     keyExtractor={(item) => item.id.toString()}//vai pegar no loans cada elemento
                     renderItem={({ item }) => ( //return aceita somente um argumento
