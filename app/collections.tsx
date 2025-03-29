@@ -6,7 +6,7 @@ import { MyModal_mobile1, MyModal_mobile2, MyModal_mobile3, MyModal_mobilefullsc
 import MyButton from '../src/components/Mybuttons';
 import MyView from '../src/components/MyView';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs'
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=star" />
+import MyList from '../src/components/mylist'
 
 //função userState só retorna para uma variavel const
 
@@ -100,9 +100,9 @@ export default function CollectionScreen() {
                             style={styles.button_capsule}
                         />
                     </View>
-                    <FlatList // data faz um foreach (data recebe collections)
+                    <MyList // data faz um foreach (data recebe collections)
                         data={collections}
-                        keyExtractor={(collections) => collections.id.toString()}
+                        keyItem={(collections) => collections.id.toString()}
                         renderItem={({ item }) => (
                             <View style={styles.itemContainer}>
                                 <Text style={styles.itemText}>Nome: {item.name}</Text>
