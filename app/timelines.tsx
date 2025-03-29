@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, TextInputBase, FlatList, TouchableOpacity } from 'react-native';
-import Myvoltar from '../src/components/Myvoltar';
 import MyButton from '../src/components/Mybuttons';
-import 
+import MyCalendar from '../src/components/MyCalendar';
+ 
 
 export default function TimelineScreen() {
     // aqui é typescript
@@ -68,6 +68,11 @@ export default function TimelineScreen() {
 
     return (
         <View>
+
+            <MyCalendar
+                    date='2021-10-10'
+                    setDate={(date) => console.log(date)}
+                />
 
             {/* aqui é typescript dentro do front */}
             <text>Meu Cronograma</text>
