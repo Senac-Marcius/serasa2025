@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Appbar, Drawer } from 'react-native-paper';
 import { useState } from 'react';
+import MyNotify from '../src/components/Mynotify';
 
 export default function HomeScreen() {
     const router = useRouter();
@@ -14,6 +15,9 @@ export default function HomeScreen() {
             <Appbar.Header>
                 <Appbar.Action icon="menu" onPress={() => setDrawerOpen(!drawerOpen)} />
                 <Appbar.Content title="Serasa App" />
+                <MyNotify>
+                    <></>
+                </MyNotify>
             </Appbar.Header>
 
             {/* Drawer Menu */}
@@ -52,11 +56,19 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
+<<<<<<< HEAD
+                        label="levels"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/levels');
+=======
                         label="Despesa"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/expenses');
+>>>>>>> bd6ef54d1ef62e2a4b56753d3e748405ff1f2bd6
                         }}
                     />
                     <Drawer.Item
@@ -82,6 +94,6 @@ export default function HomeScreen() {
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <Text>Bem-vindo ao Serasa App!</Text>
             </View>
-        </View>
+            </View>
     );  
 }

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { View,Text, StyleSheet,FlatList, Button,TextInput} from 'react-native';
+import { View,Text, StyleSheet,FlatList, Button,TextInput, Touchable, TouchableOpacity} from 'react-native';
 
-export default function categoryScreen(){
+export default function levelsScreen(){
     const [req, setReq] = useState({
         name: '',
         description : '',
         color: '',
-        id: 0,
+        id: -1,
         createAt: new Date().toISOString(),
         userId : 0,
         
@@ -22,55 +22,95 @@ export default function categoryScreen(){
         }[]>([])
     
     function handleRegister (){
-        setleves([...leves, req])
+
+        if( req.id == -1){
+            const newId = leves.length ? leves[leves.length -1].id +1 : 0;
+            const newLeves = {...req, id: newId};
+ 
+            setleves([...leves, newLeves]);
+        }else{
+            setleves(leves.map(l => (l.id == req.id ? req : l)));
+        }
+        
         setReq({name:'',
             description:'',
             color: '',
-            id: 0,
+            id: -1,
             createAt: new Date().toISOString(),
             userId : 0,
 
         })
     }
 
+    function editLevels (id:number){
+        const notification = leves.find( l => l.id == id)
+        if(notification)
+            setReq(notification)
+    }
+
+    function deleteLevels (id:number){
+
+        const list = leves.filter(l => l.id != id )
+        setleves(list)
+    }
+
     return (
         <View>
+            
     {/* aqui é typerscrypt dentro do front */}
 
             <View style={styles.row}>
                 <View style={styles.form}>
-                    <TextInput placeholder="nome" 
+                    
+                    <TextInput style={styles.fundo} placeholder="NOME" 
                         value={req.name}
                         onChangeText={(text) => setReq({...req ,name: text})}
                     /> 
                    
-
-                    <TextInput placeholder="description" 
+                    <TextInput style={styles.fundo}  placeholder="DESCRIÇÃO" 
                         value={req.description}
                         onChangeText={(text) => setReq({...req ,description: text})}
                     />
 
-                    <TextInput placeholder="color" 
+                    <TextInput style={styles.fundo} placeholder="COR" 
                         value={req.color}
                         onChangeText={(text) => setReq({...req ,color: text})}
-                    />
-                        
-                    
+                    /> 
                       
-                   <Button title= 'Cadastrar' onPress= {handleRegister}/>
+                   <Button color="#DF01A5" title= 'Cadastrar' onPress= {handleRegister}/>
                                  
                 </View>
                 <FlatList
                     data={leves}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({item}) =>(
-                        <view>
-                            <text>{item.name}</text>
-                        <text>{item.createAt}</text> 
-                        <text>{item.name}</text>
-                        <text>{item.color}</text>
-                        <text>{item.userId}</text>  
-                        </view>
+                        <View style={styles.card}>
+                            <Text>{item.name}</Text>
+                            <Text>{item.createAt}</Text> 
+                            <Text>{item.name}</Text>
+                            <Text>{item.color}</Text>
+                            <Text>{item.userId}</Text>  
+
+                            <View style={styles.buttonsContainer}>
+                                <TouchableOpacity 
+                                style={styles.editButton}
+                                onPress={() => {editLevels(item.id)}}>
+
+                                    <Text style={styles.buttonText}>EDIT</Text>
+
+                                </TouchableOpacity>
+
+                                <TouchableOpacity 
+                                style={styles.delButton}
+                                onPress={() => {deleteLevels(item.id)}}>
+
+                                    <Text style={styles.buttonText}>DELETE</Text>
+
+                                </TouchableOpacity>
+                               
+                            </View>
+                        </View>
+
                     )}
 
                 />
@@ -79,21 +119,21 @@ export default function categoryScreen(){
    
     );
 }
+
 // Estilos
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#fff',
+        backgroundColor: '#FFF'
     },
     row: {
-        flexDirection: 'row', 
-        justifyContent: 'space-between', 
-        alignItems: 'flex-start', 
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
     },
     form: {
         flex: 1,
-        marginRight: 10,
         padding: 20,
         backgroundColor: '#F2F2F2',
         borderRadius: 10,
@@ -101,10 +141,19 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
+        marginRight: 10,
+        minWidth: '45%',
     },
     listContainer: {
-        flex: 1, 
-        padding: 10,
+        flex: 1,
+        padding: 20,
+        backgroundColor: '#E8F5E9',
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 4 },
+        shadowRadius: 5,
+        minWidth: '45%',
     },
     title: {
         fontSize: 22,
@@ -139,4 +188,52 @@ const styles = StyleSheet.create({
         color: '#007BFF',
         marginBottom: 5,
     },
+    buttonText:{
+        color:'#000000',
+        fontWeight: 'bold'
+    },
+    buttonsContainer:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 20,
+        alignContent:'space-around',
+    },
+    editButton:{ backgroundColor:'#FFFF00',
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent:'center',
+
+    },
+    delButton:{ backgroundColor:'#f44336',
+        padding:10,
+        borderRadius:5,
+        alignItems:'center',
+        justifyContent:'center',
+
+    },
+
+    card: {
+        backgroundColor: '#FFF',
+        padding: 10,
+        borderRadius: 5,
+        marginBottom: 10,
+        borderLeftWidth: 5,
+        borderLeftColor: '#DF01A5',
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 3,
+      },
+
+      fundo: {
+        height: 40,
+        borderColor: '#CCC',
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingHorizontal: 10,
+        marginBottom: 10,
+        backgroundColor: '#FFF',
+      },
+
 });
