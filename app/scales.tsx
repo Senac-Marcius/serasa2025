@@ -3,6 +3,9 @@ import {View, Text, StyleSheet, TextInput, Button, FlatList, FlatListComponent, 
 import { useRouter } from 'expo-router';
 import MyFilter from '../src/components/Myfilter';
 import MyView from '../src/components/MyView';
+import MySelect from '../src/components/Myselect';
+import MyTimePicker from '../src/components/MyTimePicker';
+import MyButton from '../src/components/Mybuttons';
 
 export default function ScaleScreen(){
     const router = useRouter();
@@ -16,6 +19,7 @@ export default function ScaleScreen(){
         userId: 0,
     });
 
+
     const [scales, setScales] = useState<{
         id:number,
         day: string,
@@ -25,9 +29,31 @@ export default function ScaleScreen(){
         userId: number,
     }[]>([]);
 
+    const [selectedDay, setSelectedDay] = useState<string>('');
+
+    // Definir os dias da semana como lista de opções
+    const daysOfWeek = [
+        { key: '1', option: 'Segunda-feira' },
+        { key: '2', option: 'Terça-feira' },
+        { key: '3', option: 'Quarta-feira' },
+        { key: '4', option: 'Quinta-feira' },
+        { key: '5', option: 'Sexta-feira' },
+        { key: '6', option: 'Sábado' },
+        { key: '7', option: 'Domingo' },
+    ];
+
+    // Função para atualizar o estado com o dia selecionado
+    const handleSetLabel = (label: string) => {
+        setSelectedDay(label);
+        setReq(prevReq => ({
+          ...prevReq,
+          day: label, // Atualiza o campo 'day' em req
+        }));
+      };
+
     function handleRegister(){
-        if(req.id == -1){
-            const newId = scales.length ? scales[scales.length - 1].id +1 : 0;
+        if(req.id <= 0){
+            const newId = scales.length ? scales[scales.length - 1].id + 1 : 1;
             const newScale = {...req, id: newId };
             
             setScales([...scales, newScale]);
@@ -36,13 +62,14 @@ export default function ScaleScreen(){
         }
 
         setReq({
-            id: -1,
+            id: 0,
             day:'',
             starttime:'',
             endtime:'',
             creatAt:new Date().toISOString(),
             userId: 0,
-        })   
+        }) 
+        setSelectedDay('');  
     }
 
     function editScale(id: number){
@@ -71,22 +98,22 @@ export default function ScaleScreen(){
             <Text>Minha tela das escalas</Text>
             <View style={styles.row}>
                 <View style={styles.form}>
-                    <TextInput style={styles.input}
-                        placeholder="Dia da Semana"
-                        value={req.day}
-                        onChangeText={(text) => setReq({...req,day: text})}
+                    <MySelect
+                        label={selectedDay || 'Selecione um dia da semana'}
+                        list={daysOfWeek}
+                        setLabel={handleSetLabel}
                     />
-                    <TextInput style={styles.input}
-                        placeholder="Horario de início"
-                        value={req.starttime}
-                        onChangeText={(text) => setReq({...req,starttime: text})}
+                    <Text>Dia Selecionado: {selectedDay || 'Nenhum dia selecionado'}</Text>
+
+                    <MyTimePicker
+                         initialTime={req.starttime}
+                        onTimeSelected={(time) => setReq({ ...req, starttime: time })}
                     />
-                    <TextInput style={styles.input}
-                        placeholder="Horario de termino"
-                        value={req.endtime}
-                        onChangeText={(text) => setReq({...req,endtime: text})}
-                    />
-                    <Button 
+                    <MyTimePicker
+                        initialTime={req.endtime}
+                        onTimeSelected={(time) => setReq({ ...req, endtime: time })}
+                     />
+                    <MyButton
                         title='Cadastrar' onPress={handleRegister}
                     />
                 </View >
