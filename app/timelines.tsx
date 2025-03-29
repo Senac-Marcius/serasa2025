@@ -68,11 +68,7 @@ export default function TimelineScreen() {
 
     return (
         <View>
-
-            <MyCalendar
-                    date='2021-10-10'
-                    setDate={(date) => console.log(date)}
-                />
+            
 
             {/* aqui é typescript dentro do front */}
             <text>Meu Cronograma</text>
