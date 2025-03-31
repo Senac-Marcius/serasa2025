@@ -53,7 +53,9 @@ function delCalendar (id:number){
 
 return (
     <View>
-        
+        <MyTopbar>
+            <text>text</text>
+        </MyTopbar>
         {/*aqui é typescript dentro do front*/}
         <Text>Informações sobre o curso</Text>
         <View style={styles.row}>
