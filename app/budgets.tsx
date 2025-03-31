@@ -71,13 +71,9 @@ export default function BudgetScreen(){
         setBudgets(list)
     }
 
-
+    
     return (
         <MyView>
-            <MyLogin style={styles.row} email='Email' pass='Senha' changeEmail={(text) => {text}}>
-
-            <Mytext> </Mytext>
-            </MyLogin>
             {/* aqui é typescriot dentro do front*/}
             <Mytext>Minha tela das postagens</Mytext>
             <View style={styles.row}>

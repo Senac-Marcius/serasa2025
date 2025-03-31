@@ -1,29 +1,24 @@
-import React,{ReactNode} from 'react';
-import { View, TouchableOpacity, StyleSheet, Dimensions, TextStyle,  } from 'react-native';
+import React, { ReactNode } from 'react';
+import { View, TouchableOpacity, StyleSheet, Dimensions, TextStyle } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
 import { Button } from 'react-native-paper';
 import { router } from 'expo-router';
-import MyTopbar from './mytopbar';
+import MyTopbar from './mytopbar';  // Corrigido, apenas uma importação
 
 interface MySearchProps {
   children: ReactNode;
   style?: TextStyle | TextStyle[]; 
-
-  
 }
 
-const myView: React.FC< MySearchProps > = ({children}) => { 
+const myView: React.FC<MySearchProps> = ({ children }) => { 
  
   const handleSuporte = () => {
     console.log('Botão de suporte clicado!');
-    
   };
-
 
   const { width, height } = Dimensions.get('window');
 
-  
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -46,8 +41,7 @@ const myView: React.FC< MySearchProps > = ({children}) => {
       shadowRadius: 4,
       elevation: 5,
     },
-
-    tView:{
+    tView: {
       width: width,
       height: height,
     }
@@ -55,12 +49,11 @@ const myView: React.FC< MySearchProps > = ({children}) => {
 
   return (
     <ScrollView style={styles.container}>
-      <View>
-        <MyTopbar  title='' />
-      {children}
-      {/* Conteúdo da tela (pode ser adicionado aqui) */}
-      {/* Botão de suporte */}
-      <TouchableOpacity style={styles.suporteButton} onPress={handleSuporte}>      </TouchableOpacity>
+      <View style={styles.tView}>
+        <MyTopbar title='' />
+        {children}
+        {/* Botão de suporte */}
+        <TouchableOpacity style={styles.suporteButton} onPress={handleSuporte} />
       </View>
     </ScrollView>
   );
