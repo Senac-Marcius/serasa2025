@@ -20,9 +20,11 @@ interface MyCorrelatedprops{
   onEdit?(): void;
   onDel?(): void;
   relatedItems?: RelatedItem[];
+  showEditButton?: boolean;
+  showDeleteButton?: boolean;
 }
 
-const Myiten: React.FC<MytextProps> = ({ children, style, onEdit, onDel }) => {
+const Myiten: React.FC<MytextProps> = ({ children, style, onEdit, onDel, }) => {
   return (
           <TouchableOpacity style={style}>
             {children}
@@ -35,27 +37,27 @@ const Myiten: React.FC<MytextProps> = ({ children, style, onEdit, onDel }) => {
         );
 }
 
-const MyCorrelated: React.FC<MyCorrelatedprops> = ({ children, style, onEdit, onDel, relatedItems }) => {
+const MyCorrelated: React.FC<MyCorrelatedprops> = ({ children, style, onEdit, onDel, relatedItems, showEditButton = true, showDeleteButton = true }) => {
   return(
-    <View>
     <TouchableOpacity style={style}>
       {children}
       <View>
-        <MyButton onPress={onEdit} title="Editar" />
-        <MyButton style={{ marginTop: 20 }} onPress={onDel} title="Deletar" />
+      {showEditButton &&
+        <MyButton onPress={onEdit} title="Editar" />}
+        {showDeleteButton &&
+        <MyButton style={{ marginTop: 20 }} onPress={onDel} title="Deletar" />}
       </View>
     </TouchableOpacity>
-    <View style={{ marginTop: 20 }}>
-      {relatedItems?.map((item) => (
-        <View key={item.id}>
-          <MyButton title={item.name} onPress={() => console.log(`Selecionar ${item.name}`)} />
-        </View>
-      ))}
-    </View>
-  </View>
 );
 }
         
 
 export  {Myiten, MyCorrelated}
- 
+
+
+const styles = StyleSheet.create({
+  row : {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',}
+})

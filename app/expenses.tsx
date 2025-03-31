@@ -90,7 +90,7 @@ export default function ExpenseScreen(){
                     data={expense}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
-                        <MyCorrelated style={styles.card} 
+                        <Myiten style={styles.card} 
                             onEdit={()=> editExpense(item.id)}
 
                             onDel={() => delExpense(item.id)}
@@ -102,7 +102,7 @@ export default function ExpenseScreen(){
                             <Text style={styles.textlis} >{item.userId}</Text>
                             
     
-                        </MyCorrelated>
+                        </Myiten>
                     )}
                 /> 
             </View>
