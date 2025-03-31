@@ -3,20 +3,17 @@ import { View, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Appbar, Drawer } from 'react-native-paper';
 import { useState } from 'react';
-import  MyTheme from '../src/components/Mytheme'
 
 export default function HomeScreen() {
     const router = useRouter();
     const [drawerOpen, setDrawerOpen] = useState(false);
-
+/* esse é o menu */
     return (
         <View style={{ flex: 1 }}>
             {/* Menu Hambúrguer no Topo */}
             <Appbar.Header>
                 <Appbar.Action icon="menu" onPress={() => setDrawerOpen(!drawerOpen)} />
                 <Appbar.Content title="Serasa App" />
-                 <MyTheme chendTheme={() => {}}  fontSize={ ()=>{} }/>
-                    
             </Appbar.Header>
 
             {/* Drawer Menu */}
@@ -31,178 +28,68 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
-                        label="CATEGORIES"
+                        label="Secretaria"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/categories');
+                            router.push('/disciplines');
                         }}
                     />
-                     <Drawer.Item
-                        label="Itens"
-                        icon="post"
-                        onPress={() => {
-                            setDrawerOpen(false);
-                            router.push('/itens');
-                        }}
-                    />
+                    
                     <Drawer.Item
-                        label="Area do Aluno"
-                        icon="post"
-                        onPress={() => {
-                            setDrawerOpen(false);
-                            router.push('/students');
-                        }}
-                    />
-                    <Drawer.Item
-                        label="Cursos"
+                        label="Salas"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/courses');
                         }}
                     />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     <Drawer.Item
-                        label="Documentos"
+                        label="Alunos"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/documents');
-                        }}
-                    />
-
-                    <Drawer.Item
-                        label="Cursos"
-                        icon="acervo"
-                        onPress={() => {
-                            setDrawerOpen(false);
-                            router.push('/collections');
+                            router.push('/posts');
                         }}
                     />
                     <Drawer.Item
-                        label="notificação"
+                        label="Investimento"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/notifications');
+                            router.push('/posts');
                         }}
                     />
                     <Drawer.Item
-                    }}
-                    />
-                    <Drawer.Item
-                        label="Despesa"
+                        label="Administração"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/expenses');
+                            router.push('/posts');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="Rede de Apoio"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/posts');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="Infraestrutura"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/posts');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="Biblioteca"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/posts');
                         }}
                     />
                     <Drawer.Item
@@ -211,14 +98,6 @@ export default function HomeScreen() {
                         onPress={() => {
                             setDrawerOpen(false);
                             console.log("Configurações");
-                        }}
-                    />
-                    <Drawer.Item
-                        label="Biblioteca - Cadastramento"
-                        icon="book"
-                        onPress={() => {
-                            setDrawerOpen(false);
-                            router.push('/librarie');
                         }}
                     />
                 </Drawer.Section>

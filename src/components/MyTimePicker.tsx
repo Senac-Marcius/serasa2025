@@ -3,6 +3,9 @@ import { ScrollView, View } from 'react-native';
 import { TimePickerModal } from 'react-native-paper-dates';
 import { Button, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MyButton from './Mybuttons';
+import MyView from './MyView';
+
 
 interface MyTimePickerProps {
   onTimeSelected: (time: string) => void; // Callback para atualizar o estado no pai
@@ -20,26 +23,28 @@ export default function MyTimePicker({ onTimeSelected, initialTime = '' }: MyTim
   };
 
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+    <MyView>
       <TextInput
         placeholder="HH:MM"
         value={initialTime}
         editable={false}
         style={{ flex: 1, backgroundColor: '#f9f9f9' }}
       />
-      <Button
-        mode="contained"
+      <MyButton
+        button_type = "round"
         onPress={() => setOpen(true)}
-        style={{ backgroundColor: '#6200ee' }}
-      >
-        <Icon name="clock-outline" size={20} color="#FFF" />
-      </Button>
+        icon="clock-outline"
+      />
+        
       <TimePickerModal
         locale="pt"
         visible={open}
         onDismiss={() => setOpen(false)}
         onConfirm={handleConfirm}
+        animationType="fade" 
+        
+        
       />
-    </View>
+    </MyView>
   );
 }
