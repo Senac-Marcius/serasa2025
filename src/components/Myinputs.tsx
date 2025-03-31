@@ -49,7 +49,6 @@ const Myinput: React.FC<MyinputProps> = ({ value, onChangeText, placeholder, sty
     <View style={[inputStyles.container]} >
 
       <View style={inputStyles.labelContainer}>
-        <Icon style={[inputStyles.icon]} name={iconName} size={18} />
         <Text style={inputStyles.label}>{label}</Text>
       </View>
 
