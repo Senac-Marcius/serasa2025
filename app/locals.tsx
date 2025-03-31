@@ -84,7 +84,7 @@ export default function LocalScreen(){
                         value={req.area}
                         onChangeText={(n) => setReq({...req, area: n })}  
                                     
-                        />         
+                        />
                       
 
                         <MySelect label={unity} setLabel={setUnit}  
