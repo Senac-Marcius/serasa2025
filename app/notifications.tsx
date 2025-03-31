@@ -122,11 +122,11 @@ return (
                                 
                         > {/* pedro */}
 
-                           <Mytext style={textStyles.hepl} > Nome: {item.name}</Mytext> {/* alex */}
-                           <Mytext style={textStyles.hepl}> Descrição: {item.description}</Mytext>
-                           <Mytext style={textStyles.hepl}> Url: {item.url}</Mytext>
-                           <Mytext style={textStyles.hepl}> UserId: {item.userId}</Mytext>
-                           <Mytext style={textStyles.hepl}> CreatAt: {item.creatAt}</Mytext>
+                           <Mytext style={textStyles.textBody} > Nome: {item.name}</Mytext> {/* alex */}
+                           <Mytext style={textStyles.textBody}> Descrição: {item.description}</Mytext>
+                           <Mytext style={textStyles.textBody}> Url: {item.url}</Mytext>
+                           <Mytext style={textStyles.textBody}> UserId: {item.userId}</Mytext>
+                           <Mytext style={textStyles.textBody}> CreatAt: {item.creatAt}</Mytext>
 
 
                             {/*
