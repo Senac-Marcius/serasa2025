@@ -8,8 +8,6 @@ import MyButton from '../src/components/Mybuttons';
 import MyList from '../src/components/mylist';
 import Myiten from '../src/components/myItenlist';
 
-
-
 export default function levelsScreen(){
     const [req, setReq] = useState({
         name: '',
@@ -17,9 +15,8 @@ export default function levelsScreen(){
         color: '',
         id: -1,
         createAt: new Date().toISOString(),
-        userId : 0,
-        
- });
+        userId : 0,    
+    });
  
     const[leves, setleves] = useState<{ 
         name: string,
@@ -66,52 +63,50 @@ export default function levelsScreen(){
     return (
         <MyView>
             
-    {/* aqui é typerscrypt dentro do front */}
+        {/* aqui é typerscrypt dentro do front */}
 
-            <View style={styles.row}/>
-            <View style={styles.form}>
-            
+            <View style={styles.row}>
+                <View style={styles.form}>
+                
+                        
+                        <Myinput 
+                            style={styles.input}
+                            placeholder="Digite seu nome" 
+                            value={req.name}
+                            onChangeText={(text) => setReq({...req ,name: text})}
+                            label="Nome"
+                            iconName=''
+
+                        /> 
                     
-                    <Myinput 
-                        style={styles.input}
-                        placeholder="Digite seu nome" 
-                        value={req.name}
-                        onChangeText={(text) => setReq({...req ,name: text})}
-                        label="Nome"
-                        iconName=''
+                        <Myinput 
+                            style={styles.input}  
+                            placeholder="Digite sua descrição" 
+                            value={req.description}
+                            onChangeText={(text) => setReq({...req ,description: text})}
+                            label="Descrição"
+                            iconName=''
+                        />
 
-                    /> 
-                   
-                    <Myinput 
-                        style={styles.input}  
-                        placeholder="Digite sua descrição" 
-                        value={req.description}
-                        onChangeText={(text) => setReq({...req ,description: text})}
-                        label="Descrição"
-                        iconName=''
-                    />
+                        <Myinput 
+                            style={styles.input}
+                            placeholder="COR" 
+                            value={req.color}
+                            onChangeText={(text) => setReq({...req ,color: text})}
+                            label="Cor"
+                            iconName=''
 
-                    <Myinput 
-                    style={styles.input}
-                     placeholder="COR" 
-                    value={req.color}
-                    onChangeText={(text) => setReq({...req ,color: text})}
-                    label="Cor"
-                    iconName=''
-
-                    /> 
-                      
-                   <MyButton title='Cadastrar' onPress= {handleRegister}/>
-                                 
+                        /> 
+                        
+                    <MyButton title='Cadastrar' onPress= {handleRegister}/>
+                                    
                 </View>
 
                 <MyList
                     data={leves}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) =>(
-
                        <Myiten
-                            style={styles.levelStyle}
                             onEdit={() => {editLevels(item.id)}}
                             onDel={() => {deleteLevels(item.id)}}
                         >
@@ -146,9 +141,10 @@ export default function levelsScreen(){
                         </Myiten>
 
                     )}
-
                 />
-            </MyView>
+               
+            </View>
+        </MyView>
     );
 }
 

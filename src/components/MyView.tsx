@@ -54,12 +54,8 @@ const myView: React.FC< MySearchProps > = ({children}) => {
 
   return (
     <ScrollView style={styles.container}>
-<<<<<<< HEAD
-      <View style = {styles.tView}>
-=======
       <View>
         <MyTopbar  title='Cargos' />
->>>>>>> 9a3557f06cd0131954e29ce0ca7210ef7e1ce62a
       {children}
       {/* Conteúdo da tela (pode ser adicionado aqui) */}
       {/* Botão de suporte */}
