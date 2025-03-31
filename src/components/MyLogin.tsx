@@ -10,7 +10,8 @@ interface MyLoginProps{
     style: ViewStyle | ViewStyle[];
     email:string;
     pass:string;
-    changeEmail(): void;
+    changeEmail(text: string): void;
+    changepass(text: string): void;
     
 }
 
@@ -20,7 +21,7 @@ const MyLogin: React.FC<MyLoginProps> = ({children, style, email, pass,changeEma
     <Myinput
         label="Email"
         value={email}
-        onChangeText={changeEmail}
+        onChangeText={(text) => {changeEmail(text)} }
         iconName="person"
     
         
@@ -29,7 +30,7 @@ const MyLogin: React.FC<MyLoginProps> = ({children, style, email, pass,changeEma
 <Myinput
         label="Senha"
         value={pass}
-        onChangeText={changeEmail}
+        onChangeText={(text) => {changeEmail (text)}}
         iconName="key"
         
     />
