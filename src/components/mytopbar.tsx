@@ -1,28 +1,35 @@
 import { ReactNode } from 'react';
-import { View,  StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Appbar, Drawer } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 
-
-
 interface MyTopbarProps {
-    children: ReactNode;
+    title?: string;
 }
 
 const MyTopbar: React.FC<MyTopbarProps> = ({ title }) => {
-      const router = useRouter();
-        const [drawerOpen, setDrawerOpen] = useState(false);
+    const router = useRouter();
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    
     return (
         <View style={styles.container}>
-            <Appbar.Header>
-                <Appbar.Action icon="menu" onPress={() => setDrawerOpen (!drawerOpen)} />
-                <Appbar.Content title={title}/>
-                {/* Anelisa */}
+            <Appbar.Header style={styles.appbar}>
+                <Appbar.Action icon="menu" style={styles.hamburguer} onPress={() => setDrawerOpen(!drawerOpen)} />
+                {
+                    title && (
+                    <Appbar.Content title={title} titleStyle={styles.title} />
+                    )
+                }
+
+
+                {/**chamar o da Ane aqui */}
+
+                {/**chamar o do miza aqui */}
             </Appbar.Header>
-            {/* importar do misael */}
-             {drawerOpen && (
-                <Drawer.Section style={{ backgroundColor: 'white', padding: 10 }}>
+            
+            {drawerOpen && (
+                <Drawer.Section style={styles.drawerSection}>
                     <Drawer.Item
                         label="Início"
                         icon="home"
@@ -33,24 +40,23 @@ const MyTopbar: React.FC<MyTopbarProps> = ({ title }) => {
                     />
                     <Drawer.Item
                         label="Postagens"
-                        icon="post"
+                        icon="file-document"
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/posts');
                         }}
                     />
                     <Drawer.Item
-                        label="Calendario"
-                        icon="post"
+                        label="Calendário"
+                        icon="calendar"
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/calendar');
                         }}
                     />
-                    
                     <Drawer.Item
                         label="Cursos"
-                        icon="post"
+                        icon="school"
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/courses');
@@ -61,10 +67,9 @@ const MyTopbar: React.FC<MyTopbarProps> = ({ title }) => {
                         icon="cog"
                         onPress={() => {
                             setDrawerOpen(false);
-                            console.log("Configurações");
+                            router.push('/settings');
                         }}
                     />
-                    
                 </Drawer.Section>
             )}
         </View>
@@ -80,8 +85,14 @@ const styles = StyleSheet.create({
     },
     appbar: {
         backgroundColor: '#4A148C',
+        color: '#FFF',
         borderRadius: 10,
     },
+    hamburguer: {
+        backgroundColor: '#FFF'
+
+    },
+
     title: {
         color: 'white',
         fontSize: 18,

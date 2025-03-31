@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity} from 'react-native';
-import MyTopbar from '../src/components/mytopbar'
+import MyTopbar from '../src/components/mytopbar';
 
 export default function CalendarsScreen(){
 //aqui é typescript
@@ -53,9 +53,7 @@ function delCalendar (id:number){
 
 return (
     <View>
-        <MyTopbar>
-            <text>text</text>
-        </MyTopbar>
+        <MyTopbar />
         {/*aqui é typescript dentro do front*/}
         <Text>Informações sobre o curso</Text>
         <View style={styles.row}>
