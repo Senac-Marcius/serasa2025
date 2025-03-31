@@ -25,8 +25,7 @@ const myView: React.FC< MySearchProps > = ({children}) => {
   
   const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#ffffff', 
+      flex: 1, 
       position: 'relative', 
     },
     suporteButton: {
