@@ -24,8 +24,8 @@ interface MyinputProps {
   placeholder?: string;
   style?: TextStyle | TextStyle[];
   label: string;
-  iconName: string;
-
+  iconName?: string;
+  children?: ReactNode
 }
 
 interface MyCheckProps {
@@ -44,12 +44,12 @@ interface MyTextAreaProps {
   iconName: string;
 }
 
-const Myinput: React.FC<MyinputProps> = ({ value, onChangeText, placeholder, style, label, iconName }) => {
+const Myinput: React.FC<MyinputProps> = ({ value, onChangeText, placeholder, style, label, iconName, children }) => {
   return (
     <View style={[inputStyles.container]} >
-
+      {children}
       <View style={inputStyles.labelContainer}>
-        <Icon style={[inputStyles.icon]} name={iconName} size={18} />
+      {iconName && <Icon style={[inputStyles.icon]} name={iconName} size={18} />}
         <Text style={inputStyles.label}>{label}</Text>
       </View>
 
