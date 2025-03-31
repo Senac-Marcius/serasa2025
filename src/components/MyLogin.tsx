@@ -15,7 +15,7 @@ interface MyLoginProps{
     
 }
 
-const MyLogin: React.FC<MyLoginProps> = ({children, style, email, pass,changeEmail }) => {
+const MyLogin: React.FC<MyLoginProps> = ({children, style, email, pass, changeEmail, changepass }) => {
     return (
     <View>
     <Myinput
@@ -30,7 +30,7 @@ const MyLogin: React.FC<MyLoginProps> = ({children, style, email, pass,changeEma
 <Myinput
         label="Senha"
         value={pass}
-        onChangeText={(text) => {changeEmail (text)}}
+        onChangeText={(text) => {changepass (text)}}
         iconName="key"
         
     />

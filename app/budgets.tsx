@@ -74,7 +74,7 @@ export default function BudgetScreen(){
 
     return (
         <MyView>
-            <MyLogin style={styles.row} email='Email' pass='Senha' changeEmail={() => {}}>
+            <MyLogin style={styles.row} email='Email' pass='Senha' changeEmail={(text) => {text}}>
 
             <Mytext> </Mytext>
             </MyLogin>
