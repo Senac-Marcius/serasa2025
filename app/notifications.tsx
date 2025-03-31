@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, FlatList, Text, StyleSheet, TextInput, Button, TouchableOpacity} from 'react-native';
+import { View, FlatList, Text, StyleSheet, TextInput, Button, TouchableOpacity,  } from 'react-native';
 
 
 export default function NotificationScreen(){

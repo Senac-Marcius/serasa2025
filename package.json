@@ -11,6 +11,7 @@
   "dependencies": {
     "@expo-google-fonts/poppins": "^0.2.3",
     "@expo/metro-runtime": "~4.0.1",
+    "@expo/vector-icons": "^14.0.4",
     "@heroui/date-input": "^2.3.15",
     "@react-native-picker/picker": "^2.11.0",
     "expo": "~52.0.38",
@@ -23,6 +24,7 @@
     "normalize-css-color": "^1.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-icons": "^5.5.0",
     "react-native": "^0.76.7",
     "react-native-currency-input": "^1.1.1",
     "react-native-gesture-handler": "~2.20.2",
