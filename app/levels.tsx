@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { View,Text, StyleSheet,FlatList, Button,TextInput, Touchable, TouchableOpacity} from 'react-native';
+//*import {Myinpunt} from '../src/components/Myimput';
+import MyView from '../src/components/MyView';
+
 
 export default function levelsScreen(){
     const [req, setReq] = useState({
@@ -55,12 +58,18 @@ export default function levelsScreen(){
     }
 
     return (
-        <View>
+        <MyView>
             
     {/* aqui é typerscrypt dentro do front */}
 
-            <View style={styles.row}>
+            <View>
+
+            {/*
+            </MyView>style={styles.row}>
+            */}
+
                 <View style={styles.form}>
+            
                     
                     <TextInput style={styles.fundo} placeholder="NOME" 
                         value={req.name}
@@ -115,7 +124,7 @@ export default function levelsScreen(){
 
                 />
             </View>
-        </View>
+      </MyView>
    
     );
 }
