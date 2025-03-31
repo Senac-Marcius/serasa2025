@@ -6,7 +6,7 @@ import MyList from '../src/components/mylist';
 import MyButton from '../src/components/Mybuttons';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
 import MyTopbar from '../src/components/mytopbar';
-import Myiten from '../src/components/myItenlist';
+import {Myiten, MyCorrelated} from '../src/components/myItenlist';
 import Mytext from '../src/components/Mytext';
 import { Center } from 'native-base';
 
@@ -155,22 +155,25 @@ export default function RevenueScreen() {
             />
             <View style={styles.row}>
               <MyButton button_type='rect' title="cadastrar" onPress={handleRegister}  />
-              <MyButton title="Cancelar" onPress={handleCancel} />
+              <MyButton button_type='rect' title="Cancelar" onPress={handleCancel} />
             </View>
         </View>
 
         {/* Lista de Receitas */}
         <MyList
+
           data={revenues}
           keyItem={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <Myiten
             
-              
+           
+            <Myiten
+
               onEdit={() => { editRevenue(item.id) }} 
               onDel={() => { delRevenue(item.id) }}
-              
-            >
+             
+            > 
+            
               <Mytext style={styles.revenueText}>Descrição: {item.description}</Mytext>
               <Mytext style={styles.revenueText}>Nome: {item.name}</Mytext>
               <Mytext style={styles.revenueText}>ID do Usuário: {item.userId}</Mytext>
@@ -179,6 +182,7 @@ export default function RevenueScreen() {
               <Mytext style={styles.revenueText}>Desconto: {item.discountPercentage}%</Mytext>
               <Mytext style={styles.revenueText}>Data: {item.createAt}</Mytext>
               <Mydownload style={styles.revenueText} url={item.url} />
+              
             </Myiten>
           )}
         />
