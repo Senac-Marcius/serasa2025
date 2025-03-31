@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
   label="Descrição"
   value={req.address} // Passa o estado como valor
   onChangeText={(text) => setReq({ ...req, ..... })} // Atualiza o estado ao digitar
-  placeholder="Digite sua mensagem aqui..."
+  placeholder="Digite sua mensagem aqui"
   style={{ height: 150 }}
 />
 */
@@ -31,7 +31,7 @@ interface MyinputProps {
 interface MyCheckProps {
   label: string;
   checked: boolean;
-  onToggle: () => void;
+  onToggle(checked:boolean): void;
   //função que será chamada quando a checkbox for alterada
 }
 
@@ -86,7 +86,7 @@ const MyTextArea: React.FC<MyTextAreaProps> = ({ value, onChangeText, placeholde
 
 const MyCheck: React.FC<MyCheckProps> = ({ label, checked, onToggle }) => {
   return (
-    <Pressable style={inputStyles.checkboxContainer} onPress={onToggle}>
+    <Pressable style={inputStyles.checkboxContainer} onPress={() =>onToggle(!checked)}>
 
       <View style={[inputStyles.checkbox, checked && inputStyles.checkboxChecked]}>
         {checked && <Icon name="check" size={16} color="white" />}
@@ -94,6 +94,7 @@ const MyCheck: React.FC<MyCheckProps> = ({ label, checked, onToggle }) => {
       </View>
       <Text style={inputStyles.checkboxLabel}>{label}</Text>
     </Pressable>
+
   );
 };
 

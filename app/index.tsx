@@ -59,6 +59,15 @@ export default function HomeScreen() {
                             router.push('/courses');
                         }}
                     />
+                    
+                    <Drawer.Item
+                        label="Lançamento"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/launchs');
+                        }}
+                    />
                     <Drawer.Item
                         label="Cursos"
                         icon="acervo"
