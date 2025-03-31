@@ -190,7 +190,7 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
-        backgroundColor: "gray"
+        backgroundColor: "white"
 
     },
 

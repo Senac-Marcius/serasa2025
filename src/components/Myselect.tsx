@@ -17,7 +17,7 @@ const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {
         <View>
             <TouchableOpacity 
                 style={{ 
-                    backgroundColor: "purple", 
+                    backgroundColor: "gray", 
                     padding: 10, 
                     borderRadius: 5, 
                     alignItems: 'center' 
@@ -41,7 +41,7 @@ const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {
                             setVisible(false)
                         }}>
                         <Text>{i.item.option}</Text>
-                        <Text style={{ color: 'purple', fontWeight: 'bold' }}>{label}</Text>
+                        <Text style={{ color: 'white', fontWeight: 'bold' }}>{label}</Text>
                     </TouchableOpacity>
                     )}
                 />)
