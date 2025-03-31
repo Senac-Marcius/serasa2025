@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, TextInputBase, FlatList, TouchableOpacity } from 'react-native';
 import MyButton from '../src/components/Mybuttons';
 import MyCalendar from '../src/components/MyCalendar';
+import MyView from '../src/components/MyView';
+
  
 
 export default function TimelineScreen() {
@@ -67,7 +69,7 @@ export default function TimelineScreen() {
 
 
     return (
-        <View>
+        <MyView>
             
 
             {/* aqui é typescript dentro do front */}
@@ -122,7 +124,7 @@ export default function TimelineScreen() {
                 />
 
             </View>
-        </View>
+        </MyView>
     )
 }
 
