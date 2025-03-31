@@ -10,6 +10,7 @@ interface MySearchProps {
   children: ReactNode;
   style?: TextStyle | TextStyle[]; 
 
+  
 }
 
 const myView: React.FC< MySearchProps > = ({children}) => { 
@@ -55,7 +56,7 @@ const myView: React.FC< MySearchProps > = ({children}) => {
   return (
     <ScrollView style={styles.container}>
       <View>
-        <MyTopbar  title='Cargos' />
+        <MyTopbar  title='' />
       {children}
       {/* Conteúdo da tela (pode ser adicionado aqui) */}
       {/* Botão de suporte */}
