@@ -10,7 +10,8 @@ import { Icon } from "react-native-paper";
 import MyButton from '../src/components/Mybuttons';
 import MyModal2 from '../src/components/Mymodal';
 import MyView from '../src/components/MyView';
-import { Myinput } from '../src/components/Myinputs';
+import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
+import { Myselect } from '../src/components/Myselect';
 
 
 export default function ItemScreen() { // aqui é TS
@@ -225,7 +226,7 @@ export default function ItemScreen() { // aqui é TS
         router.push('/librarie-home');
     };
 
-    
+     const [unity, setUnit] = useState("texto") 
 
     return ( //encapsulamento
         <MyView>
@@ -267,13 +268,25 @@ export default function ItemScreen() { // aqui é TS
             />
             <View> {/* aqui é typescript dentro do front*/}
                 <View style={styles.row}>
-                    
-
                         <View style={styles.form}>
                             {/* Conteúdo condicional baseado na aba ativa */}
                             {activeTab === 0 && (
                                 <>
-                                    <Picker style={styles.picker}
+                                    <MySelect label={unity} setLabel={setUnit}  
+                                    list={            
+                                        [
+                                            {key:0, option: 'x metros'},             /* exemplo do código de SELECT para copiar */
+                                            {key:1, option: 'x cm'},
+                                        ]
+                                    } />  
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    style={styles.picker}
                                         selectedValue={req.typology}
                                         onValueChange={(itemValue) => setReq({ ...req, typology: itemValue })}
                                     >
@@ -285,26 +298,30 @@ export default function ItemScreen() { // aqui é TS
                                         <Picker.Item label="Ebook" value="Ebook" />
                                         <Picker.Item label="Mapa" value="Mapa" />
                                         <Picker.Item label="Outros" value="Outros" />
-                                    </Picker>
-                                    <TextInput style={styles.input}
+                                    <Myselect/>
+                                    <Myinput
                                         placeholder="Título"
                                         value={req.title}
                                         onChangeText={(text) => setReq({ ...req, title: text })}
+                                        label=""  iconName=""
                                     />                    
-                                    <TextInput style={styles.input}
+                                    <Myinput 
                                         placeholder="Subtítulo"
                                         value={req.subtitle}
                                         onChangeText={(text) => setReq({ ...req, subtitle: text })}
+                                        label=""  iconName=""
                                     />
-                                    <TextInput style={styles.input}
+                                    <Myinput 
                                         placeholder="Responsáveis"
                                         value={req.responsible}
                                         onChangeText={(text) => setReq({ ...req, responsible: text })}
+                                        label=""  iconName=""
                                     />
-                                    <TextInput style={styles.input}
+                                    <Myinput 
                                         placeholder="Tradução"
                                         value={req.translation}
                                         onChangeText={(text) => setReq({ ...req, translation: text })}
+                                        label=""  iconName=""
                                     />
                                     <Picker style={styles.picker}
                                         selectedValue={req.language}
@@ -327,35 +344,41 @@ export default function ItemScreen() { // aqui é TS
                                 {/* outros campos de identificação */}
                             {activeTab === 1 && (
                                 <>
-                                    <TextInput style={styles.input}
+                                    <Myinput
                                         placeholder="Ano"
                                         value={req.year}
                                         onChangeText={(text) => setReq({ ...req, year: text })}
+                                        label=""  iconName=""
                                     />
-                                    <TextInput style={styles.input}
+                                    <Myinput 
                                         placeholder="Edição"
                                         value={req.edition}
                                         onChangeText={(text) => setReq({ ...req, edition: text })}
+                                        label=""  iconName=""
                                     />
-                                    <TextInput style={styles.input}
+                                    <Myinput 
                                         placeholder="Editora"
                                         value={req.publisher}
                                         onChangeText={(text) => setReq({ ...req, publisher: text })}
+                                        label=""  iconName=""
                                     />
-                                    <TextInput style={styles.input}
+                                    <Myinput 
                                         placeholder="Local"
                                         value={req.location}
                                         onChangeText={(text) => setReq({ ...req, location: text })}
+                                        label=""  iconName=""
                                     />
-                                    <TextInput style={styles.input}
+                                    <Myinput 
                                         placeholder="Série"
                                         value={req.serie}
                                         onChangeText={(text) => setReq({ ...req, serie: text })}
+                                        label=""  iconName=""
                                     />
-                                    <TextInput style={styles.input}
+                                    <Myinput 
                                         placeholder="Volume"
                                         value={req.volume}
                                         onChangeText={(text) => setReq({ ...req, volume: text })}
+                                        label=""  iconName=""
                                     />
                                 </>
                             )}
@@ -370,68 +393,70 @@ export default function ItemScreen() { // aqui é TS
                                         <Picker.Item label="Físico" value="Físico" />
                                         <Picker.Item label="Digital" value="Digital" />
                                     </Picker>
-                                    <TextInput style={styles.input}
+                                    <Myinput 
                                         placeholder="Número de Páginas"
                                         value={req.numberPages}
                                         onChangeText={(text) => setReq({ ...req, numberPages: text })}
+                                        label=""  iconName=""
                                     />
-                                    <TextInput style={styles.input}
+                                    <Myinput 
                                         placeholder="ISBN"
                                         value={req.isbn}
                                         onChangeText={(text) => setReq({ ...req, isbn: text })}
+                                        label=""  iconName=""
                                     />
-                                    <TextInput style={styles.input}
+                                    <Myinput 
                                         placeholder="ISSN"
                                         value={req.issn}
                                         onChangeText={(text) => setReq({ ...req, issn: text })}
+                                        label=""  iconName=""
                                     />
-                                    <TextInput style={styles.input}
+                                    <Myinput 
                                         placeholder="CDD"
                                         value={req.cdd}
                                         onChangeText={(text) => setReq({ ...req, cdd: text })}
+                                        label=""  iconName=""
                                     />
-                                    <TextInput style={styles.input}
+                                    <Myinput 
                                         placeholder="Número de Chamada"
                                         value={req.callNumber}
                                         onChangeText={(text) => setReq({ ...req, callNumber: text })}
+                                        label=""  iconName=""
                                     />
                                 </>
                             )}
                                 {/* outros campos de identificação */}
                             {activeTab === 3 && (
                                 <>
-                                    <TextInput style={styles.input}
-                                        multiline={true}
-                                        numberOfLines={2}
+                                    <MyTextArea
                                         placeholder="Assunto"
                                         value={req.subject}
                                         onChangeText={(text) => setReq({ ...req, subject: text })}
+                                        label=""  iconName=""
                                     />
-                                    <TextInput style={styles.input}
-                                        multiline={true}
-                                        numberOfLines={2}
+                                    <MyTextArea
                                         placeholder="Palavras-chave"
                                         value={req.keywords}
                                         onChangeText={(text) => setReq({ ...req, keywords: text })}
+                                        label=""  iconName=""
                                     />
-                                    <TextInput style={styles.input}
-                                        multiline={true}
-                                        numberOfLines={10}
+                                    <MyTextArea
                                         placeholder="Resumo"
                                         value={req.summary}
                                         onChangeText={(text) => setReq({ ...req, summary: text })}
+                                        label=""  iconName=""
                                     />
-                                    <TextInput style={styles.input}
-                                        multiline={true}
-                                        numberOfLines={10}
+                                    <MyTextArea
                                         placeholder="Notas"
                                         value={req.notes}
                                         onChangeText={(text) => setReq({ ...req, notes: text })}
+                                        label=""  iconName=""
                                     />
-                                    <TextInput style={styles.input}
+                                    <Myinput 
                                         placeholder="Número de exemplares"
                                         value={req.numberCopies}
                                         onChangeText={(text) => setReq({ ...req, numberCopies: text })}
+                                        label=""  iconName=""
                                     />
                                     <Picker style={styles.picker}
                                         selectedValue={req.status}
@@ -452,10 +477,11 @@ export default function ItemScreen() { // aqui é TS
                                         <Picker.Item label="Consulta Local" value="Consulta Local" />
                                         <Picker.Item label="Acesso Digital" value="Acesso Digital" />
                                     </Picker>
-                                    <TextInput style={styles.input}
+                                    <Myinput 
                                         placeholder="Url"
                                         value={req.url}
                                         onChangeText={(text) => setReq({ ...req, url: text })}
+                                        label=""  iconName=""
                                     />
                                     <MyButton
                                         title="Upload do Material"
@@ -539,12 +565,6 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 40,
-        backgroundColor: '#FFF',
-        borderColor: '#0C1DA0',
-        borderWidth: 1,
-        borderRadius: 5,
-        paddingHorizontal: 10,
-        marginBottom: 10,
     },
     button: {
         backgroundColor: '#0F2259',
