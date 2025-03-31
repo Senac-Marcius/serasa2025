@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView,  } from 'react-native';
 import MyView from '../src/components/MyView';
 import MySupport from'../src/components/MyAccessbility';
+import MyAccessibility from '../src/components/MyAccessbility';
 
 export default function investmentScreen(){
  //aqui é typescript   
@@ -67,7 +68,10 @@ export default function investmentScreen(){
       <MyView>  
               {/* Aqui é typescript dentro do front */}
         
-          <MySupport/>
+        <MyAccessibility>
+            <Text>Investimentos</Text>
+        </MyAccessibility>
+        
         <Text>Investimentos</Text>
         <View style={styles.row}>
             <View style={styles.form}>

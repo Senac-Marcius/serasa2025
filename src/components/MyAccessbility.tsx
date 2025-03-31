@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, ViewStyle, TextInput } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import MyButton from './Mybuttons';
 
 
 
 interface MyAcessProps {
     label?: string;
     style?: ViewStyle;
-    url?: string;
+    children: React.ReactNode;
 }
 
-const MySupport: React.FC<MyAcessProps> = ({label, style }) => {
+const MyAccessibility: React.FC<MyAcessProps> = ({label, style, children }) => {
     const [visible, setVisible] = useState(false);
     const handleSuporte = () => {
         console.log("Suporte clicado");
@@ -31,19 +32,14 @@ const MySupport: React.FC<MyAcessProps> = ({label, style }) => {
             }
                            {visible && (
                 <View style={styles.form}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Digite sua mensagem"
-                        accessible={true}
-                        accessibilityLabel="Campo de texto para suporte"/>
-                    <TouchableOpacity
-                        style={styles.suporteButton}
-                        onPress={handleSuporte}
-                        accessible={true}
-                        accessibilityLabel="Botão de Suporte"
-                        accessibilityRole="button">
-                        <Text style={styles.suporteText}>Iniciar</Text>
-                    </TouchableOpacity>
+                    {children}
+                    <MyButton
+                    title='Sair'
+                    onPress={() => setVisible(false)}
+                    button_type='capsule'
+                    />
+                            
+                    
                 </View>
             )}
         </View>
@@ -81,5 +77,5 @@ const styles = StyleSheet.create({
 
 });
 
-export default MySupport;
+export default MyAccessibility;
 
