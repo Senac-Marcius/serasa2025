@@ -59,7 +59,7 @@ const myView: React.FC< MySearchProps > = ({children}) => {
       {children}
       {/* Conteúdo da tela (pode ser adicionado aqui) */}
       {/* Botão de suporte */}
-      <MySupport style={styles.suporteButton} onPress={handleSuporte}/>
+      <MySupport style={styles.suporteButton}/>
       </View>
     </ScrollView>
   );
