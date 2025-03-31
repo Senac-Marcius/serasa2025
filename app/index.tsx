@@ -52,13 +52,29 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
+                        label="Empréstimo"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/loans');
+                        }}
+                    />
+                    <Drawer.Item
                         label="Cursos"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/courses');
                         }}
+                       
                     />
+                      <Drawer.Item
+                         label="Despesa"
+                         icon="post"
+                         onPress={() => {
+                             setDrawerOpen(false);
+                             router.push('/expenses');
+                        }}/>
                     <Drawer.Item
                         label="Cursos"
                         icon="acervo"
@@ -68,12 +84,11 @@ export default function HomeScreen() {
                     }}
                     />
                     <Drawer.Item
-                        label="Despesa"
+                        label="Funcionários"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/expenses');
-                        }}
+                            router.push('/employees');}}
                     />
                     <Drawer.Item
                         label="Configurações"
