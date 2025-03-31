@@ -6,6 +6,7 @@ import MyButton from './Mybuttons';
 import {  StyleSheet } from 'react-native';
 import Mytext from './Mytext';
 import { Myinput } from './Myinputs';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
 
 interface MyTimePickerProps {
@@ -21,6 +22,20 @@ export default function MyTimePicker({ onTimeSelected, initialTime = '' }: MyTim
     const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
     onTimeSelected(formattedTime); // Atualiza o estado no componente pai
     setOpen(false);
+  };
+  const theme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#6200ea', // Cor dos botões e seleções
+    },
+    fonts: {
+      ...DefaultTheme.fonts,
+      regular: { 
+        fontFamily: 'sans-serif',
+        textAlign: 'center', // Pode não afetar todos os textos
+      },
+    },
   };
 
   return (
@@ -39,7 +54,7 @@ export default function MyTimePicker({ onTimeSelected, initialTime = '' }: MyTim
       onPress={() => setOpen(true)}
       icon="clock-outline"
     />
-
+    
     <TimePickerModal
       locale="pt"
       visible={open}
@@ -47,6 +62,7 @@ export default function MyTimePicker({ onTimeSelected, initialTime = '' }: MyTim
       onConfirm={handleConfirm}
       animationType="fade"
     />
+    
   </View>
 );
 }
