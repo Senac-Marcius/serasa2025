@@ -3,7 +3,7 @@ import { View,Text, StyleSheet,FlatList, Button,TextInput, Touchable, TouchableO
 import {Myinput} from '../src/components/Myinputs';
 import MyView from '../src/components/MyView';
 import Mytext from '../src/components/Mytext';
-import { TextStyle } from 'react-native';
+import {textStyles} from '../styles/textStyles';
 import MyButton from '../src/components/Mybuttons';
 import MyList from '../src/components/mylist';
 import Myiten from '../src/components/myItenlist';
@@ -67,6 +67,7 @@ export default function levelsScreen(){
         <MyView>
             
     {/* aqui é typerscrypt dentro do front */}
+
             <View style={styles.row}/>
             <View style={styles.form}>
             
@@ -103,19 +104,25 @@ export default function levelsScreen(){
                    <MyButton title='Cadastrar' onPress= {handleRegister}/>
                                  
                 </View>
+
                 <MyList
                     data={leves}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) =>(
-                        
-                        <Myiten 
-                        <Mytext style={textStyles.textBody} > Nome: {item.name}</Mytext> {/* alex */}
-                        <Mytext style={textStyles.textBody}> Descrição: {item.description}</Mytext>
-                        <Mytext style={textStyles.textBody}> Url: {item.url}</Mytext>
-                        <Mytext style={textStyles.textBody}> UserId: {item.userId}</Mytext>
-                        <Mytext style={textStyles.textBody}> CreatAt: {item.creatAt}</Mytext>
 
+                       <Myiten
+                            style={styles.levelStyle}
+                            onEdit={() => {editLevels(item.id)}}
+                            onDel={() => {deleteLevels(item.id)}}
+                        >
 
+                           <Mytext style={textStyles.textBody} > Nome: {item.name}</Mytext> {/* alex */}
+                           <Mytext style={textStyles.textBody}> Descrição: {item.description}</Mytext>
+                           <Mytext style={textStyles.textBody}> Cor: {item.color}</Mytext>
+                           <Mytext style={textStyles.textBody}> UserId: {item.userId}</Mytext>
+                           
+ 
+                            {/*
                             <View style={styles.buttonsContainer}>
                                 <TouchableOpacity 
                                 style={styles.editButton}
@@ -134,7 +141,9 @@ export default function levelsScreen(){
                                 </TouchableOpacity>
                                
                             </View>
-                        </View>
+                            */}
+
+                        </Myiten>
 
                     )}
 
