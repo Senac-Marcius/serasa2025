@@ -4,6 +4,7 @@ import MySelect from '../src/components/Myselect'
 import MyView from '../src/components/MyView';
 import MyList from '../src/components/mylist';
 import Myiten from '../src/components/myItenlist';
+import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
 
 export default function LocalScreen(){
 
@@ -73,15 +74,19 @@ export default function LocalScreen(){
                     <View style={styles.formContainer}>
                         <Text style={styles.title}>LOCAL</Text>
                        
-                        <TextInput 
+                        <Myinput
+                        iconName='name'
                         placeholder= "Digite o nome do local:"                                 
                         value={req.name}
+                          label='Nome:'
                         onChangeText={(t) => setReq({...req, name: t })}                    
-                        />  
-
-                        <TextInput 
-                        placeholder={ `Digite a dimensão do local em ${unity}:`}
+                        />                                                                     
+                                                                                                        
+                        <Myinput
+                        iconName='wolrd'
+                        placeholder={ `Digite a sua dimensão em ${unity}:`}
                         value={req.area}
+                        label='Dimensão:'
                         onChangeText={(n) => setReq({...req, area: n })}  
                                     
                         />
@@ -90,21 +95,26 @@ export default function LocalScreen(){
                         <MySelect label={unity} setLabel={setUnit}  
                         list={            
                             [
-                                {key:0, option: 'x metros'},             /* exemplo do código de SELECT para copiar */
-                                {key:1, option: 'x cm'},
+                                {key:0, option: 'metros'},             /* exemplo do código de SELECT para copiar */
+                                {key:1, option: 'cm'},
                             ]
                         } />  
 
 
 
-                        <TextInput 
+                        <Myinput
+                        iconName='description'
                         placeholder= "Digite a sua descrição:" 
                         value={req.description}
+                          label='Descrição:'
                         onChangeText={(t) => setReq({...req, description: t })}
                         /> 
 
-                        <TextInput placeholder= "Digite o seu respectivo endereço:"
+                        <Myinput 
+                        iconName='adress'
+                        placeholder= "Digite o seu endereço:"
                         value={req.adress}
+                          label='Endereço:'
                         onChangeText={(t) => setReq({...req, adress: t })}
                         />
 

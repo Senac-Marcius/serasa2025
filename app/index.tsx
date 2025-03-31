@@ -40,6 +40,14 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
+                        label="Area do Aluno"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/students');
+                        }}
+                    />
+                    <Drawer.Item
                         label="locals"
                         icon="post"
                         onPress={() => {
@@ -47,6 +55,16 @@ export default function HomeScreen() {
                             router.push('/locals');
                         }}
                     />
+
+                    <Drawer.Item
+                        label="Usuários"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/users');
+                        }}
+                    />
+
                     <Drawer.Item
                         label="Configurações"
                         icon="cog"
@@ -63,6 +81,6 @@ export default function HomeScreen() {
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <Text>Bem-vindo ao Serasa App!</Text>
             </View>
-            </View>
+        </View>
     );  
-} 
+}

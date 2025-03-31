@@ -1,5 +1,5 @@
 import React, { Children, ReactNode, useState } from 'react'
-import { Text, TouchableOpacity, View, ViewStyle, StyleSheet } from 'react-native';
+import { Text, TextStyle, TouchableOpacity, View, ViewStyle, StyleSheet } from 'react-native';
 import { FlatList, TextInput } from 'react-native-gesture-handler';
 import { Button, List } from 'react-native-paper'; 
 
@@ -40,11 +40,12 @@ const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {
                             }
                             setVisible(false)
                         }}>
+                        
                         <Text>{i.item.option}</Text>
-                        <Text style={{ color: 'white', fontWeight: 'bold' }}>{label}</Text>
                     </TouchableOpacity>
                     )}
                 />)
+                
             }
         </View>
     );
