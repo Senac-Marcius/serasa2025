@@ -40,8 +40,12 @@ export default function HomeScreen() {
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/students');
-                        }}
+                            router.push('/students');}}
+                    />
+                    <Drawer.Item
+                        label="Empréstimo"
+                        icon="post"
+                        onPress={() => {setDrawerOpen(false);router.push('/loans');}}
                     />
                     <Drawer.Item
                         label="Cursos"
@@ -50,15 +54,7 @@ export default function HomeScreen() {
                             setDrawerOpen(false);
                             router.push('/courses');
                         }}
-                    />
-                    
-                    <Drawer.Item
-                        label="Lançamento"
-                        icon="post"
-                        onPress={() => {
-                            setDrawerOpen(false);
-                            router.push('/launchs');
-                        }}
+                       
                     />
                     <Drawer.Item
                         label="Despesa"
