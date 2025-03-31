@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Button } from 'react-native-paper';
 import { router } from 'expo-router';
 import MyTopbar from './mytopbar';
+import MySupport from './Mysupport';
 
 interface MySearchProps {
   children: ReactNode;
@@ -58,7 +59,7 @@ const myView: React.FC< MySearchProps > = ({children}) => {
       {children}
       {/* Conteúdo da tela (pode ser adicionado aqui) */}
       {/* Botão de suporte */}
-      <TouchableOpacity style={styles.suporteButton} onPress={handleSuporte}>      </TouchableOpacity>
+      <MySupport style={styles.suporteButton} onPress={handleSuporte}/>
       </View>
     </ScrollView>
   );
