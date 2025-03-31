@@ -1,5 +1,24 @@
-import React, { useState } from 'react'; // Esta importando da biblioteca do react para atualizar automaticamente 
+import React, { Children, useState } from 'react'; // Esta importando da biblioteca do react para atualizar automaticamente 
 import { StyleSheet, View, Text, TextInput, Button, FlatList, TouchableOpacity, } from 'react-native'; 
+import MySearch from '../src/components/Mysearch'
+import { ScrollView } from 'react-native-gesture-handler';
+import { Input, TextArea } from 'native-base';
+/*import { textStyles } from '../styles/textStyles';*/
+
+interface Project {
+    name: string;
+    namep: string;
+    id: number;
+    url: string;
+    createAt: string;
+    userId: number;
+    recurces: number;
+    description: string;
+    activity: string;
+    timeline: string;
+    objective: string;
+    methodology: string;
+}
 
 
 export default function ProjectScreen(){
@@ -19,21 +38,7 @@ export default function ProjectScreen(){
         methodology: '',
     });
 
-    const [ projects, setProjects ] = useState<{
-        
-        name: string,
-        namep: string,
-        id: number,
-        url: string,
-        createAt: string,
-        userId: number,
-        recurces: number,
-        description: string,
-        activity: string,
-        timeline: string,
-        objective: string,
-        methodology: string,
-    } []>( [] );
+    const [ projects, setProjects ] = useState<Project[]>([]);
 
     function handleRegister(){
 
@@ -70,117 +75,139 @@ export default function ProjectScreen(){
     }
 
     function dellProject(id:number){
-        const list = projects.filter((item => item.id !== id));<Text> ⚠ </Text>
-        setProjects(list)
+        const list = projects.filter((item) => item.id !== id);
+        setProjects(list);
+
     }
-    
+
+    function adicionarProtocolo(url) {
+        if (!/^https?:\/\//i.test(url)) {
+            return 'https://' + url;  // Adiciona 'https://' se não estiver presente
+        }
+        return url;
+    }
+
     // Criando o textinput para receber e exibir o texto "placeholder" para o usuario digitar
     return ( // Esta sendo feito um emcapsulamento com a abertura da () / {req.description}= usado para mostar o codigo em baixo
-        <View>
-            {/* Aqui é typescript dentro do front */}
-            <Text> PROJETOS </Text>
-            <View style={styles.row}>
-                <View style={styles.form}> 
+        <ScrollView>
+            <MySearch style={{padding: 20, }}>
+                <Text> Responda de Maneira Objetiva </Text>
+            </MySearch>
+            
+            <View style={styles.contentContainer}>
+                <Text style={styles.title}>PROJETOS</Text>
+            
+                {/* Aqui é typescript dentro do front */}
+                <Text>  Responda de Maneira Objetiva  </Text>
+                <View style={styles.row}> 
+                        
+                    <View style={styles.form}>
+                        <Text style={styles.label}>Criador do projeto:</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder=""
+                            value={req.name}
+                            onChangeText={(text) => setReq({ ...req, name: text })}
+                        />
+
+                        <Text style={styles.label}> Nome do projeto: </Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder=""
+                            value={req.namep}
+                            onChangeText={(text) => setReq({ ...req, namep: text })}
+                        />
+                        Site:
+                        <TextInput
+                            style={styles.input}
+                            placeholder=""
+                            value={req.url}
+                            onChangeText={(text) => setReq({ ...req, url: adicionarProtocolo(text) })}
+                        />
+                        
+                        <Text  style={styles.label}> Previsão de Inicio: </Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder=""
+                            value={req.createAt}
+                            onChangeText={(text) => setReq({ ...req, createAt: text })}
+                        />
+                        
+                        <Text style={styles.label}> Periodo Esperado: </Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder=""
+                            value={req.timeline}
+                            onChangeText={(text) => setReq({ ...req, timeline: text })}
+                        />
+                        
+                        <Text style={styles.label}> Descrição: </Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder=""
+                            value={req.description}
+                            onChangeText={(TextArea) => setReq({ ...req, description: TextArea })}
+                        />
+                        
+                        <Text style={styles.label}> Objetivo: </Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder=""
+                            value={req.objective}
+                            onChangeText={(text) => setReq({ ...req, objective: text })}
+                        />
+                        
+                        <Text style={styles.label}> Qual Atividade proposta: </Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder=""
+                            value={req.activity}
+                            onChangeText={(text) => setReq({ ...req, activity: text })}
+                        />
+                        
+                        <Text style={styles.label}> Quais as Metodologias abordadas: </Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder=""
+                            value={req.methodology}
+                            onChangeText={(text) => setReq({ ...req, methodology: text })}
+                        />
+
+                        <Button title="Cadastrar" onPress={ handleRegister }/>  
+                    </View> 
+
                     
-                    <Text> Criador do projeto:</Text>
-                    <TextInput 
-                        placeholder=""
-                        value={req.name}
-                        onChangeText={(text) => setReq({...req ,name: text})}
-                    />
-
-                    <Text> Nome do projeto:
-                    <TextInput 
-                        placeholder="" 
-                        value={req.namep}
-                        onChangeText={(text) => setReq({...req ,namep: text})}
-                    /> 
-                     Site:
-                    <TextInput
-                        placeholder=""
-                        value={req.url}
-                        onChangeText={(text) => setReq({...req, url: text})}
-                    />
-                    </Text>
                     
-                    <Text> Previsão de Inicio:
-                    <TextInput
-                        placeholder=""
-                        value={req.createAt}
-                        onChangeText={(text) => setReq({...req ,createAt: text})}
-                    />
-                    </Text>
+                    <FlatList
+                        data={projects}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={({ item }) => (
+                            <View style={styles.projectContainer}> 
+                                <Text style={styles.projectText}> Criador: {item.name} </Text>
+                                <Text style={styles.projectText}> Nome do Projeto: {item.namep} </Text> 
+                                <Text style={styles.projectText}> Url: {item.url} </Text>
+                                <Text style={styles.projectText}> Numero do Usuario: {item.userId} </Text>
+                                <Text style={styles.projectText}> Recursos: {item.recurces} </Text>
+                                <Text style={styles.projectText}> Descrição: {item.description} </Text>
+                                <Text style={styles.projectText}> Atividade: {item.activity} </Text>
+                                <Text style={styles.projectText}> Tempo Esperado: {item.timeline} </Text>
+                                <Text style={styles.projectText}> Objetivo: {item.objective} </Text>
+                                <Text style={styles.projectText}> Metodologia: {item.methodology} </Text>
 
-                    <Text> Periodo Esperado:
-                    <TextInput 
-                        placeholder="" 
-                        value={req.timeline}
-                        onChangeText={(text) => setReq({...req ,timeline: text})}
-                    />
-                    </Text>
-
-                    <Text> Descrição :
-                    <TextInput
-                        placeholder="" 
-                        value={req.description}
-                        onChangeText={(text) => setReq({...req ,description: text})}
-                    />
-                    </Text>
-                    
-                    <Text> Objetivo:
-                    <TextInput 
-                        placeholder="" 
-                        value={req.objective}
-                        onChangeText={(text) => setReq({...req ,objective: text})}
-                    />
-                    </Text>
-
-                    <Text> Qual Atividade proposta:
-                    <TextInput
-                        placeholder=""
-                        value={req.activity}
-                        onChangeText={(text) => setReq({...req ,activity: text})}
-                    />
-                    </Text>
-
-                    <Text> Quais as Metodologias abordadas:
-                    <TextInput
-                        placeholder=""
-                        value={req.methodology}
-                        onChangeText={(text) => setReq({...req ,methodology: text })}
-                    />
-                    </Text>
-
-                    <Button title="Cadastrar" onPress={ handleRegister }/>  
-                </View> 
-
-                
-                
-                <FlatList
-                    data={projects}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <View style={styles.projectContainer}> 
-                            <Text style={styles.projectText}> Criador: {item.name} </Text>
-                            <Text style={styles.projectText}> Nome do Projeto: {item.namep} </Text> 
-                            <Text style={styles.projectText}> Url: {item.url} </Text>
-                            <Text style={styles.projectText}> Numero do Usuario: {item.userId} </Text>
-                            <Text style={styles.projectText}> Recursos: {item.recurces} </Text>
-                            <Text style={styles.projectText}> Descrição: {item.description} </Text>
-                            <Text style={styles.projectText}> Atividade: {item.activity} </Text>
-                            <Text style={styles.projectText}> Tempo Esperado: {item.timeline} </Text>
-                            <Text style={styles.projectText}> Objetivo: {item.objective} </Text>
-                            <Text style={styles.projectText}> Metodologia: {item.methodology} </Text>
-
-                            <View style={styles.buttonsContainer}>
-                                <TouchableOpacity style={styles.buttonEdit} onPress={ () =>  editProject(item.id) }> EDIT </TouchableOpacity>
-                                <TouchableOpacity style={styles.buttonDelete} onPress={ () =>  dellProject( item.id)}> DELETE </TouchableOpacity>
+                                <View style={styles.buttonsContainer}>
+                                    <TouchableOpacity style={styles.buttonEdit} onPress={ () =>  editProject(item.id) }>  
+                                        <Text style={styles.buttonText}>EDIT</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.buttonDelete} onPress={ () =>  dellProject( item.id)}>  
+                                        <Text style={styles.buttonText}>DELETE</Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
-                        </View>
-                    )}
-                />
+                        )}
+                    />
+                </View>
             </View>
-        </View>
+        </ScrollView>
     ); 
 }
 
@@ -188,10 +215,43 @@ export default function ProjectScreen(){
     <Button title='DELETE' /> - Esse botão não permite modificar a forma de vizualizar o botão*/ 
 
 const styles = StyleSheet.create({
+    contentContainer: {
+        padding: 20,
+    },
+
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
+    },
+
+    title: {
+        textAlign: 'center',
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+    },
+
+    label: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
+
+    input: {
+        height: 40,
+        borderColor: '#ddd',
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingLeft: 10,
+        marginBottom: 15,
+    },
+
+    headerText: {
+        textAlign: 'center',
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 20,
     },
 
     form: {
