@@ -10,6 +10,7 @@ interface MySearchProps {
   children: ReactNode;
   style?: TextStyle | TextStyle[]; 
 
+  
 }
 
 const myView: React.FC< MySearchProps > = ({children}) => { 
