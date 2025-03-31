@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { View,Text, StyleSheet,FlatList, Button,TextInput, Touchable, TouchableOpacity} from 'react-native';
-//*import {Myinpunt} from '../src/components/Myimput';
+import {Myinput} from '../src/components/Myinputs';
 import MyView from '../src/components/MyView';
+import Mytext from '../src/components/Mytext';
+import { TextStyle } from 'react-native';
+import MyButton from '../src/components/Mybuttons';
+import MyList from '../src/components/mylist';
+import Myiten from '../src/components/myItenlist';
+
 
 
 export default function levelsScreen(){
@@ -61,44 +67,54 @@ export default function levelsScreen(){
         <MyView>
             
     {/* aqui é typerscrypt dentro do front */}
-
-            <View>
-
-            {/*
-            </MyView>style={styles.row}>
-            */}
-
-                <View style={styles.form}>
+            <View style={styles.row}/>
+            <View style={styles.form}>
             
                     
-                    <TextInput style={styles.fundo} placeholder="NOME" 
+                    <Myinput 
+                        style={styles.input}
+                        placeholder="Digite seu nome" 
                         value={req.name}
                         onChangeText={(text) => setReq({...req ,name: text})}
+                        label="Nome"
+                        iconName=''
+
                     /> 
                    
-                    <TextInput style={styles.fundo}  placeholder="DESCRIÇÃO" 
+                    <Myinput 
+                        style={styles.input}  
+                        placeholder="Digite sua descrição" 
                         value={req.description}
                         onChangeText={(text) => setReq({...req ,description: text})}
+                        label="Descrição"
+                        iconName=''
                     />
 
-                    <TextInput style={styles.fundo} placeholder="COR" 
-                        value={req.color}
-                        onChangeText={(text) => setReq({...req ,color: text})}
+                    <Myinput 
+                    style={styles.input}
+                     placeholder="COR" 
+                    value={req.color}
+                    onChangeText={(text) => setReq({...req ,color: text})}
+                    label="Cor"
+                    iconName=''
+
                     /> 
                       
-                   <Button color="#DF01A5" title= 'Cadastrar' onPress= {handleRegister}/>
+                   <MyButton title='Cadastrar' onPress= {handleRegister}/>
                                  
                 </View>
-                <FlatList
+                <MyList
                     data={leves}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyItem={(item) => item.id.toString()}
                     renderItem={({item}) =>(
-                        <View style={styles.card}>
-                            <Text>{item.name}</Text>
-                            <Text>{item.createAt}</Text> 
-                            <Text>{item.name}</Text>
-                            <Text>{item.color}</Text>
-                            <Text>{item.userId}</Text>  
+                        
+                        <Myiten 
+                        <Mytext style={textStyles.textBody} > Nome: {item.name}</Mytext> {/* alex */}
+                        <Mytext style={textStyles.textBody}> Descrição: {item.description}</Mytext>
+                        <Mytext style={textStyles.textBody}> Url: {item.url}</Mytext>
+                        <Mytext style={textStyles.textBody}> UserId: {item.userId}</Mytext>
+                        <Mytext style={textStyles.textBody}> CreatAt: {item.creatAt}</Mytext>
+
 
                             <View style={styles.buttonsContainer}>
                                 <TouchableOpacity 
@@ -123,9 +139,7 @@ export default function levelsScreen(){
                     )}
 
                 />
-            </View>
-      </MyView>
-   
+            </MyView>
     );
 }
 
