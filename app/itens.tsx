@@ -70,7 +70,8 @@ export default  function itemScreen(){
                 placeholder="Marca"
                 value={req.mark}
                 onChangeText={(text) => setReq({ ...req, mark:text })}
-                label="Item" iconName='close' 
+                label="Item"
+                 iconName='list' 
             
                 />
                 
@@ -82,7 +83,8 @@ export default  function itemScreen(){
                    onChangeText={(text)=>setReq({...req,name:text})}
                    label="I
                    
-                   tem" iconName='user' 
+                   tem" 
+                   iconName='user' 
                    />
 
                 <MyLink style={{ padding : 20}} url="http://gyuguyg" label="Esqueci minha senha"/>
