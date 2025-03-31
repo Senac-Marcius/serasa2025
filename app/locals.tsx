@@ -98,7 +98,7 @@ export default function LocalScreen(){
 
 
                         <TextInput 
-                        placeholder= "Digite a sua descrição:"
+                        placeholder= "Digite a sua descrição:" 
                         value={req.description}
                         onChangeText={(t) => setReq({...req, description: t })}
                         /> 
