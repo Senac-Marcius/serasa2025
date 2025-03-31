@@ -2,6 +2,7 @@ import React, { useState }  from "react";
 import { View, Text, Touchable, TouchableOpacity } from 'react-native';
 import { DatePickerModal } from 'react-native-paper-dates';
 import { FaCalendarDays } from "react-icons/fa6";
+import { Myinput } from "./Myinputs";
 
 /*interface MyCalendarProp { //teste aula
     style: ViewStyle;
@@ -45,9 +46,13 @@ return (
         />
         {date && (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <FaCalendarDays style={{ marginRight: 8 }}/> 
             <TouchableOpacity onPress={()=> {setOpen(true)}}>
-             <Text>{`Data: ${date}`}</Text>
+             <Myinput
+                value={`Data: ${date}`}
+                onChangeText={(newDate) => setDate(newDate)}
+                label= {"Digite a Data:"}
+                iconName="calendar"
+              />
             </TouchableOpacity>
             </View>
         )}
