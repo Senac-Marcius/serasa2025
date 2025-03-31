@@ -10,6 +10,7 @@ import { Icon } from "react-native-paper";
 import MyButton from '../src/components/Mybuttons';
 import MyModal2 from '../src/components/Mymodal';
 import MyView from '../src/components/MyView';
+import { Myinput } from '../src/components/Myinputs';
 
 
 export default function ItemScreen() { // aqui é TS
@@ -266,210 +267,213 @@ export default function ItemScreen() { // aqui é TS
             />
             <View> {/* aqui é typescript dentro do front*/}
                 <View style={styles.row}>
-                    <View style={styles.form}>
-                        {/* Conteúdo condicional baseado na aba ativa */}
-                        {activeTab === 0 && (
-                            <>
-                                <Picker style={styles.picker}
-                                    selectedValue={req.typology}
-                                    onValueChange={(itemValue) => setReq({ ...req, typology: itemValue })}
-                                >
-                                    <Picker.Item label="Selecionar Tipologia" value="" />
-                                    <Picker.Item label="Livro" value="Livro" />
-                                    <Picker.Item label="Publicação Seriada" value="Publicação Seriada" />
-                                    <Picker.Item label="Artigo" value="Artigo" />
-                                    <Picker.Item label="Audiolivro" value="Audiolivro" />
-                                    <Picker.Item label="Ebook" value="Ebook" />
-                                    <Picker.Item label="Mapa" value="Mapa" />
-                                    <Picker.Item label="Outros" value="Outros" />
-                                </Picker>
-                                <TextInput style={styles.input}
-                                    placeholder="Título"
-                                    value={req.title}
-                                    onChangeText={(text) => setReq({ ...req, title: text })}
-                                />                    
-                                <TextInput style={styles.input}
-                                    placeholder="Subtítulo"
-                                    value={req.subtitle}
-                                    onChangeText={(text) => setReq({ ...req, subtitle: text })}
-                                />
-                                <TextInput style={styles.input}
-                                    placeholder="Responsáveis"
-                                    value={req.responsible}
-                                    onChangeText={(text) => setReq({ ...req, responsible: text })}
-                                />
-                                <TextInput style={styles.input}
-                                    placeholder="Tradução"
-                                    value={req.translation}
-                                    onChangeText={(text) => setReq({ ...req, translation: text })}
-                                />
-                                <Picker style={styles.picker}
-                                    selectedValue={req.language}
-                                    onValueChange={(itemValue) => setReq({ ...req, language: itemValue })}
-                                >
-                                    <Picker.Item label="Selecionar Idioma" value="" />
-                                    <Picker.Item label="Português" value="Português" />
-                                    <Picker.Item label="Inglês" value="Inglês" />
-                                    <Picker.Item label="Espanhol" value="Espanhol" />
-                                    <Picker.Item label="Francês" value="Francês" />
-                                </Picker>
-                                <MyButton
-                                    title="Selecionar Imagem"
-                                    onPress={pickImage}
-                                    button_type="capsule"
-                                    style={styles.button_capsule1}
-                                />
-                            </>
-                        )}
-                            {/* outros campos de identificação */}
-                        {activeTab === 1 && (
-                            <>
-                                <TextInput style={styles.input}
-                                    placeholder="Ano"
-                                    value={req.year}
-                                    onChangeText={(text) => setReq({ ...req, year: text })}
-                                />
-                                <TextInput style={styles.input}
-                                    placeholder="Edição"
-                                    value={req.edition}
-                                    onChangeText={(text) => setReq({ ...req, edition: text })}
-                                />
-                                <TextInput style={styles.input}
-                                    placeholder="Editora"
-                                    value={req.publisher}
-                                    onChangeText={(text) => setReq({ ...req, publisher: text })}
-                                />
-                                <TextInput style={styles.input}
-                                    placeholder="Local"
-                                    value={req.location}
-                                    onChangeText={(text) => setReq({ ...req, location: text })}
-                                />
-                                <TextInput style={styles.input}
-                                    placeholder="Série"
-                                    value={req.serie}
-                                    onChangeText={(text) => setReq({ ...req, serie: text })}
-                                />
-                                <TextInput style={styles.input}
-                                    placeholder="Volume"
-                                    value={req.volume}
-                                    onChangeText={(text) => setReq({ ...req, volume: text })}
-                                />
-                            </>
-                        )}
-                            {/* outros campos de identificação */}
-                        {activeTab === 2 && (
-                            <>
-                                <Picker style={styles.picker}
-                                    selectedValue={req.format}
-                                    onValueChange={(itemValue) => setReq({ ...req, format: itemValue })}
-                                >
-                                    <Picker.Item label="Selecionar Formato" value="" />
-                                    <Picker.Item label="Físico" value="Físico" />
-                                    <Picker.Item label="Digital" value="Digital" />
-                                </Picker>
-                                <TextInput style={styles.input}
-                                    placeholder="Número de Páginas"
-                                    value={req.numberPages}
-                                    onChangeText={(text) => setReq({ ...req, numberPages: text })}
-                                />
-                                <TextInput style={styles.input}
-                                    placeholder="ISBN"
-                                    value={req.isbn}
-                                    onChangeText={(text) => setReq({ ...req, isbn: text })}
-                                />
-                                <TextInput style={styles.input}
-                                    placeholder="ISSN"
-                                    value={req.issn}
-                                    onChangeText={(text) => setReq({ ...req, issn: text })}
-                                />
-                                <TextInput style={styles.input}
-                                    placeholder="CDD"
-                                    value={req.cdd}
-                                    onChangeText={(text) => setReq({ ...req, cdd: text })}
-                                />
-                                <TextInput style={styles.input}
-                                    placeholder="Número de Chamada"
-                                    value={req.callNumber}
-                                    onChangeText={(text) => setReq({ ...req, callNumber: text })}
-                                />
-                            </>
-                        )}
-                            {/* outros campos de identificação */}
-                        {activeTab === 3 && (
-                            <>
-                                <TextInput style={styles.input}
-                                    multiline={true}
-                                    numberOfLines={2}
-                                    placeholder="Assunto"
-                                    value={req.subject}
-                                    onChangeText={(text) => setReq({ ...req, subject: text })}
-                                />
-                                <TextInput style={styles.input}
-                                    multiline={true}
-                                    numberOfLines={2}
-                                    placeholder="Palavras-chave"
-                                    value={req.keywords}
-                                    onChangeText={(text) => setReq({ ...req, keywords: text })}
-                                />
-                                <TextInput style={styles.input}
-                                    multiline={true}
-                                    numberOfLines={10}
-                                    placeholder="Resumo"
-                                    value={req.summary}
-                                    onChangeText={(text) => setReq({ ...req, summary: text })}
-                                />
-                                <TextInput style={styles.input}
-                                    multiline={true}
-                                    numberOfLines={10}
-                                    placeholder="Notas"
-                                    value={req.notes}
-                                    onChangeText={(text) => setReq({ ...req, notes: text })}
-                                />
-                                <TextInput style={styles.input}
-                                    placeholder="Número de exemplares"
-                                    value={req.numberCopies}
-                                    onChangeText={(text) => setReq({ ...req, numberCopies: text })}
-                                />
-                                <Picker style={styles.picker}
-                                    selectedValue={req.status}
-                                    onValueChange={(itemValue) => setReq({ ...req, status: itemValue })}
-                                >
-                                    <Picker.Item label="Status" value="" />
-                                    <Picker.Item label="Disponível" value="Disponível" />
-                                    <Picker.Item label="Emprestado" value="Emprestado" />
-                                    <Picker.Item label="Reservado" value="Reservado" />
-                                    <Picker.Item label="Perdido" value="Perdido" />
-                                </Picker>
-                                <Picker style={styles.picker}
-                                    selectedValue={req.typeLoan}
-                                    onValueChange={(itemValue) => setReq({ ...req, typeLoan: itemValue })}
-                                >
-                                    <Picker.Item label="Tipo de Empréstimo" value="" />
-                                    <Picker.Item label="Domiciliar" value="Domiciliar" />
-                                    <Picker.Item label="Consulta Local" value="Consulta Local" />
-                                    <Picker.Item label="Acesso Digital" value="Acesso Digital" />
-                                </Picker>
-                                <TextInput style={styles.input}
-                                    placeholder="Url"
-                                    value={req.url}
-                                    onChangeText={(text) => setReq({ ...req, url: text })}
-                                />
-                                <MyButton
-                                    title="Upload do Material"
-                                    onPress={pickFile}
-                                    button_type="capsule"
-                                    style={styles.button_capsule1}
-                                />
-                            </>
-                        )}
+                    
 
-                        <MyButton
-                            title="INCORPORAR ITEM NO ACERVO"
-                            onPress={handleRegister}
-                            button_type="capsule"
-                            style={styles.button}
-                        />    
-                    </View>
+                        <View style={styles.form}>
+                            {/* Conteúdo condicional baseado na aba ativa */}
+                            {activeTab === 0 && (
+                                <>
+                                    <Picker style={styles.picker}
+                                        selectedValue={req.typology}
+                                        onValueChange={(itemValue) => setReq({ ...req, typology: itemValue })}
+                                    >
+                                        <Picker.Item label="Selecionar Tipologia" value="" />
+                                        <Picker.Item label="Livro" value="Livro" />
+                                        <Picker.Item label="Publicação Seriada" value="Publicação Seriada" />
+                                        <Picker.Item label="Artigo" value="Artigo" />
+                                        <Picker.Item label="Audiolivro" value="Audiolivro" />
+                                        <Picker.Item label="Ebook" value="Ebook" />
+                                        <Picker.Item label="Mapa" value="Mapa" />
+                                        <Picker.Item label="Outros" value="Outros" />
+                                    </Picker>
+                                    <TextInput style={styles.input}
+                                        placeholder="Título"
+                                        value={req.title}
+                                        onChangeText={(text) => setReq({ ...req, title: text })}
+                                    />                    
+                                    <TextInput style={styles.input}
+                                        placeholder="Subtítulo"
+                                        value={req.subtitle}
+                                        onChangeText={(text) => setReq({ ...req, subtitle: text })}
+                                    />
+                                    <TextInput style={styles.input}
+                                        placeholder="Responsáveis"
+                                        value={req.responsible}
+                                        onChangeText={(text) => setReq({ ...req, responsible: text })}
+                                    />
+                                    <TextInput style={styles.input}
+                                        placeholder="Tradução"
+                                        value={req.translation}
+                                        onChangeText={(text) => setReq({ ...req, translation: text })}
+                                    />
+                                    <Picker style={styles.picker}
+                                        selectedValue={req.language}
+                                        onValueChange={(itemValue) => setReq({ ...req, language: itemValue })}
+                                    >
+                                        <Picker.Item label="Selecionar Idioma" value="" />
+                                        <Picker.Item label="Português" value="Português" />
+                                        <Picker.Item label="Inglês" value="Inglês" />
+                                        <Picker.Item label="Espanhol" value="Espanhol" />
+                                        <Picker.Item label="Francês" value="Francês" />
+                                    </Picker>
+                                    <MyButton
+                                        title="Selecionar Imagem"
+                                        onPress={pickImage}
+                                        button_type="capsule"
+                                        style={styles.button_capsule1}
+                                    />
+                                </>
+                            )}
+                                {/* outros campos de identificação */}
+                            {activeTab === 1 && (
+                                <>
+                                    <TextInput style={styles.input}
+                                        placeholder="Ano"
+                                        value={req.year}
+                                        onChangeText={(text) => setReq({ ...req, year: text })}
+                                    />
+                                    <TextInput style={styles.input}
+                                        placeholder="Edição"
+                                        value={req.edition}
+                                        onChangeText={(text) => setReq({ ...req, edition: text })}
+                                    />
+                                    <TextInput style={styles.input}
+                                        placeholder="Editora"
+                                        value={req.publisher}
+                                        onChangeText={(text) => setReq({ ...req, publisher: text })}
+                                    />
+                                    <TextInput style={styles.input}
+                                        placeholder="Local"
+                                        value={req.location}
+                                        onChangeText={(text) => setReq({ ...req, location: text })}
+                                    />
+                                    <TextInput style={styles.input}
+                                        placeholder="Série"
+                                        value={req.serie}
+                                        onChangeText={(text) => setReq({ ...req, serie: text })}
+                                    />
+                                    <TextInput style={styles.input}
+                                        placeholder="Volume"
+                                        value={req.volume}
+                                        onChangeText={(text) => setReq({ ...req, volume: text })}
+                                    />
+                                </>
+                            )}
+                                {/* outros campos de identificação */}
+                            {activeTab === 2 && (
+                                <>
+                                    <Picker style={styles.picker}
+                                        selectedValue={req.format}
+                                        onValueChange={(itemValue) => setReq({ ...req, format: itemValue })}
+                                    >
+                                        <Picker.Item label="Selecionar Formato" value="" />
+                                        <Picker.Item label="Físico" value="Físico" />
+                                        <Picker.Item label="Digital" value="Digital" />
+                                    </Picker>
+                                    <TextInput style={styles.input}
+                                        placeholder="Número de Páginas"
+                                        value={req.numberPages}
+                                        onChangeText={(text) => setReq({ ...req, numberPages: text })}
+                                    />
+                                    <TextInput style={styles.input}
+                                        placeholder="ISBN"
+                                        value={req.isbn}
+                                        onChangeText={(text) => setReq({ ...req, isbn: text })}
+                                    />
+                                    <TextInput style={styles.input}
+                                        placeholder="ISSN"
+                                        value={req.issn}
+                                        onChangeText={(text) => setReq({ ...req, issn: text })}
+                                    />
+                                    <TextInput style={styles.input}
+                                        placeholder="CDD"
+                                        value={req.cdd}
+                                        onChangeText={(text) => setReq({ ...req, cdd: text })}
+                                    />
+                                    <TextInput style={styles.input}
+                                        placeholder="Número de Chamada"
+                                        value={req.callNumber}
+                                        onChangeText={(text) => setReq({ ...req, callNumber: text })}
+                                    />
+                                </>
+                            )}
+                                {/* outros campos de identificação */}
+                            {activeTab === 3 && (
+                                <>
+                                    <TextInput style={styles.input}
+                                        multiline={true}
+                                        numberOfLines={2}
+                                        placeholder="Assunto"
+                                        value={req.subject}
+                                        onChangeText={(text) => setReq({ ...req, subject: text })}
+                                    />
+                                    <TextInput style={styles.input}
+                                        multiline={true}
+                                        numberOfLines={2}
+                                        placeholder="Palavras-chave"
+                                        value={req.keywords}
+                                        onChangeText={(text) => setReq({ ...req, keywords: text })}
+                                    />
+                                    <TextInput style={styles.input}
+                                        multiline={true}
+                                        numberOfLines={10}
+                                        placeholder="Resumo"
+                                        value={req.summary}
+                                        onChangeText={(text) => setReq({ ...req, summary: text })}
+                                    />
+                                    <TextInput style={styles.input}
+                                        multiline={true}
+                                        numberOfLines={10}
+                                        placeholder="Notas"
+                                        value={req.notes}
+                                        onChangeText={(text) => setReq({ ...req, notes: text })}
+                                    />
+                                    <TextInput style={styles.input}
+                                        placeholder="Número de exemplares"
+                                        value={req.numberCopies}
+                                        onChangeText={(text) => setReq({ ...req, numberCopies: text })}
+                                    />
+                                    <Picker style={styles.picker}
+                                        selectedValue={req.status}
+                                        onValueChange={(itemValue) => setReq({ ...req, status: itemValue })}
+                                    >
+                                        <Picker.Item label="Status" value="" />
+                                        <Picker.Item label="Disponível" value="Disponível" />
+                                        <Picker.Item label="Emprestado" value="Emprestado" />
+                                        <Picker.Item label="Reservado" value="Reservado" />
+                                        <Picker.Item label="Perdido" value="Perdido" />
+                                    </Picker>
+                                    <Picker style={styles.picker}
+                                        selectedValue={req.typeLoan}
+                                        onValueChange={(itemValue) => setReq({ ...req, typeLoan: itemValue })}
+                                    >
+                                        <Picker.Item label="Tipo de Empréstimo" value="" />
+                                        <Picker.Item label="Domiciliar" value="Domiciliar" />
+                                        <Picker.Item label="Consulta Local" value="Consulta Local" />
+                                        <Picker.Item label="Acesso Digital" value="Acesso Digital" />
+                                    </Picker>
+                                    <TextInput style={styles.input}
+                                        placeholder="Url"
+                                        value={req.url}
+                                        onChangeText={(text) => setReq({ ...req, url: text })}
+                                    />
+                                    <MyButton
+                                        title="Upload do Material"
+                                        onPress={pickFile}
+                                        button_type="capsule"
+                                        style={styles.button_capsule1}
+                                    />
+                                </>
+                            )}
+
+                            <MyButton
+                                title="INCORPORAR ITEM NO ACERVO"
+                                onPress={handleRegister}
+                                button_type="capsule"
+                                style={styles.button}
+                            />    
+                        </View>
+                      
                 </View>
             </View> 
         </MyView>

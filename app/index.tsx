@@ -67,6 +67,14 @@ export default function HomeScreen() {
                             console.log("Configurações");
                         }}
                     />
+                    <Drawer.Item
+                        label="Biblioteca - Acervo"
+                        icon="book"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/librarie');
+                        }}
+                    />
                       
                 </Drawer.Section>
             )}
