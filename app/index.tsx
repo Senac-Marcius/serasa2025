@@ -36,6 +36,7 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
+<<<<<<< HEAD
                         label="Area do Aluno"
                         icon="post"
                         onPress={() => {
@@ -53,12 +54,19 @@ export default function HomeScreen() {
                     />
                     <Drawer.Item
                         label="Locais"
+=======
+                        label="locals"
+>>>>>>> origin/temp-select
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/locals');
                         }}
+<<<<<<< HEAD
                     /> 
+=======
+                    />
+>>>>>>> origin/temp-select
                     <Drawer.Item
                         label="Configurações"
                         icon="cog"
