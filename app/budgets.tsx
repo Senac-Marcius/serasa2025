@@ -6,6 +6,7 @@ import MyList from '../src/components/mylist';
 import  { Myinput} from '../src/components/Myinputs';
 import MyView from '../src/components/MyView';
 import Mytext from '../src/components/Mytext';
+import { Myiten } from '../src/components/myItenlist';
 
 
 export default function BudgetScreen(){
@@ -128,7 +129,10 @@ export default function BudgetScreen(){
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
                     
-                        <View style={styles.budetStyle}>
+                        <Myiten 
+                       onEdit ={()=> editBudget(item.id)}
+                       onDel ={()=> delBudget(item.id)}
+                        >
                        
                        <Text> Nome: {item.name}</Text>
                            <Text> Url: {item.url}</Text>
@@ -137,21 +141,8 @@ export default function BudgetScreen(){
                            <Text> UserId: {item.userId}</Text>
                            <Text> Data Inicial: {item.startDate}</Text>
                            <Text> Data Final: {item.endDate}</Text>
-                        
-                        <View style={styles.buttonsContanier}>
-
-                        <MyButton title ='Editar'
-                        onPress={()=> {editBudget(item.id)}}>
-                    
-                        </MyButton>
-
-                        <MyButton title='DELETAR'
-                        onPress={()=> {delBudget(item.id)}}>
-                        </MyButton>
-                        </View>
- 
-                           
-                        </View>
+    
+                        </Myiten>
                     )}
                 />
             </View>
