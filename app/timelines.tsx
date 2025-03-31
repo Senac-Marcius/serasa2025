@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, TextInputBase, FlatList, TouchableOpacity } from 'react-native';
 import MyButton from '../src/components/Mybuttons';
-import MyCalendar from '../src/components/MyCalendar';
 import MyView from '../src/components/MyView';
-
+import MySearch from '../src/components/Mysearch';
+import MyCalendar from '../src/components/MyCalendar'
  
 
 export default function TimelineScreen() {
@@ -67,10 +67,27 @@ export default function TimelineScreen() {
         setTimelines(list)
     }
 
+    function buscar(){
+
+    }
+
+    const [buscar,setBusca] = useState('');
+
+    
+{/*MyView tela do rabelo */}    
 
     return (
+        
         <MyView>
-            
+            {/*pesquisa */}
+
+
+            <MyCalendar>
+            date='2025-02-01'
+            setDate={(date) => console.log(date)} 
+
+            </MyCalendar>
+
 
             {/* aqui é typescript dentro do front */}
             <text>Meu Cronograma</text>
@@ -93,7 +110,7 @@ export default function TimelineScreen() {
                         style={styles.icon_left}
                     ></MyButton>
                 </View>
-
+            
                 <FlatList
                     data={timelines}
                     keyExtractor={(item) => item.id.toString()}
