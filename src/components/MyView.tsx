@@ -1,5 +1,6 @@
 import React,{ReactNode} from 'react';
 import { View, TouchableOpacity, StyleSheet, Dimensions, Text } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
 
 interface MySearchProps {
@@ -42,7 +43,7 @@ const MyView: React.FC< MySearchProps > = ({children}) => {
   });
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text>Olá componente</Text>
       {children}
       <Text>Tchau componente</Text>
@@ -50,7 +51,7 @@ const MyView: React.FC< MySearchProps > = ({children}) => {
       {/* Botão de suporte */}
       <TouchableOpacity style={styles.suporteButton} onPress={handleSuporte}>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
