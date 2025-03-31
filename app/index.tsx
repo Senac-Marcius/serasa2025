@@ -59,6 +59,16 @@ export default function HomeScreen() {
                             router.push('/expenses');
                         }}
                     />
+
+                    <Drawer.Item
+                        label="Usuários"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/users');
+                        }}
+                    />
+
                     <Drawer.Item
                         label="Configurações"
                         icon="cog"
@@ -75,5 +85,5 @@ export default function HomeScreen() {
                 <Text>Bem-vindo ao Serasa App!</Text>
             </View>
         </View>
-    );  
+    );
 }

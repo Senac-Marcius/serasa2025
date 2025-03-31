@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Button, FlatList } from 'react-native';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs'
-import MyView from '../src/components/MyView'
-
+import MyView from '../src/components/MyView';
+import MyList from '../src/components/mylist';
 import { ScrollView } from 'react-native-gesture-handler';
 import MyButton from '../src/components/Mybuttons';
+import { Image } from 'react-native';
+import Myiten from '../src/components/myItenlist'
+
+
 // Define o estado inicial como false
 //isChecked = valor atual da váriavel, SetIsChecked ele altera o valor da isChecked
 //useState(false), define o valor inicial do isChecked como true
@@ -12,6 +16,9 @@ import MyButton from '../src/components/Mybuttons';
 export default function UserScreen() {
 
     const [isChecked, setIsChecked] = useState(true);
+    const [showForm, setShowForm] = useState(false);
+    const [showUsers, setShowUsers] = useState(false);
+
 
     const [req, setReq] = useState({
         name: '',
@@ -89,137 +96,184 @@ export default function UserScreen() {
     //!isChecked: o operador ! inverte o valor atual de isChecked. Se isChecked era true (checkbox marcada), ele se torna false (checkbox desmarcada), e vice-versa.
     return (
         <ScrollView>
-        <MyView >
-            
 
-            <View style ={styles.formContainer} >
+            <MyView>
+
+
                 <View style={styles.form}>
-
-                    <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text })} placeholder="Digite seu nome..." label="Login" iconName='person' />
-
-                    {/* <MyCheck label={isChecked ? "Presente" : "Faltou"} checked={isChecked} onToggle={() => setIsChecked(!isChecked)} />
-                    checked busca o valor inicial/atual do estado. onToggle */}
-
-                    <Myinput
-                     value={req.password}
-                      onChangeText={(text) => setReq({ ...req, password: text })}
-                       placeholder="Digite a sua senha..." 
-                       label="Password" iconName='password' />
+                    <Text style={styles.TextIntroducao}>Cadastro de usuários</Text>
+                    <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/8307/8307575.png' }} style={styles.image} />
                     
-                    <Myinput value={req.cpf} onChangeText={(text) => setReq({ ...req, cpf: text })} placeholder="Digite o seu CPF" label="CPF:" iconName='article' /> 
+ 
+                    {/* Botão para abrir o formulário */}
+                    {!showForm && (
+                        <TouchableOpacity style={styles.startButton} onPress={() => setShowForm(true)}>
+                            <Text style={styles.buttonText}>INICIAR CADASTRO</Text>
+                        </TouchableOpacity>
+                    )}
 
-                     <Myinput value={req.age} onChangeText={(text) => setReq({ ...req, age: text })} placeholder="Digite a sua idade" label="Idade:" iconName='celebration' /> 
+                    {/* Botão para mostrar registro de usuários */}
 
-                     <Myinput value={req.contact} onChangeText={(text) => setReq({ ...req, contact: text })} placeholder="(XX) XXXXX-XXXX" label="Contato:" iconName='phone' />
+                    <TouchableOpacity style={styles.startRegistros} onPress={() => setShowUsers(!showUsers)}>
+                        <Text style={styles.buttonText}>{showUsers ? "Ocultar Registro de Usuários" : "REGISTRO DE USERS"}</Text>
+                    </TouchableOpacity>
 
-                     <Myinput value={req.email} onChangeText={(text) => setReq({ ...req, email: text })} placeholder="domain@domain.com" label="Email:" iconName='mail' /> 
 
-                     <Myinput value={req.address} onChangeText={(text) => setReq({ ...req, address: text })} placeholder="Digite o seu endereço" label="Endereço" iconName='house' />      
-                    
-                    
+                    {/* Exibir o formulário somente se showForm for true */}
+                    {showForm && (
+                        <View style={styles.formContainer}>
+                            <View style={styles.form}>
+                                <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text })} placeholder="Digite seu nome..." label="Login" iconName='person' />
+                                <Myinput value={req.password} onChangeText={(text) => setReq({ ...req, password: text })} placeholder="Digite a sua senha..." label="Password" iconName='password' />
+                                <Myinput value={req.cpf} onChangeText={(text) => setReq({ ...req, cpf: text })} placeholder="Digite o seu CPF" label="CPF:" iconName='article' />
+                                <Myinput value={req.age} onChangeText={(text) => setReq({ ...req, age: text })} placeholder="Digite a sua idade" label="Idade:" iconName='celebration' />
+                                <Myinput value={req.contact} onChangeText={(text) => setReq({ ...req, contact: text })} placeholder="(XX) XXXXX-XXXX" label="Contato:" iconName='phone' />
+                                <Myinput value={req.email} onChangeText={(text) => setReq({ ...req, email: text })} placeholder="domain@domain.com" label="Email:" iconName='mail' />
+                                <Myinput value={req.address} onChangeText={(text) => setReq({ ...req, address: text })} placeholder="Digite o seu endereço" label="Endereço" iconName='house' />
 
-                    <MyButton
-                    title = "CADASTRAR"
-                    onPress={handleRegister}
-                    button_type = "round"
-                    style = {styles.button_round}
-                    />
+                                <MyButton
+                                    title="CADASTRAR"
+                                    onPress={handleRegister}
+                                    button_type="round"
+                                    style={styles.button_round}
+                                />
 
-                    
+                                {/* Botão para fechar o formulário */}
+                                <TouchableOpacity style={styles.closeButton} onPress={() => setShowForm(false)}>
+                                    <Text style={styles.buttonText}>Cancelar</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    )}
+
+                    {/* Lista de usuários cadastrados */}
+                    {showUsers && (
+                        <MyList
+                            data={users}
+                            keyItem={(item) => item.id.toString()}
+                            renderItem={({ item }) => (
+                                <View style={styles.itemContainer}>
+
+                                    <Text style={styles.itemText}>Nome: {item.name}</Text>
+                                    <Text style={styles.itemText}>CPF: {item.cpf}</Text>
+                                    <Text style={styles.itemText}>Email: {item.email}</Text>
+                                    <Text style={styles.itemText}>Idade: {item.age}</Text>
+                                    <Text style={styles.itemText}>Endereço: {item.address}</Text>
+                                    <Text style={styles.itemText}>Contato: {item.contact}</Text>
+                                    <Text style={styles.itemText}>Criação: {item.createAt}</Text>
+
+                                    <View style={styles.buttonsContainer}>
+                                        <TouchableOpacity style={styles.deleteButton} onPress={() => deleteUser(item.id)}>
+                                            <Text style={styles.buttonText}>X</Text>
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity style={styles.editButton} onPress={() => editUser(item.id)}>
+                                            <Text style={styles.buttonText}>Edit</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            )}
+
+
+                        />
+                    )}
+
                 </View>
 
-                <FlatList
-                    data={users}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <View style={styles.itemContainer}>
-                            <Text style={styles.itemText}>Nome: {item.name}</Text>
-                            <Text style={styles.itemText}>CPF: {item.cpf}</Text>
-                            <Text style={styles.itemText}>Email: {item.email}</Text>
-                            <Text style={styles.itemText}>Idade: {item.age}</Text>
-                            <Text style={styles.itemText}>Endereço: {item.address}</Text>
-                            <Text style={styles.itemText}>Contato: {item.contact}</Text>
-                            <Text style={styles.itemText}>Criação: {item.createAt}</Text>
-
-                            <View style={styles.buttonsContainer}>
-
-                                <TouchableOpacity style={styles.deleteButton} onPress={() => { deleteUser(item.id) }}>
-                                    <Text style={styles.buttonText}>X</Text>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity style={styles.editButton} onPress={() => { editUser(item.id) }}>
-                                    <Text style={styles.buttonText}>Edit</Text>
-
-                                </TouchableOpacity>
-
-                            </View>
-
-                        </View>
-
-
-                    )}
-                />
-
-            </View>
-
-        </MyView>
+            </MyView>
         </ScrollView>
-
     );
 }
 
-
 const styles = StyleSheet.create({
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
+    myView: {
+        backgroundColor: 'purple',
 
     },
-
+    formContainer: {
+        //formulário que contém os itens
+        backgroundColor: '#D2BBF2',
+        borderWidth: 2,
+        borderColor: 'purple',
+        shadowColor: 'purple',
+        shadowOffset: { width: 2, height: 1 },
+        shadowOpacity: 0.6,
+        shadowRadius: 4,
+        alignItems: 'center',
+        // Ocupa toda a largura disponível
+    },
     form: {
-        marginRight: 10,
+        //engloba a imagem e o forms
         padding: 20,
-        backgroundColor: '#f9f9f9',
+        backgroundColor: '',
         borderRadius: 10,
         shadowColor: '#000',
         shadowOpacity: 0.1,
-        width:400,
-        
-        
-        // shadowOffset: { width: 0, height: 4 },
-        // shadowRadius: 5,
-        // marginLeft: 50,
-        // marginTop: 50,
-
+        width: '100%', // Para evitar que fique muito estreito
+        maxWidth: 500, // Define um limite máximo
+        alignSelf: 'center', // Garante que fique centralizado
     },
-
-    formContainer:{
-        flex: 1,  // Isso faz com que o componente ocupe toda a tela
-        justifyContent: 'center', // Centraliza verticalmente
-        alignItems: 'center',
-    },
-    tela:{
-        backgroundColor:'purple'
-    },
-
 
     itemContainer: {
-        padding: 15,
+        padding: 20,
         marginBottom: 5,
-        borderRadius: 30,
-        backgroundColor: 'white',
+        borderRadius: 10,
+        backgroundColor: '#fffff',
         borderColor: 'purple',
         borderWidth: 0.1,
         shadowColor: 'purple',
         shadowOffset: { width: 1, height: 10 },
         shadowOpacity: 0.5,
         shadowRadius: 10,
-        marginLeft: 50,
-        marginRight: 50,
-        marginTop: 50,
-        width: 500
-
+        width: 450,
+    },
+    startButton: {
+        backgroundColor: '#813AB1',
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+        marginVertical: 20,
+    },
+    startRegistros: {
+        backgroundColor: '#BFBFBF',
+        padding: 10,
+        color: '',
+        borderRadius: 10,
+        alignItems: 'center',
+        marginVertical: 2,
+    },
+    closeButton: {
+        backgroundColor: '#d9534f',
+        padding: 10,
+        borderRadius: 10,
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    button_round: {
+        backgroundColor: "#813AB1",
+        padding: 10,
+        borderRadius: 20,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    TextIntroducao: {
+        color: '#6A1B9A',
+        fontSize: 35,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        borderRadius: 20,
+        backgroundColor: 'white',
+        borderColor: 'purple',
+        borderWidth: 0.5,
+        shadowColor: 'purple',
+        shadowOffset: { width: 2, height: 2 },
+        shadowOpacity: 0.6,
+        shadowRadius: 4,
     },
 
     itemText: {
@@ -227,51 +281,37 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginBottom: 5,
     },
-    input: {
-        height: 30,
-        borderColor: '#ddd',
-        borderWidth: 1,
-        borderRadius: 5,
-        marginBottom: 15,
-        paddingLeft: 10,
-        fontSize: 16,
-        backgroundColor: '#f9f9f9',
-    },
-
     buttonsContainer: {
         flexDirection: 'row',
-        gap: 20
+        gap: 20,
     },
-
     deleteButton: {
-        backgroundColor: 'red', // Cor do botão de editar
+        backgroundColor: 'red',
         paddingVertical: 12,
         paddingHorizontal: 24,
-        borderRadius: 30, // Bordas arredondadas
-        marginBottom: 10,
+        borderRadius: 30,
         alignItems: 'center',
     },
-
     editButton: {
         backgroundColor: '#281259',
         paddingVertical: 12,
         paddingHorizontal: 24,
         borderRadius: 30,
-        marginBottom: 10,
         alignItems: 'center',
-
     },
-    buttonText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
+    image: {
+        width: '100%', // Ajusta a largura para 100% do contêiner
+        height: 300, // Ajusta a altura conforme necessário
+        resizeMode: 'contain', // Ajusta a imagem para caber no espaço
+        marginBottom: 20, // Adiciona um espaço entre a imagem e o formulário
+    }
 
-    button_round: {
-        backgroundColor: "#813AB1",
-        padding: 10,
-        borderRadius: 20,
-        alignItems: "center",
-        justifyContent: "center",
-      }
-})
+});
+
+
+
+
+
+
+
+
