@@ -98,8 +98,8 @@ export default function RevenueScreen() {
 
       {/* Formulário */}
       <View style={styles.row}>
+
         <View style={styles.form}>
-          <View style={styles.form}>
             {/* Campo de Nome */}
             <Myinput
               value={req.name}
@@ -153,10 +153,10 @@ export default function RevenueScreen() {
               placeholder='Porcentagem de desconto'
               label='Desconto'
             />
-            <MyButton title="cadastrar" onPress={handleRegister} style={styles.buttons} />
-            <MyButton title="Cancelar" onPress={handleCancel} style={styles.buttons} />
-
-          </View>
+            <View style={styles.row}>
+              <MyButton button_type='rect' title="cadastrar" onPress={handleRegister}  />
+              <MyButton title="Cancelar" onPress={handleCancel} />
+            </View>
         </View>
 
         {/* Lista de Receitas */}
@@ -165,7 +165,8 @@ export default function RevenueScreen() {
           keyItem={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <Myiten
-              style={styles.revenueStyle}
+            
+              
               onEdit={() => { editRevenue(item.id) }} 
               onDel={() => { delRevenue(item.id) }}
               
@@ -181,6 +182,7 @@ export default function RevenueScreen() {
             </Myiten>
           )}
         />
+
       </View>
     </MyView>
   );
