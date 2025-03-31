@@ -75,19 +75,7 @@ export default function RevenueScreen() {
     setRevenues(list); // Remove a receita da lista
   }
 
-  function handleCancel() {
-    setReq({
-      id: -1,
-      description: '',
-      name: '',
-      url: '',
-      createAt: new Date().toISOString(),
-      userId: 0,
-      value: '',
-      scholarshipStatus: '',
-      discountPercentage: '',
-    });
-  }
+  
 
   return (
 
@@ -155,7 +143,7 @@ export default function RevenueScreen() {
             />
             <View style={styles.row}>
               <MyButton button_type='rect' title="cadastrar" onPress={handleRegister}  />
-              <MyButton button_type='rect' title="Cancelar" onPress={handleCancel} />
+             
             </View>
         </View>
 
@@ -168,12 +156,11 @@ export default function RevenueScreen() {
             
            
             <Myiten
-
+           
               onEdit={() => { editRevenue(item.id) }} 
-              onDel={() => { delRevenue(item.id) }}
+              onDel= {() => { delRevenue(item.id) }}
              
-            > 
-            
+            >
               <Mytext style={styles.revenueText}>Descrição: {item.description}</Mytext>
               <Mytext style={styles.revenueText}>Nome: {item.name}</Mytext>
               <Mytext style={styles.revenueText}>ID do Usuário: {item.userId}</Mytext>
@@ -182,6 +169,8 @@ export default function RevenueScreen() {
               <Mytext style={styles.revenueText}>Desconto: {item.discountPercentage}%</Mytext>
               <Mytext style={styles.revenueText}>Data: {item.createAt}</Mytext>
               <Mydownload style={styles.revenueText} url={item.url} />
+
+      
               
             </Myiten>
           )}
