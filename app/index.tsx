@@ -36,11 +36,28 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
+                        label="Area do Aluno"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/students');
+                        }}
+                    />
+                    <Drawer.Item
                         label="Cursos"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/courses');
+                        }}
+                    />
+                    
+                    <Drawer.Item
+                        label="Lançamento"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/launchs');
                         }}
                     />
                     <Drawer.Item
