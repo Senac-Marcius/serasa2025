@@ -126,7 +126,7 @@ export default function LoanScreen() {
 
                 <MyList //data significa o parametro que vai receber o vetor (data = dados)
                     data={loans}                  //toString tranforma em string  
-                    keyExtractor={(item) => item.id.toString()}//vai pegar no loans cada elemento
+                    keyItem={(item) => item.id.toString()}//vai pegar no loans cada elemento
                     renderItem={({ item }) => ( //return aceita somente um argumento
                         <View style={styles.itemContainer}>
                             <Text>{item.bookId}</Text>
@@ -157,7 +157,6 @@ export default function LoanScreen() {
             </View>
         </MyView>
     ); //encapsulamento
-
 }
 
 const styles = StyleSheet.create({
