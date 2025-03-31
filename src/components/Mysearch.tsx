@@ -50,5 +50,13 @@ const MySearch: React.FC<MySearchProps> = ({onChangeText, style, onPress, busca}
 
 export default MySearch
 
+/** necessario adicionar essa function e cosnt para funcionar
+ * 
+ *  function buscar(){
+ 
+     }
+ 
+     const [busca, setBusca] = useState('')
+ */
 
 
