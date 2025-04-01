@@ -40,8 +40,12 @@ export default function HomeScreen() {
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/students');
-                        }}
+                            router.push('/students');}}
+                    />
+                    <Drawer.Item
+                        label="Empréstimo"
+                        icon="post"
+                        onPress={() => {setDrawerOpen(false);router.push('/loans');}}
                     />
                     <Drawer.Item
                         label="Calendario"
@@ -59,6 +63,7 @@ export default function HomeScreen() {
                             setDrawerOpen(false);
                             router.push('/courses');
                         }}
+                       
                     />
 
 
@@ -168,6 +173,7 @@ export default function HomeScreen() {
 
 
                     <Drawer.Item
+<<<<<<< HEAD
                         label="Documentos"
                         icon="post"
                         onPress={() => {
@@ -190,6 +196,13 @@ export default function HomeScreen() {
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/revenues');
+=======
+                        label="Despesa"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/expenses');
+>>>>>>> 588cb39b963b5b3a5ea79ff2ea6ce4a755d15f85
                         }}
                     />
                     <Drawer.Item

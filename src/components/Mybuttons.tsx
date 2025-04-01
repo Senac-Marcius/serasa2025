@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   button_capsule: {
+    display:"flex",
     borderRadius: 50,
     alignItems: "center",
     justifyContent: "center",
@@ -106,6 +107,7 @@ const styles = StyleSheet.create({
     
   },
   button_round: {
+    display:"flex",
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
@@ -113,6 +115,7 @@ const styles = StyleSheet.create({
     
   },
   button_rect: {
+    display:"flex",
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
@@ -120,6 +123,7 @@ const styles = StyleSheet.create({
     
   },
   button_default: {
+    display:"flex",
     borderRadius: 15,
     alignItems: "center",
     flexDirection: "row",
