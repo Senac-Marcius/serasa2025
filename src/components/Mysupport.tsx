@@ -3,6 +3,7 @@ import React, { ReactNode } from 'react';
 import { Text, View, ViewStyle, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import { FaWhatsapp } from 'react-icons/fa'; // Importa o ícone do WhatsApp
 import { Button, List } from 'react-native-paper';
+import MyButton from './Mybuttons';
 
 
 
@@ -32,6 +33,21 @@ const MySupport: React.FC<MySupportProps> = ({label, style }) => {
             {
                 visible && (
                     <View style={styles.form}>
+                        <View style={{ alignItems: 'flex-end' }}>
+                                 <MyButton
+                            onPress={() => setVisible(false)}
+                            button_type='circle'
+                            icon='close'
+                            iconSize={10}
+                            color='red'
+                            iconColor='white'
+                            width={20}
+                            height={20}
+                            
+                            >
+
+                        </MyButton>
+                        </View>
                         <TextInput 
                             placeholder="Nome" 
                             style={{ borderBottomWidth: 1, marginBottom: 10 }} 
@@ -68,6 +84,7 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: '#fff',
         borderRadius: 5,
+  
     },
 
     whatsappButton: {

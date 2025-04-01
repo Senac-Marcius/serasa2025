@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Button, FlatList } from 'react-native';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs'
 import MyView from '../src/components/MyView'
+
 import { ScrollView } from 'react-native-gesture-handler';
+import MyButton from '../src/components/Mybuttons';
 // Define o estado inicial como false
 //isChecked = valor atual da váriavel, SetIsChecked ele altera o valor da isChecked
 //useState(false), define o valor inicial do isChecked como true
@@ -87,7 +89,8 @@ export default function UserScreen() {
     //!isChecked: o operador ! inverte o valor atual de isChecked. Se isChecked era true (checkbox marcada), ele se torna false (checkbox desmarcada), e vice-versa.
     return (
         <ScrollView>
-        <MyView>
+        <MyView >
+            
 
             <View style ={styles.formContainer} >
                 <View style={styles.form}>
@@ -97,7 +100,11 @@ export default function UserScreen() {
                     {/* <MyCheck label={isChecked ? "Presente" : "Faltou"} checked={isChecked} onToggle={() => setIsChecked(!isChecked)} />
                     checked busca o valor inicial/atual do estado. onToggle */}
 
-                    <Myinput value={req.password} onChangeText={(text) => setReq({ ...req, password: text })} placeholder="Digite a sua senha..." label="Password" iconName='password' />
+                    <Myinput
+                     value={req.password}
+                      onChangeText={(text) => setReq({ ...req, password: text })}
+                       placeholder="Digite a sua senha..." 
+                       label="Password" iconName='password' />
                     
                     <Myinput value={req.cpf} onChangeText={(text) => setReq({ ...req, cpf: text })} placeholder="Digite o seu CPF" label="CPF:" iconName='article' /> 
 
@@ -108,11 +115,18 @@ export default function UserScreen() {
                      <Myinput value={req.email} onChangeText={(text) => setReq({ ...req, email: text })} placeholder="domain@domain.com" label="Email:" iconName='mail' /> 
 
                      <Myinput value={req.address} onChangeText={(text) => setReq({ ...req, address: text })} placeholder="Digite o seu endereço" label="Endereço" iconName='house' />      
-
-                    <Button title='CADASTRAR' color="purple" onPress={handleRegister} />
+                    
                     
 
+                    <MyButton
+                    title = "CADASTRAR"
 
+                    onPress={handleRegister}
+                    button_type = "round"
+                    style = {styles.button_round}
+                    />
+
+                    
                 </View>
 
                 <FlatList
@@ -186,6 +200,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center', // Centraliza verticalmente
         alignItems: 'center',
     },
+    tela:{
+        backgroundColor:'purple'
+    },
 
 
     itemContainer: {
@@ -249,5 +266,13 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
-    }
+    },
+
+    button_round: {
+        backgroundColor: "#813AB1",
+        padding: 10,
+        borderRadius: 20,
+        alignItems: "center",
+        justifyContent: "center",
+      }
 })
