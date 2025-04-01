@@ -1,7 +1,7 @@
 
-import React, { ReactNode, useState  } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
-import { Button } from 'react-native-paper';
+import MyButton from '../components/Mybuttons';
 
 interface MyModalprops {
     children: ReactNode;
@@ -27,34 +27,34 @@ interface MyModalprops {
 //    ***Modelos dos modais:***
 
 //    ***MyModal_mobile1:***
-    //    width: 327,
-    //    height: 327,
-    //    backgroundColor: 'white',
-    //    borderColor: 'purple'
+//    width: 327,
+//    height: 327,
+//    backgroundColor: 'white',
+//    borderColor: 'purple'
 
 //    ***MyModal_mobile2:***
-    // width: 330,
-    // height: 220,
-    // backgroundColor: 'white',
-    // borderColor: 'purple'
+// width: 330,
+// height: 220,
+// backgroundColor: 'white',
+// borderColor: 'purple'
 
 //    ***MyModal_mobile3:***
-    // width: 375,
-    // height: 400,
-    // backgroundColor: 'white',
-    // borderColor: 'purple'
+// width: 375,
+// height: 400,
+// backgroundColor: 'white',
+// borderColor: 'purple'
 
 //    ***MyModal_mobilefullscreen:***
-    // width: 375,
-    // height: '100%',
-    // backgroundColor: 'white',
-    // borderColor: 'purple',
+// width: 375,
+// height: '100%',
+// backgroundColor: 'white',
+// borderColor: 'purple',
 
 //    ***MyModal1_desktop:***
-    // width: 900,
-    // height: 500,
-    // backgroundColor: 'white',
-    // borderColor: 'purple',
+// width: 900,
+// height: 500,
+// backgroundColor: 'white',
+// borderColor: 'purple',
 
 
 const MyModal_mobile1: React.FC<MyModalprops> = ({ children, style, visible, setVisible, }) => { //
@@ -63,17 +63,21 @@ const MyModal_mobile1: React.FC<MyModalprops> = ({ children, style, visible, set
     };
     return (
         <View >
-            <Button onPress={() => { setVisible(true) }}>
-                sndkksnd
-            </Button>
+            <MyButton
+                onPress={() => { setVisible(true) }}
+                title="CADASTRAR"
+                 />
+
             {visible && (<Modal transparent={true} visible={visible} animationType="fade"   >
                 <View style={styles.background} >
                     <View style={styles.modalContent1}  >
                         {children}
-                        <Button onPress={onClose}>
-                            X
-                        </Button>
-                    </View>                
+                        <MyButton onPress={onClose}
+                            title="voltar"
+                            style={styles.button_round}
+                        />
+
+                    </View>
                 </View>
             </Modal>)}
         </View>
@@ -87,17 +91,17 @@ const MyModal_mobile2: React.FC<MyModalprops> = ({ children, style, visible, set
 
     return (
         <View >
-            <Button onPress={() => { setVisible(true) }}>
-                sndkksnd
-            </Button>
+            <MyButton
+                onPress={() => { setVisible(true) }}
+                title="CADASTRAR" />
             {visible && (<Modal transparent={true} visible={visible} animationType="fade"   >
                 <View style={styles.background} >
                     <View style={styles.modalContent2}  >
                         {children}
-                        <Button style ={styles.button}onPress={onClose}>
-                            Close
-                        </Button>
-                    </View>                
+                        <MyButton onPress={onClose}
+                            title="X"
+                        />
+                    </View>
                 </View>
             </Modal>)}
         </View>
@@ -111,17 +115,17 @@ const MyModal_mobile3: React.FC<MyModalprops> = ({ children, style, visible, set
 
     return (
         <View >
-            <Button onPress={() => { setVisible(true) }}>
-                sndkksnd
-            </Button>
+            <MyButton
+                onPress={() => { setVisible(true) }}
+                title="CADASTRAR" />
             {visible && (<Modal transparent={true} visible={visible} animationType="fade"   >
                 <View style={styles.background} >
                     <View style={styles.modalContent3}  >
                         {children}
-                        <Button onPress={onClose}>
-                            Close
-                        </Button>
-                    </View>                
+                        <MyButton onPress={onClose}
+                            title="X"
+                        />
+                    </View>
                 </View>
             </Modal>)}
         </View>
@@ -135,49 +139,63 @@ const MyModal_mobilefullscreen: React.FC<MyModalprops> = ({ children, style, vis
 
     return (
         <View >
-            <Button onPress={() => { setVisible(true) }}>
-                sndkksnd
-            </Button>
+            <MyButton
+                onPress={() => { setVisible(true) }}
+                title="CADASTRAR" />
             {visible && (<Modal transparent={true} visible={visible} animationType="fade"   >
                 <View style={styles.background} >
                     <View style={styles.modalContent4}  >
                         {children}
-                        <Button onPress={onClose}>
-                            Close
-                        </Button>
-                    </View>                
+                        <MyButton onPress={onClose}
+                            title="X"
+                        />
+                    </View>
                 </View>
             </Modal>)}
         </View>
     );
 }
-    const MyModal1_desktop: React.FC<MyModalprops> = ({ children, style, visible, setVisible, }) => { //
-        function onClose() {
-            setVisible(false)
-        };
-    
-        return (
-            <View >
-                <Button onPress={() => { setVisible(true) }}>
-                    sndkksnd
-                </Button>
-                {visible && (<Modal transparent={true} visible={visible} animationType="fade"   >
-                    <View style={styles.background} >
-                        <View style={styles.modalContent5}  >
-                            {children}
-                            <Button onPress={onClose}>
-                                Close
-                            </Button>
-                        </View>                
+const MyModal1_desktop: React.FC<MyModalprops> = ({ children, style, visible, setVisible, }) => { //
+    function onClose() {
+        setVisible(false)
+    };
+
+    return (
+        <View >
+            <MyButton
+                onPress={() => { setVisible(true) }}
+                title="CADASTRAR" />
+            {visible && (<Modal transparent={true} visible={visible} animationType="fade"   >
+                <View style={styles.background} >
+                    <View style={styles.modalContent5}  >
+                        {children}
+                        <MyButton onPress={onClose}
+                            title="X"
+                        />
                     </View>
-                </Modal>)}
-            </View>
-        );
-    
-    }
+                </View>
+            </Modal>)}
+        </View>
+    );
+
+}
 
 
 const styles = StyleSheet.create({
+    button_capsule: {
+        borderRadius: 50,
+        backgroundColor: "#813AB1",
+        alignItems: "center",
+        justifyContent: "center",
+      },
+      button_round: {
+        backgroundColor: "#813AB1",
+        width: 100,
+        padding: 10,
+        borderRadius: 20,
+        alignItems: "center",
+        justifyContent: "center",
+    },
     modalContent1: {
         display: 'flex',
         width: 327,
@@ -190,7 +208,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-end',
     },
-    button:{
+    button: {
     },
     modalContent2: {
         display: 'flex',
@@ -206,7 +224,7 @@ const styles = StyleSheet.create({
 
 
     },
-    modalContent3:{
+    modalContent3: {
         display: 'flex',
         width: 375,
         height: 400,
@@ -218,7 +236,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-end',
     },
-    modalContent4:{
+    modalContent4: {
         display: 'flex',
         width: 375,
         height: '100%',
@@ -230,7 +248,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-end',
     },
-    modalContent5:{
+    modalContent5: {
         display: 'flex',
         width: 900,
         height: 500,
@@ -254,4 +272,4 @@ const styles = StyleSheet.create({
 
 
 
-export {MyModal_mobile1, MyModal_mobile2, MyModal_mobile3, MyModal_mobilefullscreen,MyModal1_desktop}
+export { MyModal_mobile1, MyModal_mobile2, MyModal_mobile3, MyModal_mobilefullscreen, MyModal1_desktop }

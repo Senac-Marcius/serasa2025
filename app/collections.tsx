@@ -93,12 +93,17 @@ export default function CollectionScreen() {
                             iconName="star"
                         />
 
-                        <MyButton
-                            title="CADASTRAR"
-                            onPress={handleRegister}
-                            button_type="capsule"
-                            style={styles.button_capsule}
-                        />
+
+                        <MyModal_mobile1 visible={visible} setVisible={setVisible} style={styles.button_capsule}>
+                            DESEJA CONFIRMAR O CADASTRO?
+
+                            <MyButton
+                                onPress={() => {handleRegister()}}
+                                title="SIM"
+                                style={styles.button_round}
+                            />
+                        </MyModal_mobile1>
+
                     </View>
                     <MyList // data faz um foreach (data recebe collections)
                         data={collections}
@@ -123,8 +128,8 @@ export default function CollectionScreen() {
                         )}
                     />
                 </View>
-                </View>
-        </MyView>
+            </View>
+        </MyView >
     );
 }
 const styles = StyleSheet.create({
@@ -133,9 +138,7 @@ const styles = StyleSheet.create({
         width: 100,
         padding: 10,
         borderRadius: 20,
-        alignItems: "center",
-        justifyContent: "center",
-      },
+    },
     button_capsule: {
         borderRadius: 50,
         height: 45,
@@ -151,11 +154,11 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
 
     },
-    formContainer:{
+    formContainer: {
         flex: 1,
-        display:'flex', 
-        justifyContent:'center', 
-        alignItems:'center',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 
     form: {
@@ -168,7 +171,7 @@ const styles = StyleSheet.create({
         shadowColor: 'purple',
         shadowOffset: { width: 1, height: 10 },
         shadowOpacity: 0.5,
-        width:400,
+        width: 400,
     },
 
 
@@ -209,7 +212,7 @@ const styles = StyleSheet.create({
     buttonsContainer: {
         flexDirection: 'row',
         gap: 50,
-        justifyContent:"space-around"
+        justifyContent: "space-around"
 
     },
     buttonText: {
