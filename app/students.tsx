@@ -10,6 +10,9 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+import MyButton from "../src/components/Mybuttons";
+
+
 export default function StudentsScreen() {
   const [req, setReq] = useState({
     id: 0,
@@ -28,14 +31,12 @@ export default function StudentsScreen() {
       createdAt: string;
     }[]
   >([]);
-  
 
   function handleRegister() {
     if (req.id == -1) {
       setStudent([...student, req]);
-      
     } else {
-      setStudent(student.map(i => (i.id == req.id)? req: i )  );
+      setStudent(student.map((i) => (i.id == req.id ? req : i)));
     }
     setReq({
       id: -1,
@@ -64,6 +65,8 @@ export default function StudentsScreen() {
       <View style={styles.container}>
         <View style={styles.formtxt}>
           <Text style={styles.titulos}>Cadastre-se</Text>
+
+          
 
           <TextInput
             style={styles.textinput}
@@ -100,20 +103,22 @@ export default function StudentsScreen() {
                 <Text>{item.email}</Text>
                 <Text>{item.createdAt}</Text>
                 <View style={styles.row}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      deleteStudent(item.id);
-                    }}
-                    style={styles.button_deletar}
-                  >
-                    Deletar
-                  </TouchableOpacity>
+                  <MyButton                   
+                    onPress={() => deleteStudent(item.id)}
+                    button_type="circle"                    
+                    icon="arrow-left"
+                    iconSize={20}
+                    width={40}
+                    height={40}
+                  ></MyButton>
+
                   <TouchableOpacity
                     onPress={() => {
                       editStudent(item.id);
                     }}
                     style={styles.button_editar}
                   >
+                    
                     Editar
                   </TouchableOpacity>
                 </View>
@@ -200,7 +205,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
 
   formtxt: {
     width: 500,

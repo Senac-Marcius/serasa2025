@@ -3,6 +3,9 @@ import{View,Text, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} fro
 import MyView from "../src/components/MyView";
 import MyList from "../src/components/mylist";
 import Myiten from "../src/components/myItenlist";
+import { Myinput } from "../src/components/Myinputs";
+import MyButton from "../src/components/Mybuttons";
+import MyTimePicker from "../src/components/MyTimePicker";
 
 export default function PositionScreen(){
 /*Aqui é TypeScript*/
@@ -54,44 +57,54 @@ export default function PositionScreen(){
     }
 
     return (
-        <MyView>
+        <MyView style={styles.container}>
             {/*Aqui é TypeScript dentro do front*/}
             <Text>Minha tela dos cargos</Text>
             <View style = {styles.row}>
                 <View style = {styles.form}>
-                    <TextInput 
-                        placeholder="Cargo"
+                    <Myinput
+                        label="Cargo"
+                        placeholder="Insira um Cargo"
+                        iconName="briefcase"
                         value = {req.name}
                         onChangeText={(text)=> setReq({...req ,name: text })}/>
  
-                    <TextInput 
-                        placeholder="Digite a descrição"
+                    <Myinput 
+                        label="Descrição"
+                        placeholder="Insira uma descrição"
+                        iconName="briefcase"
                         value = {req.description}
                         onChangeText={(text)=> setReq({...req ,description: text })}/>
 
-                    <TextInput 
-                        placeholder="Salário"
+                    <Myinput 
+                        label="Salário"
+                        placeholder="Insira o salário"
+                        iconName="briefcase"
                         value = {(req.salary).toString()}
                         onChangeText={(text)=> setReq({...req ,salary: Number(text) })}/> 
 
-                    <TextInput
-                        placeholder="Horas de trabalho" 
-                        value = {req.workHours}
-                        onChangeText={(value:string)=> setReq({...req ,workHours: value })}/>
+                    <MyTimePicker 
+                    onTimeSelected={(time) => setReq({ ...req, workHours: time })}
+                    initialTime={req.workHours}
+                    />
 
-                    <TextInput 
-                        placeholder="Departamento"
+                    <Myinput 
+                        label="Departamento"
+                        placeholder="Insira um departamento"
+                        iconName="briefcase"
                         value = {req.departament}
                         onChangeText={(text)=> setReq({...req ,departament: text })}/>
 
-                    <TextInput 
-                        placeholder="Supervisor"
+                    <Myinput 
+                        label="Supervisor"
+                        placeholder="Insira um supervisor"
+                        iconName="briefcase"
                         value = {req.supervisor}
                         onChangeText={(text)=> setReq({...req ,supervisor: text })}/>
 
                   
 
-                    <Button  title = "Cadastrar" onPress={handleRegister}/>
+                    <MyButton  title = "Cadastrar" onPress={handleRegister}/>
                 </View> 
                     <MyList
                         data = {positions}
