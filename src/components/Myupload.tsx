@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Button, Alert, ActivityIndicator,Text, ViewStyle } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
+import MyButton from "../components/Mybuttons"
 
 interface MyuploadProps {
   style?: ViewStyle | ViewStyle[]; 
@@ -56,12 +57,12 @@ const MyUpload: React.FC<MyuploadProps> = ({ style, setUrl, url  }) => {
   };
 
   return (
-    <View style={style}>
+    <View>
       <Button title="Selecionar Arquivo" onPress={pickDocument}/>
       {loading && <ActivityIndicator size="large" color="#A020F0"/>}
       {url && (<Text>Arquivo enviado: {url}</Text>)}
       {alert && (<Text> {alert} </Text>)}
-    </View>
+      </View>
   );
 };
 

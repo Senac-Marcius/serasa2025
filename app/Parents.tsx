@@ -71,7 +71,7 @@ export default function ParentScreen (){
      }
     
 
-    const[urlDocument, setDocument] = useState('')
+    //const[urlDocument, setDocument] = useState('')
     
     return (
         <View>{/*aqui é typeScript dentro do Front*/}
@@ -119,7 +119,7 @@ export default function ParentScreen (){
                             color='blue'
                             onPress={handleRegister}/>
                     {/*foi aberto uma area de codigo chamar a variavel, equivale o inder do html*/}
-                        <MyUpload setUrl={setDocument} url={urlDocument}/>
+                        {/*<MyUpload setUrl={setDocument} url={urlDocument}/>*/}
                    </View>
                 </View>
 
