@@ -13,7 +13,7 @@ export default function HomeScreen() {
         <View style={{ flex: 1 }}>
             {/* Menu Hambúrguer no Topo */}
             
-            <MyTopbar title="Bem vindo ao app do Serasa"  /> 
+            <MyTopbar title="Bem vindo ao app do Serasa" /> 
            
 
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
