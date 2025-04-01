@@ -3,6 +3,12 @@ import { ScrollView, View } from 'react-native';
 import { Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Button } from 'react-native';
 import MyTimePicker  from '../src/components/MyTimePicker'
 import MyButton from '../src/components/Mybuttons';
+import MyView from '../src/components/MyView';
+import Myiten from '../src/components/myItenlist';
+import MyList from '../src/components/mylist';
+import { Myinput,MyCheck } from '../src/components/Myinputs';
+
+
 export default function EmployeeScreen(){
 //aqui é typescript 
     const [req, SetReq] = useState({
@@ -60,11 +66,15 @@ export default function EmployeeScreen(){
                         placeholder='Pefril do likendin:'
                         value={req.urls}
                         onChangeText={(text) => SetReq({...req , urls:text})}
+                        placeholder='insira uma url valida'
+                        label='Perfil do likendin:'
+                        iconName = 'link'
                     />
                     {req.urls}
                     <TextInput
                         placeholder='Nome:'
                         value={req.name}
+                        iconName='badge'
                         onChangeText={(text) => SetReq({...req , name:text})}
                     />
                     {req.name}
@@ -82,6 +92,8 @@ export default function EmployeeScreen(){
                     {req.tell}
                     <TextInput
                         placeholder='Email:'
+                        iconName='email'
+                        label='Email:'
                         value={req.email}
                         onChangeText={(text) => SetReq({...req , email:text})}
                     />
