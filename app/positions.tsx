@@ -1,8 +1,10 @@
 import React, {useState} from "react";
 import{View,Text, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} from "react-native";
-import MyView from "../src/components/MyView";
-import MyList from "../src/components/mylist";
-import Myiten from "../src/components/myItenlist";
+import CurrencyInput from 'react-native-currency-input';
+import {TimeInput} from "@heroui/date-input";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import MyView from '../src/components/MyView';
+
 
 export default function PositionScreen(){
 /*Aqui é TypeScript*/
@@ -12,7 +14,7 @@ export default function PositionScreen(){
         name:"",
         description:"",
         salary: 0,
-        workHours: "",
+        workHours:"",
         departament:"",
         supervisor:"",
         creatAt: new Date().toString(),
@@ -34,7 +36,7 @@ export default function PositionScreen(){
             name:"",
             description:"",
             salary: 0,
-            workHours: "",
+            workHours:"",
             departament:"",
             supervisor:"",
             creatAt: new Date().toString()
@@ -54,11 +56,11 @@ export default function PositionScreen(){
     }
 
     return (
-        <MyView style={styles.container}>
+        <MyView>
             {/*Aqui é TypeScript dentro do front*/}
             <Text>Minha tela dos cargos</Text>
             <View style = {styles.row}>
-                <View style = {styles.form}>
+                <View style={styles.form}>
                     <TextInput 
                         placeholder="Cargo"
                         value = {req.name}
@@ -69,15 +71,19 @@ export default function PositionScreen(){
                         value = {req.description}
                         onChangeText={(text)=> setReq({...req ,description: text })}/>
 
-                    <TextInput 
-                        placeholder="Salário"
-                        value = {(req.salary).toString()}
-                        onChangeText={(text)=> setReq({...req ,salary: Number(text) })}/> 
+                    {/*<CurrencyInput 
+                        placeholder="Salário" />
+                        value = {req.salary}
+                        onChangeText={(text)=> setReq({...req ,salary: text })}/>
 
-                    <TextInput
-                        placeholder="Horas de trabalho" 
+                        {req.salary}*/}
+
+                    {/*<TimeInput 
+                        placeholder="Horas trabalhadas" />
                         value = {req.workHours}
-                        onChangeText={(value:string)=> setReq({...req ,workHours: value })}/>
+                        onChangeText={(text)=> setReq({...req ,workHours: text })}/>
+
+                        {req.workHours}*/}
 
                     <TextInput 
                         placeholder="Departamento"
@@ -89,17 +95,16 @@ export default function PositionScreen(){
                         value = {req.supervisor}
                         onChangeText={(text)=> setReq({...req ,supervisor: text })}/>
 
-                  
+                    {/*<DateTimePickerModal 
+                        placeholder="Data de cadastro" />*/}
 
-                    <Button  title = "Cadastrar" onPress={handleRegister}/>
+                    <Button title = "Cadastrar" onPress={handleRegister}/>
                 </View> 
-                    <MyList
-                        data = {positions}
-                        keyItem = {(item) => item.id.toString()}
+                    <FlatList
+                        data={positions}
+                        keyExtractor={(item) => item.id.toString()}
                         renderItem={({item}) => (
-                            <Myiten style={styles.card}
-                                onEdit={() => editPosition(item.id)}
-                                onDel={() => delPosition(item.id)}>
+                            <View style={styles.card}>
                                 <Text>{item.name}</Text>
                                 <Text>{item.description}</Text>
                                 <Text>{item.salary}</Text>
@@ -108,12 +113,12 @@ export default function PositionScreen(){
                                 <Text>{item.supervisor}</Text>
                                 <Text>{item.creatAt}</Text>
 
-                                {/*<View style = {styles.buttonsContanier}>
+                                <View style = {styles.buttonsContanier}>
                                     <TouchableOpacity onPress={()=> { editPosition(item.id) }}>Edit</TouchableOpacity>
                                     <TouchableOpacity onPress={()=> { delPosition(item.id) }}>Delete</TouchableOpacity>
-                                </View>  MINHA FUNÇÃO DEL E EDIT*/}
+                                </View>
                                    
-                            </Myiten>
+                            </View>
                         )}  />                
                     </View>
 

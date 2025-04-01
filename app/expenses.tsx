@@ -1,12 +1,7 @@
-import React, { useState, Children } from 'react';
-import { View, Text, StyleSheet, TextInput,TouchableOpacity, } from 'react-native' ;
-import Myiten from '../src/components/myItenlist';
+import React, { Children, useState } from 'react';
+import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity, } from 'react-native' ;
+import Myiten from '../src/components/myItenlist'
 import MyList from '../src/components/mylist';
-import MyView from '../src/components/MyView';
-import MyButton from '../src/components/Mybuttons'
-import {Myinput, MyTextArea} from '../src/components/Myinputs';
-import { ScrollView } from 'react-native-gesture-handler';
-
 export default function ExpenseScreen(){
 // aqui é typescript
     const [req, setReq] = useState({
@@ -66,8 +61,7 @@ export default function ExpenseScreen(){
     }
 
     return (
-        
-        <MyView> 
+        <View> 
             {/* aqui é typecript dentro do front */}
             <Text style={styles.title}>tela de despesas</Text>
             <View style={styles.row}>
@@ -86,14 +80,13 @@ export default function ExpenseScreen(){
                     <MyButton onPress={handleRegister} title='Cadastrar'></MyButton>
                 </View>
 
-                <MyList
+                <FlatList
                     data={expense}
-                    keyItem={(item) => item.id.toString()}
+                    keyExtractor={(item) => item.id.toString()}
                     renderItem={({item}) => (
                         <Myiten style={styles.card} 
-                            onEdit={()=> editExpense(item.id)}
-
-                            onDel={() => delExpense(item.id)}
+                            onEdit={()=> editExpense}
+                            onDel={() => delExpense}
                         >
                             <Text style={styles.textlis} >{item.name}</Text>
                             <Text style={styles.textlis} >{item.email}</Text> 
