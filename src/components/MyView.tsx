@@ -41,14 +41,6 @@ const myView: React.FC< MySearchProps > = ({children, style, title}) => {
   });
 
   return (
-<<<<<<< HEAD
-    <ScrollView style={styles.container}>
-      <View style = {styles.tView}>
-      {children}
-      {/* Conteúdo da tela (pode ser adicionado aqui) */}
-      {/* Botão de suporte */}
-      <TouchableOpacity style={styles.suporteButton} onPress={handleSuporte}>      </TouchableOpacity>
-=======
     <ScrollView style={[styles.container, style]}>
       <View>
         <MyTopbar  title = {title ? title: ""} />
@@ -56,7 +48,6 @@ const myView: React.FC< MySearchProps > = ({children, style, title}) => {
       {/* Conteúdo da tela (pode ser adicionado aqui) */}
       {/* Botão de suporte */}
       <MySupport style={styles.suporteButton}/>
->>>>>>> a10f2337e3a9fffc2853af44a6391b7c322824f4
       </View>
     </ScrollView>
   );
