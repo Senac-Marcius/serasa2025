@@ -25,9 +25,8 @@ const MyTopbar: React.FC<MyTopbarProps> = ({ title }) => {
 
                 {/**chamar o da Ane aqui */}
 
-                {/**chamar o do miza aqui */}
             </Appbar.Header>
-            
+            {/**chamar o do miza aqui */}
             {drawerOpen && (
                 <Drawer.Section style={styles.drawerSection}>
                     <Drawer.Item
