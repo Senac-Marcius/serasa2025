@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 
 interface MyTopbarProps {
-    title: string;
+    title?: string;
 }
 
 const MyTopbar: React.FC<MyTopbarProps> = ({ title }) => {
@@ -15,10 +15,9 @@ const MyTopbar: React.FC<MyTopbarProps> = ({ title }) => {
         const [drawerOpen, setDrawerOpen] = useState(false);
     return (
         <View style={styles.container}>
-            <Appbar.Header>
-                <Appbar.Action icon="menu" onPress={() => setDrawerOpen (!drawerOpen)} />
-                <Appbar.Content title={title}/>
-                {/* Anelisa */}
+            <Appbar.Header style={styles.appbar}>
+                <Appbar.Action icon="menu" onPress={() => setDrawerOpen(!drawerOpen)} />
+                <Appbar.Content title={title} titleStyle={styles.title} />
             </Appbar.Header>
             {/* importar do misael */}
              {drawerOpen && (
@@ -81,12 +80,11 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         margin: 10,
     },
-    iconButton: {
-        padding: 8,
-        backgroundColor: '#4A148C', // Roxo escuro
-        borderRadius: 50,
+    appbar: {
+        backgroundColor: '#4A148C',
+        borderRadius: 10,
     },
-    screenName: {
+    title: {
         color: 'white',
         fontSize: 16,
         fontWeight: 'bold',

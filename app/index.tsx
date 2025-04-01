@@ -3,6 +3,8 @@ import { View, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Appbar, Drawer } from 'react-native-paper';
 import { useState } from 'react';
+import MyNotify from '../src/components/Mynotify';
+import MyTopbar from '../src/components/mytopbar';
 
 export default function HomeScreen() {
     const router = useRouter();
@@ -11,10 +13,9 @@ export default function HomeScreen() {
     return (
         <View style={{ flex: 1 }}>
             {/* Menu Hambúrguer no Topo */}
-            <Appbar.Header>
-                <Appbar.Action icon="menu" onPress={() => setDrawerOpen(!drawerOpen)} />
-                <Appbar.Content title="Serasa App" />
-            </Appbar.Header>
+            
+            <MyTopbar title="Bem vindo ao app do Serasa" /> 
+           
 
             {/* Drawer Menu */}
             {drawerOpen && (
@@ -113,6 +114,6 @@ export default function HomeScreen() {
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <Text>Bem-vindo ao Serasa App!</Text>
             </View>
-        </View>
+            </View>
     );  
 }
