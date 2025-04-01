@@ -15,8 +15,201 @@ export default function HomeScreen() {
             {/* Menu Hambúrguer no Topo */}
             
             <MyTopbar title="Bem vindo ao app do Serasa" /> 
-           
 
+            {/* Drawer Menu */}
+            {drawerOpen && (
+                <Drawer.Section style={{ backgroundColor: 'white', padding: 10 }}>
+                    <Drawer.Item
+                        label="Início"
+                        icon="home"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="CATEGORIES"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/categories');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="Area do Aluno"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/students');}}
+                    />
+                    <Drawer.Item
+                        label="Empréstimo"
+                        icon="post"
+                        onPress={() => {setDrawerOpen(false);router.push('/loans');}}
+                    />
+                    <Drawer.Item
+                        label="Calendario"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/calendar');
+                        }}
+                    />
+                    
+                    <Drawer.Item
+                        label="Cursos"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/courses');
+                        }}
+                       
+                    />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <Drawer.Item
+                        label="Documentos"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/documents');
+                        }}
+                    />
+
+                    <Drawer.Item
+                        label="Cursos"
+                        icon="acervo"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/collections');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="receitas"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/revenues');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="Configurações"
+                        icon="cog"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            console.log("Configurações");
+                        }}
+                    />
+                    
+                </Drawer.Section>
+            )}
+
+            {/* Conteúdo da Página */}
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <Text>Bem-vindo ao Serasa App!</Text>
             </View>

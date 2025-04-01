@@ -66,8 +66,10 @@ export default function PositionScreen(){
                         value = {req.name}
                         onChangeText={(text)=> setReq({...req ,name: text })}/>
  
-                    <TextInput 
-                        placeholder="Digite a descrição"
+                    <Myinput 
+                        label="Descrição"
+                        placeholder="Insira uma descrição"
+                        iconName="briefcase"
                         value = {req.description}
                         onChangeText={(text)=> setReq({...req ,description: text })}/>
 
@@ -85,13 +87,17 @@ export default function PositionScreen(){
 
                         {req.workHours}*/}
 
-                    <TextInput 
-                        placeholder="Departamento"
+                    <Myinput 
+                        label="Departamento"
+                        placeholder="Insira um departamento"
+                        iconName="briefcase"
                         value = {req.departament}
                         onChangeText={(text)=> setReq({...req ,departament: text })}/>
 
-                    <TextInput 
-                        placeholder="Supervisor"
+                    <Myinput 
+                        label="Supervisor"
+                        placeholder="Insira um supervisor"
+                        iconName="briefcase"
                         value = {req.supervisor}
                         onChangeText={(text)=> setReq({...req ,supervisor: text })}/>
 
