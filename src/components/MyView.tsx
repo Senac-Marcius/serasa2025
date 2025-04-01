@@ -1,9 +1,5 @@
 import React,{ReactNode} from 'react';
-<<<<<<< HEAD
 import { View, TouchableOpacity, StyleSheet, Dimensions, TextStyle,  } from 'react-native';
-=======
-import { View, TouchableOpacity, StyleSheet, Dimensions, Text } from 'react-native';
->>>>>>> 110bbb8d9ea6eca5b6d50f98a7112071347c5d46
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
 import { Button } from 'react-native-paper';
@@ -16,7 +12,6 @@ interface MySearchProps {
   style?: TextStyle | TextStyle[]; 
   title?: string;
 
-  
 }
 
 const myView: React.FC< MySearchProps > = ({children, style, title}) => { 
@@ -38,30 +33,22 @@ const myView: React.FC< MySearchProps > = ({children, style, title}) => {
       justifyContent: 'center',
       alignItems: 'center',
     },
-    tView: {
+
+    tView:{
       width: width,
       height: height,
     }
   });
 
   return (
-    <ScrollView style={styles.container}>
-<<<<<<< HEAD
+    <ScrollView style={[styles.container, style]}>
       <View>
-        <MyTopbar  title='' />
-=======
-      <Text>Olá componente</Text>
->>>>>>> 110bbb8d9ea6eca5b6d50f98a7112071347c5d46
+        <MyTopbar  title = {title ? title: ""} />
       {children}
       {/* Conteúdo da tela (pode ser adicionado aqui) */}
       {/* Botão de suporte */}
-<<<<<<< HEAD
-      <TouchableOpacity style={styles.suporteButton} onPress={handleSuporte}>      </TouchableOpacity>
+      <MySupport style={styles.suporteButton}/>
       </View>
-=======
-      <TouchableOpacity style={styles.suporteButton} onPress={handleSuporte}>
-      </TouchableOpacity>
->>>>>>> 110bbb8d9ea6eca5b6d50f98a7112071347c5d46
     </ScrollView>
   );
 };

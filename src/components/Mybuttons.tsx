@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
   button_round: {
     backgroundColor: "#813AB1",
     padding: 10,
+    display:"flex",
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
@@ -103,6 +104,7 @@ const styles = StyleSheet.create({
   button_default: {
     backgroundColor: "#813AB1",
     padding: 10,
+    display:"flex",
     borderRadius: 15,
     alignItems: "center",
   },
