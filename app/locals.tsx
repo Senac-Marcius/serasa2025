@@ -83,7 +83,7 @@ export default function LocalScreen(){
                         />                                                                     
                                                                                                         
                         <Myinput
-                        iconName='wolrd'
+                        iconName='wolrd-o'
                         placeholder={ `Digite a sua dimensão em ${unity}:`}
                         value={req.area}
                         label='Dimensão:'
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
         
     },
     buttonsTitle: {
-        backgroundColor: "puple",
+        backgroundColor: "",
     },
     item:{
 
