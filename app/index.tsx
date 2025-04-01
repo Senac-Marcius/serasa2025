@@ -28,11 +28,19 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
-                        label="CATEGORIES"
+                        label="Postagens"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/categories');
+                            router.push('/posts');
+                        }}
+                    />
+                     <Drawer.Item
+                        label="Perfil"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/Myperfil');
                         }}
                     />
                     <Drawer.Item
