@@ -288,28 +288,30 @@ export default function ProjectScreen(){
 const styles = StyleSheet.create({
     contentContainer: {
         padding: 20,
+        alignItems: 'center',
     },
 
     buttonContainer: {
-            alignItems: 'center', // Alinha o botão horizontalmente no centro
-            marginTop: 20,        // Dá um espaço acima do botão
+        alignItems: 'center', // Alinha o botão horizontalmente no centro
+        marginTop: 20,        // Dá um espaço acima do botão
     },
 
     row: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'flex-start',
     },
 
     title: {
         textAlign: 'center',
-        fontSize: 24,
+        fontSize: 25,
         fontWeight: 'bold',
-        marginBottom: 20,
+        marginBottom: 10,
+        alignItems: 'center',
     },
 
     label: {
-        fontSize: 14,
+        fontSize: 18,
         fontFamily: 'Poppins_400Regular',
         
       },
@@ -331,8 +333,7 @@ const styles = StyleSheet.create({
     },
 
     form: {
-        flex: 1,
-        marginRight: 10,
+        width: '80%',
         padding: 20,
         backgroundColor: '#F2F2F2',
         borderRadius: 10,
