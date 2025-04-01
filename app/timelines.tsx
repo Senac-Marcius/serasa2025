@@ -67,7 +67,7 @@ export default function TimelineScreen() {
         setTimelines(list)
     }
 
-    function buscar(){
+    function buscar(){ 
 
     }
 
@@ -78,20 +78,21 @@ export default function TimelineScreen() {
 
     return (
 
-        <MySearch> 
-                icon="magnify" // Ícone de pesquisa do react-native-paper
-                size={20}
-                onPress={onPress}
-                style={{ position: 'absolute', left: 10 }} // Colocando o ícone à esquerda da TextInput
-        </MySearch> 
+        
         
         <MyView> 
             {/*pesquisa */}
+            <MySearch icon="magnify" // Ícone de pesquisa do react-native-paper
+                size={20}
+                onPress={onPress}
+                style={{ position: 'absolute', left: 10 }} >
+            </MySearch> 
+                
+        
 
 
-            </MyCalendar>
-            date='2025-02-01'
-            setDate={(date) => console.log(date)} 
+            </MyCalendar >
+            
 
             </MyCalendar>
 
