@@ -2,7 +2,12 @@
 import React,{ useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
 import  Mytext  from '../src/components/Mytext';
-
+import MyButton from '../src/components/Mybuttons';
+import MyList from '../src/components/mylist';
+import MyView from '../src/components/MyView';
+import Myiten from '../src/components/myItenlist';
+import { Myinput, MyTextArea } from '../src/components/Myinputs';
+//fuction
 export default function CoursesScreen(){
     const [req, setReq] = useState({
         description: '',
@@ -56,61 +61,64 @@ export default function CoursesScreen(){
 
     return (
       <ScrollView style={styles.container}>
-      <View>
+      <MyView>
         <Mytext>Cursos</Mytext>
         <View style={styles.row}>
             <View style={styles.form}>
-                <TextInput
-                    style={styles.input}
-                    placeholder='Descrição:'
+                <MyTextArea
+                    iconName='description'
+                    label="Descrição"
                     value={req.description}
-                    onChangeText={(text) => setReq({...req,description: text})}
-                />
+                    onChangeText={(text) => setReq({...req, description: text})}    
+                    placeholder="Digite a descrição..."       
+                    />
                 
-                <TextInput
-                    style={styles.input}
-                    placeholder='Plano de curso:'
+                <Myinput
+                    iconName='book'
+                    label="Plano de Curso"
                     value={req.Courseplan}
-                    onChangeText={(text) => setReq({...req,Courseplan: text})}
-                />
+                    onChangeText={(text) => setReq({...req, Courseplan: text})}
+                    placeholder="Digite o plano de curso..."
+                     />
                 
-                <TextInput
-                   style={styles.input}
-                   placeholder='Plano de orientação:'
+                <Myinput
+                   iconName='school'
+                   label="Plano de Orientação"
                    value={req.Orientationplan}
                    onChangeText={(text) => setReq({...req,Orientationplan: text})}
+                   placeholder="Digite o plano de orientação..."
                 />
                 
-                <TextInput
-                    style={styles.input}
-                    placeholder='Carga horaria:' 
+                <Myinput
+                    iconName='schedule'
+                    label='Carga horaria:' 
                     value={req.Workload}
                    onChangeText={(text) => setReq({...req,Workload: text})}
+                   placeholder="Digite a carga horária..."
                 />
-                <Button title='CADASTRAR' onPress={handleRegister}/> 
-            </View> 
-            <FlatList
+                <MyButton title="CADASTRAR" onPress={handleRegister} button_type="rect" />
+        </View> 
+            <MyList
           data={CoursesPosts}
-          keyExtractor={(item) => item.id.toString()}
-          style={styles.listContainer}
+          keyItem={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <View style={styles.listItem}>
-              <Text style={styles.listText}>Descrição: {item.description}</Text>
-              <Text style={styles.listText}>Plano: {item.Courseplan}</Text>
-              <Text style={styles.listText}>Orientação: {item.Orientationplan}</Text>
-              <Text style={styles.listText}>Carga: {item.Workload}</Text>
+            <Myiten  style={styles.listItem}
 
-              <View style={styles.buttonsContanier}>
-                <TouchableOpacity onPress={() => {editCourses (item.id)}}>EDIT</TouchableOpacity>
-                <TouchableOpacity onPress={() => {deleteCourses(item.id)}}>DELETE</TouchableOpacity>
-                
-              </View>
+              onEdit={()=> editCourses(item.id)}
+              onDel={()=> deleteCourses(item.id)}
+            >
+              <Mytext style={styles.listText}>Descrição: {item.description}</Mytext>
+              <Mytext style={styles.listText}>Plano: {item.Courseplan}</Mytext>
+              <Mytext style={styles.listText}>Orientação: {item.Orientationplan}</Mytext>
+              <Mytext style={styles.listText}>Carga: {item.Workload}</Mytext>
 
-            </View>
+              
+
+            </Myiten>
           )}
         />
       </View>
-    </View>
+    </MyView>
     </ScrollView>
   );
 }
