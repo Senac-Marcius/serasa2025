@@ -8,15 +8,13 @@ import MyButton from '../src/components/Mybuttons';
 import Myiten from '../src/components/myItenlist';
 import MyView from '../src/components/MyView';
 
-
-
 export default function ScaleScreen(){
     const router = useRouter();
 
     const [req, setReq] = useState({
         id:0,
         day:'',
-        starttime:'',
+        starttime:'', 
         endtime:'',
         creatAt: new Date().toISOString(),
         userId: 0,
