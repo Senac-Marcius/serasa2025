@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   button_capsule: {
+    display:"flex",
     borderRadius: 50,
     backgroundColor: "#813AB1",
     alignItems: "center",
@@ -87,11 +88,13 @@ const styles = StyleSheet.create({
   button_round: {
     backgroundColor: "#813AB1",
     padding: 10,
+    display:"flex",
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
   },
   button_rect: {
+    display:"flex",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#813AB1",
@@ -101,6 +104,7 @@ const styles = StyleSheet.create({
   button_default: {
     backgroundColor: "#813AB1",
     padding: 10,
+    display:"flex",
     borderRadius: 15,
     alignItems: "center",
   },

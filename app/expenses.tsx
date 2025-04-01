@@ -95,8 +95,9 @@ export default function ExpenseScreen(){
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({item}) => (
                         <Myiten style={styles.card} 
-                            onEdit={()=> editExpense}
-                            onDel={() => delExpense}
+                            onEdit={()=> editExpense(item.id)}
+
+                            onDel={() => delExpense(item.id)}
                         >
                             <Text style={styles.textlis} >{item.name}</Text>
                             <Text style={styles.textlis} >{item.url}</Text> 
