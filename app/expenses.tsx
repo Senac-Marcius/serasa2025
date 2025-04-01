@@ -1,12 +1,18 @@
-import React, { Children, useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity, } from 'react-native' ;
-import Myiten from '../src/components/myItenlist'
+import React, { useState, Children } from 'react';
+import { View, Text, StyleSheet, TextInput,TouchableOpacity, } from 'react-native' ;
+import {Myiten, MyCorrelated } from '../src/components/myItenlist';
 import MyList from '../src/components/mylist';
+import MyView from '../src/components/MyView';
+import MyButton from '../src/components/Mybuttons'
+import {Myinput, MyTextArea} from '../src/components/Myinputs';
+import { ScrollView } from 'react-native-gesture-handler';
+
 export default function ExpenseScreen(){
 // aqui é typescript
     const [req, setReq] = useState({
+            contact:"",
             name: '',
-            url: '',
+            email: '',
             description: '',
             id: -1,
             cost: '',
@@ -14,8 +20,9 @@ export default function ExpenseScreen(){
             userId: 0,
     });
     const [expense, setExpense ] = useState<{
+        contact: string,
         name: string,
-        url: string,
+        email: string,
         description: string,
         id: number,
         cost: string,
@@ -25,7 +32,7 @@ export default function ExpenseScreen(){
 
     function handleRegister(){
         if(req.id == -1){
-            const newid = expense.length ? expense[postMessage.length - 1].id + 1 :0;
+            const newid = expense.length ? expense[ expense.length - 1].id + 1 :0;
             const newExpense = {...req, id:newid};
             setExpense([...expense, newExpense]);
         }else{
@@ -33,8 +40,9 @@ export default function ExpenseScreen(){
         }
 
         setReq({
+            contact:"",
             name: '',
-            url: '',
+            email: '',
             description: '',
             id: -1,
             cost: '',
@@ -58,41 +66,29 @@ export default function ExpenseScreen(){
     }
 
     return (
-        <View> 
+        
+        <MyView> 
             {/* aqui é typecript dentro do front */}
             <Text style={styles.title}>tela de despesas</Text>
             <View style={styles.row}>
                 <View style={styles.form}>
-                    <TextInput 
-                        placeholder="nome" 
-                        value={req.name}
-                        onChangeText ={(text) => setReq({...req ,name: text}) }
-                    />
+                    <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text })} placeholder="Nome" label="Nomes:" iconName='' />
 
-                    <TextInput 
-                        placeholder="url"
-                        value={req.url}
-                        onChangeText={(text)=>setReq({...req ,url: text})}
-                    />
+                    <Myinput value={req.contact} onChangeText={(text) => setReq({ ...req, contact: text })} placeholder="(XX) XXXXX-XXXX" label="Contato:" iconName='phone' />    
 
-                    <TextInput
-                        placeholder="description"
-                        value={req.description}
-                        onChangeText={(text)=>setReq({...req ,description: text})}
-                    />
+                    <Myinput value={req.email} onChangeText={(text) => setReq({ ...req, email: text })} placeholder="domain@domain.com" label="Email:" iconName='mail' /> 
 
-                    <TextInput
-                        placeholder="valor"
-                        value={req.cost}
-                        onChangeText ={(text) => setReq({...req ,cost: text}) }
-                    />
+                    <MyTextArea value={req.description} onChangeText={(text)=>setReq({...req ,description: text})} iconName='' placeholder='Descrição'   label=''/>
 
-                    <TouchableOpacity style={styles.buttonRegister} onPress= { handleRegister }>Cadastrar</TouchableOpacity>
+                <Myinput value={req.cost} onChangeText={(text) => setReq({ ...req, cost: text })} placeholder="R$" label="Valores:" iconName='' /> 
+
+
+                    <MyButton onPress={handleRegister} title='Cadastrar'></MyButton>
                 </View>
 
-                <FlatList
+                <MyList
                     data={expense}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
                         <Myiten style={styles.card} 
                             onEdit={()=> editExpense(item.id)}
@@ -100,7 +96,7 @@ export default function ExpenseScreen(){
                             onDel={() => delExpense(item.id)}
                         >
                             <Text style={styles.textlis} >{item.name}</Text>
-                            <Text style={styles.textlis} >{item.url}</Text> 
+                            <Text style={styles.textlis} >{item.email}</Text> 
                             <Text style={styles.textlis} >{item.description}</Text>  
                             <Text style={styles.textlis} >{item.cost}</Text> 
                             <Text style={styles.textlis} >{item.userId}</Text>
@@ -110,7 +106,7 @@ export default function ExpenseScreen(){
                     )}
                 /> 
             </View>
-        </View>
+        </MyView>
     );
 }
 
@@ -148,40 +144,7 @@ const styles = StyleSheet.create({
         color: "#555",
         marginVertical: 4,
       },
-
-      buttonRegister:{
-        backgroundColor: "#ab66f9",
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        borderRadius: 5,
-        color: '#ffffff'
-      },
-      
-      buttonsContainer:{
-       
-        textAlign: 'center',
-        fontSize: 20,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        gap: 20,
-        alignContent: 'space-between',
-        
-      },
-      editButton: {
-        backgroundColor: "#9a47f8",
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        borderRadius: 5,
-        color: '#ffffff'
-     },
-     delButton:{
-        backgroundColor: "#36046e",
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        borderRadius: 5,
-        color: '#ffffff'
-     },
+     
      title:{
         marginBottom: 8,
         fontSize: 30,
@@ -195,11 +158,5 @@ const styles = StyleSheet.create({
         textShadowColor: "rgba(0, 0, 0, 0.2)",
         fontStyle: "italic",
      },
-     titleBase: {
-        backgroundColor: "#222", 
-        paddingVertical: 12, 
-        paddingHorizontal: 24,
-        borderRadius: 8, 
-      },
      
     });
