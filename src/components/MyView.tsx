@@ -12,6 +12,7 @@ interface MySearchProps {
   style?: TextStyle | TextStyle[]; 
   title?: string;
 
+  
 }
 
 const myView: React.FC< MySearchProps > = ({children, style, title}) => { 
@@ -41,9 +42,9 @@ const myView: React.FC< MySearchProps > = ({children, style, title}) => {
   });
 
   return (
-    <ScrollView style={[styles.container, style]}>
+    <ScrollView style={styles.container}>
       <View>
-        <MyTopbar  title = {title ? title: ""} />
+        <MyTopbar  title='' />
       {children}
       {/* Conteúdo da tela (pode ser adicionado aqui) */}
       {/* Botão de suporte */}
