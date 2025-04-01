@@ -3,26 +3,31 @@ import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity }
 import MySupport from '../src/components/Mysupport';
 import MyView from '../src/components/MyView';
 import { ScrollView } from 'react-native-gesture-handler';
-import Myiten from '../src/components/myItenlist';
+import {Myiten, MyCorrelated} from '../src/components/myItenlist';
 import MyList from '../src/components/mylist';
-import {Myinput} from '../src/components/Myinputs';
+import { Myinput, MyCheck } from '../src/components/Myinputs';
 import Mybutton from '../src/components/Mybuttons';
+import MyCalendar from '../src/components/MyCalendar';
+
+
+
 
 export default function LaunchScreen() {
+    const [isChecked, setIsChecked] = useState(true);
     const [req, setReq] = useState({
-        Id: -1,
+        id: -1,
         observation: '',
-        presence: '',
+        presence: true,
         indicator: '',
         note: '',
-        createAt: new Date().toISOString(),
+        createAt: new Date().toString(),
         userId: 0,
     });
 
     const [launchs, setLaunchs] = useState<{
-        Id: number,
+        id: number,
         observation: string,
-        presence: string,
+        presence: boolean,
         indicator: string,
         note: string,
         createAt: string,
@@ -31,22 +36,22 @@ export default function LaunchScreen() {
     }[]>([]);
 
     function handleRegister() {
-        if (req.Id == -1) {
-            const newId = launchs.length ? launchs[launchs.length - 1].Id + 1 : 0;
-            const newLaunch = { ...req, Id: newId };
+        if (req.id == -1) {
+            const newId = launchs.length ? launchs[launchs.length - 1].id + 1 : 0;
+            const newLaunch = { ...req, id: newId };
 
 
             setLaunchs([...launchs, newLaunch])
         } else {
-            setLaunchs(launchs.map(l => (l.Id == req.Id ? req : l)));
+            setLaunchs(launchs.map(l => (l.id == req.id ? req : l)));
 
 
 
         }
         setReq({
-            Id: -1,
+            id: -1,
             observation: '',
-            presence: '',
+            presence: true,
             indicator: '',
             note: '',
             createAt: new Date().toISOString(),
@@ -57,14 +62,14 @@ export default function LaunchScreen() {
     }
 
     function editLaunch(Id: number) {
-        const launch = launchs.find(l => l.Id == Id)
+        const launch = launchs.find(l => l.id == Id)
         if (launch)
             setReq(launch)
 
     }
 
     function delLaunch(Id: number) {
-        const list = launchs.filter(l => l.Id != Id)
+        const list = launchs.filter(l => l.id != Id)
         setLaunchs(list)
 
     }
@@ -73,46 +78,25 @@ export default function LaunchScreen() {
     return (
         <MyView>
 
+            <Mybutton title="turma" onPress={handleRegister} /> {/*simulando select que tenho que pegar da giovana*/}
+            <Mybutton title="disciplina" onPress={handleRegister} />
+            
+            {/*aqui chamar o calendario*/}
+            <MyCalendar
+                    date='2021-10-10'
+                    setDate={(date) => console.log(date)}
+            />
+
+            <Text>Alunos:</Text>
 
             <View style={styles.form}>
-                <Text>Lançamentos de Alunos:</Text>
 
-                <Myinput //Myinput
-                    placeholder="Digite a Observação:"
-                    value={req.observation}
-                    onChangeText={(text) => setReq({ ...req, observation: text })}
-                    label=""
-                    iconName=""
-                />
+               
+
+    
 
 
-                <Myinput
-                    placeholder="Digite a Nota:"
-                    value={req.note}
-                    onChangeText={(text) => setReq({ ...req, note: text })}
-                    label=""
-                    iconName=""
-                />
-
-
-                <Myinput
-                    placeholder="Presença:"
-                    value={req.presence}
-                    onChangeText={(text) => setReq({ ...req, presence: text })}
-                    label=""
-                    iconName=""
-                />
-
-
-                <Myinput
-                    placeholder="Indicador"
-                    value={req.indicator}
-                    onChangeText={(text) => setReq({ ...req, indicator: text })}
-                    label=""
-                    iconName=""
-                />
-
-                <Mybutton title="CADASTRAR" onPress={handleRegister} /> {/*Mybutton*/ }
+                <Mybutton title="Salvar" onPress={handleRegister} /> {/*Mybutton*/}
 
 
 
@@ -120,25 +104,59 @@ export default function LaunchScreen() {
 
             <MyList //Mylist
                 data={launchs}
-                keyItem={(item) => item.Id.toString()}
+                keyItem={(item) => item.id.toString()}
                 renderItem={({ item }) => (
-                    <Myiten //Mylistitem
+
+                    <MyCorrelated //Mylistitem
+                    showEditButton={false} 
+                   showDeleteButton={false}
                         style={styles.card}
                     >
-                        <Text>{item.observation}</Text>
-                        <Text>{item.note}</Text>
-                        <Text>{item.presence}</Text>
-                        <Text>{item.indicator}</Text>
-                        <Text>{item.createAt}</Text>
                         <Text>{item.userId}</Text>
+                        
+                        <MyCheck
+                            label={isChecked ? "Presente" : "Faltou"} checked={isChecked}
+                            onToggle={() => setIsChecked(!isChecked)}
+                        />
 
-                        <View style={styles.buttonsContanier}>
-                            <TouchableOpacity style={styles.buttonedit} onPress={() => { editLaunch(item.Id) }}>EDIT</TouchableOpacity>
-                            <TouchableOpacity style={styles.buttondelete} onPress={() => { delLaunch(item.Id) }}>DELETE</TouchableOpacity>
-                        </View>
-                    
+                        <Myinput //Myinput
+                            placeholder="Digite a Observação:"
+                            value={req.observation}
+                            onChangeText={(text) => {
+                                setReq({ ...req, observation: text });
+                                setLaunchs(launchs.map(l => (l.id == item.id ? req : l)));
+                            }}
+                            label=""
+                            iconName=""
+                        />
 
-                    </Myiten>
+
+                        <Myinput
+                            placeholder="Digite a Nota:"
+                            value={req.note}
+                            onChangeText={(text) => {
+                                setReq({ ...req, note: text });
+                                setLaunchs(launchs.map(l => (l.id == item.id ? req : l)));
+                            }}
+                            label=""
+                            iconName=""
+                        />
+
+
+
+                        <Myinput
+                            placeholder="Indicador"
+                            value={req.indicator}
+                            onChangeText={(text) => {
+                                setReq({ ...req, indicator: text });
+                                setLaunchs(launchs.map(l => (l.id == item.id ? req : l)));
+                            }}
+                            label=""
+                            iconName=""
+                        />
+
+
+                    </MyCorrelated>
 
 
                 )}
@@ -190,7 +208,6 @@ const styles = StyleSheet.create({
 
 
     form: {
-        flex: 1,
         marginRight: 10,
         padding: 20,
         backgroundColor: '#F2F2F2',
@@ -199,6 +216,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
+        height: 800,
     },
 
     card: {
