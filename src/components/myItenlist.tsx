@@ -1,25 +1,11 @@
 import React, { ReactNode } from 'react';
 import { Text, View, TextStyle,TouchableOpacity, ViewStyle, StyleSheet } from 'react-native';
-import MyButton from './Mybuttons';
-
-type RelatedItem = {
-  id: number;
-  name: string;
-};
 
 interface MytextProps {
   children?: ReactNode;
   style?: ViewStyle | ViewStyle[];
-  onEdit?(): void;
+  onEdit?(): void
   onDel?(): void
-}
-
-interface MyCorrelatedprops{
-  children?: ReactNode;
-  style?: ViewStyle | ViewStyle[];
-  onEdit?(): void;
-  onDel?(): void;
-  relatedItems?: RelatedItem[];
 }
 
 const Myiten: React.FC<MytextProps> = ({ children, style, onEdit, onDel }) => {
@@ -27,35 +13,33 @@ const Myiten: React.FC<MytextProps> = ({ children, style, onEdit, onDel }) => {
           <TouchableOpacity style={style}>
             {children}
             <View>
-              <MyButton onPress={onEdit} title='Editar'></MyButton>
-              <MyButton  style={{marginTop: 20 }} onPress={onDel} title='Deletar'></MyButton> 
-
+              <TouchableOpacity style={styles.edit} onPress={onEdit}
+              >Editar
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.del} onPress={onDel}
+              >Deletar
+              </TouchableOpacity> 
             </View>
         </TouchableOpacity>
         );
 }
 
-const MyCorrelated: React.FC<MyCorrelatedprops> = ({ children, style, onEdit, onDel, relatedItems }) => {
-  return(
-    <View>
-    <TouchableOpacity style={style}>
-      {children}
-      <View>
-        <MyButton onPress={onEdit} title="Editar" />
-        <MyButton style={{ marginTop: 20 }} onPress={onDel} title="Deletar" />
-      </View>
-    </TouchableOpacity>
-    <View style={{ marginTop: 20 }}>
-      {relatedItems?.map((item) => (
-        <View key={item.id}>
-          <MyButton title={item.name} onPress={() => console.log(`Selecionar ${item.name}`)} />
-        </View>
-      ))}
-    </View>
-  </View>
-);
-}
-        
-
-export  {Myiten, MyCorrelated}
+export default Myiten;
  
+const styles = StyleSheet.create({
+  edit: {
+
+    backgroundColor: "#3498DB",
+  } as ViewStyle,
+
+  del:{
+    backgroundColor: "#E74C3C",
+  } as ViewStyle,
+
+  buttonText: {
+    color: "#FFF",
+    fontSize: 16,
+    fontWeight: "bold"
+  } as TextStyle,
+  
+})
