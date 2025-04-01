@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, FlatList, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import MySwitch from '../src/components/MySwitch' //nome do arquivo
-import { isEnabled } from 'react-native/Libraries/Performance/Systrace';
+import MyView from '../src/components/MyView';
 //nome da variavel
 
 export default function RecordScreen() {
@@ -80,12 +80,14 @@ export default function RecordScreen() {
             setEditingId(id);// qual id eu quero editar
         }
     };
+
+    const[isEnabled, setIsEnabled] = useState(false)
     
     return (
         
-        <View style={styles.container}>
+        <MyView style={styles.container}>
 
-            <MySwitch /*isEnabled={isEnabled} onToggle={setIsEnabled}*//>
+            <MySwitch isEnabled={isEnabled} onToggle={setIsEnabled} />
                 
 
             <View style={styles.row}>
@@ -171,7 +173,7 @@ export default function RecordScreen() {
                     </ScrollView>
                 </View>
             </View>
-        </View>
+        </MyView>
     );
 }
 
