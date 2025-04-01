@@ -1,145 +1,47 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import MySwitch from '../src/components/MySwitch' //nome do arquivo
+import { View, Text, Button, StyleSheet, FlatList,  ScrollView, TouchableOpacity } from 'react-native';
+//import MySwitch from '../src/components/MySwitch' //nome do arquivo
 import MyView from '../src/components/MyView';
 //nome da variavel
 
 export default function RecordScreen() {
-    // Estados individuais para os inputs
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [rg, setRg] = useState('');
-    const [dateBirth, setDateBirth] = useState('');
-    const [cpf, setCpf] = useState('');
-    const[editingID, setEditingId] = useState<number | -1>(-1);
+    
+    
 
+    // Função para cancelar o envio
+    const handleCancel = (id: number) => {
+    };
 
-    // Estado para armazenar os registros e definir seus tipos
-    const [records, setRecords] = useState<{ 
-        id: number; 
-        name: string; 
-        email: string; 
-        rg: string; 
-        dateBirth: string; 
-        cpf: string; 
-        createAt: string; 
-    }[]>([]);
-
-
-    // Função para adicionar um novo registro
-    const handleRegister = () => {
-        if (!name.trim() || !email.trim() || !rg.trim() || !dateBirth.trim() || !cpf.trim()) {
-            alert('Preencha todos os campos!');
-            return;
-        }
-
-        //se for um item editado, ele deve chamar o registro existente
-        if (editingID !== -1) {
-            setRecords(records.map(record =>
-                record.id === editingID ? {...record, name, email, rg, dateBirth, cpf} : record
-            ));
-            setEditingId(-1);//reset
-        } else{ //senão, ele deve criar um novo registro
-            const newRecord = {
-                id: records.length ? records[records.length - 1].id + 1 : 1,
-                name,
-                email,
-                rg,
-                dateBirth,
-                cpf,
-                createAt: new Date().toString(),
-            };
-
-            setRecords([...records, newRecord]);//armazena o novo registro
-
-        }       
-
+    // Função para fazer o envio
+    const handleUpload = (id: number) => {
         
-        // Resetando os campos após editar, cadastrar, etc..
-        setName('');
-        setEmail('');
-        setRg('');
-        setDateBirth('');
-        setCpf('');
     };
 
-
-    // Função para excluir um registro
-    const deleteRecord = (id: number) => {
-        setRecords(records.filter((record) => record.id !== id));
-    };
-
-    const editRecord = (id: number) => {
-        const record = (records.find((record => record.id === id)));
-        if (record){//vai colocar as informações salvas no vetor de volta no input para editar
-            setName(record.name);
-            setEmail(record.email);
-            setRg(record.rg);
-            setDateBirth(record.dateBirth);
-            setCpf(record.cpf);
-            setEditingId(id);// qual id eu quero editar
-        }
-    };
-
-    const[isEnabled, setIsEnabled] = useState(false)
+    //const[isEnabled, setIsEnabled] = useState(false) ---- useState do Upload
     
     return (
         
         <MyView style={styles.container}>
-
-            <MySwitch isEnabled={isEnabled} onToggle={setIsEnabled} />
-                
+              
 
             <View style={styles.row}>
+
                 <View style={styles.formContainer}>
-                    <Text style={styles.title}>Solicitação de Documentos</Text>
+
+                    <Text style={styles.title}>Documentos</Text>
                     
-                    <TextInput 
-                        style={styles.input} 
-                        placeholder="Nome" 
-                        value={name} 
-                        onChangeText={setName}
-                    />
+                        
+                    <Button title={"Escolha um arquivo para fazer Upload"} color={'#813AB1'} /*onPress={handleUpload}*/ />
+                </View>
 
-
-                    <TextInput 
-                        style={styles.input} 
-                        placeholder="Email" 
-                        value={email} 
-                        onChangeText={setEmail}
-                    />
-
-
-                    <TextInput 
-                        style={styles.input} 
-                        placeholder="RG" 
-                        value={rg} 
-                        onChangeText={(text) => setRg(text.replace(/[^0-9]/g, ''))} 
-                        keyboardType="numeric"
-                    />
-
-
-                    <TextInput 
-                        style={styles.input} 
-                        placeholder="Data de Nascimento" 
-                        value={dateBirth} 
-                        onChangeText={setDateBirth}
-                    />
-
-
-                    <TextInput 
-                        style={styles.input} 
-                        placeholder="CPF" 
-                        value={cpf} 
-                        onChangeText={(text) => setCpf(text.replace(/[^0-9]/g, ''))} 
-                        keyboardType="numeric"
-                    />                    
-                    <Button title={editingID !== -1 ? "Atualizar":"Cadastrar"} color={'#813AB1'} onPress={handleRegister} />
+                <View style={styles.formContainer}>
+                <Button title={"Cancelar"} color={'#813AB1'} /*onPress={}*/ />
+                <Button title={"Fazer Upload"} color={'#813AB1'} /*onPress={}*/ />
                 </View>
                 
 
                 <View style={styles.listContainer}>
-                    <Text style={styles.title}>Registros Cadastrados</Text>
+                    <Text style={styles.title}>Documentos Cadastrados</Text>
                     <ScrollView style={{ flex: 1 }}>
                         <FlatList
                             data={records}
