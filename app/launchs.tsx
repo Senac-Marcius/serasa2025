@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity }
 import MySupport from '../src/components/Mysupport';
 import MyView from '../src/components/MyView';
 import { ScrollView } from 'react-native-gesture-handler';
-import Myiten from '../src/components/myItenlist';
+import {Myiten, MyCorrelated} from '../src/components/myItenlist';
 import MyList from '../src/components/mylist';
 import { Myinput, MyCheck } from '../src/components/Myinputs';
 import Mybutton from '../src/components/Mybuttons';
@@ -107,7 +107,9 @@ export default function LaunchScreen() {
                 keyItem={(item) => item.id.toString()}
                 renderItem={({ item }) => (
 
-                    <Myiten //Mylistitem
+                    <MyCorrelated //Mylistitem
+                    showEditButton={false} 
+                   showDeleteButton={false}
                         style={styles.card}
                     >
                         <Text>{item.userId}</Text>
@@ -154,7 +156,7 @@ export default function LaunchScreen() {
                         />
 
 
-                    </Myiten>
+                    </MyCorrelated>
 
 
                 )}
