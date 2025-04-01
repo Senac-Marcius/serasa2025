@@ -1,5 +1,6 @@
 import React, { useState } from 'react'; 
-import { View, Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity  } from 'react-native';
+import { Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, View  } from 'react-native';
+import MySelect from '../src/components/Myselect' 
 
 export default function LocalScreen(){
 
@@ -53,17 +54,21 @@ export default function LocalScreen(){
     function delLocal(id:number){
         const list = locals.filter(l => l.id != id)
         if(list)
-            setLocals(list)
+            setLocals(list)           
     }
 
-    return (  //  *  sempre retornará um html.     * view com o "v" minúsculo é utilizado, apenas, no HTML puro.     * Para comentar no HYML, é necessário utilizar "{/* */}"
-        <View>
+    const [unity, setUnit] = useState("metros")              /* exemplo do código de SELECT para copiar */
+    
+
+    return (
+
             <View style={styles.container}>
 
-            <Text style={styles.title}>TELA DOS LOCAIS</Text>
+            
 
                 <View style={styles.row}>
                     <View style={styles.formContainer}>
+                        <Text style={styles.title}>LOCAL</Text>
                        
                         <TextInput 
                         placeholder= "Digite o nome do local:"                                 
@@ -72,10 +77,23 @@ export default function LocalScreen(){
                         />  
 
                         <TextInput 
-                        placeholder= "Digite a área do local em metros:"
+                        placeholder={ `Digite a área do local em ${unity}:`}
                         value={req.area}
-                        onChangeText={(n) => setReq({...req, area: n })}                   
-                        />                                                              
+                        onChangeText={(n) => setReq({...req, area: n })}  
+                                    
+                        />         
+                      
+
+                        <MySelect label={unity} setLabel={setUnit}  
+                        list={            
+                            [
+                                {key:0, option: 'x metros'},             /* exemplo do código de SELECT para copiar */
+                                {key:1, option: 'x cm'},
+                            ]
+                        } />  
+
+
+
                         <TextInput 
                         placeholder= "Digite a sua descrição:"
                         value={req.description}
@@ -90,6 +108,114 @@ export default function LocalScreen(){
                         <Button title='Cadastrar' onPress={ handleRegister } />         
 
                     </View>
+
+                    <View style={styles.formContainer}>
+                        <Text style={styles.title}>Pesquisa de locais:</Text>
+                       
+                       <TextInput 
+                       placeholder= "Nome:"                                 
+                       value={req.name}
+                       onChangeText={(t) => setReq({...req, name: t })}                    
+                       />  
+                                                             
+                       <TextInput 
+                       placeholder= "Opção 1"
+                       value={req.description}
+                       onChangeText={(t) => setReq({...req, description: t })}
+                       /> 
+
+                       <TextInput placeholder= "Opção 2"
+                       value={req.adress}
+                       onChangeText={(t) => setReq({...req, adress: t })}
+                       />
+
+                        <TextInput placeholder= "Opção 3"
+                       value={req.adress}
+                       onChangeText={(t) => setReq({...req, adress: t })}
+                       />
+
+
+
+
+                        <TextInput 
+                       placeholder= "Dimensão:"                                 
+                       value={req.name}
+                       onChangeText={(t) => setReq({...req, name: t })}                    
+                       />  
+                                                             
+                       <TextInput 
+                       placeholder= "Opção 1"
+                       value={req.description}
+                       onChangeText={(t) => setReq({...req, description: t })}
+                       /> 
+
+                       <TextInput placeholder= "Opção 2"
+                       value={req.adress}
+                       onChangeText={(t) => setReq({...req, adress: t })}
+                       />
+
+                        <TextInput placeholder= "Opção 3"
+                       value={req.adress}
+                       onChangeText={(t) => setReq({...req, adress: t })}
+                       />
+                       
+
+
+
+                       <TextInput 
+                       placeholder= "Descrição:"                                 
+                       value={req.name}
+                       onChangeText={(t) => setReq({...req, name: t })}                    
+                       />  
+                                                             
+                       <TextInput 
+                       placeholder= "Opção 1"
+                       value={req.description}
+                       onChangeText={(t) => setReq({...req, description: t })}
+                       /> 
+
+                       <TextInput placeholder= "Opção 2"
+                       value={req.adress}
+                       onChangeText={(t) => setReq({...req, adress: t })}
+                       />
+
+                        <TextInput placeholder= "Opção 3"
+                       value={req.adress}
+                       onChangeText={(t) => setReq({...req, adress: t })}
+                       />
+                       
+
+
+
+                       <TextInput 
+                       placeholder= "Endereço:"                                 
+                       value={req.name}
+                       onChangeText={(t) => setReq({...req, name: t })}                    
+                       />  
+                                                             
+                       <TextInput 
+                       placeholder= "Opção 1"
+                       value={req.description}
+                       onChangeText={(t) => setReq({...req, description: t })}
+                       /> 
+
+                       <TextInput placeholder= "Opção 2"
+                       value={req.adress}
+                       onChangeText={(t) => setReq({...req, adress: t })}
+                       />
+
+                        <TextInput placeholder= "Opção 3"
+                       value={req.adress}
+                       onChangeText={(t) => setReq({...req, adress: t })}
+                       />
+
+                </View>
+
+                <View style={styles.row}>
+                    
+                        
+                </View>
+
                                         
                     <FlatList                         
                         data={locals}                   
@@ -101,20 +227,21 @@ export default function LocalScreen(){
                                 <Text style={styles.label} > {item.area} </Text>
                                 <Text style={styles.label} > {item.description} </Text>
                                 <Text style={styles.label} > {item.createAt} </Text>
-
-
-
+                            
                                 <View style={styles.buttonsContainer}>
                                     <TouchableOpacity style={styles.edit} onPress={ () => {editLocal(item.id)} }>edit</TouchableOpacity>
                                     <TouchableOpacity style={styles.del} onPress={ () => (delLocal(item.id))}>del</TouchableOpacity>
+                                  
+
                                 </View>
 
                             </View>
                         ) }
                     />
-                </View>    
+                    
+                </View>            
             </View>  
-        </View> 
+       
         
     )   
 }               
@@ -123,8 +250,7 @@ export default function LocalScreen(){
 
 const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos funções que criam estilos para fontes
 
-    
-     edit: {
+    edit: {
         flex: 5,
         marginRight: 15,
         padding: 10,
@@ -147,60 +273,72 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
         shadowRadius: 7,
     },
     container: {
-        flex: 20,
+        flex: 1000,
         padding: 15,
-        backgroundColor: '#F2F2F2',
+        backgroundColor: "gray", 
+    },
+    title:{
+        fontSize: 24,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: "black",
+        backgroundColor: "white",
+        padding: 10,
+        borderRadius: 5,
+       
     },
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
+        backgroundColor: "gray"
 
-    },
-    formContainer: {
-        flex: 5,
-        marginRight: 50,
-        padding: 25,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 15,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 7,
     },
     form: {
         flex: 6,
         marginRight: 15,
         padding: 50,
-        backgroundColor: '#F2F2F2',
+        backgroundColor: "black",
         borderRadius: 15,
-        shadowColor: '#000',
+        shadowColor: "black",
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 3, height: 4 },
+        shadowRadius: 7,
+    },
+
+    formContainer: {
+        flex: 5,
+        marginRight: 50,
+        padding: 10,
+        backgroundColor: "white",
+        borderRadius: 10,
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 7,
     },
+    input: {
+        borderBottomWidth: 1,
+        borderColor: "black",
+        marginBottom: 10,
+        paddingVertical: 4,
+    },
     buttonsContainer: {
         flex: 100,
         padding: 50,
-        backgroundColor: '#F2F2F2',
+        backgroundColor: "white",
         justifyContent: 'space-between',
         alignItems: 'flex-start',
         
     },
-    title:{
-        fontSize: 22,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 20,
-        color: "green"
-        
+    buttonsTitle: {
+        backgroundColor: "puple",
     },
     item:{
 
     },
     label:{
-        color: "blue",
+        color: "black",
     }
 
-})
+}) 
 
