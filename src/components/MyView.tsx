@@ -1,6 +1,9 @@
-
 import React,{ReactNode} from 'react';
+<<<<<<< HEAD
 import { View, TouchableOpacity, StyleSheet, Dimensions, TextStyle,  } from 'react-native';
+=======
+import { View, TouchableOpacity, StyleSheet, Dimensions, Text } from 'react-native';
+>>>>>>> 110bbb8d9ea6eca5b6d50f98a7112071347c5d46
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
 import { Button } from 'react-native-paper';
@@ -20,6 +23,7 @@ const myView: React.FC< MySearchProps > = ({children, style, title}) => {
  
   const { width, height } = Dimensions.get('window');
 
+  
   const styles = StyleSheet.create({
     container: {
       flex: 1, 
@@ -42,13 +46,22 @@ const myView: React.FC< MySearchProps > = ({children, style, title}) => {
 
   return (
     <ScrollView style={styles.container}>
+<<<<<<< HEAD
       <View>
         <MyTopbar  title='' />
+=======
+      <Text>Olá componente</Text>
+>>>>>>> 110bbb8d9ea6eca5b6d50f98a7112071347c5d46
       {children}
       {/* Conteúdo da tela (pode ser adicionado aqui) */}
       {/* Botão de suporte */}
+<<<<<<< HEAD
       <TouchableOpacity style={styles.suporteButton} onPress={handleSuporte}>      </TouchableOpacity>
       </View>
+=======
+      <TouchableOpacity style={styles.suporteButton} onPress={handleSuporte}>
+      </TouchableOpacity>
+>>>>>>> 110bbb8d9ea6eca5b6d50f98a7112071347c5d46
     </ScrollView>
   );
 };
