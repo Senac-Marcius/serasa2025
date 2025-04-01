@@ -20,7 +20,6 @@ const myView: React.FC< MySearchProps > = ({children, style, title}) => {
  
   const { width, height } = Dimensions.get('window');
 
-  
   const styles = StyleSheet.create({
     container: {
       flex: 1, 
@@ -35,8 +34,7 @@ const myView: React.FC< MySearchProps > = ({children, style, title}) => {
       justifyContent: 'center',
       alignItems: 'center',
     },
-
-    tView:{
+    tView: {
       width: width,
       height: height,
     }
