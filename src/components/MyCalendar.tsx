@@ -47,12 +47,14 @@ return (
         {date && (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <TouchableOpacity onPress={()=> {setOpen(true)}}>
+            
              <Myinput
                 value={`Data: ${date}`}
                 onChangeText={(newDate) => setDate(newDate)}
                 label= {"Digite a Data:"}
-                iconName="calendar"
+                iconName= "square"
               />
+              <FaCalendarDays style={{ marginRight: "8px" }} />
             </TouchableOpacity>
             </View>
         )}
