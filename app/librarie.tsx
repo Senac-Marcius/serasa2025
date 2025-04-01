@@ -11,7 +11,7 @@ import MyButton from '../src/components/Mybuttons';
 import MyModal2 from '../src/components/Mymodal';
 import MyView from '../src/components/MyView';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
-import { Myselect } from '../src/components/Myselect';
+import  MySelect  from '../src/components/Myselect'; 
 
 
 export default function ItemScreen() { // aqui é TS
@@ -226,7 +226,8 @@ export default function ItemScreen() { // aqui é TS
         router.push('/librarie-home');
     };
 
-     const [unity, setUnit] = useState("texto") 
+     const [unity, setUnit] = useState('jfjfdf')
+    
 
     return ( //encapsulamento
         <MyView>
@@ -274,31 +275,16 @@ export default function ItemScreen() { // aqui é TS
                                 <>
                                     <MySelect label={unity} setLabel={setUnit}  
                                     list={            
-                                        [
-                                            {key:0, option: 'x metros'},             /* exemplo do código de SELECT para copiar */
-                                            {key:1, option: 'x cm'},
+                                        [           
+                                            {key:0, option: 'Livro'},
+                                            {key:1, option: 'Publicação Seriada'},
+                                            {key:2, option: 'Artigo'},
+                                            {key:3, option: 'Audiolivro'},
+                                            {key:4, option: 'Ebook'},
+                                            {key:5, option: 'Mapa'},
+                                            {key:6, option: 'Outros'},
                                         ]
-                                    } />  
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    style={styles.picker}
-                                        selectedValue={req.typology}
-                                        onValueChange={(itemValue) => setReq({ ...req, typology: itemValue })}
-                                    >
-                                        <Picker.Item label="Selecionar Tipologia" value="" />
-                                        <Picker.Item label="Livro" value="Livro" />
-                                        <Picker.Item label="Publicação Seriada" value="Publicação Seriada" />
-                                        <Picker.Item label="Artigo" value="Artigo" />
-                                        <Picker.Item label="Audiolivro" value="Audiolivro" />
-                                        <Picker.Item label="Ebook" value="Ebook" />
-                                        <Picker.Item label="Mapa" value="Mapa" />
-                                        <Picker.Item label="Outros" value="Outros" />
-                                    <Myselect/>
+                                    } />     
                                     <Myinput
                                         placeholder="Título"
                                         value={req.title}
@@ -323,16 +309,15 @@ export default function ItemScreen() { // aqui é TS
                                         onChangeText={(text) => setReq({ ...req, translation: text })}
                                         label=""  iconName=""
                                     />
-                                    <Picker style={styles.picker}
-                                        selectedValue={req.language}
-                                        onValueChange={(itemValue) => setReq({ ...req, language: itemValue })}
-                                    >
-                                        <Picker.Item label="Selecionar Idioma" value="" />
-                                        <Picker.Item label="Português" value="Português" />
-                                        <Picker.Item label="Inglês" value="Inglês" />
-                                        <Picker.Item label="Espanhol" value="Espanhol" />
-                                        <Picker.Item label="Francês" value="Francês" />
-                                    </Picker>
+                                    <MySelect label={unity} setLabel={setUnit}  
+                                    list={            
+                                        [           
+                                            {key:0, option: 'Português'},
+                                            {key:1, option: 'Inglês'},
+                                            {key:2, option: 'Espanhol'},
+                                            {key:3, option: 'Francês'}
+                                        ]
+                                    } />     
                                     <MyButton
                                         title="Selecionar Imagem"
                                         onPress={pickImage}
@@ -385,14 +370,13 @@ export default function ItemScreen() { // aqui é TS
                                 {/* outros campos de identificação */}
                             {activeTab === 2 && (
                                 <>
-                                    <Picker style={styles.picker}
-                                        selectedValue={req.format}
-                                        onValueChange={(itemValue) => setReq({ ...req, format: itemValue })}
-                                    >
-                                        <Picker.Item label="Selecionar Formato" value="" />
-                                        <Picker.Item label="Físico" value="Físico" />
-                                        <Picker.Item label="Digital" value="Digital" />
-                                    </Picker>
+                                    <MySelect label={unity} setLabel={setUnit}  
+                                    list={            
+                                        [           
+                                            {key:0, option: 'Físico'},
+                                            {key:1, option: 'Digital'},
+                                        ]
+                                    } />
                                     <Myinput 
                                         placeholder="Número de Páginas"
                                         value={req.numberPages}
