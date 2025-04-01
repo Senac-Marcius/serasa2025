@@ -73,16 +73,23 @@ export default function TimelineScreen() {
 
     const [buscar,setBusca] = useState('');
 
-    
+
 {/*MyView tela do rabelo */}    
 
     return (
+
+        <MySearch> 
+                icon="magnify" // Ícone de pesquisa do react-native-paper
+                size={20}
+                onPress={onPress}
+                style={{ position: 'absolute', left: 10 }} // Colocando o ícone à esquerda da TextInput
+        </MySearch> 
         
-        <MyView>
+        <MyView> 
             {/*pesquisa */}
 
 
-            <MyCalendar>
+            </MyCalendar>
             date='2025-02-01'
             setDate={(date) => console.log(date)} 
 
@@ -90,6 +97,7 @@ export default function TimelineScreen() {
 
 
             {/* aqui é typescript dentro do front */}
+
             <text>Meu Cronograma</text>
             <View style={styles.row}>
                 <View style={styles.form}>
