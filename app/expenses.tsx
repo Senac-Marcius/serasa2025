@@ -1,6 +1,6 @@
 import React, { useState, Children } from 'react';
 import { View, Text, StyleSheet, TextInput,TouchableOpacity, } from 'react-native' ;
-import Myiten from '../src/components/myItenlist';
+import {Myiten, MyCorrelated } from '../src/components/myItenlist';
 import MyList from '../src/components/mylist';
 import MyView from '../src/components/MyView';
 import MyButton from '../src/components/Mybuttons'
@@ -90,7 +90,7 @@ export default function ExpenseScreen(){
                     data={expense}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
-                        <Myiten style={styles.card} 
+                        <MyCorrelated style={styles.card} 
                             onEdit={()=> editExpense(item.id)}
 
                             onDel={() => delExpense(item.id)}
@@ -102,7 +102,7 @@ export default function ExpenseScreen(){
                             <Text style={styles.textlis} >{item.userId}</Text>
                             
     
-                        </Myiten>
+                        </MyCorrelated>
                     )}
                 /> 
             </View>

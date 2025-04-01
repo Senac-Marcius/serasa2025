@@ -28,11 +28,19 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
-                        label="CATEGORIES"
+                        label="Postagens"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/categories');
+                            router.push('/posts');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="Orçamentos"
+                        icon="budget"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/budgets');
                         }}
                     />
                      <Drawer.Item
@@ -52,6 +60,14 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
+                        label="Area do Aluno"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/students');
+                        }}
+                    />
+                    <Drawer.Item
                         label="Cursos"
                         icon="post"
                         onPress={() => {
@@ -59,6 +75,113 @@ export default function HomeScreen() {
                             router.push('/courses');
                         }}
                     />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     <Drawer.Item
                         label="Cursos"
                         icon="acervo"
@@ -72,9 +195,10 @@ export default function HomeScreen() {
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/expenses');
+                            router.push('/documents');
                         }}
                     />
+
                     <Drawer.Item
                         label="Configurações"
                         icon="cog"
