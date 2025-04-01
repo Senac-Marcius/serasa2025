@@ -15,8 +15,6 @@ export default function HomeScreen() {
             <MyTopbar title="Bem vindo ao app do Serasa"  /> 
            
 
-<<<<<<< HEAD
-=======
             {/* Drawer Menu */}
             {drawerOpen && (
                 <Drawer.Section style={{ backgroundColor: 'white', padding: 10 }}>
@@ -77,7 +75,6 @@ export default function HomeScreen() {
             )}
 
             {/* Conteúdo da Página */}
->>>>>>> a10f2337e3a9fffc2853af44a6391b7c322824f4
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <Text>Bem-vindo ao Serasa App!</Text>
             </View>
