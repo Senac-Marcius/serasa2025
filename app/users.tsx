@@ -1,10 +1,24 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Button, FlatList } from 'react-native';
+import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs'
+import MyView from '../src/components/MyView';
+import MyList from '../src/components/mylist';
+import { ScrollView } from 'react-native-gesture-handler';
+import MyButton from '../src/components/Mybuttons';
+import { Image } from 'react-native';
+import Myiten from '../src/components/myItenlist'
 
-
-
+// Define o estado inicial como false
+//isChecked = valor atual da váriavel, SetIsChecked ele altera o valor da isChecked
+//useState(false), define o valor inicial do isChecked como true
 
 export default function UserScreen() {
+
+    const [isChecked, setIsChecked] = useState(true);
+    const [showForm, setShowForm] = useState(false);
+    const [showUsers, setShowUsers] = useState(false);
+
+
     const [req, setReq] = useState({
         name: '',
         password: '',
@@ -34,16 +48,16 @@ export default function UserScreen() {
     }[]>([])
 
     function handleRegister() {
-        if(req.id == -1){
-            const newId = users.length ? users[users.length - 1].id +1:0
-            const newUser = {...req, id:newId}
+        if (req.id == -1) {
+            const newId = users.length ? users[users.length - 1].id + 1 : 0
+            const newUser = { ...req, id: newId }
             setUsers([...users, newUser])
 
-        }else{
-            setUsers(users.map(p=>(p.id == req.id ? req:p)))
+        } else {
+            setUsers(users.map(p => (p.id == req.id ? req : p)))
 
         }
-        
+
         setReq({
             name: '',
             password: '',
@@ -58,174 +72,207 @@ export default function UserScreen() {
         })
 
     }
-    function editUser(id:number){
+    function editUser(id: number) {
         let user = users.find(u => u.id == id)
-        if(user)
+        if (user)
             setReq(user)
 
 
     }
 
-    function deleteUser(id:number){
+    function deleteUser(id: number) {
         const list = users.filter(u => u.id != id)
-        if(list)
+        if (list)
             setUsers(list)
-
     }
 
     //criar outras funções, sempre retorna html
     //aqui é typescript
-    return (
-        <View>
 
-            <View style={styles.row}>
+
+    //CHECKBOX:
+    //setIsChecked: é uma função usada para atualizar o estado de isChecked.
+    //!isChecked: o operador ! inverte o valor atual de isChecked. Se isChecked era true (checkbox marcada), ele se torna false (checkbox desmarcada), e vice-versa.
+    return (
+        <ScrollView>
+
+            <MyView>
+
 
                 <View style={styles.form}>
+                    <Text style={styles.TextIntroducao}>Cadastro de usuários</Text>
+                    <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/8307/8307575.png' }} style={styles.image} />
+                    
+ 
+                    {/* Botão para abrir o formulário */}
+                    {!showForm && (
+                        <TouchableOpacity style={styles.startButton} onPress={() => setShowForm(true)}>
+                            <Text style={styles.buttonText}>INICIAR CADASTRO</Text>
+                        </TouchableOpacity>
+                    )}
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Nome:"
-                        value={req.name} //O atributo value vincula o campo de texto ao estado name
-                        onChangeText={(text) => setReq({ ...req, name: text })} //Ele recebe o texto digitado pelo usuário como argumento e o passa para a função setName
+                    {/* Botão para mostrar registro de usuários */}
 
-                    />
-
-
-
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Senha:"
-                        value={req.password} //O atributo value vincula o campo de texto ao estado name
-                        onChangeText={(text) => setReq({ ...req, password: text })} //Ele recebe o texto digitado pelo usuário como argumento e o passa para a função setName
-
-                    />
+                    <TouchableOpacity style={styles.startRegistros} onPress={() => setShowUsers(!showUsers)}>
+                        <Text style={styles.buttonText}>{showUsers ? "Ocultar Registro de Usuários" : "REGISTRO DE USERS"}</Text>
+                    </TouchableOpacity>
 
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="CPF:"
-                        value={req.cpf} //O atributo value vincula o campo de texto ao estado name
-                        onChangeText={(text) => setReq({ ...req, cpf: text })}
-                    />
+                    {/* Exibir o formulário somente se showForm for true */}
+                    {showForm && (
+                        <View style={styles.formContainer}>
+                            <View style={styles.form}>
+                                <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text })} placeholder="Digite seu nome..." label="Login" iconName='person' />
+                                <Myinput value={req.password} onChangeText={(text) => setReq({ ...req, password: text })} placeholder="Digite a sua senha..." label="Password" iconName='password' />
+                                <Myinput value={req.cpf} onChangeText={(text) => setReq({ ...req, cpf: text })} placeholder="Digite o seu CPF" label="CPF:" iconName='article' />
+                                <Myinput value={req.age} onChangeText={(text) => setReq({ ...req, age: text })} placeholder="Digite a sua idade" label="Idade:" iconName='celebration' />
+                                <Myinput value={req.contact} onChangeText={(text) => setReq({ ...req, contact: text })} placeholder="(XX) XXXXX-XXXX" label="Contato:" iconName='phone' />
+                                <Myinput value={req.email} onChangeText={(text) => setReq({ ...req, email: text })} placeholder="domain@domain.com" label="Email:" iconName='mail' />
+                                <Myinput value={req.address} onChangeText={(text) => setReq({ ...req, address: text })} placeholder="Digite o seu endereço" label="Endereço" iconName='house' />
+
+                                <MyButton
+                                    title="CADASTRAR"
+                                    onPress={handleRegister}
+                                    button_type="round"
+                                    style={styles.button_round}
+                                />
+
+                                {/* Botão para fechar o formulário */}
+                                <TouchableOpacity style={styles.closeButton} onPress={() => setShowForm(false)}>
+                                    <Text style={styles.buttonText}>Cancelar</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    )}
+
+                    {/* Lista de usuários cadastrados */}
+                    {showUsers && (
+                        <MyList
+                            data={users}
+                            keyItem={(item) => item.id.toString()}
+                            renderItem={({ item }) => (
+                                <View style={styles.itemContainer}>
+
+                                    <Text style={styles.itemText}>Nome: {item.name}</Text>
+                                    <Text style={styles.itemText}>CPF: {item.cpf}</Text>
+                                    <Text style={styles.itemText}>Email: {item.email}</Text>
+                                    <Text style={styles.itemText}>Idade: {item.age}</Text>
+                                    <Text style={styles.itemText}>Endereço: {item.address}</Text>
+                                    <Text style={styles.itemText}>Contato: {item.contact}</Text>
+                                    <Text style={styles.itemText}>Criação: {item.createAt}</Text>
+
+                                    <View style={styles.buttonsContainer}>
+                                        <TouchableOpacity style={styles.deleteButton} onPress={() => deleteUser(item.id)}>
+                                            <Text style={styles.buttonText}>X</Text>
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity style={styles.editButton} onPress={() => editUser(item.id)}>
+                                            <Text style={styles.buttonText}>Edit</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            )}
 
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Idade:"
-                        value={req.age} //O atributo value vincula o campo de texto ao estado name
-                        onChangeText={(text) => setReq({ ...req, age: text })}
-                    />
-
-
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Contato:"
-                        value={req.contact} //O atributo value vincula o campo de texto ao estado name
-                        onChangeText={(text) => setReq({ ...req, contact: text })}
-                    />
-
-
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Email:"
-                        value={req.email} //O atributo value vincula o campo de texto ao estado name
-                        onChangeText={(text) => setReq({ ...req, email: text })}
-
-                    />
-
-
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Endereço:"
-                        value={req.address} //O atributo value vincula o campo de texto ao estado name
-                        onChangeText={(text) => setReq({ ...req, address: text })}
-                    />
-
-
-                    <Button title='CADASTRAR' color="purple" onPress={handleRegister} />
-
+                        />
+                    )}
 
                 </View>
 
-                <FlatList
-                    data={users}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <View style={styles.itemContainer}>
-                            <Text style={styles.itemText}>Nome: {item.name}</Text>
-                            <Text style={styles.itemText}>CPF: {item.cpf}</Text>
-                            <Text style={styles.itemText}>Email: {item.email}</Text>
-                            <Text style={styles.itemText}>Idade: {item.age}</Text>
-                            <Text style={styles.itemText}>Endereço: {item.address}</Text>
-                            <Text style={styles.itemText}>Contato: {item.contact}</Text>
-                            <Text style={styles.itemText}>Criação: {item.createAt}</Text>
-
-                            <View style={styles.buttonsContainer}>
-
-                                <TouchableOpacity style={styles.deleteButton} onPress={() => {deleteUser(item.id)}}>
-                                <Text style={styles.buttonText}>X</Text>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity style={styles.editButton} onPress={() => {editUser(item.id)}}>
-                                <Text style={styles.buttonText}>Edit</Text>
-
-                                </TouchableOpacity>
-
-                            </View>
-
-                        </View>
-
-
-                    )}
-                />
-
-            </View>
-
-        </View>
-
+            </MyView>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
+    myView: {
+        backgroundColor: 'purple',
 
     },
-
+    formContainer: {
+        //formulário que contém os itens
+        backgroundColor: '#D2BBF2',
+        borderWidth: 2,
+        borderColor: 'purple',
+        shadowColor: 'purple',
+        shadowOffset: { width: 2, height: 1 },
+        shadowOpacity: 0.6,
+        shadowRadius: 4,
+        alignItems: 'center',
+        // Ocupa toda a largura disponível
+    },
     form: {
-        flex: 1,
-        marginRight: 10,
+        //engloba a imagem e o forms
         padding: 20,
-        backgroundColor: 'white',
+        backgroundColor: '',
         borderRadius: 10,
         shadowColor: '#000',
         shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-        marginLeft: 50,
-        marginTop: 50,
-
+        width: '100%', // Para evitar que fique muito estreito
+        maxWidth: 500, // Define um limite máximo
+        alignSelf: 'center', // Garante que fique centralizado
     },
 
-
     itemContainer: {
-        padding: 15,
+        padding: 20,
         marginBottom: 5,
-        borderRadius: 30,
-        backgroundColor: 'white',
+        borderRadius: 10,
+        backgroundColor: '#fffff',
         borderColor: 'purple',
         borderWidth: 0.1,
         shadowColor: 'purple',
         shadowOffset: { width: 1, height: 10 },
         shadowOpacity: 0.5,
         shadowRadius: 10,
-        marginLeft: 50,
-        marginRight: 50,
-        marginTop: 50,
-        width: 500
-
+        width: 450,
+    },
+    startButton: {
+        backgroundColor: '#813AB1',
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+        marginVertical: 20,
+    },
+    startRegistros: {
+        backgroundColor: '#BFBFBF',
+        padding: 10,
+        color: '',
+        borderRadius: 10,
+        alignItems: 'center',
+        marginVertical: 2,
+    },
+    closeButton: {
+        backgroundColor: '#d9534f',
+        padding: 10,
+        borderRadius: 10,
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    button_round: {
+        backgroundColor: "#813AB1",
+        padding: 10,
+        borderRadius: 20,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    TextIntroducao: {
+        color: '#6A1B9A',
+        fontSize: 35,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        borderRadius: 20,
+        backgroundColor: 'white',
+        borderColor: 'purple',
+        borderWidth: 0.5,
+        shadowColor: 'purple',
+        shadowOffset: { width: 2, height: 2 },
+        shadowOpacity: 0.6,
+        shadowRadius: 4,
     },
 
     itemText: {
@@ -233,47 +280,37 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginBottom: 5,
     },
-    input: {
-        height: 30,
-        borderColor: '#ddd',
-        borderWidth: 1,
-        borderRadius: 5,
-        marginBottom: 15,
-        paddingLeft: 10,
-        fontSize: 16,
-        backgroundColor: '#f9f9f9',
-    },
-
     buttonsContainer: {
         flexDirection: 'row',
-        gap: 20
+        gap: 20,
     },
-
     deleteButton: {
-        backgroundColor: 'red', // Cor do botão de editar
+        backgroundColor: 'red',
         paddingVertical: 12,
         paddingHorizontal: 24,
-        borderRadius: 30, // Bordas arredondadas
-        marginBottom: 10,
+        borderRadius: 30,
         alignItems: 'center',
     },
-
     editButton: {
         backgroundColor: '#281259',
         paddingVertical: 12,
         paddingHorizontal: 24,
-        borderRadius: 30, 
-        marginBottom: 10,
+        borderRadius: 30,
         alignItems: 'center',
-
     },
-    buttonText: {
-        color: '#fff', 
-        fontSize: 16,
-        fontWeight: 'bold',
+    image: {
+        width: '100%', // Ajusta a largura para 100% do contêiner
+        height: 300, // Ajusta a altura conforme necessário
+        resizeMode: 'contain', // Ajusta a imagem para caber no espaço
+        marginBottom: 20, // Adiciona um espaço entre a imagem e o formulário
     }
 
+});
 
 
 
-})
+
+
+
+
+

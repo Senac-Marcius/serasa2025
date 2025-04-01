@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity} from 'react-native';
- 
+import MyTopbar from '../src/components/mytopbar';
+
 export default function CalendarsScreen(){
 //aqui é typescript
     const [req,setReq] = useState({
@@ -52,9 +53,9 @@ function delCalendar (id:number){
 
 return (
     <View>
-        Olá Aluno! 
+        <MyTopbar />
         {/*aqui é typescript dentro do front*/}
-        <Text>Tela de Cronograma</Text>
+        <Text>Informações sobre o curso</Text>
         <View style={styles.row}>
             <View style ={styles.form}>
                 
@@ -85,8 +86,8 @@ return (
                         <Text style ={styles.item}>Periodo: {item.period}</Text>
                     
                         <View style={styles.buttonsI}>
-                            <TouchableOpacity onPress={ () => {editCalendar(item.id)} }>EDIT</TouchableOpacity>
-                            <TouchableOpacity onPress={ () => {delCalendar(item.id)} }>DELET</TouchableOpacity>
+                            <TouchableOpacity style ={styles.editButton} onPress={ () => {editCalendar(item.id)} }>EDIT</TouchableOpacity>
+                            <TouchableOpacity style ={styles.dellButton} onPress={ () => {delCalendar(item.id)} }>DELETE</TouchableOpacity>
                         </View>  
                    
                     </View>
@@ -125,7 +126,6 @@ const styles = StyleSheet.create({
         marginRight: 10,
         padding: 20,
         marginBottom: 10,
-        borderWidth: 1, 
         backgroundColor: '#F2F2F2',
         borderRadius: 10,
         shadowColor: '#000',
@@ -155,6 +155,20 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
       },
 
+      editButton:{
+        backgroundColor: '#FFFF00',
+        padding: 20,
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
 
+      dellButton:{
+        backgroundColor: '#FF0000',
+        padding: 20,
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
     
 })

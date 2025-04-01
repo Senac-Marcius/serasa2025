@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet, ScrollView } from 'react-native';
-
+import { View, Text, TextInput, Button, FlatList, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import MySwitch from '../src/components/MySwitch' //nome do arquivo
+import MyView from '../src/components/MyView';
+//nome da variavel
 
 export default function RecordScreen() {
     // Estados individuais para os inputs
@@ -9,9 +11,10 @@ export default function RecordScreen() {
     const [rg, setRg] = useState('');
     const [dateBirth, setDateBirth] = useState('');
     const [cpf, setCpf] = useState('');
+    const[editingID, setEditingId] = useState<number | -1>(-1);
 
 
-    // Estado para armazenar os registros
+    // Estado para armazenar os registros e definir seus tipos
     const [records, setRecords] = useState<{ 
         id: number; 
         name: string; 
@@ -30,22 +33,29 @@ export default function RecordScreen() {
             return;
         }
 
+        //se for um item editado, ele deve chamar o registro existente
+        if (editingID !== -1) {
+            setRecords(records.map(record =>
+                record.id === editingID ? {...record, name, email, rg, dateBirth, cpf} : record
+            ));
+            setEditingId(-1);//reset
+        } else{ //senão, ele deve criar um novo registro
+            const newRecord = {
+                id: records.length ? records[records.length - 1].id + 1 : 1,
+                name,
+                email,
+                rg,
+                dateBirth,
+                cpf,
+                createAt: new Date().toString(),
+            };
 
-        const newRecord = {
-            id: records.length ? records[records.length - 1].id + 1 : 1,
-            name,
-            email,
-            rg,
-            dateBirth,
-            cpf,
-            createAt: new Date().toString(),
-        };
+            setRecords([...records, newRecord]);//armazena o novo registro
 
+        }       
 
-        setRecords([...records, newRecord]);
-
-
-        // Resetando os campos
+        
+        // Resetando os campos após editar, cadastrar, etc..
         setName('');
         setEmail('');
         setRg('');
@@ -59,9 +69,27 @@ export default function RecordScreen() {
         setRecords(records.filter((record) => record.id !== id));
     };
 
+    const editRecord = (id: number) => {
+        const record = (records.find((record => record.id === id)));
+        if (record){//vai colocar as informações salvas no vetor de volta no input para editar
+            setName(record.name);
+            setEmail(record.email);
+            setRg(record.rg);
+            setDateBirth(record.dateBirth);
+            setCpf(record.cpf);
+            setEditingId(id);// qual id eu quero editar
+        }
+    };
 
+    const[isEnabled, setIsEnabled] = useState(false)
+    
     return (
-        <View style={styles.container}>
+        
+        <MyView style={styles.container}>
+
+            <MySwitch isEnabled={isEnabled} onToggle={setIsEnabled} />
+                
+
             <View style={styles.row}>
                 <View style={styles.formContainer}>
                     <Text style={styles.title}>Solicitação de Documentos</Text>
@@ -105,19 +133,17 @@ export default function RecordScreen() {
                         value={cpf} 
                         onChangeText={(text) => setCpf(text.replace(/[^0-9]/g, ''))} 
                         keyboardType="numeric"
-                    />
-
-
-                    <Button title="Cadastrar" onPress={handleRegister} />
+                    />                    
+                    <Button title={editingID !== -1 ? "Atualizar":"Cadastrar"} color={'#813AB1'} onPress={handleRegister} />
                 </View>
-
+                
 
                 <View style={styles.listContainer}>
-                    <Text style={styles.subtitle}>Registros Cadastrados</Text>
+                    <Text style={styles.title}>Registros Cadastrados</Text>
                     <ScrollView style={{ flex: 1 }}>
                         <FlatList
                             data={records}
-                            keyExtractor={(item) => item.id.toString()}
+                            keyExtractor={(item) => item.id.toString()}//tratamento
                             renderItem={({ item }) => (
                                 <View style={styles.recordItem}>
                                     <Text style={styles.recordText}>Nome: {item.name}</Text>
@@ -126,7 +152,19 @@ export default function RecordScreen() {
                                     <Text style={styles.recordText}>Data de Nascimento: {item.dateBirth}</Text>
                                     <Text style={styles.recordText}>CPF: {item.cpf}</Text>
                                     <Text style={styles.recordText}>Criado em: {item.createAt}</Text>
-                                    <Button title="Excluir" color="red" onPress={() => deleteRecord(item.id)} />
+                                    
+                                    <View style={styles.buttonContainer}>
+                                        <TouchableOpacity style={styles.editButton} onPress={() => editRecord(item.id)}> 
+                                            <Text style={styles.buttonText}>
+                                                Editar
+                                            </Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={styles.deleteButton} onPress={() => deleteRecord(item.id)}> 
+                                            <Text style={styles.buttonText}>
+                                                Excluir
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             )}
                             showsVerticalScrollIndicator={true}
@@ -135,7 +173,7 @@ export default function RecordScreen() {
                     </ScrollView>
                 </View>
             </View>
-        </View>
+        </MyView>
     );
 }
 
@@ -156,7 +194,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginRight: 10,
         padding: 20,
-        backgroundColor: '#F2F2F2',
+        backgroundColor: '#FFF',
         borderRadius: 10,
         shadowColor: '#000',
         shadowOpacity: 0.1,
@@ -166,18 +204,15 @@ const styles = StyleSheet.create({
     listContainer: {
         flex: 1, 
         padding: 10,
+        backgroundColor:'#FFF',
+        borderRadius: 10,
     },
     title: {
         fontSize: 22,
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 20,
-    },
-    subtitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
+    },   
     input: {
         borderWidth: 1,
         borderColor: '#ccc',
@@ -186,15 +221,46 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     recordItem: {
+        backgroundColor: '#E6E6FA',
         padding: 10,
-        marginVertical: 5,
-        backgroundColor: '#f8f8f8',
         borderRadius: 5,
+        marginBottom: 10,
+        borderLeftWidth: 5,
+        borderLeftColor: '#813AB1',
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 3,
+
     },
     recordText: {
         fontSize: 16,
         fontWeight: 'bold',
     },
+    buttonText: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center' 
+    },
+    buttonContainer: { 
+        flexDirection: 'row', 
+        justifyContent: 'center', 
+        marginTop: 10,
+        backgroundColor: '#E6E6FA'
+    },
+    editButton: {
+        backgroundColor: 'blue',
+        padding: 10,
+        borderRadius: 5,
+        marginRight: 5,
+    },
+    deleteButton: {
+        backgroundColor: 'red',
+        padding: 10,
+        borderRadius: 5 ,
+    },
+    
+
 });
 
 

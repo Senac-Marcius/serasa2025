@@ -1,5 +1,12 @@
 import React ,{ useState }from 'react';
 import { Text, View, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} from 'react-native';
+import MyLink from '../src/components/Mylink';
+import Myiten from '../src/components/myItenlist';
+import MyList from '../src/components/mylist';
+import { Myinput } from '../src/components/Myinputs';
+import MyButton from '../src/components/Mybuttons';
+import MyView from '../src/components/MyView';
+
 
 export default  function itemScreen(){
      const[req,setReq] = useState({ 
@@ -53,34 +60,44 @@ export default  function itemScreen(){
      }
 
     return (
-        <View>
-        {}
+        <MyView>
+       
         <Text>Minha tela de itens</Text>
         
         <View style={styles.row}>
             <View style={styles.form}>
-                <TextInput placeholder="Marca"
+                <Myinput 
+                placeholder="Marca"
                 value={req.mark}
-                onChangeText={(text)=>setReq({...req,mark:text})}
+                onChangeText={(text) => setReq({ ...req, mark:text })}
+                label="Item"
+                 iconName='list' 
+            
                 />
                 
 
 
-                <TextInput placeholder= "Digite o nome"
+                <Myinput 
+                   placeholder= "Digite o nome"
                    value={req.name}
                    onChangeText={(text)=>setReq({...req,name:text})}
+                   label="I
+                   
+                   tem" 
+                   iconName='user' 
                    />
 
-                   
-                <Button title='Cadastrar' onPress={ handleRegister}/>
+                <MyLink style={{ padding : 20}} url="http://gyuguyg" label="Esqueci minha senha"/>
+
+                <MyButton title='Cadastrar' onPress={ handleRegister}/>
             
             </View>
 
-            <FlatList
+            <MyList
             data={itens}
-            keyExtractor={(i) => i.id.toString()}
+            keyItem={(i) => i.id.toString()}
             renderItem={({item})=>(
-                <View >
+                <Myiten >
                     <text >{item.name}</text>
                     <text >{item.mark}</text>
                     <text>{item.assetNumber}</text>
@@ -88,14 +105,15 @@ export default  function itemScreen(){
 
                     <View>
                         <TouchableOpacity onPress={ () => { editItem(item.id)} }></TouchableOpacity>
+                        <TouchableOpacity onPress={ () => { delItem(item.id)} }></TouchableOpacity>
                     </View>
-                </View>
+                </Myiten>
 
             )}
             
             />
         </View>
-    </View>
+    </MyView>
 
     );
 }
@@ -144,6 +162,11 @@ const styles= StyleSheet.create({
         padding: 10,
         marginBottom: 10,
     },
+    form: { 
+        flex:1
+
+    }
 })
+
 
 

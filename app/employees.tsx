@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
-import { View , Text, StyleSheet, FlatList, TextInput, Button } from 'react-native';
-
+import { ScrollView, View } from 'react-native';
+import { Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Button } from 'react-native';
+import MyTimePicker  from '../src/components/MyTimePicker'
+import MyButton from '../src/components/Mybuttons';
 export default function EmployeeScreen(){
 //aqui é typescript 
     const [req, SetReq] = useState({
@@ -143,10 +145,9 @@ export default function EmployeeScreen(){
                         value={req.isActive}
                         onChangeText={(bool) => SetReq({...req , isActive:bool})}
                     />
-                    {req.isActive}
-                </View>
-                <View style ={style.button}>
-                    <Button title='Cadastrar Funcionário' color = '#800080'  onPress={() => handleRegister}/>
+
+                    
+                   <MyButton title='Cadastrar Funcionário' button_type ='round'  onPress={handleRegister}/>
                 </View>
                 
 
