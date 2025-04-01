@@ -1,6 +1,11 @@
 import React, { useState } from 'react'; 
 import { Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, View  } from 'react-native';
 import MySelect from '../src/components/Myselect' 
+import MyView from '../src/components/MyView';
+import MyList from '../src/components/mylist';
+import Myiten from '../src/components/myItenlist';
+import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
+import MyButton  from '../src/components/Mybuttons';
 
 export default function LocalScreen(){
 
@@ -62,7 +67,7 @@ export default function LocalScreen(){
 
     return (
 
-            <View style={styles.container}>
+            <MyView style={styles.container}>
 
             
 
@@ -70,177 +75,82 @@ export default function LocalScreen(){
                     <View style={styles.formContainer}>
                         <Text style={styles.title}>LOCAL</Text>
                        
-                        <TextInput 
+                        <Myinput
+                        iconName='name'
                         placeholder= "Digite o nome do local:"                                 
                         value={req.name}
+                          label='Nome:'
                         onChangeText={(t) => setReq({...req, name: t })}                    
-                        />  
-
-                        <TextInput 
-                        placeholder={ `Digite a área do local em ${unity}:`}
+                        />                                                                     
+                                                                                                        
+                        <Myinput
+                        iconName='wolrd-o'
+                        placeholder={ `Digite a sua dimensão em ${unity}:`}
                         value={req.area}
+                        label='Dimensão:'
                         onChangeText={(n) => setReq({...req, area: n })}  
                                     
-                        />         
+                        />
                       
 
                         <MySelect label={unity} setLabel={setUnit}  
                         list={            
                             [
-                                {key:0, option: 'x metros'},             /* exemplo do código de SELECT para copiar */
-                                {key:1, option: 'x cm'},
+                                {key:0, option: 'metros'},             /* exemplo do código de SELECT para copiar */
+                                {key:1, option: 'cm'},
                             ]
                         } />  
 
 
 
-                        <TextInput 
-                        placeholder= "Digite a sua descrição:"
+                        <Myinput
+                        iconName='description'
+                        placeholder= "Digite a sua descrição:" 
                         value={req.description}
+                          label='Descrição:'
                         onChangeText={(t) => setReq({...req, description: t })}
                         /> 
 
-                        <TextInput placeholder= "Digite o seu respectivo endereço:"
+                        <Myinput 
+                        iconName='adress'
+                        placeholder= "Digite o seu endereço:"
                         value={req.adress}
+                          label='Endereço:'
                         onChangeText={(t) => setReq({...req, adress: t })}
                         />
 
-                        <Button title='Cadastrar' onPress={ handleRegister } />         
+                        <MyButton title='Cadastrar' onPress={ handleRegister } button_type="capsule" />         
 
                     </View>
 
-                    <View style={styles.formContainer}>
-                        <Text style={styles.title}>Pesquisa de locais:</Text>
-                       
-                       <TextInput 
-                       placeholder= "Nome:"                                 
-                       value={req.name}
-                       onChangeText={(t) => setReq({...req, name: t })}                    
-                       />  
-                                                             
-                       <TextInput 
-                       placeholder= "Opção 1"
-                       value={req.description}
-                       onChangeText={(t) => setReq({...req, description: t })}
-                       /> 
-
-                       <TextInput placeholder= "Opção 2"
-                       value={req.adress}
-                       onChangeText={(t) => setReq({...req, adress: t })}
-                       />
-
-                        <TextInput placeholder= "Opção 3"
-                       value={req.adress}
-                       onChangeText={(t) => setReq({...req, adress: t })}
-                       />
-
-
-
-
-                        <TextInput 
-                       placeholder= "Dimensão:"                                 
-                       value={req.name}
-                       onChangeText={(t) => setReq({...req, name: t })}                    
-                       />  
-                                                             
-                       <TextInput 
-                       placeholder= "Opção 1"
-                       value={req.description}
-                       onChangeText={(t) => setReq({...req, description: t })}
-                       /> 
-
-                       <TextInput placeholder= "Opção 2"
-                       value={req.adress}
-                       onChangeText={(t) => setReq({...req, adress: t })}
-                       />
-
-                        <TextInput placeholder= "Opção 3"
-                       value={req.adress}
-                       onChangeText={(t) => setReq({...req, adress: t })}
-                       />
-                       
-
-
-
-                       <TextInput 
-                       placeholder= "Descrição:"                                 
-                       value={req.name}
-                       onChangeText={(t) => setReq({...req, name: t })}                    
-                       />  
-                                                             
-                       <TextInput 
-                       placeholder= "Opção 1"
-                       value={req.description}
-                       onChangeText={(t) => setReq({...req, description: t })}
-                       /> 
-
-                       <TextInput placeholder= "Opção 2"
-                       value={req.adress}
-                       onChangeText={(t) => setReq({...req, adress: t })}
-                       />
-
-                        <TextInput placeholder= "Opção 3"
-                       value={req.adress}
-                       onChangeText={(t) => setReq({...req, adress: t })}
-                       />
-                       
-
-
-
-                       <TextInput 
-                       placeholder= "Endereço:"                                 
-                       value={req.name}
-                       onChangeText={(t) => setReq({...req, name: t })}                    
-                       />  
-                                                             
-                       <TextInput 
-                       placeholder= "Opção 1"
-                       value={req.description}
-                       onChangeText={(t) => setReq({...req, description: t })}
-                       /> 
-
-                       <TextInput placeholder= "Opção 2"
-                       value={req.adress}
-                       onChangeText={(t) => setReq({...req, adress: t })}
-                       />
-
-                        <TextInput placeholder= "Opção 3"
-                       value={req.adress}
-                       onChangeText={(t) => setReq({...req, adress: t })}
-                       />
-
-                </View>
-
-                <View style={styles.row}>
-                    
-                        
-                </View>
-
-                                        
-                    <FlatList                         
+                    <MyList                         
                         data={locals}                   
-                        keyExtractor={(item) => item.id.toString()}                
+                        keyItem={(item) => item.id.toString()}                
                         renderItem={({ item }) => (
-                            <View style={styles.item}>
+                            <Myiten
+                                style={styles.formContainer}
+                                onEdit={ () => {editLocal(item.id)} }
+                                onDel={ () => (delLocal(item.id))}
+                            >
                                 <Text style={styles.label} > {item.name} </Text>
                                 <Text style={styles.label} > {item.adress} </Text>
                                 <Text style={styles.label} > {item.area} </Text>
                                 <Text style={styles.label} > {item.description} </Text>
                                 <Text style={styles.label} > {item.createAt} </Text>
                             
-                                <View style={styles.buttonsContainer}>
-                                    <TouchableOpacity style={styles.edit} onPress={ () => {editLocal(item.id)} }>edit</TouchableOpacity>
-                                    <TouchableOpacity style={styles.del} onPress={ () => (delLocal(item.id))}>del</TouchableOpacity>
-                                  
 
-                                </View>
-
-                            </View>
+                            </Myiten>
                         ) }
                     />
+
+                </View>
                     
-                </View>            
-            </View>  
+               
+                                        
+                   
+                    
+                         
+            </MyView>  
        
         
     )   
@@ -291,23 +201,12 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
-        backgroundColor: "gray"
+        backgroundColor: "white"
 
-    },
-    form: {
-        flex: 6,
-        marginRight: 15,
-        padding: 50,
-        backgroundColor: "black",
-        borderRadius: 15,
-        shadowColor: "black",
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 3, height: 4 },
-        shadowRadius: 7,
     },
 
     formContainer: {
-        flex: 5,
+        flex: 1,
         marginRight: 50,
         padding: 10,
         backgroundColor: "white",
@@ -315,6 +214,7 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 7,
+        marginBottom: 10
     },
     input: {
         borderBottomWidth: 1,
@@ -331,7 +231,7 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
         
     },
     buttonsTitle: {
-        backgroundColor: "puple",
+        backgroundColor: "",
     },
     item:{
 
