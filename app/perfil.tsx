@@ -4,6 +4,7 @@ import MyView from "../src/components/MyView";
 import MyButton from "../src/components/Mybuttons";
 import Mytext from "../src/components/Mytext";
 import { Myinput } from "../src/components/Myinputs";
+import MyUpload from "../src/components/Myupload";
 
 interface iUser {
   photo: string,
@@ -19,11 +20,12 @@ interface MyPerfilProps {
     setUser(user: iUser):void,
     saveUser(id:number, user: iUser):void,
     id:number,
+    
 };
-
-    const Perfil: React.FC<MyPerfilProps> = ({user, setUser, id, saveUser}) => { 
+    
+    const Perfil: React.FC<MyPerfilProps> = ({user, setUser, id, saveUser, }) => { 
       const [ editing, setEditing] = useState(false)
-
+      const[urlDocument, setDocument] = useState('')
       return (
         <MyView>
           <View>
@@ -32,7 +34,8 @@ interface MyPerfilProps {
           <View>
             <View>
             {!editing && (<Image src={user.photo? user.photo:''}/>)}
-            {/* editing && (<MyUpload   />) aguardar commit atualizado do Igor */}
+            {editing && (<MyUpload setUrl={setDocument} url={urlDocument}/>
+)}
             </View>
             {!editing && (<Mytext style={styles.title}>{user.name? user.name:''}</Mytext>)}
             {editing && (<Myinput value={user.name} onChangeText={(text)=>{setUser({...user, name: text})}} label="Nome"/>)}
