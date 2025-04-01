@@ -1,4 +1,3 @@
-
 import React,{ReactNode} from 'react';
 import { View, TouchableOpacity, StyleSheet, Dimensions, TextStyle,  } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -10,16 +9,21 @@ import MyTopbar from './mytopbar';  // Corrigido, apenas uma importação
 interface MySearchProps {
   children: ReactNode;
   style?: TextStyle | TextStyle[]; 
+
+  
 }
 
-const myView: React.FC<MySearchProps> = ({ children }) => { 
+const myView: React.FC< MySearchProps > = ({children}) => { 
  
   const handleSuporte = () => {
     console.log('Botão de suporte clicado!');
+    
   };
+
 
   const { width, height } = Dimensions.get('window');
 
+  
   const styles = StyleSheet.create({
     container: {
       flex: 1,
