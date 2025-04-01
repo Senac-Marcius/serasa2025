@@ -1,23 +1,27 @@
-import React from 'react';
-import { View, Text } from 'react-native';
-import { useRouter } from 'expo-router';
+import { ReactNode } from 'react';
+import { View,  StyleSheet } from 'react-native';
 import { Appbar, Drawer } from 'react-native-paper';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 
-export default function HomeScreen() {
-    const router = useRouter();
-    const [drawerOpen, setDrawerOpen] = useState(false);
 
+
+interface MyTopbarProps {
+    title: string;
+}
+
+const MyTopbar: React.FC<MyTopbarProps> = ({ title }) => {
+      const router = useRouter();
+        const [drawerOpen, setDrawerOpen] = useState(false);
     return (
-        <View style={{ flex: 1 }}>
-            {/* Menu Hambúrguer no Topo */}
+        <View style={styles.container}>
             <Appbar.Header>
-                <Appbar.Action icon="menu" onPress={() => setDrawerOpen(!drawerOpen)} />
-                <Appbar.Content title="Serasa App" />
+                <Appbar.Action icon="menu" onPress={() => setDrawerOpen (!drawerOpen)} />
+                <Appbar.Content title={title}/>
+                {/* Anelisa */}
             </Appbar.Header>
-
-            {/* Drawer Menu */}
-            {drawerOpen && (
+            {/* importar do misael */}
+             {drawerOpen && (
                 <Drawer.Section style={{ backgroundColor: 'white', padding: 10 }}>
                     <Drawer.Item
                         label="Início"
@@ -28,40 +32,28 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
-                        label="CATEGORIES"
+                        label="Postagens"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/categories');
+                            router.push('/posts');
                         }}
                     />
                     <Drawer.Item
-                        label="Area do Aluno"
+                        label="Calendario"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/students');}}
+                            router.push('/calendar');
+                        }}
                     />
-                    <Drawer.Item
-                        label="Empréstimo"
-                        icon="post"
-                        onPress={() => {setDrawerOpen(false);router.push('/loans');}}
-                    />
+                    
                     <Drawer.Item
                         label="Cursos"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/courses');
-                        }}
-                       
-                    />
-                    <Drawer.Item
-                        label="Despesa"
-                        icon="post"
-                        onPress={() => {
-                            setDrawerOpen(false);
-                            router.push('/expenses');
                         }}
                     />
                     <Drawer.Item
@@ -72,13 +64,33 @@ export default function HomeScreen() {
                             console.log("Configurações");
                         }}
                     />
+                    
                 </Drawer.Section>
             )}
-
-            {/* Conteúdo da Página */}
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text>Bem-vindo ao Serasa App!</Text>
-            </View>
         </View>
-    );  
-}
+    );
+};
+
+const styles = StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: '#6A1B9A', // Roxo
+        padding: 10,
+        borderRadius: 10,
+        margin: 10,
+    },
+    iconButton: {
+        padding: 8,
+        backgroundColor: '#4A148C', // Roxo escuro
+        borderRadius: 50,
+    },
+    screenName: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+});
+
+export default MyTopbar;

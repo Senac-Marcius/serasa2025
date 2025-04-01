@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
 import MySupport from '../src/components/Mysupport';
 import MyView from '../src/components/MyView';
+import { ScrollView } from 'react-native-gesture-handler';
+import Myiten from '../src/components/myItenlist';
+import MyList from '../src/components/mylist';
+import {Myinput} from '../src/components/Myinputs';
+import Mybutton from '../src/components/Mybuttons';
 
 export default function LaunchScreen() {
     const [req, setReq] = useState({
@@ -72,45 +77,52 @@ export default function LaunchScreen() {
             <View style={styles.form}>
                 <Text>Lançamentos de Alunos:</Text>
 
-                <TextInput
+                <Myinput //Myinput
                     placeholder="Digite a Observação:"
                     value={req.observation}
                     onChangeText={(text) => setReq({ ...req, observation: text })}
+                    label=""
+                    iconName=""
                 />
 
 
-                <TextInput
+                <Myinput
                     placeholder="Digite a Nota:"
                     value={req.note}
                     onChangeText={(text) => setReq({ ...req, note: text })}
+                    label=""
+                    iconName=""
                 />
 
 
-                <TextInput
+                <Myinput
                     placeholder="Presença:"
                     value={req.presence}
                     onChangeText={(text) => setReq({ ...req, presence: text })}
+                    label=""
+                    iconName=""
                 />
 
 
-                <TextInput
+                <Myinput
                     placeholder="Indicador"
                     value={req.indicator}
                     onChangeText={(text) => setReq({ ...req, indicator: text })}
-
+                    label=""
+                    iconName=""
                 />
 
-                <Button title="CADASTRAR" onPress={handleRegister} color="purple" />
+                <Mybutton title="CADASTRAR" onPress={handleRegister} /> {/*Mybutton*/ }
 
 
 
             </View>
 
-            <FlatList
+            <MyList //Mylist
                 data={launchs}
-                keyExtractor={(item) => item.Id.toString()}
+                keyItem={(item) => item.Id.toString()}
                 renderItem={({ item }) => (
-                    <View
+                    <Myiten //Mylistitem
                         style={styles.card}
                     >
                         <Text>{item.observation}</Text>
@@ -126,12 +138,11 @@ export default function LaunchScreen() {
                         </View>
                     
 
-                    </View>
+                    </Myiten>
 
 
                 )}
             />
-            <MySupport label='dgsdgsd' />
 
         </MyView>
     );

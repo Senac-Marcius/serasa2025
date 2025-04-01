@@ -3,6 +3,11 @@ import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity, 
 import MyView from '../src/components/MyView';
 import MySupport from'../src/components/MyAccessbility';
 import MyAccessibility from '../src/components/MyAccessbility';
+import { Myinput, MyTextArea } from '../src/components/Myinputs';
+import Mylist from '../src/components/mylist';
+import Myiten from '../src/components/myItenlist';
+import MyButton from '../src/components/Mybuttons';
+import Mytext from '../src/components/Mytext';
 
 export default function investmentScreen(){
  //aqui é typescript   
@@ -31,11 +36,11 @@ export default function investmentScreen(){
     function handleRegister(){
         if(req.id == -1){
             const nId = investments.length ? investments[investments.length - 1].id + 1 : 0;
-            const newInvestment = { ...req, id: nId };
+            const newInvestment = {...req, id: nId };
 
             setInvestments([...investments, newInvestment]);
         }else{
-            setInvestments(investments.map(i => (i.id == req.id) ? req : i));
+            setInvestments(investments.map(i => (i.id == req.id ? req : i)));
         }
 
         setReq({
@@ -69,62 +74,58 @@ export default function investmentScreen(){
               {/* Aqui é typescript dentro do front */}
         
         <MyAccessibility>
-            <Text>Investimentos</Text>
+            <Text>Acessibilidade</Text>
         </MyAccessibility>
-        
+
         <Text>Investimentos</Text>
         <View style={styles.row}>
             <View style={styles.form}>
-                <TextInput
-                    placeholder='Descrição'
-                    value={req.description}
-                    onChangeText={(text) => setReq({...req, description: text })}
-                  />
-                <TextInput
+            <Myinput
+                    label='Nome'
                     placeholder='Nome'
                     value={req.name}
                     onChangeText={(text) => setReq({...req, name: text })}
+                    iconName=''
                 />
-                <TextInput
-                    placeholder='URL'
+                <Myinput
+                    label='Url'
+                    placeholder='Url'
                     value={req.url}
                     onChangeText={(text) => setReq({...req, url: text })}
+                    iconName=''
                 />
-                <TextInput
+                <Myinput
+                    label='Valor'
                     placeholder='Valor'
                     value ={req.value}
                     onChangeText={(text) => setReq({...req, value: text })}
+                    iconName=''
                 />
-                <TextInput
-                    placeholder='UserId'
-                    value={req.userId}
-                    onChangeText={(text) => setReq({...req, userId: text })}
-                />
+                <MyTextArea
+                    label='Descrição'
+                    placeholder='Descrição'
+                    value={req.description}
+                    onChangeText={(text) => setReq({...req, description: text })}
+                    iconName=''
+                  />
                     
 
-                <Button title='Cadastrar' onPress={ handleRegister }/> 
+                <MyButton title='Cadastrar' onPress={ handleRegister }/> 
             </View>
-            <FlatList
+            <Mylist
                 data={investments}
-                keyExtractor={ (item) => item.id.toString() }
+                keyItem={ (item) => item.id.toString() }
                 renderItem={({item}) => (
-                    <View style={styles.item}>
-                       <Text> Descrição: {item.description}</Text>
-                       <Text> Nome: {item.name}</Text>
-                       <Text> Url: {item.url}</Text>
-                       <Text> Data: {item.createAt}</Text>
-                       <Text> ID de Usuario: {item.userId}</Text>
-
-                        <View style={styles.buttons}>
-                            <TouchableOpacity 
-                            style={styles.editButton} onPress={ () => { editInvestment(item.id) } } activeOpacity={0.7}><Text style={styles.editButtonText}> editar</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                            style={styles.delButton} onPress={ () => { delInvestment(item.id) } }> <Text style={styles.delButtonText}> excluir</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        </View> 
+                    <Myiten style={styles.item}
+                    onEdit={ () => editInvestment (item.id)  }
+                    onDel={ () => delInvestment (item.id)  }
+                    >
+                       <Mytext style={styles.investmentText}> Descrição: {item.description}</Mytext>
+                       <Mytext style={styles.investmentText}> Nome: {item.name}</Mytext>
+                       <Mytext style={styles.investmentText}> Url: {item.url}</Mytext>
+                       <Mytext style={styles.investmentText}> Data: {item.createAt}</Mytext>
+                       <Mytext style={styles.investmentText}> ID de Usuario: {item.userId}</Mytext>
+                        </Myiten> 
                 )}
             />
         </View>
@@ -219,7 +220,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 
-    text: {
+    investmentText: {
         fontSize: 16,
         fontFamily: 'Roboto',
         color: '#333',
