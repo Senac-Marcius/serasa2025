@@ -1,3 +1,4 @@
+
 import React,{ReactNode} from 'react';
 import { View, TouchableOpacity, StyleSheet, Dimensions, TextStyle,  } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -54,12 +55,11 @@ const myView: React.FC< MySearchProps > = ({children}) => {
 
   return (
     <ScrollView style={styles.container}>
-<<<<<<< HEAD
+
       <View>
         <MyTopbar  title='Cargos' />
-=======
-      <View style = {styles.tView}>
->>>>>>> d98b2614f4857e7b8fe7f9f70e5ecd89cce46c3f
+
+
       {children}
       {/* Conteúdo da tela (pode ser adicionado aqui) */}
       {/* Botão de suporte */}
