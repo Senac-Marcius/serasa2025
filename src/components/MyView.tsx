@@ -1,4 +1,3 @@
-
 import React,{ReactNode} from 'react';
 <<<<<<< HEAD
 import { View, TouchableOpacity, StyleSheet, Dimensions, TextStyle,  } from 'react-native';
@@ -24,6 +23,7 @@ const myView: React.FC< MySearchProps > = ({children, style, title}) => {
  
   const { width, height } = Dimensions.get('window');
 
+  
   const styles = StyleSheet.create({
     container: {
       flex: 1, 

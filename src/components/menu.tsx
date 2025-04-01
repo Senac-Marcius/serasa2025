@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Animated, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Animated, StyleSheet, Image, Dimensions } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+
+// Pega as dimensões da tela
+const { height } = Dimensions.get('window');
 
 export default function HamburgerMenu() {
     const [menuVisible, setMenuVisible] = useState(false);
@@ -25,7 +28,7 @@ export default function HamburgerMenu() {
             </TouchableOpacity>
 
             {/* Menu Lateral */}
-            <Animated.View style={[styles.menu, { left: slideAnim }]}> 
+            <Animated.View style={[styles.menu, { left: slideAnim, height }]}>
                 {/* Perfil (Agora clicável) */}
                 <TouchableOpacity style={styles.profileSection} onPress={() => alert('Perfil clicado!')}>
                     <Image source={{ uri: 'https://via.placeholder.com/50' }} style={styles.profileImage} />
@@ -92,7 +95,6 @@ const styles = StyleSheet.create({
         top: 0,
         left: 0,
         width: 280,
-        height: '100%',
         backgroundColor: '#5A2D82', // Cor roxa igual ao Figma
         paddingTop: 50,
         paddingLeft: 20,
@@ -106,6 +108,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 20,
+        padding: 10,  // Agora a área é clicável
     },
     profileImage: {
         width: 60,

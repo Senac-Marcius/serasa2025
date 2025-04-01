@@ -5,6 +5,7 @@ import { Appbar, Drawer } from 'react-native-paper';
 import { useState } from 'react';
 import  MyTheme from '../src/components/Mytheme'
 import MyNotify from '../src/components/Mynotify';
+import MyTopbar from '../src/components/mytopbar';
 
 export default function HomeScreen() {
     const router = useRouter();
@@ -41,6 +42,14 @@ export default function HomeScreen() {
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/Myperfil');
+                        }}
+                    />
+                     <Drawer.Item
+                        label="Itens"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/itens');
                         }}
                     />
                     <Drawer.Item
@@ -181,7 +190,15 @@ export default function HomeScreen() {
 
 
                     <Drawer.Item
-                        label="Documentos"
+                        label="Cursos"
+                        icon="acervo"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/collections');
+                    }}
+                    />
+                    <Drawer.Item
+                        label="Funcionários"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
@@ -221,7 +238,14 @@ export default function HomeScreen() {
                             console.log("Configurações");
                         }}
                     />
-                    
+                    <Drawer.Item
+                        label="Biblioteca - Cadastramento"
+                        icon="book"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/librarie');
+                        }}
+                    />
                 </Drawer.Section>
             )}
 
