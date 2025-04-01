@@ -15,6 +15,69 @@ export default function HomeScreen() {
             <MyTopbar title="Bem vindo ao app do Serasa"  /> 
            
 
+<<<<<<< HEAD
+=======
+            {/* Drawer Menu */}
+            {drawerOpen && (
+                <Drawer.Section style={{ backgroundColor: 'white', padding: 10 }}>
+                    <Drawer.Item
+                        label="Início"
+                        icon="home"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="CATEGORIES"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/categories');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="Area do Aluno"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/students');}}
+                    />
+                    <Drawer.Item
+                        label="Empréstimo"
+                        icon="post"
+                        onPress={() => {setDrawerOpen(false);router.push('/loans');}}
+                    />
+                    <Drawer.Item
+                        label="Cursos"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/courses');
+                        }}
+                       
+                    />
+                    <Drawer.Item
+                        label="Despesa"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/expenses');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="Configurações"
+                        icon="cog"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            console.log("Configurações");
+                        }}
+                    />
+                </Drawer.Section>
+            )}
+
+            {/* Conteúdo da Página */}
+>>>>>>> a10f2337e3a9fffc2853af44a6391b7c322824f4
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <Text>Bem-vindo ao Serasa App!</Text>
             </View>

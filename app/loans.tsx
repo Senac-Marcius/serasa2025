@@ -1,7 +1,13 @@
 import React, { useState } from 'react'; //react é uma biblioteca e essa função esta importando ela, puxando
 import { FlatList, View, Text, StyleSheet, TextInput, Button, TouchableOpacity} from 'react-native'; //react native é uma biblioteca dentro de react 
+import MyCalendar  from '../src/components/MyCalendar';
+
 
 export default function LoanScreen() {
+
+    const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+
+
     const[req, setReq]= useState({ //useState retorna uma variavel e uma função para alteral a variavel (req e setReq)
         id: 0,
         bookId: '',
@@ -62,7 +68,7 @@ export default function LoanScreen() {
             renewal: '',
             creatAt: new Date().toISOString(),
             statusLoan: '',
-            observation: '',
+            observation: '',  
             
         })
     }
@@ -73,7 +79,9 @@ export default function LoanScreen() {
 
     return (
         <View>
-             
+              
+ 
+
             <Text>Tela de Empréstimo</Text>
             <View style={styles.row}>
                 <View style={styles.form}>
@@ -83,6 +91,7 @@ export default function LoanScreen() {
                     onChangeText={(text) => setReq({...req, bookId: text })}
                     />
                     
+                    <MyCalendar date={date}   setDate={setDate} />
 
                     <TextInput 
                         placeholder="Status de Empréstimo:"

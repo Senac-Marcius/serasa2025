@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { TimePickerModal } from 'react-native-paper-dates';
 import { Button, TextInput } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MyButton from './Mybuttons';
+import {  StyleSheet } from 'react-native';
+import Mytext from './Mytext';
+import { Myinput } from './Myinputs';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+
 
 interface MyTimePickerProps {
   onTimeSelected: (time: string) => void; // Callback para atualizar o estado no pai
@@ -18,28 +23,64 @@ export default function MyTimePicker({ onTimeSelected, initialTime = '' }: MyTim
     onTimeSelected(formattedTime); // Atualiza o estado no componente pai
     setOpen(false);
   };
+  const theme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#6200ea', // Cor dos botões e seleções
+    },
+    fonts: {
+      ...DefaultTheme.fonts,
+      regular: { 
+        fontFamily: 'sans-serif',
+        textAlign: 'center', // Pode não afetar todos os textos
+      },
+    },
+  };
 
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-      <TextInput
-        placeholder="HH:MM"
-        value={initialTime}
-        editable={false}
-        style={{ flex: 1, backgroundColor: '#f9f9f9' }}
-      />
-      <Button
-        mode="contained"
-        onPress={() => setOpen(true)}
-        style={{ backgroundColor: '#6200ee' }}
-      >
-        <Icon name="clock-outline" size={20} color="#FFF" />
-      </Button>
-      <TimePickerModal
-        locale="pt"
-        visible={open}
-        onDismiss={() => setOpen(false)}
-        onConfirm={handleConfirm}
-      />
-    </View>
-  );
+    <View style={styles.container}>
+    <Myinput
+      placeholder="HH:MM"
+      label="Insira um horário"
+      iconName="clock"
+      value={initialTime}
+      onChangeText={() => {}}
+    />
+
+    <MyButton
+      button_type="round"
+      style={styles.button} // Aplica o estilo
+      onPress={() => setOpen(true)}
+      icon="clock-outline"
+    />
+    
+    <TimePickerModal
+      locale="pt"
+      visible={open}
+      onDismiss={() => setOpen(false)}
+      onConfirm={handleConfirm}
+      animationType="fade"
+    />
+    
+  </View>
+);
 }
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',   // Alinha o botão e o campo de input na horizontal
+    alignItems: 'center',   // Centraliza verticalmente
+    justifyContent: 'space-between', // Cria espaço entre os elementos
+    padding: 10,
+  },
+  button: {
+    backgroundColor: '#6200ea', // Cor de fundo
+    borderRadius: 30,           // Deixa o botão arredondado
+    padding: 10,                // Adiciona um espaço interno
+    elevation: 5,               // Cria sombra (Android)
+    shadowColor: '#000',        // Cor da sombra (iOS)
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+  },
+});
