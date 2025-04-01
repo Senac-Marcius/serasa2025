@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
 import Mydownload from '../src/components/mydownload';
-import MyView from '../src/components/View';
+import MyView from '../src/components/MyView';
 import MyList from '../src/components/mylist';
 import MyButton from '../src/components/Mybuttons';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
