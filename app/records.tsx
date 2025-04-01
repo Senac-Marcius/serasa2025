@@ -4,7 +4,8 @@ import MyView from '../src/components/MyView';
 import MyButton from '../src/components/Mybuttons';
 import { IconButton } from 'react-native-paper';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
-
+import { Myiten, MyCorrelated } from '../src/components/myItenlist';
+import MyList from '../src/components/mylist';
 
 export default function RecordScreen() {
     {/*Aqui é typescript COMENTÁRIO dentro do front */ }
@@ -39,7 +40,7 @@ export default function RecordScreen() {
             const newId = records.length ? records[records.length - 1].id + 1 : 0;
             const newRecord = { ...req, id: newId };
 
-            setRecords([...records, req]);
+            setRecords([...records, newRecord]);
         } else {
             setRecords(records.map(r => (r.id == req.id ? req : r)));
         }
@@ -139,11 +140,16 @@ export default function RecordScreen() {
                 </View>
 
 
-                <FlatList // MyList
-                    data={records}
-                    keyExtractor={(item) => item.id.toString()}
+                <MyList
+                    data={records} 
+                    keyItem={(item) => item.id.toString()}
                     renderItem={({ item }) => (
-                        <View style={styles.recordsItem}  /*MyItem */> 
+
+                        <MyCorrelated 
+                        showDeleteButton = {false}
+                        showEditButton = {false}
+
+                        style={styles.itemText}  /*MyItem */> 
                             <Text style={styles.itemText}>Nome: {item.name}</Text>
                             <Text style={styles.itemText}>Descrição: {item.description}</Text>
                             <Text style={styles.itemText}>Doença: {item.sick}</Text>
@@ -163,14 +169,14 @@ export default function RecordScreen() {
 
                                 <MyButton
                                     title=" EDITAR"
-                                    onPress={() => { delRecord(item.id) }}
+                                    onPress={() => { editRecord(item.id) }}
                                     button_type="round"
                                     style={styles.button_round}
                                 />
 
 
                             </View>
-                        </View>
+                        </MyCorrelated>
                     )}
                 />
             </View>
@@ -198,19 +204,6 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
     },
 
-    recordsItem: {
-        flex: 1,
-        marginRight: 20,
-        marginLeft: 20,
-        padding: 10,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-    },
-
     button_round: {
         borderRadius: 20,
         alignItems: "center",
@@ -230,4 +223,18 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
     }
+
+    /*    recordsItem: {
+        flex: 1,
+        marginRight: 20,
+        marginLeft: 20,
+        padding: 10,
+        backgroundColor: '#F2F2F2',
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 4 },
+        shadowRadius: 5,
+    },*/
+    
 })
