@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Appbar, Drawer } from 'react-native-paper';
 import { useState } from 'react';
+import  MyTheme from '../src/components/Mytheme'
 import MyNotify from '../src/components/Mynotify';
 import MyTopbar from '../src/components/mytopbar';
 
@@ -15,7 +16,6 @@ export default function HomeScreen() {
             {/* Menu Hambúrguer no Topo */}
             
             <MyTopbar title="Bem vindo ao app do Serasa" /> 
-           
 
             {/* Drawer Menu */}
             {drawerOpen && (
@@ -29,11 +29,19 @@ export default function HomeScreen() {
                         }}
                     />
                     <Drawer.Item
-                        label="CATEGORIES"
+                        label="Postagens"
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/categories');
+                            router.push('/posts');
+                        }}
+                    />
+                     <Drawer.Item
+                        label="Perfil"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/Myperfil');
                         }}
                     />
                      <Drawer.Item
@@ -49,17 +57,22 @@ export default function HomeScreen() {
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/students');
-                        }}
+                            router.push('/students');}}
                     />
                     <Drawer.Item
                         label="Empréstimo"
                         icon="post"
+                        onPress={() => {setDrawerOpen(false);router.push('/loans');}}
+                    />
+                    <Drawer.Item
+                        label="Calendario"
+                        icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/loans');
+                            router.push('/calendar');
                         }}
                     />
+                    
                     <Drawer.Item
                         label="Cursos"
                         icon="post"
@@ -69,13 +82,113 @@ export default function HomeScreen() {
                         }}
                        
                     />
-                      <Drawer.Item
-                         label="Despesa"
-                         icon="post"
-                         onPress={() => {
-                             setDrawerOpen(false);
-                             router.push('/expenses');
-                        }}/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     <Drawer.Item
                         label="Cursos"
                         icon="acervo"
@@ -89,7 +202,25 @@ export default function HomeScreen() {
                         icon="post"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/employees');}}
+                            router.push('/documents');
+                        }}
+                    />
+
+                    <Drawer.Item
+                        label="Cursos"
+                        icon="acervo"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/collections');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="receitas"
+                        icon="post"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/revenues');
+                        }}
                     />
                     <Drawer.Item
                         label="Configurações"
@@ -116,4 +247,4 @@ export default function HomeScreen() {
             </View>
             </View>
     );  
-}
+} 

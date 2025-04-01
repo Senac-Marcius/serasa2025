@@ -1,5 +1,13 @@
-import react, {useState} from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity} from 'react-native';
+import MyLogin from '../src/components/MyLogin';
+import MyButton from '../src/components/Mybuttons';
+import MyList from '../src/components/mylist';
+import  { Myinput} from '../src/components/Myinputs';
+import MyView from '../src/components/MyView';
+import Mytext from '../src/components/Mytext';
+import { Myiten } from '../src/components/myItenlist';
+
 
 export default function BudgetScreen(){
 
@@ -63,50 +71,64 @@ export default function BudgetScreen(){
         setBudgets(list)
     }
 
-
+    
     return (
-        <View>
+        <MyView>
             {/* aqui é typescriot dentro do front*/}
-            <Text>Minha tela das postagens</Text>
+            <Mytext>Minha tela das postagens</Mytext>
             <View style={styles.row}>
                 <View style={styles.form}>
-                    <TextInput
-                            placeholder = "nome" 
+                    <Myinput
+                            
                             value={req.name}
                             onChangeText={(text) => setReq({...req ,name: text})}
+                            label="Nome"
+                            iconName="person"
                    />
-                    <TextInput 
-                    placeholder = "url"
+                    <Myinput 
+                    
                     value={req.url}
                     onChangeText={(text) => setReq({...req ,url: text})} 
+                    label="url"
+                    iconName="link"
                      />
                      
-                     <TextInput 
-                    placeholder = "valor"
+                     <Myinput 
+                    placeholder = "Digite o valor"
                     value={req.velue}
                     onChangeText={(text) => setReq({...req ,velue: text})} 
+                    label="valor"
+                    iconName="pin"
                      />
-                    <TextInput 
-                    placeholder = "Data Inicial"
+                    <Myinput 
+                  
                     value={req.startDate}
                     onChangeText={(text) => setReq({...req ,startDate: text})} 
+                    label="Data Inicial"
+                    iconName="pin"
                      />
-                    <TextInput 
-                    placeholder = "Data Final" 
+                    <Myinput 
+                  
                     value={req.endDate}
                     onChangeText={(text) => setReq({...req ,endDate: text})}
+                    label="Data Final"
+                    iconName="pin"
                      />
                      
 
-                    <Button title ='CADASTRAR' onPress={ handleRegister }/>
+
+                    <MyButton title ='CADASTRAR' onPress={ handleRegister }/>
                 </View>
-                <FlatList
+                <MyList
 
                     data={budgets}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
                     
-                        <View style={styles.budetStyle}>
+                        <Myiten 
+                       onEdit ={()=> editBudget(item.id)}
+                       onDel ={()=> delBudget(item.id)}
+                        >
                        
                        <Text> Nome: {item.name}</Text>
                            <Text> Url: {item.url}</Text>
@@ -115,28 +137,12 @@ export default function BudgetScreen(){
                            <Text> UserId: {item.userId}</Text>
                            <Text> Data Inicial: {item.startDate}</Text>
                            <Text> Data Final: {item.endDate}</Text>
-                        
-                        <View style={styles.buttonsContanier}>
-
-                        <TouchableOpacity
-                        style ={styles.editButton}
-                        onPress={()=> {editBudget(item.id)}}>
-                        <Text style={styles.buttonText}>EDIT</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity 
-                        style ={styles.delButton}
-                        onPress={()=> {delBudget(item.id)}}>
-                        <Text style={styles.buttonText}>DELETE</Text>
-                        </TouchableOpacity>
-                        </View>
- 
-                           
-                        </View>
+    
+                        </Myiten>
                     )}
                 />
             </View>
-        </View>
+        </MyView>
     );
 }
 

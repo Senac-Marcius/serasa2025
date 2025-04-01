@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   button_capsule: {
+    display:"flex",
     borderRadius: 50,
     backgroundColor: "#813AB1",
     alignItems: "center",
@@ -92,6 +93,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   button_rect: {
+    display:"flex",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#813AB1",

@@ -55,7 +55,6 @@ export default function categoryScreen(){
 
     return (
         <View>
-                                                         
     {/* aqui é typerscrypt dentro do front */}
 
             <View style={styles.row}>

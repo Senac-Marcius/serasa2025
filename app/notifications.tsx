@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
-import { View, FlatList, Text, StyleSheet, TextInput, Button, TouchableOpacity,  } from 'react-native';
-
+import { View, FlatList, Text, StyleSheet, TextInput, Button, TouchableOpacity,} from 'react-native';
+import MyTheme from '../src/components/Mytheme';
+import {Myinput} from '../src/components/Myinputs'; 
+import MyView from '../src/components/MyView';
+import MyButton from '../src/components/Mybuttons';
+import Myiten from '../src/components/myItenlist';
+import MyList from '../src/components/mylist';
+import Mytext from '../src/components/Mytext';
+import {textStyles}  from '../styles/textStyles';
 
 export default function NotificationScreen(){
 // aqui é typNotificationScreenescript
@@ -57,54 +64,72 @@ export default function NotificationScreen(){
     }
 
 return (
-    <View>
+    <MyView>
+          
+           
+
         {/* aqui é typescriot dentro do front*/}
         <Text>Minha tela de notificações</Text>
         <View style={styles.row}>
             <View style={styles.form}>
-                <TextInput
+                <Myinput
                         style={styles.input}
-                        placeholder = "Nome:"
+                        placeholder = "Digite o nome:"
                         value={req.name}
                         onChangeText={(text) => setReq({...req ,name: text  })}
+                        label="Nome"
+                        iconName='person'
                  />
-                <TextInput 
+                <Myinput
                         style={styles.input}
-                        placeholder = "Descrição:"  
+                        placeholder = "Digite a descrição:"  
                         value={req.description}
                         onChangeText={(text) => setReq({...req ,description: text  })}
+                        label="Descrição"
+                        iconName='pending'
+                    
                 />
-                <TextInput 
+                <Myinput
                         style={styles.input}
-                        placeholder = "classificação:"  
+                        placeholder = "Digite a classificação:"  
                         value={req.classification}
                         onChangeText={(text) => setReq({...req ,classification: text  })}
+                        label="Classificação"
+                        iconName= 'pending'
                 />
 
-                <TextInput 
+                <Myinput
                         style={styles.input}
-                        placeholder = "Url:" 
+                        placeholder = "Digite o Url:" 
                          value={req.url}
                          onChangeText={(text) => setReq({...req ,url: text  })}
+                         label="Url"
+                         iconName='pending'
                 />
 
-                <Button title="cadastrar:" onPress={handleRegister}/>
+                <MyButton title="cadastrar:" onPress={handleRegister}/>
 
             </View>
 
-           <FlatList
+           <MyList 
                     data={notifications}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
-                        <View style={styles.notificationStyle}>
+                        <Myiten 
+                            style={styles.notificationStyle} 
+                                onEdit={() => {editNotification(item.id)}}
+                                onDel={() => {deleteNotification(item.id)}}
+                                
+                        > {/* pedro */}
 
-                           <text> Nome: {item.name}</text> 
-                           <text> Descrição: {item.description}</text>
-                           <text> Url: {item.url}</text>
-                           <text> Classificação: {item.classification}</text>
-                           <text> UserId: {item.userId}</text>
-                           <text> CreatAt: {item.creatAt}</text>
+                           <Mytext style={textStyles.textBody} > Nome: {item.name}</Mytext> {/* alex */}
+                           <Mytext style={textStyles.textBody}> Descrição: {item.description}</Mytext>
+                           <Mytext style={textStyles.textBody}> Url: {item.url}</Mytext>
+                           <Mytext style={textStyles.textBody}> UserId: {item.userId}</Mytext>
+                           <Mytext style={textStyles.textBody}> CreatAt: {item.creatAt}</Mytext>
 
+
+                            {/*
                             <View style={styles.buttonsContainer}>
                                 <TouchableOpacity 
                                     style ={styles.editButton} 
@@ -118,13 +143,15 @@ return (
                                 </TouchableOpacity>
                            
                             </View>
-                        </View>
+                            */}
+
+                        </Myiten>
                     )}
            />
            
         </View>
 
-    </View>
+    </MyView>
 );
 }
 

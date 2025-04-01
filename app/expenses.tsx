@@ -1,6 +1,6 @@
 import React, { useState, Children } from 'react';
 import { View, Text, StyleSheet, TextInput,TouchableOpacity, } from 'react-native' ;
-import Myiten from '../src/components/myItenlist';
+import {Myiten, MyCorrelated } from '../src/components/myItenlist';
 import MyList from '../src/components/mylist';
 import MyView from '../src/components/MyView';
 import MyButton from '../src/components/Mybuttons'
