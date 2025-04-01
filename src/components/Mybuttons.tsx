@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { TouchableOpacity, Text, StyleSheet, ViewStyle } from "react-native";
-import { Icon , MD3Colors} from "react-native-paper";
-
+import { Icon } from "react-native-paper";
+ 
 type Button_type = "default" | "round" | "circle" | "rect" | "capsule" |"loading";
-
+ 
 interface MyButtonProps {
-  title?: string;
+  title: string;
   onPress?: () => void;
   button_type?: Button_type;
-  icon?: string;
+  Icon?: string;
   style?: ViewStyle;
 }
-
+ 
 function getButtonType(button_type: Button_type): any {
   switch (button_type) {
     case "circle":
@@ -28,46 +28,39 @@ function getButtonType(button_type: Button_type): any {
       return styles.button_default;
   }
 }
-
-
-
-
-
+ 
 const MyButton: React.FC<MyButtonProps> = ({
   title,
   onPress,
   button_type = "default",
-  icon,
   style,
 }) => {
-
+ 
     const [loading, setLoading] = useState(false)
-
+ 
     function onPressIntenal(){
         if(button_type == "loading"){
             setLoading(true)
             setTimeout(() => {
-                () => {onPress && onPress()};
+              if(onPress) onPress();
                 setLoading(false)
             }, 2000)
         }else{
-            onPress != undefined ? onPress() : ""
-            setLoading(true)
+            if(onPress) onPress();
         }
-        
     }
   return (
     <TouchableOpacity
       style={[getButtonType(button_type), style]}
       onPress={onPressIntenal}
     >
-     { icon && <Icon size={20} source={icon} color={MD3Colors.error50}></Icon>}
+      {/* <Text style={styles.button_text}>{loading && (<Icon></Icon>) }{title}</Text> */}
       <Text style={styles.button_text}>{title}</Text>
-
+ 
     </TouchableOpacity>
   );
 };
-
+ 
 const styles = StyleSheet.create({
   button_circle: {
     backgroundColor: "#813AB1",
@@ -109,5 +102,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
+ 
 export default MyButton;
+ 
+ 

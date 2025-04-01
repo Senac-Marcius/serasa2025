@@ -1,28 +1,26 @@
 import { ReactNode } from 'react';
-import { View,  StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Appbar, Drawer } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-
-
 
 interface MyTopbarProps {
     title: string;
 }
 
 const MyTopbar: React.FC<MyTopbarProps> = ({ title }) => {
-      const router = useRouter();
-        const [drawerOpen, setDrawerOpen] = useState(false);
+    const router = useRouter();
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    
     return (
         <View style={styles.container}>
-            <Appbar.Header>
-                <Appbar.Action icon="menu" onPress={() => setDrawerOpen (!drawerOpen)} />
-                <Appbar.Content title={title}/>
-                {/* Anelisa */}
+            <Appbar.Header style={styles.appbar}>
+                <Appbar.Action icon="menu" onPress={() => setDrawerOpen(!drawerOpen)} />
+                <Appbar.Content title={title} titleStyle={styles.title} />
             </Appbar.Header>
-            {/* importar do misael */}
-             {drawerOpen && (
-                <Drawer.Section style={{ backgroundColor: 'white', padding: 10 }}>
+            
+            {drawerOpen && (
+                <Drawer.Section style={styles.drawerSection}>
                     <Drawer.Item
                         label="Início"
                         icon="home"
@@ -33,24 +31,23 @@ const MyTopbar: React.FC<MyTopbarProps> = ({ title }) => {
                     />
                     <Drawer.Item
                         label="Postagens"
-                        icon="post"
+                        icon="file-document"
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/posts');
                         }}
                     />
                     <Drawer.Item
-                        label="Calendario"
-                        icon="post"
+                        label="Calendário"
+                        icon="calendar"
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/calendar');
                         }}
                     />
-                    
                     <Drawer.Item
                         label="Cursos"
-                        icon="post"
+                        icon="school"
                         onPress={() => {
                             setDrawerOpen(false);
                             router.push('/courses');
@@ -61,10 +58,9 @@ const MyTopbar: React.FC<MyTopbarProps> = ({ title }) => {
                         icon="cog"
                         onPress={() => {
                             setDrawerOpen(false);
-                            console.log("Configurações");
+                            router.push('/settings');
                         }}
                     />
-                    
                 </Drawer.Section>
             )}
         </View>
@@ -73,23 +69,29 @@ const MyTopbar: React.FC<MyTopbarProps> = ({ title }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: '#6A1B9A', // Roxo
+        backgroundColor: '#6A1B9A',
         padding: 10,
         borderRadius: 10,
         margin: 10,
     },
-    iconButton: {
-        padding: 8,
-        backgroundColor: '#4A148C', // Roxo escuro
-        borderRadius: 50,
+    appbar: {
+        backgroundColor: '#4A148C',
+        borderRadius: 10,
     },
-    screenName: {
+    title: {
         color: 'white',
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: 'bold',
+    },
+    drawerSection: {
+        backgroundColor: 'white',
+        padding: 15,
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        elevation: 5,
     },
 });
 
