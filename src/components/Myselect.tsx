@@ -17,7 +17,7 @@ const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {
         <View>
             <TouchableOpacity 
                 style={{ 
-                    backgroundColor: "gray", 
+                    backgroundColor: "#813AB1", 
                     padding: 10, 
                     borderRadius: 5, 
                     alignItems: 'center' 

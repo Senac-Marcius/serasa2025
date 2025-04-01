@@ -5,6 +5,7 @@ import MyView from '../src/components/MyView';
 import MyList from '../src/components/mylist';
 import Myiten from '../src/components/myItenlist';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
+import MyButton  from '../src/components/Mybuttons';
 
 export default function LocalScreen(){
 
@@ -118,7 +119,7 @@ export default function LocalScreen(){
                         onChangeText={(t) => setReq({...req, adress: t })}
                         />
 
-                        <Button title='Cadastrar' onPress={ handleRegister } />         
+                        <MyButton title='Cadastrar' onPress={ handleRegister } button_type="capsule" />         
 
                     </View>
 
