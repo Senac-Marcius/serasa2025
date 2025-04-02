@@ -9,13 +9,13 @@ export default function StudentsScreen() {
     <MyView>
       <View style={styles.hero}>
            <MyButton  button_type="circle" width={70} height={70} icon="library" iconColor="white" iconSize={30}></MyButton>
-           <MyButton  button_type="circle" width={70} height={70} icon="library" iconColor="white" iconSize={30}></MyButton>
-           <MyButton  button_type="circle" width={70} height={70} icon="library" iconColor="white" iconSize={30}></MyButton>
-           <MyButton  button_type="circle" width={70} height={70} icon="library" iconColor="white" iconSize={30}></MyButton>
-           <MyButton  button_type="circle" width={70} height={70} icon="library" iconColor="white" iconSize={30}></MyButton>
-           <MyButton  button_type="circle" width={70} height={70} icon="library" iconColor="white" iconSize={30}></MyButton>
-           <MyButton  button_type="circle" width={70} height={70} icon="library" iconColor="white" iconSize={30}></MyButton>
-           <MyButton  button_type="circle" width={70} height={70} icon="library" iconColor="white" iconSize={30}></MyButton>
+           <MyButton  button_type="circle" width={70} height={70} icon="hand-coin" iconColor="white" iconSize={30}></MyButton>
+           <MyButton  button_type="circle" width={70} height={70} icon="finance" iconColor="white" iconSize={30}></MyButton>
+           <MyButton  button_type="circle" width={70} height={70} icon="book" iconColor="white" iconSize={30}></MyButton>
+           <MyButton  button_type="circle" width={70} height={70} icon="book-open" iconColor="white" iconSize={30}></MyButton>
+           <MyButton  button_type="circle" width={70} height={70} icon="receipt" iconColor="white" iconSize={30}></MyButton>
+           <MyButton  button_type="circle" width={70} height={70} icon="file-clock" iconColor="white" iconSize={30}></MyButton>
+           <MyButton  button_type="circle" width={70} height={70} icon="room-service" iconColor="white" iconSize={30}></MyButton>
 
 
       </View>
@@ -26,7 +26,7 @@ export default function StudentsScreen() {
 const styles = StyleSheet.create({
 
 hero:{
-  boxShadow:"0 1px 2px black ",
+  boxShadow:"0px 4px 10px -6px rgba(0,0,0,0.32)",
   width:310,
   height:505,
   borderRadius:25,
@@ -36,6 +36,8 @@ hero:{
   paddingVertical:23,
   flexDirection:"row",
   flexWrap:"wrap",
+  columnGap:80,
+  
   
 },
 
