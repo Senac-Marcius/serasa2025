@@ -1,6 +1,5 @@
 import React, {useState} from 'react'; //Importa o react e atualiza a lista Automaticamente.
 import {View, Text, StyleSheet, FlatList} from 'react-native';//Une  os objetos e o react-native faz a função de trasformar o codigo em multiplas plataformas.
-import { useRouter } from 'expo-router';
 import MyFilter from '../src/components/MyFilter';
 import MySelect from '../src/components/MySelect';
 import MyTimerPicker from '../src/components/MyTimerPiker';
@@ -9,7 +8,6 @@ import MyItem from '../src/components/MyItem';
 import MyView from '../src/components/MyView';
 
 export default function ScaleScreen(){
-    const router = useRouter();
 
     const [req, setReq] = useState({
         id:0,

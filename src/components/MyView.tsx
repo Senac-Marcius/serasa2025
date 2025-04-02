@@ -1,6 +1,5 @@
 import React,{ReactNode} from 'react';
-import { View, StyleSheet, Dimensions, TextStyle  } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { View, StyleSheet, Dimensions, TextStyle, ScrollView} from 'react-native';
 import MyTopbar from './MyTopbar';
 import MySupport from './MySupport';
 

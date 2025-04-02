@@ -1,7 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Appbar, Drawer } from 'react-native-paper';
+import { View } from 'react-native';
 import { useState } from 'react';
 import  MyTheme from '../src/components/MyTheme'
 import  MyView from '../src/components/MyView'
