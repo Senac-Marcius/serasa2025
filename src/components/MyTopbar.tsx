@@ -280,6 +280,14 @@ const MyTopbar: React.FC<MyTopbarProps> = ({ title, router }) => {
                             router.push('/users');
                         }}
                     />
+                    <Drawer.Item
+                        label="more"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/more');
+                        }}
+                    />
                 </Drawer.Section>
             )}
         </View>
