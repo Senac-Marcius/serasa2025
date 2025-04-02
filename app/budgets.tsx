@@ -6,9 +6,11 @@ import  { Myinput} from '../src/components/MyInputs';
 import MyView from '../src/components/MyView';
 import Mytext from '../src/components/MyText';
 import { MyItem } from '../src/components/MyItem';
+import { useRouter } from 'expo-router';
 
 
 export default function BudgetScreen(){
+    const router = useRouter();
 
 //aqui é typescriot
 
@@ -72,7 +74,7 @@ export default function BudgetScreen(){
 
     
     return (
-        <MyView>
+        <MyView router={router} >
             {/* aqui é typescriot dentro do front*/}
             <Mytext>Minha tela das postagens</Mytext>
             <View style={styles.row}>

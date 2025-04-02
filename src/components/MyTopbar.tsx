@@ -1,15 +1,15 @@
 import { View, StyleSheet } from 'react-native';
 import { Appbar, Drawer } from 'react-native-paper';
-import { useRouter } from 'expo-router';
+import { Router } from 'expo-router';
 import { useState } from 'react';
 import MyNotify from './MyNotify';
 
 interface MyTopbarProps {
     title?: string;
+    router: Router;
 }
 
-const MyTopbar: React.FC<MyTopbarProps> = ({ title }) => {
-    const router = useRouter();
+const MyTopbar: React.FC<MyTopbarProps> = ({ title, router }) => {
     const [drawerOpen, setDrawerOpen] = useState(false);
     
     return (

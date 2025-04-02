@@ -1,12 +1,12 @@
 import React ,{ useState }from 'react';
 import { Text, View, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} from 'react-native';
 import MyLink from '../src/components/MyLink';
-import MyItem from '../src/components/MyItem';
+import {MyItem} from '../src/components/MyItem';
 import MyList from '../src/components/MyList';
 import { Myinput } from '../src/components/MyInputs';
 import MyButton from '../src/components/MyButtons';
 import MyView from '../src/components/MyView';
-
+import { useRouter } from 'expo-router';
 
 export default  function itemScreen(){
      const[req,setReq] = useState({ 
@@ -59,8 +59,10 @@ export default  function itemScreen(){
         setItens(list)
      }
 
+    const router = useRouter();
+     
     return (
-        <MyView>
+        <MyView router={router} >
        
         <Text>Minha tela de itens</Text>
         

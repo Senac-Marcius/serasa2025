@@ -6,6 +6,7 @@ import MyButton from '../src/components/MyButtons';
 import Mytext from '../src/components/MyText';
 import MyView from '../src/components/MyView';
 import { Myinput } from '../src/components/MyInputs';
+import { useRouter } from 'expo-router';
 
 export default function ProjectScreen(){
     interface Project {
@@ -105,10 +106,11 @@ export default function ProjectScreen(){
 
     }
 
+    const router = useRouter();
     const [busca, setBusca] = useState('')
     // Criando o textinput para receber e exibir o texto "placeholder" para o usuario digitar
     return ( // Esta sendo feito um emcapsulamento com a abertura da () / {req.description}= usado para mostar o codigo em baixo
-        <MyView>
+        <MyView router={router} >
             <MySearch 
                 style={{ padding: 20 }} 
                 onChangeText={setBusca}

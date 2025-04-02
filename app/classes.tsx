@@ -1,21 +1,25 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import MyView from '../src/components/MyView'
+import { useRouter } from 'expo-router';
+
 
 export default function ClassScreen() {
 
-    const [Req, setReq] = useState({
+    const [req, setReq] = useState({
         name: '',
         id: 0,
         date: '',
+        quant: '',
         start_date: '',
         end_date: '',       
         createAt: new Date(),
     });
 
-
+    const router = useRouter();
 
     return (
-        <View>
+        <MyView router={router} >
             Olá mundo
             <Text>
                 Minha tela das classes</Text>
@@ -23,41 +27,28 @@ export default function ClassScreen() {
                     <View style={styles.form}>
                         <TextInput
                         placeholder="Nome da Turma"
-                        value={Req.name}
-                        onChangeText={(text) => setReq({...Req, name: text})}
+                        value={req.name}
+                        onChangeText={(text) => setReq({...req, name: text})}
                         />
-                        {Req.name}
+
                         <TextInput
                         placeholder="Quantidade de Alunos"
-                        value={Req.quant}
-                        onChangeText={(text) => setReq({...Req, quant: text})}
+                        value={req.quant}
+                        onChangeText={(text) => setReq({...req, quant: text})}
                         />
-                        {Req.quant}
-                        <TextInput
-                        placeholder="ID da Turma"
-                        value={Req.id}
-                        onChangeText={(text) => setReq({...Req, id: text})}
-                        />
-                        {Req.id}
-                        <TextInput
-                        placeholder="Data de criação da Turma"
-                        value={Req.date}
-                        onChangeText={(text) => setReq({...Req, date: text})}
-                        />
-                        {Req.date}
+                        
                         <TextInput
                         placeholder="Data de Inicio"
-                        value={Req.start_date}
-                        onChangeText={(text) => setReq({...Req, start_date: text})}
+                        value={req.start_date}
+                        onChangeText={(text) => setReq({...req, start_date: text})}
                         />
-                        {Req.start_date}
+
                         <TextInput
                         placeholder="Data de Finalização"
-                        value={Req.end_date}
-                        onChangeText={(text) => setReq({...Req, end_date: text})}
+                        value={req.end_date}
+                        onChangeText={(text) => setReq({...req, end_date: text})}
                         
                         />
-                        {Req.end_date}
 
                         <Button title="Cadastrar Turma" color= 'purple'/>
 
@@ -65,7 +56,7 @@ export default function ClassScreen() {
                     
 
                 </View>
-        </View>
+        </MyView>
     );
 
 } 

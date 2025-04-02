@@ -8,7 +8,7 @@ import MyList from '../src/components/MyList';
 import { Myinput, MyCheck } from '../src/components/MyInputs';
 import Mybutton from '../src/components/MyButtons';
 import MyCalendar from '../src/components/MyCalendar';
-
+import { useRouter } from 'expo-router';
 
 
 
@@ -74,9 +74,10 @@ export default function LaunchScreen() {
 
     }
 
+    const router = useRouter();
 
     return (
-        <MyView>
+        <MyView router={router} >
 
             <Mybutton title="turma" onPress={handleRegister} /> {/*simulando select que tenho que pegar da giovana*/}
             <Mybutton title="disciplina" onPress={handleRegister} />
@@ -85,6 +86,7 @@ export default function LaunchScreen() {
             <MyCalendar
                     date='2021-10-10'
                     setDate={(date) => console.log(date)}
+                    icon=''
             />
 
             <Text>Alunos:</Text>

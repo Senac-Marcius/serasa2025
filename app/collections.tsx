@@ -5,6 +5,8 @@ import MyButton from '../src/components/MyButtons';
 import MyView from '../src/components/MyView';
 import { Myinput } from '../src/components/MyInputs'
 import MyList from '../src/components/MyList'
+import { useRouter } from 'expo-router';
+
 
 //função userState só retorna para uma variavel const
 
@@ -61,8 +63,11 @@ export default function CollectionScreen() {
 
     }
 
+    const router = useRouter();
+
+
     return (//encapsulamento 
-        <MyView >
+        <MyView router={router} >
             <View style={styles.formContainer}>
                 <View style={styles.row}>
                     <View style={styles.form}>

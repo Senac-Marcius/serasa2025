@@ -3,9 +3,11 @@ import { Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, View  
 import MySelect from '../src/components/MySelect' 
 import MyView from '../src/components/MyView';
 import MyList from '../src/components/MyList';
-import MyItem from '../src/components/MyItem';
+import {MyItem} from '../src/components/MyItem';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs';
 import MyButton  from '../src/components/MyButtons';
+import { useRouter } from 'expo-router';
+
 
 export default function LocalScreen(){
 
@@ -64,10 +66,13 @@ export default function LocalScreen(){
 
     const [unity, setUnit] = useState("metros")              /* exemplo do código de SELECT para copiar */
     
+    
+    const router = useRouter();
+    
 
     return (
 
-            <MyView style={styles.container}>
+            <MyView router={router} style={styles.container}>
 
             
 

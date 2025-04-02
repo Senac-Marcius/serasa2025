@@ -5,8 +5,11 @@ import  Mytext  from '../src/components/MyText';
 import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
 import MyView from '../src/components/MyView';
-import MyItem from '../src/components/MyItem';
+import {MyItem} from '../src/components/MyItem';
 import { Myinput, MyTextArea } from '../src/components/MyInputs';
+import { useRouter } from 'expo-router';
+
+
 //fuction
 export default function CoursesScreen(){
     const [req, setReq] = useState({
@@ -59,9 +62,12 @@ export default function CoursesScreen(){
      setCourses(CoursesPosts.filter(course => course.id !==id));
     }
 
+    const router = useRouter();
+
+
     return (
       <ScrollView style={styles.container}>
-      <MyView>
+      <MyView router={router} >
         <Mytext>Cursos</Mytext>
         <View style={styles.row}>
             <View style={styles.form}>

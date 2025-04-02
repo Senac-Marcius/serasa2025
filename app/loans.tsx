@@ -5,6 +5,7 @@ import MyView from '../src/components/MyView';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs';
 import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
+import { useRouter } from 'expo-router';
 
 
 export default function LoanScreen() {
@@ -79,12 +80,13 @@ export default function LoanScreen() {
     //aqui é typescript
 
 
+    const router = useRouter();
 
 
     return (
 
 
-        <MyView>
+        <MyView router={router} >
             <View style={styles.formConteiner}>
             <Text>Tela de Empréstimo</Text>
             <View style={styles.row}>

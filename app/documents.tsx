@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
 
 const FileUploadComponent = () => {
   const [file, setFile] = useState(null);
@@ -12,6 +13,9 @@ const FileUploadComponent = () => {
     setFile(null);
     console.log('Upload cancelado');
   };
+
+  const router = useRouter();
+
 
   return (
     <View style={styles.container}>

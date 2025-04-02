@@ -1,12 +1,12 @@
 import React, { useState } from 'react'; //função useState só retorna para uma variavel const
 import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
 import { Picker } from "@react-native-picker/picker";
-import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
 import MyTabsbar from '../src/components/MyTabsBar';
 import MyButton from '../src/components/MyButtons';
 import MyView from '../src/components/MyView';
+import { useRouter } from 'expo-router';
 
 
 export default function ItemScreen() { // aqui é TS
@@ -224,7 +224,7 @@ export default function ItemScreen() { // aqui é TS
     
 
     return ( //encapsulamento
-        <MyView>
+        <MyView router={router} >
             <Text style={styles.h1}>Cadastro de Itens no Acervo</Text>
             <View style={styles.buttonContainer}>
                 <ScrollView 

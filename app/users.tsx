@@ -3,10 +3,10 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, Button, FlatList }
 import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs'
 import MyView from '../src/components/MyView';
 import MyList from '../src/components/MyList';
-import { ScrollView } from 'react-native-gesture-handler';
 import MyButton from '../src/components/MyButtons';
 import { Image } from 'react-native';
-import MyItem from '../src/components/MyItem'
+import {MyItem} from '../src/components/MyItem'
+import { useRouter } from 'expo-router';
 
 // Define o estado inicial como false
 //isChecked = valor atual da váriavel, SetIsChecked ele altera o valor da isChecked
@@ -86,17 +86,13 @@ export default function UserScreen() {
             setUsers(list)
     }
 
-    //criar outras funções, sempre retorna html
-    //aqui é typescript
-
+    const router = useRouter();
 
     //CHECKBOX:
     //setIsChecked: é uma função usada para atualizar o estado de isChecked.
     //!isChecked: o operador ! inverte o valor atual de isChecked. Se isChecked era true (checkbox marcada), ele se torna false (checkbox desmarcada), e vice-versa.
     return (
-        <ScrollView>
-
-            <MyView>
+            <MyView router={router} >
 
 
                 <View style={styles.form}>
@@ -180,7 +176,6 @@ export default function UserScreen() {
                 </View>
 
             </MyView>
-        </ScrollView>
     );
 }
 

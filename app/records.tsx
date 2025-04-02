@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity} from 'react-native';
+import MyView from '../src/components/MyView';
+import { useRouter } from 'expo-router';
 
 export default function RecordScreen(){
 {/*Aqui é typescript COMENTÁRIO dentro do front */}
@@ -64,9 +66,10 @@ export default function RecordScreen(){
             setRecords(list)
     }
 
+    const router = useRouter();
     return (
 
-        <View>
+        <MyView router={router} >
             <Text>Tela dos Registros</Text>
 
             <View style={styles.row}>
@@ -134,7 +137,7 @@ export default function RecordScreen(){
                     )}                                                                        
                 />
             </View>
-        </View>
+        </MyView>
     );
 }
 

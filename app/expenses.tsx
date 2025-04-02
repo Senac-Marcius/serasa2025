@@ -6,6 +6,7 @@ import MyView from '../src/components/MyView';
 import MyButton from '../src/components/MyButtons'
 import {Myinput, MyTextArea} from '../src/components/MyInputs';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useRouter } from 'expo-router';
 
 export default function ExpenseScreen(){
 // aqui é typescript
@@ -65,9 +66,12 @@ export default function ExpenseScreen(){
             setExpense(list)
     }
 
+            const router = useRouter();
+    
+
     return (
         
-        <MyView> 
+        <MyView router={router} > 
             {/* aqui é typecript dentro do front */}
             <Text style={styles.title}>tela de despesas</Text>
             <View style={styles.row}>

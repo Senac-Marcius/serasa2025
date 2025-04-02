@@ -9,8 +9,9 @@ import {
   Button,
   TouchableOpacity,
 } from "react-native";
-
 import MyButton from "../src/components/MyButtons";
+import MyView from '../src/components/MyView';
+import { useRouter } from 'expo-router';
 
 
 export default function StudentsScreen() {
@@ -60,8 +61,10 @@ export default function StudentsScreen() {
     setStudent((prevItems) => prevItems.filter((item) => item.id !== id));
   }
 
+  const router = useRouter();
+
   return (
-    <ScrollView>
+    <MyView router={router} > 
       <View style={styles.container}>
         <View style={styles.formtxt}>
           <Text style={styles.titulos}>Cadastre-se</Text>
@@ -126,7 +129,7 @@ export default function StudentsScreen() {
           />
         </View>
       </View>
-    </ScrollView>
+    </MyView>
   );
 }
 

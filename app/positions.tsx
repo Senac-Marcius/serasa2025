@@ -4,7 +4,7 @@ import CurrencyInput from 'react-native-currency-input';
 import {TimeInput} from "@heroui/date-input";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import MyView from '../src/components/MyView';
-
+import { useRouter } from 'expo-router';
 
 export default function PositionScreen(){
 /*Aqui é TypeScript*/
@@ -55,8 +55,10 @@ export default function PositionScreen(){
         setPositions(list)
     }
 
+    const router = useRouter();
+
     return (
-        <MyView>
+        <MyView router={router} >
             {/*Aqui é TypeScript dentro do front*/}
             <Text>Minha tela dos cargos</Text>
             <View style = {styles.row}>
@@ -66,12 +68,13 @@ export default function PositionScreen(){
                         value = {req.name}
                         onChangeText={(text)=> setReq({...req ,name: text })}/>
  
-                    <Myinput 
+                    {/*<Myinput 
                         label="Descrição"
                         placeholder="Insira uma descrição"
                         iconName="briefcase"
                         value = {req.description}
                         onChangeText={(text)=> setReq({...req ,description: text })}/>
+                        */}
 
                     {/*<CurrencyInput 
                         placeholder="Salário" />
@@ -87,19 +90,23 @@ export default function PositionScreen(){
 
                         {req.workHours}*/}
 
+{/*
                     <Myinput 
                         label="Departamento"
                         placeholder="Insira um departamento"
                         iconName="briefcase"
                         value = {req.departament}
                         onChangeText={(text)=> setReq({...req ,departament: text })}/>
+*/}
 
+{/*
                     <Myinput 
                         label="Supervisor"
                         placeholder="Insira um supervisor"
                         iconName="briefcase"
                         value = {req.supervisor}
-                        onChangeText={(text)=> setReq({...req ,supervisor: text })}/>
+                     onChangeText={(text)=> setReq({...req ,supervisor: text })}/>
+*/}
 
                     {/*<DateTimePickerModal 
                         placeholder="Data de cadastro" />*/}
