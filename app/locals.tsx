@@ -1,11 +1,11 @@
 import React, { useState } from 'react'; 
 import { Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, View  } from 'react-native';
-import MySelect from '../src/components/Myselect' 
+import MySelect from '../src/components/MySelect' 
 import MyView from '../src/components/MyView';
-import MyList from '../src/components/mylist';
-import Myiten from '../src/components/myItenlist';
-import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
-import MyButton  from '../src/components/Mybuttons';
+import MyList from '../src/components/MyList';
+import MyItem from '../src/components/MyItem';
+import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs';
+import MyButton  from '../src/components/MyButtons';
 
 export default function LocalScreen(){
 
@@ -127,7 +127,7 @@ export default function LocalScreen(){
                         data={locals}                   
                         keyItem={(item) => item.id.toString()}                
                         renderItem={({ item }) => (
-                            <Myiten
+                            <MyItem
                                 style={styles.formContainer}
                                 onEdit={ () => {editLocal(item.id)} }
                                 onDel={ () => (delLocal(item.id))}
@@ -139,7 +139,7 @@ export default function LocalScreen(){
                                 <Text style={styles.label} > {item.createAt} </Text>
                             
 
-                            </Myiten>
+                            </MyItem>
                         ) }
                     />
 

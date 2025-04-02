@@ -1,8 +1,8 @@
-import { ReactNode } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Appbar, Drawer } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
+import MyNotify from './MyNotify';
 
 interface MyTopbarProps {
     title?: string;
@@ -23,7 +23,9 @@ const MyTopbar: React.FC<MyTopbarProps> = ({ title }) => {
                 }
 
 
-                {/**chamar o da Ane aqui */}
+                <MyNotify>
+                    <></>
+                </MyNotify>
 
                 {/**chamar o do miza aqui */}
             </Appbar.Header>
@@ -39,7 +41,175 @@ const MyTopbar: React.FC<MyTopbarProps> = ({ title }) => {
                         }}
                     />
                     <Drawer.Item
-                        label="Postagens"
+                        label="budgets"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/budgets');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="calendar"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/calendar');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="categories"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/categories');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="classes"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/classes');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="collections"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/collections');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="courses"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/courses');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="disciplines"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/disciplines');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="documents"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/documents');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="employees"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/employees');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="expenses"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/expenses');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="investments"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/investments');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="itens"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/itens');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="launchs"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/launchs');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="levels"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/levels');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="librarie"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/librarie');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="loans"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/loans');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="locals"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/locals');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="notifications"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/notifications');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="parents"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/parents');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="perfil"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/perfil');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="positions"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/positions');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="posts"
                         icon="file-document"
                         onPress={() => {
                             setDrawerOpen(false);
@@ -47,27 +217,67 @@ const MyTopbar: React.FC<MyTopbarProps> = ({ title }) => {
                         }}
                     />
                     <Drawer.Item
-                        label="Calendário"
-                        icon="calendar"
+                        label="products"
+                        icon="file-document"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/calendar');
+                            router.push('/products');
                         }}
                     />
                     <Drawer.Item
-                        label="Cursos"
-                        icon="school"
+                        label="projects"
+                        icon="file-document"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/courses');
+                            router.push('/projects');
                         }}
                     />
                     <Drawer.Item
-                        label="Configurações"
-                        icon="cog"
+                        label="records"
+                        icon="file-document"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/settings');
+                            router.push('/records');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="revenues"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/revenues');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="scales"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/scales');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="schedules"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/schedules');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="students"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/students');
+                        }}
+                    />
+                    <Drawer.Item
+                        label="users"
+                        icon="file-document"
+                        onPress={() => {
+                            setDrawerOpen(false);
+                            router.push('/users');
                         }}
                     />
                 </Drawer.Section>

@@ -1,12 +1,12 @@
 
 import React,{ useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
-import  Mytext  from '../src/components/Mytext';
-import MyButton from '../src/components/Mybuttons';
-import MyList from '../src/components/mylist';
+import  Mytext  from '../src/components/MyText';
+import MyButton from '../src/components/MyButtons';
+import MyList from '../src/components/MyList';
 import MyView from '../src/components/MyView';
-import Myiten from '../src/components/myItenlist';
-import { Myinput, MyTextArea } from '../src/components/Myinputs';
+import MyItem from '../src/components/MyItem';
+import { Myinput, MyTextArea } from '../src/components/MyInputs';
 //fuction
 export default function CoursesScreen(){
     const [req, setReq] = useState({
@@ -102,7 +102,7 @@ export default function CoursesScreen(){
           data={CoursesPosts}
           keyItem={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <Myiten  style={styles.listItem}
+            <MyItem  style={styles.listItem}
 
               onEdit={()=> editCourses(item.id)}
               onDel={()=> deleteCourses(item.id)}
@@ -114,7 +114,7 @@ export default function CoursesScreen(){
 
               
 
-            </Myiten>
+            </MyItem>
           )}
         />
       </View>

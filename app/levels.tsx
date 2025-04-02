@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { View,Text, StyleSheet,FlatList, Button,TextInput, Touchable, TouchableOpacity} from 'react-native';
-import {Myinput} from '../src/components/Myinputs';
+import {Myinput} from '../src/components/MyInputs';
 import MyView from '../src/components/MyView';
-import Mytext from '../src/components/Mytext';
+import Mytext from '../src/components/MyText';
 import {textStyles} from '../styles/textStyles';
-import MyButton from '../src/components/Mybuttons';
-import MyList from '../src/components/mylist';
-import Myiten from '../src/components/myItenlist';
+import MyButton from '../src/components/MyButtons';
+import MyList from '../src/components/MyList';
+import MyItem from '../src/components/MyItem';
 
 export default function levelsScreen(){
     const [req, setReq] = useState({
@@ -106,7 +106,7 @@ export default function levelsScreen(){
                     data={leves}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) =>(
-                       <Myiten
+                       <MyItem
                             onEdit={() => {editLevels(item.id)}}
                             onDel={() => {deleteLevels(item.id)}}
                         >
@@ -138,7 +138,7 @@ export default function levelsScreen(){
                             </View>
                             */}
 
-                        </Myiten>
+                        </MyItem>
 
                     )}
                 />

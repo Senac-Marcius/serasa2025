@@ -1,12 +1,11 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity} from 'react-native';
-import MyLogin from '../src/components/MyLogin';
-import MyButton from '../src/components/Mybuttons';
-import MyList from '../src/components/mylist';
-import  { Myinput} from '../src/components/Myinputs';
+import {View, Text, StyleSheet} from 'react-native';
+import MyButton from '../src/components/MyButtons';
+import MyList from '../src/components/MyList';
+import  { Myinput} from '../src/components/MyInputs';
 import MyView from '../src/components/MyView';
-import Mytext from '../src/components/Mytext';
-import { Myiten } from '../src/components/myItenlist';
+import Mytext from '../src/components/MyText';
+import { MyItem } from '../src/components/MyItem';
 
 
 export default function BudgetScreen(){
@@ -125,7 +124,7 @@ export default function BudgetScreen(){
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
                     
-                        <Myiten 
+                        <MyItem 
                        onEdit ={()=> editBudget(item.id)}
                        onDel ={()=> delBudget(item.id)}
                         >
@@ -138,7 +137,7 @@ export default function BudgetScreen(){
                            <Text> Data Inicial: {item.startDate}</Text>
                            <Text> Data Final: {item.endDate}</Text>
     
-                        </Myiten>
+                        </MyItem>
                     )}
                 />
             </View>

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView,  } from 'react-native';
 import MyView from '../src/components/MyView';
-import MyAccessibility from '../src/components/MyAccessbility';
-import { Myinput, MyTextArea } from '../src/components/Myinputs';
-import Mylist from '../src/components/mylist';
-import Myiten from '../src/components/myItenlist';
-import MyButton from '../src/components/Mybuttons';
-import Mytext from '../src/components/Mytext';
+import MyAccessibility from '../src/components/MyAccessibility';
+import { Myinput, MyTextArea } from '../src/components/MyInputs';
+import Mylist from '../src/components/MyList';
+import MyItem from '../src/components/MyItem';
+import MyButton from '../src/components/MyButtons';
+import Mytext from '../src/components/MyText';
 
 export default function investmentScreen(){
  //aqui é typescript   
@@ -115,7 +115,7 @@ export default function investmentScreen(){
                 data={investments}
                 keyItem={ (item) => item.id.toString() }
                 renderItem={({item}) => (
-                    <Myiten style={styles.item}
+                    <MyItem style={styles.item}
                     onEdit={ () => editInvestment (item.id)  }
                     onDel={ () => delInvestment (item.id)  }
                     >
@@ -124,7 +124,7 @@ export default function investmentScreen(){
                        <Mytext style={styles.investmentText}> Url: {item.url}</Mytext>
                        <Mytext style={styles.investmentText}> Data: {item.createAt}</Mytext>
                        <Mytext style={styles.investmentText}> ID de Usuario: {item.userId}</Mytext>
-                        </Myiten> 
+                        </MyItem> 
                 )}
             />
         </View>

@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Text, View, TextStyle,TouchableOpacity, ViewStyle, StyleSheet } from 'react-native';
-import MyButton from './Mybuttons';
+import MyButton from './MyButtons';
 
 type RelatedItem = {
   id: number;
@@ -24,7 +24,7 @@ interface MyCorrelatedprops{
   showDeleteButton?: boolean;
 }
 
-const Myiten: React.FC<MytextProps> = ({ children, style, onEdit, onDel, }) => {
+const MyItem: React.FC<MytextProps> = ({ children, style, onEdit, onDel, }) => {
   return (
           <TouchableOpacity style={style}>
             {children}
@@ -52,7 +52,7 @@ const MyCorrelated: React.FC<MyCorrelatedprops> = ({ children, style, onEdit, on
 }
         
 
-export  {Myiten, MyCorrelated}
+export  {MyItem, MyCorrelated}
 
 
 const styles = StyleSheet.create({

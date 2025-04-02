@@ -3,7 +3,7 @@ import { View, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
 import { TextInput, Text} from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { DatePickerModal } from 'react-native-paper-dates';
-import Perfil from '../src/components/Myperfil'
+import Perfil from '../src/components/MyPerfil'
 
 export default function productScreen(){
 //aqui é typescript

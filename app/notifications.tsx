@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { View, FlatList, Text, StyleSheet, TextInput, Button, TouchableOpacity,} from 'react-native';
-import MyTheme from '../src/components/Mytheme';
-import {Myinput} from '../src/components/Myinputs'; 
+import MyTheme from '../src/components/MyTheme';
+import {Myinput} from '../src/components/MyInputs'; 
 import MyView from '../src/components/MyView';
-import MyButton from '../src/components/Mybuttons';
-import Myiten from '../src/components/myItenlist';
-import MyList from '../src/components/mylist';
-import Mytext from '../src/components/Mytext';
+import MyButton from '../src/components/MyButtons';
+import MyItem from '../src/components/MyItem';
+import MyList from '../src/components/MyList';
+import Mytext from '../src/components/MyText';
 import {textStyles}  from '../styles/textStyles';
 
 export default function NotificationScreen(){
@@ -115,7 +115,7 @@ return (
                     data={notifications}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
-                        <Myiten 
+                        <MyItem 
                             style={styles.notificationStyle} 
                                 onEdit={() => {editNotification(item.id)}}
                                 onDel={() => {deleteNotification(item.id)}}
@@ -145,7 +145,7 @@ return (
                             </View>
                             */}
 
-                        </Myiten>
+                        </MyItem>
                     )}
            />
            

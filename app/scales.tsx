@@ -1,11 +1,11 @@
 import React, {useState} from 'react'; //Importa o react e atualiza a lista Automaticamente.
 import {View, Text, StyleSheet, FlatList} from 'react-native';//Une  os objetos e o react-native faz a função de trasformar o codigo em multiplas plataformas.
 import { useRouter } from 'expo-router';
-import MyFilter from '../src/components/Myfilter';
-import MySelect from '../src/components/Myselect';
-import MyTimePicker from '../src/components/MyTimePicker';
-import MyButton from '../src/components/Mybuttons';
-import Myiten from '../src/components/myItenlist';
+import MyFilter from '../src/components/MyFilter';
+import MySelect from '../src/components/MySelect';
+import MyTimerPicker from '../src/components/MyTimerPiker';
+import MyButton from '../src/components/MyButtons';
+import MyItem from '../src/components/MyItem';
 import MyView from '../src/components/MyView';
 
 export default function ScaleScreen(){
@@ -106,11 +106,11 @@ export default function ScaleScreen(){
                     />
                     <Text>Dia Selecionado: {selectedDay || 'Nenhum dia selecionado'}</Text>
 
-                    <MyTimePicker
+                    <MyTimerPicker
                          initialTime={req.starttime}
                         onTimeSelected={(time) => setReq({ ...req, starttime: time })}
                     />
-                    <MyTimePicker
+                    <MyTimerPicker
                         initialTime={req.endtime}
                         onTimeSelected={(time) => setReq({ ...req, endtime: time })}
                      />
@@ -123,7 +123,7 @@ export default function ScaleScreen(){
                     data={scales}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
-                        <Myiten
+                        <MyItem
                             style={styles.response}
                             onEdit={() => editScale(item.id)}
                             onDel={() => deleteScale(item.id)}
@@ -133,7 +133,7 @@ export default function ScaleScreen(){
                             <Text>Horário de término: {item.endtime}</Text>
                             <Text>Id do Usuário: {item.userId}</Text>
                             <Text>Data da criação: {item.creatAt}</Text>
-                        </Myiten>
+                        </MyItem>
                     )}
                 />
                 </MyView> 

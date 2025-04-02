@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View,Text, StyleSheet,FlatList, Button,TextInput} from 'react-native';
-import MyList from '../src/components/mylist'
-import Myiten from '../src/components/myItenlist'
+import MyList from '../src/components/MyList'
+import MyItem from '../src/components/MyItem'
 
 export default function categoryScreen(){
 
@@ -79,13 +79,13 @@ export default function categoryScreen(){
                     data={categories}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
-                        <Myiten 
+                        <MyItem 
                             onDel={()=>{delCategorie(item.id)}}
                             onEdit={()=>{editCategorie(item.id)}}
                         >
                                             <Text >{item.name}</Text>
                             <Text >{item.description}</Text>  
-                        </Myiten>
+                        </MyItem>
                     )}
                 /> 
             </View>

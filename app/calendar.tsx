@@ -1,11 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity} from 'react-native';
-<<<<<<< HEAD
- 
-=======
-import MyTopbar from '../src/components/mytopbar';
+import MyView from '../src/components/MyView';
 
->>>>>>> baad01c111af6fc24bf2269b87a8882caabdb71f
 export default function CalendarsScreen(){
 //aqui é typescript
     const [req,setReq] = useState({
@@ -56,12 +52,8 @@ function delCalendar (id:number){
 
 
 return (
-    <View>
-<<<<<<< HEAD
-        Olá Aluno! 
-=======
-        <MyTopbar />
->>>>>>> baad01c111af6fc24bf2269b87a8882caabdb71f
+    <MyView>
+
         {/*aqui é typescript dentro do front*/}
         <Text>Tela de Cronograma</Text>
         <View style={styles.row}>
@@ -103,7 +95,7 @@ return (
         />
         </View>
         </View> 
-    </View>
+    </MyView>
 
     );
 }

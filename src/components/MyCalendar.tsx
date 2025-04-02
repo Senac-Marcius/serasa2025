@@ -2,7 +2,7 @@ import React, { useState }  from "react";
 import { View, Text, Touchable, TouchableOpacity } from 'react-native';
 import { DatePickerModal } from 'react-native-paper-dates';
 import { FaCalendarDays } from "react-icons/fa6";
-import { Myinput } from "./Myinputs";
+import { Myinput } from "./MyInputs";
 
 /*interface MyCalendarProp { //teste aula
     style: ViewStyle;

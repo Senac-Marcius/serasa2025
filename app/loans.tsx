@@ -2,8 +2,8 @@ import React, { useState } from 'react'; //react é uma biblioteca e essa funç�
 import { FlatList, View, Text, StyleSheet, TextInput, Button, TouchableOpacity } from 'react-native'; //react native é uma biblioteca dentro de react 
 import MyCalendar from '../src/components/MyCalendar';
 import MyView from '../src/components/MyView';
-import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
-import MyButton from '../src/components/Mybuttons';
+import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs';
+import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
 
 

@@ -1,8 +1,8 @@
 import { TouchableOpacity, View, ViewStyle, StyleSheet } from 'react-native';
 import React, { ReactNode, useState } from 'react';
-import MyLink from '../components/Mylink';
-import MyButton from '../components/Mybuttons';
-import { Myinput } from '../components/Myinputs';
+import MyLink from './MyLink';
+import MyButton from './MyButtons';
+import { Myinput } from './MyInputs';
 import MySwitch from '../components/MySwitch';
  
 interface MyLoginProps {

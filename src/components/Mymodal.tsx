@@ -1,7 +1,7 @@
 
 import React, { ReactNode, useState } from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
-import MyButton from '../components/Mybuttons';
+import MyButton from './MyButtons';
 
 interface MyModalprops {
     children: ReactNode;

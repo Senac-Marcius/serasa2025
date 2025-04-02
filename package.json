@@ -27,11 +27,8 @@
     "react-native": "^0.76.7",
     "react-native-currency-input": "^1.1.1",
     "react-native-gesture-handler": "~2.20.2",
-<<<<<<< HEAD
     "react-native-modal-datetime-picker": "^18.0.0",
-=======
     "react-native-linear-gradient": "^2.8.3",
->>>>>>> 110bbb8d9ea6eca5b6d50f98a7112071347c5d46
     "react-native-paper": "^5.13.1",
     "react-native-paper-dates": "^0.22.36",
     "react-native-reanimated": "~3.16.1",

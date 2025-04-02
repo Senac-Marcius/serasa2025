@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Button, FlatList } from 'react-native';
-import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs'
+import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs'
 import MyView from '../src/components/MyView';
-import MyList from '../src/components/mylist';
+import MyList from '../src/components/MyList';
 import { ScrollView } from 'react-native-gesture-handler';
-import MyButton from '../src/components/Mybuttons';
+import MyButton from '../src/components/MyButtons';
 import { Image } from 'react-native';
-import Myiten from '../src/components/myItenlist'
+import MyItem from '../src/components/MyItem'
 
 // Define o estado inicial como false
 //isChecked = valor atual da váriavel, SetIsChecked ele altera o valor da isChecked

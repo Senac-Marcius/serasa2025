@@ -7,10 +7,10 @@ import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
 import MyTabsbar from '../src/components/MyTabsBar';
 import { Icon } from "react-native-paper";
-import MyButton from '../src/components/Mybuttons';
-import MyModal2 from '../src/components/Mymodal';
+import MyButton from '../src/components/MyButtons';
+import MyModal2 from '../src/components/MyModal';
 import MyView from '../src/components/MyView';
-import { Myinput } from '../src/components/Myinputs';
+import { Myinput } from '../src/components/MyInputs';
 
 
 export default function ItemScreen() { // aqui é TS

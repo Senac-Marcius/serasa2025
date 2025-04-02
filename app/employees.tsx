@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import { ScrollView, View } from 'react-native';
 import { Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Button } from 'react-native';
-import MyTimePicker  from '../src/components/MyTimePicker'
-import MyButton from '../src/components/Mybuttons';
+import MyTimerPicker  from '../src/components/MyTimerPicker'
+import MyButton from '../src/components/MyButtons';
 import MyView from '../src/components/MyView';
-import Myiten from '../src/components/myItenlist';
-import MyList from '../src/components/mylist';
-import { Myinput,MyCheck } from '../src/components/Myinputs';
+import MyItem from '../src/components/MyItem';
+import MyList from '../src/components/MyList';
+import { Myinput,MyCheck } from '../src/components/MyInputs';
 
 
 export default function EmployeeScreen(){

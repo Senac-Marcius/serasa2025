@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
-import Mydownload from '../src/components/mydownload';
+import { View, StyleSheet, } from 'react-native';
+import Mydownload from '../src/components/MyDownload';
 import MyView from '../src/components/MyView';
-import MyList from '../src/components/mylist';
-import MyButton from '../src/components/Mybuttons';
-import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs';
-import MyTopbar from '../src/components/mytopbar';
-import {Myiten, MyCorrelated} from '../src/components/myItenlist';
-import Mytext from '../src/components/Mytext';
-import { Center } from 'native-base';
+import MyList from '../src/components/MyList';
+import MyButton from '../src/components/MyButtons';
+import { Myinput, MyTextArea } from '../src/components/MyInputs';
+import {MyItem} from '../src/components/MyItem';
+import Mytext from '../src/components/MyText';
 
 export default function RevenueScreen() {
   // Estado para o formulário
@@ -155,7 +153,7 @@ export default function RevenueScreen() {
           renderItem={({ item }) => (
             
            
-            <Myiten
+            <MyItem
            
               onEdit={() => { editRevenue(item.id) }} 
               onDel= {() => { delRevenue(item.id) }}
@@ -172,7 +170,7 @@ export default function RevenueScreen() {
 
       
               
-            </Myiten>
+            </MyItem>
           )}
         />
 

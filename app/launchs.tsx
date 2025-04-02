@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
-import MySupport from '../src/components/Mysupport';
+import MySupport from '../src/components/MySupport';
 import MyView from '../src/components/MyView';
 import { ScrollView } from 'react-native-gesture-handler';
-import {Myiten, MyCorrelated} from '../src/components/myItenlist';
-import MyList from '../src/components/mylist';
-import { Myinput, MyCheck } from '../src/components/Myinputs';
-import Mybutton from '../src/components/Mybuttons';
+import {MyItem, MyCorrelated} from '../src/components/MyItem';
+import MyList from '../src/components/MyList';
+import { Myinput, MyCheck } from '../src/components/MyInputs';
+import Mybutton from '../src/components/MyButtons';
 import MyCalendar from '../src/components/MyCalendar';
 
 

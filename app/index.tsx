@@ -3,24 +3,27 @@ import { View, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Appbar, Drawer } from 'react-native-paper';
 import { useState } from 'react';
-import  MyTheme from '../src/components/Mytheme'
-import MyNotify from '../src/components/Mynotify';
-import MyTopbar from '../src/components/mytopbar';
+import  MyTheme from '../src/components/MyTheme'
+import  MyView from '../src/components/MyView'
+import MyLogin from '../src/components/MyLogin';
+import MyText from '../src/components/MyText';
 
 export default function HomeScreen() {
-    const router = useRouter();
-    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [email, setEmail] = useState('')
+    const [pass, setPass] = useState('')
 
     return (
-        <View style={{ flex: 1 }}>
-            {/* Menu Hambúrguer no Topo */}
-            
-            <MyTopbar title="Bem vindo ao app do Serasa" /> 
+        <MyView style={{ flex: 1 }}>
+            <MyTheme chendTheme={()=>{}} fontSize={()=>{}}/>
 
             {/* Conteúdo da Página */}
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text>Bem-vindo ao Serasa App!</Text>
+            <MyLogin email={email} pass={pass} changeEmail={setEmail} changepass={setPass}>
+
+                <MyText>Bem vind@ </MyText>
+
+            </MyLogin>
             </View>
-            </View>
+        </MyView>
     );  
 } 

@@ -1,8 +1,8 @@
 import React, {ReactNode, useState} from "react";
 import { Text,  TouchableOpacity, Image, View, ViewStyle, StyleSheet, ScrollView, TextStyle } from "react-native";
 import MyView from "./MyView";
-import MyButton from "./Mybuttons";
-import Mytext from "./Mytext";
+import MyButton from "./MyButtons";
+import Mytext from "./MyText";
 
 
 

@@ -1,10 +1,10 @@
 import React ,{ useState }from 'react';
 import { Text, View, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} from 'react-native';
-import MyLink from '../src/components/Mylink';
-import Myiten from '../src/components/myItenlist';
-import MyList from '../src/components/mylist';
-import { Myinput } from '../src/components/Myinputs';
-import MyButton from '../src/components/Mybuttons';
+import MyLink from '../src/components/MyLink';
+import MyItem from '../src/components/MyItem';
+import MyList from '../src/components/MyList';
+import { Myinput } from '../src/components/MyInputs';
+import MyButton from '../src/components/MyButtons';
 import MyView from '../src/components/MyView';
 
 
@@ -97,7 +97,7 @@ export default  function itemScreen(){
             data={itens}
             keyItem={(i) => i.id.toString()}
             renderItem={({item})=>(
-                <Myiten >
+                <MyItem >
                     <text >{item.name}</text>
                     <text >{item.mark}</text>
                     <text>{item.assetNumber}</text>
@@ -107,7 +107,7 @@ export default  function itemScreen(){
                         <TouchableOpacity onPress={ () => { editItem(item.id)} }></TouchableOpacity>
                         <TouchableOpacity onPress={ () => { delItem(item.id)} }></TouchableOpacity>
                     </View>
-                </Myiten>
+                </MyItem>
 
             )}
             

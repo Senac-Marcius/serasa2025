@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextStyle } from 'react-native';
 import { Button, TextInput, RadioButton, Checkbox } from 'react-native-paper';
 import { useRouter } from 'expo-router';
-import { MyModal_mobile1, MyModal_mobile2, MyModal_mobile3, MyModal_mobilefullscreen, MyModal1_desktop } from '../src/components/Mymodal';
-import MyButton from '../src/components/Mybuttons';
+import { MyModal_mobile1, MyModal_mobile2, MyModal_mobile3, MyModal_mobilefullscreen, MyModal1_desktop } from '../src/components/MyModal';
+import MyButton from '../src/components/MyButtons';
 import MyView from '../src/components/MyView';
-import { Myinput, MyCheck, MyTextArea } from '../src/components/Myinputs'
-import MyList from '../src/components/mylist'
+import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs'
+import MyList from '../src/components/MyList'
 
 //função userState só retorna para uma variavel const
 

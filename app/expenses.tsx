@@ -1,10 +1,10 @@
 import React, { useState, Children } from 'react';
 import { View, Text, StyleSheet, TextInput,TouchableOpacity, } from 'react-native' ;
-import {Myiten, MyCorrelated } from '../src/components/myItenlist';
-import MyList from '../src/components/mylist';
+import {MyItem, MyCorrelated } from '../src/components/MyItem';
+import MyList from '../src/components/MyList';
 import MyView from '../src/components/MyView';
-import MyButton from '../src/components/Mybuttons'
-import {Myinput, MyTextArea} from '../src/components/Myinputs';
+import MyButton from '../src/components/MyButtons'
+import {Myinput, MyTextArea} from '../src/components/MyInputs';
 import { ScrollView } from 'react-native-gesture-handler';
 
 export default function ExpenseScreen(){
@@ -90,7 +90,7 @@ export default function ExpenseScreen(){
                     data={expense}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
-                        <Myiten style={styles.card} 
+                        <MyItem style={styles.card} 
                             onEdit={()=> editExpense(item.id)}
 
                             onDel={() => delExpense(item.id)}
@@ -102,7 +102,7 @@ export default function ExpenseScreen(){
                             <Text style={styles.textlis} >{item.userId}</Text>
                             
     
-                        </Myiten>
+                        </MyItem>
                     )}
                 /> 
             </View>

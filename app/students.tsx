@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import MyButton from "../src/components/Mybuttons";
+import MyButton from "../src/components/MyButtons";
 
 
 export default function StudentsScreen() {

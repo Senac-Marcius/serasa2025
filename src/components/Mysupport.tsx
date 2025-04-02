@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 import { Text, View, ViewStyle, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import { FaWhatsapp } from 'react-icons/fa'; // Importa o ícone do WhatsApp
 import { Button, List } from 'react-native-paper';
-import MyButton from './Mybuttons';
+import MyButton from './MyButtons';
 
 
 

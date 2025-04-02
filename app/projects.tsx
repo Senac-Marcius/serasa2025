@@ -1,12 +1,12 @@
 import React, { Children, useState } from 'react'; // Esta importando da biblioteca do react para atualizar automaticamente 
 import { StyleSheet, View, Text, TextInput, Button, FlatList, TouchableOpacity, } from 'react-native'; 
-import MySearch from '../src/components/Mysearch'
+import MySearch from '../src/components/MySearch'
 import { ScrollView } from 'react-native-gesture-handler';
-import {MyTextArea } from '../src/components/Myinputs'
-import MyButton from '../src/components/Mybuttons';
-import Mytext from '../src/components/Mytext';
+import {MyTextArea } from '../src/components/MyInputs'
+import MyButton from '../src/components/MyButtons';
+import Mytext from '../src/components/MyText';
 import MyView from '../src/components/MyView';
-import { Myinput } from '../src/components/Myinputs';
+import { Myinput } from '../src/components/MyInputs';
 /*import { textStyles } from '../styles/textStyles';*/
 
 interface Project {
