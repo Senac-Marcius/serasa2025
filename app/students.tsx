@@ -3,12 +3,13 @@ import { StyleSheet, View } from "react-native";
 
 import MyButton from "../src/components/Mybuttons";
 import MyView from "../src/components/MyView";
+import { Myiten,MyCorrelated } from "../src/components/myItenlist";
 
 export default function StudentsScreen() {
   return (
     <MyView>
-      <View style={styles.hero}>
-           <MyButton  button_type="circle" width={70} height={70} icon="library" iconColor="white" iconSize={30}></MyButton>
+      <MyCorrelated style={styles.hero } showDeleteButton = {false} showEditButton = {false} >
+           <MyButton  button_type="circle" width={70} height={70} icon="library" iconColor="white" iconSize={30} bottom_text="Teste" font_size={12} text_color="black"></MyButton>
            <MyButton  button_type="circle" width={70} height={70} icon="hand-coin" iconColor="white" iconSize={30}></MyButton>
            <MyButton  button_type="circle" width={70} height={70} icon="finance" iconColor="white" iconSize={30}></MyButton>
            <MyButton  button_type="circle" width={70} height={70} icon="book" iconColor="white" iconSize={30}></MyButton>
@@ -18,7 +19,7 @@ export default function StudentsScreen() {
            <MyButton  button_type="circle" width={70} height={70} icon="room-service" iconColor="white" iconSize={30}></MyButton>
 
 
-      </View>
+      </MyCorrelated>
     </MyView>
   );
 }

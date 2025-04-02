@@ -1,4 +1,4 @@
-import { Flex, Row } from "native-base";
+
 import React, { useState } from "react";
 import { TouchableOpacity, Text, StyleSheet, ViewStyle } from "react-native";
 import { Icon } from "react-native-paper";
@@ -13,6 +13,7 @@ type Button_type =
 
 interface MyButtonProps {
   title?: string;
+  bottom_text?:string;
   onPress?: () => void;
   button_type?: Button_type;
   icon?: string;
@@ -46,6 +47,7 @@ function getButtonType(button_type: Button_type): any {
 
 const MyButton: React.FC<MyButtonProps> = ({
   title,
+  bottom_text,
   onPress,
   button_type = "default",
   color = "#813AB1",
@@ -75,18 +77,20 @@ const MyButton: React.FC<MyButtonProps> = ({
       setLoading(true);
     }
   }
-  return (
+  return (<>
     <TouchableOpacity
       style={[
         getButtonType(button_type),
         style,
-        { backgroundColor: color, height: height, width: width,gap:gap },
+        { backgroundColor: color, height: height, width: width,gap:gap,},
       ]}
       onPress={onPressIntenal}
     >
       {icon && <Icon size={iconSize} source={icon} color={iconColor}></Icon>}
       {title && <Text style={{ fontSize: font_size, color: text_color }}>{title}</Text>}
     </TouchableOpacity>
+    {bottom_text && <Text  style={{ fontSize: font_size, color: text_color }}>{bottom_text}</Text>}
+    </>
   );
 };
 
