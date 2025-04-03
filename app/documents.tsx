@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 
 const FileUploadComponent = () => {
   const [file, setFile] = useState(null);
+  //deve ter um registro ocm os dados da tabela do supabase, id, iduser,createAT, etc
 
   const handleUpload = () => {
     console.log('Fazendo upload...');
