@@ -7,6 +7,7 @@ import MyView from '../src/components/MyView';
 import Mytext from '../src/components/MyText';
 import { MyItem } from '../src/components/MyItem';
 import { useRouter } from 'expo-router';
+import { setBudgets, budgets, setBudget } from '../src/controllers/budgets';
 
 
 export default function BudgetScreen(){
@@ -16,9 +17,10 @@ export default function BudgetScreen(){
 
     const [req, setReq] = useState({
 
+        
+        id: -1,
         name:'',
         url:'',
-        id: -1,
         createAt: new Date().toISOString(),
         velue:'',
         userId: 0,
@@ -27,26 +29,15 @@ export default function BudgetScreen(){
         
     });
 
-    const [budgets, setBudgets]= useState<{
-        name: string,
-        url:string,
-        id: number,
-        createAt: string,
-        velue: string,
-        userId: number,
-        startDate: string,
-        endDate: string,
-
-    }[]>([])
-
+  
     function  handleRegister(){
         if(req.id == -1){
             const newId = budgets.length ? budgets[budgets.length -1].id +1: 0;
             const newBudget = {...req, id: newId};
-
             setBudgets([...budgets, newBudget]);
+            setBudget(newBudget)
         }else{
-            setBudgets(budgets.map(jTNL=> (jTNL.id == req.id)? req: jTNL));
+            setBudgets(budgets.map(b=> (b.id == req.id)? req: b));
         }
         
         setReq({ 
