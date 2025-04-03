@@ -1,10 +1,11 @@
 import React, {useState} from "react";
 import{View,Text, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} from "react-native";
-import CurrencyInput from 'react-native-currency-input';
-import {TimeInput} from "@heroui/date-input";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import MyView from '../src/components/MyView';
-import { useRouter } from 'expo-router';
+import MyView from "../src/components/MyView";
+import MyList from "../src/components/MyList";
+import MyItem from "../src/components/MyItem";
+import { Myinput } from "../src/components/MyInputs";
+import MyButton from "../src/components/MyButtons";
+import MyTimePicker from "../src/components/MyTimerPicker";
 
 export default function PositionScreen(){
 /*Aqui é TypeScript*/
@@ -14,7 +15,7 @@ export default function PositionScreen(){
         name:"",
         description:"",
         salary: 0,
-        workHours:"",
+        workHours: "",
         departament:"",
         supervisor:"",
         creatAt: new Date().toString(),
@@ -36,7 +37,7 @@ export default function PositionScreen(){
             name:"",
             description:"",
             salary: 0,
-            workHours:"",
+            workHours: "",
             departament:"",
             supervisor:"",
             creatAt: new Date().toString()
@@ -55,69 +56,63 @@ export default function PositionScreen(){
         setPositions(list)
     }
 
-    const router = useRouter();
-
     return (
-        <MyView router={router} >
+        <MyView style={styles.container}>
             {/*Aqui é TypeScript dentro do front*/}
             <Text>Minha tela dos cargos</Text>
             <View style = {styles.row}>
-                <View style={styles.form}>
-                    <TextInput 
-                        placeholder="Cargo"
+                <View style = {styles.form}>
+                    <Myinput
+                        label="Cargo"
+                        placeholder="Insira um Cargo"
+                        iconName="briefcase"
                         value = {req.name}
                         onChangeText={(text)=> setReq({...req ,name: text })}/>
  
-                    {/*<Myinput 
+                    <Myinput 
                         label="Descrição"
                         placeholder="Insira uma descrição"
                         iconName="briefcase"
                         value = {req.description}
                         onChangeText={(text)=> setReq({...req ,description: text })}/>
-                        */}
 
-                    {/*<CurrencyInput 
-                        placeholder="Salário" />
-                        value = {req.salary}
-                        onChangeText={(text)=> setReq({...req ,salary: text })}/>
+                    <Myinput 
+                        label="Salário"
+                        placeholder="Insira o salário"
+                        iconName="briefcase"
+                        value = {(req.salary).toString()}
+                        onChangeText={(text)=> setReq({...req ,salary: Number(text) })}/> 
 
-                        {req.salary}*/}
+                    <MyTimePicker 
+                    onTimeSelected={(time) => setReq({ ...req, workHours: time })}
+                    initialTime={req.workHours}
+                    />
 
-                    {/*<TimeInput 
-                        placeholder="Horas trabalhadas" />
-                        value = {req.workHours}
-                        onChangeText={(text)=> setReq({...req ,workHours: text })}/>
-
-                        {req.workHours}*/}
-
-{/*
                     <Myinput 
                         label="Departamento"
                         placeholder="Insira um departamento"
                         iconName="briefcase"
                         value = {req.departament}
                         onChangeText={(text)=> setReq({...req ,departament: text })}/>
-*/}
 
-{/*
                     <Myinput 
                         label="Supervisor"
                         placeholder="Insira um supervisor"
                         iconName="briefcase"
                         value = {req.supervisor}
-                     onChangeText={(text)=> setReq({...req ,supervisor: text })}/>
-*/}
+                        onChangeText={(text)=> setReq({...req ,supervisor: text })}/>
 
-                    {/*<DateTimePickerModal 
-                        placeholder="Data de cadastro" />*/}
+                  
 
-                    <Button title = "Cadastrar" onPress={handleRegister}/>
+                    <MyButton  title = "Cadastrar" onPress={handleRegister}/>
                 </View> 
-                    <FlatList
-                        data={positions}
-                        keyExtractor={(item) => item.id.toString()}
+                    <MyList
+                        data = {positions}
+                        keyItem = {(item) => item.id.toString()}
                         renderItem={({item}) => (
-                            <View style={styles.card}>
+                            <MyItem style={styles.card}
+                                onEdit={() => editPosition(item.id)}
+                                onDel={() => delPosition(item.id)}>
                                 <Text>{item.name}</Text>
                                 <Text>{item.description}</Text>
                                 <Text>{item.salary}</Text>
@@ -126,12 +121,12 @@ export default function PositionScreen(){
                                 <Text>{item.supervisor}</Text>
                                 <Text>{item.creatAt}</Text>
 
-                                <View style = {styles.buttonsContanier}>
+                                {/*<View style = {styles.buttonsContanier}>
                                     <TouchableOpacity onPress={()=> { editPosition(item.id) }}>Edit</TouchableOpacity>
                                     <TouchableOpacity onPress={()=> { delPosition(item.id) }}>Delete</TouchableOpacity>
-                                </View>
+                                </View>  MINHA FUNÇÃO DEL E EDIT*/}
                                    
-                            </View>
+                            </MyItem>
                         )}  />                
                     </View>
 
