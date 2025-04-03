@@ -22,15 +22,7 @@ export default function investmentScreen(){
     });
 
 
-    const [investments, setInvestments] = useState<{
-        description: string,
-        url: string,
-        name: string,
-        id: number,
-        createAt: string,
-        userId: string,
-        value: string,
-    }[]>([]);
+    
     
 
     function handleRegister(){
