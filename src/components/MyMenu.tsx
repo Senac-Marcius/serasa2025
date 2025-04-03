@@ -1,141 +1,152 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Animated, StyleSheet, Image, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, Animated, StyleSheet, Image, Dimensions, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
-// Pega as dimensões da tela
 const { height } = Dimensions.get('window');
+const MENU_WIDTH = 280;
 
-export default function HamburgerMenu() {
-    const [menuVisible, setMenuVisible] = useState(false);
-    const [slideAnim] = useState(new Animated.Value(-300)); // Menu começa fora da tela
-    const router = useRouter();
+interface HamburgerMenuProps {
+  closeMenu: () => void;
+}
 
-    const toggleMenu = () => {
-        Animated.timing(slideAnim, {
-            toValue: menuVisible ? -300 : 0, // Abre e fecha o menu
-            duration: 300,
-            useNativeDriver: false,
-        }).start();
-        setMenuVisible(!menuVisible);
-    };
+export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
+  const router = useRouter();
+  const slideAnim = useState(new Animated.Value(-MENU_WIDTH))[0];
 
-    return (
-        <View style={styles.fullScreen}>
-            {/* Ícone do Menu no canto superior esquerdo */}
-            <TouchableOpacity style={styles.menuButton} onPress={toggleMenu}>
-                <Ionicons name="menu" size={32} color="#333" />
-            </TouchableOpacity>
+  // Animação de entrada do menu
+  React.useEffect(() => {
+    Animated.timing(slideAnim, {
+      toValue: 0,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+  }, []);
 
-            {/* Menu Lateral */}
-            <Animated.View style={[styles.menu, { left: slideAnim, height }]}>
-                {/* Perfil (Agora clicável) */}
-                <TouchableOpacity style={styles.profileSection} onPress={() => alert('Perfil clicado!')}>
-                    <Image source={{ uri: 'https://via.placeholder.com/50' }} style={styles.profileImage} />
-                    <View>
-                        <Text style={styles.profileName}>sung di wo</Text>
-                        <Text style={styles.profileRole}>Admin</Text>
-                    </View>
-                </TouchableOpacity>
+  const MenuItem = ({
+    label,
+    route,
+    icon,
+  }: {
+    label: string;
+    route: string;
+    icon: keyof typeof Ionicons.glyphMap;
+  }) => (
+    <TouchableOpacity
+      style={styles.menuItem}
+      onPress={() => {
+        router.push(`/${route}`);
+        closeMenu();
+      }}
+    >
+      <Ionicons name={icon} size={20} color="#FFF" style={{ marginRight: 8 }} />
+      <Text style={styles.menuText}>{label}</Text>
+    </TouchableOpacity>
+  );
 
-                {/* Itens do Menu */}
-                <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/painel')}>
-                    <Ionicons name="home" size={20} color="#FFF" />
-                    <Text style={styles.menuText}>Painel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/disciplines')}>
-                    <Ionicons name="briefcase" size={20} color="#FFF" />
-                    <Text style={styles.menuText}>Secretaria</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/salas')}>
-                    <Ionicons name="business" size={20} color="#FFF" />
-                    <Text style={styles.menuText}>Salas</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/alunos')}>
-                    <Ionicons name="school" size={20} color="#FFF" />
-                    <Text style={styles.menuText}>Alunos</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/investimento')}>
-                    <Ionicons name="cash" size={20} color="#FFF" />
-                    <Text style={styles.menuText}>Investimento</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/administracao')}>
-                    <Ionicons name="settings" size={20} color="#FFF" />
-                    <Text style={styles.menuText}>Administração</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/redeapoio')}>
-                    <Ionicons name="people" size={20} color="#FFF" />
-                    <Text style={styles.menuText}>Rede de Apoio</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/biblioteca')}>
-                    <Ionicons name="book" size={20} color="#FFF" />
-                    <Text style={styles.menuText}>Biblioteca</Text>
-                </TouchableOpacity>
-            </Animated.View>
+  return (
+    <Animated.View
+      style={[styles.menu, { height, transform: [{ translateX: slideAnim }] }]}
+    >
+      <View style={styles.menuHeader}>
+        <TouchableOpacity onPress={closeMenu}>
+          <Ionicons name="close" size={26} color="#FFF" />
+        </TouchableOpacity>
+      </View>
+
+      <TouchableOpacity style={styles.profileSection}>
+        <Image source={{ uri: 'https://via.placeholder.com/50' }} style={styles.profileImage} />
+        <View>
+          <Text style={styles.profileName}>sung di wo</Text>
+          <Text style={styles.profileRole}>Admin</Text>
         </View>
-    );
+      </TouchableOpacity>
+
+      <ScrollView style={styles.scroll}>
+        <MenuItem label="Budgets" route="budgets" icon="wallet" />
+        <MenuItem label="Calendar" route="calendar" icon="calendar" />
+        <MenuItem label="Categories" route="categories" icon="albums" />
+        <MenuItem label="Classes" route="classes" icon="school" />
+        <MenuItem label="Collections" route="collections" icon="cube" />
+        <MenuItem label="Courses" route="courses" icon="book" />
+        <MenuItem label="Disciplines" route="disciplines" icon="document-text" />
+        <MenuItem label="Documents" route="documents" icon="document" />
+        <MenuItem label="Employees" route="employees" icon="people" />
+        <MenuItem label="Expenses" route="expenses" icon="cash" />
+        <MenuItem label="Investments" route="investments" icon="trending-up" />
+        <MenuItem label="Itens" route="itens" icon="pricetag" />
+        <MenuItem label="Launchs" route="launchs" icon="rocket" />
+        <MenuItem label="Levels" route="levels" icon="stats-chart" />
+        <MenuItem label="Libraie" route="libraie" icon="book" />
+        <MenuItem label="Loans" route="loans" icon="card" />
+        <MenuItem label="Locals" route="locals" icon="location" />
+        <MenuItem label="Notifications" route="notifications" icon="notifications" />
+        <MenuItem label="Parents" route="Parents" icon="people-circle" />
+        <MenuItem label="Perfil" route="perfil" icon="person" />
+        <MenuItem label="Positions" route="positions" icon="pin" />
+        <MenuItem label="Posts" route="posts" icon="chatbox" />
+        <MenuItem label="Products" route="products" icon="cart" />
+        <MenuItem label="Projects" route="projects" icon="briefcase" />
+        <MenuItem label="Records" route="records" icon="disc" />
+        <MenuItem label="Revenues" route="revenues" icon="cash-outline" />
+        <MenuItem label="Scales" route="scales" icon="speedometer" />
+        <MenuItem label="Schedules" route="schedules" icon="calendar" />
+        <MenuItem label="Students" route="students" icon="school" />
+        <MenuItem label="Users" route="users" icon="person-circle" />
+      </ScrollView>
+    </Animated.View>
+  );
 }
 
 const styles = StyleSheet.create({
-    fullScreen: {
-        flex: 1,
-        backgroundColor: '#FFF',
-    },
-    menuButton: {
-        position: 'absolute',
-        top: 10,
-        left: 5, // Movido mais para cima
-        zIndex: 1100,
-        backgroundColor: 'transparent',
-        padding: 10,
-        borderRadius: 50,
-    },
-    menu: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: 280,
-        backgroundColor: '#5A2D82', // Cor roxa igual ao Figma
-        paddingTop: 50,
-        paddingLeft: 20,
-        shadowColor: '#000',
-        shadowOpacity: 0.4,
-        shadowOffset: { width: 2, height: 2 },
-        shadowRadius: 4,
-        zIndex: 999,
-    },
-    profileSection: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 20,
-        padding: 10,  // Agora a área é clicável
-    },
-    profileImage: {
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        marginRight: 10,
-        borderWidth: 2,
-        borderColor: '#FFF',
-        backgroundColor: '#FFF',
-    },
-    profileName: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#FFF',
-    },
-    profileRole: {
-        fontSize: 14,
-        color: '#DDD',
-    },
-    menuItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 15,
-    },
-    menuText: {
-        fontSize: 18,
-        color: '#FFF',
-        marginLeft: 10,
-    },
+  menu: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: MENU_WIDTH,
+    backgroundColor: '#5A2D82',
+    zIndex: 999,
+  },
+  scroll: {
+    paddingHorizontal: 10,
+  },
+  menuHeader: {
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    alignItems: 'flex-end',
+  },
+  profileSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+    paddingHorizontal: 10,
+  },
+  profileImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 10,
+    borderWidth: 2,
+    borderColor: '#FFF',
+    backgroundColor: '#FFF',
+  },
+  profileName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFF',
+  },
+  profileRole: {
+    fontSize: 14,
+    color: '#DDD',
+  },
+  menuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingRight: 10,
+  },
+  menuText: {
+    fontSize: 18,
+    color: '#FFF',
+  },
 });
