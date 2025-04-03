@@ -24,16 +24,7 @@ export default function LaunchScreen() {
         userId: 0,
     });
 
-    const [launchs, setLaunchs] = useState<{
-        id: number,
-        observation: string,
-        presence: boolean,
-        indicator: string,
-        note: string,
-        createAt: string,
-        userId: number,
-
-    }[]>([]);
+   
 
     function handleRegister() {
         if (req.id == -1) {
