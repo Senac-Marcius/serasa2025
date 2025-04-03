@@ -12,10 +12,10 @@ interface iStudent {
 
 const [student, setStudents] = useState<iStudent[]>([]);
 
-async function setStudent() {
+async function setStudent(student:iStudent) {
   const { data, error } = await supabase
     .from("students")
-    .insert([{ some_column: "someValue", other_column: "otherValue" }])
+    .insert([student])
     .select();
 }
 
