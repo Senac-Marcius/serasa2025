@@ -42,6 +42,6 @@ async function  setEmployee(employee:iEmployees){
     return data
 }
 
-export {setEmployee}
+export {setEmployee, employees , setEmployees}
 
         
