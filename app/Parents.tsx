@@ -119,7 +119,7 @@ export default function ParentScreen (){
                         </View>
                     )}
                 />
-                {/*parâmetro FlatList é parecido com o forEach do html */}
+                {/*parâmetro FlatList é parecido com o forEach do html. */}
             </View>
 
         </MyView>

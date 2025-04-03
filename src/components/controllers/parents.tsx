@@ -23,7 +23,7 @@ async function setParent(parent:iParent){
     .select()
 
     if (error){
-        //aqui vem os tratamentos da variavel error
+        //aqui vem os tratamentos da variavel error.
         return[]
     }
 

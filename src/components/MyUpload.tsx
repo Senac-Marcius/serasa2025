@@ -45,7 +45,7 @@ const MyUpload: React.FC<MyuploadProps> = ({ style, setUrl, url  }) => {
         setUrl(data.link); // Atualiza a variável URL
         setAlert(`Upload Concluído! Arquivo enviado: ${data.link}`);
       } else {
-        setAlert(`Erro no Upload Tente novamente.`);
+        setAlert(`Erro no Upload Tente novamente..`);
       }*/
         setUrl('http://issoeumteste');
         setAlert(`Upload Concluído! Arquivo enviado: `);
