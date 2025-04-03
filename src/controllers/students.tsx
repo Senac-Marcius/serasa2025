@@ -63,3 +63,4 @@ async function selectStudent() {
     .not("column", "like", "Negate filter")
     .or("some_column.eq.Some value, other_column.eq.Other value");
 }
+export {selectStudent,delStudent,editStudent,getStudent,setStudent}

@@ -1,225 +1,48 @@
 import React, { useState, useEffect } from "react";
-import {
-  FlatList,
-  Text,
-  View,
-  StyleSheet,
-  ScrollView,
-  TextInput,
-  Button,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, View } from "react-native";
+import { useRouter } from "expo-router";
 import MyButton from "../src/components/MyButtons";
-import MyView from '../src/components/MyView';
-import { useRouter } from 'expo-router';
-
+import MyView from "../src/components/MyView";
+import { MyCorrelated } from "../src/components/MyItem";
+import {delStudent,editStudent,getStudent,selectStudent,setStudent} from "../src/controllers/students"
 
 export default function StudentsScreen() {
-  const [req, setReq] = useState({
-    id: 0,
-    name: "",
-    password: "",
-    email: "",
-    createdAt: Date.now().toString(),
-  });
-
-  const [student, setStudent] = useState<
-    {
-      id: number;
-      name: string;
-      password: string;
-      email: string;
-      createdAt: string;
-    }[]
-  >([]);
-
-  function handleRegister() {
-    if (req.id == -1) {
-      setStudent([...student, req]);
-    } else {
-      setStudent(student.map((i) => (i.id == req.id ? req : i)));
-    }
-    setReq({
-      id: -1,
-      name: "",
-      password: "",
-      email: "",
-      createdAt: Date().toString(),
-    });
-  }
-
-  function editStudent(id: number) {
-    let stu = student.find((s) => {
-      if (s.id == id) return s;
-    });
-    if (stu != undefined) {
-      setReq(stu);
-    }
-  }
-
-  function deleteStudent(id: number) {
-    setStudent((prevItems) => prevItems.filter((item) => item.id !== id));
-  }
-
-  const router = useRouter();
-
   return (
-    <MyView router={router} > 
-      <View style={styles.container}>
-        <View style={styles.formtxt}>
-          <Text style={styles.titulos}>Cadastre-se</Text>
+    <MyView router={useRouter()}>
+      <MyCorrelated style={styles.hero } showDeleteButton = {false} showEditButton = {false} >
+           <MyButton  button_type="circle" width={70} height={70} icon="library" iconColor="white" iconSize={30} bottom_text="Teste" font_size={12} text_color="black"></MyButton>
+           <MyButton  button_type="circle" width={70} height={70} icon="hand-coin" iconColor="white" iconSize={30} bottom_text="Teste" font_size={12} text_color="black"></MyButton>
+           <MyButton  button_type="circle" width={70} height={70} icon="finance" iconColor="white" iconSize={30} bottom_text="Teste" font_size={12} text_color="black" ></MyButton>
+           <MyButton  button_type="circle" width={70} height={70} icon="book" iconColor="white" iconSize={30} bottom_text="Teste" font_size={12} text_color="black"></MyButton>
+           <MyButton  button_type="circle" width={70} height={70} icon="book-open" iconColor="white" iconSize={30}></MyButton>
+           <MyButton  button_type="circle" width={70} height={70} icon="receipt" iconColor="white" iconSize={30}></MyButton>
+           <MyButton  button_type="circle" width={70} height={70} icon="file-clock" iconColor="white" iconSize={30}></MyButton>
+           <MyButton  button_type="circle" width={70} height={70} icon="room-service" iconColor="white" iconSize={30}></MyButton>
 
-          
 
-          <TextInput
-            style={styles.textinput}
-            placeholder="Digite seu nome"
-            value={req.name}
-            onChangeText={(text) => setReq({ ...req, name: text })}
-          />
-          <TextInput
-            style={styles.textinput}
-            placeholder="Digite sua senha"
-            value={req.password}
-            onChangeText={(text) => setReq({ ...req, password: text })}
-          />
-          <TextInput
-            style={styles.textinput}
-            placeholder="Digite seu email"
-            value={req.email}
-            onChangeText={(text) => setReq({ ...req, email: text })}
-          />
-
-          <TouchableOpacity
-            onPress={handleRegister}
-            style={styles.button_handle}
-          >
-            Cadastrar
-          </TouchableOpacity>
-
-          <FlatList
-            data={student}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <View style={styles.output}>
-                <Text>{item.name}</Text>
-                <Text>{item.email}</Text>
-                <Text>{item.createdAt}</Text>
-                <View style={styles.row}>
-                  <MyButton
-                   
-                    onPress={() => deleteStudent(item.id)}
-                    button_type="capsule"
-                    style={{ width: 50, height: 50 }}
-                    icon="camera"
-                  ></MyButton>
-
-                  <TouchableOpacity
-                    onPress={() => {
-                      editStudent(item.id);
-                    }}
-                    style={styles.button_editar}
-                  >
-                    
-                    Editar
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )}
-          />
-        </View>
-      </View>
+      </MyCorrelated>
     </MyView>
   );
 }
 
 const styles = StyleSheet.create({
-  output: {
-    boxShadow:
-      "rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px",
-    borderRadius: 25,
-    width: 250,
-    height: 150,
-    textAlign: "center",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
-    gap: 5,
-  },
-  titulos: {
-    fontSize: 34,
-    fontWeight: 600,
-  },
-  button_handle: {
-    width: 150,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: "green",
-    textAlign: "center",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
-    fontSize: 18,
-    color: "white",
-  },
 
-  textinput: {
-    borderRadius: "5px",
-    padding: 5,
-    width: 400,
-  },
-  container: {
-    display: "flex",
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
-  },
-  row: {
-    textAlign: "center",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
-  },
+hero:{
+  boxShadow:"0px 4px 10px -6px rgba(0,0,0,0.32)",
+  width:310,
+  height:505,
+  borderRadius:25,
+  alignSelf:"center",
+  marginTop:40,
+  paddingHorizontal:45,
+  paddingVertical:23,
+  flexDirection:"row",
+  flexWrap:"wrap",
+  columnGap:80,
+  
+  
+},
 
-  button_editar: {
-    backgroundColor: "yellow",
-    borderRadius: 25,
-    width: 80,
-    height: 40,
-    color: "black",
-    textAlign: "center",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  button_deletar: {
-    backgroundColor: "red",
-    borderRadius: 25,
-    width: 80,
-    height: 40,
-    color: "black",
-    textAlign: "center",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
 
-  formtxt: {
-    width: 500,
-    height: 600,
-    backgroundColor: "white",
-    padding: 25,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "10px",
-    borderRadius: "25px",
-    boxShadow:
-      "rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px",
-  },
+
 });
