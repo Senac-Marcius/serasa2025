@@ -29,7 +29,7 @@ export default function UserScreen() {
         address: '',
         createAt: new Date().toISOString(),
         id: -1,
-        Userid: 0
+        //Userid: 0
 
     });
 
@@ -68,7 +68,7 @@ export default function UserScreen() {
             address: '',
             createAt: new Date().toISOString(),
             id: -1,
-            Userid: 0
+           // Userid: 0
         })
 
     }
