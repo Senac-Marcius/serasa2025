@@ -16,14 +16,6 @@ export default function DisciplineScreen() {
     teacher: '',
   });
 
-  const [disciplines, setDisciplines] = useState<{ 
-    id: number; 
-    name: string; 
-    url: string; 
-    workload: string; 
-    createdAt: string; 
-    teacher: string 
-  }[]>([]);
 
   const [isEditing, setIsEditing] = useState(false);
 
