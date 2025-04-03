@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { View,Text, StyleSheet,FlatList, Button,TextInput} from 'react-native';
 import MyList from '../src/components/MyList'
-import MyItem from '../src/components/MyItem'
+import {MyItem} from '../src/components/MyItem'
+import MyView from '../src/components/MyView'
+import { useRouter } from 'expo-router';
+
 
 export default function categoryScreen(){
 
@@ -52,9 +55,11 @@ export default function categoryScreen(){
         if(list)
         setCategories(list)
     }
+    
+    const router = useRouter();
 
     return (
-        <View>
+        <MyView router={router} >
     {/* aqui é typerscrypt dentro do front */}
 
             <View style={styles.row}>
@@ -89,7 +94,7 @@ export default function categoryScreen(){
                     )}
                 /> 
             </View>
-        </View>
+        </MyView>
    
     );
 }

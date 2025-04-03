@@ -7,6 +7,7 @@ import MyButton from '../src/components/MyButtons';
 import { Myinput, MyTextArea } from '../src/components/MyInputs';
 import {MyItem} from '../src/components/MyItem';
 import Mytext from '../src/components/MyText';
+import { useRouter } from 'expo-router';
 
 export default function RevenueScreen() {
   // Estado para o formulário
@@ -74,10 +75,10 @@ export default function RevenueScreen() {
   }
 
   
-
+  const router = useRouter();
   return (
 
-    <MyView>
+    <MyView router={router} >
       <Mytext style={{ fontSize: 24, fontWeight: 'bold', color: '#333', textAlign: 'center' }}>
         cadastre as receitas
       </Mytext>

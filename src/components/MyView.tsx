@@ -1,17 +1,19 @@
 import React,{ReactNode} from 'react';
-import { View, StyleSheet, Dimensions, TextStyle  } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { View, StyleSheet, Dimensions, TextStyle, ScrollView} from 'react-native';
 import MyTopbar from './MyTopbar';
 import MySupport from './MySupport';
+import { Router } from 'expo-router';
+
 
 interface MySearchProps {
   children: ReactNode;
   style?: TextStyle | TextStyle[]; 
   title?: string;
+  router: Router;  
 
 }
 
-const myView: React.FC< MySearchProps > = ({children, style, title}) => { 
+const myView: React.FC< MySearchProps > = ({children, style, title, router}) => { 
  
   const { width, height } = Dimensions.get('window');
 
@@ -40,7 +42,7 @@ const myView: React.FC< MySearchProps > = ({children, style, title}) => {
   return (
     <ScrollView style={[styles.container, style]}>
       <View style={styles.tView}>
-        <MyTopbar  title = {title ? title: ""} />
+        <MyTopbar router={router} title = {title ? title: ""} />
         {children}
         {/* Conteúdo da tela (pode ser adicionado aqui) */}
         {/* Botão de suporte */}

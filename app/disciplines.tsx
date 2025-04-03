@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
 import MyView from '../src/components/MyView';
+import { useRouter } from 'expo-router';
 
 
 //esse é o certo
@@ -75,8 +76,11 @@ export default function DisciplineScreen() {
     setIsEditing(false)
   }
 
+  const router = useRouter();
+
+
   return (
-    <MyView style={styles.container}>
+    <MyView router={router} style={styles.container}>
       <Text style={styles.title}>Disciplinas</Text>
       <View style={styles.row}>
         {/* Formulário */}

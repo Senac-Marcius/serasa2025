@@ -1,37 +1,33 @@
-import React, { Children, useState } from 'react'; // Esta importando da biblioteca do react para atualizar automaticamente 
-import { StyleSheet, View, Text, TextInput, Button, FlatList, TouchableOpacity, } from 'react-native'; 
+import React, { useState } from 'react'; // Esta importando da biblioteca do react para atualizar automaticamente 
+import { StyleSheet, View, FlatList, TouchableOpacity, } from 'react-native'; 
 import MySearch from '../src/components/MySearch'
-import { ScrollView } from 'react-native-gesture-handler';
 import {MyTextArea } from '../src/components/MyInputs'
 import MyButton from '../src/components/MyButtons';
 import Mytext from '../src/components/MyText';
 import MyView from '../src/components/MyView';
 import { Myinput } from '../src/components/MyInputs';
-/*import { textStyles } from '../styles/textStyles';*/
-
-interface Project {
-    name: string;
-    namep: string;
-    id: number;
-    url: string;
-    createAt: string;
-    userId: number;
-    recurces: number;
-    description: string;
-    activity: string;
-    timeline: string;
-    objective: string;
-    methodology: string;
-    techniques: string;
-    strategies: string;
-    planning: string;
-    process: string;
-}
-
-const [visible, setVisible] = useState(false)
-
+import { useRouter } from 'expo-router';
 
 export default function ProjectScreen(){
+    interface Project {
+        name: string;
+        namep: string;
+        id: number;
+        url: string;
+        createAt: string;
+        userId: number;
+        recurces: number;
+        description: string;
+        activity: string;
+        timeline: string;
+        objective: string;
+        methodology: string;
+        techniques: string;
+        strategies: string;
+        planning: string;
+        process: string;
+    }
+
 // Aqui é typescript
     const [req, setReq] = useState ({
         name: '',
@@ -110,10 +106,11 @@ export default function ProjectScreen(){
 
     }
 
+    const router = useRouter();
     const [busca, setBusca] = useState('')
     // Criando o textinput para receber e exibir o texto "placeholder" para o usuario digitar
     return ( // Esta sendo feito um emcapsulamento com a abertura da () / {req.description}= usado para mostar o codigo em baixo
-        <MyView>
+        <MyView router={router} >
             <MySearch 
                 style={{ padding: 20 }} 
                 onChangeText={setBusca}

@@ -19,7 +19,7 @@ interface MyPerfilProps {
     const Perfil = () => { 
       return (
         <ScrollView>
-        <MyView>
+        <MyView router={router} >
           <View style={styles.header}>
             <Mytext>Perfil</Mytext>
           </View>

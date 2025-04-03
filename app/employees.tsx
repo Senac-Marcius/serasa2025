@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
 import { ScrollView, View } from 'react-native';
 import { Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Button } from 'react-native';
-import MyTimerPicker  from '../src/components/MyTimerPicker'
+import MyTimerPicker  from '../src/components/MyTimerPiker'
 import MyButton from '../src/components/MyButtons';
 import MyView from '../src/components/MyView';
-import MyItem from '../src/components/MyItem';
+import {MyItem} from '../src/components/MyItem';
 import MyList from '../src/components/MyList';
 import { Myinput,MyCheck } from '../src/components/MyInputs';
+import { useRouter } from 'expo-router';
 
 
 export default function EmployeeScreen(){
@@ -55,6 +56,8 @@ export default function EmployeeScreen(){
             
         }
 
+        const router = useRouter();
+
 
     return(
         <View>
@@ -62,102 +65,7 @@ export default function EmployeeScreen(){
             <Text>Hello world</Text>
             <View style={style.row}>
                 <View style={style.form}>
-                    <TextInput
-                        placeholder='Pefril do likendin:'
-                        value={req.urls}
-                        onChangeText={(text) => SetReq({...req , urls:text})}
-                        placeholder='insira uma url valida'
-                        label='Perfil do likendin:'
-                        iconName = 'link'
-                    />
-                    {req.urls}
-                    <TextInput
-                        placeholder='Nome:'
-                        value={req.name}
-                        iconName='badge'
-                        onChangeText={(text) => SetReq({...req , name:text})}
-                    />
-                    {req.name}
-                    <TextInput
-                        placeholder='Idade:'
-                        value={req.datebirth}
-                        onChangeText={(int) => SetReq({...req , datebirth:int})}
-                    />
-                    {req.datebirth}
-                    <TextInput
-                        placeholder='Telefone:'
-                        value={req.tell}
-                        onChangeText={(int) => SetReq({...req , tell:int})}
-                    />
-                    {req.tell}
-                    <TextInput
-                        placeholder='Email:'
-                        iconName='email'
-                        label='Email:'
-                        value={req.email}
-                        onChangeText={(text) => SetReq({...req , email:text})}
-                    />
-                    {req.email}
-                    <TextInput
-                        placeholder='Endereço:'
-                        value={req.address}
-                        onChangeText={(text) => SetReq({...req , address:text})}
-                    />
-                    {req.address}
-                    <TextInput
-                        placeholder='Nacionalidade:'
-                        value={req.nationality}
-                        onChangeText={(text) => SetReq({...req , nationality:text})}
-                    />
-                    {req.nationality}
-                    <TextInput
-                        placeholder='Personalidade:'
-                        value={req.discPersonality}
-                        onChangeText={(text) => SetReq({...req , discPersonality:text})}
-                    />
-                    {req.discPersonality}
-                    <TextInput
-                        placeholder='C.P.F:'
-                        value={req.cpf}
-                        onChangeText={(int) => SetReq({...req , cpf:int})}
-                    />
-                    {req.cpf}
-                    <TextInput
-                        placeholder='Genêro:'
-                        value={req.sex}
-                        onChangeText={(text) => SetReq({...req , sex:text})}
-                    />
-                    {req.sex}
-                    <TextInput
-                        placeholder='Estado civil:'
-                        value={req.martinalStatus}
-                        onChangeText={(text) => SetReq({...req , martinalStatus:text})}
-                    />
-                    {req.martinalStatus}
-                    <TextInput
-                        placeholder='Cargo:'
-                        value={req.position}
-                        onChangeText={(text) => SetReq({...req , position:text})}
-                    />
-                    {req.position}
-                    <TextInput
-                        placeholder='Etnia:'
-                        value={req.ethnicity}
-                        onChangeText={(text) => SetReq({...req , ethnicity:text})}
-                    />
-                    {req.ethnicity}
-                    <TextInput
-                        placeholder='Deficiência:'
-                        value={req.deficiency}
-                        onChangeText={(text) => SetReq({...req , deficiency:text})}
-                    />
-                    {req.deficiency}
-                    <TextInput
-                        placeholder='Está ativo:'
-                        value={req.isActive}
-                        onChangeText={(bool) => SetReq({...req , isActive:bool})}
-                    />
-
+                    
                     
                    <MyButton title='Cadastrar Funcionário' button_type ='round'  onPress={handleRegister}/>
                 </View>

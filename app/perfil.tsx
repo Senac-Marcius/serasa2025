@@ -2,7 +2,6 @@ import React from 'react';
 import {ScrollView} from 'react-native';
 import {View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
-
 const Perfil = () => { 
   return (
     <ScrollView>

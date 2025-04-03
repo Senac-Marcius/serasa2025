@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity} from 'react-native';
 import MyView from '../src/components/MyView';
+import { useRouter } from 'expo-router';
+
 
 export default function CalendarsScreen(){
 //aqui é typescript
@@ -50,9 +52,10 @@ function delCalendar (id:number){
         setCalendars(item)
 }
 
+const router = useRouter();
 
 return (
-    <MyView>
+    <MyView router={router} >
 
         {/*aqui é typescript dentro do front*/}
         <Text>Tela de Cronograma</Text>

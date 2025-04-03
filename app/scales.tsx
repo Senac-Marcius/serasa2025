@@ -1,15 +1,14 @@
 import React, {useState} from 'react'; //Importa o react e atualiza a lista Automaticamente.
 import {View, Text, StyleSheet, FlatList} from 'react-native';//Une  os objetos e o react-native faz a função de trasformar o codigo em multiplas plataformas.
-import { useRouter } from 'expo-router';
 import MyFilter from '../src/components/MyFilter';
 import MySelect from '../src/components/MySelect';
 import MyTimerPicker from '../src/components/MyTimerPiker';
 import MyButton from '../src/components/MyButtons';
-import MyItem from '../src/components/MyItem';
+import {MyItem} from '../src/components/MyItem';
 import MyView from '../src/components/MyView';
+import { useRouter } from 'expo-router';
 
 export default function ScaleScreen(){
-    const router = useRouter();
 
     const [req, setReq] = useState({
         id:0,
@@ -87,8 +86,10 @@ export default function ScaleScreen(){
 
     }
 
+    const router = useRouter();
+
     return (
-        <MyView> {/* Aqui é typecript dentro do html*/}
+        <MyView router={router} > {/* Aqui é typecript dentro do html*/}
             <MyFilter
                 style={styles.container}
                 itens={['day', 'starttime']}
@@ -97,7 +98,7 @@ export default function ScaleScreen(){
                 />
             {/*Aqui é HTML*/}
             <Text>Minha tela das escalas</Text>
-            <MyView>
+            <MyView router={router} >
                 <View style={styles.form}>
                     <MySelect
                         label={selectedDay || 'Selecione um dia da semana'}
@@ -118,7 +119,7 @@ export default function ScaleScreen(){
                         title='Cadastrar' onPress={handleRegister}
                     />
                 </View >
-                <MyView>
+                <MyView router={router} >
                 <FlatList
                     data={scales}
                     keyExtractor={(item) => item.id.toString()}

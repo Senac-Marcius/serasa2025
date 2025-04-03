@@ -4,9 +4,10 @@ import MyView from '../src/components/MyView';
 import MyAccessibility from '../src/components/MyAccessibility';
 import { Myinput, MyTextArea } from '../src/components/MyInputs';
 import Mylist from '../src/components/MyList';
-import MyItem from '../src/components/MyItem';
+import {MyItem} from '../src/components/MyItem';
 import MyButton from '../src/components/MyButtons';
 import Mytext from '../src/components/MyText';
+import { useRouter } from 'expo-router';
 
 export default function investmentScreen(){
  //aqui é typescript   
@@ -66,10 +67,12 @@ export default function investmentScreen(){
             setInvestments(list)
 
     }
+
+    const router = useRouter();
     
     
     return (
-      <MyView>  
+      <MyView router={router} >  
               {/* Aqui é typescript dentro do front */}
         
         <MyAccessibility>
