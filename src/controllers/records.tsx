@@ -40,5 +40,5 @@ interface iRecord {
 
 }
 
-export {setRecord}
+export {setRecords, records , setRecord}
 

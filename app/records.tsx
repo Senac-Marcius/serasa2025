@@ -8,6 +8,7 @@ import { MyItem, MyCorrelated } from '../src/components/MyItem';
 import MyList from '../src/components/MyList';
 import { useRouter } from 'expo-router';
 
+
 export default function RecordScreen() {
     const router = useRouter();
     
