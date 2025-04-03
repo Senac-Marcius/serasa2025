@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { supabase } from "../utils/supabase";
 
-interface iStudent {
-  id: number;
+interface iStudent { 
   name: string;
   password: string;
   email: string;
@@ -16,6 +15,8 @@ async function setStudent(student: iStudent) {
     .from("students")
     .insert([student])
     .select();
+    
+
 }
 
 async function delStudent(id:number) {
@@ -25,11 +26,11 @@ async function delStudent(id:number) {
     .eq("id", `${id}`);
 }
 
-async function editStudent(student:iStudent) {
+async function editStudent(student:iStudent,id:number) {
   const { data, error } = await supabase
     .from("students")
     .update(student)
-    .eq("id", `${student.id}`)
+    .eq("id", `${id}`)
     .select();
 }
 
@@ -63,4 +64,4 @@ async function selectStudent() {
     .not("column", "like", "Negate filter")
     .or("some_column.eq.Some value, other_column.eq.Other value");
 }
-export {selectStudent,delStudent,editStudent,getStudent,setStudent}
+export {selectStudent,delStudent,editStudent,getStudent,setStudent,student,setStudents}
