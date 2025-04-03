@@ -18,6 +18,13 @@ const [launchs, setLaunchs] = useState<iLaunch[]>([]);
 
 async function setLaunch(launch: iLaunch) {
     //aqui vem os tratamentos de regex ou do modelo de negócio antes de inserir
+    const observationRegex = /^[\w\sáàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ.,;:!?()'"-]{1,1000}$/;
+    const presenceRegex = /^(true|false)$/i;  // Para boolean (aceita "true" ou "false")
+    const indicatorRegex = /^[A-Z0-9_]{1,20}$/;  // Ex: "INDICATOR_01"
+    const noteRegex = /^[\w\sáàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ.,;:!?()'"-]{1,500}$/;
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;  // Formato YYYY-MM-DD
+
+
 const { data, error } = await supabase.from('launchs')
   .insert([
    launch
@@ -35,4 +42,4 @@ return[]
 
 }
 
-export {setLaunch}
+export {setLaunch, launchs, setLaunchs}

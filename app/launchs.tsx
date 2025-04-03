@@ -9,7 +9,7 @@ import { Myinput, MyCheck } from '../src/components/MyInputs';
 import Mybutton from '../src/components/MyButtons';
 import MyCalendar from '../src/components/MyCalendar';
 import { useRouter } from 'expo-router';
-
+import {launchs, setLaunch, setLaunchs} from '../src/controllers/launchs';
 
 
 export default function LaunchScreen() {
