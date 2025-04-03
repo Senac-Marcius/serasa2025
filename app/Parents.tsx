@@ -18,7 +18,8 @@ export default function ParentScreen (){
 
     });
 
-    const [parents,setParents] = useState<{
+    /*RETIRAR DEPOIS QUE FOR FEITA AS AUTERAÇÕES DO BANCO DE DADOS↓↓↓*/
+        const [parents,setParents] = useState<{
         Nome: string,
         Email: string,
         parentesco: string,
@@ -27,6 +28,7 @@ export default function ParentScreen (){
         userId: number,
     
     }[]>([])/* <> → usado para tipar uma função */
+    /*RETIRAR DEPOIS QUE FOR FEITA AS AUTERAÇÕES DO BANCO DE DADOS↑↑↑*/
 
     function handleRegister() {
         if(req.id == -1){
