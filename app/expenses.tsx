@@ -7,6 +7,7 @@ import MyButton from '../src/components/MyButtons'
 import {Myinput, MyTextArea} from '../src/components/MyInputs';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useRouter } from 'expo-router';
+import { setExpense } from '../src/controllers/expenses';
 
 export default function ExpenseScreen(){
 // aqui é typescript
@@ -20,16 +21,7 @@ export default function ExpenseScreen(){
             creatAt : new Date(). toISOString(),
             userId: 0,
     });
-    const [expense, setExpense ] = useState<{
-        contact: string,
-        name: string,
-        email: string,
-        description: string,
-        id: number,
-        cost: string,
-        creatAt: string,
-        userId: number,
-    }[]>([]) 
+    
 
     function handleRegister(){
         if(req.id == -1){
