@@ -21,15 +21,7 @@ export default function LocalScreen(){
         adress:'',
         createAt: new Date().toISOString(),
     });      
-
-    const [locals, setLocals] = useState<{
-        id: number,
-        name: string,
-        area: string,
-        description: string,
-        adress: string,
-        createAt: string,
-    }[]>([])        //  '< >' -> recebe um tipo. torna-se tipada   -> 
+                                       //  '< >' -> recebe um tipo. torna-se tipada   -> 
 
     function handleRegister(){
         if(req.id == -1){
@@ -81,7 +73,7 @@ export default function LocalScreen(){
                         <Text style={styles.title}>LOCAL</Text>
                        
                         <Myinput
-                        iconName='name'
+                        iconName='search'
                         placeholder= "Digite o nome do local:"                                 
                         value={req.name}
                           label='Nome:'
@@ -89,7 +81,7 @@ export default function LocalScreen(){
                         />                                                                     
                                                                                                         
                         <Myinput
-                        iconName='wolrd-o'
+                        iconName='TSquare Foot'
                         placeholder={ `Digite a sua dimensão em ${unity}:`}
                         value={req.area}
                         label='Dimensão:'
@@ -117,7 +109,7 @@ export default function LocalScreen(){
                         /> 
 
                         <Myinput 
-                        iconName='adress'
+                        iconName='language'
                         placeholder= "Digite o seu endereço:"
                         value={req.adress}
                           label='Endereço:'
