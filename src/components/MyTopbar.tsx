@@ -257,11 +257,11 @@ const MyTopbar: React.FC<MyTopbarProps> = ({ title, router }) => {
                         }}
                     />
                     <Drawer.Item
-                        label="schedules"
+                        label="timelines"
                         icon="file-document"
                         onPress={() => {
                             setDrawerOpen(false);
-                            router.push('/schedules');
+                            router.push('/timelines');
                         }}
                     />
                     <Drawer.Item
