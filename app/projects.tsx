@@ -8,25 +8,7 @@ import MyView from '../src/components/MyView';
 import { Myinput } from '../src/components/MyInputs';
 import { useRouter } from 'expo-router';
 
-export default function ProjectScreen(){
-    interface Project {
-        name: string;
-        namep: string;
-        id: number;
-        url: string;
-        createAt: string;
-        userId: number;
-        recurces: number;
-        description: string;
-        activity: string;
-        timeline: string;
-        objective: string;
-        methodology: string;
-        techniques: string;
-        strategies: string;
-        planning: string;
-        process: string;
-    }
+export default function ProjectScreen(){ 
 
 // Aqui é typescript
     const [req, setReq] = useState ({
@@ -48,7 +30,7 @@ export default function ProjectScreen(){
         process:'',
     });
 
-    const [ projects, setProjects ] = useState<Project[]>([]);
+    
 
     function handleRegister(){
 
