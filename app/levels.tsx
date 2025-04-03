@@ -153,7 +153,7 @@ export default function levelsScreen(){
     );
 }
 
-// Estilos
+//* Estilos
 const styles = StyleSheet.create({
     container: {
         flex: 1,
