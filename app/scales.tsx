@@ -20,14 +20,7 @@ export default function ScaleScreen(){
     });
 
 
-    const [scales, setScales] = useState<{
-        id:number,
-        day: string,
-        starttime:string,
-        endtime:string,
-        creatAt: string,
-        userId: number,
-    }[]>([]);
+    
 
     const [selectedDay, setSelectedDay] = useState<string>('');
 

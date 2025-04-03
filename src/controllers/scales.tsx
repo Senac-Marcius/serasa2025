@@ -13,7 +13,13 @@ interface iScale {
 const [scales, setScales] = useState<iScale[]>([]);
 
 async function setScale(scale:iScale){
-    //Tratamento de Regex antes de inserir
+    
+    const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/; // Valida formato HH:mm
+
+    if (!timeRegex.test(scale.starttime) || !timeRegex.test(scale.endtime)) {
+        console.error("Erro: Formato de horário inválido!");
+        return [];
+    }
 
     const { data, error } = await supabase
     .from('scales')
@@ -23,8 +29,7 @@ async function setScale(scale:iScale){
     .select()
 
     if(error){
-        //Aqui vem a variavel erro
-        
+        console.error("Erro ao inserir escala:", error);
         return[]
     }
     
