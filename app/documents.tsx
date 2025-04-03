@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
+import {insertDocument, documents, setDocuments} from '../src/controllers/documents'
 
 const FileUploadComponent = () => {
-  const [file, setFile] = useState(null);
+  //const [documents, setDocuments] = useState(null);
   //deve ter um registro ocm os dados da tabela do supabase, id, iduser,createAT, etc
 
   const handleUpload = () => {
@@ -11,7 +12,7 @@ const FileUploadComponent = () => {
   };
 
   const handleCancel = () => {
-    setFile(null);
+    //insertDocument();
     console.log('Upload cancelado');
   };
 

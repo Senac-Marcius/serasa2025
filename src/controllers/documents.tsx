@@ -1,30 +1,32 @@
 import React, { useState } from 'react';
 import { supabase } from '../utils/supabase'
 
-
-
 interface iDoc{
-    //passa os parametros do registro aqui
+  id: number; 
+  userId: number; 
+  createAt: string;  //passa os parametros do registro aqui
 }
+
 //documents, setdocuments
-const [file, setFile] = useState<iDoc[]>[()];
+const [documents, setDocuments] = useState<iDoc[]>([]);
 
 
-async function setDocuments(documents:iDoc) {
-    const { data, error } = await supabase
-  .from('documents')
+
+//função do banco de dados
+async function insertDocument(document: iDoc, p0: number, userId: any, p1: number) {//mesma coisa que o set só que com nome dif para não ter conflito
+    const { data, error } = await supabase.from('documents')
   .insert([
-    documents //vai receber req da da view do obj princ   //some_column: 'someValue', other_column: 'otherValue' },
+    document //vai receber req da da view do obj princ -- recebe o obj -- some_column: 'someValue', other_column: 'otherValue' },
   ])
   .select()
     
-    if(error){
-        // aqui vem os tratamentos da variavel erro --> "try catch"
-        return[]
-    }
+    if(error){// aqui vem os tratamentos da variavel erro --> "try catch"
+        
+        return "Erro!"
+    }//catch error
     return data
 }
 
-export {setDocuments}
+export {insertDocument, documents, setDocuments}
 
           
