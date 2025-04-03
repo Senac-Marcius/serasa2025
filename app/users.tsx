@@ -33,19 +33,19 @@ export default function UserScreen() {
 
     });
 
-    const [users, setUsers] = useState<{
-        //tipo, tipo vetor, objeto
-        name: string,
-        password: string,
-        cpf: string,
-        age: string,
-        contact: string,
-        email: string,
-        address: string,
-        createAt: string,
-        id: number,
-        Userid: number
-    }[]>([])
+    // const [users, setUsers] = useState<{
+    //     //tipo, tipo vetor, objeto
+    //     name: string,
+    //     password: string,
+    //     cpf: string,
+    //     age: string,
+    //     contact: string,
+    //     email: string,
+    //     address: string,
+    //     createAt: string,
+    //     id: number,
+    //     Userid: number
+    // }[]>([])
 
     function handleRegister() {
         if (req.id == -1) {
