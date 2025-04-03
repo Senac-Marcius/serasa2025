@@ -32,24 +32,7 @@ export default function EmployeeScreen(){
         isActive: ''
         
     });
-    const [employees, setEmployees]= useState<{
-        id: number,
-        urls: string,
-        name: string,
-        datebirth: string,
-        tell: string,
-        email: string,
-        address: string,
-        nationality: string,
-        discPersonality: string,
-        cpf: string,
-        sex: string,
-        martinalStatus: string,
-        position: string,
-        ethnicity: string,
-        deficiency: string,
-        createAt: string,
-        isActive: string,}[]>([])
+   
 
         function handleRegister(){
             if(req.id == -1){
