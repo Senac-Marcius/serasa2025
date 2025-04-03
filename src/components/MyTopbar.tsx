@@ -1,34 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Appbar } from 'react-native-paper';
-import { useRouter } from 'expo-router';
+import { Link } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import MyNotify from './MyNotify';
-import HamburgerMenu from './MyMenu';
+import MyMenu from './MyMenu';
 
-interface MyTopbarProps {
-  title?: string;
-}
-
-const MyTopbar: React.FC<MyTopbarProps> = ({ title }) => {
-  const router = useRouter();
+const MyTopbar: React.FC = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <View style={styles.container}>
       <View style={styles.topbarPill}>
         {/* Botão de menu */}
-        <HamburgerMenu />
+        <TouchableOpacity onPress={() => setMenuOpen(!menuOpen)} style={styles.iconButton}>
+          <Ionicons name="menu" size={24} color="#fff" />
+        </TouchableOpacity>
 
         {/* Ícones à direita */}
         <View style={styles.rightIcons}>
           <MyNotify />
-          
-          {/* Ícone de perfil navegável */}
-          <TouchableOpacity onPress={() => router.push('/perfil')} style={styles.iconButton}>
-            <Ionicons name="person" size={20} color="#fff" />
-          </TouchableOpacity>
+          <Link href="/perfil" asChild>
+            <TouchableOpacity style={styles.iconButton}>
+              <Ionicons name="person" size={20} color="#fff" />
+            </TouchableOpacity>
+          </Link>
         </View>
       </View>
+
+      {/* Renderiza o menu somente quando aberto */}
+      {menuOpen && <MyMenu closeMenu={() => setMenuOpen(false)} />}
     </View>
   );
 };
@@ -36,6 +36,7 @@ const MyTopbar: React.FC<MyTopbarProps> = ({ title }) => {
 const styles = StyleSheet.create({
   container: {
     margin: 16,
+    zIndex: 2,
   },
   topbarPill: {
     backgroundColor: '#f1f1f1',
@@ -47,6 +48,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    zIndex: 3,
   },
   iconButton: {
     backgroundColor: '#6A1B9A',

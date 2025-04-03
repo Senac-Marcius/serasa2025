@@ -1,28 +1,27 @@
 import React, { useState } from 'react';
-import {View,Text,TouchableOpacity,Animated,StyleSheet,Image,Dimensions,ScrollView,} from 'react-native';
+import { View, Text, TouchableOpacity, Animated, StyleSheet, Image, Dimensions, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
 const { height } = Dimensions.get('window');
 const MENU_WIDTH = 280;
 
-export default function HamburgerMenu() {
+interface HamburgerMenuProps {
+  closeMenu: () => void;
+}
+
+export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
   const router = useRouter();
-  const [menuVisible, setMenuVisible] = useState(false);
   const slideAnim = useState(new Animated.Value(-MENU_WIDTH))[0];
 
-  const toggleMenu = () => {
-    const isOpening = !menuVisible;
+  // Animação de entrada do menu
+  React.useEffect(() => {
     Animated.timing(slideAnim, {
-      toValue: isOpening ? 0 : -MENU_WIDTH,
+      toValue: 0,
       duration: 250,
       useNativeDriver: true,
-    }).start(() => {
-      if (!isOpening) setMenuVisible(false);
-    });
-
-    if (isOpening) setMenuVisible(true);
-  };
+    }).start();
+  }, []);
 
   const MenuItem = ({
     label,
@@ -37,7 +36,7 @@ export default function HamburgerMenu() {
       style={styles.menuItem}
       onPress={() => {
         router.push(`/${route}`);
-        toggleMenu();
+        closeMenu();
       }}
     >
       <Ionicons name={icon} size={20} color="#FFF" style={{ marginRight: 8 }} />
@@ -46,72 +45,56 @@ export default function HamburgerMenu() {
   );
 
   return (
-    <>
-      {/* Menu lateral */}
-      {menuVisible && (
-        <Animated.View
-          style={[
-            styles.menu,
-            {
-              height,
-              transform: [{ translateX: slideAnim }],
-            },
-          ]}
-        >
-          <View style={styles.menuHeader}>
-            <TouchableOpacity onPress={toggleMenu}>
-              <Ionicons name="close" size={26} color="#FFF" />
-            </TouchableOpacity>
-          </View>
+    <Animated.View
+      style={[styles.menu, { height, transform: [{ translateX: slideAnim }] }]}
+    >
+      <View style={styles.menuHeader}>
+        <TouchableOpacity onPress={closeMenu}>
+          <Ionicons name="close" size={26} color="#FFF" />
+        </TouchableOpacity>
+      </View>
 
-          <TouchableOpacity style={styles.profileSection}>
-            <Image source={{ uri: 'https://via.placeholder.com/50' }} style={styles.profileImage} />
-            <View>
-              <Text style={styles.profileName}>sung di wo</Text>
-              <Text style={styles.profileRole}>Admin</Text>
-            </View>
-          </TouchableOpacity>
-
-          <ScrollView style={styles.scroll}>
-            <MenuItem label="Budgets" route="budgets" icon="wallet" />
-            <MenuItem label="Calendar" route="calendar" icon="calendar" />
-            <MenuItem label="Categories" route="categories" icon="albums" />
-            <MenuItem label="Classes" route="classes" icon="school" />
-            <MenuItem label="Collections" route="collections" icon="cube" />
-            <MenuItem label="Courses" route="courses" icon="book" />
-            <MenuItem label="Disciplines" route="disciplines" icon="document-text" />
-            <MenuItem label="Documents" route="documents" icon="document" />
-            <MenuItem label="Employees" route="employees" icon="people" />
-            <MenuItem label="Expenses" route="expenses" icon="cash" />
-            <MenuItem label="Investments" route="investments" icon="trending-up" />
-            <MenuItem label="Itens" route="itens" icon="pricetag" />
-            <MenuItem label="Launchs" route="launchs" icon="rocket" />
-            <MenuItem label="Levels" route="levels" icon="stats-chart" />
-            <MenuItem label="Libraie" route="libraie" icon="book" />
-            <MenuItem label="Loans" route="loans" icon="card" />
-            <MenuItem label="Locals" route="locals" icon="location" />
-            <MenuItem label="Notifications" route="notifications" icon="notifications" />
-            <MenuItem label="Parents" route="Parents" icon="people-circle" />
-            <MenuItem label="Perfil" route="perfil" icon="person" />
-            <MenuItem label="Positions" route="positions" icon="pin" />
-            <MenuItem label="Posts" route="posts" icon="chatbox" />
-            <MenuItem label="Products" route="products" icon="cart" />
-            <MenuItem label="Projects" route="projects" icon="briefcase" />
-            <MenuItem label="Records" route="records" icon="disc" />
-            <MenuItem label="Revenues" route="revenues" icon="cash-outline" />
-            <MenuItem label="Scales" route="scales" icon="speedometer" />
-            <MenuItem label="Schedules" route="schedules" icon="calendar" />
-            <MenuItem label="Students" route="students" icon="school" />
-            <MenuItem label="Users" route="users" icon="person-circle" />
-          </ScrollView>
-        </Animated.View>
-      )}
-
-      {/* Botão de menu externo controlando o menu */}
-      <TouchableOpacity style={styles.menuButton} onPress={toggleMenu}>
-        <Ionicons name="menu" size={20} color="#fff" />
+      <TouchableOpacity style={styles.profileSection}>
+        <Image source={{ uri: 'https://via.placeholder.com/50' }} style={styles.profileImage} />
+        <View>
+          <Text style={styles.profileName}>sung di wo</Text>
+          <Text style={styles.profileRole}>Admin</Text>
+        </View>
       </TouchableOpacity>
-    </>
+
+      <ScrollView style={styles.scroll}>
+        <MenuItem label="Budgets" route="budgets" icon="wallet" />
+        <MenuItem label="Calendar" route="calendar" icon="calendar" />
+        <MenuItem label="Categories" route="categories" icon="albums" />
+        <MenuItem label="Classes" route="classes" icon="school" />
+        <MenuItem label="Collections" route="collections" icon="cube" />
+        <MenuItem label="Courses" route="courses" icon="book" />
+        <MenuItem label="Disciplines" route="disciplines" icon="document-text" />
+        <MenuItem label="Documents" route="documents" icon="document" />
+        <MenuItem label="Employees" route="employees" icon="people" />
+        <MenuItem label="Expenses" route="expenses" icon="cash" />
+        <MenuItem label="Investments" route="investments" icon="trending-up" />
+        <MenuItem label="Itens" route="itens" icon="pricetag" />
+        <MenuItem label="Launchs" route="launchs" icon="rocket" />
+        <MenuItem label="Levels" route="levels" icon="stats-chart" />
+        <MenuItem label="Libraie" route="libraie" icon="book" />
+        <MenuItem label="Loans" route="loans" icon="card" />
+        <MenuItem label="Locals" route="locals" icon="location" />
+        <MenuItem label="Notifications" route="notifications" icon="notifications" />
+        <MenuItem label="Parents" route="Parents" icon="people-circle" />
+        <MenuItem label="Perfil" route="perfil" icon="person" />
+        <MenuItem label="Positions" route="positions" icon="pin" />
+        <MenuItem label="Posts" route="posts" icon="chatbox" />
+        <MenuItem label="Products" route="products" icon="cart" />
+        <MenuItem label="Projects" route="projects" icon="briefcase" />
+        <MenuItem label="Records" route="records" icon="disc" />
+        <MenuItem label="Revenues" route="revenues" icon="cash-outline" />
+        <MenuItem label="Scales" route="scales" icon="speedometer" />
+        <MenuItem label="Schedules" route="schedules" icon="calendar" />
+        <MenuItem label="Students" route="students" icon="school" />
+        <MenuItem label="Users" route="users" icon="person-circle" />
+      </ScrollView>
+    </Animated.View>
   );
 }
 
@@ -165,11 +148,5 @@ const styles = StyleSheet.create({
   menuText: {
     fontSize: 18,
     color: '#FFF',
-  },
-  menuButton: {
-    backgroundColor: '#6A1B9A',
-    padding: 10,
-    borderRadius: 30,
-    marginHorizontal: 4,
   },
 });
