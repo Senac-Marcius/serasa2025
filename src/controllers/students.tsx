@@ -10,7 +10,7 @@ interface iStudent {
     createdAt: string;
 }
 
-const [student, setStunt] = useState<iStudent[]>([]);
+const [student, setStudents] = useState<iStudent[]>([]);
 
 async function setStudent() {
   const { data, error } = await supabase
