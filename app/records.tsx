@@ -25,6 +25,7 @@ export default function RecordScreen() {
         createAt: new Date().toISOString(),
     });
 
+    /*RETIRAR ISSO AQUI DEPOIS ATTENCION PICKET POCKET*/
     const [records, setRecords] = useState<{
         id: number
         name: string,
@@ -35,7 +36,8 @@ export default function RecordScreen() {
         medication: string,
         userId: number,
         createAt: string,
-
+    /*RETIRAR ISSO AQUI DEPOIS ATTENCION PICKET POCKET*/
+    
     }[]>([]);
 
     function handleRegister() {
