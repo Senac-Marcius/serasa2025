@@ -4,7 +4,7 @@ import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
 import MyCalendar from '../src/components/MyCalendar'; 
 import MySearch from '../src/components/MySearch';
-
+import {timelines,setTimelines, setTimeline } from '../src/controllers/timeline';
 
 
 export default function TimelineScreen(){
@@ -28,8 +28,8 @@ export default function TimelineScreen(){
         if(req.id == -1){
             const newId = timelines.length ? timelines[timelines.length -1].id + 1 : 0;
             const newTimeline = {...req, id: newId};
-
             setTimelines([...timelines, newTimeline]);
+            setTimeline(newTimeline)
         }else{
             setTimelines(timelines.map(s =>(s.id == req.id) ? req : s));
         }
@@ -73,7 +73,7 @@ export default function TimelineScreen(){
         const [busca, setBusca] = useState('')
 
         <MySearch
-
+            
             
              />
 

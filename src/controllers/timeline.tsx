@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { supabase } from '../utils/supabase';
 
 
+
 interface iTimeline {
     id: number,
     url: string,
@@ -21,22 +22,44 @@ const [timelines, setTimelines] = useState<iTimeline[]>([]);
 async function setTimeline(timeline:iTimeline){
     //aqui vem os tratamentos do regex ou do modelo de negocio antes de inserir
     
-    const urlRegex = /^(https?:\/\/)?([a-z0-9]+(\.[a-z0-9]+)+)(\/[a-z0-9#?&%=]*)?$/i;
+    const urlRegex= /^https?:\/\/[^\s/$.?#].[^\s]*$/i;
+    const classRegex = /^[a-zA-Z0-9\s\-_]+$/;
+    const disciplineRegex = /^[a-zA-ZÀ-ÿ\s\-']+$/;
+    const locationRegex = /^[a-zA-Z0-9\s\-,.]+$/;
+    const start_timeRegex= /^([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/;
+    const end_timeRegex= /^([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$/;
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    const timeRegex = /^([01]?[0-9]|2[0-3]):([0-5]?[0-9])$/
 
 
-    if (!urlRegex.test(req.url)) {
-        return "Campo url deve conter o formato https:siteorganizador";
-    }
 
-    if (!dateRegex.test(req.date)) {
-        return "Campo deve conter o formato yyyy-mm-dd";
-    }
+if (!urlRegex.test(timeline.url)) {
+    return "URL deve seguir o formato válido (ex: http://exemplo.com)";
+}
 
-    if (!timeRegex.test(req.beginning)) {
-        return "Campo deve conter o formato 13:00";
-    }
+if (!classRegex.test(timeline.class)) {
+    return "Classe deve conter apenas letras, números, espaços, hífens ou underscores";
+}
+
+
+if (!disciplineRegex.test(timeline.discipline)) {
+    return "Disciplina deve conter apenas caracteres válidos";
+}
+
+if (!locationRegex.test(timeline.location)) {
+    return "Localização contém caracteres inválidos";
+}
+
+if (!start_timeRegex.test(timeline.start_time)) {
+    return "Hora de início deve estar no formato HH:MM (24h)";
+}
+
+if (!end_timeRegex.test(timeline.end_time)) {
+    return "Hora de término deve estar no formato HH:MM (24h)";
+}
+
+if (!dateRegex.test(timeline.createAt)) {
+    return "Data de criação deve estar no formato YYYY-MM-DD";
+}
 
 const { data, error } = await supabase
   .from('timeline')
@@ -56,5 +79,4 @@ return data
 
 }
 
-export {setTimeline}
-          
+export {setTimeline, timelines, setTimelines}
