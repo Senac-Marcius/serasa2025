@@ -9,6 +9,7 @@ import {MyItem} from '../src/components/MyItem';
 import Mytext from '../src/components/MyText';
 import { useRouter } from 'expo-router';
 
+
 export default function RevenueScreen() {
   // Estado para o formulário
   const [req, setReq] = useState({
@@ -23,18 +24,7 @@ export default function RevenueScreen() {
     discountPercentage: '',
   });
 
-  // Estado para a lista de receitas
-  const [revenues, setRevenues] = useState<{
-    id: number;
-    description: string;
-    name: string;
-    url: string;
-    createAt: string;
-    userId: number;
-    value: string;
-    scholarshipStatus: string;
-    discountPercentage: string;
-  }[]>([]);
+  
 
   // Função para cadastrar ou editar uma receita
   function handleRegister() {
@@ -43,6 +33,7 @@ export default function RevenueScreen() {
       const newId = revenues.length ? revenues[revenues.length - 1].id + 1 : 0;
       const newRevenue = { ...req, id: newId };
       setRevenues([...revenues, newRevenue]);
+      
     } else {
       // Edita uma receita existente
       setRevenues(revenues.map(r => (r.id == req.id ? req : r)));
@@ -78,9 +69,9 @@ export default function RevenueScreen() {
   const router = useRouter();
   return (
 
-    <MyView router={router} >
+    <MyView  router={router} >
       <Mytext style={{ fontSize: 24, fontWeight: 'bold', color: '#333', textAlign: 'center' }}>
-        cadastre as receitas
+         cadastre as receitas
       </Mytext>
 
       {/* Formulário */}
