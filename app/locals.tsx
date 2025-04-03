@@ -11,7 +11,7 @@ import { useRouter } from 'expo-router';
 
 export default function LocalScreen(){
 
-    //onde vou criar a variavel do useState:            é const pq a usestate so aceita const
+    //onde vou criar a variavel do useState:            é const pq a usestate so aceita const 
     const [req, setReq] = useState({
     
         id: -1,
