@@ -10,9 +10,9 @@ export default function StudentsScreen() {
     <MyView>
       <MyCorrelated style={styles.hero } showDeleteButton = {false} showEditButton = {false} >
            <MyButton  button_type="circle" width={70} height={70} icon="library" iconColor="white" iconSize={30} bottom_text="Teste" font_size={12} text_color="black"></MyButton>
-           <MyButton  button_type="circle" width={70} height={70} icon="hand-coin" iconColor="white" iconSize={30}></MyButton>
-           <MyButton  button_type="circle" width={70} height={70} icon="finance" iconColor="white" iconSize={30}></MyButton>
-           <MyButton  button_type="circle" width={70} height={70} icon="book" iconColor="white" iconSize={30}></MyButton>
+           <MyButton  button_type="circle" width={70} height={70} icon="hand-coin" iconColor="white" iconSize={30} bottom_text="Teste" font_size={12} text_color="black"></MyButton>
+           <MyButton  button_type="circle" width={70} height={70} icon="finance" iconColor="white" iconSize={30} bottom_text="Teste" font_size={12} text_color="black" ></MyButton>
+           <MyButton  button_type="circle" width={70} height={70} icon="book" iconColor="white" iconSize={30} bottom_text="Teste" font_size={12} text_color="black"></MyButton>
            <MyButton  button_type="circle" width={70} height={70} icon="book-open" iconColor="white" iconSize={30}></MyButton>
            <MyButton  button_type="circle" width={70} height={70} icon="receipt" iconColor="white" iconSize={30}></MyButton>
            <MyButton  button_type="circle" width={70} height={70} icon="file-clock" iconColor="white" iconSize={30}></MyButton>

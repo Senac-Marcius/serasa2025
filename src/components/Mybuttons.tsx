@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { TouchableOpacity, Text, StyleSheet, ViewStyle } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, ViewStyle,View } from "react-native";
 import { Icon } from "react-native-paper";
 
 type Button_type =
@@ -77,7 +77,7 @@ const MyButton: React.FC<MyButtonProps> = ({
       setLoading(true);
     }
   }
-  return (<>
+  return (<View style={{alignContent:"center", justifyContent:"center"}}>
     <TouchableOpacity
       style={[
         getButtonType(button_type),
@@ -89,8 +89,8 @@ const MyButton: React.FC<MyButtonProps> = ({
       {icon && <Icon size={iconSize} source={icon} color={iconColor}></Icon>}
       {title && <Text style={{ fontSize: font_size, color: text_color }}>{title}</Text>}
     </TouchableOpacity>
-    {bottom_text && <Text  style={{ fontSize: font_size, color: text_color }}>{bottom_text}</Text>}
-    </>
+    {bottom_text && <Text  style={{ fontSize: font_size, color: text_color, textAlign:"center" , fontWeight:"bold" }}>{bottom_text}</Text>}
+    </View>
   );
 };
 
