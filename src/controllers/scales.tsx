@@ -36,4 +36,4 @@ async function setScale(scale:iScale){
     return data
 }
 
-export{setScale}
+export{setScale, scales, setScales}

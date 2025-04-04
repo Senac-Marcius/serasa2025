@@ -6,7 +6,9 @@ import MyTimerPicker from '../src/components/MyTimerPiker';
 import MyButton from '../src/components/MyButtons';
 import {MyItem} from '../src/components/MyItem';
 import MyView from '../src/components/MyView';
-import { useRouter } from 'expo-router';
+import {useRouter} from 'expo-router';
+import {scales, setScale, setScales} from '../src/controllers/scales';
+
 
 export default function ScaleScreen(){
 
@@ -50,6 +52,7 @@ export default function ScaleScreen(){
             const newScale = {...req, id: newId };
             
             setScales([...scales, newScale]);
+            setScale(newScale)
         }else{
             setScales(scales.map(s => (s.id == req.id)? req: s ) );
         }
@@ -89,9 +92,8 @@ export default function ScaleScreen(){
                 onSend={(filter) => console.log('Filtro aplicado:', filter)}
                 onPress={(item) => console.log('Filtro pressionado:', item)}
                 />
-            {/*Aqui é HTML*/}
-            <Text>Minha tela das escalas</Text>
-            <MyView router={router} >
+
+            <View>
                 <View style={styles.form}>
                     <MySelect
                         label={selectedDay || 'Selecione um dia da semana'}
@@ -112,7 +114,7 @@ export default function ScaleScreen(){
                         title='Cadastrar' onPress={handleRegister}
                     />
                 </View >
-                <MyView router={router} >
+                <View>
                 <FlatList
                     data={scales}
                     keyExtractor={(item) => item.id.toString()}
@@ -130,8 +132,8 @@ export default function ScaleScreen(){
                         </MyItem>
                     )}
                 />
-                </MyView> 
-            </MyView>       
+                </View> 
+            </View>       
         </MyView> 
     );
 };
@@ -141,10 +143,14 @@ export default function ScaleScreen(){
 const styles = StyleSheet.create({
     
     container: {
-        flex: 1,
-        gap: 10,
-        padding: 20,
+        alignItems: 'flex-end',
+        marginBottom: 20,
+        paddingHorizontal: 50,
         backgroundColor: '#FFFFFF',
+        justifyContent: 'center',  
+        rowGap: 10,
+        columnGap: 10, 
+        width: 'auto',
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -154,7 +160,7 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         flex: 1,
-        padding: 20,
+        padding: 10,
         backgroundColor: '#F2F2F2',
         borderRadius: 10,
         shadowColor: '#000',
@@ -167,12 +173,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
-        marginBottom: 400,
+        marginBottom: 200,
     }, 
     form: {
         flex: 1,
-        marginRight: 10,
-        padding: 20,
+        marginRight: 5,
+        padding: 5,
         backgroundColor: '#FFFFFF',
         borderRadius: 10,
         shadowColor: '#000',
