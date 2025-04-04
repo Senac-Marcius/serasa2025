@@ -3,6 +3,15 @@ import { View, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
 import { TextInput, Text} from 'react-native-paper';
 import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
+import {products, setProduct} from '../src/controllers/products';
+import MyButton from '../src/components/MyButtons';
+import Mytext from '../src/components/MyText';
+import {Myinput} from '../src/components/MyInputs';
+import { MyItem } from '../src/components/MyItem';
+import MyList from '../src/components/MyList';
+import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
+
+
 
 export default function productScreen(){
 //aqui é typescript
@@ -30,6 +39,7 @@ export default function productScreen(){
                 const newProduct = { ...req, id: newId}
                 
                 setProducts([...products, newProduct]); 
+                setProduct(newProduct)
                 
                 
             }else{ 
@@ -55,58 +65,58 @@ export default function productScreen(){
         }
 
     const router = useRouter();
-
     return (
         <MyView router={router} >
+       
+        <Mytext style={styles.h2}>Cadastro de Produtos</Mytext>
+        
+        <View style={styles.row}>
+            <View style={styles.form}>
+
+                <Myinput 
+                placeholder="Digite o Nome"
+                value={req.name}
+                onChangeText={(text) => setReq({ ...req, name:text })}
+                label="Produto"
+                 iconName='product' 
             
-            <Text style={styles.h1}> Produtos </Text>
-                {/*aqui é typescript dentro do front */ }
-            <Text style={styles.h2}>Minha tela dos Produtos</Text>
-                <View style={styles.row}>
-                    <View style={styles.form}>
-                            
-                        <TextInput style={styles.input}
-                        placeholder="Digite o nome"
-                        value={req.name}
-                        onChangeText={(text)=> setReq({...req, name: text})}
-                        />
-                            
-                        <TextInput style={styles.input}
-                        placeholder="Digite a descrição" 
-                        value={req.description}
-                        onChangeText={(text)=> setReq({...req, description: text})}
-                        />
+                />
+          
+                <Myinput 
+                   placeholder= "Descrição"
+                   value={req.description}
+                   onChangeText={(text)=>setReq({...req, description:text})}
+                   label= 'Descrição'
+                   iconName='description' 
+                   />
+
+                    <MyButton style={styles.cadastrar} onPress={handleRegister} title='Cadastrar'></MyButton>            
+            </View>
+
+            <MyList
+                data={products}
+                keyItem={(Item) => Item.id.toString()}
+                renderItem={({item})=>(
+                    <MyItem>
+                        <text>{item.name}</text>
+                        <text>{item.description}</text>
+                        <text>{item.createAt}</text>
+                        <text>{item.userId}</text>
+
                         
+                        <MyButton style={styles.edit}title='Editar' onPress={() => {editProduct(item.id)}}/>
+                        <MyButton style={styles.delete}title='Deletar' onPress={() => {dellProduct(item.id)}}/>
+                    
+                </MyItem>
 
-                        <TouchableOpacity style={styles.cadastrar} onPress={()=>{handleRegister()}}>Cadastrar</TouchableOpacity>
-
-                    </View>
-
+            )}
             
-                    <FlatList
-                        data={products}
-                        keyExtractor={(item) => item.id.toString() }
-                        renderItem={({item}) => (
-                            <View  style={styles.cadastroForm}>
-                                <Text>{item.description}</Text>
-                                <Text>{item.name}</Text>
-                                <Text>{item.createAt}</Text>
-                                <Text>{item.userId}</Text>
-                                <View style={styles.buttonsContainer}>
-                                    
-                                    <TouchableOpacity style={styles.edit} onPress={()=>{editProduct(item.id)}}>Edit</TouchableOpacity>
-                                    <TouchableOpacity style={styles.delete}onPress={()=>{dellProduct(item.id)}}>Delete</TouchableOpacity>
-                                </View>  
-                            </View>  
-                                
-                        )
-                        
-                        }
-                    />
-                </View> 
-        </MyView> 
-            
+            />
+        </View>
+    </MyView>
+
     );
+    
 }
 
 
@@ -143,10 +153,6 @@ const styles = StyleSheet.create({
     },
     h2: {
         fontSize: 25,
-        textAlign: 'center', 
-    },
-    h1: {
-        fontSize: 25,
         textAlign: 'center',
         marginRight: 10,
         padding: 20,
@@ -174,10 +180,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         fontSize: 15,
         padding: 40,
-        
-
-
-    },
+      },
     input: {
         fontSize: 15,
         textAlign: 'left',
@@ -206,7 +209,7 @@ const styles = StyleSheet.create({
         marginTop: 80,
         marginBottom: 10,
         padding: 20,
-    }
+    },
 })
     
 
