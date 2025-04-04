@@ -9,8 +9,8 @@ interface iRecord {
     health: string,
     allergy: string,
     medication: string,
-    userId: number,
-    createAt: string,
+    user_id: number,
+    create_at: string,
 
 }  
 

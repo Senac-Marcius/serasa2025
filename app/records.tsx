@@ -7,6 +7,7 @@ import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs';
 import { MyItem, MyCorrelated } from '../src/components/MyItem';
 import MyList from '../src/components/MyList';
 import { useRouter } from 'expo-router';
+import {setRecord, records, setRecords} from '../src/controllers/records'
 
 
 export default function RecordScreen() {
@@ -22,12 +23,12 @@ export default function RecordScreen() {
         health: '',
         allergy: '',
         medication: '',
-        userId: 0,
-        createAt: new Date().toISOString(),
+        user_id: 0,
+        create_at: new Date().toISOString(),
     });
 
-    /*RETIRAR ISSO AQUI DEPOIS ATTENCION PICKET POCKET*/
-    const [records, setRecords] = useState<{
+    /*RETIRAR ISSO AQUI DEPOIS ATTENCION PICKET POCKET
+    //const [records, setRecords] = useState<{
         id: number
         name: string,
         description: string,
@@ -36,17 +37,19 @@ export default function RecordScreen() {
         allergy: string,
         medication: string,
         userId: number,
-        createAt: string,
-    /*RETIRAR ISSO AQUI DEPOIS ATTENCION PICKET POCKET*/
+       createAt: string,
+    RETIRAR ISSO AQUI DEPOIS ATTENCION PICKET POCKET
     
-    }[]>([]);
+    }[]>([]);*/
 
-    function handleRegister() {
+   async function handleRegister() {
         if (req.id == -1) {
             const newId = records.length ? records[records.length - 1].id + 1 : 0;
             const newRecord = { ...req, id: newId };
-
-            setRecords([...records, newRecord]);
+            setRecords([...records,newRecord]);
+            const resp = await setRecord(newRecord)
+            console.log (resp)
+            
         } else {
             setRecords(records.map(r => (r.id == req.id ? req : r)));
         }
@@ -59,8 +62,8 @@ export default function RecordScreen() {
             health: '',
             allergy: '',
             medication: '',
-            userId: 0,
-            createAt: new Date().toISOString(),
+            user_id: 0,
+            create_at: new Date().toISOString(),
         })
     }
 
@@ -162,7 +165,7 @@ export default function RecordScreen() {
                             <Text style={styles.itemText}>Saúde: {item.health}</Text>
                             <Text style={styles.itemText}>Alergias: {item.allergy}</Text>
                             <Text style={styles.itemText}>Medicações: {item.medication}</Text>
-                            <Text style={styles.itemText}>Usuário Id: {item.userId}</Text>
+                            <Text style={styles.itemText}>Usuário Id: {item.user_id}</Text>
 
                             <View style={styles.button_round}>
 
