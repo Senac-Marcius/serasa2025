@@ -49,7 +49,7 @@ export default function StudentsScreen() {
 
   async function handleRegister() {
     console.log("Registering student:", req);
-    await setStudent([req])
+    await setStudent(req)
       .then(() => {
         console.log("Student registered successfully");
       })
