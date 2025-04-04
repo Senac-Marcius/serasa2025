@@ -1,32 +1,40 @@
 import React, { useState } from "react";
 import { supabase } from "../utils/supabase";
 
-interface iStudent { 
+interface iStudent {
   name: string;
-  password: string;
+  birthday: string;
   email: string;
-  createdAt: string;
+  phone: string;
+  rg: string;
+  cpf: string;
+  cep: string;
+  address: string;
+  city: string;
+  state: string;
+  password: string;
+  user_id: number;
 }
 
 const [student, setStudents] = useState<iStudent[]>([]);
 
 async function setStudent(student: iStudent) {
+  
   const { data, error } = await supabase
     .from("students")
-    .insert([student])
+    .insert([student],)
     .select();
-    
+  if (error) {
+    console.error("Error inserting student:", error);
+  }
 
 }
 
-async function delStudent(id:number) {
-  const { error } = await supabase
-    .from("students")
-    .delete()
-    .eq("id", `${id}`);
+async function delStudent(id: number) {
+  const { error } = await supabase.from("students").delete().eq("id", `${id}`);
 }
 
-async function editStudent(student:iStudent,id:number) {
+async function editStudent(student: iStudent, id: number) {
   const { data, error } = await supabase
     .from("students")
     .update(student)
@@ -36,7 +44,7 @@ async function editStudent(student:iStudent,id:number) {
 
 async function getStudent() {
   let { data: students, error } = await supabase.from("students").select("*");
-  return students
+  return students;
 }
 
 async function selectStudent() {
@@ -64,4 +72,12 @@ async function selectStudent() {
     .not("column", "like", "Negate filter")
     .or("some_column.eq.Some value, other_column.eq.Other value");
 }
-export {selectStudent,delStudent,editStudent,getStudent,setStudent,student,setStudents}
+export {
+  selectStudent,
+  delStudent,
+  editStudent,
+  getStudent,
+
+  iStudent,
+  setStudent,
+};

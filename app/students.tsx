@@ -10,42 +10,66 @@ import {
   TouchableOpacity,
 } from "react-native";
 import MyButton from "../src/components/MyButtons";
-import MyView from '../src/components/MyView';
-import { useRouter } from 'expo-router';
-import {delStudent,editStudent,getStudent,selectStudent,setStudent,setStudents,student} from "../src/controllers/students"
+import MyView from "../src/components/MyView";
+import { useRouter } from "expo-router";
+import {
+  delStudent,
+  editStudent,
+  getStudent,
+  selectStudent,
+  setStudent,
+  iStudent
+
+} from "../src/controllers/students";
 
 export default function StudentsScreen() {
   const [req, setReq] = useState({
-   
     name: "",
-    password: "",
+    birthday: "",
     email: "",
-    createdAt: Date.now().toString(),
+    phone: "",
+    rg: "",
+    cpf: "",
+    cep: "",
+    address: "",
+    city: "",
+    state: "",
+    password: "",
+    user_id: 0,
   });
 
- 
+  useEffect(() => {
+    async function fetchStudents() {
+      const students = await getStudent();     
+    }
+    fetchStudents();
+  }, []);
 
-  function handleRegister() {
-    
+
+
+  async function handleRegister() {
+    console.log("Registering student:", req);
+    await setStudent([req])
+      .then(() => {
+        console.log("Student registered successfully");
+      })
+      .catch((error) => {
+        console.error("Error registering student:", error);
+      });
+
   }
 
-  function editStudent(id: number) {
-   
-  }
+  function editStudent(id: number) {}
 
-  function deleteStudent(id: number) {
- 
-  }
+  function deleteStudent(id: number) {}
 
   const router = useRouter();
 
   return (
-    <MyView router={router} > 
+    <MyView router={router}>
       <View style={styles.container}>
         <View style={styles.formtxt}>
           <Text style={styles.titulos}>Cadastre-se</Text>
-
-          
 
           <TextInput
             style={styles.textinput}
@@ -55,15 +79,69 @@ export default function StudentsScreen() {
           />
           <TextInput
             style={styles.textinput}
-            placeholder="Digite sua senha"
-            value={req.password}
-            onChangeText={(text) => setReq({ ...req, password: text })}
+            placeholder="Data de nascimento"
+            value={req.birthday}
+            onChangeText={(text) => setReq({ ...req, birthday: text })}
           />
           <TextInput
             style={styles.textinput}
             placeholder="Digite seu email"
             value={req.email}
             onChangeText={(text) => setReq({ ...req, email: text })}
+          />
+          <TextInput
+            style={styles.textinput}
+            placeholder="Digite seu phone"
+            value={req.phone}
+            onChangeText={(text) => setReq({ ...req, phone: text })}
+          />
+          <TextInput
+            style={styles.textinput}
+            placeholder="Digite seu rg"
+            value={req.rg}
+            onChangeText={(text) => setReq({ ...req, rg: text })}
+          />
+          <TextInput
+            style={styles.textinput}
+            placeholder="Digite seu cpf"
+            value={req.cpf}
+            onChangeText={(text) => setReq({ ...req, cpf: text })}
+          />
+          <TextInput
+            style={styles.textinput}
+            placeholder="Digite seu cep"
+            value={req.cep}
+            onChangeText={(text) => setReq({ ...req, cep: text })}
+          />
+          <TextInput
+            style={styles.textinput}
+            placeholder="Digite seu address"
+            value={req.address}
+            onChangeText={(text) => setReq({ ...req, address: text })}
+          />
+          <TextInput
+            style={styles.textinput}
+            placeholder="Digite seu city"
+            value={req.city}
+            onChangeText={(text) => setReq({ ...req, city: text })}
+          />
+          <TextInput
+            style={styles.textinput}
+            placeholder="Digite seu state"
+            value={req.state}
+            onChangeText={(text) => setReq({ ...req, state: text })}
+          />
+          <TextInput
+            style={styles.textinput}
+            placeholder="Digite seu password"
+            value={req.password}
+            onChangeText={(text) => setReq({ ...req, password: text })}
+          />
+          <TextInput
+            style={styles.textinput}
+            placeholder="Digite seu user id"
+            value={req.user_id.toString()}
+            onChangeText={(text) => setReq({ ...req, user_id: Number(text) })}
           />
 
           <TouchableOpacity
@@ -73,36 +151,7 @@ export default function StudentsScreen() {
             Cadastrar
           </TouchableOpacity>
 
-          <FlatList
-            data={student}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <View style={styles.output}>
-                <Text>{item.name}</Text>
-                <Text>{item.email}</Text>
-                <Text>{item.createdAt}</Text>
-                <View style={styles.row}>
-                  <MyButton
-                   
-                    onPress={() => deleteStudent(item.id)}
-                    button_type="capsule"
-                    style={{ width: 50, height: 50 }}
-                    icon="camera"
-                  ></MyButton>
 
-                  <TouchableOpacity
-                    onPress={() => {
-                      editStudent(item.id);
-                    }}
-                    style={styles.button_editar}
-                  >
-                    
-                    Editar
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )}
-          />
         </View>
       </View>
     </MyView>
