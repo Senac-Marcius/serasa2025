@@ -3,17 +3,18 @@ import { supabase } from '../utils/supabase'
 
 
 interface iCourses{
-    description: string,
-    Courseplan: string,
-    Orientationplan: string,
-    Workload: string,
     id: number,
-    userId: number,
+    created_at: string,
+    description: string,
+    courseplan: string,
+    orientationplan: string,
+    workload: string,
+    userId: number
 }
 
 const [CoursesPosts, setCourses] = useState<iCourses[]> ([]);
 
-async function setCourse(courses:iCourses ){
+async function setCoursebd(courses:iCourses ){
     //aqui vem os tratamenos de regez ou model ode negocio antes de inseir
     const { data, error } = await supabase.from('courses')
     .insert([
@@ -32,4 +33,4 @@ async function setCourse(courses:iCourses ){
 
 }        
 
-export {setCourse}
+export {CoursesPosts, setCoursebd, setCourses}

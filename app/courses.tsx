@@ -8,27 +8,22 @@ import MyView from '../src/components/MyView';
 import {MyItem} from '../src/components/MyItem';
 import { Myinput, MyTextArea } from '../src/components/MyInputs';
 import { useRouter } from 'expo-router';
+import {CoursesPosts, setCourses, setCoursebd} from '../src/controllers/courses'
 
 
 //fuction
 export default function CoursesScreen(){
     const [req, setReq] = useState({
-        description: '',
-        Courseplan: '',
-        Orientationplan: '',
-        Workload: '',
         id: -1,
-        userId: 0,
-
+        created_at: new Date().toISOString(),
+        description: '',
+        courseplan: '',
+        orientationplan: '',
+        workload: '',
+        userId: 0
     });
 
-    const [CoursesPosts, setCourses] = useState<{description: string,
-         Courseplan: string,
-          Orientationplan: string,
-           Workload: string,
-           id: number,
-           userId: number,
-         }[]> ([]);
+   
 
     function handleRegister(){
       if(req.id == -1){
@@ -36,17 +31,19 @@ export default function CoursesScreen(){
         const newCourses = {...req, id: newId};
 
         setCourses([...CoursesPosts, newCourses]);
+        setCoursebd(newCourses)
       }else{
         setCourses(CoursesPosts.map(c => (c.id == req.id ? req:c)));
       }
 
         
         setReq({
-        description: '',
-        Courseplan: '',
-        Orientationplan: '',
-        Workload: '',
         id: -1,
+        created_at: new Date().toISOString(),
+        description: '',
+        courseplan: '',
+        orientationplan: '',
+        workload: '',
         userId: 0,
         })
     }
@@ -78,28 +75,30 @@ export default function CoursesScreen(){
                     onChangeText={(text) => setReq({...req, description: text})}    
                     placeholder="Digite a descrição..."       
                     />
+
+                
                 
                 <Myinput
                     iconName='book'
                     label="Plano de Curso"
-                    value={req.Courseplan}
-                    onChangeText={(text) => setReq({...req, Courseplan: text})}
+                    value={req.courseplan}
+                    onChangeText={(text) => setReq({...req, courseplan: text})}
                     placeholder="Digite o plano de curso..."
                      />
                 
                 <Myinput
                    iconName='school'
                    label="Plano de Orientação"
-                   value={req.Orientationplan}
-                   onChangeText={(text) => setReq({...req,Orientationplan: text})}
+                   value={req.orientationplan}
+                   onChangeText={(text) => setReq({...req,orientationplan: text})}
                    placeholder="Digite o plano de orientação..."
                 />
                 
                 <Myinput
                     iconName='schedule'
                     label='Carga horaria:' 
-                    value={req.Workload}
-                   onChangeText={(text) => setReq({...req,Workload: text})}
+                    value={req.workload}
+                   onChangeText={(text) => setReq({...req,workload: text})}
                    placeholder="Digite a carga horária..."
                 />
                 <MyButton title="CADASTRAR" onPress={handleRegister} button_type="rect" />
@@ -114,9 +113,9 @@ export default function CoursesScreen(){
               onDel={()=> deleteCourses(item.id)}
             >
               <Mytext style={styles.listText}>Descrição: {item.description}</Mytext>
-              <Mytext style={styles.listText}>Plano: {item.Courseplan}</Mytext>
-              <Mytext style={styles.listText}>Orientação: {item.Orientationplan}</Mytext>
-              <Mytext style={styles.listText}>Carga: {item.Workload}</Mytext>
+              <Mytext style={styles.listText}>Plano: {item.courseplan}</Mytext>
+              <Mytext style={styles.listText}>Orientação: {item.orientationplan}</Mytext>
+              <Mytext style={styles.listText}>Carga: {item.workload}</Mytext>
 
               
 
