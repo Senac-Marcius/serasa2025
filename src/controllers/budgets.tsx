@@ -14,7 +14,7 @@ interface iBudgets{
  
  
 // Estado para a lista de receitas
-const [budgets, setBudgets] = useState<iBudgets[]>([]);
+
  
  
  
@@ -76,4 +76,4 @@ async function  setBudget(budget:iBudgets ){
     return data
 }
  
-export {setBudgets, budgets, setBudget}
+export { iBudgets, setBudget}

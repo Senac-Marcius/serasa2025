@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
@@ -7,7 +7,9 @@ import MyView from '../src/components/MyView';
 import Mytext from '../src/components/MyText';
 import { MyItem } from '../src/components/MyItem';
 import { useRouter } from 'expo-router';
-import { setBudgets, budgets, setBudget } from '../src/controllers/budgets';
+import {iBudgets , setBudget } from '../src/controllers/budgets';
+import { supabase } from '../src/utils/supabase';
+
 
 
 export default function BudgetScreen(){
@@ -28,14 +30,26 @@ export default function BudgetScreen(){
         end_date:'',
         
     });
+    const [budgets, setBudgets] = useState<iBudgets[]>([]);
 
-  
-    function  handleRegister(){
+        useEffect(()=> {
+            async function getTodos(){
+                const {data: todos} = await supabase.from('budgets').select()
+
+                if(todos && todos.length > 1){
+                    setBudgets(todos)
+                }
+            }
+            getTodos()
+
+        },[] )
+
+    async function  handleRegister(){
         if(req.id == -1){
             const newId = budgets.length ? budgets[budgets.length -1].id +1: 0;
             const newBudget = {...req, id: newId};
             setBudgets([...budgets, newBudget]);
-            setBudget(newBudget)
+           await setBudget(newBudget)
         }else{
             setBudgets(budgets.map(b=> (b.id == req.id)? req: b));
         }
