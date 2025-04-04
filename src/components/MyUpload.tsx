@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { View, Button, Alert, ActivityIndicator,Text, ViewStyle } from "react-native";
+
+import { View, Button, Alert, ActivityIndicator,Text, ViewStyle, StyleSheet } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
-import MyButton from "../components/MyButtons"
+import MyButton from "../components/MyButtons";
 
 interface MyuploadProps {
   style?: ViewStyle | ViewStyle[]; 
@@ -58,12 +59,23 @@ const MyUpload: React.FC<MyuploadProps> = ({ style, setUrl, url  }) => {
 
   return (
     <View>
-      <Button title="Selecionar Arquivo" onPress={pickDocument}/>
+      <MyButton title="Upload" onPress={pickDocument} button_type="round" style={styles.button_round} />
       {loading && <ActivityIndicator size="large" color="#A020F0"/>}
       {url && (<Text>Arquivo enviado: {url}</Text>)}
       {alert && (<Text> {alert} </Text>)}
-      </View>
+    </View>
   );
 };
+
+const styles = StyleSheet.create ({
+    button_round: {
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    gap: 10,
+}
+
+})
 
 export default MyUpload;

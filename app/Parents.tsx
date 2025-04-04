@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity} from 'react-native';
 import MyView from '../src/components/MyView';
+import MyUpload from '../src/components/MyUpload';
 import { useRouter } from 'expo-router';
+import{parents, setParentController, setParents} from '../src/controllers/parentsController';
+import MyButton from '../src/components/MyButtons';
+import MyList from '../src/components/MyList';
+import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs';
+import { MyItem,MyCorrelated } from '../src/components/MyItem';
+import MyMenu from '../src/components/MyButtons';
+
 
 //import dateTimepicker
 //npm run web → chamar pagina web pelo terminal
@@ -9,16 +17,22 @@ import { useRouter } from 'expo-router';
 export default function ParentScreen (){
 //Aqui é TypeScript
     const [req, setReq] = useState({
-        Nome: '',
-        Email:'',
-        parentesco:'',
         id:0,
-        createAt: new Date().toISOString(),
-        userId: 0,
+        name: '',
+        rg:'',
+        cpf:'',
+        age:'',
+        phone:'',
+        e_mail:'',
+        kinship:'',
+        create_at: new Date().toDateString(),
+        user_id: 0,
 
     });
+    
 
-    /*RETIRAR DEPOIS QUE FOR FEITA AS AUTERAÇÕES DO BANCO DE DADOS↓↓↓*/
+
+    /*Dados movidos para o controlador ↓↓↓
         const [parents,setParents] = useState<{
         Nome: string,
         Email: string,
@@ -28,24 +42,30 @@ export default function ParentScreen (){
         userId: number,
     
     }[]>([])/* <> → usado para tipar uma função */
-    /*RETIRAR DEPOIS QUE FOR FEITA AS AUTERAÇÕES DO BANCO DE DADOS↑↑↑*/
+    /*Dados movidos para o controlador ↑↑↑*/
 
     function handleRegister() {
         if(req.id == -1){
             const newId = parents.length ? parents [parents.length -1].id +1 : 0;
-            const newParents = {...req, id: newId}
+            const newParent = {...req, id: newId}
+            setParents([...parents, newParent])
+            setParentController(newParent)
         }else{
             setParents(parents.map( p =>(p.id == req.id ? req : p)))
         }
 
         //setParents([...parents, req])
         setReq({
-            id:req.id + 1,
-            Nome: '',
-            Email:'',
-            parentesco:'',
-            createAt: new Date().toISOString(),
-            userId: 0,
+            id:-1,
+            name: '',
+            rg:'',
+            cpf:'',
+            age:'',
+            phone:'',
+            e_mail:'',
+            kinship:'',
+            create_at: new Date().toDateString(),
+            user_id: 0,
         })
     }
      function editParent(id:number){
@@ -60,35 +80,44 @@ export default function ParentScreen (){
      }
     
     const router = useRouter();
+    const[urlDocument, setDocument]= useState('')
 
     return (
         <MyView router={router} > {/*aqui é typeScript dentro do Front*/}
             {/*View → esse view é diferente do HTML ele contém DIVs e outros atributos,*/}
-            <Text>Minha tela das postagens </Text>
+            
             <View style = {styles.row}>
                 <View style={styles.form}>{/*View no Type pode ser usado para substituir o Form */}
                 {/*<FlatList/> → atibuto para possivel criação de lista */}
-                    <TextInput 
-                        placeholder="Nome:"
-                        value={req.Nome}
-                        onChangeText={(Text) => setReq({...req, Nome: Text})}
+                    <Myinput 
+                        placeholder="Digite"
+                        value={req.name}
+                        onChangeText={(text) => setReq({ ...req, name: text })}
+                        label='Nome do Aluno:'
+                        iconName='person'
             
                     />
-                    <TextInput
-                        placeholder="Email:"
-                        value={req.Email}
-                        onChangeText={(Text) => setReq({...req, Email: Text})}
+                    <Myinput
+                        placeholder="Digite"
+                        value={req.e_mail}
+                        onChangeText={(text) => setReq({ ...req, e_mail: text })}
+                        label='Email:'
+                        iconName='person'
                     />
-                    <TextInput
-                        placeholder="Parentesco:"
-                        value={req.parentesco}
-                        onChangeText={(Text) => setReq({...req, parentesco: Text})}
+                    <Myinput
+                        placeholder="Digite"
+                        value={req.kinship}
+                        onChangeText={(text) => setReq({ ...req, kinship: text })}
+                        label='Parentesco:'
+                        iconName='person'
                     />
                 
-                    <Button 
-                        title='Cadastrar' 
-                        color='blue'
-                        onPress={handleRegister}/>
+                    <MyButton
+                        title="CADASTRAR"
+                        onPress={handleRegister}
+                        button_type="round"
+                        style={styles.button_round}
+                    />
                    {/*foi aberto uma area de codigo chamar a variavel, equivale o inder do html*/}
                    {/*<Button 
                         title='Editar'
@@ -98,7 +127,11 @@ export default function ParentScreen (){
                         title='Deletar'
                         color='red'
                         onPress={delParent}/>*/}
+                    <View>
+                        <MyUpload setUrl={setDocument} url={urlDocument}/>
+                    </View>
                 </View>
+                
 
                 <FlatList
                     data={parents}
@@ -107,11 +140,15 @@ export default function ParentScreen (){
                         <View style={styles.parentsItem}>
 
                             <Text>{item.id}</Text>
-                            <Text>{item.Nome}</Text>
-                            <Text>{item.Email}</Text>
-                            <Text>{item.parentesco}</Text>
-                            <Text>{item.createAt}</Text>
-                            <Text>{item.userId}</Text> 
+                            <Text>{item.name}</Text>
+                            <Text>{item.rg}</Text>
+                            <Text>{item.cpf}</Text>
+                            <Text>{item.age}</Text>
+                            <Text>{item.phone}</Text>
+                            <Text>{item.e_mail}</Text>
+                            <Text>{item.kinship}</Text>
+                            <Text>{item.create_at}</Text>
+                            <Text>{item.user_id}</Text>
                                 <View style ={styles.buttonContainer}>
                                     <TouchableOpacity onPress={()=> {editParent(item.id)}}>EDIT</TouchableOpacity>
                                     <TouchableOpacity onPress={()=> {delParent(item.id)}}>DELETE</TouchableOpacity>
@@ -120,6 +157,7 @@ export default function ParentScreen (){
                     )}
                 />
                 {/*parâmetro FlatList é parecido com o forEach do html. */}
+                
             </View>
 
         </MyView>
@@ -164,5 +202,12 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         alignItems: 'center',
         gap: 20,
         alignContent: 'space-around'
+    },
+    button_round: {
+        borderRadius: 20,
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "row",
+        gap: 10,
     },
 })
