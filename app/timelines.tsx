@@ -7,6 +7,7 @@ import MySearch from '../src/components/MySearch';
 import {timelines,setTimelines, setTimeline } from '../src/controllers/timelines';
 
 
+
 export default function TimelineScreen(){
 // aqui é typescript
     const [req, setReq] = useState({
