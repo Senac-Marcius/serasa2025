@@ -1,31 +1,32 @@
-import { View, ViewStyle, TouchableOpacity } from 'react-native';
-import Entypo from '@expo/vector-icons/Entypo';
-//https://icons.expo.fyi/Index
-import React, { ReactNode } from 'react';
+import React from 'react';
+import { TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 interface MyNotifyProps {
-  children: ReactNode;
   style?: ViewStyle;
+  onPress?: () => void;
 }
 
-const MyNotify: React.FC<MyNotifyProps> = ({ children, style }) => {
+const MyNotify: React.FC<MyNotifyProps> = ({ style, onPress }) => {
   return (
-    <View style={style}>
-      {children}
-      <TouchableOpacity
-        style={{
-          borderRadius: 20,
-          width: 40,
-          height: 40,
-          justifyContent:'center',
-          alignItems:'center',
-        }}
-        onPress={() => console.log('Abrir notificações')}
-      >
-          <Entypo name="bell" size={24} color="black" />
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity
+      style={[styles.notifyButton, style]}
+      onPress={onPress || (() => console.log('Abrir notificações'))}
+    >
+      <Ionicons name="notifications" size={20} color="#fff" />
+    </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  notifyButton: {
+    backgroundColor: '#6A1B9A',
+    padding: 10,
+    borderRadius: 30,
+    marginHorizontal: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default MyNotify;
