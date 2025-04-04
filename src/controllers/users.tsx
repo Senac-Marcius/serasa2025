@@ -11,6 +11,7 @@ interface iUser {
     address: string,
     createAt: string,
     id: number,
+
     //Userid: number
 }
     const [users, setUsers] = useState<iUser[]>([])
@@ -33,4 +34,4 @@ interface iUser {
             
     }
 
- export {users, setUsers, setUser}
+ export {setUser, iUser}

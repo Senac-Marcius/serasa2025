@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Button, FlatList } from 'react-native';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs'
 import MyView from '../src/components/MyView';
@@ -7,7 +7,8 @@ import MyButton from '../src/components/MyButtons';
 import { Image } from 'react-native';
 import {MyItem} from '../src/components/MyItem'
 import { useRouter } from 'expo-router';
-import {users, setUsers, setUser} from '../src/controllers/users'
+import {iUser, setUser} from '../src/controllers/users'
+import { supabase } from '../src/utils/supabase'
 
 // Define o estado inicial como false
 //isChecked = valor atual da váriavel, SetIsChecked ele altera o valor da isChecked
@@ -47,11 +48,26 @@ export default function UserScreen() {
     //     Userid: number
     // }[]>([])
 
-    function handleRegister() {
+    const [users, setUsers] = useState<iUser[]>([])
+
+    useEffect(() => {
+        async function getTodos(){
+            const { data: todos } = await supabase.from("users").select();
+            if (todos && todos.length > 1){
+                setUsers(todos)
+            }
+
+        }
+        getTodos()
+      
+      }, [])
+  
+
+    async function handleRegister() {
         if (req.id == -1) {
             const newId = users.length ? users[users.length - 1].id + 1 : 0
             const newUser = { ...req, id: newId }
-            setUsers([...users, newUser])
+            await setUsers([...users, newUser])
 
         } else {
             setUsers(users.map(u => (u.id == req.id ? req : u)))
@@ -98,22 +114,25 @@ export default function UserScreen() {
                     <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/8307/8307575.png' }} style={styles.image} />
                     
  
-                    {/* Botão para abrir o formulário */}
+                    {/* Botão para abrir o formulário 
                     {!showForm && (
                         <TouchableOpacity style={styles.startButton} onPress={() => setShowForm(true)}>
                             <Text style={styles.buttonText}>INICIAR CADASTRO</Text>
                         </TouchableOpacity>
                     )}
+                        */}
 
                     {/* Botão para mostrar registro de usuários */}
 
-                    <TouchableOpacity style={styles.startRegistros} onPress={() => setShowUsers(!showUsers)}>
+                   {/* <TouchableOpacity style={styles.startRegistros} onPress={() => setShowUsers(!showUsers)}>
                         <Text style={styles.buttonText}>{showUsers ? "Ocultar Registro de Usuários" : "REGISTRO DE USERS"}</Text>
                     </TouchableOpacity>
+                     */}
+
 
 
                     {/* Exibir o formulário somente se showForm for true */}
-                    {showForm && (
+                
                         <View style={styles.formContainer}>
                             <View style={styles.form}>
                                 <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text })} placeholder="Digite seu nome..." label="Login" iconName='person' />
@@ -123,23 +142,25 @@ export default function UserScreen() {
                                 <Myinput value={req.contact} onChangeText={(text) => setReq({ ...req, contact: text })} placeholder="(XX) XXXXX-XXXX" label="Contato:" iconName='phone' />
                                 <Myinput value={req.email} onChangeText={(text) => setReq({ ...req, email: text })} placeholder="domain@domain.com" label="Email:" iconName='mail' />
                                 <Myinput value={req.address} onChangeText={(text) => setReq({ ...req, address: text })} placeholder="Digite o seu endereço" label="Endereço" iconName='house' />
-                                <MyButton
+                               
+
+                                {/* Botão para fechar o formulário 
+                                <TouchableOpacity style={styles.closeButton} onPress={() => setShowForm(false)}>
+                                    <Text style={styles.buttonText}>Cancelar</Text>
+                                </TouchableOpacity>
+                                */}
+                            </View>
+                            <MyButton
                                     title="CADASTRAR"
                                     onPress={handleRegister}
                                     button_type="round"
                                     style={styles.button_round}
                                 />
-
-                                {/* Botão para fechar o formulário */}
-                                <TouchableOpacity style={styles.closeButton} onPress={() => setShowForm(false)}>
-                                    <Text style={styles.buttonText}>Cancelar</Text>
-                                </TouchableOpacity>
-                            </View>
                         </View>
-                    )}
+                    
 
                     {/* Lista de usuários cadastrados */}
-                    {showUsers && (
+                    
                         <MyList
                             data={users}
                             keyItem={(item) => item.id.toString()}
@@ -168,7 +189,7 @@ export default function UserScreen() {
 
 
                         />
-                    )}
+                   
 
              </View>
 
@@ -178,7 +199,7 @@ export default function UserScreen() {
 
 const styles = StyleSheet.create({
     myView: {
-        
+        flex: 1,
 
     },
     formContainer: {
@@ -190,7 +211,12 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 2, height: 1 },
         shadowOpacity: 0.6,
         shadowRadius: 4,
+ 
+        
+        justifyContent: 'center',
         alignItems: 'center',
+
+        padding: 20,
         // Ocupa toda a largura disponível
     },
     form: {
@@ -250,7 +276,10 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 20,
         alignItems: "center",
+        
         justifyContent: "center",
+
+        
     },
     TextIntroducao: {
         color: '#6A1B9A',
