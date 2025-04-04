@@ -9,9 +9,9 @@ const FileUploadComponent = () => {
   const handleUpload = () => {
     
     const insertDocument = () => {
-      id: -1,
+      id: 0,
       user_id,
-      created_at: new Date().toString(),
+      created_at: new Date().toString()
     };
     
     console.log('Fazendo upload...');
