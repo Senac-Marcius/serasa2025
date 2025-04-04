@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from 'react';
 import { Text, TouchableOpacity, TextStyle, ViewStyle, StyleSheet } from 'react-native';
+import { tabsBarStyles } from '../../styles/tabsBarStyles';
 import { FlatList } from 'react-native-gesture-handler';
-import {tabsBarStyles} from '../styles/tabsBarStyles';
 
 interface MyTabsbarProps {  
   items: string[]; // Lista de nomes das abas (ex: ["Identificação", "Publicação"]

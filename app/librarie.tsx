@@ -3,11 +3,14 @@ import { View, Text, StyleSheet, TextInput, ScrollView, ViewStyle } from 'react-
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
+import MyTheme from '../src/components/MyTheme';
+import MyText from '../src/components/MyText';
 import MyTabsbar from '../src/components/MyTabsBar';
 import MyButton from '../src/components/MyButtons';
 import MyView from '../src/components/MyView';
 import MySelect from '../src/components/MySelect';
 import { Myinput, MyTextArea } from '../src/components/MyInputs';
+import MyAccessibility from '../src/components/MyAccessibility';
 import {textStyles} from '../styles/textStyles';
 import { Icon , MD3Colors} from "react-native-paper";
 import {tabsBarStyles} from '../styles/tabsBarStyles';
@@ -203,8 +206,12 @@ export default function ItemScreen() { // aqui é TS
     const [typeLoan, setTypeLoan] = useState("Selecione o Tupo de Empréstimo")  
 
     return ( //encapsulamento
-        <MyView router={router} >
-            <Text style={styles.h1}>Cadastro de Itens no Acervo</Text>
+        <MyView router={router} style={{ flex: 1 }}>
+            {/*<MyAccessibility>
+                <MyText style={textStyles.buttonMenores}>Acessibilidade</MyText>
+            </MyAccessibility>*/}
+            <MyTheme chendTheme={()=>{}} fontSize={()=>{}}/>
+            <MyText style={styles.h1}>Cadastro de Itens no Acervo</MyText>
             <View style={styles.buttonContainer}>
                 <ScrollView 
                     horizontal 
@@ -490,28 +497,30 @@ const styles = StyleSheet.create({
     },
     scrollRow: {
         flexDirection: 'row',
-        paddingHorizontal: 10,
+        paddingHorizontal: 5,
         flexGrow: 1,
 
     },
     h1: {
         textAlign: 'center',
-        fontFamily: 'sans-serif',
-        fontSize: 25,
+        fontFamily: 'Poppins_400Regular',
+        fontSize: 36,
         fontStyle: 'italic',
         fontWeight: 'bold',
         color: '#0F2259',
         backgroundColor: '#F2F2F2',
-        margin: 20,
+        marginVertical: 5,
         padding: 15,
+        marginRight: 50,
+        marginLeft: 50,
         borderRadius: 10,
     },
     form: {
         flex: 1,
-        marginRight: 20,
-        marginVertical: 30,
+        marginRight: 50,
+        marginLeft: 50,
         marginHorizontal: 20,
-        padding: 25,
+        padding: 30,
         backgroundColor: '#AD6CD9',
         borderRadius: 10,
         shadowColor: '#0C1DA0',
@@ -523,48 +532,49 @@ const styles = StyleSheet.create({
         backgroundColor: '#0F2259',
         color: '#FFF',
         fontWeight: 'bold',
-        fontFamily: 'sans-serif',
+        fontFamily: 'Poppins_400Regular',
         fontSize: 20,
         padding: 15,
         marginVertical: 15,
-        borderRadius: 20,
+        borderRadius: 50,
         display:"flex",
         alignItems: 'center',
         cursor: 'pointer'
     },
-    // estilos para os botões
     buttonContainer: {
-        display: 'flex',
-        flexDirection: 'row', // Alinha na horizontal
-        justifyContent: 'space-between', // Separa os botões
-        alignItems: 'center', // Alinha verticalmente
-        paddingHorizontal: 20, // Espaçamento interno
-        marginVertical: 20, // Margem superior e inferior
-        marginHorizontal: 20,
-        backgroundColor: "transparent", // Evita que o container pareça um botão único
+        flexDirection: 'row', // Alinha os botões horizontalmente
+        justifyContent: 'center', // Mantém no centro
+        alignItems: 'center', // Alinha na vertical
+        paddingHorizontal: 80, // Ajuste de espaçamento interno
+        marginVertical: 10,
+        marginRight: 50,
+        marginLeft: 50,
+        width: '100%', // Garante que ocupe a largura máxima
     },
+    
     button_capsule1: {
         borderRadius: 50,
         backgroundColor: "#813AB1",
         alignItems: "center",
         justifyContent: "center",
-        marginRight: 50,
-        marginHorizontal: 250,
-        height: 50,
-        paddingVertical: 10, // Melhor ajuste no espaçamento interno
-        paddingHorizontal: 20,
-        width: 200, // Define um tamanho mínimo para evitar botões colados
+        height: 40,
+        paddingVertical: 10,
+        marginRight: 20,
+        width: 200,
         fontSize: 14,
         fontFamily: 'Poppins_400Regular',
+        marginHorizontal: 100, // Adiciona espaço entre os botões
     },
     button_capsule2: {
-        display:"flex",
         borderRadius: 50,
         backgroundColor: "#813AB1",
         alignItems: "center",
         justifyContent: "center",
+        height: 30,
+        paddingVertical: 10,
+        marginRight: 20,
+        marginVertical: 30,
+        marginHorizontal: 20,
     },
-   
-    
 
 });
