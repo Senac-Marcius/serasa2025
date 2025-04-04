@@ -5,11 +5,11 @@ interface iBudgets{
     id: number;
     name: string;
     url: string;
-    createAt: string;
-    userId: number;
+    create_at: string;
+    user_id: number;
     value: string;
-    startDate: string;
-    endDate: string;
+    start_date: string;
+    end_date: string;
 }
  
  
@@ -42,17 +42,17 @@ async function  setBudget(budget:iBudgets ){
         return "Campo url deve conter o seguinte formato https://dominio";
     }
  
-    if (!idRegex.test(String(budget.userId))) {
+    if (!idRegex.test(String(budget.user_id))) {
         return "Campo userId deve conter apenas números";
     }
  
     if (!valueRegex.test(budget.value)) {
         return "Campo value deve ser um valor monetário (ex: '100', 'R$ 50,00')";
     }
-    if (!startDateRgex.test(budget.createAt)) {
+    if (!startDateRgex.test(budget.create_at)) {
         return "Campo createAt deve conter o seguinte formato YYYY-MM-DD";
     }
-    if (!endDateRegex.test(budget.createAt)) {
+    if (!endDateRegex.test(budget.create_at)) {
         return "Campo createAt deve conter o seguinte formato YYYY-MM-DD";
     }
  

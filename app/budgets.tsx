@@ -21,11 +21,11 @@ export default function BudgetScreen(){
         id: -1,
         name:'',
         url:'',
-        createAt: new Date().toISOString(),
+        create_at: new Date().toISOString(),
         velue:'',
-        userId: 0,
-        startDate: '',
-        endDate:'',
+        user_id: 3,
+        start_date: '',
+        end_date:'',
         
     });
 
@@ -44,11 +44,11 @@ export default function BudgetScreen(){
         id: -1,
         name:'',
         url:'',
-        createAt: new Date().toISOString(),
+        create_at: new Date().toISOString(),
         velue:'',
-        userId: 0,
-        startDate: '',
-        endDate:'',
+        user_id: 3,
+        start_date: '',
+        end_date:'',
             })
     }
 
@@ -94,15 +94,15 @@ export default function BudgetScreen(){
                      />
                     <Myinput 
                   
-                    value={req.startDate}
-                    onChangeText={(text) => setReq({...req ,startDate: text})} 
+                    value={req.start_date}
+                    onChangeText={(text) => setReq({...req ,start_date: text})} 
                     label="Data Inicial"
                     iconName="pin"
                      />
                     <Myinput 
                   
-                    value={req.endDate}
-                    onChangeText={(text) => setReq({...req ,endDate: text})}
+                    value={req.end_date}
+                    onChangeText={(text) => setReq({...req ,end_date: text})}
                     label="Data Final"
                     iconName="pin"
                      />
