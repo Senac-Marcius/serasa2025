@@ -67,7 +67,8 @@ export default function UserScreen() {
         if (req.id == -1) {
             const newId = users.length ? users[users.length - 1].id + 1 : 0
             const newUser = { ...req, id: newId }
-            await setUsers([...users, newUser])
+            setUsers([...users, newUser])
+            await setUser(newUser)
 
         } else {
             setUsers(users.map(u => (u.id == req.id ? req : u)))
@@ -150,7 +151,7 @@ export default function UserScreen() {
                                 </TouchableOpacity>
                                 */}
                             </View>
-                            <MyButton
+                             <MyButton
                                     title="CADASTRAR"
                                     onPress={handleRegister}
                                     button_type="round"
