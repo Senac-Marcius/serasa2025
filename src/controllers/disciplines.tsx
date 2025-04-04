@@ -13,7 +13,7 @@ interface iDisciplines {
 const [disciplines, setDisciplines] = useState<iDisciplines[]>([]);
 
   
-  async function SetDisciplines(disciplines:iDisciplines){
+  async function SetDisciplinebd(disciplines:iDisciplines){
   const { data, error } = await supabase.from('disciplines')
 .insert([
   disciplines
@@ -22,7 +22,7 @@ const [disciplines, setDisciplines] = useState<iDisciplines[]>([]);
 
 //aqui vem os tratamentos de variavel error
 if(error){
-    alert('Preencha todos os dados!')
+    console.log('Preencha todos os dados!')
 
     return {}
 }
@@ -32,5 +32,5 @@ return data
 
 }
 
-export {setDisciplines}
+export {setDisciplines, SetDisciplinebd, disciplines}
         
