@@ -9,7 +9,7 @@ import MyList from '../src/components/MyList';
 import Mytext from '../src/components/MyText';
 import {textStyles}  from '../styles/textStyles';
 import { useRouter } from 'expo-router';
-
+import { notifications, setNotification,setNotifications } from '../src/controllers/notification';
 
 export default function NotificationScreen(){
 // aqui é typNotificationScreenescript
@@ -23,22 +23,13 @@ export default function NotificationScreen(){
         userId: 0,
     });
     
-    const [notifications, setNotifications] = useState<{
-        name: string,
-        url: string,
-        description: string,
-        classification: string,
-        id: number,
-        creatAt: string,
-        userId: number,
-    }[]>([])
-
     function handleRegister(){
         if( req.id == -1){
             const newId = notifications.length ? notifications[notifications.length -1].id +1 : 0;
             const newNotification = {...req, id: newId};
 
-            setNotifications([...notifications, newNotification]);
+            setNotifications([...notifications, newNotification])
+            setNotification(newNotification)
         }else{
             setNotifications(notifications.map(n => (n.id == req.id ? req : n)));
         }
