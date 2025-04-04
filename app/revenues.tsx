@@ -8,7 +8,7 @@ import { Myinput, MyTextArea } from '../src/components/MyInputs';
 import {MyItem} from '../src/components/MyItem';
 import Mytext from '../src/components/MyText';
 import { useRouter } from 'expo-router';
-
+import {revenues,setRevenues,setRevenue} from '../src/controllers/revenues'
 
 export default function RevenueScreen() {
   // Estado para o formulário
@@ -17,22 +17,27 @@ export default function RevenueScreen() {
     description: '',
     name: '',
     url: '',
-    createAt: new Date().toISOString(),
-    userId: 0,
+    created_at: new Date().toISOString(),
+    user_id: 1,
     value: '',
-    scholarshipStatus: '',
-    discountPercentage: '',
+    scholarship_status: '',
+    discount_percentage: '',
+    
+
   });
 
   
 
   // Função para cadastrar ou editar uma receita
-  function handleRegister() {
+  async function handleRegister() {
+
     if (req.id == -1) {
       // Cadastra uma nova receita
       const newId = revenues.length ? revenues[revenues.length - 1].id + 1 : 0;
       const newRevenue = { ...req, id: newId };
       setRevenues([...revenues, newRevenue]);
+      const resp = await setRevenue(newRevenue)
+      console.log(resp)
       
     } else {
       // Edita uma receita existente
@@ -45,11 +50,11 @@ export default function RevenueScreen() {
       description: '',
       name: '',
       url: '',
-      createAt: new Date().toISOString(),
-      userId: 0,
+      created_at: new Date().toISOString(),
+      user_id: 1,
       value: '',
-      scholarshipStatus: '',
-      discountPercentage: '',
+      scholarship_status: '',
+      discount_percentage: '',
     });
   }
 
@@ -116,8 +121,8 @@ export default function RevenueScreen() {
 
             {/* Campo de Status da Bolsa */}
             <Myinput
-              value={req.scholarshipStatus}
-              onChangeText={(text) => setReq({ ...req, scholarshipStatus: text })}
+              value={req.scholarship_status}
+              onChangeText={(text) => setReq({ ...req, scholarship_status: text })}
               iconName=''
               placeholder='Status da bolsa'
               label='Status Bolsa'
@@ -125,8 +130,8 @@ export default function RevenueScreen() {
 
             {/* Campo de Desconto */}
             <Myinput
-              value={req.discountPercentage}
-              onChangeText={(text) => setReq({ ...req, discountPercentage: text })}
+              value={req.discount_percentage}
+              onChangeText={(text) => setReq({ ...req, discount_percentage: text })}
               iconName='percent'
               placeholder='Porcentagem de desconto'
               label='Desconto'
@@ -153,11 +158,11 @@ export default function RevenueScreen() {
             >
               <Mytext style={styles.revenueText}>Descrição: {item.description}</Mytext>
               <Mytext style={styles.revenueText}>Nome: {item.name}</Mytext>
-              <Mytext style={styles.revenueText}>ID do Usuário: {item.userId}</Mytext>
+              <Mytext style={styles.revenueText}>ID do Usuário: {item.user_id}</Mytext>
               <Mytext style={styles.revenueText}>Valor: {item.value}</Mytext>
-              <Mytext style={styles.revenueText}>Status da Bolsa: {item.scholarshipStatus}</Mytext>
-              <Mytext style={styles.revenueText}>Desconto: {item.discountPercentage}%</Mytext>
-              <Mytext style={styles.revenueText}>Data: {item.createAt}</Mytext>
+              <Mytext style={styles.revenueText}>Status da Bolsa: {item.scholarship_status}</Mytext>
+              <Mytext style={styles.revenueText}>Desconto: {item.discount_percentage}%</Mytext>
+              <Mytext style={styles.revenueText}>Data: {item.created_at}</Mytext>
               <Mydownload style={styles.revenueText} url={item.url} />
 
       
