@@ -1,12 +1,14 @@
 import React, { useState } from 'react'; // Esta importando da biblioteca do react para atualizar automaticamente 
 import { StyleSheet, View, FlatList, TouchableOpacity, } from 'react-native'; 
-import MySearch from '../src/components/MySearch'
-import {MyTextArea } from '../src/components/MyInputs'
+import MySearch from '../src/components/MySearch';
+import {MyTextArea } from '../src/components/MyInputs';
 import MyButton from '../src/components/MyButtons';
 import Mytext from '../src/components/MyText';
 import MyView from '../src/components/MyView';
 import { Myinput } from '../src/components/MyInputs';
 import { useRouter } from 'expo-router';
+import MyCalendar from '../src/components/MyCalendar';
+import { projects, setProjects, setProject } from '../src/controlador/projects';
 
 export default function ProjectScreen(){ 
 
@@ -17,7 +19,7 @@ export default function ProjectScreen(){
         id: -1,
         url: '',
         createAt: new Date().toISOString(),
-        userId: 0,
+        user_id: 0,
         recurces: 0,
         description: '',
         activity: '',
@@ -30,7 +32,12 @@ export default function ProjectScreen(){
         process:'',
     });
 
-    
+    interface CalendarDate {
+        year: number;
+        month: number;
+        day: number;
+      }
+    const [calendarDate, setCalendarDate] = useState<CalendarDate | null>(null);
 
     function handleRegister(){
 
@@ -49,7 +56,7 @@ export default function ProjectScreen(){
             id: -1,
             url: '',
             createAt: new Date().toISOString(),
-            userId: 0,
+            user_id: 0,
             recurces: 0,
             description: '',
             activity: '',
@@ -140,8 +147,8 @@ export default function ProjectScreen(){
                             iconName=''
                             label =''
                             placeholder=""
-                            value={req.createAt}
-                            onChangeText={(text) => setReq({ ...req, createAt: text })}
+                            value={req.timeline}
+                            onChangeText={(text) => setReq({ ...req, timeline: text })}
                         />
                         
                         <Mytext style={styles.label}> Periodo Esperado: </Mytext>
@@ -149,7 +156,7 @@ export default function ProjectScreen(){
                             iconName=''
                             label =''
                             placeholder=""
-                            value={req.timeline}
+                            value={req.createAt}
                             onChangeText={(text) => setReq({ ...req, timeline: text })}
                         />
                         
@@ -236,7 +243,7 @@ export default function ProjectScreen(){
                                 <Mytext style={styles.projectText}> Criador: {item.name} </Mytext>
                                 <Mytext style={styles.projectText}> Nome do Projeto: {item.namep} </Mytext> 
                                 <Mytext style={styles.projectText}> Url: {item.url} </Mytext>
-                                <Mytext style={styles.projectText}> Numero do Usuario: {item.userId} </Mytext>
+                                <Mytext style={styles.projectText}> Numero do Usuario: {item.user_id} </Mytext>
                                 <Mytext style={styles.projectText}> Recursos: {item.recurces} </Mytext>
                                 <Mytext style={styles.projectText}> Descrição: {item.description} </Mytext>
                                 <Mytext style={styles.projectText}> Atividade: {item.activity} </Mytext>
@@ -265,6 +272,8 @@ export default function ProjectScreen(){
     <Button title='DELETE' /> - Esse botão não permite modificar a forma de vizualizar o botão*/ 
 
 const styles = StyleSheet.create({
+    
+    
     contentContainer: {
         padding: 20,
         alignItems: 'center',

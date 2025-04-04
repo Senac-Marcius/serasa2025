@@ -7,7 +7,7 @@ interface iProject {
         id: number;
         url: string;
         createAt: string;
-        userId: number;
+        user_id: number;
         recurces: number;
         description: string;
         activity: string;
@@ -30,4 +30,6 @@ const { data, error } = await supabase
   ])
   .select()
 }
+
+export {setProject, projects, setProjects}
           
