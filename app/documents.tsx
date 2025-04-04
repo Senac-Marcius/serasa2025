@@ -4,15 +4,21 @@ import { useRouter } from 'expo-router';
 import {insertDocument, documents, setDocuments} from '../src/controllers/documents'
 
 const FileUploadComponent = () => {
-  //const [documents, setDocuments] = useState(null);
-  //deve ter um registro ocm os dados da tabela do supabase, id, iduser,createAT, etc
+  const [documents, setDocuments] = useState(null);
 
   const handleUpload = () => {
+    
+    const insertDocument = () => {
+      id: -1,
+      user_id,
+      created_at: new Date().toString(),
+    };
+    
     console.log('Fazendo upload...');
   };
 
   const handleCancel = () => {
-    //insertDocument();
+    
     console.log('Upload cancelado');
   };
 
