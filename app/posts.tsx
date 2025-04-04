@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View,Text, StyleSheet,FlatList, Button,TextInput} from 'react-native';
 import MyList from '../src/components/MyList'
 import {MyItem} from '../src/components/MyItem'
@@ -7,37 +7,57 @@ import { useRouter } from 'expo-router';
 import { Myinput } from '../src/components/MyInputs';
 import MyButton from '../src/components/MyButtons'
 import MyUpload from '../src/components/MyUpload';
+import {setPost, getPosts, iPost} from '../src/controllers/posts'
+import { supabase } from '../src/utils/supabase'
 
 
-export default function postScreen(){
+export default function PostScreen(){
 
     const [req, setReq] = useState({
         description : '',
         id: -1,
+        like: 0,
         url: '',
-        createAt: new Date().toISOString(),
-        userId : 0,    
+        create_at: new Date().toISOString(),
+        user_id : 2,    
     });
+
+    const[posts, setPosts] = useState<iPost[]>([]);
+
+
+    useEffect(() => {
+        async function getTodos() {
+          const { data: todos } = await supabase.from('posts').select()
+    
+          if (todos && todos.length > 1) {
+            setPosts(todos)
+          }
+        }
+    
+        getTodos()
+      }, [])
+    
  
-    //aqui estava o veto que foi pro controlador
+    //aqui estava o vetor que foi para o controlador
     
     function handleRegister(){
         if(req.id == -1){
-            const newid= posts.length ? posts[posts.length-1].id=1:0;
+            const newid= posts.length ? posts[posts.length-1].id+1:0;
             const newPost = {... req, id: newid};
             setPosts([...posts, newPost])
-    
+            setPost(newPost)
         }else{
             setPosts(posts.map(i =>(i.id == req.id)? req: i )  );
     
         }
-    
+
         setReq({
-            id: -1,
-            url: '',
             description : '',
-            createAt: new Date().toISOString(),
-            userId : 0,
+            id: -1,
+            like: 0,
+            url: '',
+            create_at: new Date().toISOString(),
+            user_id : 2,    
         })
     }
     

@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
 import { supabase } from '../utils/supabase'
 
 interface iPost {
-    name: string,
+    url: string,
     description: string,
     id: number,
-    createAt: string,
-    userId: number,
+    like: number,
+    create_at: string,
+    user_id: number,
 }
 
-const[posts, setPosts] = useState<iPost[]>([]);
 
 async function setPost(post:iPost){
     //aqui vem os tratamentos de regex ou do modelo de negócio antes de inserir
@@ -21,8 +20,7 @@ async function setPost(post:iPost){
     .select()
     
     if(error){
-        //aqui vem os tratamentos da variável error
-
+        console.error('Erro ao buscar posts:', error);
 
         return []
     }
@@ -30,4 +28,15 @@ async function setPost(post:iPost){
     return data
 }
 
-export {setPost} 
+async function getPosts(): Promise<iPost[]> {
+    const { data, error } = await supabase.from('posts').select();
+  
+    if (error) {
+      console.error('Erro ao buscar posts:', error);
+      return [];
+    }
+  
+    return data || [];
+}
+
+export {setPost, getPosts, iPost} 
