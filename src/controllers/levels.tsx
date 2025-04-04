@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import { supabase } from '../utils/supabase'
   
   interface iLevels{
-    name: string,
+        name: string,
         description: string,
         color: string,
         id: number,
@@ -29,7 +29,7 @@ async function setLevel(level:iLevels){
 
     return data
 }
-export {setLevels}
+export {setLevel, levels, setLevels }
 
 
 

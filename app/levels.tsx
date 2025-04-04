@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { View,Text, StyleSheet,FlatList, Button,TextInput, Touchable, TouchableOpacity} from 'react-native';
-import {Myinput} from '../src/components/MyInputs';
+import { Myinput } from '../src/components/MyInputs';
 import MyView from '../src/components/MyView';
 import Mytext from '../src/components/MyText';
-import {textStyles} from '../styles/textStyles';
+import { textStyles } from '../styles/textStyles';
 import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
-import {MyItem} from '../src/components/MyItem';
+import { MyItem } from '../src/components/MyItem';
 import { useRouter } from 'expo-router';
-
+import { levels } from '../src/controllers/levels';
 
 export default function levelsScreen(){
     const [req, setReq] = useState({
@@ -20,6 +20,7 @@ export default function levelsScreen(){
         userId : 0,    
     });
  
+    //aqui é o supabase
     const[leves, setleves] = useState<{ 
         name: string,
         description: string,
@@ -40,8 +41,8 @@ export default function levelsScreen(){
             setleves(leves.map(l => (l.id == req.id ? req : l)));
         }
         
-        setReq({name:'',
-            description:'',
+        setReq({name: '',
+            description: '',
             color: '',
             id: -1,
             createAt: new Date().toISOString(),
@@ -50,13 +51,13 @@ export default function levelsScreen(){
         })
     }
 
-    function editLevels (id:number){
+    function editLevels (id: number){
         const notification = leves.find( l => l.id == id)
         if(notification)
             setReq(notification)
     }
 
-    function deleteLevels (id:number){
+    function deleteLevels (id: number){
 
         const list = leves.filter(l => l.id != id )
         setleves(list)
@@ -66,57 +67,57 @@ export default function levelsScreen(){
     
 
     return (
-        <MyView router={router} >
+        <MyView router  = {router} >
             
         {/* aqui é typerscrypt dentro do front */}
 
-            <View style={styles.row}>
-                <View style={styles.form}>
+            <View style = {styles.row}>
+                <View style = {styles.form}>
                 
                         
                         <Myinput 
-                            style={styles.input}
-                            placeholder="Digite seu nome" 
-                            value={req.name}
-                            onChangeText={(text) => setReq({...req ,name: text})}
-                            label="Nome"
-                            iconName=''
+                            style= {styles.input}
+                            placeholder= "Digite seu nome" 
+                            value= {req.name}
+                            onChangeText= {(text) => setReq({...req, name: text})}
+                            label= "Nome"
+                            iconName= ''
 
                         /> 
                     
                         <Myinput 
-                            style={styles.input}  
-                            placeholder="Digite sua descrição" 
-                            value={req.description}
-                            onChangeText={(text) => setReq({...req ,description: text})}
-                            label="Descrição"
-                            iconName=''
+                            style= {styles.input}  
+                            placeholder= "Digite sua descrição" 
+                            value= {req.description}
+                            onChangeText= {(text) => setReq({...req ,description: text})}
+                            label= "Descrição"
+                            iconName= ''
                         />
 
                         <Myinput 
-                            style={styles.input}
-                            placeholder="COR" 
-                            value={req.color}
-                            onChangeText={(text) => setReq({...req ,color: text})}
-                            label="Cor"
-                            iconName=''
+                            style= {styles.input}
+                            placeholder= "COR" 
+                            value= {req.color}
+                            onChangeText= {(text) => setReq({...req ,color: text})}
+                            label= "Cor"
+                            iconName= ''
 
                         /> 
                         
-                    <MyButton title='Cadastrar' onPress= {handleRegister}/>
+                    <MyButton title= 'Cadastrar' onPress= {handleRegister}/>
                                     
                 </View>
 
                 <MyList
-                    data={leves}
-                    keyItem={(item) => item.id.toString()}
-                    renderItem={({item}) =>(
+                    data= {leves}
+                    keyItem= {(item) => item.id.toString()}
+                    renderItem= {({item}) =>(
                        <MyItem
-                            onEdit={() => {editLevels(item.id)}}
-                            onDel={() => {deleteLevels(item.id)}}
+                            onEdit= {() => {editLevels(item.id)}}
+                            onDel= {() => {deleteLevels(item.id)}}
                         >
 
-                           <Mytext style={textStyles.textBody} > Nome: {item.name}</Mytext> {/* alex */}
+                           <Mytext style={textStyles.textBody}> Nome: {item.name}</Mytext> {/* alex */}
                            <Mytext style={textStyles.textBody}> Descrição: {item.description}</Mytext>
                            <Mytext style={textStyles.textBody}> Cor: {item.color}</Mytext>
                            <Mytext style={textStyles.textBody}> UserId: {item.userId}</Mytext>
@@ -160,11 +161,13 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: '#FFF'
     },
+
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
     },
+
     form: {
         flex: 1,
         padding: 20,
@@ -177,6 +180,7 @@ const styles = StyleSheet.create({
         marginRight: 10,
         minWidth: '45%',
     },
+
     listContainer: {
         flex: 1,
         padding: 20,
@@ -188,17 +192,20 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         minWidth: '45%',
     },
+
     title: {
         fontSize: 22,
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 20,
     },
+
     subtitle: {
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 10,
     },
+
     input: {
         borderWidth: 1,
         borderColor: '#ccc',
@@ -206,43 +213,50 @@ const styles = StyleSheet.create({
         padding: 10,
         marginBottom: 10,
     },
+    
     postItem: {
         padding: 10,
         marginVertical: 5,
         backgroundColor: '#f8f8f8',
         borderRadius: 5,
     },
+
     postText: {
         fontSize: 16,
         fontWeight: 'bold',
     },
+
     postUrl: {
         fontSize: 14,
         color: '#007BFF',
         marginBottom: 5,
     },
+
     buttonText:{
-        color:'#000000',
-        fontWeight: 'bold'
+        color: '#000000',
+        fontWeight:'bold'
     },
+
     buttonsContainer:{
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems:'center',
         gap: 20,
-        alignContent:'space-around',
+        alignContent: 'space-around',
     },
-    editButton:{ backgroundColor:'#FFFF00',
+
+    editButton:{ backgroundColor: '#FFFF00',
         padding: 10,
         borderRadius: 5,
         alignItems: 'center',
         justifyContent:'center',
 
     },
-    delButton:{ backgroundColor:'#f44336',
-        padding:10,
-        borderRadius:5,
-        alignItems:'center',
-        justifyContent:'center',
+
+    delButton:{ backgroundColor: '#f44336',
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
 
     },
 
