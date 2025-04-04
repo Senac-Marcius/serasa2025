@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '../utils/supabase'
 
-interface iDoc{
+export interface iDoc{
   id: number; 
   user_id: number; 
   create_at: string;  //passa os parametros do registro aqui
