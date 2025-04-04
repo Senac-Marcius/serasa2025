@@ -42,7 +42,7 @@ const MyView: React.FC< MySearchProps > = ({children, style, title, router}) => 
   return (
     <ScrollView style={[styles.container, style]}>
       <View style={styles.tView}>
-        <MyTopbar router={router} title = {title ? title: ""} />
+        <MyTopbar  />
         {children}
         {/* Conteúdo da tela (pode ser adicionado aqui) */}
         {/* Botão de suporte */}

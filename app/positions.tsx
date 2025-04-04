@@ -62,7 +62,6 @@ export default function PositionScreen(){
 
     return (
         <MyView style={{flex: 1}} title="Cargos" router={router}>
-            <MyButton title="Voltar" onPress={() => {}}/>
             {/*Aqui é TypeScript dentro do front*/}
             <Text>Minha tela dos cargos</Text>
             <View style = {styles.row}>
