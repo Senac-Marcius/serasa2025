@@ -1,24 +1,25 @@
 import React, {useState} from 'react';
 import { supabase } from '../utils/supabase'
 
-interface iEmployees {
+interface iEmployees { 
     id: number,
     urls: string,
     name: string,
-    datebirth: string,
+    date_birth: string,
     tell: string,
     email: string,
     address: string,
     nationality: string,
-    discPersonality: string,
+    disc_personality: string,
     cpf: string,
     sex: string,
-    martinalStatus: string,
-    position: string,
+    martinal_status: string,
     ethnicity: string,
     deficiency: string,
-    createAt: string,
-    isActive: string
+    created_at: string,
+    is_active: string,
+    user_id:number,
+    positions_id:number
 }
 
 const [employees, setEmployees] = useState<iEmployees[]>([])

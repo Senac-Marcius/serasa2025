@@ -8,28 +8,30 @@ import {MyItem} from '../src/components/MyItem';
 import MyList from '../src/components/MyList';
 import { Myinput,MyCheck } from '../src/components/MyInputs';
 import { useRouter } from 'expo-router';
+import { setEmployee,setEmployees,employees } from '../src/controllers/employees';
 
 export default function EmployeeScreen(){
     const router = useRouter();
 //aqui é typescript 
     const [req, SetReq] = useState({
-        id:-1,
+        id: -1,
         urls:'',
         name:'',
-        datebirth:'',
+        date_birth:'',
         tell:'',
         email:'',
         address:'',
         nationality:'',
-        discPersonality:'',
+        disc_personality:'',
         cpf:'',
         sex:'',
-        martinalStatus:'',
-        position:'',
+        martinal_status:'',
         ethnicity:'',
         deficiency:'',
-        createAt: new Date().toISOString(),
-        isActive: ''
+        created_at: new Date().toISOString(),
+        is_active: '',
+        user_id: 1,
+        positions_id:1
         
     });
    
@@ -39,6 +41,7 @@ export default function EmployeeScreen(){
                 const newId = employees.length ? employees[employees.length - 1].id + 1:0
                 const  newEmployee = {...req , id:newId}
                 setEmployees([...employees,newEmployee])
+                setEmployee(newEmployee)
             }else{
                 setEmployees(employees.map(e =>(e.id == req.id ? req:e)))
                 
@@ -47,20 +50,21 @@ export default function EmployeeScreen(){
                 id: -1,
                 urls:'',
                 name:'',
-                datebirth:'',
+                date_birth:'',
                 tell:'',
                 email:'',
                 address:'',
                 nationality:'',
-                discPersonality:'',
+                disc_personality:'',
                 cpf:'',
                 sex:'',
-                martinalStatus:'',
-                position:'',
+                martinal_status:'',
                 ethnicity:'',
                 deficiency:'',
-                createAt: '',
-                isActive: '',
+                created_at: '',
+                is_active: '',
+                user_id : 1,
+                positions_id:1
                 })
             
         }
@@ -102,8 +106,8 @@ export default function EmployeeScreen(){
                         label = 'Data de Nascimento:'
                         iconName='event'
                         placeholder='Insira a data ANO/MES/DIA'
-                        value={req.datebirth}
-                        onChangeText={(int) => SetReq({...req , datebirth:int})}
+                        value={req.date_birth}
+                        onChangeText={(int) => SetReq({...req , date_birth:int})}
                     />
                     <Myinput
                         label='Telefone:'
@@ -137,8 +141,8 @@ export default function EmployeeScreen(){
                         label='Personalidade:'
                         iconName='stack'
                         placeholder='Personalidade:'
-                        value={req.discPersonality}
-                        onChangeText={(text) => SetReq({...req , discPersonality:text})}
+                        value={req.disc_personality}
+                        onChangeText={(text) => SetReq({...req , disc_personality:text})}
                     />
                     <Myinput
                         label='C.P.F:'
@@ -158,15 +162,8 @@ export default function EmployeeScreen(){
                         label='Estado Civil:'
                         iconName='favorite'
                         placeholder='Estado civil:'
-                        value={req.martinalStatus}
-                        onChangeText={(text) => SetReq({...req , martinalStatus:text})}
-                    />
-                    <Myinput
-                        label='Cargo:'
-                        iconName='inventory'
-                        placeholder='Insira um Cargo'
-                        value={req.position}
-                        onChangeText={(text) => SetReq({...req , position:text})}
+                        value={req.martinal_status}
+                        onChangeText={(text) => SetReq({...req , martinal_status:text})}
                     />
                     <Myinput
                         label='Etnia'
@@ -183,8 +180,8 @@ export default function EmployeeScreen(){
                         onChangeText={(text) => SetReq({...req , deficiency:text})}
                     />
                     <MyTimePicker 
-                        onTimeSelected={(time) => SetReq({ ...req, isActive: time })}
-                        initialTime={req.isActive}
+                        onTimeSelected={(time) => SetReq({ ...req, is_active: time.toString() })}
+                        initialTime={req.is_active}
                     />
 
                     
@@ -201,8 +198,8 @@ export default function EmployeeScreen(){
                          onDel={() => {deleteEmployee(item.id)}}
                          onEdit={() => {editEmployee(item.id)}}
                         >
-                        Nome:{item.name} / Cargo:{item.position}
-                        ativo desde de:{item.isActive}
+                        Nome:{item.name} / Cargo:{item.position.id}
+                        ativo desde de:{item.is_active}
                         </MyItem>
                     )}
                 />
