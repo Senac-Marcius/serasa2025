@@ -8,6 +8,7 @@ import {MyItem} from '../src/components/MyItem';
 import MyButton from '../src/components/MyButtons';
 import Mytext from '../src/components/MyText';
 import { useRouter } from 'expo-router';
+import { investments, setInvestments, setInvestment } from '../src/controllers/investments';
 
 export default function investmentScreen(){
  //aqui é typescript   
@@ -16,8 +17,8 @@ export default function investmentScreen(){
         name: '',
         url: '',
         id: -1,
-        createAt: new Date().toISOString(),
-        userId: '',
+        created_at: new Date().toISOString(),
+        user_id: '',
         value: '',
     });
 
@@ -31,6 +32,7 @@ export default function investmentScreen(){
             const newInvestment = {...req, id: nId };
 
             setInvestments([...investments, newInvestment]);
+            setInvestment(newInvestment)
         }else{
             setInvestments(investments.map(i => (i.id == req.id ? req : i)));
         }
@@ -40,8 +42,8 @@ export default function investmentScreen(){
             name: '',
             url: '',
             id: -1,
-            createAt: new Date().toISOString(),
-            userId: '',
+            created_at: new Date().toISOString(),
+            user_id: '',
             value: '',
         });
     }
@@ -117,8 +119,8 @@ export default function investmentScreen(){
                        <Mytext style={styles.investmentText}> Descrição: {item.description}</Mytext>
                        <Mytext style={styles.investmentText}> Nome: {item.name}</Mytext>
                        <Mytext style={styles.investmentText}> Url: {item.url}</Mytext>
-                       <Mytext style={styles.investmentText}> Data: {item.createAt}</Mytext>
-                       <Mytext style={styles.investmentText}> ID de Usuario: {item.userId}</Mytext>
+                       <Mytext style={styles.investmentText}> Data: {item.created_at}</Mytext>
+                       <Mytext style={styles.investmentText}> ID de Usuario: {item.user_id}</Mytext>
                         </MyItem> 
                 )}
             />
