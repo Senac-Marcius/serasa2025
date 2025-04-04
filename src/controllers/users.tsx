@@ -13,7 +13,6 @@ interface iUser {
     id: number,
     //Userid: number
 }
-
     const [users, setUsers] = useState<iUser[]>([])
 
     async function setUser(user:iUser){
@@ -27,7 +26,6 @@ interface iUser {
   
     if(error){
         //aqui vem os tratamentos da varíavel error
-
         return[]
     }
 
@@ -35,4 +33,4 @@ interface iUser {
             
     }
 
-    export {setUser}
+ export {users, setUsers, setUser}

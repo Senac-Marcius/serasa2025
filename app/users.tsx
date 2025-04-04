@@ -7,6 +7,7 @@ import MyButton from '../src/components/MyButtons';
 import { Image } from 'react-native';
 import {MyItem} from '../src/components/MyItem'
 import { useRouter } from 'expo-router';
+import {users, setUsers, setUser} from '../src/controllers/users'
 
 // Define o estado inicial como false
 //isChecked = valor atual da váriavel, SetIsChecked ele altera o valor da isChecked
@@ -28,9 +29,8 @@ export default function UserScreen() {
         email: '',
         address: '',
         createAt: new Date().toISOString(),
-        id: -1,
+        id: 0,
         //Userid: 0
-
     });
 
     // const [users, setUsers] = useState<{
@@ -54,7 +54,7 @@ export default function UserScreen() {
             setUsers([...users, newUser])
 
         } else {
-            setUsers(users.map(p => (p.id == req.id ? req : p)))
+            setUsers(users.map(u => (u.id == req.id ? req : u)))
 
         }
 
@@ -76,8 +76,6 @@ export default function UserScreen() {
         let user = users.find(u => u.id == id)
         if (user)
             setReq(user)
-
-
     }
 
     function deleteUser(id: number) {
@@ -125,7 +123,6 @@ export default function UserScreen() {
                                 <Myinput value={req.contact} onChangeText={(text) => setReq({ ...req, contact: text })} placeholder="(XX) XXXXX-XXXX" label="Contato:" iconName='phone' />
                                 <Myinput value={req.email} onChangeText={(text) => setReq({ ...req, email: text })} placeholder="domain@domain.com" label="Email:" iconName='mail' />
                                 <Myinput value={req.address} onChangeText={(text) => setReq({ ...req, address: text })} placeholder="Digite o seu endereço" label="Endereço" iconName='house' />
-
                                 <MyButton
                                     title="CADASTRAR"
                                     onPress={handleRegister}
@@ -173,7 +170,7 @@ export default function UserScreen() {
                         />
                     )}
 
-                </View>
+             </View>
 
             </MyView>
     );
@@ -181,7 +178,7 @@ export default function UserScreen() {
 
 const styles = StyleSheet.create({
     myView: {
-        backgroundColor: 'purple',
+        
 
     },
     formContainer: {
