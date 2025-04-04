@@ -1,14 +1,14 @@
 import React, { useState } from 'react'; // Esta importando da biblioteca do react para atualizar automaticamente 
 import { StyleSheet, View, FlatList, TouchableOpacity, } from 'react-native'; 
 import MySearch from '../src/components/MySearch';
-import {MyTextArea } from '../src/components/MyInputs';
 import MyButton from '../src/components/MyButtons';
 import Mytext from '../src/components/MyText';
 import MyView from '../src/components/MyView';
-import { Myinput } from '../src/components/MyInputs';
+import { Myinput, MyTextArea } from '../src/components/MyInputs';
 import { useRouter } from 'expo-router';
 import MyCalendar from '../src/components/MyCalendar';
 import { projects, setProjects, setProject } from '../src/controlador/projects';
+
 
 export default function ProjectScreen(){ 
 
@@ -31,13 +31,16 @@ export default function ProjectScreen(){
         planning: '',
         process:'',
     });
+    
+    const [date, setDate] = useState('');
+    const [busca, setBusca] = useState('');
+    const router = useRouter();
 
     interface CalendarDate {
         year: number;
         month: number;
         day: number;
-      }
-    const [calendarDate, setCalendarDate] = useState<CalendarDate | null>(null);
+    }
 
     function handleRegister(){
 
@@ -91,12 +94,14 @@ export default function ProjectScreen(){
         return url;
     }
 
-    function buscar(){
-
+    function buscar() {
+        const resultado = projects.filter((p) => 
+            p.name.toLowerCase().includes(busca.toLowerCase()) ||
+            p.namep.toLowerCase().includes(busca.toLowerCase())
+        );
+        console.log("Resultados da busca:", resultado);
     }
-
-    const router = useRouter();
-    const [busca, setBusca] = useState('')
+    
     // Criando o textinput para receber e exibir o texto "placeholder" para o usuario digitar
     return ( // Esta sendo feito um emcapsulamento com a abertura da () / {req.description}= usado para mostar o codigo em baixo
         <MyView router={router} >
@@ -142,22 +147,18 @@ export default function ProjectScreen(){
                             onChangeText={(text) => setReq({ ...req, url: adicionarProtocolo(text) })}
                         />
                         
-                        <Mytext  style={styles.label}> Previsão de Inicio: </Mytext>
-                        <Myinput
-                            iconName=''
-                            label =''
-                            placeholder=""
-                            value={req.timeline}
-                            onChangeText={(text) => setReq({ ...req, timeline: text })}
+                        <Mytext style={styles.label}>Previsão de Início:</Mytext>
+                        <MyCalendar
+                            date={date} setDate={setDate} icon="FaCalendarDays" 
                         />
-                        
+
                         <Mytext style={styles.label}> Periodo Esperado: </Mytext>
                         <Myinput
-                            iconName=''
-                            label =''
-                            placeholder=""
-                            value={req.createAt}
-                            onChangeText={(text) => setReq({ ...req, timeline: text })}
+                            value={date}
+                            onChangeText={setDate}
+                            label="Digite a Data:"
+                            placeholder="DD/MM/AAAA"
+                            iconName="square"
                         />
                         
                         <Mytext style={styles.label}> Descrição: </Mytext>
@@ -353,9 +354,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
-        gap: 10,
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-     
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+        elevation: 3,
     },
 
     buttonEdit: {
