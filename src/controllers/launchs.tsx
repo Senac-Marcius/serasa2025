@@ -9,8 +9,11 @@ interface iLaunch {
     presence: boolean,
     indicator: string,
     note: string,
-    createAt: string,
+    created_at: string,
     userId: number,
+    students_id: number,
+    class_id: number,
+    employees_id: number,
 }
 
 

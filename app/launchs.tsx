@@ -20,8 +20,12 @@ export default function LaunchScreen() {
         presence: true,
         indicator: '',
         note: '',
-        createAt: new Date().toString(),
+        created_at: new Date().toString(),
         userId: 0,
+        students_id: 0,
+        class_id: 0,
+        employees_id: 0,
+        
     });
 
    
@@ -34,6 +38,7 @@ export default function LaunchScreen() {
 
             setLaunchs([...launchs, newLaunch])
         } else {
+
             setLaunchs(launchs.map(l => (l.id == req.id ? req : l)));
 
 
@@ -45,8 +50,12 @@ export default function LaunchScreen() {
             presence: true,
             indicator: '',
             note: '',
-            createAt: new Date().toISOString(),
+            created_at: new Date().toISOString(),
             userId: 0,
+            students_id: 0,
+            class_id: 0,
+            employees_id: 0,
+            
 
         })
 
