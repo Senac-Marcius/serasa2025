@@ -5,7 +5,7 @@ import { useRouter } from 'expo-router';
 import {setDisciplines, SetDisciplinebd, disciplines} from '../src/controllers/disciplines'
 
 
-//esse é o certo
+//esse é o certo, certo
 
 export default function DisciplineScreen() {
   const [req, setReq] = useState({
