@@ -13,7 +13,7 @@ interface MySearchProps {
 
 }
 
-const myView: React.FC< MySearchProps > = ({children, style, title, router}) => { 
+const MyView: React.FC< MySearchProps > = ({children, style, title, router}) => { 
  
   const { width, height } = Dimensions.get('window');
 
@@ -52,4 +52,4 @@ const myView: React.FC< MySearchProps > = ({children, style, title, router}) => 
   );
 };
 
-export default myView;
+export default MyView;

@@ -2,37 +2,38 @@ import React, {useState} from "react";
 import{View,Text, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} from "react-native";
 import MyView from "../src/components/MyView";
 import MyList from "../src/components/MyList";
-import MyItem from "../src/components/MyItem";
+import {MyItem} from "../src/components/MyItem";
 import { Myinput } from "../src/components/MyInputs";
 import MyButton from "../src/components/MyButtons";
-import MyTimePicker from "../src/components/MyTimerPicker";
+import { useRouter } from 'expo-router';
+import MyTimePicker from "../src/components/MyTimerPiker";
+import {setPosition, positions, setPositions} from "../src/controllers/positions";
 
 export default function PositionScreen(){
 /*Aqui é TypeScript*/
 
     const[req, setReq] = useState({
-        id:-1,
+        id: -1,
         name:"",
         description:"",
         salary: 0,
         workHours: "",
         departament:"",
         supervisor:"",
-        creatAt: new Date().toString(),
+        creatAt: new Date().toString()
     });
 
-    const [positions, setPositions] = useState <{name: string, description: string, salary: number, id: number, workHours: string, departament: string, supervisor: string, creatAt: string }[]> ([])
-    
     function handleRegister (){
         if(req.id == -1){
             const newId = positions.length ? positions [positions.length - 1].id + 1 : 0;
             const newPosition = {...req, id: newId};
 
             setPositions([...positions,newPosition]);
+            setPosition(newPosition)
         }else{
             setPositions(positions.map(p => (p.id == req.id ? req : p)));
         }
-        setReq ({
+        setReq ({    
             id: -1,
             name:"",
             description:"",
@@ -55,9 +56,13 @@ export default function PositionScreen(){
         const list = positions.filter(p => p.id != id)
         setPositions(list)
     }
+    
+    const router = useRouter();
+    
 
     return (
-        <MyView style={styles.container}>
+        <MyView style={{flex: 1}} title="Cargos" router={router}>
+            <MyButton title="Voltar" onPress={() => {}}/>
             {/*Aqui é TypeScript dentro do front*/}
             <Text>Minha tela dos cargos</Text>
             <View style = {styles.row}>

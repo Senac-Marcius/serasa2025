@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { supabase } from '../utils/supabase'
 
 interface iPosition {
-    id: number;
+    id:number,
     name: string;
     description: string;
     salary: number;
@@ -34,4 +34,4 @@ async function setPosition (position: iPosition) {
 
         return data
 }
-export{setPositions}
+export{setPosition, positions, setPositions}
