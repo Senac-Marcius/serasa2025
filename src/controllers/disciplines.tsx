@@ -1,36 +1,33 @@
-import React, { useState } from 'react';
 import { supabase } from '../utils/supabase'
 
 interface iDisciplines {
     id: number; 
     name: string; 
     url: string; 
-    workload: string;      
-    createdAt: string; 
+    workload: number;      
+    created_at: string; 
     teacher: string ;
 }
 
-const [disciplines, setDisciplines] = useState<iDisciplines[]>([]);
-
   
-  async function SetDisciplinebd(disciplines:iDisciplines){
+async function SetDisciplinebd(disciplines:iDisciplines){
+  console.log('chamou')
+
   const { data, error } = await supabase.from('disciplines')
-.insert([
-  disciplines
-])
-.select()
+  .insert([
+    disciplines
+  ])
+  .select()
 
 //aqui vem os tratamentos de variavel error
-if(error){
-    console.log('Preencha todos os dados!')
+  if(error){
+    console.log(error)
 
     return {}
+  }
+
+  return data
 }
 
-return data
-
-
-}
-
-export {setDisciplines, SetDisciplinebd, disciplines}
+export {SetDisciplinebd, iDisciplines}
         

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
 import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
-import {setDisciplines, SetDisciplinebd, disciplines} from '../src/controllers/disciplines'
+import {iDisciplines, SetDisciplinebd} from '../src/controllers/disciplines'
+import { supabase } from '../src/utils/supabase'
 
 
 //esse é o certo, certo
@@ -12,16 +13,28 @@ export default function DisciplineScreen() {
     id: -1,
     name: '',
     url: '',
-    workload: '',
-    createdAt: new Date().toISOString(),
+    workload: 0,
+    created_at: new Date().toISOString(),
     teacher: '',
   });
+
+  const [disciplines, setDisciplines] = useState<iDisciplines[]>([]);
 
 
   const [isEditing, setIsEditing] = useState(false);
 
+  useEffect(() => {
+    (async () => {
+      const { data: todos } = await supabase.from('disciplines').select()
+
+      if (todos && todos.length > 1) {
+        setDisciplines(todos)
+      }
+    })()
+  }, [])
+
   function handleRegister() {
-    if (!req.name?.trim() || !req.url?.trim() || !req.workload?.trim() || !req.teacher?.trim()) {
+    if (!req.name?.trim() || !req.url?.trim() || !req.teacher?.trim()) {
       alert('Preencha todos os campos!');
       return;
     }
@@ -36,7 +49,10 @@ export default function DisciplineScreen() {
       id: new Date().getTime(), 
     };
 
-    setDisciplines([...disciplines, newDiscipline])
+    setDisciplines([...disciplines, newDiscipline]);
+
+    (async () => { await SetDisciplinebd(newDiscipline)})();
+
     resetForm()
   }
 
@@ -62,8 +78,8 @@ export default function DisciplineScreen() {
       id: -1,
       name: '',
       url: '',
-      workload: '',
-      createdAt: new Date().toISOString(),
+      workload: 0,
+      created_at: new Date().toISOString(),
       teacher: '',
     });
     setIsEditing(false)
@@ -91,12 +107,12 @@ export default function DisciplineScreen() {
             value={req.url}
             onChangeText={(text) => setReq({ ...req, url: text })}
           />
-          <TextInput
+          {/*<TextInput
             style={styles.input}
             placeholder="Carga Horária"
             value={req.workload}
             onChangeText={(text) => setReq({ ...req, workload: text })}
-          />
+          />*/}
           <TextInput
             style={styles.input}
             placeholder="Professor"
