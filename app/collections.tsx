@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { MyModal_mobile1 } from '../src/components/MyModal';
 import MyButton from '../src/components/MyButtons';
@@ -6,6 +6,8 @@ import MyView from '../src/components/MyView';
 import { Myinput } from '../src/components/MyInputs'
 import MyList from '../src/components/MyList'
 import { useRouter } from 'expo-router';
+import {setCollection, iCollections} from '../src/controllers/collections';
+import { supabase } from '../src/utils/supabase'
 
 
 //função userState só retorna para uma variavel const
@@ -13,27 +15,37 @@ import { useRouter } from 'expo-router';
 export default function CollectionScreen() {
 
     const [visible, setVisible] = useState(false);
+    const[collections, setCollections] = useState<iCollections[]>([]);
+
+    useEffect(() =>{
+        async function getTodos(){
+
+            const{data:todos} = await supabase.from ('collections').select()
+            
+            if (todos && todos.length >1){
+                setCollections(todos)
+         }
+    }
+    getTodos()
+}, [])
+
+
+
 
     const [req, setReq] = useState({
         id: 0,
         name: '',
         quantity: '',
         star: '',
-        creatAt: new Date().toISOString()
+        createAt: new Date().toISOString()
     });
-    const [collections, setCollections] = useState<{
-        name: string,
-        quantity: string,
-        star: string,
-        creatAt: string,
-        id: number,
-    }[]>([])
 
-    function handleRegister() {
+     async function handleRegister() {
         if (req.id == -1) {
             const newId = collections.length ? collections[collections.length - 1].id + 1 : 0
             const newcollections = { ...req, id: newId }
             setCollections([...collections, newcollections])
+            setCollection(newcollections)
 
         } else {
             setCollections(collections.map(c => (c.id == req.id ? req : c)))
@@ -44,7 +56,7 @@ export default function CollectionScreen() {
             name: '',
             quantity: '',
             star: '',
-            creatAt: new Date().toISOString()
+            createAt: new Date().toISOString()
         })
 
     }
