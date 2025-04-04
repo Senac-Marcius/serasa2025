@@ -6,15 +6,7 @@ import { useRouter } from 'expo-router';
 
 export default function CalendarsScreen(){
 //aqui é typescript
-    const [req,setReq] = useState({
-        studentname: '',
-        course: '',
-        registrationdate: '',
-        period: '',
-        id: -1,
-        creadAt: new Date().toISOString(),
 
-});
 
 const [calendars, setCalendars] = useState<{studentname:string, course: string, registrationdate: string, period:string, id:number, creadAt:string }[]>([])
 
