@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
 import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
+import {setDisciplines, SetDisciplinebd, disciplines} from '../src/controllers/disciplines'
 
 
 //esse é o certo
 
 export default function DisciplineScreen() {
   const [req, setReq] = useState({
-    id: 0,
+    id: -1,
     name: '',
     url: '',
     workload: '',
@@ -58,7 +59,7 @@ export default function DisciplineScreen() {
 
   function resetForm() {
     setReq({
-      id: 0,
+      id: -1,
       name: '',
       url: '',
       workload: '',
