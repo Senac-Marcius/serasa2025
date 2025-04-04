@@ -32,8 +32,8 @@ export default function BudgetScreen(){
     });
     const [budgets, setBudgets] = useState<iBudgets[]>([]);
 
-        useEffect(()=> {
-            async function getTodos(){
+                useEffect(()=> {
+                async function getTodos(){
                 const {data: todos} = await supabase.from('budgets').select()
 
                 if(todos && todos.length > 1){
