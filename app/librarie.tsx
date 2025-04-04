@@ -1,25 +1,22 @@
 import React, { useState } from 'react'; //função useState só retorna para uma variavel const
-import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, ScrollView, ViewStyle } from 'react-native';
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
 import MyTabsbar from '../src/components/MyTabsBar';
 import MyButton from '../src/components/MyButtons';
 import MyView from '../src/components/MyView';
+import MySelect from '../src/components/MySelect';
+import { Myinput, MyTextArea } from '../src/components/MyInputs';
+import {textStyles} from '../styles/textStyles';
+import { Icon , MD3Colors} from "react-native-paper";
+import {tabsBarStyles} from '../styles/tabsBarStyles';
 import { useRouter } from 'expo-router';
+import {items, setItems, setItem} from '../src/controllers/librarie';
 
 
 export default function ItemScreen() { // aqui é TS
     const router = useRouter();
-
-     // Estados para as abas
-     const [activeTab, setActiveTab] = useState(0);
-     const tabs = ["Identificação da Obra", "Publicação e Edição", "Descrição e Classificação", "Conteúdo e Acesso"];
-
-      // Função para lidar com o clique nas abas
-    const handleTabPress = (item: string, index: number) => {
-        setActiveTab(index);
-    };
 
     const [req, setReq] = useState({
         id: 0,
@@ -111,6 +108,15 @@ export default function ItemScreen() { // aqui é TS
         setSelectedFile(null); // Limpa o selectedPdf após o registro
     };
 
+    // Estados para as abas
+    const [activeTab, setActiveTab] = useState(0);
+    const tabs = ["Identificação da Obra", "Publicação e Edição", "Descrição e Classificação", "Conteúdo e Acesso"];
+
+    // Função para lidar com o clique nas abas
+    const handleTabPress = (item: string, index: number) => {
+        setActiveTab(index);
+    };
+
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [selectedFile, setSelectedFile] = useState<string | null>(null);
 
@@ -189,7 +195,12 @@ export default function ItemScreen() { // aqui é TS
         router.push('/librarie');
     };
 
-    
+    //Selects
+    const [typology, setTypology] = useState("Selecione a Tipologia")
+    const [language, setLanguage] = useState("Selecione o Idioma") 
+    const [format, setFormat] = useState("Selecione o Formato") 
+    const [status, setStatus] = useState("Selecione o Status")
+    const [typeLoan, setTypeLoan] = useState("Selecione o Tupo de Empréstimo")  
 
     return ( //encapsulamento
         <MyView router={router} >
@@ -199,245 +210,266 @@ export default function ItemScreen() { // aqui é TS
                     horizontal 
                     showsHorizontalScrollIndicator={false}
                     style={styles.scrollRow}>
-                    <MyButton   
+                    <MyButton
                         title="Salvar"
                         onPress={save}
                         button_type="capsule"
+                        icon=""
                         style={styles.button_capsule1}
                     />
                     <MyButton
                         title="Prévia"
                         onPress={() => router.push('/preview') }
                         button_type="capsule"
+                        icon=""
                         style={styles.button_capsule1}
                     />
                     <MyButton
                         title="Cancelar"
                         onPress={cancel}
                         button_type="capsule"
+                         icon=""
                         style={styles.button_capsule1}
                     />
                 </ScrollView>
             </View>
             <MyTabsbar
                 items={tabs}
-                style={styles.tabsContainer}
-                itemStyle={styles.tabItem}
-                activeItemStyle={styles.activeTabItem}
-                textStyle={styles.tabText}
-                activeTextStyle={styles.activeTabText}
+                style={tabsBarStyles.tabsContainer}
+                itemStyle={tabsBarStyles.tabItem}
+                activeItemStyle={tabsBarStyles.activeTabItem}
+                textStyle={tabsBarStyles.tabText}
+                activeTextStyle={tabsBarStyles.activeTabText}
                 onPress={handleTabPress}
                 initialActiveIndex={0}
             />
             <View> {/* aqui é typescript dentro do front*/}
                 <View style={styles.row}>
-                    
-
-                        <View style={styles.form}>
-                            {/* Conteúdo condicional baseado na aba ativa */}
-                            {activeTab === 0 && (
-                                <>
-                                    <Picker style={styles.picker}
-                                        selectedValue={req.typology}
-                                        onValueChange={(itemValue) => setReq({ ...req, typology: itemValue })}
-                                    >
-                                        <Picker.Item label="Selecionar Tipologia" value="" />
-                                        <Picker.Item label="Livro" value="Livro" />
-                                        <Picker.Item label="Publicação Seriada" value="Publicação Seriada" />
-                                        <Picker.Item label="Artigo" value="Artigo" />
-                                        <Picker.Item label="Audiolivro" value="Audiolivro" />
-                                        <Picker.Item label="Ebook" value="Ebook" />
-                                        <Picker.Item label="Mapa" value="Mapa" />
-                                        <Picker.Item label="Outros" value="Outros" />
-                                    </Picker>
-                                    <TextInput style={styles.input}
-                                        placeholder="Título"
-                                        value={req.title}
-                                        onChangeText={(text) => setReq({ ...req, title: text })}
-                                    />                    
-                                    <TextInput style={styles.input}
-                                        placeholder="Subtítulo"
-                                        value={req.subtitle}
-                                        onChangeText={(text) => setReq({ ...req, subtitle: text })}
-                                    />
-                                    <TextInput style={styles.input}
-                                        placeholder="Responsáveis"
-                                        value={req.responsible}
-                                        onChangeText={(text) => setReq({ ...req, responsible: text })}
-                                    />
-                                    <TextInput style={styles.input}
-                                        placeholder="Tradução"
-                                        value={req.translation}
-                                        onChangeText={(text) => setReq({ ...req, translation: text })}
-                                    />
-                                    <Picker style={styles.picker}
-                                        selectedValue={req.language}
-                                        onValueChange={(itemValue) => setReq({ ...req, language: itemValue })}
-                                    >
-                                        <Picker.Item label="Selecionar Idioma" value="" />
-                                        <Picker.Item label="Português" value="Português" />
-                                        <Picker.Item label="Inglês" value="Inglês" />
-                                        <Picker.Item label="Espanhol" value="Espanhol" />
-                                        <Picker.Item label="Francês" value="Francês" />
-                                    </Picker>
-                                    <MyButton
-                                        title="Selecionar Imagem"
-                                        onPress={pickImage}
-                                        button_type="capsule"
-                                        style={styles.button_capsule1}
-                                    />
-                                </>
-                            )}
-                                {/* outros campos de identificação */}
-                            {activeTab === 1 && (
-                                <>
-                                    <TextInput style={styles.input}
-                                        placeholder="Ano"
-                                        value={req.year}
-                                        onChangeText={(text) => setReq({ ...req, year: text })}
-                                    />
-                                    <TextInput style={styles.input}
-                                        placeholder="Edição"
-                                        value={req.edition}
-                                        onChangeText={(text) => setReq({ ...req, edition: text })}
-                                    />
-                                    <TextInput style={styles.input}
-                                        placeholder="Editora"
-                                        value={req.publisher}
-                                        onChangeText={(text) => setReq({ ...req, publisher: text })}
-                                    />
-                                    <TextInput style={styles.input}
-                                        placeholder="Local"
-                                        value={req.location}
-                                        onChangeText={(text) => setReq({ ...req, location: text })}
-                                    />
-                                    <TextInput style={styles.input}
-                                        placeholder="Série"
-                                        value={req.serie}
-                                        onChangeText={(text) => setReq({ ...req, serie: text })}
-                                    />
-                                    <TextInput style={styles.input}
-                                        placeholder="Volume"
-                                        value={req.volume}
-                                        onChangeText={(text) => setReq({ ...req, volume: text })}
-                                    />
-                                </>
-                            )}
-                                {/* outros campos de identificação */}
-                            {activeTab === 2 && (
-                                <>
-                                    <Picker style={styles.picker}
-                                        selectedValue={req.format}
-                                        onValueChange={(itemValue) => setReq({ ...req, format: itemValue })}
-                                    >
-                                        <Picker.Item label="Selecionar Formato" value="" />
-                                        <Picker.Item label="Físico" value="Físico" />
-                                        <Picker.Item label="Digital" value="Digital" />
-                                    </Picker>
-                                    <TextInput style={styles.input}
-                                        placeholder="Número de Páginas"
-                                        value={req.numberPages}
-                                        onChangeText={(text) => setReq({ ...req, numberPages: text })}
-                                    />
-                                    <TextInput style={styles.input}
-                                        placeholder="ISBN"
-                                        value={req.isbn}
-                                        onChangeText={(text) => setReq({ ...req, isbn: text })}
-                                    />
-                                    <TextInput style={styles.input}
-                                        placeholder="ISSN"
-                                        value={req.issn}
-                                        onChangeText={(text) => setReq({ ...req, issn: text })}
-                                    />
-                                    <TextInput style={styles.input}
-                                        placeholder="CDD"
-                                        value={req.cdd}
-                                        onChangeText={(text) => setReq({ ...req, cdd: text })}
-                                    />
-                                    <TextInput style={styles.input}
-                                        placeholder="Número de Chamada"
-                                        value={req.callNumber}
-                                        onChangeText={(text) => setReq({ ...req, callNumber: text })}
-                                    />
-                                </>
-                            )}
-                                {/* outros campos de identificação */}
-                            {activeTab === 3 && (
-                                <>
-                                    <TextInput style={styles.input}
-                                        multiline={true}
-                                        numberOfLines={2}
-                                        placeholder="Assunto"
-                                        value={req.subject}
-                                        onChangeText={(text) => setReq({ ...req, subject: text })}
-                                    />
-                                    <TextInput style={styles.input}
-                                        multiline={true}
-                                        numberOfLines={2}
-                                        placeholder="Palavras-chave"
-                                        value={req.keywords}
-                                        onChangeText={(text) => setReq({ ...req, keywords: text })}
-                                    />
-                                    <TextInput style={styles.input}
-                                        multiline={true}
-                                        numberOfLines={10}
-                                        placeholder="Resumo"
-                                        value={req.summary}
-                                        onChangeText={(text) => setReq({ ...req, summary: text })}
-                                    />
-                                    <TextInput style={styles.input}
-                                        multiline={true}
-                                        numberOfLines={10}
-                                        placeholder="Notas"
-                                        value={req.notes}
-                                        onChangeText={(text) => setReq({ ...req, notes: text })}
-                                    />
-                                    <TextInput style={styles.input}
-                                        placeholder="Número de exemplares"
-                                        value={req.numberCopies}
-                                        onChangeText={(text) => setReq({ ...req, numberCopies: text })}
-                                    />
-                                    <Picker style={styles.picker}
-                                        selectedValue={req.status}
-                                        onValueChange={(itemValue) => setReq({ ...req, status: itemValue })}
-                                    >
-                                        <Picker.Item label="Status" value="" />
-                                        <Picker.Item label="Disponível" value="Disponível" />
-                                        <Picker.Item label="Emprestado" value="Emprestado" />
-                                        <Picker.Item label="Reservado" value="Reservado" />
-                                        <Picker.Item label="Perdido" value="Perdido" />
-                                    </Picker>
-                                    <Picker style={styles.picker}
-                                        selectedValue={req.typeLoan}
-                                        onValueChange={(itemValue) => setReq({ ...req, typeLoan: itemValue })}
-                                    >
-                                        <Picker.Item label="Tipo de Empréstimo" value="" />
-                                        <Picker.Item label="Domiciliar" value="Domiciliar" />
-                                        <Picker.Item label="Consulta Local" value="Consulta Local" />
-                                        <Picker.Item label="Acesso Digital" value="Acesso Digital" />
-                                    </Picker>
-                                    <TextInput style={styles.input}
-                                        placeholder="Url"
-                                        value={req.url}
-                                        onChangeText={(text) => setReq({ ...req, url: text })}
-                                    />
-                                    <MyButton
-                                        title="Upload do Material"
-                                        onPress={pickFile}
-                                        button_type="capsule"
-                                        style={styles.button_capsule1}
-                                    />
-                                </>
-                            )}
-
-                            <MyButton
-                                title="INCORPORAR ITEM NO ACERVO"
-                                onPress={handleRegister}
-                                button_type="capsule"
-                                style={styles.button}
-                            />    
-                        </View>
-                      
+                    <View style={styles.form}>
+                        {/* Conteúdo condicional baseado na aba ativa */}
+                        {activeTab === 0 && (
+                            <>
+                                <MySelect
+                                    label={typology} setLabel={setTypology} 
+                                    list={            
+                                        [ 
+                                            {key:1, option: 'Livro'},            
+                                            {key:2, option: 'Publicação Seriada'},
+                                            {key:3, option: "Artigo" },
+                                            {key:4, option: "Audiolivro"},
+                                            {key:5, option: "Ebook" },
+                                            {key:6, option: "Mapa" },
+                                            {key:7, option: "Outros" },
+                                        ]
+                                    }
+                                />
+                                <Myinput
+                                    placeholder="Título"
+                                    value={req.title}
+                                    onChangeText={(text) => setReq({ ...req, title: text })}
+                                    label='' iconName=''
+                                />                    
+                                <Myinput
+                                    placeholder="Subtítulo"
+                                    value={req.subtitle}
+                                    onChangeText={(text) => setReq({ ...req, subtitle: text })}
+                                    label='' iconName=''
+                                />
+                                <Myinput
+                                    placeholder="Responsáveis"
+                                    value={req.responsible}
+                                    onChangeText={(text) => setReq({ ...req, responsible: text })}
+                                    label='' iconName=''
+                                />
+                                <Myinput
+                                    placeholder="Tradução"
+                                    value={req.translation}
+                                    onChangeText={(text) => setReq({ ...req, translation: text })}
+                                    label='' iconName=''
+                                />
+                                <MySelect
+                                    label={language} setLabel={setLanguage} 
+                                    list={            
+                                        [ 
+                                            {key:1, option: 'Português'},            
+                                            {key:2, option: 'Inglês'},
+                                            {key:3, option: "Espanhol" },
+                                            {key:4, option: "Francês"},
+                                            {key:5, option: "Outros" },
+                                        ]
+                                    }
+                                />
+                                <MyButton
+                                    title="Selecionar Imagem"
+                                    onPress={pickImage}
+                                    button_type="capsule"
+                                    icon=""
+                                    style={styles.button_capsule2}
+                                />
+                            </>
+                        )}
+                            {/* outros campos de identificação */}
+                        {activeTab === 1 && (
+                            <>
+                                <Myinput 
+                                    placeholder="Ano"
+                                    value={req.year}
+                                    onChangeText={(text) => setReq({ ...req, year: text })}
+                                    label='' iconName=''
+                                />
+                                <Myinput 
+                                    placeholder="Edição"
+                                    value={req.edition}
+                                    onChangeText={(text) => setReq({ ...req, edition: text })}
+                                    label='' iconName=''
+                                />
+                                <Myinput 
+                                    placeholder="Editora"
+                                    value={req.publisher}
+                                    onChangeText={(text) => setReq({ ...req, publisher: text })}
+                                    label='' iconName=''
+                                />
+                                <Myinput 
+                                    placeholder="Local"
+                                    value={req.location}
+                                    onChangeText={(text) => setReq({ ...req, location: text })}
+                                    label='' iconName=''
+                                />
+                                <Myinput 
+                                    placeholder="Série"
+                                    value={req.serie}
+                                    onChangeText={(text) => setReq({ ...req, serie: text })}
+                                    label='' iconName=''
+                                />
+                                <Myinput 
+                                    placeholder="Volume"
+                                    value={req.volume}
+                                    onChangeText={(text) => setReq({ ...req, volume: text })}
+                                    label='' iconName=''
+                                />
+                            </>
+                        )}
+                            {/* outros campos de identificação */}
+                        {activeTab === 2 && (
+                            <>
+                                <MySelect
+                                    label={format} setLabel={setFormat} 
+                                    list={            
+                                        [ 
+                                            {key:1, option: 'Físico'},            
+                                            {key:2, option: 'Digital'},
+                                        ]
+                                    }
+                                />
+                                <Myinput
+                                    placeholder="Número de Páginas"
+                                    value={req.numberPages}
+                                    onChangeText={(text) => setReq({ ...req, numberPages: text })}
+                                    label='' iconName=''
+                                />
+                                <Myinput
+                                    placeholder="ISBN"
+                                    value={req.isbn}
+                                    onChangeText={(text) => setReq({ ...req, isbn: text })}
+                                    label='' iconName=''
+                                />
+                                <Myinput
+                                    placeholder="ISSN"
+                                    value={req.issn}
+                                    onChangeText={(text) => setReq({ ...req, issn: text })}
+                                    label='' iconName=''
+                                />
+                                <Myinput 
+                                    placeholder="CDD"
+                                    value={req.cdd}
+                                    onChangeText={(text) => setReq({ ...req, cdd: text })}
+                                    label='' iconName=''
+                                />
+                                <Myinput 
+                                    placeholder="Número de Chamada"
+                                    value={req.callNumber}
+                                    onChangeText={(text) => setReq({ ...req, callNumber: text })}
+                                    label='' iconName=''
+                                />
+                            </>
+                        )}
+                            {/* outros campos de identificação */}
+                        {activeTab === 3 && (
+                            <>
+                                <MyTextArea 
+                                    placeholder="Assunto"
+                                    value={req.subject}
+                                    onChangeText={(text) => setReq({ ...req, subject: text })}
+                                    label='' iconName=''
+                                />
+                                <MyTextArea 
+                                    placeholder="Palavras-chave"
+                                    value={req.keywords}
+                                    onChangeText={(text) => setReq({ ...req, keywords: text })}
+                                    label='' iconName=''
+                                />
+                                <MyTextArea
+                                    placeholder="Resumo"
+                                    value={req.summary}
+                                    onChangeText={(text) => setReq({ ...req, summary: text })}
+                                    label='' iconName=''
+                                />
+                                <MyTextArea
+                                    placeholder="Notas"
+                                    value={req.notes}
+                                    onChangeText={(text) => setReq({ ...req, notes: text })}
+                                    label='' iconName=''
+                                />
+                                <Myinput
+                                    placeholder="Número de exemplares"
+                                    value={req.numberCopies}
+                                    onChangeText={(text) => setReq({ ...req, numberCopies: text })}
+                                    label='' iconName=''
+                                />
+                                <MySelect
+                                    label={status} setLabel={setStatus} 
+                                    list={            
+                                        [ 
+                                            {key:1, option: 'Disponível'},            
+                                            {key:2, option: 'Emprestado'},
+                                            {key:3, option: "Reservado" },
+                                            {key:4, option: "Perdido"},
+                                        ]
+                                    }
+                                />
+                                <MySelect
+                                    label={typeLoan} setLabel={setTypeLoan} 
+                                    list={            
+                                        [ 
+                                            {key:1, option: 'Domiciliar'},            
+                                            {key:2, option: 'Consulta Local'},
+                                            {key:3, option: "Acesso Digital" },
+                                        ]
+                                    }
+                                />
+                                <Myinput 
+                                    placeholder="Url"
+                                    value={req.url}
+                                    onChangeText={(text) => setReq({ ...req, url: text })}
+                                    label='' iconName=''
+                                />
+                                <MyButton
+                                    title="Upload do Material"
+                                    onPress={pickFile}
+                                    button_type="capsule"
+                                    icon=""
+                                    style={styles.button_capsule2}
+                                />
+                            </>
+                        )}
+                        <MyButton
+                            title="INCORPORAR ITEM NO ACERVO"
+                            onPress={handleRegister}
+                            button_type="round"
+                            icon=""
+                            style={styles.buttonRegister}
+                        />    
+                    </View>
                 </View>
             </View> 
         </MyView>
@@ -446,11 +478,6 @@ export default function ItemScreen() { // aqui é TS
 
 const styles = StyleSheet.create({
 
-    viewContainer: {
-        flex: 1,
-        backgroundColor: '#ffffff', 
-        position: 'relative', 
-    },
     container: {
         flex: 1,
         padding: 20,
@@ -464,7 +491,7 @@ const styles = StyleSheet.create({
     scrollRow: {
         flexDirection: 'row',
         paddingHorizontal: 10,
-        flexGrow: 1, 
+        flexGrow: 1,
 
     },
     h1: {
@@ -476,15 +503,15 @@ const styles = StyleSheet.create({
         color: '#0F2259',
         backgroundColor: '#F2F2F2',
         margin: 20,
-        padding: 18,
+        padding: 15,
         borderRadius: 10,
     },
     form: {
         flex: 1,
-        marginRight: 10,
-        marginVertical: 10,
+        marginRight: 20,
+        marginVertical: 30,
         marginHorizontal: 20,
-        padding: 20,
+        padding: 25,
         backgroundColor: '#AD6CD9',
         borderRadius: 10,
         shadowColor: '#0C1DA0',
@@ -492,25 +519,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
     },
-    picker: {
-        height: 40,
-        backgroundColor: "#FFF",
-        borderColor: "#0C1DA0",
-        borderWidth: 1,
-        borderRadius: 5,
-        paddingHorizontal: 10,
-        marginBottom: 10,
-    },
-    input: {
-        height: 40,
-        backgroundColor: '#FFF',
-        borderColor: '#0C1DA0',
-        borderWidth: 1,
-        borderRadius: 5,
-        paddingHorizontal: 10,
-        marginBottom: 10,
-    },
-    button: {
+    buttonRegister: {
         backgroundColor: '#0F2259',
         color: '#FFF',
         fontWeight: 'bold',
@@ -518,47 +527,10 @@ const styles = StyleSheet.create({
         fontSize: 20,
         padding: 15,
         marginVertical: 15,
-        borderRadius: 5,
+        borderRadius: 20,
+        display:"flex",
         alignItems: 'center',
         cursor: 'pointer'
-    },
-    // estilos para as abas:
-    tabsContainer: {
-        flex: 1,
-        padding: 15,
-        backgroundColor: '#F2F2F2',
-        height: 50,
-        marginBottom: 10,
-        borderRadius: 10,
-        marginVertical: 20,
-        marginHorizontal: 20,
-    },
-    tabItem: { // Estilo para cada aba
-        paddingHorizontal: 15,
-        paddingVertical: 10,
-        marginRight: 20,
-        marginHorizontal: 5,
-        height: 50,
-        width: 300,
-        borderRadius: 50,
-        backgroundColor: '#F2F2F2',
-        borderWidth: 2,
-        borderColor: '#0F2259',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    activeTabItem: { // Estilo quando a aba está ativa
-        backgroundColor: '#AD6CD9',
-        borderBottomWidth: 5,
-        borderBottomColor: '#0F2259',
-    },
-    tabText: { // Estilo do texto normal
-        fontSize: 18,
-        color: 'black',
-    },
-    activeTabText: { // Estilo do texto quando a aba está ativa
-        fontWeight: 'bold',
-        color: 'white',
     },
     // estilos para os botões
     buttonContainer: {
@@ -569,7 +541,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20, // Espaçamento interno
         marginVertical: 20, // Margem superior e inferior
         marginHorizontal: 20,
-        width: 400, // Ajuste conforme necessário
         backgroundColor: "transparent", // Evita que o container pareça um botão único
     },
     button_capsule1: {
@@ -577,13 +548,23 @@ const styles = StyleSheet.create({
         backgroundColor: "#813AB1",
         alignItems: "center",
         justifyContent: "center",
-        marginRight: 20,
-        marginHorizontal: 5,
-        height: 45,
+        marginRight: 50,
+        marginHorizontal: 250,
+        height: 50,
         paddingVertical: 10, // Melhor ajuste no espaçamento interno
         paddingHorizontal: 20,
-        width: 250, // Define um tamanho mínimo para evitar botões colados
+        width: 200, // Define um tamanho mínimo para evitar botões colados
+        fontSize: 14,
+        fontFamily: 'Poppins_400Regular',
     },
-
+    button_capsule2: {
+        display:"flex",
+        borderRadius: 50,
+        backgroundColor: "#813AB1",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+   
+    
 
 });

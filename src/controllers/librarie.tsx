@@ -52,5 +52,5 @@ const { data, error } = await supabase.from('items_librarie')
     return data
 }
 
-export {setItem}
+export {setItems, items, setItem}
         
