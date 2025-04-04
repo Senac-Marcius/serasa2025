@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { supabase } from '../utils/supabase'
 
+
 interface iCategories{
  name: string,
     description: string,
     id: number,
-    createAt: string,
-    userId: number,
+    created_at: string,
+    user_id: number,
 }
 
 const[categories, setCategories] = useState<iCategories[]>([]);
@@ -31,4 +32,5 @@ return []
 return data 
 }
 
-export {setCategory}    
+
+export {setCategories, categories,setCategory}

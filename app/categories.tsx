@@ -4,7 +4,7 @@ import MyList from '../src/components/MyList'
 import {MyItem} from '../src/components/MyItem'
 import MyView from '../src/components/MyView'
 import { useRouter } from 'expo-router';
-
+import {setCategories, categories,setCategory} from'../src/controllers/category'
 
 export default function categoryScreen(){
 
@@ -12,18 +12,10 @@ export default function categoryScreen(){
         name: '',
         description : '',
         id: -1,
-        createAt: new Date().toISOString(),
-        userId : 0,
+        created_at: new Date().toISOString(),
+        user_id : 0,
         
  });
- 
-    const[categories, setCategories] = useState<{ 
-        name: string,
-        description: string,
-        id: number,
-        createAt: string,
-        userId: number,
-        }[]>([])
     
     function handleRegister(){
         if(req.id == -1){
@@ -40,8 +32,8 @@ export default function categoryScreen(){
             id: -1,
             name: '',
             description : '',
-            createAt: new Date().toISOString(),
-            userId : 0,
+            created_at: new Date().toISOString(),
+            user_id : 0,
         })
     }
     
