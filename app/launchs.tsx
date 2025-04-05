@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
 import MySupport from '../src/components/MySupport';
 import MyView from '../src/components/MyView';
@@ -9,7 +9,8 @@ import { Myinput, MyCheck } from '../src/components/MyInputs';
 import Mybutton from '../src/components/MyButtons';
 import MyCalendar from '../src/components/MyCalendar';
 import { useRouter } from 'expo-router';
-import {launchs, setLaunch, setLaunchs} from '../src/controllers/launchs';
+import {setLaunch, iLaunch} from '../src/controllers/launchs';
+import { supabase } from '../src/utils/supabase';
 
 
 export default function LaunchScreen() {
@@ -28,20 +29,28 @@ export default function LaunchScreen() {
         
     });
 
+    const [launchs, setLaunchs] = useState<iLaunch[]>([]);
+
+    useEffect(() => {
+        async function getLaunchs() {
+            const {data: todos} = await supabase.from ('launchs').select();
+            if (todos && todos.length > 1) {
+                setLaunchs(todos);
+            }
+        }
+        getLaunchs();
+    }, []);
+
    
 
-    function handleRegister() {
+    async function handleRegister() {
         if (req.id == -1) {
             const newId = launchs.length ? launchs[launchs.length - 1].id + 1 : 0;
             const newLaunch = { ...req, id: newId };
-
-
             setLaunchs([...launchs, newLaunch])
+            await setLaunch(newLaunch)
         } else {
-
             setLaunchs(launchs.map(l => (l.id == req.id ? req : l)));
-
-
 
         }
         setReq({

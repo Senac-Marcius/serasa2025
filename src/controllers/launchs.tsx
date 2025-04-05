@@ -17,7 +17,7 @@ interface iLaunch {
 }
 
 
-const [launchs, setLaunchs] = useState<iLaunch[]>([]);
+
 
 async function setLaunch(launch: iLaunch) {
     //aqui vem os tratamentos de regex ou do modelo de negócio antes de inserir
@@ -35,8 +35,8 @@ const { data, error } = await supabase.from('launchs')
   .select()
 
   if(error){
+    console.log('Erro ao inserir o lançamento:', error.message)
 //aqui vem os tratamentos da variavel error 
-
 
 return[]
   }
@@ -45,4 +45,4 @@ return[]
 
 }
 
-export {setLaunch, launchs, setLaunchs}
+export {iLaunch, setLaunch}
