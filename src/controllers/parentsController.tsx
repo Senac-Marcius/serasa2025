@@ -2,21 +2,21 @@
   import { supabase } from '../utils/supabase'
   
   interface iParent{
-    id: number,
+      id: number,
       name: string,
       rg:string,
       cpf:string,
       age:string,
       phone:string,
-      e_mail: string,
+      email: string,
       kinship: string,
-      create_at: string,
-      user_id: 0,
+      createat: string,
+      userid: number,
   }
 
 
 
-  const [parents,setParents] = useState<iParent[]>([])//a chave recebe a lista que esta sendo declarada na interface.
+  
 
 async function setParentController(parent:iParent){
     //aqui vem os tratamentos de regex ou do modelo de negó´cio antes de inserir
@@ -33,4 +33,4 @@ async function setParentController(parent:iParent){
 
     return data
 }
-export {setParentController, parents, setParents}
+export {setParentController, iParent }
