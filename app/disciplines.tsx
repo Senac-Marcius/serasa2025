@@ -35,7 +35,7 @@ export default function DisciplineScreen() {
 
   function handleRegister() {
     if (!req.name?.trim() || !req.url?.trim() || !req.teacher?.trim()) {
-      alert('Preencha todos os campos!');
+      console.log('Preencha todos os campos!');
       return;
     }
 
