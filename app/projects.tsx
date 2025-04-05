@@ -1,16 +1,19 @@
-import React, { useState } from 'react'; // Esta importando da biblioteca do react para atualizar automaticamente 
+import React, { useEffect, useState } from 'react'; // Esta importando da biblioteca do react para atualizar automaticamente 
 import { StyleSheet, View, FlatList, TouchableOpacity, } from 'react-native'; 
 import MySearch from '../src/components/MySearch';
 import MyButton from '../src/components/MyButtons';
 import Mytext from '../src/components/MyText';
 import MyView from '../src/components/MyView';
+import MyList from '../src/components/MyList';
 import { Myinput, MyTextArea } from '../src/components/MyInputs';
 import { useRouter } from 'expo-router';
 import MyCalendar from '../src/components/MyCalendar';
 import { projects, setProjects, setProject } from '../src/controlador/projects';
+import { supabase } from '../src/utils/supabase';
 
 
 export default function ProjectScreen(){ 
+    const[projects, setProjects] = useState<iProject[]>([]);
 
 // Aqui é typescript
     const [req, setReq] = useState ({
@@ -31,8 +34,23 @@ export default function ProjectScreen(){
         planning: '',
         process:'',
     });
+
+    useEffect(() => {
+        function getTodos() {
+          const { data: todos } = await supabase.from('todos').select()
     
-    const [date, setDate] = useState('');
+          if (todos.length > 1) {
+            setTodos(todos)
+          }
+        }
+    
+        getTodos()
+      }, [])
+   
+
+
+
+    const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
     const [busca, setBusca] = useState('');
     const router = useRouter();
 
@@ -153,12 +171,8 @@ export default function ProjectScreen(){
                         />
 
                         <Mytext style={styles.label}> Periodo Esperado: </Mytext>
-                        <Myinput
-                            value={date}
-                            onChangeText={setDate}
-                            label="Digite a Data:"
-                            placeholder="DD/MM/AAAA"
-                            iconName="square"
+                        <MyCalendar
+                            date={date} setDate={setDate} icon="FaCalendarDays" 
                         />
                         
                         <Mytext style={styles.label}> Descrição: </Mytext>
@@ -250,7 +264,10 @@ export default function ProjectScreen(){
                                 <Mytext style={styles.projectText}> Atividade: {item.activity} </Mytext>
                                 <Mytext style={styles.projectText}> Tempo Esperado: {item.timeline} </Mytext>
                                 <Mytext style={styles.projectText}> Objetivo: {item.objective} </Mytext>
-                                <Mytext style={styles.projectText}> Metodologia: {item.methodology} </Mytext>
+                                <Mytext style={styles.projectText}> Metodologia: {item.techniques} </Mytext>
+                                <Mytext style={styles.projectText}> Metodologia: {item.process} </Mytext>
+                                <Mytext style={styles.projectText}> Metodologia: {item.strategies} </Mytext>
+                                <Mytext style={styles.projectText}> Metodologia: {item.planning} </Mytext>
 
                                 <View style={styles.buttonsContainer}>
                                     <TouchableOpacity style={styles.buttonEdit} onPress={ () =>  editProject(item.id) }>  
