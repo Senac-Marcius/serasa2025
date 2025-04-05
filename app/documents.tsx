@@ -65,7 +65,7 @@ const FileUploadComponent = () => {
 
 
   return (
-    <MyView >
+    <MyView router={router}>
 
       <MyButton title='Escolher Arquivo' onPress={() => alert('Escolhido um arquivo')}></MyButton>
 
