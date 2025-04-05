@@ -6,27 +6,27 @@ interface iProduct {
     description: string,
     name: string,
     id: number,
-    userId: number,
-    createAt: string
+    user_id: number,
+    create_at: string
 }
 const [products, setProducts] = useState<iProduct[]>([]);
 
-async function setProduct(product:iProduct){
+async function setProduct(products:iProduct){
     //aqui vem os tratamentos de regex ou do modelo de negócco antes de inserir 
 
 
 const { data, error } = await supabase.from ('products')
   .insert([
-    product
+    products
   ])
   .select()
 
     if(error){
-    // aqui vem os tratamentos da variável erro
+       console.log(error)           // aqui vem os tratamentos da variável erro
     
         return []
     }
     
     return data 
 }
-export {setProduct, products, setProducts}
+export {setProduct, iProduct}
