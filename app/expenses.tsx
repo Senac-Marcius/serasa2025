@@ -1,14 +1,14 @@
-import React, { useState} from 'react';
-import { View, Text, StyleSheet, TextInput,TouchableOpacity, } from 'react-native' ;
+import React, { useEffect, useState} from 'react';
+import { View, Text, StyleSheet } from 'react-native' ;
 import {MyItem} from '../src/components/MyItem';
 import MyList from '../src/components/MyList';
 import MyView from '../src/components/MyView';
 import MyButton from '../src/components/MyButtons'
 import {Myinput, MyTextArea} from '../src/components/MyInputs';
-import { ScrollView } from 'react-native-gesture-handler';
 import { useRouter } from 'expo-router';
-import { expense, setExpense, setExpenses } from '../src/controllers/expenses';
-import { textStyles } from '../styles/textStyles';
+import { setExpense, iexpenses } from '../src/controllers/expenses';
+import { supabase } from '../src/utils/supabase';
+
 
 export default function ExpenseScreen(){
 // aqui é typescript
@@ -22,6 +22,20 @@ export default function ExpenseScreen(){
             descriptions: '',
             user_id: 1,
     });
+
+    const [expense,setExpenses] = useState< iexpenses[]>([]);
+
+    useEffect(()=>{
+        async function getTodos(){
+            const {data: todos}= await supabase.from('expenses').select()
+
+            if(todos && todos.length > 1){
+                setExpenses(todos)
+            }
+        }
+
+        getTodos();
+    },[])
     
 
     async function handleRegister(){
@@ -29,6 +43,7 @@ export default function ExpenseScreen(){
             const newid = expense.length ? expense[ expense.length - 1].id + 1 :0;
             const newExpense = {...req, id:newid};
             setExpenses([...expense, newExpense]);
+            await setExpense(newExpense)
         }else{
             setExpenses(expense.map(e => (e.id == req.id ? req : e)));
         }
