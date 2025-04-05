@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView,  } from 'react-native';
 import MyView from '../src/components/MyView';
 import MyAccessibility from '../src/components/MyAccessibility';
@@ -8,7 +8,8 @@ import {MyItem} from '../src/components/MyItem';
 import MyButton from '../src/components/MyButtons';
 import Mytext from '../src/components/MyText';
 import { useRouter } from 'expo-router';
-import { investments, setInvestments, setInvestment } from '../src/controllers/investments';
+import { iInvestment, setInvestment } from '../src/controllers/investments';
+import { supabase } from '../src/utils/supabase';
 
 export default function investmentScreen(){
  //aqui é typescript   
@@ -23,7 +24,18 @@ export default function investmentScreen(){
     });
 
 
-    
+    const [investments, setInvestments] = useState<iInvestment[]>([]);
+
+    useEffect(() => {
+        async function getAll() {
+            const { data: all} = await supabase.from('investments').select();
+
+            if (all && all.length > 1) {
+            setInvestments(all);
+        }
+        }
+        getAll();
+    },[])
     
 
     function handleRegister(){

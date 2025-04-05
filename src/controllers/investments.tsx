@@ -11,7 +11,7 @@ interface iInvestment {
     value: string,
 }
 
-const [investments, setInvestments] = useState<iInvestment[]>([]);
+
 
 async function setInvestment(investment:iInvestment){
     //aqui vem os tratamentos de regex ou do modelo de negocio antes de inserir
@@ -54,4 +54,4 @@ async function setInvestment(investment:iInvestment){
     return data
 }
 
-export {setInvestment, investments, setInvestments}
+export {setInvestment, iInvestment}
