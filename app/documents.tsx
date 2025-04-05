@@ -5,13 +5,15 @@ import {insertDocument, iDoc} from '../src/controllers/documents'
 import { supabase } from '../src/utils/supabase';
 import MyButton from '../src/components/MyButtons';
 import MyView from '../src/components/MyView';
+import MyUpload from '../src/components/MyUpload';
 
 const FileUploadComponent = () => {
 
-   const [req] = useState({
+   const [req, setReq] = useState({
     id: -1,
     created_at : new Date(). toISOString(),
     user_id: 8,
+    url: '',
   });
 
   //documents, setdocuments
@@ -32,8 +34,12 @@ const FileUploadComponent = () => {
   getAll()
 },[]);
 
+
+
   async function handleUpload() {
-    console.log('Fazendo Upload...');
+
+    
+    //console.log('Fazendo Upload...');
     
     if(req.id === -1){
       const newId = documents.length ? documents[documents.length-1].id + 1 : 0;
@@ -53,6 +59,13 @@ const FileUploadComponent = () => {
       const novoDocumento = (documents.map(i =>(i.id === req.id)? req: i));
       setDocuments(novoDocumento);
     }   
+
+    setReq({
+      id: -1,
+      created_at : new Date(). toISOString(),
+      user_id: 8,
+      url: '',
+    })
     
   }
    
@@ -62,6 +75,7 @@ const FileUploadComponent = () => {
     console.log('Upload cancelado');
   };
 
+  const[urlDocument, setDocument]= useState('')
 
 
   return (
@@ -72,14 +86,17 @@ const FileUploadComponent = () => {
       <View >
         <MyButton title='Cancelar' onPress={handleCancel}></MyButton>
 
-        <MyButton title='Upload' onPress={handleUpload}></MyButton>
-
-      </View>
-
+        <MyUpload setUrl={setDocument} url={urlDocument}/>
+        </View>
+      
     </MyView>
+    
   );
 };
 
-
-
 export default FileUploadComponent;
+
+// botao de cadastrar par achamar a handleCancel
+//ter uma view que mostre os docs cadastrados
+//inserir chaves estrangeiras para todos que precisam upar documentos
+//pega a url da nuvem e c

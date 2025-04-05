@@ -4,6 +4,7 @@ interface iDoc{
   id: number; 
   user_id: number; 
   created_at: string;  //passa os parametros do registro aqui
+  url:string;
 }
 
 
