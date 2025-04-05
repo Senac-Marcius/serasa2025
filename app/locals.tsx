@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useState, useEffect} from 'react'; 
 import { Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, View  } from 'react-native';
 import MySelect from '../src/components/MySelect' 
 import MyView from '../src/components/MyView';
@@ -7,6 +7,9 @@ import {MyItem} from '../src/components/MyItem';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs';
 import MyButton  from '../src/components/MyButtons';
 import { useRouter } from 'expo-router';
+import {setLocal, iLocal } from '../src/controllers/locals'
+import { supabase } from '../src/utils/supabase' 
+
 
 
 export default function LocalScreen(){
@@ -16,19 +19,34 @@ export default function LocalScreen(){
     
         id: -1,
         name: '',
-        area: '',
+        dimension: '',
         description: '', 
         adress:'',
-        createAt: new Date().toISOString(),
-    });      
-                                       //  '< >' -> recebe um tipo. torna-se tipada   -> 
+        created_at: new Date().toISOString(),
+    } );      
 
-    function handleRegister(){
+    const [locals, setLocals] = useState<iLocal[]>([])              
+
+                                       //  '< >' -> recebe um tipo. torna-se tipada   -> 
+    useEffect(() => {
+        async function getTodos() {
+            const {data: todos} = await supabase.from('locals').select()
+
+            if (todos && todos.length > 1){
+
+            }
+        }
+
+        getTodos();
+
+    }, [])
+
+    async function handleRegister(){
         if(req.id == -1){
             const newId = locals.length ? locals[locals.length - 1].id + 1 : 0;
-            const newLocal = { ...req, id: newId };
-
-            setLocals([...locals, newLocal]);
+            const newLocal = {... req, id: newId };
+            setLocals([...locals, newLocal])
+            await setLocal(newLocal)
         }else{
              
             setLocals(locals.map(l => (l.id == req.id) ? req : l));          //map = for it, percorre a lista
@@ -36,10 +54,10 @@ export default function LocalScreen(){
         setReq({ 
             id: -1,
             name: '',
-            area: '',
+            dimension: '',
             description: '', 
             adress:'',
-            createAt: new Date().toISOString(),
+            created_at: new Date().toISOString(),
 
         })
     }
@@ -66,30 +84,27 @@ export default function LocalScreen(){
 
             <MyView router={router} style={styles.container}>
 
-            
-
                 <View style={styles.row}>
                     <View style={styles.formContainer}>
                         <Text style={styles.title}>LOCAL</Text>
                        
                         <Myinput
                         iconName='search'
-                        placeholder= "Digite o nome do local:"                                 
+                        placeholder= "Digite o nome do respectivo local:"                                 
                         value={req.name}
                           label='Nome:'
                         onChangeText={(t) => setReq({...req, name: t })}                    
                         />                                                                     
                                                                                                         
                         <Myinput
-                        iconName='TSquare Foot'
+                        iconName='language'
                         placeholder={ `Digite a sua dimensão em ${unity}:`}
-                        value={req.area}
+                        value={req.dimension}
                         label='Dimensão:'
-                        onChangeText={(n) => setReq({...req, area: n })}  
+                        onChangeText={(n) => setReq({...req, dimension: n })}  
                                     
                         />
                       
-
                         <MySelect label={unity} setLabel={setUnit}  
                         list={            
                             [
@@ -97,8 +112,6 @@ export default function LocalScreen(){
                                 {key:1, option: 'cm'},
                             ]
                         } />  
-
-
 
                         <Myinput
                         iconName='description'
@@ -109,7 +122,7 @@ export default function LocalScreen(){
                         /> 
 
                         <Myinput 
-                        iconName='language'
+                        iconName='home'
                         placeholder= "Digite o seu endereço:"
                         value={req.adress}
                           label='Endereço:'
@@ -117,7 +130,6 @@ export default function LocalScreen(){
                         />
 
                         <MyButton title='Cadastrar' onPress={ handleRegister } button_type="capsule" />         
-
                     </View>
 
                     <MyList                         
@@ -131,29 +143,21 @@ export default function LocalScreen(){
                             >
                                 <Text style={styles.label} > {item.name} </Text>
                                 <Text style={styles.label} > {item.adress} </Text>
-                                <Text style={styles.label} > {item.area} </Text>
+                                <Text style={styles.label} > {item.dimension} </Text>
                                 <Text style={styles.label} > {item.description} </Text>
-                                <Text style={styles.label} > {item.createAt} </Text>
+                                <Text style={styles.label} > {item.created_at} </Text>
                             
 
                             </MyItem>
                         ) }
                     />
 
-                </View>
-                    
-               
-                                        
-                   
-                    
-                         
+                </View> 
             </MyView>  
        
         
     )   
 }               
-
-     
 
 const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos funções que criam estilos para fontes
 
@@ -182,7 +186,7 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
     container: {
         flex: 1000,
         padding: 15,
-        backgroundColor: "gray", 
+        backgroundColor: "white", 
     },
     title:{
         fontSize: 24,
@@ -204,7 +208,7 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
 
     formContainer: {
         flex: 1,
-        marginRight: 50,
+        marginRight: 500,
         padding: 10,
         backgroundColor: "white",
         borderRadius: 10,
@@ -220,7 +224,7 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
         paddingVertical: 4,
     },
     buttonsContainer: {
-        flex: 100,
+        flex: 50,
         padding: 50,
         backgroundColor: "white",
         justifyContent: 'space-between',
@@ -236,6 +240,5 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
     label:{
         color: "black",
     }
-
 }) 
 

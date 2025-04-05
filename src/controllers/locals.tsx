@@ -4,13 +4,12 @@ import { supabase } from '../utils/supabase'
 interface iLocal{
     id: number,
     name: string,
-    area: string,
+    dimension: string,
     description: string,
     adress: string,
-    createAt: string,
+    created_at: string,
 }
 
-const [locals, setLocals] = useState<iLocal[]>([])              
 
 async function setLocal(local:iLocal){
   //aqui vem os tratamentos de regex ou modelo de negócio antes de inserir
@@ -24,7 +23,7 @@ const { data, error } = await supabase.from('locals')
 
   if(error){
      //aqui vem os tratamentos da variável error, se der algum problema=>
-
+    console.log(error)
     return []
 }      
 
@@ -32,7 +31,7 @@ const { data, error } = await supabase.from('locals')
 
 }
 
-export {setLocal}
+export {setLocal, iLocal}
 
 
 
