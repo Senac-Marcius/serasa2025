@@ -15,7 +15,7 @@ interface iRecord {
 }  
 
 
-    const [records, setRecords] = useState<iRecord[]>([]);
+    
 
     
 
@@ -30,6 +30,7 @@ interface iRecord {
 
     if (error){
             //tratamento da variável error
+            console.error('Erro ao buscar records: ', error);
 
         return []
 
@@ -40,5 +41,5 @@ interface iRecord {
 
 }
 
-export {setRecords, records , setRecord}
+export {setRecord, iRecord}
 

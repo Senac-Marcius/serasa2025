@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
 import MyView from '../src/components/MyView';
 import MyButton from '../src/components/MyButtons';
@@ -7,16 +7,17 @@ import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs';
 import { MyItem, MyCorrelated } from '../src/components/MyItem';
 import MyList from '../src/components/MyList';
 import { useRouter } from 'expo-router';
-import {setRecord, records, setRecords} from '../src/controllers/records'
-
+import {setRecord, iRecord} from '../src/controllers/records'
+import { supabase } from '../src/utils/supabase';
 
 export default function RecordScreen() {
     const router = useRouter();
+    const [records, setRecords] = useState<iRecord[]>([]);
     
 
 
     const [req, setReq] = useState({
-        id: 0,
+        id: -1,
         name: '',
         description: '',
         sick: '',
@@ -41,6 +42,20 @@ export default function RecordScreen() {
     RETIRAR ISSO AQUI DEPOIS ATTENCION PICKET POCKET
     
     }[]>([]);*/
+
+    useEffect(() => {
+        async function getTodos () {
+            const { data: todos } = await supabase.from ('records').select()
+
+            if (todos && todos.length > 1) {
+                setRecords (todos)
+            
+            }
+        }
+        
+        getTodos()
+
+    }, [])
 
    async function handleRegister() {
         if (req.id == -1) {
@@ -124,7 +139,7 @@ export default function RecordScreen() {
                     />
 
                     < Myinput
-                        value={req.sick}
+                        value={req.allergy}
                         onChangeText={(text) => setReq({ ...req, allergy: text })}
                         placeholder='Alergia'
                         label='Coloque as alergias do aluno:'
@@ -132,7 +147,7 @@ export default function RecordScreen() {
                     />
 
                     < Myinput
-                        value={req.sick}
+                        value={req.medication}
                         onChangeText={(text) => setReq({ ...req, medication: text })}
                         placeholder='Medicação'
                         label='Coloque as medicações de uso do aluno:'
@@ -198,10 +213,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
+        alignSelf:"center",
+        
     },
 
     form: {
-        flex: 1,
+        flex: 20,
         marginRight: 20,
         marginLeft: 20,
         padding: 30,
@@ -211,6 +228,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
+        alignItems: "center",
     },
 
     button_round: {
@@ -225,6 +243,7 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: 16,
         marginBottom: 5,
+        
     },
 
     buttonText: {
