@@ -8,10 +8,10 @@ import MyView from '../src/components/MyView';
 
 const FileUploadComponent = () => {
 
-   const [req, setReq] = useState({
+   const [req] = useState({
     id: -1,
     created_at : new Date(). toISOString(),
-    user_id: 0,
+    user_id: 8,
   });
 
   //documents, setdocuments
