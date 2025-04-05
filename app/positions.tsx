@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import{View,Text, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} from "react-native";
+import{View,Text, StyleSheet} from "react-native";
 import MyView from "../src/components/MyView";
 import MyList from "../src/components/MyList";
 import {MyItem} from "../src/components/MyItem";
@@ -7,7 +7,11 @@ import { Myinput } from "../src/components/MyInputs";
 import MyButton from "../src/components/MyButtons";
 import { useRouter } from 'expo-router';
 import MyTimePicker from "../src/components/MyTimerPiker";
-import {setPosition, positions, setPositions} from "../src/controllers/positions";
+import {setPosition, iPosition} from "../src/controllers/positions";
+import {supabase} from '../src/utils/supabase';
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import { useEffect } from "react";
+
 
 export default function PositionScreen(){
 /*Aqui é TypeScript*/
@@ -17,19 +21,31 @@ export default function PositionScreen(){
         name:"",
         description:"",
         salary: 0,
-        workHours: "",
+        work_hours: "",
         departament:"",
         supervisor:"",
-        creatAt: new Date().toString()
+        creat_at: new Date().toISOString(),    
     });
 
-    function handleRegister (){
+    const [positions, setPositions] = useState<iPosition[]>([]);
+
+    useEffect(() => {
+        (async () => {
+            const { data: todos } = await supabase.from("positions").select()
+
+            if(todos && todos.length > 1){
+                setPositions(todos);
+            }
+        }) ();
+    }, [])
+
+    async function handleRegister (){
         if(req.id == -1){
             const newId = positions.length ? positions [positions.length - 1].id + 1 : 0;
             const newPosition = {...req, id: newId};
 
             setPositions([...positions,newPosition]);
-            setPosition(newPosition)
+           await setPosition(newPosition)
         }else{
             setPositions(positions.map(p => (p.id == req.id ? req : p)));
         }
@@ -38,10 +54,10 @@ export default function PositionScreen(){
             name:"",
             description:"",
             salary: 0,
-            workHours: "",
+            work_hours: "",
             departament:"",
             supervisor:"",
-            creatAt: new Date().toString()
+            creat_at: new Date().toString()
         })
     }
 
@@ -88,8 +104,8 @@ export default function PositionScreen(){
                         onChangeText={(text)=> setReq({...req ,salary: Number(text) })}/> 
 
                     <MyTimePicker 
-                    onTimeSelected={(time) => setReq({ ...req, workHours: time })}
-                    initialTime={req.workHours}
+                    onTimeSelected={(time) => setReq({ ...req, work_hours: time })}
+                    initialTime={req.work_hours}
                     />
 
                     <Myinput 
@@ -120,10 +136,10 @@ export default function PositionScreen(){
                                 <Text>{item.name}</Text>
                                 <Text>{item.description}</Text>
                                 <Text>{item.salary}</Text>
-                                <Text>{item.workHours}</Text>
+                                <Text>{item.work_hours}</Text>
                                 <Text>{item.departament}</Text>
                                 <Text>{item.supervisor}</Text>
-                                <Text>{item.creatAt}</Text>
+                                <Text>{item.creat_at}</Text>
 
                                 {/*<View style = {styles.buttonsContanier}>
                                     <TouchableOpacity onPress={()=> { editPosition(item.id) }}>Edit</TouchableOpacity>
