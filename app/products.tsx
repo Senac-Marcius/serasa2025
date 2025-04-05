@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
-import { TextInput, Text} from 'react-native-paper';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Text} from 'react-native';
 import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
-import {products, setProduct} from '../src/controllers/products';
+import {iProduct, setProduct} from '../src/controllers/products';
 import MyButton from '../src/components/MyButtons';
 import Mytext from '../src/components/MyText';
 import {Myinput} from '../src/components/MyInputs';
 import { MyItem } from '../src/components/MyItem';
 import MyList from '../src/components/MyList';
-import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
+import { supabase } from  '../src/utils/supabase';
 
 
 
@@ -20,28 +19,32 @@ export default function productScreen(){
         description:'',
         name:'',
         id: -1,
-        createAt:  new Date().toISOString(),
-        userId: 0,
+        create_at:  new Date().toISOString(),
+        user_id: 6,
     });
     
-    const [products, setProducts] = useState<{ 
-        description: string,
-        name: string,
-        id: number,
-        userId: number,
-        createAt: string
-        }[]>([]);
+    const [products, setProducts] = useState<iProduct[]>([]);
 
-        function handleRegister(){  
+        useEffect(()=> {
+            (async () => {
+                const { data: todos } = await supabase.from('products').select()      
+                
+                if (todos && todos.length > 1) {
+                    setProducts(todos)
+                }
+            }) ()
+        }, [])
+       
+
+
+        async function handleRegister(){  
             if(req.id == -1){
 
                 const newId = products.length ? products[products.length - 1].id+1:0;
                 const newProduct = { ...req, id: newId}
                 
                 setProducts([...products, newProduct]); 
-                setProduct(newProduct)
-                
-                
+                await setProduct(newProduct)
             }else{ 
                 setProducts ( products.map ( p => (p.id == req.id) ? req : p));
             }
@@ -49,8 +52,9 @@ export default function productScreen(){
                 description:'',
                 name:'',
                 id: -1,
-                createAt:  new Date().toISOString(),
-                userId: 0,})  
+                create_at:  new Date().toISOString(),
+                user_id: 6
+            })  
         }
 
         function editProduct(id:number){
@@ -68,53 +72,50 @@ export default function productScreen(){
     return (
         <MyView router={router} >
        
-        <Mytext style={styles.h2}>Cadastro de Produtos</Mytext>
+            <Mytext style={styles.h2}>Cadastro de Produtos</Mytext>
         
-        <View style={styles.row}>
-            <View style={styles.form}>
+            <View style={styles.row}>
+                <View style={styles.form}>
 
-                <Myinput 
-                placeholder="Digite o Nome"
-                value={req.name}
-                onChangeText={(text) => setReq({ ...req, name:text })}
-                label="Produto"
-                 iconName='product' 
+                    <Myinput 
+                    placeholder="Digite o Nome"
+                    value={req.name}
+                    onChangeText={(text) => setReq({ ...req, name:text })}
+                    label="Produto"
+                    iconName='storefront' 
+                
+                    />
             
+                    <Myinput 
+                    placeholder= "Descrição"
+                    value={req.description}
+                    onChangeText={(text)=>setReq({...req, description:text})}
+                    label= 'Descrição'
+                    iconName='description' 
+                    />
+
+                        <MyButton style={styles.cadastrar} onPress={handleRegister} title='Cadastrar'></MyButton>            
+                </View>
+
+                <MyList
+                    data={products}
+                    keyItem={(item) => item.id.toString()}
+                    renderItem={({item})=>(
+                        <MyItem
+                            onEdit={()=> editProduct(item.id)}
+                            onDel={() => dellProduct(item.id)}
+                        >
+                                <Text>{item.name}</Text>
+                                <Text>{item.description}</Text>
+                                <Text>{item.create_at}</Text>
+                                <Text>{item.user_id}</Text>
+                        </MyItem>
+
+                    )}
+                
                 />
-          
-                <Myinput 
-                   placeholder= "Descrição"
-                   value={req.description}
-                   onChangeText={(text)=>setReq({...req, description:text})}
-                   label= 'Descrição'
-                   iconName='description' 
-                   />
-
-                    <MyButton style={styles.cadastrar} onPress={handleRegister} title='Cadastrar'></MyButton>            
             </View>
-
-            <MyList
-                data={products}
-                keyItem={(Item) => Item.id.toString()}
-                renderItem={({item})=>(
-                    <MyItem>
-                        <text>{item.name}</text>
-                        <text>{item.description}</text>
-                        <text>{item.createAt}</text>
-                        <text>{item.userId}</text>
-
-                        
-                        <MyButton style={styles.edit}title='Editar' onPress={() => {editProduct(item.id)}}/>
-                        <MyButton style={styles.delete}title='Deletar' onPress={() => {dellProduct(item.id)}}/>
-                    
-                </MyItem>
-
-            )}
-            
-            />
-        </View>
-    </MyView>
-
+        </MyView>
     );
     
 }
