@@ -1,91 +1,85 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import { useRouter } from 'expo-router';
-import {insertDocument, documents, setDocuments} from '../src/controllers/documents'
+import {insertDocument, iDoc} from '../src/controllers/documents'
+import { supabase } from '../src/utils/supabase';
+import MyButton from '../src/components/MyButtons';
+import MyView from '../src/components/MyView';
 
 const FileUploadComponent = () => {
-  const [documents, setDocuments] = useState(null);
 
-  const handleUpload = () => {
+   const [req, setReq] = useState({
+    id: -1,
+    created_at : new Date(). toISOString(),
+    user_id: 0,
+  });
+
+  //documents, setdocuments
+  const [documents, setDocuments] = useState<iDoc[]>([]);
+  const router = useRouter();
+
+  //buscar documentos no banco e atualizar de acordo com a ação
+  useEffect(() =>{
+    async function getAll() {
+      const{ data:all, error } = await supabase.from('documents').select()
+      if(all && all.length > 1){
+        setDocuments(all)
+      }
+      if (error){
+        console.error('Erro ao buscar documentos: ', error.message);
+      }   
+  }
+  getAll()
+},[]);
+
+  async function handleUpload() {
+    console.log('Fazendo Upload...');
     
-    const insertDocument = () => {
-      id: 0,
-      user_id,
-      created_at: new Date().toString()
-    };
+    if(req.id === -1){
+      const newId = documents.length ? documents[documents.length-1].id + 1 : 0;
+      const newDocument = {...req, id:newId};
+
+      //add no supabase
+      const result = await insertDocument(newDocument);
+
+      if (result){
+        setDocuments([...documents,newDocument])
+        console.log('Documento inserido com sucesso: ', result);
+      }else{
+        console.log('Erro ao inserir documento');
+      }
+      
+    }else{
+      const novoDocumento = (documents.map(i =>(i.id === req.id)? req: i));
+      setDocuments(novoDocumento);
+    }   
     
-    console.log('Fazendo upload...');
-  };
+  }
+   
 
   const handleCancel = () => {
     
     console.log('Upload cancelado');
   };
 
-  const router = useRouter();
 
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Escolha um arquivo para fazer download</Text>
+    <MyView >
 
-      <TouchableOpacity style={styles.button} onPress={() => alert('Escolhido um arquivo')}>
-        <Text style={styles.buttonText}>Escolher Arquivo</Text>
-      </TouchableOpacity>
+      <MyButton title='Escolher Arquivo' onPress={() => alert('Escolhido um arquivo')}></MyButton>
 
-      <View style={styles.buttonsContainer}>
-        <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
-          <Text style={styles.buttonText}>Cancelar</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.uploadButton} onPress={handleUpload}>
-          <Text style={styles.buttonText}>Fazer Upload</Text>
-        </TouchableOpacity>
+      <View >
+        <MyButton title='Cancelar' onPress={handleCancel}></MyButton>
+
+        <MyButton title='Upload' onPress={handleUpload}></MyButton>
+
       </View>
-    </View>
+
+    </MyView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  text: {
-    fontSize: 18,
-    marginBottom: 20,
-  },
-  button: {
-    backgroundColor: '#007BFF',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 20,
-  },
-  cancelButton: {
-    backgroundColor: '#FF4136',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 10,
-    width: 200,
-    alignItems: 'center',
-  },
-  uploadButton: {
-    backgroundColor: '#28A745',
-    padding: 10,
-    borderRadius: 5,
-    width: 200,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  buttonsContainer: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
+
 
 export default FileUploadComponent;

@@ -1,32 +1,33 @@
-import { useState } from 'react';
 import { supabase } from '../utils/supabase'
 
-export interface iDoc{
+interface iDoc{
   id: number; 
   user_id: number; 
-  create_at: string;  //passa os parametros do registro aqui
+  created_at: string;  //passa os parametros do registro aqui
 }
-
-//documents, setdocuments
-const [documents, setDocuments] = useState<iDoc[]>([]);
-
 
 
 //função do banco de dados
-async function insertDocument(document: iDoc/*, p0: number, userId: any, p1: number*/) {//mesma coisa que o set só que com nome dif para não ter conflito
+async function insertDocument(document: iDoc) {//mesma coisa que o set só que com nome dif para não ter conflito
+  try{
     const { data, error } = await supabase.from('documents')
-  .insert([
-    document //vai receber req da da view do obj princ -- recebe o obj -- some_column: 'someValue', other_column: 'otherValue' },
-  ])
-  .select()
-    
-    if(error){// aqui vem os tratamentos da variavel erro --> "try catch"
-        
+    .insert([
+      document //vai receber req da da view do obj princ -- recebe o obj -- some_column: 'someValue', other_column: 'otherValue' },
+    ])
+    .select()
+      
+      if(error){// aqui vem os tratamentos da variavel erro --> "try catch"
+
+        console.error('Erro ao inserir docuemnto: ', error);//message
         return "Erro!"
-    }//catch error
-    return data
+      }
+  }catch(err){
+    console.error('Erro ao inserir docuemnto: ', err);
+    return 'Erro desconhecido!'
+    
+  }
 }
 
-export {insertDocument, documents, setDocuments}
+export {insertDocument, iDoc}
 
           
