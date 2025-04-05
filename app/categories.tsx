@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View,Text, StyleSheet,FlatList, Button,TextInput} from 'react-native';
 import MyList from '../src/components/MyList'
 import {MyItem} from '../src/components/MyItem'
 import MyView from '../src/components/MyView'
 import { useRouter } from 'expo-router';
-import {setCategories, categories,setCategory} from'../src/controllers/category'
+import {setCategory, iCategories} from'../src/controllers/category'
+import { supabase } from '../src/utils/supabase';
 
 export default function categoryScreen(){
 
@@ -12,28 +13,43 @@ export default function categoryScreen(){
         name: '',
         description : '',
         id: -1,
-        created_at: new Date().toISOString(),
-        user_id : 0,
-        
- });
-    
-    function handleRegister(){
+        created_at: new Date().toISOString()
+    });
+
+    const[categories, setCategories] = useState<iCategories[]>([]);
+
+    useEffect( () =>{
+        async function getTodos(){
+            const {data : todos, error } = await supabase.from('categories').select()
+
+            if(error)
+                console.log('aqui: ' + error)
+
+            if (todos && todos.length > 1){
+                setCategories(todos)
+            }
+        }
+
+        getTodos()
+    },[])
+
+    async function handleRegister(){
         if(req.id == -1){
             const newid= categories.length ? categories[categories.length-1].id=1:0;
-            const newCategorie = {... categories,req};
-            setCategories([...categories, req])
-    
+            const newCategory = {...req, id : newid};
+
+            setCategories([...categories, newCategory])
+            await setCategory(newCategory)
         }else{
             setCategories(categories.map(i =>(i.id == req.id)? req: i )  );
     
         }
     
         setReq({
-            id: -1,
             name: '',
             description : '',
-            created_at: new Date().toISOString(),
-            user_id : 0,
+            id: -1,
+            created_at: new Date().toISOString()
         })
     }
     
@@ -135,8 +151,7 @@ const styles = StyleSheet.create({
         padding: 10,
         marginBottom: 10,
     },
-    postCategorie: {
-        padding: 10,
+    postCategorie: {        padding: 10,
         marginVertical: 5,
         backgroundColor: '#f8f8f8',
         borderRadius: 5,
