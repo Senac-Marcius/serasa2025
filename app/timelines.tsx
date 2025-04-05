@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, TextInputBase, FlatList, TouchableOpacity } from 'react-native';
 import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
 import MyCalendar from '../src/components/MyCalendar'; 
 import MySearch from '../src/components/MySearch';
-import {timelines,setTimelines, setTimeline } from '../src/controllers/timelines';
-
+import {setTimeline, iTimeline} from '../src/controllers/timelines';
+import { supabase } from '../src/utils/supabase';
+import MyButton from '../src/components/MyButtons';
 
 
 export default function TimelineScreen(){
@@ -13,37 +14,49 @@ export default function TimelineScreen(){
     const [req, setReq] = useState({
             id: -1,
             url: '',
-            class: '',
-            userId: 0,
+            class_id: 2,
             discipline: '',
-            location: '',
+            local_id: 1,
             start_time: '',
             end_time: '',
-            createAt: new Date().toISOString(),
+            created_at: new Date().toISOString(),
         
     });
 
+    const [timelines, setTimelines] = useState<iTimeline[]>([]);
+
+    useEffect(() => {
+        (async () => {
+
+            const{ data: todos}= await supabase.from('timelines').select()
+
+            if (todos && todos.length > 1){
+                setTimelines(todos)
+            }
+
+        }) ()
+    },[])
    
 
-    function handleRegister() {
+    async function handleRegister() {
         if(req.id == -1){
             const newId = timelines.length ? timelines[timelines.length -1].id + 1 : 0;
             const newTimeline = {...req, id: newId};
             setTimelines([...timelines, newTimeline]);
-            setTimeline(newTimeline)
+            const result = await setTimeline(newTimeline)
+            console.log(result)
         }else{
             setTimelines(timelines.map(s =>(s.id == req.id) ? req : s));
         }
         setReq({ 
             id: -1,
             url: '',
-            class: '',
-            userId: 0,
+            class_id: 2,
             discipline: '',
-            location: '',
+            local_id: 1,
             start_time: '',
             end_time: '',
-            createAt: new Date().toISOString(),
+            created_at: new Date().toISOString(),
         })
     }
     
@@ -95,9 +108,7 @@ export default function TimelineScreen(){
                 <View style={styles.form}>
 
                      <TextInput placeholder="Digite a url:" value={req.url} onChangeText={(text) => setReq({...req, url:text})} /> 
-                     <TextInput placeholder="Digite a classe:" value={req.class} onChangeText={(text) => setReq({...req, class:text})} /> 
                      <TextInput placeholder="Digite a disciplina:" value={req.discipline} onChangeText={(text) => setReq({...req, discipline:text})} /> 
-                     <TextInput placeholder="Digite a localização:" value={req.location} onChangeText={(text) => setReq({...req, location:text})} /> 
                      <TextInput placeholder="Digite o horário de início:" value={req.start_time} onChangeText={(text) => setReq({...req, start_time:text})} /> 
                      <TextInput placeholder="Digite o horário do fim:" value={req.end_time} onChangeText={(text) => setReq({...req, end_time:text})} /> 
                      
@@ -112,13 +123,9 @@ export default function TimelineScreen(){
                         
                          
                             <Text> {item.discipline} </Text>
-                            <Text> {item.userId} </Text>
                             <Text> {item.url} </Text>
-                            <Text> {item.class} </Text>
-                            <Text> {item.location} </Text>
                             <Text> {item.start_time} </Text>
                             <Text> {item.end_time} </Text>
-                            <Text> {item.createAt} </Text>  
                
                             <View style={styles.buttonsContanier}>
                                 <TouchableOpacity style={styles.buttonedit} onPress={ () => { editTimelines (item.id) } } >EDIT</TouchableOpacity>
@@ -147,6 +154,12 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
 
+    button: {
+        flexDirection: 'row',
+        alignContent: 'space-between',
+        alignItems: 'center',
+        gap: 10,
+    },
 
     row: {
         flexDirection: 'row',

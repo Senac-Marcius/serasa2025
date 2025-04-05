@@ -6,22 +6,20 @@ import { supabase } from '../utils/supabase';
 interface iTimeline {
     id: number,
     url: string,
-    class: string,
-    userId: number,
+    class_id: number,
     discipline: string,
-    location: string,
+    local_id: number,
     start_time: string,
     end_time: string,
-    createAt: string,
+    created_at: string,
 }
 
 
-const [timelines, setTimelines] = useState<iTimeline[]>([]);
 
 
 async function setTimeline(timeline:iTimeline){
     //aqui vem os tratamentos do regex ou do modelo de negocio antes de inserir
-    
+    /*
     const urlRegex= /^https?:\/\/[^\s/$.?#].[^\s]*$/i;
     const classRegex = /^[a-zA-Z0-9\s\-_]+$/;
     const disciplineRegex = /^[a-zA-ZÀ-ÿ\s\-']+$/;
@@ -59,10 +57,10 @@ if (!end_timeRegex.test(timeline.end_time)) {
 
 if (!dateRegex.test(timeline.createAt)) {
     return "Data de criação deve estar no formato YYYY-MM-DD";
-}
+}*/
 
 const { data, error } = await supabase
-  .from('timeline')
+  .from('timelines')
   .insert([
     timeline
     
@@ -70,6 +68,8 @@ const { data, error } = await supabase
   .select()
 
   if(error){
+    console.log('erro ao inserir o lançamento')
+    console.log(error)
     //aqui vem os tratamentos da variavel error
 
     return[]
@@ -79,4 +79,4 @@ return data
 
 }
 
-export {setTimeline, timelines, setTimelines}
+export {setTimeline, iTimeline}
