@@ -22,8 +22,6 @@ interface iEmployees {
     positions_id:number
 }
 
-const [employees, setEmployees] = useState<iEmployees[]>([])
-
 async function  setEmployee(employee:iEmployees){
 
     //aqui vem o tratamento da informação antes da inserção
@@ -42,7 +40,40 @@ async function  setEmployee(employee:iEmployees){
     }
     return data
 }
+async function updateEmployee(id: number, req:any){
+    const { data, error } = await supabase
+  .from('employees')
+  .update({
+    urls: req.urls,
+    name: req.name,
+    tell: req.tell,
+    email: req.email,
+    address: req.address,
+    nationality: req.nationality,
+    disc_personality: req.disc_personality,
+    sex: req.sex,
+    martinal_status: req.martinal_status,
+    is_active: req.is_active,
+    positions_id: req.positions_id
+     })
+  .eq('id', id)
+  .select()
+  if(error){
+    //aqui vem o tratamento da variavel error
 
-export {setEmployee, employees , setEmployees}
+
+      return[]
+  }
+  return data
+}
+async function  dellEmployee(id:number) {
+    const { error } = await supabase
+  .from('employees')
+  .delete()
+  .eq('id', id)
+  return 'Usuario Deletado'
+}
+
+export {setEmployee,updateEmployee,dellEmployee, iEmployees}
 
         

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { ScrollView, View } from 'react-native';
 import { Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Button } from 'react-native';
 import MyTimePicker  from '../src/components/MyTimerPiker'
@@ -8,9 +8,12 @@ import {MyItem} from '../src/components/MyItem';
 import MyList from '../src/components/MyList';
 import { Myinput,MyCheck } from '../src/components/MyInputs';
 import { useRouter } from 'expo-router';
-import { setEmployee,setEmployees,employees } from '../src/controllers/employees';
+import { setEmployee,iEmployees,updateEmployee,dellEmployee } from '../src/controllers/employees';
+import { supabase } from '../src/utils/supabase';
+
 
 export default function EmployeeScreen(){
+    const [employees, setEmployees] = useState<iEmployees[]>([])
     const router = useRouter();
 //aqui é typescript 
     const [req, SetReq] = useState({
@@ -34,16 +37,30 @@ export default function EmployeeScreen(){
         positions_id:1
         
     });
+
+      useEffect(() => {
+        
+        (async () => {
+          const { data: todos } = await supabase.from('employees').select()
+          console.log(todos);
+    
+          if ( todos && todos.length > 0) {
+            setEmployees(todos)
+          }
+        })();
+      }, [])
    
 
-        function handleRegister(){
+       async function handleRegister(){
             if(req.id == -1){
                 const newId = employees.length ? employees[employees.length - 1].id + 1:0
                 const  newEmployee = {...req , id:newId}
                 setEmployees([...employees,newEmployee])
-                setEmployee(newEmployee)
+                await setEmployee(newEmployee)
             }else{
-                setEmployees(employees.map(e =>(e.id == req.id ? req:e)))
+                setEmployees(employees.map(e =>(e.id == req.id ? req:e))) 
+                await updateEmployee(req.id,req);
+                
                 
             }
             SetReq({
@@ -68,13 +85,18 @@ export default function EmployeeScreen(){
                 })
             
         }
-        function editEmployee(id:number){
+        async function editEmployee(id:number){
             let employee = employees.find(e => e.id == id)
-            if(employee)SetReq(employee)
+            if(employee){
+            SetReq(employee)
+            }   
         }
-        function deleteEmployee(id:number){
+        async function deleteEmployee(id:number){
             const list = employees.filter(e=> e.id != id)
-            if(list) setEmployees(list);
+            if(list){
+                setEmployees(list);
+                await dellEmployee(id)
+            } 
             
     
         }
@@ -198,7 +220,7 @@ export default function EmployeeScreen(){
                          onDel={() => {deleteEmployee(item.id)}}
                          onEdit={() => {editEmployee(item.id)}}
                         >
-                        Nome:{item.name} / Cargo:{item.position.id}
+                        Nome:{item.name} / Cargo:{item.positions_id}
                         ativo desde de:{item.is_active}
                         </MyItem>
                     )}
