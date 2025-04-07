@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
 import { supabase } from '../utils/supabase'
 
 interface iPost {
-    name: string,
-    description: string,
     id: number,
-    createAt: string,
-    userId: number,
+    url: string,
+    description: string,
+    like: number,
+    created_at: string,
+    user_id: number,
 }
-
-const[posts, setPosts] = useState<iPost[]>([]);
 
 async function setPost(post:iPost){
     //aqui vem os tratamentos de regex ou do modelo de negócio antes de inserir
@@ -30,4 +28,4 @@ async function setPost(post:iPost){
     return data
 }
 
-export {setPost} 
+export {setPost, iPost} 
