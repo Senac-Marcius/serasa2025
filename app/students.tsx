@@ -23,6 +23,8 @@ import {
 } from "../src/controllers/students";
 
 export default function StudentsScreen() {
+
+  const [students, setStudents] = useState<iStudent[]>([]);
   const [req, setReq] = useState({
     name: "",
     birthday: "",
@@ -35,12 +37,15 @@ export default function StudentsScreen() {
     city: "",
     state: "",
     password: "",
-    user_id: 0,
+    user_id: 1,
   });
 
   useEffect(() => {
     async function fetchStudents() {
-      const students = await getStudent();     
+      const todos = await getStudent();
+      if(todos && todos.length > 0){
+        setStudents(todos)
+      }     
     }
     fetchStudents();
   }, []);

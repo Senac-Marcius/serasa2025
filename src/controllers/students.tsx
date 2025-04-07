@@ -16,7 +16,7 @@ interface iStudent {
   user_id: number;
 }
 
-const [student, setStudents] = useState<iStudent[]>([]);
+
 
 async function setStudent(student: iStudent) {
   
