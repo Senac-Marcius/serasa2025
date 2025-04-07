@@ -10,7 +10,7 @@ interface iPosition {
     work_hours: string;
     departament: string;
     supervisor: string;
-    creat_at: Timestamp;
+    creat_at: string;
 }
 
 

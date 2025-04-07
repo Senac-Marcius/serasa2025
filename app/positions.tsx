@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import{View,Text, StyleSheet} from "react-native";
 import MyView from "../src/components/MyView";
 import MyList from "../src/components/MyList";
@@ -10,12 +10,11 @@ import MyTimePicker from "../src/components/MyTimerPiker";
 import {setPosition, iPosition} from "../src/controllers/positions";
 import {supabase} from '../src/utils/supabase';
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
-import { useEffect } from "react";
 
 
 export default function PositionScreen(){
 /*Aqui é TypeScript*/
-
+    const [positions, setPositions] = useState<iPosition[]>([]);
     const[req, setReq] = useState({
         id: -1,
         name:"",
@@ -27,13 +26,13 @@ export default function PositionScreen(){
         creat_at: new Date().toISOString(),    
     });
 
-    const [positions, setPositions] = useState<iPosition[]>([]);
+   
 
     useEffect(() => {
         (async () => {
             const { data: todos } = await supabase.from("positions").select()
 
-            if(todos && todos.length > 1){
+            if(todos && todos.length > 0){
                 setPositions(todos);
             }
         }) ();
