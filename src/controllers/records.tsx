@@ -1,7 +1,9 @@
 import React, { useState } from 'react';  
 import { supabase } from '../utils/supabase';
 
-interface iRecord {
+
+
+export interface iRecord {
     id: number
     name: string,
     description: string,
@@ -14,32 +16,56 @@ interface iRecord {
 
 }  
 
+// CRIAR REGISTRO
+export async function setRecord(record: iRecord) {
+    // Aqui você pode aplicar regex ou regras de negócio antes de inserir
 
-    
+    const { data, error } = await supabase
+        .from('records')
+        .insert([record])
+        .select();
 
-    
-
-    async function  setRecord (record:iRecord){
-        //aqui vem tratamentos de regex ou modelo de negócio antes de inserir 
-
-        const { data, error } = await supabase.from('records')
-        .insert([
-            record 
-    ])
-    .select()
-
-    if (error){
-            //tratamento da variável error
-            console.error('Erro ao buscar records: ', error);
-
-        return []
-
-
+    if (error) {
+        console.error('Erro ao inserir record: ', error);
+        return [];
     }
 
-    return data
-
+    return data;
 }
 
-export {setRecord, iRecord}
+// BUSCAR TODOS OS REGISTROS
+export async function getRecords() {
+    const { data, error } = await supabase.from('records').select();
+
+    if (error) {
+        console.error('Erro ao buscar records: ', error);
+        return [];
+    }
+
+    return data;
+}
+
+// ATUALIZAR REGISTRO
+export async function updateRecord(record: iRecord) {
+    const { error } = await supabase
+        .from('records')
+        .update({
+            name: record.name,
+            description: record.description,
+            sick: record.sick,
+            health: record.health,
+            allergy: record.allergy,
+            medication: record.medication,
+            user_id: record.user_id,
+        })
+        .eq('id', record.id);
+
+    return error;
+}
+
+// DELETAR REGISTRO
+export async function deleteRecord(id: number) {
+    const { error } = await supabase.from('records').delete().eq('id', id);
+    return error;
+}
 

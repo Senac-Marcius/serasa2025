@@ -7,7 +7,7 @@ import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs';
 import { MyItem, MyCorrelated } from '../src/components/MyItem';
 import MyList from '../src/components/MyList';
 import { useRouter } from 'expo-router';
-import {setRecord, iRecord} from '../src/controllers/records'
+import {setRecord, iRecord } from '../src/controllers/records'
 import { supabase } from '../src/utils/supabase';
 
 export default function RecordScreen() {
@@ -27,21 +27,6 @@ export default function RecordScreen() {
         user_id: 0,
         create_at: new Date().toISOString(),
     });
-
-    /*RETIRAR ISSO AQUI DEPOIS ATTENCION PICKET POCKET
-    //const [records, setRecords] = useState<{
-        id: number
-        name: string,
-        description: string,
-        sick: string,
-        health: string,
-        allergy: string,
-        medication: string,
-        userId: number,
-       createAt: string,
-    RETIRAR ISSO AQUI DEPOIS ATTENCION PICKET POCKET
-    
-    }[]>([]);*/
 
     useEffect(() => {
         async function getTodos () {
@@ -64,34 +49,57 @@ export default function RecordScreen() {
             setRecords([...records,newRecord]);
             const resp = await setRecord(newRecord)
             console.log (resp)
-            
-        } else {
-            setRecords(records.map(r => (r.id == req.id ? req : r)));
-        }
 
-        setReq({
-            id: -1,
-            name: '',
-            description: '',
-            sick: '',
-            health: '',
-            allergy: '',
-            medication: '',
-            user_id: 0,
-            create_at: new Date().toISOString(),
-        })
+                } else {
+                    const { error } = await supabase.from('records')
+                        .update({
+                            name: req.name,
+                            description: req.description,
+                            sick: req.sick,
+                            health: req.health,
+                            allergy: req.allergy,
+                            medication: req.medication,
+                            user_id: req.user_id,
+                        })
+                        .eq('id', req.id);
+            
+                    if (!error) {
+                        setRecords(records.map(r => (r.id === req.id ? req : r)));
+                    } else {
+                        console.error("Erro ao atualizar:", error);
+                    }
+                }
+            
+                // Limpa o formulário após salvar ou atualizar
+                setReq({
+                    id: -1,
+                    name: '',
+                    description: '',
+                    sick: '',
+                    health: '',
+                    allergy: '',
+                    medication: '',
+                    user_id: 0,
+                    create_at: new Date().toISOString(),
+                })
+            }
+        
+
+   async function delRecord(id: number) {
+        const { error } = await supabase.from('records').delete().eq('id', id);
+        if (!error) {
+            const list = records.filter(r => r.id != id)
+            setRecords(list)
+        } else {
+            console.error('Erro ao deletar:', error);
+        }
     }
 
     function editRecord(id: number) {
-        const record = records.find(r => r.id == id)
-        if (record)
-            setReq(record)
-    }
-
-    function delRecord(id: number) {
-        const list = records.filter(r => r.id != id)
-        if (list)
-            setRecords(list)
+        const record = records.find(r => r.id === id);
+        if (record) {
+            setReq(record);
+        }
     }
 
     return (
@@ -182,7 +190,7 @@ export default function RecordScreen() {
                             <Text style={styles.itemText}>Medicações: {item.medication}</Text>
                             <Text style={styles.itemText}>Usuário Id: {item.user_id}</Text>
 
-                            <View style={styles.button_round}>
+                           <View style={styles.button_round}>
 
                                 <MyButton
                                     title="EXCLUIR"
