@@ -7,7 +7,8 @@ import MyButton from '../src/components/MyButtons';
 import { Image } from 'react-native';
 import {MyItem} from '../src/components/MyItem'
 import { useRouter } from 'expo-router';
-import {iUser, setUser} from '../src/controllers/users'
+import {iUser, setUser, deleteUserById, updateUserById} from '../src/controllers/users'
+
 import { supabase } from '../src/utils/supabase'
 
 // Define o estado inicial como false
@@ -73,6 +74,13 @@ export default function UserScreen() {
         } else {
             setUsers(users.map(u => (u.id == req.id ? req : u)))
 
+            const sucesso = await updateUserById(req.id, req)
+            if (!sucesso) {
+                alert("Erro ao atualizar usuário.")
+                return
+            }
+            
+
         }
 
         setReq({
@@ -89,16 +97,21 @@ export default function UserScreen() {
         })
 
     }
+
     function editUser(id: number) {
         let user = users.find(u => u.id == id)
         if (user)
             setReq(user)
     }
 
-    function deleteUser(id: number) {
-        const list = users.filter(u => u.id != id)
-        if (list)
-            setUsers(list)
+    async function deleteUser(id: number) {
+        const sucesso = await deleteUserById(id)
+        if (sucesso) {
+            const updatedList = users.filter(u => u.id !== id)
+            setUsers(updatedList)
+        } else {
+            alert("Erro ao deletar usuário.")
+        }
     }
 
     const router = useRouter();
