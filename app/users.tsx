@@ -107,94 +107,91 @@ export default function UserScreen() {
     //setIsChecked: é uma função usada para atualizar o estado de isChecked.
     //!isChecked: o operador ! inverte o valor atual de isChecked. Se isChecked era true (checkbox marcada), ele se torna false (checkbox desmarcada), e vice-versa.
     return (
-            <MyView router={router} >
+        <MyView router={router} >
 
 
-                <View style={styles.form}>
-                    <Text style={styles.TextIntroducao}>Cadastro de usuários</Text>
-                    <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/8307/8307575.png' }} style={styles.image} />
-                    
- 
-                    {/* Botão para abrir o formulário 
-                    {!showForm && (
-                        <TouchableOpacity style={styles.startButton} onPress={() => setShowForm(true)}>
-                            <Text style={styles.buttonText}>INICIAR CADASTRO</Text>
+        <View style={styles.form}>
+            <Text style={styles.TextIntroducao}>Cadastro de usuários</Text>
+            <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/8307/8307575.png' }} style={styles.image} />
+            
+
+            {/* Botão para abrir o formulário 
+            {!showForm && (
+                <TouchableOpacity style={styles.startButton} onPress={() => setShowForm(true)}>
+                    <Text style={styles.buttonText}>INICIAR CADASTRO</Text>
+                </TouchableOpacity>
+            )}
+                */}
+
+            {/* Botão para mostrar registro de usuários */}
+
+           {/* <TouchableOpacity style={styles.startRegistros} onPress={() => setShowUsers(!showUsers)}>
+                <Text style={styles.buttonText}>{showUsers ? "Ocultar Registro de Usuários" : "REGISTRO DE USERS"}</Text>
+            </TouchableOpacity>
+             */}
+
+
+
+            {/* Exibir o formulário somente se showForm for true */}
+        
+                <View style={styles.formContainer}>
+                    <View style={styles.form}>
+                        <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text })} placeholder="Digite seu nome..." label="Login" iconName='person' />
+                        <Myinput value={req.password} onChangeText={(text) => setReq({ ...req, password: text })} placeholder="Digite a sua senha..." label="Password" iconName='password' />
+                        <Myinput value={req.cpf} onChangeText={(text) => setReq({ ...req, cpf: text })} placeholder="Digite o seu CPF" label="CPF:" iconName='article' />
+                        <Myinput value={req.age} onChangeText={(text) => setReq({ ...req, age: text })} placeholder="Digite a sua idade" label="Idade:" iconName='celebration' />
+                        <Myinput value={req.contact} onChangeText={(text) => setReq({ ...req, contact: text })} placeholder="(XX) XXXXX-XXXX" label="Contato:" iconName='phone' />
+                        <Myinput value={req.email} onChangeText={(text) => setReq({ ...req, email: text })} placeholder="domain@domain.com" label="Email:" iconName='mail' />
+                        <Myinput value={req.address} onChangeText={(text) => setReq({ ...req, address: text })} placeholder="Digite o seu endereço" label="Endereço" iconName='house' />
+                       
+                        {/* Botão para fechar o formulário 
+                        <TouchableOpacity style={styles.closeButton} onPress={() => setShowForm(false)}>
+                            <Text style={styles.buttonText}>Cancelar</Text>
                         </TouchableOpacity>
-                    )}
                         */}
-
-                    {/* Botão para mostrar registro de usuários */}
-
-                   {/* <TouchableOpacity style={styles.startRegistros} onPress={() => setShowUsers(!showUsers)}>
-                        <Text style={styles.buttonText}>{showUsers ? "Ocultar Registro de Usuários" : "REGISTRO DE USERS"}</Text>
-                    </TouchableOpacity>
-                     */}
-
-
-
-                    {/* Exibir o formulário somente se showForm for true */}
-                
-                        <View style={styles.formContainer}>
-                            <View style={styles.form}>
-                                <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text })} placeholder="Digite seu nome..." label="Login" iconName='person' />
-                                <Myinput value={req.password} onChangeText={(text) => setReq({ ...req, password: text })} placeholder="Digite a sua senha..." label="Password" iconName='password' />
-                                <Myinput value={req.cpf} onChangeText={(text) => setReq({ ...req, cpf: text })} placeholder="Digite o seu CPF" label="CPF:" iconName='article' />
-                                <Myinput value={req.age} onChangeText={(text) => setReq({ ...req, age: text })} placeholder="Digite a sua idade" label="Idade:" iconName='celebration' />
-                                <Myinput value={req.contact} onChangeText={(text) => setReq({ ...req, contact: text })} placeholder="(XX) XXXXX-XXXX" label="Contato:" iconName='phone' />
-                                <Myinput value={req.email} onChangeText={(text) => setReq({ ...req, email: text })} placeholder="domain@domain.com" label="Email:" iconName='mail' />
-                                <Myinput value={req.address} onChangeText={(text) => setReq({ ...req, address: text })} placeholder="Digite o seu endereço" label="Endereço" iconName='house' />
-                               
-
-                                {/* Botão para fechar o formulário 
-                                <TouchableOpacity style={styles.closeButton} onPress={() => setShowForm(false)}>
-                                    <Text style={styles.buttonText}>Cancelar</Text>
-                                </TouchableOpacity>
-                                */}
-                            </View>
-                             <MyButton
-                                    title="CADASTRAR"
-                                    onPress={handleRegister}
-                                    button_type="round"
-                                    style={styles.button_round}
-                                />
-                        </View>
-                    
-
-                    {/* Lista de usuários cadastrados */}
-                    
-                        <MyList
-                            data={users}
-                            keyItem={(item) => item.id.toString()}
-                            renderItem={({ item }) => (
-                                <View style={styles.itemContainer}>
-
-                                    <Text style={styles.itemText}>Nome: {item.name}</Text>
-                                    <Text style={styles.itemText}>CPF: {item.cpf}</Text>
-                                    <Text style={styles.itemText}>Email: {item.email}</Text>
-                                    <Text style={styles.itemText}>Idade: {item.age}</Text>
-                                    <Text style={styles.itemText}>Endereço: {item.address}</Text>
-                                    <Text style={styles.itemText}>Contato: {item.contact}</Text>
-                                    <Text style={styles.itemText}>Criação: {item.createAt}</Text>
-
-                                    <View style={styles.buttonsContainer}>
-                                        <TouchableOpacity style={styles.deleteButton} onPress={() => deleteUser(item.id)}>
-                                            <Text style={styles.buttonText}>X</Text>
-                                        </TouchableOpacity>
-
-                                        <TouchableOpacity style={styles.editButton} onPress={() => editUser(item.id)}>
-                                            <Text style={styles.buttonText}>Edit</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            )}
-
-
+                    </View>
+                    <MyButton
+                            title="CADASTRAR"
+                            onPress={handleRegister}
+                            button_type="round"
+                            style={styles.button_round}
                         />
-                   
+                </View>
+            
 
-             </View>
+            {/* Lista de usuários cadastrados */}
+            
+                <MyList
+                    data={users}
+                    keyItem={(item) => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <View style={styles.itemContainer}>
 
-            </MyView>
+                            <Text style={styles.itemText}>Nome: {item.name}</Text>
+                            <Text style={styles.itemText}>CPF: {item.cpf}</Text>
+                            <Text style={styles.itemText}>Email: {item.email}</Text>
+                            <Text style={styles.itemText}>Idade: {item.age}</Text>
+                            <Text style={styles.itemText}>Endereço: {item.address}</Text>
+                            <Text style={styles.itemText}>Contato: {item.contact}</Text>
+                            <Text style={styles.itemText}>Criação: {item.createAt}</Text>
+
+                            <View style={styles.buttonsContainer}>
+                                <TouchableOpacity style={styles.deleteButton} onPress={() => deleteUser(item.id)}>
+                                    <Text style={styles.buttonText}>X</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.editButton} onPress={() => editUser(item.id)}>
+                                    <Text style={styles.buttonText}>Edit</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    )}
+
+
+                />    
+     </View>
+
+    </MyView>
     );
 }
 
