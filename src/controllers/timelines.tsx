@@ -79,4 +79,11 @@ return data
 
 }
 
+//supabase delete
+console.log= (delTimelines)
+
+
+
+
+
 export {setTimeline, iTimeline}

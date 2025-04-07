@@ -62,12 +62,28 @@ export default function TimelineScreen(){
     }
     
     function editTimelines(id:number){
+        //supabase
+
+
         const timeline = timelines.find(s => s.id == id) 
         if(timeline)
         setReq(timeline)
     }
 
     function delTimelines(id:number){
+        //supabase
+
+                const channels = supabase.channel('custom-delete-channel')
+        .on(
+            'postgres_changes',
+            { event: 'DELETE', schema: 'public', table: 'timelines' },
+            (payload) => {
+            console.log('Change received!', payload)
+            }
+        )
+        .subscribe()
+
+        
         const list = timelines.filter(s => s.id != id)
             setTimelines(list)
     }
@@ -181,7 +197,7 @@ export default function TimelineScreen(){
 
 const styles = StyleSheet.create({
     button_capsule: {
-        gap: 10,
+         gap: 10,
     },
 
     button: {
