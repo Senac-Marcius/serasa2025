@@ -2,9 +2,11 @@ import { supabase } from '../utils/supabase'
 
 interface iDoc{
   id: number; 
-  user_id: number; 
-  created_at: string;  //passa os parametros do registro aqui
-  url:string;
+    name: string; 
+    url: string; 
+    user_id: string; 
+    type: string; 
+    created_at: string;
 }
 
 
