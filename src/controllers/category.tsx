@@ -1,34 +1,60 @@
-import React, { useEffect, useState } from 'react';
-import { supabase } from '../utils/supabase'
+import { supabase } from '../utils/supabase';
 
-
-interface iCategories{
+export interface iCategories {
     name: string,
     description: string,
     id: number,
     created_at: string
 }
 
+// Criar minha categoria
+async function setCategory(category: Omit<iCategories, 'id'>) {
+    const { data, error } = await supabase
+        .from('categories')
+        .insert([category])
+        .select();
 
+    if (error) {
+        console.log('Erro ao cadastrar:', error);
+        return [];
+    }
 
-async function setCategory(category:iCategories){
-//aqui vem os tratamentos do regex  ou do modelo de negocio antes de inserir
-
-    const { data, error } = await supabase.from('categories').insert([category]).select()
-
-
-    if(error){
-        console.log(error)
-        //aqui vem os tratamentos da variVEL error
-    
-        
-
-return []
-
+    return data;
 }
 
-return data 
+// Atualizar ela
+async function updateCategory(category: iCategories) {
+    const { data, error } = await supabase
+        .from('categories')
+        .update({
+            name: category.name,
+            description: category.description,
+            created_at: category.created_at
+        })
+        .eq('id', category.id)
+        .select();
+
+    if (error) {
+        console.log('Erro ao atualizar:', error);
+        return [];
+    }
+
+    return data;
 }
 
+// Deletar agr
+async function deleteCategory(id: number) {
+    const { error } = await supabase
+        .from('categories')
+        .delete()
+        .eq('id', id);
 
-export {setCategory, iCategories}
+    if (error) {
+        console.log('Erro ao deletar:', error);
+        return false;
+    }
+
+    return true;
+}
+
+export { setCategory, updateCategory, deleteCategory };
