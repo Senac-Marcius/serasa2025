@@ -160,6 +160,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 10,
     },
+    button_capsule: {
+    display:"flex",
+    borderRadius: 50,
+    backgroundColor: "#813AB1",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 
     row: {
         flexDirection: 'row',
