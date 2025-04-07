@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, } from 'react-native';
 import Mydownload from '../src/components/MyDownload';
 import MyView from '../src/components/MyView';
@@ -8,7 +8,8 @@ import { Myinput, MyTextArea } from '../src/components/MyInputs';
 import {MyItem} from '../src/components/MyItem';
 import Mytext from '../src/components/MyText';
 import { useRouter } from 'expo-router';
-import {revenues,setRevenues,setRevenue} from '../src/controllers/revenues'
+import {iRevenue,setRevenue, deleteRevenue, updateRevenue} from '../src/controllers/revenues'
+import { supabase } from '../src/utils/supabase';
 
 export default function RevenueScreen() {
   // Estado para o formulário
@@ -26,6 +27,19 @@ export default function RevenueScreen() {
 
   });
 
+const [revenues, setRevenues] = useState<iRevenue[]>([]);
+
+useEffect(()=>{
+  async function getTodos(){
+    const{data:todos}=await supabase.from('revenues').select()
+
+    if(todos && todos.length > 0){
+      setRevenues(todos)
+    }
+  }
+  getTodos();
+},[])
+ 
   
 
   // Função para cadastrar ou editar uma receita
@@ -36,13 +50,24 @@ export default function RevenueScreen() {
       const newId = revenues.length ? revenues[revenues.length - 1].id + 1 : 0;
       const newRevenue = { ...req, id: newId };
       setRevenues([...revenues, newRevenue]);
-      const resp = await setRevenue(newRevenue)
-      console.log(resp)
+      await setRevenue(newRevenue)
       
-    } else {
-      // Edita uma receita existente
-      setRevenues(revenues.map(r => (r.id == req.id ? req : r)));
-    }
+      
+      } else {
+        // Edita uma receita existente
+        setRevenues(revenues.map(r => (r.id == req.id)? req : r) );
+        const result = await updateRevenue(req);
+
+        if (result.error) {
+          console.error("Erro ao atualizar:", result.error.message);
+          alert(`Erro ao atualizar: ${result.error.message}`);
+          return;
+      }
+      // Atualiza o estado local com os dados retornados do Supabase
+      setRevenues(revenues.map(r => r.id === req.id ? result.data : r));
+    
+      }
+      
 
     // Reseta o formulário
     setReq({
@@ -65,10 +90,21 @@ export default function RevenueScreen() {
   }
 
   // Função para excluir uma receita
-  function delRevenue(id: number) {
-    const list = revenues.filter(r => r.id != id);
-    setRevenues(list); // Remove a receita da lista
-  }
+  async function delRevenue(id: number) {
+    try {
+        
+        // Chama a função do controller
+        const result = await deleteRevenue(id);
+        
+        
+        // Atualiza o estado local se a exclusão no Supabase foi bem-sucedida
+        setRevenues(revenues.filter(r => r.id !== id));
+        
+    } catch (error) {
+        console.error("Erro inesperado:", error);
+      
+    }
+}
 
   
   const router = useRouter();
