@@ -7,7 +7,7 @@ import { Myinput } from "../src/components/MyInputs";
 import MyButton from "../src/components/MyButtons";
 import { useRouter } from 'expo-router';
 import MyTimePicker from "../src/components/MyTimerPiker";
-import {setPosition, iPosition} from "../src/controllers/positions";
+import {setPosition, deletePosition, updatePosition, iPosition} from "../src/controllers/positions";
 import {supabase} from '../src/utils/supabase';
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
@@ -38,27 +38,32 @@ export default function PositionScreen(){
         }) ();
     }, [])
 
-    async function handleRegister (){
-        if(req.id == -1){
-            const newId = positions.length ? positions [positions.length - 1].id + 1 : 0;
-            const newPosition = {...req, id: newId};
-
-            setPositions([...positions,newPosition]);
-           await setPosition(newPosition)
-        }else{
-            setPositions(positions.map(p => (p.id == req.id ? req : p)));
+    async function handleRegister() {
+        if (req.id === -1) {
+          const newId = positions.length ? positions[positions.length - 1].id + 1 : 0;
+          const newPosition = { ...req, id: newId };
+      
+          const result = await setPosition(newPosition);
+          if (result) setPositions([...positions, newPosition]);
+        } else {
+          const updated = await updatePosition(req);
+          if (updated) {
+            setPositions(positions.map(p => (p.id === req.id ? req : p)));
+          }
         }
-        setReq ({    
-            id: -1,
-            name:"",
-            description:"",
-            salary: 0,
-            work_hours: "",
-            departament:"",
-            supervisor:"",
-            creat_at: new Date().toString()
-        })
-    }
+      
+        setReq({
+          id: -1,
+          name: "",
+          description: "",
+          salary: 0,
+          work_hours: "",
+          departament: "",
+          supervisor: "",
+          creat_at: new Date().toISOString()
+        });
+      }
+      
 
     function editPosition (id:number){
         const position = positions.find(p => p.id == id)
@@ -67,10 +72,14 @@ export default function PositionScreen(){
 
     }
 
-    function delPosition (id:number){
-        const list = positions.filter(p => p.id != id)
-        setPositions(list)
-    }
+    async function delPosition(id: number) {
+        const success = await deletePosition(id);
+        if (success) {
+          const list = positions.filter(p => p.id !== id);
+          setPositions(list);
+        }
+      }
+      
     
     const router = useRouter();
     

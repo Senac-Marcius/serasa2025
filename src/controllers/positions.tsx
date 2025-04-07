@@ -14,6 +14,49 @@ interface iPosition {
 }
 
 
+async function deletePosition(id: number) {
+    try {
+      const { error } = await supabase
+        .from('positions')
+        .delete()
+        .eq('id', id);
+  
+      if (error) {
+        console.error("Erro ao deletar no Supabase:", error.message);
+        throw new Error(error.message);
+      }
+  
+      return true;
+    } catch (err) {
+      console.error("Erro geral deletePosition:", err);
+      return false;
+    }
+  }
+  
+
+
+
+  async function updatePosition(position: iPosition) {
+    try {
+      const { error } = await supabase
+        .from('positions')
+        .update(position)
+        .eq('id', position.id);
+  
+      if (error) {
+        console.error("Erro ao atualizar no Supabase:", error.message);
+        throw new Error(error.message);
+      }
+  
+      return true;
+    } catch (err) {
+      console.error("Erro geral updatePosition:", err);
+      return false;
+    }
+  }
+  
+
+
 
 async function setPosition (position: iPosition) {
 
@@ -38,4 +81,5 @@ async function setPosition (position: iPosition) {
         return null
     }
 }
-export{setPosition, iPosition}
+export { setPosition, updatePosition, deletePosition, iPosition };
+
