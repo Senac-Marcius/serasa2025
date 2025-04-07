@@ -4,9 +4,10 @@ import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
 import MyCalendar from '../src/components/MyCalendar'; 
 import MySearch from '../src/components/MySearch';
+import {Myinput, MyCheck, MyTextArea} from '../src/components/MyInputs'; 
 import {setTimeline, iTimeline} from '../src/controllers/timelines';
 import { supabase } from '../src/utils/supabase';
-import MyButton from '../src/components/MyButtons';
+
 
 
 export default function TimelineScreen(){
@@ -106,11 +107,45 @@ export default function TimelineScreen(){
             <text>Meu Cronograma</text>
             <View style={styles.row}>
                 <View style={styles.form}>
+                    
+                     
+                     <Myinput 
+                     value={req.discipline}
+                     onChangeText={(text) => setReq({...req, discipline:text})}
+                     label=''
+                     iconName=  ''
+                     placeholder='Digite a disciplina:'
 
-                     <TextInput placeholder="Digite a url:" value={req.url} onChangeText={(text) => setReq({...req, url:text})} /> 
-                     <TextInput placeholder="Digite a disciplina:" value={req.discipline} onChangeText={(text) => setReq({...req, discipline:text})} /> 
-                     <TextInput placeholder="Digite o horário de início:" value={req.start_time} onChangeText={(text) => setReq({...req, start_time:text})} /> 
-                     <TextInput placeholder="Digite o horário do fim:" value={req.end_time} onChangeText={(text) => setReq({...req, end_time:text})} /> 
+                     />
+
+                    <Myinput 
+                     value={req.url}
+                     onChangeText={(text) => setReq({...req,  url:text})}
+                     label=''
+                     iconName=  ''
+                     placeholder='Digite a url:'
+
+                     />
+
+                    <Myinput 
+                     value={req.start_time}
+                     onChangeText={(text) => setReq({...req, start_time:text})}
+                     label=''
+                     iconName=  ''
+                     placeholder='Digite o horário de início:'
+
+                     />
+                     
+                     <Myinput 
+                     value={req.end_time}
+                     onChangeText={(text) => setReq({...req, end_time:text})}
+                     label=''
+                     iconName=  ''
+                     placeholder='Digite o horário do fim:'
+
+                     />
+                     
+                     
                      
                      <Button title="CADASTRAR" onPress={ handleRegister } color="purple" />
                 </View>
@@ -127,7 +162,7 @@ export default function TimelineScreen(){
                             <Text> {item.start_time} </Text>
                             <Text> {item.end_time} </Text>
                
-                            <View style={styles.buttonsContanier}>
+                            <View style={styles.button_capsule}>
                                 <TouchableOpacity style={styles.buttonedit} onPress={ () => { editTimelines (item.id) } } >EDIT</TouchableOpacity>
                                 <TouchableOpacity style={styles.buttondel} onPress={() => {delTimelines (item.id)}}>DELETE</TouchableOpacity>
 
@@ -145,13 +180,8 @@ export default function TimelineScreen(){
 }
 
 const styles = StyleSheet.create({
-    buttonsContanier: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 20, 
-        alignContent: 'space-around',
-        padding: 20,
-        borderRadius: 10,
+    button_capsule: {
+        gap: 10,
     },
 
     button: {
@@ -160,13 +190,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 10,
     },
-    button_capsule: {
-    display:"flex",
-    borderRadius: 50,
-    backgroundColor: "#813AB1",
-    alignItems: "center",
-    justifyContent: "center",
-  },
+   
 
     row: {
         flexDirection: 'row',
@@ -211,7 +235,7 @@ const styles = StyleSheet.create({
             alignItems: 'center',
             padding: 20,
             borderRadius: 10,
-            backgroundColor: 'gray',
+            backgroundColor: 'purple',
             textAlign: 'center',
            
             
