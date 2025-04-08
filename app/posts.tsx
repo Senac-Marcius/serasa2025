@@ -24,7 +24,7 @@ export default function postScreen(){
         async function getTodos(){
             const {data: todos}= await supabase.from('posts').select()
 
-            if(todos && todos.length > 1){
+            if(todos && todos.length > 0){
                 setPosts(todos)
             }
         }
@@ -37,7 +37,8 @@ export default function postScreen(){
             const newid = posts.length ? posts[posts.length-1].id+1:0;
             const newPost = {...req, id: newid};
             setPosts([...posts, newPost])
-            await setPost(newPost)
+            const resp = await setPost(newPost)
+            console.log(resp)
         }else{
             setPosts(posts.map(i =>(i.id == req.id)? req: i )  );
         }
@@ -57,6 +58,7 @@ export default function postScreen(){
         if(item)
         setReq(item)
     }
+    
     function delPost(id:number){
         const list= posts.filter(i => i.id != id)
         if(list)
