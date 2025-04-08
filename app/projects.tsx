@@ -8,12 +8,35 @@ import MyList from '../src/components/MyList';
 import { Myinput, MyTextArea } from '../src/components/MyInputs';
 import { useRouter } from 'expo-router';
 import MyCalendar from '../src/components/MyCalendar';
-import { projects, setProjects, setProject } from '../src/controlador/projects';
+import { iProject , setProject, updateProject, deleteProject } from '../src/controlador/projects';
 import { supabase } from '../src/utils/supabase';
+import { MyItem } from '../src/components/MyItem';
+import { Picker } from '@react-native-picker/picker';
+
+
 
 
 export default function ProjectScreen(){ 
     const[projects, setProjects] = useState<iProject[]>([]);
+
+    // Estado para a moeda escolhida e valor bruto digitado pelo usuário
+const [currency, setCurrency] = useState('BRL'); // Moeda selecionada (BRL, USD, EUR)
+const [rawRecurces, setRawRecurces] = useState(''); // Valor como string para exibir formatado
+
+// Função para formatar o número como moeda
+const formatCurrency = (value: number, currency: string = 'BRL') => {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: currency,
+    minimumFractionDigits: 2,
+  }).format(value);
+};
+
+// Função para converter texto do input em número (ex: 1.000,50 => 1000.5)
+const parseCurrencyInput = (text: string): number => {
+  const cleanText = text.replace(/[^\d,]/g, '').replace(',', '.'); // remove tudo exceto dígitos e vírgula
+  return parseFloat(cleanText) || 0;
+};
 
 // Aqui é typescript
     const [req, setReq] = useState ({
@@ -21,12 +44,12 @@ export default function ProjectScreen(){
         namep: '',
         id: -1,
         url: '',
-        createAt: new Date().toISOString(),
-        user_id: 0,
+        created_at: new Date().toISOString(),
+        user_id: 1,
         recurces: 0,
         description: '',
         activity: '',
-        timeline: '',
+        time_line: '',
         objective: '',
         methodology: '',
         techniques: '', 
@@ -36,18 +59,16 @@ export default function ProjectScreen(){
     });
 
     useEffect(() => {
-        function getTodos() {
-          const { data: todos } = await supabase.from('todos').select()
+        async function getTodos() {
+          const { data: todos } = await supabase.from('projects').select()
     
-          if (todos.length > 1) {
-            setTodos(todos)
+          if ( todos && todos.length > 0) {
+            setProjects(todos)
           }
         }
     
         getTodos()
       }, [])
-   
-
 
 
     const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
@@ -60,15 +81,19 @@ export default function ProjectScreen(){
         day: number;
     }
 
-    function handleRegister(){
-
+    async function handleRegister(){
         if(req.id == -1){ //aqui é quando esta cadastrando
             const newid = projects.length ? projects[projects.length -1].id + 1 : 0;
             const newProjects = { ...req, id: newid };
 
+            console.log("Cadastrando no Supabase:", newProjects);
+
             setProjects([... projects, newProjects])
+            await setProject(newProjects)
+        
         }else{ //aqui é quando esta editando id esta maior do que -1
-            setProjects(projects.map(jTNL => (jTNL.id == req.id)? req : jTNL )); 
+            setProjects(projects.map(jTNL => (jTNL.id == req.id)? req : jTNL ));
+            await updateProject(req); 
         }
         
         setReq({
@@ -76,19 +101,18 @@ export default function ProjectScreen(){
             namep: '',
             id: -1,
             url: '',
-            createAt: new Date().toISOString(),
-            user_id: 0,
+            created_at: new Date().toISOString(),
+            user_id: 1,
             recurces: 0,
             description: '',
             activity: '',
-            timeline: '',
+            time_line: '',
             objective: '',
             methodology: '',
-            techniques: '', // Tecnicas 
-            strategies: '', // Estratégias
-            planning: '', // Planejamento 
-            process: '', // processos
-            /** Criar Processos, tecnicas, Estratégias e Planejamento aqui e puxar la embaixo para poder funcionar  */
+            techniques: '', 
+            strategies: '', 
+            planning: '',
+            process:'',
         })
 
     }
@@ -97,12 +121,16 @@ export default function ProjectScreen(){
         const project = projects.find(item => item.id == id)
         if(project)
             setReq(project)
+
+        console.log("Dados enviados para o Supabase:", projects);
     }
 
-    function dellProject(id: number){
+    async function dellProject(id: number){
         const list = projects.filter((item) => item.id !== id);
         setProjects(list);
+        await deleteProject(id);
 
+        
     }
 
     function adicionarProtocolo(url: string){
@@ -135,7 +163,7 @@ export default function ProjectScreen(){
                 <Mytext style={styles.title}>PROJETOS</Mytext>
             
                 {/* Aqui é typescript dentro do front */}
-                <Mytext>  Responda de Maneira Objetiva  </Mytext>
+                <Mytext> ✨ Vamos Inovar ✨ </Mytext>
                 <View style={styles.row}> 
                         
                     <View style={styles.form}>
@@ -165,15 +193,57 @@ export default function ProjectScreen(){
                             onChangeText={(text) => setReq({ ...req, url: adicionarProtocolo(text) })}
                         />
                         
+                        <Mytext style={styles.label}> Recursos: </Mytext>
+                        <Myinput
+                        iconName=""
+                        label=""
+                        placeholder="Digite o valor..."
+                        value={rawRecurces} // Mostra valor formatado
+                        onChangeText={(text) => {
+                            setRawRecurces(text); // Salva o valor como string
+                            const parsed = parseCurrencyInput(text);
+                            setReq({ ...req, recurces: parseCurrencyInput(text) }); // Atualiza como número para salvar no Supabase
+                        }}
+                        />
+
+                        <Mytext style={[styles.label, { marginTop: 10 }]}> Moeda: </Mytext>
+
+                        <Picker
+                            selectedValue={currency}
+                            style={{ marginBottom: 15 }}
+                            onValueChange={(itemValue) => setCurrency(itemValue)}
+                            >
+                            <Picker.Item label="R$ - Real" value="BRL" />
+                            <Picker.Item label="$ - Dólar" value="USD" />
+                            <Picker.Item label="€ - Euro" value="EUR" />
+                        </Picker>
+
+
                         <Mytext style={styles.label}>Previsão de Início:</Mytext>
                         <MyCalendar
                             date={date} setDate={setDate} icon="FaCalendarDays" 
                         />
 
                         <Mytext style={styles.label}> Periodo Esperado: </Mytext>
-                        <MyCalendar
-                            date={date} setDate={setDate} icon="FaCalendarDays" 
-                        />
+                        <View style={styles.row}>
+                            <View style={{ flex: 1, marginRight: 5 }}>
+                                <Mytext style={[styles.label, { fontSize: 18, fontWeight: '600' }]}>Início</Mytext>
+                                <MyCalendar
+                                date={date} // usa o mesmo estado
+                                setDate={setDate} // mesma função
+                                icon="FaCalendarDays"
+                                />
+                            </View>
+
+                            <View style={{ flex: 1, marginLeft: 5 }}>
+                                <Mytext style={[styles.label, { fontSize: 18, fontWeight: '600' }]}>Término</Mytext>
+                                <MyCalendar
+                                date={date} // mesmo estado novamente
+                                setDate={setDate} // mesma função
+                                icon="FaCalendarDays"
+                                />
+                            </View>
+                        </View>
                         
                         <Mytext style={styles.label}> Descrição: </Mytext>
                         <Myinput
@@ -250,11 +320,15 @@ export default function ProjectScreen(){
 
                     
                     
-                    <FlatList
+                    <MyList
                         data={projects}
-                        keyExtractor={(item) => item.id.toString()}
+                        keyItem={(item) => item.id.toString()}
                         renderItem={({ item }) => (
-                            <View style={styles.projectContainer}> 
+                            
+                            <MyItem style={styles.projectContainer}
+                                onDel={ () =>  dellProject( item.id)}
+                                onEdit={ () =>  editProject(item.id)}
+                            > 
                                 <Mytext style={styles.projectText}> Criador: {item.name} </Mytext>
                                 <Mytext style={styles.projectText}> Nome do Projeto: {item.namep} </Mytext> 
                                 <Mytext style={styles.projectText}> Url: {item.url} </Mytext>
@@ -268,16 +342,7 @@ export default function ProjectScreen(){
                                 <Mytext style={styles.projectText}> Metodologia: {item.process} </Mytext>
                                 <Mytext style={styles.projectText}> Metodologia: {item.strategies} </Mytext>
                                 <Mytext style={styles.projectText}> Metodologia: {item.planning} </Mytext>
-
-                                <View style={styles.buttonsContainer}>
-                                    <TouchableOpacity style={styles.buttonEdit} onPress={ () =>  editProject(item.id) }>  
-                                        <Mytext style={styles.buttonText}>EDIT</Mytext>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={styles.buttonDelete} onPress={ () =>  dellProject( item.id)}>  
-                                        <Mytext style={styles.buttonText}>DELETE</Mytext>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
+                            </MyItem>
                         )}
                     />
                 </View>
