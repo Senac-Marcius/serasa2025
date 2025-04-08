@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import { View,Text, StyleSheet,FlatList, Button,TextInput} from 'react-native';
+import MyList from '../src/components/MyList'
+import {MyItem} from '../src/components/MyItem'
+import MyView from '../src/components/MyView'
+import { useRouter } from 'expo-router';
+
 
 export default function categoryScreen(){
+
     const [req, setReq] = useState({
         name: '',
         description : '',
-        id: 0,
+        id: -1,
         createAt: new Date().toISOString(),
         userId : 0,
         
@@ -19,22 +25,44 @@ export default function categoryScreen(){
         userId: number,
         }[]>([])
     
-    function handleRegister (){
-        setCategories([...categories, req])
-        setReq({name:'',
-            description:'',
-            id: 0,
+    function handleRegister(){
+        if(req.id == -1){
+            const newid= categories.length ? categories[categories.length-1].id=1:0;
+            const newCategorie = {... categories,req};
+            setCategories([...categories, req])
+    
+        }else{
+            setCategories(categories.map(i =>(i.id == req.id)? req: i )  );
+    
+        }
+    
+        setReq({
+            id: -1,
+            name: '',
+            description : '',
             createAt: new Date().toISOString(),
             userId : 0,
-
         })
     }
+    
+    function editCategorie(id:number){
+        let item= categories.find(i => i.id== id)
+        if(item)
+        setReq(item)
+    }
+    function delCategorie(id:number){
+        const list= categories.filter(i => i.id != id)
+        if(list)
+        setCategories(list)
+    }
+    
+    const router = useRouter();
 
     return (
-        <View>
+        <MyView router={router} >
     {/* aqui é typerscrypt dentro do front */}
 
-            <view style={styles.row}>
+            <View style={styles.row}>
                 <View style={styles.form}>
                     <TextInput placeholder="nome" 
                         value={req.name}
@@ -52,22 +80,21 @@ export default function categoryScreen(){
                    <Button title= 'Cadastrar' onPress= {handleRegister}/>
                                  
                 </View>
-           <FlatList
-           data={categories}
-           keyExtractor={(item) => item.id.toString()}
-           renderItem={({item}) =>(
-            <view>
-                <text>{item.name}</text>
-              <text>{item.createAt}</text> 
-              <text>{item.name}</text>
-              <text>{item.userId}</text>  
-            </view>
-           )
-        }
-
-           />
-            </view>
-        </View>
+                <MyList
+                    data={categories}
+                    keyItem={(item) => item.id.toString()}
+                    renderItem={({item}) => (
+                        <MyItem 
+                            onDel={()=>{delCategorie(item.id)}}
+                            onEdit={()=>{editCategorie(item.id)}}
+                        >
+                                            <Text >{item.name}</Text>
+                            <Text >{item.description}</Text>  
+                        </MyItem>
+                    )}
+                /> 
+            </View>
+        </MyView>
    
     );
 }
@@ -116,7 +143,7 @@ const styles = StyleSheet.create({
         padding: 10,
         marginBottom: 10,
     },
-    postItem: {
+    postCategorie: {
         padding: 10,
         marginVertical: 5,
         backgroundColor: '#f8f8f8',

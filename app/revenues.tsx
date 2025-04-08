@@ -1,5 +1,15 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, } from 'react-native';
+import Mydownload from '../src/components/MyDownload';
+import MyView from '../src/components/MyView';
+import MyList from '../src/components/MyList';
+import MyButton from '../src/components/MyButtons';
+import { Myinput, MyTextArea } from '../src/components/MyInputs';
+import {MyItem} from '../src/components/MyItem';
+import Mytext from '../src/components/MyText';
+import { useRouter } from 'expo-router';
+import {iRevenue,setRevenue, deleteRevenue, updateRevenue} from '../src/controllers/revenues'
+import { supabase } from '../src/utils/supabase';
 
 export default function RevenueScreen() {
   // Estado para o formulário
@@ -8,37 +18,56 @@ export default function RevenueScreen() {
     description: '',
     name: '',
     url: '',
-    createAt: new Date().toISOString(),
-    userId: 0,
+    created_at: new Date().toISOString(),
+    user_id: 1,
     value: '',
-    scholarshipStatus: '',
-    discountPercentage: '',
+    scholarship_status: '',
+    discount_percentage: '',
+    
+
   });
 
-  // Estado para a lista de receitas
-  const [revenues, setRevenues] = useState<{
-    id: number;
-    description: string;
-    name: string;
-    url: string;
-    createAt: string;
-    userId: number;
-    value: string;
-    scholarshipStatus: string;
-    discountPercentage: string;
-  }[]>([]);
+const [revenues, setRevenues] = useState<iRevenue[]>([]);
+
+useEffect(()=>{
+  async function getTodos(){
+    const{data:todos}=await supabase.from('revenues').select()
+
+    if(todos && todos.length > 0){
+      setRevenues(todos)
+    }
+  }
+  getTodos();
+},[])
+ 
+  
 
   // Função para cadastrar ou editar uma receita
-  function handleRegister() {
+  async function handleRegister() {
+
     if (req.id == -1) {
       // Cadastra uma nova receita
       const newId = revenues.length ? revenues[revenues.length - 1].id + 1 : 0;
       const newRevenue = { ...req, id: newId };
       setRevenues([...revenues, newRevenue]);
-    } else {
-      // Edita uma receita existente
-      setRevenues(revenues.map(r => (r.id == req.id ? req : r)));
-    }
+      await setRevenue(newRevenue)
+      
+      
+      } else {
+        // Edita uma receita existente
+        setRevenues(revenues.map(r => (r.id == req.id)? req : r) );
+        const result = await updateRevenue(req);
+
+        if (result.error) {
+          console.error("Erro ao atualizar:", result.error.message);
+          alert(`Erro ao atualizar: ${result.error.message}`);
+          return;
+      }
+      // Atualiza o estado local com os dados retornados do Supabase
+      setRevenues(revenues.map(r => r.id === req.id ? result.data : r));
+    
+      }
+      
 
     // Reseta o formulário
     setReq({
@@ -46,11 +75,11 @@ export default function RevenueScreen() {
       description: '',
       name: '',
       url: '',
-      createAt: new Date().toISOString(),
-      userId: 0,
+      created_at: new Date().toISOString(),
+      user_id: 1,
       value: '',
-      scholarshipStatus: '',
-      discountPercentage: '',
+      scholarship_status: '',
+      discount_percentage: '',
     });
   }
 
@@ -61,171 +90,174 @@ export default function RevenueScreen() {
   }
 
   // Função para excluir uma receita
-  function delRevenue(id: number) {
-    const list = revenues.filter(r => r.id != id);
-    setRevenues(list); // Remove a receita da lista
-  }
+  async function delRevenue(id: number) {
+    try {
+        
+        // Chama a função do controller
+        const result = await deleteRevenue(id);
+        
+        
+        // Atualiza o estado local se a exclusão no Supabase foi bem-sucedida
+        setRevenues(revenues.filter(r => r.id !== id));
+        
+    } catch (error) {
+        console.error("Erro inesperado:", error);
+      
+    }
+}
 
+  
+  const router = useRouter();
   return (
-    <View style={styles.container}>
-       <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#333', textAlign: 'center' }}>
-       cadastre as receitas
-  </Text>
+
+    <MyView  router={router} >
+      <Mytext style={{ fontSize: 24, fontWeight: 'bold', color: '#333', textAlign: 'center' }}>
+         cadastre as receitas
+      </Mytext>
 
       {/* Formulário */}
       <View style={styles.row}>
-        <View style={styles.form}>
-          <TextInput
-            placeholder="Digite aqui a Descrição"
-            value={req.description}
-            onChangeText={(text) => setReq({ ...req, description: text })}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Digite aqui o Name"
-            value={req.name}
-            onChangeText={(text) => setReq({ ...req, name: text })}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Digite aqui a URL"
-            value={req.url}
-            onChangeText={(text) => setReq({ ...req, url: text })}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Digite aqui o Valor"
-            value={req.value}
-            onChangeText={(text) => setReq({ ...req, value: text })}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Digite aqui o status da Bolsa"
-            value={req.scholarshipStatus}
-            onChangeText={(text) => setReq({ ...req, scholarshipStatus: text })}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Digite aqui o desconto"
-            value={req.discountPercentage}
-            onChangeText={(text) => setReq({ ...req, discountPercentage: text })}
-            style={styles.input}
-          />
 
-          <Button title="Cadastrar" onPress={handleRegister} />
+        <View style={styles.form}>
+            {/* Campo de Nome */}
+            <Myinput
+              value={req.name}
+              onChangeText={(text) => setReq({ ...req, name: text })}
+              iconName=''
+              placeholder='Digite o nome'
+              label='Nome'
+            />
+
+            {/* Campo de Descrição */}
+            <MyTextArea
+              value={req.description}
+              onChangeText={(text) => setReq({ ...req, description: text })}
+              iconName=''
+              placeholder='Digite a descrição'
+              label='Descrição'
+            />
+
+            {/* Campo de URL */}
+            <Myinput
+              value={req.url}
+              onChangeText={(text) => setReq({ ...req, url: text })}
+              iconName='link'
+              placeholder='Digite a URL'
+              label='URL'
+            />
+
+            {/* Campo de Valor */}
+            <Myinput
+              value={req.value}
+              onChangeText={(text) => setReq({ ...req, value: text })}
+              iconName=''
+              placeholder='Digite o valor'
+              label='Valor'
+            />
+
+            {/* Campo de Status da Bolsa */}
+            <Myinput
+              value={req.scholarship_status}
+              onChangeText={(text) => setReq({ ...req, scholarship_status: text })}
+              iconName=''
+              placeholder='Status da bolsa'
+              label='Status Bolsa'
+            />
+
+            {/* Campo de Desconto */}
+            <Myinput
+              value={req.discount_percentage}
+              onChangeText={(text) => setReq({ ...req, discount_percentage: text })}
+              iconName='percent'
+              placeholder='Porcentagem de desconto'
+              label='Desconto'
+            />
+            <View style={styles.row}>
+              <MyButton button_type='rect' title="cadastrar" onPress={handleRegister}  />
+             
+            </View>
         </View>
 
         {/* Lista de Receitas */}
-        <FlatList
+        <MyList
+
           data={revenues}
-          keyExtractor={(item) => item.id.toString()}
+          keyItem={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <View style={styles.revenueStyle}>
-              <Text style={styles.revenueText}>Descrição: {item.description}</Text>
-              <Text style={styles.revenueText}>Nome: {item.name}</Text>
-              <Text style={styles.revenueText}>URL: {item.url}</Text>
-              <Text style={styles.revenueText}>Data: {item.createAt}</Text>
-              <Text style={styles.revenueText}>ID do Usuário: {item.userId}</Text>
-              <Text style={styles.revenueText}>Valor: {item.value}</Text>
-              <Text style={styles.revenueText}>Status da Bolsa: {item.scholarshipStatus}</Text>
-              <Text style={styles.revenueText}>Desconto: {item.discountPercentage}%</Text>
+            
+           
+            <MyItem
+           
+              onEdit={() => { editRevenue(item.id) }} 
+              onDel= {() => { delRevenue(item.id) }}
+             
+            >
+              <Mytext style={styles.revenueText}>Descrição: {item.description}</Mytext>
+              <Mytext style={styles.revenueText}>Nome: {item.name}</Mytext>
+              <Mytext style={styles.revenueText}>ID do Usuário: {item.user_id}</Mytext>
+              <Mytext style={styles.revenueText}>Valor: {item.value}</Mytext>
+              <Mytext style={styles.revenueText}>Status da Bolsa: {item.scholarship_status}</Mytext>
+              <Mytext style={styles.revenueText}>Desconto: {item.discount_percentage}%</Mytext>
+              <Mytext style={styles.revenueText}>Data: {item.created_at}</Mytext>
+              <Mydownload style={styles.revenueText} url={item.url} />
 
-              {/* Botões de Editar e Excluir */}
-              <View style={styles.buttonsContanier}>
-
-                <TouchableOpacity
-                  style={styles.editButton}
-                  onPress={() => editRevenue(item.id)}
-                ><Text style={styles.buttonText}>EDIT</Text>
-                </TouchableOpacity>
-                
-                <TouchableOpacity
-                  style={styles.deleteButton}
-                  onPress={() => delRevenue(item.id)}
-                ><Text style={styles.buttonText}>DELETE</Text>
-                </TouchableOpacity>
-
-              </View>
-            </View>
+      
+              
+            </MyItem>
           )}
         />
+
       </View>
-    </View>
+    </MyView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#f5f5f5', // Fundo da tela
-  },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
   },
+  buttons: {
+     alignItems:"center",
+     justifyContent:"center",
+     flexDirection: 'row',
+     gap: 10,
+     marginTop: 10,
+     width: '100%',
+     
+  }
+  ,
   form: {
     flex: 1,
     marginRight: 10,
     padding: 20,
-    backgroundColor: '#fff', // Fundo branco
+    backgroundColor: '#D3D3D3',
     borderRadius: 10,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 5,
-    elevation: 3, // Sombra no Android
-  },
-  input: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 15,
-    paddingHorizontal: 10,
-    backgroundColor: '#f9f9f9', // Fundo do input
+    elevation: 3,
   },
   revenueStyle: {
     flex: 1,
     marginRight: 10,
     padding: 15,
-    backgroundColor: '#fff', // Fundo branco
+    backgroundColor: '#D3D3D3',
     borderRadius: 10,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 5,
-    elevation: 3, // Sombra no Android
-    marginBottom: 10, // Espaçamento entre os itens
+    elevation: 3,
+    marginBottom: 10,
+    
   },
   revenueText: {
     fontSize: 14,
-    color: '#000000', // Texto preto
-    marginBottom: 5, // Espaçamento entre os textos
-  },
-  buttonsContanier: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 20,
-    justifyContent: 'space-around',
-  },
-  editButton: {
-    backgroundColor: '#FFFF00', // Cor de fundo AMARELO
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  deleteButton: {
-    backgroundColor: '#f44336', // Cor de fundo vermelho
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonText: {
-    color: '#000000', // Texto preto
-    fontWeight: 'bold',
+    color: '#000000',
+    marginBottom: 5,
+    
   },
 });

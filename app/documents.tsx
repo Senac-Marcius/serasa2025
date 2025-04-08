@@ -1,202 +1,83 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
+
+const FileUploadComponent = () => {
+  const [file, setFile] = useState(null);
+
+  const handleUpload = () => {
+    console.log('Fazendo upload...');
+  };
+
+  const handleCancel = () => {
+    setFile(null);
+    console.log('Upload cancelado');
+  };
+
+  const router = useRouter();
 
 
-export default function RecordScreen() {
-    // Estados individuais para os inputs
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [rg, setRg] = useState('');
-    const [dateBirth, setDateBirth] = useState('');
-    const [cpf, setCpf] = useState('');
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>Escolha um arquivo para fazer download</Text>
 
+      <TouchableOpacity style={styles.button} onPress={() => alert('Escolhido um arquivo')}>
+        <Text style={styles.buttonText}>Escolher Arquivo</Text>
+      </TouchableOpacity>
 
-    // Estado para armazenar os registros
-    const [records, setRecords] = useState<{ 
-        id: number; 
-        name: string; 
-        email: string; 
-        rg: string; 
-        dateBirth: string; 
-        cpf: string; 
-        createAt: string; 
-    }[]>([]);
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
+          <Text style={styles.buttonText}>Cancelar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.uploadButton} onPress={handleUpload}>
+          <Text style={styles.buttonText}>Fazer Upload</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
 
-
-    // Função para adicionar um novo registro
-    const handleRegister = () => {
-        if (!name.trim() || !email.trim() || !rg.trim() || !dateBirth.trim() || !cpf.trim()) {
-            alert('Preencha todos os campos!');
-            return;
-        }
-
-
-        const newRecord = {
-            id: records.length ? records[records.length - 1].id + 1 : 1,
-            name,
-            email,
-            rg,
-            dateBirth,
-            cpf,
-            createAt: new Date().toString(),
-        };
-
-
-        setRecords([...records, newRecord]);
-
-
-        // Resetando os campos
-        setName('');
-        setEmail('');
-        setRg('');
-        setDateBirth('');
-        setCpf('');
-    };
-
-
-    // Função para excluir um registro
-    const deleteRecord = (id: number) => {
-        setRecords(records.filter((record) => record.id !== id));
-    };
-
-
-    return (
-        <View style={styles.container}>
-            <View style={styles.row}>
-                <View style={styles.formContainer}>
-                    <Text style={styles.title}>Solicitação de Documentos</Text>
-                    
-                    <TextInput 
-                        style={styles.input} 
-                        placeholder="Nome" 
-                        value={name} 
-                        onChangeText={setName}
-                    />
-
-
-                    <TextInput 
-                        style={styles.input} 
-                        placeholder="Email" 
-                        value={email} 
-                        onChangeText={setEmail}
-                    />
-
-
-                    <TextInput 
-                        style={styles.input} 
-                        placeholder="RG" 
-                        value={rg} 
-                        onChangeText={(text) => setRg(text.replace(/[^0-9]/g, ''))} 
-                        keyboardType="numeric"
-                    />
-
-
-                    <TextInput 
-                        style={styles.input} 
-                        placeholder="Data de Nascimento" 
-                        value={dateBirth} 
-                        onChangeText={setDateBirth}
-                    />
-
-
-                    <TextInput 
-                        style={styles.input} 
-                        placeholder="CPF" 
-                        value={cpf} 
-                        onChangeText={(text) => setCpf(text.replace(/[^0-9]/g, ''))} 
-                        keyboardType="numeric"
-                    />
-
-
-                    <Button title="Cadastrar" onPress={handleRegister} />
-                </View>
-
-
-                <View style={styles.listContainer}>
-                    <Text style={styles.subtitle}>Registros Cadastrados</Text>
-                    <ScrollView style={{ flex: 1 }}>
-                        <FlatList
-                            data={records}
-                            keyExtractor={(item) => item.id.toString()}
-                            renderItem={({ item }) => (
-                                <View style={styles.recordItem}>
-                                    <Text style={styles.recordText}>Nome: {item.name}</Text>
-                                    <Text style={styles.recordText}>Email: {item.email}</Text>
-                                    <Text style={styles.recordText}>RG: {item.rg}</Text>
-                                    <Text style={styles.recordText}>Data de Nascimento: {item.dateBirth}</Text>
-                                    <Text style={styles.recordText}>CPF: {item.cpf}</Text>
-                                    <Text style={styles.recordText}>Criado em: {item.createAt}</Text>
-                                    <Button title="Excluir" color="red" onPress={() => deleteRecord(item.id)} />
-                                </View>
-                            )}
-                            showsVerticalScrollIndicator={true}
-                            contentContainerStyle={{ paddingBottom: 20 }}
-                        />
-                    </ScrollView>
-                </View>
-            </View>
-        </View>
-    );
-}
-
-
-// Estilos
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#fff',
-    },
-    row: {
-        flexDirection: 'row', 
-        justifyContent: 'space-between', 
-        alignItems: 'flex-start', 
-    },
-    formContainer: {
-        flex: 1,
-        marginRight: 10,
-        padding: 20,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-    },
-    listContainer: {
-        flex: 1, 
-        padding: 10,
-    },
-    title: {
-        fontSize: 22,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 20,
-    },
-    subtitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
-        padding: 10,
-        marginBottom: 10,
-    },
-    recordItem: {
-        padding: 10,
-        marginVertical: 5,
-        backgroundColor: '#f8f8f8',
-        borderRadius: 5,
-    },
-    recordText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  text: {
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  button: {
+    backgroundColor: '#007BFF',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 20,
+  },
+  cancelButton: {
+    backgroundColor: '#FF4136',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+    width: 200,
+    alignItems: 'center',
+  },
+  uploadButton: {
+    backgroundColor: '#28A745',
+    padding: 10,
+    borderRadius: 5,
+    width: 200,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  buttonsContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
-
-
-
+export default FileUploadComponent;

@@ -1,13 +1,24 @@
 import React, { useState } from 'react'; //react é uma biblioteca e essa função esta importando ela, puxando
-import { FlatList, View, Text, StyleSheet, TextInput, Button, TouchableOpacity} from 'react-native'; //react native é uma biblioteca dentro de react 
+import { FlatList, View, Text, StyleSheet, TextInput, Button, TouchableOpacity } from 'react-native'; //react native é uma biblioteca dentro de react 
+import MyCalendar from '../src/components/MyCalendar';
+import MyView from '../src/components/MyView';
+import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs';
+import MyButton from '../src/components/MyButtons';
+import MyList from '../src/components/MyList';
+import { useRouter } from 'expo-router';
+
 
 export default function LoanScreen() {
-    const[req, setReq]= useState({ //useState retorna uma variavel e uma função para alteral a variavel (req e setReq)
+
+    const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+
+
+    const [req, setReq] = useState({ //useState retorna uma variavel e uma função para alteral a variavel (req e setReq)
         id: 0,
         bookId: '',
         loanDate: '',
-        expectedLoanDate:'',
-        effectiveLoanDate:'',
+        expectedLoanDate: '',
+        effectiveLoanDate: '',
         renewal: '',
         creatAt: new Date().toISOString(),
         statusLoan: '',
@@ -18,123 +29,106 @@ export default function LoanScreen() {
     const [loans, setLoans] = useState<{
         id: number,
         bookId: string,
-        loanDate:string,
+        loanDate: string,
         expectedLoanDate: string,
-        effectiveLoanDate:string,
-        renewal:string,
-        creatAt:string,
-        statusLoan:string,
-        observation:string,
-        
+        effectiveLoanDate: string,
+        renewal: string,
+        creatAt: string,
+        statusLoan: string,
+        observation: string,
+
     }[]>([])
 
-    function editLoans(id:number){
-        const loan = loans.find(p =>p.id == id)
-        if(loan)
-        setReq(loan)
-                                        //operador ternario ?
+    function editLoans(id: number) {
+        const loan = loans.find(p => p.id == id)
+        if (loan)
+            setReq(loan)
+        //operador ternario ?
     }
-    function deletLoans(id:number){
-        const list = loans.filter((p) => p.id != id) 
-            setLoans(list)
+    function deletLoans(id: number) {
+        const list = loans.filter((p) => p.id != id)
+        setLoans(list)
     }
-    
 
 
-    function handleRegister (){
-        if(req.id == -1){
-            const newId = loans.length ? loans[loans.length -1].id + 1 : 0;
-            const newLoans = {...req, id: newId}
+
+    function handleRegister() {
+        if (req.id == -1) {
+            const newId = loans.length ? loans[loans.length - 1].id + 1 : 0;
+            const newLoans = { ...req, id: newId }
 
             setLoans([...loans, newLoans]);
 
-        }else{
+        } else {
             setLoans(loans.map(p => (p.id == req.id ? req : p)));
 
         }
-            
+
         setReq({
             id: -1,
             bookId: '',
             loanDate: '',
-            expectedLoanDate:'',
-            effectiveLoanDate:'',
+            expectedLoanDate: '',
+            effectiveLoanDate: '',
             renewal: '',
             creatAt: new Date().toISOString(),
             statusLoan: '',
             observation: '',
-            
+
         })
     }
-//aqui é typescript
+    //aqui é typescript
 
 
+    const router = useRouter();
 
 
     return (
-        <View>
-             
+
+
+        <MyView router={router} >
+            <View style={styles.formConteiner}>
             <Text>Tela de Empréstimo</Text>
             <View style={styles.row}>
                 <View style={styles.form}>
-                
-                    <TextInput placeholder="Nome do Livro:"
-                    value={req.bookId} 
-                    onChangeText={(text) => setReq({...req, bookId: text })}
+
+                    <Myinput 
+                     value={req.bookId}
+                      onChangeText={(text) => setReq({ ...req, bookId: text })}
+                      placeholder="Nome do Livro:"
+                      label ="Nome do Livro:"
+                      iconName="book"
                     />
-                    
 
-                    <TextInput 
-                        placeholder="Status de Empréstimo:"
-                        value={req.statusLoan} 
-                        onChangeText={(text) => setReq({...req, statusLoan: text })} //onChangeText recebe uma função, uma função anonima,a set req pede um objeto, (...) pega todos os objetos e tras de volta
+                    
+                     <Myinput 
+                     value={req.renewal}
+                      onChangeText={(text) => setReq({ ...req, renewal: text })}
+                      placeholder="Renovar:"
+                      label ="Renovar:"
+                      iconName="check"
                     />
-                    
 
-                    <TextInput 
-                        placeholder="Data de Empréstimo:"
-                        value={req.loanDate} 
-                        onChangeText={(text) => setReq({...req, loanDate: text })}
-                    />
-                    
+                    <Myinput 
+                    value={req.observation}
+                     onChangeText={(text) => setReq({ ...req, observation: text })}
+                     placeholder="Observação:"
+                     label ="Observação:"
+                     iconName="question"
+                   />
+                    <MyCalendar date={date} setDate={setDate} icon="FaCalendarDays" />
 
-                     <TextInput 
-                        placeholder="Data Prevista de Devolução:"
-                        value={req.expectedLoanDate} 
-                        onChangeText={(text) => setReq({...req, expectedLoanDate: text })}
-                    />
-                    
+                    <MyButton  
+                        title='Emprestar'
+                        onPress={handleRegister}
+                         button_type='round'
+                               />
 
-                     <TextInput 
-                        placeholder="Data de Devolução Efetuada:"
-                        value={req.effectiveLoanDate} 
-                        onChangeText={(text) => setReq({...req, effectiveLoanDate: text })}
-                    />
-                    
+                </View>
 
-                     <TextInput 
-                        placeholder="Renovar:"
-                        value={req.renewal}         //(...req) cria uma cópia do req atual
-                        onChangeText={(text) => setReq({...req, renewal: text })}//O que está acontecendo aqui é que o estado de req está sendo atualizado de forma imutável (sem alterar diretamente o valor antigo).
-                    /> 
-                    
-
-                    <TextInput 
-                        placeholder="Observação:"
-                        value={req.observation} 
-                        onChangeText={(text) => setReq({...req, observation: text })}
-                    />
-                    
-
-                    <Button title="Emprestar" onPress={handleRegister}
-                    color="purple"
-                     />
-                    
-                </View> 
-                    
-                <FlatList //data significa o parametro que vai receber o vetor (data = dados)
+                <MyList //data significa o parametro que vai receber o vetor (data = dados)
                     data={loans}                  //toString tranforma em string  
-                    keyExtractor={(item) => item.id.toString()}//vai pegar no loans cada elemento
+                    keyItem={(item) => item.id.toString()}//vai pegar no loans cada elemento
                     renderItem={({ item }) => ( //return aceita somente um argumento
                         <View style={styles.itemContainer}>
                             <Text>{item.bookId}</Text>
@@ -145,22 +139,29 @@ export default function LoanScreen() {
                             <Text>{item.statusLoan}</Text>
                             <Text>{item.observation}</Text>
                             <Text>{item.creatAt}</Text>
-                            <View style={styles.itemContainer} >
-                                <TouchableOpacity onPress={ () => {editLoans(item.id)}}>EDITAR</TouchableOpacity>
-                                <TouchableOpacity onPress={ () => {deletLoans(item.id)}}>DELETE</TouchableOpacity>
-                            </View>
+
+                            <MyButton  
+                                title='Editar'
+                                onPress={() => { editLoans(item.id) }}
+                                button_type='round'
+                               />
+                            <MyButton  
+                                title='Deletar'
+                                onPress={() => { deletLoans(item.id) }}
+                                button_type='round'
+                               />
+
                         </View>
                         
                     )}
-                   
                 />
             </View>
-        </View>
+            </View>
+        </MyView>
     ); //encapsulamento
-
 }
 
-const styles = StyleSheet.create({ 
+const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -176,6 +177,15 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
+        width: 700
+        
+    },
+    formConteiner:{
+        flex:8,
+        justifyContent: 'center',
+        alignItems:'center',
+        
+        
     },
     itemContainer: {
         marginRight: 10,
@@ -188,11 +198,43 @@ const styles = StyleSheet.create({
         color: "pink"
     },
     buttonContainer: {
-       color: "blue"
-    }
-           
-})
-
+        color: "blue"
+    },
+    button_circle: {
+      borderRadius: 100,
+      display: "flex",
+      gap: 5,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    button_capsule: {
+      borderRadius: 50,
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "row",
+      
+    },
+    button_round: {
+      borderRadius: 20,
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "row",
+      
+    },
+    button_rect: {
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "row",
+      borderRadius: 0,
+      
+    },
+    button_default: {
+      borderRadius: 15,
+      alignItems: "center",
+      flexDirection: "row",
+      
+    },
+  });
 
 
 

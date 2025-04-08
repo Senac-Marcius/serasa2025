@@ -1,63 +1,29 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Appbar, Drawer } from 'react-native-paper';
+import { View } from 'react-native';
 import { useState } from 'react';
+import  MyTheme from '../src/components/MyTheme'
+import  MyView from '../src/components/MyView'
+import MyLogin from '../src/components/MyLogin';
+import MyText from '../src/components/MyText';
+import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
     const router = useRouter();
-    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [email, setEmail] = useState('')
+    const [pass, setPass] = useState('')
 
     return (
-        <View style={{ flex: 1 }}>
-            {/* Menu Hambúrguer no Topo */}
-            <Appbar.Header>
-                <Appbar.Action icon="menu" onPress={() => setDrawerOpen(!drawerOpen)} />
-                <Appbar.Content title="Serasa App" />
-            </Appbar.Header>
-
-            {/* Drawer Menu */}
-            {drawerOpen && (
-                <Drawer.Section style={{ backgroundColor: 'white', padding: 10 }}>
-                    <Drawer.Item
-                        label="Início"
-                        icon="home"
-                        onPress={() => {
-                            setDrawerOpen(false);
-                            router.push('/');
-                        }}
-                    />
-                    <Drawer.Item
-                        label="Postagens"
-                        icon="post"
-                        onPress={() => {
-                            setDrawerOpen(false);
-                            router.push('/posts');
-                        }}
-                    />
-                    <Drawer.Item
-                        label="Cursos"
-                        icon="post"
-                        onPress={() => {
-                            setDrawerOpen(false);
-                            router.push('/courses');
-                        }}
-                    />
-                    <Drawer.Item
-                        label="Configurações"
-                        icon="cog"
-                        onPress={() => {
-                            setDrawerOpen(false);
-                            console.log("Configurações");
-                        }}
-                    />
-                </Drawer.Section>
-            )}
+        <MyView router={router} style={{ flex: 1 }}>
+            <MyTheme chendTheme={()=>{}} fontSize={()=>{}}/>
 
             {/* Conteúdo da Página */}
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text>Bem-vindo ao Serasa App!</Text>
+            <MyLogin email={email} pass={pass} changeEmail={setEmail} changepass={setPass}>
+
+                <MyText>Bem vind@ </MyText>
+
+            </MyLogin>
             </View>
-        </View>
+        </MyView>
     );  
-}
+} 

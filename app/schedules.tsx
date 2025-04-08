@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, TextInputBase, FlatList, TouchableOpacity } from 'react-native';
-
+import MyView from '../src/components/MyView';
+import { useRouter } from 'expo-router';
 
 export default function ScheduleScreen(){
 // aqui é typescript
@@ -63,9 +64,10 @@ export default function ScheduleScreen(){
             setSchedules(list)
     }
 
+    const router = useRouter();
 
     return (
-        <View>
+        <MyView router={router} > 
         
             {/* aqui é typescript dentro do front */}
             <text>Meu Cronograma</text>
@@ -111,7 +113,7 @@ export default function ScheduleScreen(){
                 />
                 
             </View>   
-        </View>
+        </MyView>
         )             
 }
 

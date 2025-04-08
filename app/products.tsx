@@ -1,6 +1,8 @@
-import React, { useState }  from 'react';  //importando objeto react e useState da biblioteca do react
-import {View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity} from 'react-native';
-
+import React, { useState } from 'react';
+import { View, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
+import { TextInput, Text} from 'react-native-paper';
+import MyView from '../src/components/MyView';
+import { useRouter } from 'expo-router';
 
 export default function productScreen(){
 //aqui é typescript
@@ -51,8 +53,12 @@ export default function productScreen(){
             if(list)
                 setProducts(list)
         }
+
+    const router = useRouter();
+
     return (
-        <View>
+        <MyView router={router} >
+            
             <Text style={styles.h1}> Produtos </Text>
                 {/*aqui é typescript dentro do front */ }
             <Text style={styles.h2}>Minha tela dos Produtos</Text>
@@ -98,7 +104,7 @@ export default function productScreen(){
                         }
                     />
                 </View> 
-        </View> 
+        </MyView> 
             
     );
 }

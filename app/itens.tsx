@@ -1,5 +1,12 @@
 import React ,{ useState }from 'react';
 import { Text, View, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} from 'react-native';
+import MyLink from '../src/components/MyLink';
+import {MyItem} from '../src/components/MyItem';
+import MyList from '../src/components/MyList';
+import { Myinput } from '../src/components/MyInputs';
+import MyButton from '../src/components/MyButtons';
+import MyView from '../src/components/MyView';
+import { useRouter } from 'expo-router';
 
 export default  function itemScreen(){
      const[req,setReq] = useState({ 
@@ -52,35 +59,47 @@ export default  function itemScreen(){
         setItens(list)
      }
 
+    const router = useRouter();
+     
     return (
-        <View>
-        {}
+        <MyView router={router} >
+       
         <Text>Minha tela de itens</Text>
         
         <View style={styles.row}>
             <View style={styles.form}>
-                <TextInput placeholder="Marca"
+                <Myinput 
+                placeholder="Marca"
                 value={req.mark}
-                onChangeText={(text)=>setReq({...req,mark:text})}
+                onChangeText={(text) => setReq({ ...req, mark:text })}
+                label="Item"
+                 iconName='list' 
+            
                 />
                 
 
 
-                <TextInput placeholder= "Digite o nome"
+                <Myinput 
+                   placeholder= "Digite o nome"
                    value={req.name}
                    onChangeText={(text)=>setReq({...req,name:text})}
+                   label="I
+                   
+                   tem" 
+                   iconName='user' 
                    />
 
-                   
-                <Button title='Cadastrar' onPress={ handleRegister}/>
+                <MyLink style={{ padding : 20}} url="http://gyuguyg" label="Esqueci minha senha"/>
+
+                <MyButton title='Cadastrar' onPress={ handleRegister}/>
             
             </View>
 
-            <FlatList
+            <MyList
             data={itens}
-            keyExtractor={(i) => i.id.toString()}
+            keyItem={(i) => i.id.toString()}
             renderItem={({item})=>(
-                <View >
+                <MyItem >
                     <text >{item.name}</text>
                     <text >{item.mark}</text>
                     <text>{item.assetNumber}</text>
@@ -88,14 +107,15 @@ export default  function itemScreen(){
 
                     <View>
                         <TouchableOpacity onPress={ () => { editItem(item.id)} }></TouchableOpacity>
+                        <TouchableOpacity onPress={ () => { delItem(item.id)} }></TouchableOpacity>
                     </View>
-                </View>
+                </MyItem>
 
             )}
             
             />
         </View>
-    </View>
+    </MyView>
 
     );
 }
@@ -144,6 +164,11 @@ const styles= StyleSheet.create({
         padding: 10,
         marginBottom: 10,
     },
+    form: { 
+        flex:1
+
+    }
 })
+
 
 
