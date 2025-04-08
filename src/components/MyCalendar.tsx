@@ -6,17 +6,7 @@ import { Myinput } from "./MyInputs";
 
 const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
 
-/*interface MyCalendarProp { //teste aula
-    style: ViewStyle;
-    children: ReactNode;
-} 
-interface CalendarDate {
-    year: number;
-    month: number;
-    day: number;
-  }
-  const [calendarDate, setCalendarDate] = useState<CalendarDate | null>(null); //tipo modificado para aceitar valores nulos
-*/
+
 interface MyCalendarProps {
     date?: string;
     setDate(date:string): void;
@@ -63,20 +53,5 @@ return (
     </View>
 )};
 
-
-/*const MyCalendar: React.FC <MyCalendarProp> = ({children, style}) => { //teste aula
-    return (
-        <View style={style}>
-        <Text>ola componente</Text>
-        {children}
-        </View>
-    );
-}
-const MyCalendar2 = () => { //teste aula
-    return (
-        <Text>ola componente2</Text>
-        
-    );
-}*/
 
 export default MyCalendar

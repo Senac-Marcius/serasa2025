@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; //react é uma biblioteca e essa função esta importando ela, puxando
+import React, { useEffect, useState } from 'react'; //react é uma biblioteca e essa função esta importando ela, puxando
 import { FlatList, View, Text, StyleSheet, TextInput, Button, TouchableOpacity } from 'react-native'; //react native é uma biblioteca dentro de react 
 import MyCalendar from '../src/components/MyCalendar';
 import MyView from '../src/components/MyView';
@@ -6,19 +6,21 @@ import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs';
 import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
 import { useRouter } from 'expo-router';
+import {iLoans, setLoanbd} from '../src/controllers/loans'
+import { supabase } from '../src/utils/supabase';
 
 
 export default function LoanScreen() {
 
     const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-
+   
 
     const [req, setReq] = useState({ //useState retorna uma variavel e uma função para alteral a variavel (req e setReq)
         id: 0,
         bookId: '',
-        loanDate: '',
-        expectedLoanDate: '',
-        effectiveLoanDate: '',
+        loanDate: new Date().toISOString(),
+        expectedLoanDate: new Date().toISOString(),
+        effectiveLoanDate: new Date().toISOString(),
         renewal: '',
         creatAt: new Date().toISOString(),
         statusLoan: '',
@@ -26,7 +28,7 @@ export default function LoanScreen() {
 
     });
 
-    const [loans, setLoans] = useState<{
+   /* const [setLoans] = useState<{
         id: number,
         bookId: string,
         loanDate: string,
@@ -37,31 +39,73 @@ export default function LoanScreen() {
         statusLoan: string,
         observation: string,
 
-    }[]>([])
+    }[]>([])*/
+        function editLoans(id: number) {
+            let user = loans.find(u => u.id == id)
+            if (user)
+                setReq(user)
+        }
+    
 
-    function editLoans(id: number) {
-        const loan = loans.find(p => p.id == id)
-        if (loan)
-            setReq(loan)
-        //operador ternario ?
-    }
-    function deletLoans(id: number) {
-        const list = loans.filter((p) => p.id != id)
-        setLoans(list)
-    }
+        async function deleteLoansById(id: number) {
+            const { error } = await supabase
+                .from('loans')
+                .delete()
+                .eq('id', id)
+        
+            if (error) {
+                console.error("Erro ao deletar empréstimo:")
+                return false
+            }
+        
+            return true
+        }
+    
+    
+        async function updateLoansById(id: number, updatedUser: Partial<iLoans>) {
+            const { error } = await supabase
+                .from('loans')
+                .update(updatedUser)
+                .eq('id', id);
+        
+            if (error) {
+                console.error("Erro ao atualizar empréstimo:", error.message);
+                return false;
+            }
+            return true;
+        }
+    
+
+    const [loans, setLoans] = useState<iLoans[]>([]);
 
 
+    useEffect(() => {
+        async function getTodos() {
+            const { data:todos } = await supabase.from('loans').select()
+            
+            if (todos && todos.length > 0){
+                setLoans(todos)
+            }
+        }
 
-    function handleRegister() {
+        getTodos()
+    },[])
+
+    
+
+    async function handleRegister() {
         if (req.id == -1) {
             const newId = loans.length ? loans[loans.length - 1].id + 1 : 0;
             const newLoans = { ...req, id: newId }
 
             setLoans([...loans, newLoans]);
-
+            await setLoanbd(newLoans)
         } else {
             setLoans(loans.map(p => (p.id == req.id ? req : p)));
 
+            const sucesso = await updateLoansById(req.id, req)
+            if (!sucesso) {
+                alert("Erro ao atualizar usuário.")
         }
 
         setReq({
@@ -100,6 +144,32 @@ export default function LoanScreen() {
                       iconName="book"
                     />
 
+                    <Myinput 
+                    value={req.loanDate}
+                     onChangeText={(newDate) => setReq({ ...req, loanDate: date })}
+                     placeholder="Data de Empréstimo:"
+                     label ="Data de Empréstimo:"
+                     iconName="book"
+                   />
+
+                    
+                    <Myinput 
+                     value={req.expectedLoanDate}
+                      onChangeText={(date) => setReq({ ...req, expectedLoanDate: date })}
+                      placeholder="Data prevista de Devolução:"
+                      label ="Data prevista de Devolução:"
+                      iconName="book"
+                    />
+
+                    <Myinput 
+                     value={req.effectiveLoanDate}
+                      onChangeText={(date) => setReq({ ...req, effectiveLoanDate: date })}
+                      placeholder="Data Efetiva de Devolução:"
+                      label ="Data Efetiva de Devolução:"
+                      iconName="book"
+                      
+                    />
+            
                     
                      <Myinput 
                      value={req.renewal}
@@ -107,6 +177,14 @@ export default function LoanScreen() {
                       placeholder="Renovar:"
                       label ="Renovar:"
                       iconName="check"
+                    />
+
+                    <Myinput 
+                     value={req.statusLoan}
+                      onChangeText={(text) => setReq({ ...req, statusLoan: text })}
+                      placeholder="Status de Empréstimo:"
+                      label ="Status de Empréstimo:"
+                      iconName="book"
                     />
 
                     <Myinput 
@@ -147,7 +225,7 @@ export default function LoanScreen() {
                                />
                             <MyButton  
                                 title='Deletar'
-                                onPress={() => { deletLoans(item.id) }}
+                                onPress={() => { deleteLoansById(item.id) }}
                                 button_type='round'
                                />
 
@@ -169,7 +247,7 @@ const styles = StyleSheet.create({
     },
     form: {
         flex: 1,
-        marginRight: 10,
+        marginRight: 5,
         padding: 20,
         backgroundColor: '#F2F2F2',
         borderRadius: 10,
@@ -177,7 +255,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
-        width: 700
+        width: 760
         
     },
     formConteiner:{
@@ -191,7 +269,7 @@ const styles = StyleSheet.create({
         marginRight: 10,
         padding: 20,
         borderRadius: 10,
-        shadowOffset: { width: 0, height: 4 },
+        shadowOffset: { width: 9, height: 4 },
         shadowColor: '#000',
         shadowOpacity: 0.1,
         shadowRadius: 5,
@@ -237,4 +315,4 @@ const styles = StyleSheet.create({
   });
 
 
-
+}
