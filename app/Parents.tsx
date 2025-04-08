@@ -3,13 +3,15 @@ import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity} f
 import MyView from '../src/components/MyView';
 import MyUpload from '../src/components/MyUpload';
 import { useRouter } from 'expo-router';
-import {setParentController, iParent} from '../src/controllers/parentsController';
+import { setParent,iParent,editParentSupa, delParentSupa,} from '../src/controllers/parentsController';
 import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
-import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs';
+import { Myinput, MyCheck, MyTextArea} from '../src/components/MyInputs';
 import { MyItem,MyCorrelated } from '../src/components/MyItem';
 import { supabase } from '../src/utils/supabase';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import itemScreen from './itens';
+import { ListItem } from 'native-base';
 
 
 
@@ -19,7 +21,6 @@ import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 export default function ParentScreen (){
     const [parents,setParents] = useState<iParent[]>([])
 
-//Aqui é TypeScript
     const [req, setReq] = useState({
         id:-1,
         name: '',
@@ -72,7 +73,7 @@ export default function ParentScreen (){
             const newId = parents.length ? parents[parents.length - 1].id + 1 : 0;
             const newParent = { ...req, id: newId };
             setParents([...parents, newParent]);
-            await setParentController(newParent);
+            await setParent(newParent);
         
         } else {
             setParents(parents.map(p => (p.id == req.id ? req : p)));
@@ -91,7 +92,7 @@ export default function ParentScreen (){
             userid: 0,
         });
     }
-     function editParent(id:number){
+     /*function editParent(id:number){
         const parent = parents.find (p => p.id == id)
         if(parent)
             setReq(parent)
@@ -100,10 +101,30 @@ export default function ParentScreen (){
         const list = parents.filter (p=> p.id != id)
         if (list)
             setParents(list)
-     }
+     }*/
+
+        async function delParent(id: number) {
+                const { error } = await supabase.from('parents').delete().eq('id', id);
+                if (!error) {
+                    const list = parents.filter(r => r.id != id)
+                    setParents(list)
+                } else {
+                    console.error('Erro ao deletar:', error);
+                }
+            }
+        
+            function editParent(id: number) {
+                const parent = parents.find(r => r.id === id);
+                if (parent) {
+                    setReq(parent);
+                }
+            }
+        
     
     const router = useRouter();
     const[urlDocument, setDocument]= useState('')
+
+    
 
     return (
         <MyView router={router} > {/*aqui é typeScript dentro do Front*/}
