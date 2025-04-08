@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView,  } from 'react-native';
+import { View, Text, StyleSheet  } from 'react-native';
 import MyView from '../src/components/MyView';
 import MyAccessibility from '../src/components/MyAccessibility';
 import { Myinput, MyTextArea } from '../src/components/MyInputs';
@@ -8,7 +8,7 @@ import {MyItem} from '../src/components/MyItem';
 import MyButton from '../src/components/MyButtons';
 import Mytext from '../src/components/MyText';
 import { useRouter } from 'expo-router';
-import { iInvestment, setInvestment } from '../src/controllers/investments';
+import { iInvestment, setInvestment, deleteInvestment, updateInvestment } from '../src/controllers/investments';
 import { supabase } from '../src/utils/supabase';
 
 export default function investmentScreen(){
@@ -19,7 +19,7 @@ export default function investmentScreen(){
         url: '',
         id: -1,
         created_at: new Date().toISOString(),
-        user_id: '',
+        user_id: 1,
         value: '',
     });
 
@@ -30,23 +30,30 @@ export default function investmentScreen(){
         async function getAll() {
             const { data: all} = await supabase.from('investments').select();
 
-            if (all && all.length > 1) {
-            setInvestments(all);
-        }
+            if (all && all.length > 0) {
+            setInvestments(all)
+            }
         }
         getAll();
     },[])
     
 
-    function handleRegister(){
+    async function handleRegister(){
         if(req.id == -1){
             const nId = investments.length ? investments[investments.length - 1].id + 1 : 0;
             const newInvestment = {...req, id: nId };
 
             setInvestments([...investments, newInvestment]);
-            setInvestment(newInvestment)
+           await setInvestment(newInvestment)
         }else{
             setInvestments(investments.map(i => (i.id == req.id ? req : i)));
+            const result = await updateInvestment(req);
+            if(result.error){
+                console.log('Investment updated successfully:', result.error.message);
+                return;
+            }
+            setInvestments(investments.map(i => (i.id == req.id ? result : i)));
+
         }
 
         setReq({
@@ -55,24 +62,29 @@ export default function investmentScreen(){
             url: '',
             id: -1,
             created_at: new Date().toISOString(),
-            user_id: '',
+            user_id: 1,
             value: '',
         });
     }
 
     function editInvestment(id:number){
-        const investment = investments.find(i => i.id == id)
+        const investment = investments.find(i => i.id == id);
         if(investment)
-        setReq(investment)
+        setReq(investment);
     }
 
 
-    function delInvestment(id:number){
-        const list = investments.filter(i => i.id != id)
-        if(list)
-            setInvestments(list)
+    async function delInvestment(id: number) {
+        try {
+    const result =  await deleteInvestment(id);
+        
 
-    }
+        setInvestments (investments.filter(i => i.id !== id));
+    }   catch (error) {
+        console.log(error)
+        }
+}
+    
 
     const router = useRouter();
     
