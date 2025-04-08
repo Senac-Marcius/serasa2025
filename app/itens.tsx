@@ -1,4 +1,4 @@
-import React ,{ useState }from 'react';
+import React ,{ useEffect, useState }from 'react';
 import { Text, View, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} from 'react-native';
 import MyLink from '../src/components/MyLink';
 import {MyItem} from '../src/components/MyItem';
@@ -7,44 +7,57 @@ import { Myinput } from '../src/components/MyInputs';
 import MyButton from '../src/components/MyButtons';
 import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
+import {setIten,dell, edit, iIten} from '../src/controllers/items'
+import { supabase } from '../src/utils/supabase';
+import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
+
 
 export default  function itemScreen(){
      const[req,setReq] = useState({ 
         id: -1,
         name:'',
         mark:'',
-        assetNumber:0,
+        asset_number:'',
         amount: 0,
-        createAt: new Date().toISOString ()
-        
+        local_id: 1,
+        created_at: new Date().toISOString ()        
      });
-     const [itens,setItens]= useState<{
-        id: number,
-        name: string,
-        mark: string,
-        assetNumber: number,
-        amount: number, 
-        createAt:string,
+     const[itens, setItens] = useState<iIten[]>([]);
 
-     }[]>([])
+     useEffect( ()=>{
+        async function getTodos(){
+            const {data: todos} = await supabase.from ('items').select()
+            if(todos && todos.length > 0) {
+                setItens(todos)
+            }
+        }
+     
+        getTodos();
 
-     function handleRegister(){
+    
+    },[])
+
+
+    async function handleRegister(){
        if(req.id == -1){
-        const newid= itens.length ? itens[itens.length-1].id=1:0;
-        const newItem = {... itens,req};
-        setItens([...itens, req])
+        const newid= itens.length ? itens[itens.length-1].id+1:0;
+        const newItem = {... req,id: newid};
+        setItens([...itens, newItem])
+        await setIten(newItem)
 
        }else{
-        setItens(itens.map(i =>(i.id == req.id)? req: i )  );
-
+        setItens(itens.map(i =>(i.id == req.id? req: i)));
+        await edit(req)
        }
 
-        setReq({id: -1,
+        setReq({
+            id: -1,
             name:'',
             mark:'',
-            assetNumber:0,
-            amount: 0,  
-            createAt: new Date().toISOString(),
+            asset_number:'',
+            amount: 0,
+            local_id: 1,
+            created_at: new Date().toISOString ()        
         })
      }
 
@@ -53,7 +66,8 @@ export default  function itemScreen(){
         if(item)
         setReq(item)
      }
-     function delItem(id:number){
+    async function delItem(id:number){
+        await dell(id)
         const list= itens.filter(i => i.id != id)
         if(list)
         setItens(list)
@@ -91,7 +105,7 @@ export default  function itemScreen(){
 
                 <MyLink style={{ padding : 20}} url="http://gyuguyg" label="Esqueci minha senha"/>
 
-                <MyButton title='Cadastrar' onPress={ handleRegister}/>
+                <MyButton title='Cadastrar' onPress={handleRegister}/>
             
             </View>
 
@@ -99,16 +113,16 @@ export default  function itemScreen(){
             data={itens}
             keyItem={(i) => i.id.toString()}
             renderItem={({item})=>(
-                <MyItem >
+                <MyItem 
+                    onDel={()=>{delItem(item.id)}}
+                    onEdit={()=>{editItem(item.id)}}
+                >
                     <text >{item.name}</text>
                     <text >{item.mark}</text>
                     <text>{item.assetNumber}</text>
                     <text>{item.amount}</text>
+                    <View style={styles.buttonsContainer}></View>
 
-                    <View>
-                        <TouchableOpacity onPress={ () => { editItem(item.id)} }></TouchableOpacity>
-                        <TouchableOpacity onPress={ () => { delItem(item.id)} }></TouchableOpacity>
-                    </View>
                 </MyItem>
 
             )}
@@ -121,11 +135,32 @@ export default  function itemScreen(){
 }
 
 const styles= StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#fff',
+    edit: {
+        fontSize: 15,
+        padding: 10,
+        backgroundColor: '#FFDB58',
+        borderRadius: 100,
+        fontFamily: 'arial'
+
     },
+    delete: {
+        fontSize: 15,
+        padding: 10,
+        backgroundColor: '#BC544B',
+        borderRadius: 100,
+        fontFamily: 'arial',
+    
+    },
+   
+    buttonsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        fontSize: 15,
+        padding: 40,
+        
+    },
+    
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
