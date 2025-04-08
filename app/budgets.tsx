@@ -7,7 +7,7 @@ import MyView from '../src/components/MyView';
 import Mytext from '../src/components/MyText';
 import { MyItem } from '../src/components/MyItem';
 import { useRouter } from 'expo-router';
-import {iBudgets , setBudget } from '../src/controllers/budgets';
+import {iBudgets , setBudget, delBudget} from '../src/controllers/budgets';
 import { supabase } from '../src/utils/supabase';
 
 
@@ -23,8 +23,8 @@ export default function BudgetScreen(){
         id: -1,
         name:'',
         url:'',
-        create_at: new Date().toISOString(),
-        velue:'',
+        created_at: new Date().toISOString(),
+        value:'',
         user_id: 3,
         start_date: '',
         end_date:'',
@@ -32,24 +32,29 @@ export default function BudgetScreen(){
     });
     const [budgets, setBudgets] = useState<iBudgets[]>([]);
 
-                useEffect(()=> {
-                async function getTodos(){
-                const {data: todos} = await supabase.from('budgets').select()
+    useEffect(()=> {
+        async function getTodos(){
+            const {data: todos} = await supabase.from('budgets').select()
 
-                if(todos && todos.length > 1){
-                    setBudgets(todos)
-                }
+            if(todos && todos.length > 0){
+                setBudgets(todos)
             }
-            getTodos()
-
-        },[] )
+        }
+        
+        getTodos();
+    },[] )
 
     async function  handleRegister(){
         if(req.id == -1){
-            const newId = budgets.length ? budgets[budgets.length -1].id +1: 0;
+            const newId = budgets.length ? budgets[budgets.length -1].id + 1: 0;
+            console.log(newId)
+
             const newBudget = {...req, id: newId};
+
             setBudgets([...budgets, newBudget]);
-           await setBudget(newBudget)
+            console.log(newBudget)
+           const resp = await setBudget(newBudget)
+           console.log (resp)
         }else{
             setBudgets(budgets.map(b=> (b.id == req.id)? req: b));
         }
@@ -58,8 +63,8 @@ export default function BudgetScreen(){
         id: -1,
         name:'',
         url:'',
-        create_at: new Date().toISOString(),
-        velue:'',
+        created_at: new Date().toISOString(),
+        value:'',
         user_id: 3,
         start_date: '',
         end_date:'',
@@ -72,9 +77,26 @@ export default function BudgetScreen(){
         setReq(budget)
     }
 
-    function delBudget(id:number){
-        const list = budgets.filter(b => b.id != id)
-        setBudgets(list)
+    async function delBudget(id: number) {
+        try {
+            
+            const updatedBudgets = budgets.filter(b => b.id !== id);
+            setBudgets(updatedBudgets);
+    
+         
+            const { error } = await supabase
+                .from('budgets')
+                .delete()
+                .eq('id', id); 
+    
+            if (error) {
+                console.error('Erro ao deletar:', error);
+               
+                setBudgets(budgets); 
+            }
+        } catch (err) {
+            console.error("Erro inesperado:", err);
+        }
     }
 
     
@@ -101,8 +123,8 @@ export default function BudgetScreen(){
                      
                      <Myinput 
                     placeholder = "Digite o valor"
-                    value={req.velue}
-                    onChangeText={(text) => setReq({...req ,velue: text})} 
+                    value={req.value}
+                    onChangeText={(text) => setReq({...req ,value: text})} 
                     label="valor"
                     iconName="pin"
                      />
@@ -137,12 +159,13 @@ export default function BudgetScreen(){
                         >
                        
                        <Text> Nome: {item.name}</Text>
+                       <Text> id: {item.id}</Text>
                            <Text> Url: {item.url}</Text>
-                           <Text> CreateAt: {item.createAt}</Text>
-                           <Text> Valor: {item.velue}</Text>
-                           <Text> UserId: {item.userId}</Text>
-                           <Text> Data Inicial: {item.startDate}</Text>
-                           <Text> Data Final: {item.endDate}</Text>
+                           <Text> CreateAt: {item.created_at}</Text>
+                           <Text> Valor: {item.value}</Text>
+                           <Text> UserId: {item.user_id}</Text>
+                           <Text> Data Inicial: {item.start_date}</Text>
+                           <Text> Data Final: {item.end_date}</Text>
     
                         </MyItem>
                     )}
