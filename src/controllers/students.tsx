@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { supabase } from "../utils/supabase";
 
 interface iStudent {
+
   name: string;
   birthday: string;
   email: string;
@@ -16,7 +17,7 @@ interface iStudent {
   user_id: number;
 }
 
-
+type eStudent = {id:number} & iStudent
 
 async function setStudent(student: iStudent) {
   
@@ -34,17 +35,19 @@ async function delStudent(id: number) {
   const { error } = await supabase.from("students").delete().eq("id", `${id}`);
 }
 
-async function editStudent(student: iStudent, id: number) {
+async function editStudent(student: eStudent) {
   const { data, error } = await supabase
     .from("students")
     .update(student)
-    .eq("id", `${id}`)
+    .eq("id", `${student.id}`)
     .select();
 }
 
 async function getStudent() {
   let { data: students, error } = await supabase.from("students").select("*");
+
   return students;
+  
 }
 
 async function selectStudent() {
@@ -79,5 +82,6 @@ export {
   getStudent,
 
   iStudent,
+  eStudent,
   setStudent,
 };

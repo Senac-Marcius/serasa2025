@@ -8,6 +8,7 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
+  _View,
 } from "react-native";
 import MyButton from "../src/components/MyButtons";
 import MyView from "../src/components/MyView";
@@ -18,13 +19,15 @@ import {
   getStudent,
   selectStudent,
   setStudent,
-  iStudent
-
+  iStudent,
+  eStudent,
 } from "../src/controllers/students";
+import { Item } from "react-native-paper/lib/typescript/components/Drawer/Drawer";
 
 export default function StudentsScreen() {
+  const [students, setStudents] = useState<eStudent[]>([]);
+  const [studentEdit, setEditStudent] = useState<eStudent | null>(null);
 
-  const [students, setStudents] = useState<iStudent[]>([]);
   const [req, setReq] = useState({
     name: "",
     birthday: "",
@@ -40,19 +43,27 @@ export default function StudentsScreen() {
     user_id: 1,
   });
 
+  const [isEditing, setEditState] = useState(false);
+
   useEffect(() => {
     async function fetchStudents() {
       const todos = await getStudent();
-      if(todos && todos.length > 0){
-        setStudents(todos)
-      }     
+      if (todos && todos.length > 0) {
+        setStudents(todos);
+      }
     }
     fetchStudents();
   }, []);
 
-
-
   async function handleRegister() {
+    if (isEditing) {
+      if (studentEdit) {
+        setEditStudent({ id: studentEdit.id, ...req });
+        editStudent(studentEdit)
+      }
+      setEditState(false)
+      return
+    }
     console.log("Registering student:", req);
     await setStudent(req)
       .then(() => {
@@ -61,14 +72,25 @@ export default function StudentsScreen() {
       .catch((error) => {
         console.error("Error registering student:", error);
       });
-
   }
 
-  function editStudent(id: number) {}
-
-  function deleteStudent(id: number) {}
-
   const router = useRouter();
+
+  const renderItem = ({ item }: { item: eStudent }) => (
+    <View>
+      <Text>{item.name}</Text>
+      <Text>{item.email}</Text>
+      <MyButton
+        title="Editar"
+        onPress={() => {
+          setEditStudent(item)
+          setReq(item);
+          setEditState(true);
+        }}
+      />
+      <MyButton title="Delete" onPress={() => delStudent(item.id)} />
+    </View>
+  );
 
   return (
     <MyView router={router}>
@@ -155,9 +177,12 @@ export default function StudentsScreen() {
           >
             Cadastrar
           </TouchableOpacity>
-
-
         </View>
+        <FlatList
+          data={students}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderItem}
+        ></FlatList>
       </View>
     </MyView>
   );
