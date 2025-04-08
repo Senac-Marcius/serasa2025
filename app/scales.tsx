@@ -12,7 +12,7 @@ import { supabase } from '../src/utils/supabase'
 import Mytext from '../src/components/MyText';
 import { jsiConfigureProps } from 'react-native-reanimated/lib/typescript/core';
 
-
+//Esse é o codigo correto.
 
 export default function ScaleScreen(){
     const [scales, setScales] = useState<iScale[]>([]);
