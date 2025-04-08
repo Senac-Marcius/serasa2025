@@ -5,10 +5,12 @@ import {insertDocument, iDoc} from '../src/controllers/documents'
 import { supabase } from '../src/utils/supabase';
 import MyButton from '../src/components/MyButtons';
 import MyView from '../src/components/MyView';
-import MyTextArea from '../src/components/MyTextArea';
-import MyUpload from '../src/components/MyUpload';
+import  Mytext  from '../src/components/MyText';
+import { Myinput } from '../src/components/MyInputs';
+import MyList from '../src/components/MyList';
+import { MyItem } from '../src/components/MyItem';
+//import MyUpload from '../src/components/MyUpload';
 
-//nome da variavel
 
 export default function RecordScreen() {
 
@@ -17,58 +19,64 @@ export default function RecordScreen() {
   const [url, setUrl] = useState('');
   const [type, setType] = useState('');
   const [user_id, setUserId] = useState(''); //fk    
-  const [created_at, setCreateAt] = useState('');
   const[editingID, setEditingId] = useState<number | -1>(-1);
-
   //documents, setdocuments
   const [document, setDocuments] = useState<iDoc[]>([]);
   const router = useRouter();
 
-//buscar documentos no banco e atualizar de acordo com a ação
-useEffect(() =>{
-  async function getAll() {
-    const{ data:all, error } = await supabase.from('documents').select()
-    if(all && all.length > 1){
-      setDocuments(all)
+  //buscar documentos no banco e atualizar de acordo com a ação
+  useEffect(() =>{
+    async function getAll() {
+      const{ data:all, error } = await supabase.from('documents').select()
+      if(all){
+        setDocuments(all)
+      }
+      if (error){
+        console.error('Erro ao buscar documentos: ', error.message);
+      }   
     }
-    if (error){
-      console.error('Erro ao buscar documentos: ', error.message);
-    }   
-}
-getAll()
-},[]);
+  getAll()
+  },[]);
 
 
   // Função para adicionar um novo registro
-  const handleRegister = () => {
-      if (!name.trim() || !url.trim() || !type.trim()) {
-          alert('Preencha todos os campos!');
-          return;
-      }
+  async function handleRegister() {
+    if (!name.trim() || !url.trim() || !type.trim()) {
+        alert('Preencha todos os campos!');
+        return;
+    }
 
-      //se for um item editado, ele deve chamar o registro existente
-      if (editingID !== -1) {
-        setDocuments(document.map(doc =>
-              doc.id === editingID ? {...doc, name, url, type} : doc
-          ));
-          setEditingId(-1);//reset
-      } else{ //senão, ele deve criar um novo registro
-          const newDoc = {
-              id: document.length ? document[document.length - 1].id + 1 : 1,
-              name,
-              url,
-              user_id,
-              type,
-              created_at: new Date().toString(),
-          };
+    //se for um item editado, ele deve chamar o registro existente
+    if (editingID !== -1) {
+      setDocuments(document.map(doc =>
+            doc.id === editingID ? {...doc, name, url, type} : doc
+        ));
+        setEditingId(-1);//reset
+    } else{ //senão, ele deve criar um novo registro
+        const newDoc:iDoc = {
+            id: document.length ? document[document.length - 1].id + 1 : 1,
+            name,
+            url,
+            user_id,
+            type,
+            created_at: new Date().toString(),
+        };
 
-          setDocuments([...document, newDoc]);//armazena o novo registro
+        const result = await insertDocument(newDoc);//add no supabase
 
-      }       
-      // Resetando os campos após editar, cadastrar, etc..
-      setName('');
-      setUrl('');
-      setType('');
+        if (typeof result === 'string') {//garante q o valor é uma string antes de inseriri no bd
+          console.log('Erro ao inserir documento', result);          
+        }else{
+          setDocuments([...document,newDoc])
+          console.log('Documento inserido com sucesso: ', result);
+        }
+      
+    }  
+
+    // Resetando os campos após editar, cadastrar, etc..
+    setName('');
+    setUrl('');
+    setType('');
   };
 
 
@@ -87,75 +95,63 @@ getAll()
       }
   };
   
-
-  const[isEnabled, setIsEnabled] = useState(false)
   
 return (
     
   <MyView router={router}>
     
     <View>
+      <Mytext >Solicitação de Documentos</Mytext>
+      
+      <Myinput
+          iconName="person" 
+          label='Nome'
+          value={name} 
+          onChangeText={setName}
+      />
 
-      <View >
-        <MyTextArea >Solicitação de Documentos</MyTextArea>
-        
-        <MyTextArea
-            placeholder="Nome" 
-            value={name} 
-            onChangeMyTextArea={setName}
-        />
+      <Myinput 
+          iconName="link" 
+          label='Url'
+          value={url} 
+          onChangeText={setUrl}
+      />
 
-        <MyTextArea 
-            placeholder="Url" 
-            value={url} 
-            onChangeMyTextArea={setUrl}
-        />
+      <Myinput 
+          iconName="description" 
+          label='Tipo do Documento'
+          value={type} 
+          onChangeText={setType}
+      />
+      
+      <MyButton title={editingID !== -1 ? "Atualizar":"Cadastrar"} color={'#813AB1'} onPress={handleRegister} button_type="rect" />
+    </View>
+    
+          
 
-        <MyTextArea 
-            placeholder="Tipo do documento" 
-            value={type} 
-            onChangeMyTextArea={setType}
-        />
-        
-        <MyButton title={editingID !== -1 ? "Atualizar":"Cadastrar"} color={'#813AB1'} onPress={handleRegister} />
+    <View>
+      <Mytext >Registros Cadastrados</Mytext>
+      <MyList
+        data={document}
+        keyItem={(item) => item.id.toString()}//tratamento
+        renderItem={({ item }) => (
+          <View >                                 
+               
+              <View>
+                <MyButton title='EDITAR' onPress={()=> editRecord(item.id)}/>
+                <MyButton title='DELETAR' onPress={()=> deleteRecord(item.id)}/>
+              </View>
+              
+            <Mytext>Nome: {item.name}</Mytext>
+            <Mytext >Url: {item.url}</Mytext>
+            <Mytext >Tipo Documento: {item.type}</Mytext>     
 
-      </View>
-            
-
-            <View >
-                <MyTextArea >Registros Cadastrados</MyTextArea>
-                <ScrollView style={{ flex: 1 }}>
-                    <FlatList
-                        data={document}
-                        keyExtractor={(item) => item.id.toString()}//tratamento
-                        renderItem={({ item }) => (
-                            <View >
-                                <MyTextArea >Nome: {item.name}</MyTextArea>
-                                <MyTextArea >Url: {item.url}</MyTextArea>
-                                <MyTextArea >Tipo Documento: {item.type}</MyTextArea>
-                                
-                                
-                                <View >
-                                    <MyButton  onPress={() => editRecord(item.id)}> 
-                                        <MyTextArea >
-                                            Editar
-                                        </MyTextArea>
-                                    </MyButton>
-                                    <MyButton onPress={() => deleteRecord(item.id)}> 
-                                        <MyTextArea >
-                                            Excluir
-                                        </MyTextArea>
-                                    </MyButton>
-                                </View>
-                            </View>
-                        )}
-                        showsVerticalScrollIndicator={true}
-                        contentContainerStyle={{ paddingBottom: 20 }}
-                    />
-                </ScrollView>
-            </View>
-        </View>
-    </MyView>
+          </View>
+        )}
+      />
+    </View>
+    
+  </MyView>
 );
 }
 
