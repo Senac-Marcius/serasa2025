@@ -13,7 +13,7 @@ import { supabase } from '../src/utils/supabase';
 import { MyItem } from '../src/components/MyItem';
 import { Picker } from '@react-native-picker/picker';
 
-
+// Esse é o Projeto Correto 
 
 
 export default function ProjectScreen(){ 
