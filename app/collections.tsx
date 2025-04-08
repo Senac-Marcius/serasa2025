@@ -10,6 +10,7 @@ import {setCollection, iCollection,deleteCollectionById,updateCollectionById} fr
 import { supabase } from '../src/utils/supabase'
 
 
+
 //função userState só retorna para uma variavel const
 
 export default function CollectionScreen() {
@@ -49,7 +50,6 @@ export default function CollectionScreen() {
 
         } else {
             setCollections(collections.map(c => (c.id == req.id ? req : c)))
-
             const deletecollection = await updateCollectionById(req.id, req)
             if (!deletecollection) {
                 alert("Erro ao atualizar usuário.")
@@ -86,6 +86,8 @@ export default function CollectionScreen() {
     }
 
     const router = useRouter();
+
+   
 
 
     return (//encapsulamento 
@@ -146,8 +148,10 @@ export default function CollectionScreen() {
                                         <Text style={styles.buttonText}>Edit</Text>
 
                                     </TouchableOpacity>
-
                                 </View>
+                                <TouchableOpacity style={styles.button_round} onPress={() => router.push('/collectionspage')}>
+                                        <Text style={styles.buttonText}>Visite nosso acervo</Text>
+                                </TouchableOpacity>
                             </View>
                         )}
                     />
@@ -249,3 +253,4 @@ const styles = StyleSheet.create({
 
 
 })
+
