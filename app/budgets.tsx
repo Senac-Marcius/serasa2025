@@ -78,7 +78,7 @@ export default function BudgetScreen(){
         setReq(budget)
     }
 
-    async function handleDelete(id: number) {
+    async function delBudget(id: number) {
         try {
             const { error } = await supabase
                 .from('budgets')
