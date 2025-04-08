@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, FlatList, Text, StyleSheet, TextInput, Button, TouchableOpacity,} from 'react-native';
 import MyTheme from '../src/components/MyTheme';
 import {Myinput} from '../src/components/MyInputs'; 
@@ -9,7 +9,9 @@ import MyList from '../src/components/MyList';
 import Mytext from '../src/components/MyText';
 import {textStyles}  from '../styles/textStyles';
 import { useRouter } from 'expo-router';
-import { notifications, setNotification,setNotifications } from '../src/controllers/notification';
+import { setNotification, iNotification, editNotification, deleteNotification } from '../src/controllers/notification';
+import { supabase } from '../src/utils/supabase'
+
 
 export default function NotificationScreen(){
 // aqui é typNotificationScreenescript
@@ -17,19 +19,44 @@ export default function NotificationScreen(){
         name:'',
         url:'',
         description:'',
-        classification:'',
         id: -1,
-        creatAt: new Date().toISOString(),
-        userId: 0,
+        created_at: new Date().toISOString(),
+        user_id: 1,
     });
+
+    const [notifications, setNotifications]= useState<iNotification[]>([])
     
-    function handleRegister(){
-        if( req.id == -1){
-            const newId = notifications.length ? notifications[notifications.length -1].id +1 : 0;
-            const newNotification = {...req, id: newId};
+
+    useEffect(() => {
+        async function getTodos(){
+            const {data: todos}= await supabase.from('notifications').select()
+    
+            if(todos && todos.length > 0){
+                setNotifications(todos)
+            }
+        }
+
+        getTodos();
+    },[])
+    
+    
+    async function handleRegister(){
+        const newNotification = {...req};
 
             setNotifications([...notifications, newNotification])
-            setNotification(newNotification)
+            const resp = await setNotification(newNotification)
+            console.log(resp)
+            
+        if( req.id == -1){
+            const newId = notifications.length ? notifications[notifications.length -1].id +1 : 0;
+            const newNotification = {...req, id: newId}
+            
+        
+            setNotifications([...notifications, newNotification])
+            const resp = await setNotification(newNotification)
+            console.log(resp)
+
+
         }else{
             setNotifications(notifications.map(n => (n.id == req.id ? req : n)));
         }
@@ -38,10 +65,9 @@ export default function NotificationScreen(){
             name:'',
             url:'',
             description:'',
-            classification:'',
             id: -1,
-            creatAt: new Date().toISOString(),
-            userId: 0,
+            created_at: new Date().toISOString(),
+            user_id: 1,
         })
     }
 
@@ -52,6 +78,7 @@ export default function NotificationScreen(){
     }
 
     function deleteNotification(id:number){
+
         const list = notifications.filter(n => n.id != id )
             setNotifications(list)
     }
@@ -84,14 +111,6 @@ return (
                         iconName='pending'
                     
                 />
-                <Myinput
-                        style={styles.input}
-                        placeholder = "Digite a classificação:"  
-                        value={req.classification}
-                        onChangeText={(text) => setReq({...req ,classification: text  })}
-                        label="Classificação"
-                        iconName= 'pending'
-                />
 
                 <Myinput
                         style={styles.input}
@@ -120,8 +139,8 @@ return (
                            <Mytext style={textStyles.textBody} > Nome: {item.name}</Mytext> {/* alex */}
                            <Mytext style={textStyles.textBody}> Descrição: {item.description}</Mytext>
                            <Mytext style={textStyles.textBody}> Url: {item.url}</Mytext>
-                           <Mytext style={textStyles.textBody}> UserId: {item.userId}</Mytext>
-                           <Mytext style={textStyles.textBody}> CreatAt: {item.creatAt}</Mytext>
+                           <Mytext style={textStyles.textBody}> UserId: {item.user_id}</Mytext>
+                           <Mytext style={textStyles.textBody}> CreatAt: {item.created_at}</Mytext>
 
 
                             {/*
