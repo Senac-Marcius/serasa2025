@@ -65,7 +65,7 @@ export default function PositionScreen(){
       }
       
 
-    function editPosition (id:number){
+    async function editPosition (id:number){
         const position = positions.find(p => p.id == id)
         if(position)
             setReq(position)
