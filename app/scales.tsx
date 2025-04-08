@@ -1,4 +1,4 @@
-import React, {useState} from 'react'; //Importa o react e atualiza a lista Automaticamente.
+import React, {useState, useEffect} from 'react'; //Importa o react e atualiza a lista Automaticamente.
 import {View, Text, StyleSheet, FlatList} from 'react-native';//Une  os objetos e o react-native faz a função de trasformar o codigo em multiplas plataformas.
 import MyFilter from '../src/components/MyFilter';
 import MySelect from '../src/components/MySelect';
@@ -6,28 +6,28 @@ import MyTimerPicker from '../src/components/MyTimerPiker';
 import MyButton from '../src/components/MyButtons';
 import {MyItem} from '../src/components/MyItem';
 import MyView from '../src/components/MyView';
-import { useRouter } from 'expo-router';
+import {useRouter} from 'expo-router';
+import {iScale, setScale, updateScale, deleteScale} from '../src/controllers/scales';
+import { supabase } from '../src/utils/supabase'
+import Mytext from '../src/components/MyText';
+import { jsiConfigureProps } from 'react-native-reanimated/lib/typescript/core';
+
+//Esse é o codigo correto.
 
 export default function ScaleScreen(){
+    const [scales, setScales] = useState<iScale[]>([]);
 
     const [req, setReq] = useState({
-        id:0,
+        id:-1,
         day:'',
-        starttime:'', 
-        endtime:'',
-        creatAt: new Date().toISOString(),
-        userId: 0,
+        start_time:'', 
+        end_time:'',
+        created_at: new Date().toISOString(),
+        employ_id: 1,
     });
 
 
-    const [scales, setScales] = useState<{
-        id:number,
-        day: string,
-        starttime:string,
-        endtime:string,
-        creatAt: string,
-        userId: number,
-    }[]>([]);
+    
 
     const [selectedDay, setSelectedDay] = useState<string>('');
 
@@ -50,76 +50,102 @@ export default function ScaleScreen(){
           day: label, // Atualiza o campo 'day' em req
         }));
       };
+    
 
-    function handleRegister(){
-        if(req.id <= 0){
-            const newId = scales.length ? scales[scales.length - 1].id + 1 : 1;
-            const newScale = {...req, id: newId };
-            
-            setScales([...scales, newScale]);
-        }else{
-            setScales(scales.map(s => (s.id == req.id)? req: s ) );
+    useEffect(() => {
+        async function getTodos() {
+          const { data: todos } = await supabase.from('scales').select()
+    
+          if (todos && todos.length > 0) {
+            setScales(todos)
+          }
         }
+    
+        getTodos()
+      }, [])
+    
+      async function handleRegister() {
+        
+        
+        if (req.id == -1) {
+            const newid = scales.length? scales[scales.length - 1].id + 1 : 0;
 
+
+          const newScale = {...req,  id: newid};
+      
+          const saved = await setScale(newScale);
+          if (saved) setScales([...scales, saved[0]]);
+        } else {
+          const updated = await updateScale(req.id, req);
+      
+          if (updated) {
+            setScales(scales.map((s) => (s.id === req.id ? updated[0] : s)));
+          }
+        }
+      
+        // Reset do formulário
         setReq({
-            id: 0,
+            id:-1,
             day:'',
-            starttime:'',
-            endtime:'',
-            creatAt:new Date().toISOString(),
-            userId: 0,
-        }) 
-        setSelectedDay('');  
-    }
-
-    function editScale(id: number){
+            start_time:'', 
+            end_time:'',
+            created_at: new Date().toISOString(),
+            employ_id: 1,
+        });
+        setSelectedDay('');
+      }
+    
+      async function handleDeleteScale(id: number) {
+        const success = await deleteScale(id);
+        if (success) {
+          setScales(scales.filter(s => s.id !== id));
+        }
+      }
+    
+      function editScale(id: number) {
         const scale = scales.find(s => s.id === id);
         if (scale) {
-            setReq(scale);
+          setReq(scale);
+          setSelectedDay(scale.day);
         }
-    }
-
-
-    function deleteScale(id: number){
-        const list = scales.filter(s => s.id !== id);
-        setScales(list);
-
-    }
-
-    const router = useRouter();
+      }
+    
+      const router = useRouter();
 
     return (
         <MyView router={router} > {/* Aqui é typecript dentro do html*/}
+            <Mytext>CRIE SUA ESCALA</Mytext>
             <MyFilter
                 style={styles.container}
                 itens={['day', 'starttime']}
                 onSend={(filter) => console.log('Filtro aplicado:', filter)}
                 onPress={(item) => console.log('Filtro pressionado:', item)}
                 />
-            {/*Aqui é HTML*/}
-            <Text>Minha tela das escalas</Text>
-            <MyView router={router} >
+
+            <View>
                 <View style={styles.form}>
                     <MySelect
                         label={selectedDay || 'Selecione um dia da semana'}
                         list={daysOfWeek}
                         setLabel={handleSetLabel}
                     />
-                    <Text>Dia Selecionado: {selectedDay || 'Nenhum dia selecionado'}</Text>
+                    <Mytext>Dia Selecionado:📅 {selectedDay || 'Nenhum dia selecionado'}</Mytext>
 
+                    <Mytext>Horario de início:▶</Mytext>
                     <MyTimerPicker
-                         initialTime={req.starttime}
-                        onTimeSelected={(time) => setReq({ ...req, starttime: time })}
+                         initialTime={req.start_time}
+                        onTimeSelected={(time) => setReq({ ...req, start_time: time })}
                     />
+                    <Mytext>Horario de término:⏹</Mytext>
                     <MyTimerPicker
-                        initialTime={req.endtime}
-                        onTimeSelected={(time) => setReq({ ...req, endtime: time })}
+                        initialTime={req.end_time}
+                        onTimeSelected={(time) => setReq({ ...req, end_time: time })}
                      />
                     <MyButton
                         title='Cadastrar' onPress={handleRegister}
                     />
                 </View >
-                <MyView router={router} >
+                <View>
                 <FlatList
                     data={scales}
                     keyExtractor={(item) => item.id.toString()}
@@ -127,18 +153,18 @@ export default function ScaleScreen(){
                         <MyItem
                             style={styles.response}
                             onEdit={() => editScale(item.id)}
-                            onDel={() => deleteScale(item.id)}
+                            onDel={() => handleDeleteScale(item.id)}
                         >
                             <Text>Dia da semana: {item.day}</Text>
-                            <Text>Horário de início: {item.starttime}</Text>
-                            <Text>Horário de término: {item.endtime}</Text>
-                            <Text>Id do Usuário: {item.userId}</Text>
-                            <Text>Data da criação: {item.creatAt}</Text>
+                            <Text>Horário de início: {item.start_time}</Text>
+                            <Text>Horário de término: {item.end_time}</Text>
+                            <Text>Id do Usuário: {item.employ_id}</Text>
+                            <Text>Data da criação: {item.created_at}</Text>
                         </MyItem>
                     )}
                 />
-                </MyView> 
-            </MyView>       
+                </View> 
+            </View>       
         </MyView> 
     );
 };
@@ -148,10 +174,17 @@ export default function ScaleScreen(){
 const styles = StyleSheet.create({
     
     container: {
-        flex: 1,
-        gap: 10,
-        padding: 20,
+        alignItems: 'flex-end',
+        marginBottom: 20,
+        paddingHorizontal: 50,
         backgroundColor: '#FFFFFF',
+        justifyContent: 'center',  
+        rowGap: 10,
+        columnGap: 10, 
+        width: 'auto',
+    },
+    Mytext:{
+        justifyContent: 'center'
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -161,7 +194,7 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         flex: 1,
-        padding: 20,
+        padding: 10,
         backgroundColor: '#F2F2F2',
         borderRadius: 10,
         shadowColor: '#000',
@@ -174,12 +207,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
-        marginBottom: 400,
+        marginBottom: 200,
     }, 
     form: {
         flex: 1,
-        marginRight: 10,
-        padding: 20,
+        marginRight: 5,
+        padding: 5,
         backgroundColor: '#FFFFFF',
         borderRadius: 10,
         shadowColor: '#000',
