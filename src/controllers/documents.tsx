@@ -4,10 +4,11 @@ interface iDoc{
   id: number; 
   name: string; 
   url: string; 
-  user_id: string; 
+  user_id: number; 
   type: string; 
   created_at: string;
 }
+
 
 
 //função do banco de dados
@@ -22,13 +23,13 @@ async function insertDocument(document: iDoc) {//mesma coisa que o set só que c
       
       if(error){// aqui vem os tratamentos da variavel erro --> "try catch"
 
-        console.log('Erro ao inserir documento: ', error);//message
+        console.error('Erro ao inserir documento: ', error);//message
         return "Erro!";
       }
 
     return data;
   }catch(err){
-    console.log('Erro ao inserir documento2: ', err);
+    console.error('Erro ao inserir documento2: ', err);
     return 'Erro desconhecido!';
     
   }

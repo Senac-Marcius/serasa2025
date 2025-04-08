@@ -15,13 +15,19 @@ import { MyItem } from '../src/components/MyItem';
 export default function RecordScreen() {
 
   // Estados individuais para os s
-  const [name, setName] = useState('');
-  const [url, setUrl] = useState('');
-  const [type, setType] = useState('');
-  const [user_id, setUserId] = useState(''); //fk    
-  const[editingID, setEditingId] = useState<number | -1>(-1);
+   const [req,setReq] = useState({
+      name: '',
+      url: '',
+      type: '',
+      user_id: 1,
+      id: -1,
+      created_at: new Date().toISOString(),
+  
+  });
+
   //documents, setdocuments
-  const [document, setDocuments] = useState<iDoc[]>([]);
+  const [documents, setDocuments] = useState<iDoc[]>([]);
+
   const router = useRouter();
 
   //buscar documentos no banco e atualizar de acordo com a ação
@@ -35,124 +41,110 @@ export default function RecordScreen() {
         console.error('Erro ao buscar documentos: ', error.message);
       }   
     }
-  getAll()
+
+    getAll()
   },[]);
 
 
   // Função para adicionar um novo registro
   async function handleRegister() {
-    if (!name.trim() || !url.trim() || !type.trim()) {
-        alert('Preencha todos os campos!');
-        return;
-    }
-
+  
     //se for um item editado, ele deve chamar o registro existente
-    if (editingID !== -1) {
-      setDocuments(document.map(doc =>
-            doc.id === editingID ? {...doc, name, url, type} : doc
-        ));
-        setEditingId(-1);//reset
+    if (req.id == -1) {
+      const newid = documents.length? documents[documents.length - 1].id + 1 : 0;
+      const newDoc = {...req, id: newid}
+
+      setDocuments([...documents, newDoc]);
+      await insertDocument(newDoc)
     } else{ //senão, ele deve criar um novo registro
-        const newDoc:iDoc = {
-            id: document.length ? document[document.length - 1].id + 1 : 1,
-            name,
-            url,
-            user_id,
-            type,
-            created_at: new Date().toString(),
-        };
+      //aqui vc vai chamada sua função de editar do controlador
+      setDocuments(documents.map((d) => (d.id == req.id)? req: d));
 
-        const result = await insertDocument(newDoc);//add no supabase
-
-        if (typeof result === 'string') {//garante q o valor é uma string antes de inseriri no bd
-          console.log('Erro ao inserir documento', result);          
-        }else{
-          setDocuments([...document,newDoc])
-          console.log('Documento inserido com sucesso: ', result);
-        }
-      
     }  
 
     // Resetando os campos após editar, cadastrar, etc..
-    setName('');
-    setUrl('');
-    setType('');
+    setReq({
+      name: '',
+      url: '',
+      type: '',
+      user_id: 1,
+      id: -1,
+      created_at: new Date().toISOString(),
+    })
   };
 
 
   // Função para excluir um registro
   const deleteRecord = (id: number) => {
-      setDocuments(document.filter((doc) => doc.id !== id));
+      //aqui voce vai chamda sua função de deletar do controlador
+
+      setDocuments(documents.filter((d) => d.id != id));
   };
 
   const editRecord = (id: number) => {
-      const doc = (document.find((doc => doc.id === id)));
+      const doc = documents.find( (d) => d.id == id);
       if (doc){//vai colocar as informações salvas no vetor de volta no  para editar
-          setName(doc.name);
-          setUrl(doc.url);
-          setType(doc.type);
-          setEditingId(id);// qual id eu quero editar
+          setReq(doc)
       }
   };
   
   
-return (
-    
-  <MyView router={router}>
-    
-    <View>
-      <Mytext >Solicitação de Documentos</Mytext>
+  return (
       
-      <Myinput
-          iconName="person" 
-          label='Nome'
-          value={name} 
-          onChangeText={setName}
-      />
-
-      <Myinput 
-          iconName="link" 
-          label='Url'
-          value={url} 
-          onChangeText={setUrl}
-      />
-
-      <Myinput 
-          iconName="description" 
-          label='Tipo do Documento'
-          value={type} 
-          onChangeText={setType}
-      />
+    <MyView router={router}>
       
-      <MyButton title={editingID !== -1 ? "Atualizar":"Cadastrar"} color={'#813AB1'} onPress={handleRegister} button_type="rect" />
-    </View>
-    
-          
+      <View>
+        <Mytext >Solicitação de Documentos</Mytext>
+        
+        <Myinput
+            iconName="person" 
+            label='Nome'
+            value={req.name} 
+            onChangeText={(text) => {setReq({...req, name: text})}}
+        />
 
-    <View>
-      <Mytext >Registros Cadastrados</Mytext>
-      <MyList
-        data={document}
-        keyItem={(item) => item.id.toString()}//tratamento
-        renderItem={({ item }) => (
-          <View >                                 
-               
-              <View>
-                <MyButton title='EDITAR' onPress={()=> editRecord(item.id)}/>
-                <MyButton title='DELETAR' onPress={()=> deleteRecord(item.id)}/>
-              </View>
-              
-            <Mytext>Nome: {item.name}</Mytext>
-            <Mytext >Url: {item.url}</Mytext>
-            <Mytext >Tipo Documento: {item.type}</Mytext>     
+        <Myinput 
+            iconName="link" 
+            label='Url'
+            value={req.url} 
+            onChangeText={(text) => {setReq({...req, url: text})}}
+        />
 
-          </View>
-        )}
-      />
-    </View>
-    
-  </MyView>
-);
+        <Myinput 
+            iconName="description" 
+            label='Tipo do Documento'
+            value={req.type} 
+            onChangeText={(text) => {setReq({...req, type: text})}}
+        />
+        
+        <MyButton title={req.id != -1 ? "Atualizar":"Cadastrar"} color={'#813AB1'} onPress={handleRegister} button_type="rect" />
+      </View>
+      
+            
+
+      <View>
+        <Mytext >Registros Cadastrados</Mytext>
+        <MyList
+          data={documents}
+          keyItem={(item) => item.id.toString()}//tratamento
+          renderItem={({ item }) => (
+            <MyItem
+              onDel={()=> deleteRecord(item.id)}
+              onEdit={()=> editRecord(item.id)}
+            >                                 
+
+
+              <Mytext>Nome: {item.name}</Mytext>
+              <Mytext >Url: {item.url}</Mytext>
+              <Mytext >Tipo Documento: {item.type}</Mytext>     
+
+            </MyItem>
+          )}
+        />
+      </View>
+      
+    </MyView>
+  );
 }
 
 
