@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { supabase } from "../utils/supabase";
+import { Alert } from "react-native";
 
 interface iStudent {
-
   name: string;
   birthday: string;
   email: string;
@@ -17,70 +17,56 @@ interface iStudent {
   user_id: number;
 }
 
-type eStudent = {id:number} & iStudent
+type eStudent = { id: number } & iStudent;
 
 async function setStudent(student: iStudent) {
-  
   const { data, error } = await supabase
     .from("students")
-    .insert([student],)
+    .insert([student])
     .select();
   if (error) {
     console.error("Error inserting student:", error);
   }
-
 }
 
 async function delStudent(id: number) {
   const { error } = await supabase.from("students").delete().eq("id", `${id}`);
+
+  if (error) {
+    console.log(error);
+    alert(error);
+
+    return false;
+  } else return true;
 }
 
 async function editStudent(student: eStudent) {
+  let studentID = student.id;
+  const { id, ...studentValues } = student;
+
   const { data, error } = await supabase
     .from("students")
-    .update(student)
-    .eq("id", `${student.id}`)
+    .update(studentValues)
+    .eq("id", `${studentID}`)
     .select();
+
+  console.log(data);
 }
 
 async function getStudent() {
   let { data: students, error } = await supabase.from("students").select("*");
 
   return students;
-  
 }
 
 async function selectStudent() {
-  let { data: students, error } = await supabase
-    .from("students")
-    .select("*")
-
-    // Filters
-    .eq("column", "Equal to")
-    .gt("column", "Greater than")
-    .lt("column", "Less than")
-    .gte("column", "Greater than or equal to")
-    .lte("column", "Less than or equal to")
-    .like("column", "%CaseSensitive%")
-    .ilike("column", "%CaseInsensitive%")
-    .is("column", null)
-    .in("column", ["Array", "Values"])
-    .neq("column", "Not equal to")
-
-    // Arrays
-    .contains("array_column", ["array", "contains"])
-    .containedBy("array_column", ["contained", "by"])
-
-    // Logical operators
-    .not("column", "like", "Negate filter")
-    .or("some_column.eq.Some value, other_column.eq.Other value");
+  let { data: students, error } = await supabase.from("students").select("*");
 }
 export {
   selectStudent,
   delStudent,
   editStudent,
   getStudent,
-
   iStudent,
   eStudent,
   setStudent,

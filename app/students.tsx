@@ -4,9 +4,7 @@ import {
   Text,
   View,
   StyleSheet,
-  ScrollView,
   TextInput,
-  Button,
   TouchableOpacity,
   _View,
 } from "react-native";
@@ -17,15 +15,12 @@ import {
   delStudent,
   editStudent,
   getStudent,
-  selectStudent,
   setStudent,
-  iStudent,
   eStudent,
 } from "../src/controllers/students";
-import { Item } from "react-native-paper/lib/typescript/components/Drawer/Drawer";
 
 export default function StudentsScreen() {
-  const [students, setStudents] = useState<eStudent[]>([]);
+  const [students, setStudents] = useState<eStudent[] | null>([]);
   const [studentEdit, setEditStudent] = useState<eStudent | null>(null);
 
   const [req, setReq] = useState({
@@ -44,34 +39,44 @@ export default function StudentsScreen() {
   });
 
   const [isEditing, setEditState] = useState(false);
-
-  useEffect(() => {
-    async function fetchStudents() {
-      const todos = await getStudent();
-      if (todos && todos.length > 0) {
-        setStudents(todos);
-      }
+  async function fetchStudents() {
+    const todos = await getStudent();
+    if (todos && todos.length > 0) {
+      setStudents(todos);
     }
+  }
+  useEffect(() => {
     fetchStudents();
   }, []);
 
   async function handleRegister() {
     if (isEditing) {
       if (studentEdit) {
-        setEditStudent({ id: studentEdit.id, ...req });
-        editStudent(studentEdit)
+        const { id, ...othervalues } = studentEdit;
+        const updateStudent = { id, ...req };
+        console.log(updateStudent);
+        await editStudent(updateStudent);
       }
-      setEditState(false)
-      return
+      setEditState(false);
+      fetchStudents();
+      return;
     }
     console.log("Registering student:", req);
     await setStudent(req)
       .then(() => {
         console.log("Student registered successfully");
+        fetchStudents();
       })
       .catch((error) => {
         console.error("Error registering student:", error);
       });
+  }
+  async function removeStudent(id: number) {
+    let remove = await delStudent(id);
+
+    if (remove) {
+      fetchStudents();
+    }
   }
 
   const router = useRouter();
@@ -83,12 +88,12 @@ export default function StudentsScreen() {
       <MyButton
         title="Editar"
         onPress={() => {
-          setEditStudent(item)
+          setEditStudent(item);
           setReq(item);
           setEditState(true);
         }}
       />
-      <MyButton title="Delete" onPress={() => delStudent(item.id)} />
+      <MyButton title="Delete" onPress={() => removeStudent(item.id)} />
     </View>
   );
 
@@ -102,8 +107,11 @@ export default function StudentsScreen() {
             style={styles.textinput}
             placeholder="Digite seu nome"
             value={req.name}
-            onChangeText={(text) => setReq({ ...req, name: text })}
+            onChangeText={(text) => {
+              setReq({ ...req, name: text });
+            }}
           />
+
           <TextInput
             style={styles.textinput}
             placeholder="Data de nascimento"
