@@ -6,31 +6,13 @@ import MyView from '../src/components/MyView';
 import { Myinput } from '../src/components/MyInputs'
 import MyList from '../src/components/MyList'
 import { useRouter } from 'expo-router';
-import {setCollection, iCollections} from '../src/controllers/collections';
+import {setCollection, iCollection,deleteCollectionById,updateCollectionById} from '../src/controllers/collections';
 import { supabase } from '../src/utils/supabase'
 
 
 //função userState só retorna para uma variavel const
 
 export default function CollectionScreen() {
-
-    const [visible, setVisible] = useState(false);
-    const[collections, setCollections] = useState<iCollections[]>([]);
-
-    useEffect(() =>{
-        async function getTodos(){
-
-            const{data:todos} = await supabase.from ('collections').select()
-            
-            if (todos && todos.length >1){
-                setCollections(todos)
-         }
-    }
-    getTodos()
-}, [])
-
-
-
 
     const [req, setReq] = useState({
         id: 0,
@@ -40,16 +22,40 @@ export default function CollectionScreen() {
         createAt: new Date().toISOString()
     });
 
+    const [visible, setVisible] = useState(false);
+
+    const[collections, setCollections] = useState<iCollection[]>([]);
+
+    useEffect(() =>{
+        async function getTodos(){
+
+            const{data:todos} = await supabase.from('collections').select()
+            
+            if (todos && todos.length>0){
+                setCollections(todos)
+         }
+    }
+    getTodos()
+}, [])
+
+
      async function handleRegister() {
         if (req.id == -1) {
             const newId = collections.length ? collections[collections.length - 1].id + 1 : 0
-            const newcollections = { ...req, id: newId }
-            setCollections([...collections, newcollections])
-            setCollection(newcollections)
+            const newCollections = {...req, id: newId}
+            setCollections([...collections, newCollections])
+            await setCollection(newCollections)
+             
 
         } else {
             setCollections(collections.map(c => (c.id == req.id ? req : c)))
 
+            const deletecollection = await updateCollectionById(req.id, req)
+            if (!deletecollection) {
+                alert("Erro ao atualizar usuário.")
+                return
+            }
+            
         }
         setReq({
             id: -1,
@@ -67,12 +73,16 @@ export default function CollectionScreen() {
 
 
     }
+  
 
-    function deleteCollections(id: number) {
-        const list = collections.filter(c => c.id != id)
-        if (list)
-            setCollections(list)
-
+    async function deleteCollections(id: number) {
+        const deletecollection = await deleteCollectionById(id)
+        if (deletecollection) {
+            const updatedList = collections.filter(c => c.id != id)
+            setCollections(updatedList)
+        } else {
+            alert("Erro ao deletar usuário.")
+        }
     }
 
     const router = useRouter();
