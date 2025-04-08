@@ -1,92 +1,187 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Ionicons } from '@expo/vector-icons';
+module.exports = {
+    presets: ['babel-preset-expo'],
+    plugins: ['react-native-reanimated/plugin'], // isso precisa ser o último plugin!
+  };
+  
 
-export default function ClassScreen() {
+type Turma = {
+  id: string;
+  curso: string;
+  codigo: string;
+  turno: string;
+  modalidade: string;
+  horario: string;
+  cargaHoraria: string;
+  vagas: string;
+  inicio: string;
+  termino: string;
+  valor: string;
+  docente: string;
+  certificacao: string;
+  status: string;
+};
 
-    const [Req, setReq] = useState({
-        name: '',
-        id: 0,
-        date: '',
-        start_date: '',
-        end_date: '',       
-        createAt: new Date(),
-    });
+const Stack = createNativeStackNavigator();
 
+export default function App() {
+  const [turmas, setTurmas] = useState<Turma[]>([]);
 
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Turmas">
+        <Stack.Screen name="Turmas">
+          {(props) => (
+            <TurmasScreen {...props} turmas={turmas} setTurmas={setTurmas} />
+          )}
+        </Stack.Screen>
+        <Stack.Screen name="CadastroTurma">
+          {(props) => (
+            <CadastroTurmaScreen {...props} setTurmas={setTurmas} />
+          )}
+        </Stack.Screen>
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
-    return (
-        <View>
-            Olá mundo
-            <Text>
-                Minha tela das classes</Text>
-                <View style={styles.row}>
-                    <View style={styles.form}>
-                        <TextInput
-                        placeholder="Nome da Turma"
-                        value={Req.name}
-                        onChangeText={(text) => setReq({...Req, name: text})}
-                        />
-                        {Req.name}
-                        <TextInput
-                        placeholder="Quantidade de Alunos"
-                        value={Req.quant}
-                        onChangeText={(text) => setReq({...Req, quant: text})}
-                        />
-                        {Req.quant}
-                        <TextInput
-                        placeholder="ID da Turma"
-                        value={Req.id}
-                        onChangeText={(text) => setReq({...Req, id: text})}
-                        />
-                        {Req.id}
-                        <TextInput
-                        placeholder="Data de criação da Turma"
-                        value={Req.date}
-                        onChangeText={(text) => setReq({...Req, date: text})}
-                        />
-                        {Req.date}
-                        <TextInput
-                        placeholder="Data de Inicio"
-                        value={Req.start_date}
-                        onChangeText={(text) => setReq({...Req, start_date: text})}
-                        />
-                        {Req.start_date}
-                        <TextInput
-                        placeholder="Data de Finalização"
-                        value={Req.end_date}
-                        onChangeText={(text) => setReq({...Req, end_date: text})}
-                        
-                        />
-                        {Req.end_date}
+function TurmasScreen({ navigation, turmas, setTurmas }: any) {
+  const deletarTurma = (id: string) => {
+    setTurmas(turmas.filter((t: Turma) => t.id !== id));
+  };
 
-                        <Button title="Cadastrar Turma" color= 'purple'/>
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={turmas}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+            <Text style={styles.title}>{item.curso}</Text>
+            <Text>Código: {item.codigo}</Text>
+            <Text>Turno: {item.turno}</Text>
+            <View style={styles.actions}>
+              <TouchableOpacity onPress={() => {}}>
+                <Ionicons name="pencil" size={20} color="purple" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => deletarTurma(item.id)}>
+                <Ionicons name="trash" size={20} color="purple" />
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+      />
+      <Button
+        title="Cadastrar Turma"
+        onPress={() => navigation.navigate('CadastroTurma')}
+      />
+    </View>
+  );
+}
 
-                    </View>
-                    
+function CadastroTurmaScreen({ navigation, setTurmas }: any) {
+  const [form, setForm] = useState<Turma>({
+    id: Date.now().toString(),
+    curso: '',
+    codigo: '',
+    turno: '',
+    modalidade: '',
+    horario: '',
+    cargaHoraria: '',
+    vagas: '',
+    inicio: '',
+    termino: '',
+    valor: '',
+    docente: '',
+    certificacao: '',
+    status: '',
+  });
 
-                </View>
-        </View>
-    );
+  const handleChange = (field: keyof Turma, value: string) => {
+    setForm({ ...form, [field]: value });
+  };
 
-} 
+  const salvar = () => {
+    setTurmas((prev: Turma[]) => [...prev, form]);
+    navigation.goBack();
+  };
+
+  return (
+    <ScrollView contentContainerStyle={styles.formContainer}>
+      {[
+        'codigo',
+        'curso',
+        'turno',
+        'modalidade',
+        'horario',
+        'cargaHoraria',
+        'vagas',
+        'inicio',
+        'termino',
+        'valor',
+        'docente',
+        'certificacao',
+        'status',
+      ].map((campo) => (
+        <TextInput
+          key={campo}
+          style={styles.input}
+          placeholder={campo.charAt(0).toUpperCase() + campo.slice(1)}
+          value={(form as any)[campo]}
+          onChangeText={(text) => handleChange(campo as keyof Turma, text)}
+        />
+      ))}
+      <Button title="Salvar Turma" onPress={salvar} />
+    </ScrollView>
+  );
+}
 
 const styles = StyleSheet.create({
-    row : {
-        flexDirection: 'row',   
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-    },    
-    form:{
-        flex: 1,
-        marginRight: 10,
-        padding: 20,
-        backgroundColor: 'F2F2F2',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: {width: 0, height: 4},
-        shadowRadius: 5,
-
-
-    },
-})
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+  card: {
+    backgroundColor: '#fff',
+    padding: 16,
+    marginVertical: 8,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  actions: {
+    flexDirection: 'row',
+    gap: 16,
+    marginTop: 8,
+  },
+  formContainer: {
+    padding: 16,
+    gap: 12,
+  },
+  input: {
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 10,
+    backgroundColor: '#fff',
+  },
+});
