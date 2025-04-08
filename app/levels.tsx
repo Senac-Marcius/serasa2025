@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View,Text, StyleSheet,FlatList, Button,TextInput, Touchable, TouchableOpacity} from 'react-native';
 import { Myinput } from '../src/components/MyInputs';
 import MyView from '../src/components/MyView';
@@ -8,59 +8,67 @@ import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
 import { MyItem } from '../src/components/MyItem';
 import { useRouter } from 'expo-router';
-import { levels } from '../src/controllers/levels';
+import {setLevel , iLevels } from '../src/controllers/levels';
+import { supabase } from '../src/utils/supabase';
+import { iLevels } from './seuArquivoDeTipos';  
 
 export default function levelsScreen(){
     const [req, setReq] = useState({
         name: '',
-        description : '',
+        description: '',
         color: '',
         id: -1,
-        createAt: new Date().toISOString(),
-        userId : 0,    
+        created_at: new Date().toISOString(),
+          
     });
  
-    //aqui é o supabase
-    const[leves, setleves] = useState<{ 
-        name: string,
-        description: string,
-        color: string,
-        id: number,
-        createAt: string,
-        userId: number,
-        }[]>([])
+    const [levels,setLevels] = useState<iLevels[]>([])//a chave recebe a lista que esta sendo declarada na interface.
     
-    function handleRegister (){
+    useEffect (()=>{
+            async function getTodos(){
+            const {data: todos}= await supabase.from('levels').select()
+
+            if(todos && todos.length > 0){
+                setLevels(todos)
+            }
+        }
+
+        getTodos();
+    },[])
+
+    async function handleRegister (){
 
         if( req.id == -1){
-            const newId = leves.length ? leves[leves.length -1].id +1 : 0;
+            const newId = levels.length ? levels[levels.length -1].id +1 : 0;
             const newLeves = {...req, id: newId};
  
-            setleves([...leves, newLeves]);
+            setLevels([...levels, newLeves]);
+            await setLevel(newLeves)
+            
         }else{
-            setleves(leves.map(l => (l.id == req.id ? req : l)));
+            setLevels(levels.map(l => (l.id == req.id ? req : l)));
         }
         
         setReq({name: '',
             description: '',
             color: '',
             id: -1,
-            createAt: new Date().toISOString(),
-            userId : 0,
+            created_at: new Date().toISOString(),
+           
 
         })
     }
 
     function editLevels (id: number){
-        const notification = leves.find( l => l.id == id)
+        const notification = levels.find( l => l.id == id)
         if(notification)
             setReq(notification)
     }
 
     function deleteLevels (id: number){
 
-        const list = leves.filter(l => l.id != id )
-        setleves(list)
+        const list = levels.filter(l => l.id != id )
+        setLevels(list)
     }
 
     const router = useRouter();
@@ -109,7 +117,7 @@ export default function levelsScreen(){
                 </View>
 
                 <MyList
-                    data= {leves}
+                    data= {levels}
                     keyItem= {(item) => item.id.toString()}
                     renderItem= {({item}) =>(
                        <MyItem
@@ -120,7 +128,7 @@ export default function levelsScreen(){
                            <Mytext style={textStyles.textBody}> Nome: {item.name}</Mytext> {/* alex */}
                            <Mytext style={textStyles.textBody}> Descrição: {item.description}</Mytext>
                            <Mytext style={textStyles.textBody}> Cor: {item.color}</Mytext>
-                           <Mytext style={textStyles.textBody}> UserId: {item.userId}</Mytext>
+                          
                            
  
                             {/*
