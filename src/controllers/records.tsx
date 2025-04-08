@@ -68,4 +68,3 @@ export async function deleteRecord(id: number) {
     const { error } = await supabase.from('records').delete().eq('id', id);
     return error;
 }
-
