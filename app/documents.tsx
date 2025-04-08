@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { useRouter } from 'expo-router';
-import {insertDocument, iDoc} from '../src/controllers/documents'
+import {insertDocument, iDoc, updateDocument, deleteDocument} from '../src/controllers/documents'
 import { supabase } from '../src/utils/supabase';
 import MyButton from '../src/components/MyButtons';
 import MyView from '../src/components/MyView';
@@ -56,8 +56,9 @@ export default function RecordScreen() {
 
       setDocuments([...documents, newDoc]);
       await insertDocument(newDoc)
+
     } else{ //senão, ele deve criar um novo registro
-      //aqui vc vai chamada sua função de editar do controlador
+      await updateDocument(req)//aqui vc vai chamada sua função de editar do controlador
       setDocuments(documents.map((d) => (d.id == req.id)? req: d));
 
     }  
@@ -75,10 +76,12 @@ export default function RecordScreen() {
 
 
   // Função para excluir um registro
-  const deleteRecord = (id: number) => {
-      //aqui voce vai chamda sua função de deletar do controlador
+  async function deleteRecord (id: number){
+    const del = await deleteDocument(id)//aqui voce vai chamda sua função de deletar do controlador
 
+    if(del){
       setDocuments(documents.filter((d) => d.id != id));
+    }      
   };
 
   const editRecord = (id: number) => {
@@ -146,109 +149,3 @@ export default function RecordScreen() {
     </MyView>
   );
 }
-
-
-
-
-/*import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
-import { useRouter } from 'expo-router';
-import {insertDocument, iDoc} from '../src/controllers/documents'
-import { supabase } from '../src/utils/supabase';
-import MyButton from '../src/components/MyButtons';
-import MyView from '../src/components/MyView';
-import MyUpload from '../src/components/MyUpload';
-
-const FileUploadComponent = () => {
-
-const [req, setReq] = useState({
-id: -1,
-created_at : new Date(). toISOString(),
-user_id: 8,
-url: '',
-});
-
-//documents, setdocuments
-const [documents, setDocuments] = useState<iDoc[]>([]);
-const router = useRouter();
-
-//buscar documentos no banco e atualizar de acordo com a ação
-useEffect(() =>{
-async function getAll() {
-  const{ data:all, error } = await supabase.from('documents').select()
-  if(all && all.length > 1){
-    setDocuments(all)
-  }
-  if (error){
-    console.error('Erro ao buscar documentos: ', error.message);
-  }   
-}
-getAll()
-},[]);
-
-
-
-async function handleUpload() {
-
-
-//console.log('Fazendo Upload...');
-
-if(req.id === -1){
-  const newId = documents.length ? documents[documents.length-1].id + 1 : 0;
-  const newDocument = {...req, id:newId};
-
-  //add no supabase
-  const result = await insertDocument(newDocument);
-
-  if (result){
-    setDocuments([...documents,newDocument])
-    console.log('Documento inserido com sucesso: ', result);
-  }else{
-    console.log('Erro ao inserir documento');
-  }
-  
-}else{
-  const novoDocumento = (documents.map(i =>(i.id === req.id)? req: i));
-  setDocuments(novoDocumento);
-}   
-
-setReq({
-  id: -1,
-  created_at : new Date(). toISOString(),
-  user_id: 8,
-  url: '',
-})
-
-}
-
-
-const handleCancel = () => {
-
-console.log('Upload cancelado');
-};
-
-const[urlDocument, setDocument]= useState('')
-
-
-return (
-<MyView router={router}>
-
-  <MyButton title='Escolher Arquivo' onPress={() => alert('Escolhido um arquivo')}></MyButton>
-
-  <View >
-    <MyButton title='Cancelar' onPress={handleCancel}></MyButton>
-
-    <MyUpload setUrl={setDocument} url={urlDocument}/>
-    </View>
-  
-</MyView>
-
-);
-};
-
-export default FileUploadComponent;*/
-
-// botao de cadastrar par achamar a handleCancel
-//ter uma view que mostre os docs cadastrados
-//inserir chaves estrangeiras para todos que precisam upar documentos
-//pega a url da nuvem e c

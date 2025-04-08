@@ -11,7 +11,7 @@ interface iDoc{
 
 
 
-//função do banco de dados
+//função do banco de dados - CREATE
 async function insertDocument(document: iDoc) {//mesma coisa que o set só que com nome dif para não ter conflito
   try{
     const { data, error } = await supabase
@@ -19,7 +19,7 @@ async function insertDocument(document: iDoc) {//mesma coisa que o set só que c
     .insert([
       document //vai receber req da da view do obj princ -- recebe o obj -- some_column: 'someValue', other_column: 'otherValue' },
     ])
-    .select();
+    //.select(); necessário apenas com o RLS do supabase ativo
       
       if(error){// aqui vem os tratamentos da variavel erro --> "try catch"
 
@@ -28,6 +28,7 @@ async function insertDocument(document: iDoc) {//mesma coisa que o set só que c
       }
 
     return data;
+
   }catch(err){
     console.error('Erro ao inserir documento2: ', err);
     return 'Erro desconhecido!';
@@ -35,6 +36,57 @@ async function insertDocument(document: iDoc) {//mesma coisa que o set só que c
   }
 }
 
-export {insertDocument, iDoc}
+//UPDATE
+async function updateDocument(req: iDoc) {
+  try{
+    const { error } = await supabase
+    .from('documents')
+    .update({
+      name: req.name, 
+      url: req.url,
+      user_id: req.user_id, 
+      type: req.type,
+    })
+    .eq('id', req.id);
+      
+      if(error){// aqui vem os tratamentos da variavel erro --> "try catch"
+
+        console.error('Erro ao atualizar documento: ', error.message);//message
+        return false;
+      }
+
+    return true;
+
+  }catch(err){
+    console.error('Erro 2: atualizar documento ', err);
+    return false;
+    
+  }
+}
+
+//DELETE
+async function deleteDocument(id: number) {
+  try{
+    const { error } = await supabase
+    .from('documents')
+    .delete()
+    .eq('id', id);
+      
+      if(error){// aqui vem os tratamentos da variavel erro --> "try catch"
+
+        console.error('Erro ao deletar documento: ', error);//message
+        return false;
+      }
+
+    return true;
+
+  } catch(err){
+    console.error('Erro 2: ao deletar documento ', err);
+    return false;
+    
+  }
+}
+
+export {insertDocument, updateDocument, deleteDocument,  iDoc}
 
           
