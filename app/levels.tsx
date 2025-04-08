@@ -8,9 +8,8 @@ import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
 import { MyItem } from '../src/components/MyItem';
 import { useRouter } from 'expo-router';
-import {setLevel , iLevels } from '../src/controllers/levels';
-import { supabase } from '../src/utils/supabase';
-import { iLevels } from './seuArquivoDeTipos';  
+import {setLevels , iLevels } from '../src/controllers/levels';
+import { supabase } from '../src/utils/supabase'; 
 
 export default function levelsScreen(){
     const [req, setReq] = useState({
@@ -40,10 +39,10 @@ export default function levelsScreen(){
 
         if( req.id == -1){
             const newId = levels.length ? levels[levels.length -1].id +1 : 0;
-            const newLeves = {...req, id: newId};
+            const newLevel = {...req, id: newId};
  
-            setLevels([...levels, newLeves]);
-            await setLevel(newLeves)
+            setLevels([...levels, newLevel]);
+            //await setLevels(l);
             
         }else{
             setLevels(levels.map(l => (l.id == req.id ? req : l)));
@@ -54,7 +53,6 @@ export default function levelsScreen(){
             color: '',
             id: -1,
             created_at: new Date().toISOString(),
-           
 
         })
     }
@@ -72,7 +70,6 @@ export default function levelsScreen(){
     }
 
     const router = useRouter();
-    
 
     return (
         <MyView router  = {router} >
@@ -292,3 +289,4 @@ const styles = StyleSheet.create({
       },
 
 });
+
