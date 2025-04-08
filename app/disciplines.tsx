@@ -4,7 +4,7 @@ import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
 import { iDisciplines, SetDisciplinebd, UpdateDisciplinebd, DeleteDisciplinebd } from '../src/controllers/disciplines';
 import { supabase } from '../src/utils/supabase';
-
+//111
 export default function DisciplineScreen() {
   const [req, setReq] = useState<iDisciplines>({
     id: -1,
