@@ -1,6 +1,5 @@
-import React, { useState } from 'react'; //função useState só retorna para uma variavel const
-import { View, Text, StyleSheet, TextInput, ScrollView, ViewStyle } from 'react-native';
-import { Picker } from "@react-native-picker/picker";
+import React, { useState, useEffect } from 'react'; //função useState só retorna para uma variavel const
+import { View, StyleSheet, ScrollView, FlatList } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
 import MyTheme from '../src/components/MyTheme';
@@ -10,105 +9,117 @@ import MyButton from '../src/components/MyButtons';
 import MyView from '../src/components/MyView';
 import MySelect from '../src/components/MySelect';
 import { Myinput, MyTextArea } from '../src/components/MyInputs';
-import MyAccessibility from '../src/components/MyAccessibility';
 import {textStyles} from '../styles/textStyles';
 import { Icon , MD3Colors} from "react-native-paper";
 import {tabsBarStyles} from '../styles/tabsBarStyles';
 import { useRouter } from 'expo-router';
-import {items, setItems, setItem} from '../src/controllers/librarie';
+import {iItem, setItem} from '../src/controllers/librarie';
+import { supabase } from '../src/utils/supabase'
 
-
-export default function ItemScreen() { // aqui é TS
-    const router = useRouter();
+export default function itemScreen() { // aqui é TS
 
     const [req, setReq] = useState({
-        id: 0,
-        createAt: new Date().toISOString(),
+        id: -1,
+        created_at: new Date().toISOString(),
         typology: '',
         title: '',
         subtitle: '',
         responsible: '',
         translation: '',
         language: '',
-        year: '',
+        image: '',
+        year: 0,
         edition: '',
         publisher: '',
         location: '',
-        numberPages: '',
+        number_pages: 0,
         serie: '',
-        volume: '',
+        volume: 0,
         format: '',
         isbn: '',
         issn: '',
         cdd: '',
-        callNumber: '',
+        call_number: '',
         subject: '',
         keywords: '',
         summary: '',
         notes: '',
-        numberCopies: '',
+        number_copies: 0,
         status: '',
         url: '',
         file: '',
-        typeLoan: '',
+        type_loan: '',
     });
 
-    function handleRegister() {
+    const[items, setItems] = useState<iItem[]>([])
 
-        //Campos obrigatórios de preenchimento
-        if (!req.title.trim() || !req.subject.trim() || !req.keywords.trim() || !req.typology.trim() || !req.language.trim() 
-        || !req.cdd.trim() || !req.status.trim() || !req.typeLoan.trim()) {
-        alert('Por favor, preencha todos os campos obrigatórios: Título, Assunto, Palavras-chave, Tipologia, Idioma, CDD, Status e Tipo de Empréstimo.');
-        return;
-        }   
+    useEffect(()=>{
+        async function getTodos(){
+            const {data: todos}= await supabase.from('items_librarie').select()
 
+            if(todos && todos.length > 1){
+                setItems(todos)
+            }
+        }
+        getTodos();
+    },[])
+
+    const router = useRouter();
+
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [selectedFile, setSelectedFile] = useState<string | null>(null);
+
+    async function handleRegister() { 
          // Atualiza req.file com o selectedFile (se existir)
-        const updatedReq = {
+        /*const updatedReq = {
         ...req,
         file: selectedFile || req.file, // Mantém o arquivo anterior se selectedFile for null
-        };
+        };*/
 
-        if (req.id === -1) {
+        if (req.id == -1) {
             const newId = items.length ? items[items.length - 1].id + 1 : 0;
-            const newItem = { ...updatedReq, id: newId };
+            const newItem = { ...req, id: newId };
 
-            setItems([...items, newItem]);
+            setItems([...items, newItem])
+            await setItem(newItem)
         } else {
-            setItems(items.map(i => (i.id == req.id ? updatedReq : i)));
+            setItems(items.map(i => (i.id == req.id) ? req : i));
         }
         setReq({
             id: -1,
-            createAt: new Date().toISOString(),
+            created_at: new Date().toISOString(),
             typology: '',
             title: '',
             subtitle: '',
             responsible: '',
             translation: '',
             language: '',
-            year: '',
+            image: "",
+            year: 0,
             edition: '',
             publisher: '',
             location: '',
-            numberPages: '',
+            number_pages: 0,
             serie: '',
-            volume: '',
+            volume: 0,
             format: '',
             isbn: '',
             issn: '',
             cdd: '',
-            callNumber: '',
+            call_number: '',
             subject: '',
             keywords: '',
             summary: '',
             notes: '',
-            numberCopies: '',
+            number_copies: 0,
             status: '',
             url: '',
             file: '',
-            typeLoan: '',
+            type_loan: '',
         });
+        //setSelectedFile(null); // Limpa o selectedPdf após o registro
 
-        setSelectedFile(null); // Limpa o selectedPdf após o registro
+        router.push('/librarieRegisterList');
     };
 
     // Estados para as abas
@@ -119,13 +130,6 @@ export default function ItemScreen() { // aqui é TS
     const handleTabPress = (item: string, index: number) => {
         setActiveTab(index);
     };
-
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    const [selectedFile, setSelectedFile] = useState<string | null>(null);
-
-    const save = () => {
-        console.log("Item salvo:", req);
-      };
 
     async function pickImage() {
     // Solicita permissão para acessar a galeria
@@ -163,53 +167,55 @@ export default function ItemScreen() { // aqui é TS
         }
     };
 
+    const save = () => {
+        console.log("Item salvo:", req);
+    };
+
     const cancel = () => {
         setReq({
-            id: 0,
-            createAt: new Date().toISOString(),
+            id: -1,
+            created_at: new Date().toISOString(),
             typology: '',
             title: '',
             subtitle: '',
             responsible: '',
             translation: '',
             language: '',
-            year: '',
+            image: '',
+            year: 0,
             edition: '',
             publisher: '',
             location: '',
-            numberPages: '',
+            number_pages: 0,
             serie: '',
-            volume: '',
+            volume: 0,
             format: '',
             isbn: '',
             issn: '',
             cdd: '',
-            callNumber: '',
+            call_number: '',
             subject: '',
             keywords: '',
             summary: '',
             notes: '',
-            numberCopies: '',
+            number_copies: 0,
             status: '',
             url: '',
             file: '',
-            typeLoan: '',
+            type_loan: '',
         });
-        router.push('/librarie');
+        router.push('/librarieHome');
     };
 
-    //Selects
+    //Selects/Pickers
     const [typology, setTypology] = useState("Selecione a Tipologia")
     const [language, setLanguage] = useState("Selecione o Idioma") 
     const [format, setFormat] = useState("Selecione o Formato") 
     const [status, setStatus] = useState("Selecione o Status")
-    const [typeLoan, setTypeLoan] = useState("Selecione o Tupo de Empréstimo")  
+    const [type_loan, settype_loan] = useState("Selecione o Tipo de Empréstimo")  
 
     return ( //encapsulamento
         <MyView router={router} style={{ flex: 1 }}>
-            {/*<MyAccessibility>
-                <MyText style={textStyles.buttonMenores}>Acessibilidade</MyText>
-            </MyAccessibility>*/}
             <MyTheme chendTheme={()=>{}} fontSize={()=>{}}/>
             <MyText style={styles.h1}>Cadastro de Itens no Acervo</MyText>
             <View style={styles.buttonContainer}>
@@ -226,7 +232,7 @@ export default function ItemScreen() { // aqui é TS
                     />
                     <MyButton
                         title="Prévia"
-                        onPress={() => router.push('/preview') }
+                        onPress={() => router.push('/librariePreview') }
                         button_type="capsule"
                         icon=""
                         style={styles.button_capsule1}
@@ -320,8 +326,8 @@ export default function ItemScreen() { // aqui é TS
                             <>
                                 <Myinput 
                                     placeholder="Ano"
-                                    value={req.year}
-                                    onChangeText={(text) => setReq({ ...req, year: text })}
+                                    value={req.year?.toString()}
+                                    onChangeText={(text) => setReq({ ...req, year: Number(text) })}
                                     label='' iconName=''
                                 />
                                 <Myinput 
@@ -350,8 +356,8 @@ export default function ItemScreen() { // aqui é TS
                                 />
                                 <Myinput 
                                     placeholder="Volume"
-                                    value={req.volume}
-                                    onChangeText={(text) => setReq({ ...req, volume: text })}
+                                    value={req.volume?.toString()}
+                                    onChangeText={(text) => setReq({ ...req, volume: Number(text) })}
                                     label='' iconName=''
                                 />
                             </>
@@ -370,8 +376,8 @@ export default function ItemScreen() { // aqui é TS
                                 />
                                 <Myinput
                                     placeholder="Número de Páginas"
-                                    value={req.numberPages}
-                                    onChangeText={(text) => setReq({ ...req, numberPages: text })}
+                                    value={req.number_pages?.toString()}
+                                    onChangeText={(text) => setReq({ ...req, number_pages: Number(text) })}
                                     label='' iconName=''
                                 />
                                 <Myinput
@@ -394,8 +400,8 @@ export default function ItemScreen() { // aqui é TS
                                 />
                                 <Myinput 
                                     placeholder="Número de Chamada"
-                                    value={req.callNumber}
-                                    onChangeText={(text) => setReq({ ...req, callNumber: text })}
+                                    value={req.call_number}
+                                    onChangeText={(text) => setReq({ ...req, call_number: text })}
                                     label='' iconName=''
                                 />
                             </>
@@ -429,8 +435,8 @@ export default function ItemScreen() { // aqui é TS
                                 />
                                 <Myinput
                                     placeholder="Número de exemplares"
-                                    value={req.numberCopies}
-                                    onChangeText={(text) => setReq({ ...req, numberCopies: text })}
+                                    value={req.number_copies?.toString()}
+                                    onChangeText={(text) => setReq({ ...req, number_copies: Number(text) })}
                                     label='' iconName=''
                                 />
                                 <MySelect
@@ -445,7 +451,7 @@ export default function ItemScreen() { // aqui é TS
                                     }
                                 />
                                 <MySelect
-                                    label={typeLoan} setLabel={setTypeLoan} 
+                                    label={type_loan} setLabel={settype_loan} 
                                     list={            
                                         [ 
                                             {key:1, option: 'Domiciliar'},            
@@ -471,7 +477,7 @@ export default function ItemScreen() { // aqui é TS
                         )}
                         <MyButton
                             title="INCORPORAR ITEM NO ACERVO"
-                            onPress={handleRegister}
+                            onPress={ handleRegister }
                             button_type="round"
                             icon=""
                             style={styles.buttonRegister}
@@ -575,6 +581,19 @@ const styles = StyleSheet.create({
         marginRight: 20,
         marginVertical: 30,
         marginHorizontal: 20,
+    },
+    card: {
+        backgroundColor: '#F2F2F2',
+        padding: 20,
+        marginVertical: 10,
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.2,
+        shadowOffset: { width: 0, height: 4 },
+        shadowRadius: 5,
+    },
+    cardText: {
+        fontSize: 15,
     },
 
 });

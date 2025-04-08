@@ -1,50 +1,49 @@
 import React, { useState } from 'react';
 import { supabase } from '../utils/supabase'; 
  
-interface iItems {
+interface iItem {
     typology: string,
     title: string,
     subtitle: string,
     responsible: string,
     translation: string,
     language: string,
-    year: string,
+    image: string,
+    year: number,
     edition: string,
     publisher: string,
     location: string,
-    numberPages: string,
+    number_pages: number,
     serie: string,
-    volume: string,
+    volume: number,
     format: string,
     isbn: string,
     issn: string,
     cdd: string,
-    callNumber: string,
+    call_number: string,
     subject: string,
     keywords: string,
     summary: string,
     notes: string,
-    numberCopies: string,
+    number_copies: number,
     status: string,
     url: string,
     file: string,
-    typeLoan: string,
-    createAt: string,
+    type_loan: string,
+    created_at: string,
     id: number,
 }
 
-const [items, setItems] = useState<iItems[]>([]);
-
-async function setItem(items: iItems){   
+async function setItem(item: iItem){   
 
 const { data, error } = await supabase.from('items_librarie')
     .insert([
-        items
+        item
     ])
     .select() 
 
     if (error){
-
+        console.log (error)
              // aqui vem os tratamentos da variavel error
         return []
     }
@@ -52,5 +51,5 @@ const { data, error } = await supabase.from('items_librarie')
     return data
 }
 
-export {setItems, items, setItem}
+export {setItem, iItem}
         
