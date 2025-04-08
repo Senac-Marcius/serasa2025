@@ -12,10 +12,7 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
-module.exports = {
-    presets: ['babel-preset-expo'],
-    plugins: ['react-native-reanimated/plugin'], // isso precisa ser o último plugin!
-  };
+
   
 
 type Turma = {
