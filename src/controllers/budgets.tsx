@@ -26,9 +26,8 @@ async function  setBudget(budget:iBudgets ){
     //const urlRegex =/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
     const valueRegex = /^\d+(\.\d{1,2})?$/;
     const startDateRgex = /^\d{4}-\d{2}-\d{2}$/;
-    const endDateRegex = /^\d{4}-\d{2}-\d{2}$/;            
-    
- 
+    const endDateRegex = /^\d{4}-\d{2}-\d{2}$/; 
+        
     if (!nameRegex.test(budget.name)) {
         return "Campo name deve conter apenas letras, espaços ou hífens (2-100 caracteres)";
     }
@@ -67,6 +66,7 @@ async function  setBudget(budget:iBudgets ){
     
 }
 
+
  async function delBudget(id: number): Promise<{ error?: Error }> {
     try {
         const { error } = await supabase
@@ -84,6 +84,42 @@ async function  setBudget(budget:iBudgets ){
         console.error('Erro inesperado:', err);
         return { error: err instanceof Error ? err : new Error('Erro desconhecido') };
     }
+
+}
+
+async function updateBudget(budget: iBudgets): Promise<iBudgets[] | string> {
+ 
+    const nameRegex = /^[a-zA-ZÀ-ÿ\u00f1\u00d1\s-]{2,100}$/;
+    const valueRegex = /^\d+(\.\d{1,2})?$/;
+
+    if (!nameRegex.test(budget.name)) {
+        return "Nome inválido (2-100 caracteres, apenas letras, espaços ou hífens)";
+    }
+
+    if (!valueRegex.test(budget.value)) {
+        return "Valor deve ser numérico (ex: 100 ou 50.00)";
+    }
+
+   
+    const { data, error } = await supabase
+        .from('budgets')
+        .update({
+            name: budget.name,
+            url: budget.url,
+            value: budget.value,
+            start_date: budget.start_date,
+            end_date: budget.end_date,
+            user_id: budget.user_id
+        })
+        .eq('id', budget.id) 
+        .select();
+
+    if (error) {
+        console.error('Erro ao atualizar:', error);
+        return error.message;
+    }
+
+    return data || [];
 }
  
-export { iBudgets, setBudget,delBudget}
+export { iBudgets, setBudget,delBudget, updateBudget}

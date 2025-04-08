@@ -7,7 +7,7 @@ import MyView from '../src/components/MyView';
 import Mytext from '../src/components/MyText';
 import { MyItem } from '../src/components/MyItem';
 import { useRouter } from 'expo-router';
-import {iBudgets , setBudget, delBudget} from '../src/controllers/budgets';
+import {iBudgets , setBudget, delBudget, updateBudget} from '../src/controllers/budgets';
 import { supabase } from '../src/utils/supabase';
 
 
@@ -57,6 +57,7 @@ export default function BudgetScreen(){
            console.log (resp)
         }else{
             setBudgets(budgets.map(b=> (b.id == req.id)? req: b));
+            const result = await updateBudget(req);
         }
         
         setReq({ 
@@ -77,22 +78,18 @@ export default function BudgetScreen(){
         setReq(budget)
     }
 
-    async function delBudget(id: number) {
+    async function handleDelete(id: number) {
         try {
-            
-            const updatedBudgets = budgets.filter(b => b.id !== id);
-            setBudgets(updatedBudgets);
-    
-         
             const { error } = await supabase
                 .from('budgets')
                 .delete()
-                .eq('id', id); 
-    
-            if (error) {
+                .eq('id', id);
+            
+            if (!error) {
+                // Só atualiza o estado se a operação no banco for bem sucedida
+                setBudgets(budgets.filter(b => b.id !== id));
+            } else {
                 console.error('Erro ao deletar:', error);
-               
-                setBudgets(budgets); 
             }
         } catch (err) {
             console.error("Erro inesperado:", err);
