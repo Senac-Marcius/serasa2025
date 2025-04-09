@@ -164,7 +164,7 @@ const parseCurrencyInput = (text: string): number => {
                 <Mytext style={styles.title}>PROJETOS</Mytext>
             
                 {/* Aqui é typescript dentro do front */}
-                <Mytext> ✨ Vamos Inovar ✨ </Mytext>
+                <Mytext>  Vamos Inovar  </Mytext>
                 <View style={styles.row}> 
                         
                     <View style={styles.form}>
@@ -319,11 +319,10 @@ const parseCurrencyInput = (text: string): number => {
                         </View>
                     </View> 
 
-                </View>   
-                <View style={styles.listContainer}> 
                     <MyList 
                         data={projects}
                         keyItem={(item) => item.id.toString()}
+                        numColumns={2}
                         renderItem={({ item }) => (
                         // Container estilizado para cada item da lista
                             <MyItem style={styles.projectContainer}
@@ -377,7 +376,7 @@ const parseCurrencyInput = (text: string): number => {
                             </MyItem>
                         )}
                     />
-                </View>
+                </View>   
             </View>
         </MyView>
     ); 
@@ -450,7 +449,7 @@ const styles = StyleSheet.create({
     },
 
     form: {
-        width: '80%',
+        width: '100%',
         padding: 20,
         backgroundColor: '#F2F2F2',
         borderRadius: 10,
@@ -458,6 +457,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
+        alignSelf: 'center',
     },
 
     projectContainer: {
