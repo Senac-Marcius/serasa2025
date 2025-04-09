@@ -7,8 +7,13 @@ export interface iCategories {
     created_at: string
 }
 
+<<<<<<< HEAD
 // Criar categoria
 async function setCategory(category: iCategories) {
+=======
+// Criar minha categoria
+async function setCategory(category: Omit<iCategories, 'id'>) {
+>>>>>>> 39c7ffb718898f6c01083b3c93d4e044baa6f326
     const { data, error } = await supabase
         .from('categories')
         .insert([category])
@@ -22,7 +27,11 @@ async function setCategory(category: iCategories) {
     return data;
 }
 
+<<<<<<< HEAD
 // Atualizar categoria
+=======
+// Atualizar ela
+>>>>>>> 39c7ffb718898f6c01083b3c93d4e044baa6f326
 async function updateCategory(category: iCategories) {
     const { data, error } = await supabase
         .from('categories')
@@ -42,7 +51,11 @@ async function updateCategory(category: iCategories) {
     return data;
 }
 
+<<<<<<< HEAD
 // Deletar categoria
+=======
+// Deletar agr
+>>>>>>> 39c7ffb718898f6c01083b3c93d4e044baa6f326
 async function deleteCategory(id: number) {
     const { error } = await supabase
         .from('categories')
