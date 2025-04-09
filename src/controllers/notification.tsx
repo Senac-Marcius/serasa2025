@@ -47,30 +47,36 @@ async function setNotification(notification:iNotification){
     return data
 }
 
-function editNotification(id:number, req){
-    
-    // função edit
-    const channels = supabase.channel('custom-update-channel')
-    .on(
-    'postgres_changes',
-    { event: 'UPDATE', schema: 'public', table: 'notifications' },
-    (payload) => {
-        console.log('Change received!', payload)
+ async function getNotifications() {
+    const { data, error } = await supabase.from('notifications').select();
+ 
+    if (error) {
+        console.error('Erro ao buscar notifications: ', error);
+        return [];
     }
-    )
-    .subscribe()
-}
-function deleteNotification(id:number){
-    // função delete
-    const channels = supabase.channel('custom-delete-channel')
-    .on(
-    'postgres_changes',
-    { event: 'DELETE', schema: 'public', table: 'notifications' },
-    (payload) => {
-        console.log('Change received!', payload)
-    }
-    )
-    .subscribe()
+ 
+    return data;
 }
 
-export {setNotification, iNotification, editNotification, deleteNotification}
+async function updateNotification(notification: iNotification) {
+    const { error } = await supabase
+        .from('notifications')
+        .update({
+            name: notification.name,
+            description: notification.description,
+            user_id: notification.user_id,
+            created_at: notification.created_at,
+            url: notification.url,
+
+        })
+        .eq('id', notification.id);
+ 
+    return error;
+}
+
+async function deleteNotification(id: number) {
+    const { error } = await supabase.from('notifications').delete().eq('id', id);
+    return error;
+}
+
+export {setNotification, iNotification, deleteNotification, updateNotification, getNotifications}

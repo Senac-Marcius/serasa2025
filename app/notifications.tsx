@@ -9,9 +9,7 @@ import MyList from '../src/components/MyList';
 import Mytext from '../src/components/MyText';
 import {textStyles}  from '../styles/textStyles';
 import { useRouter } from 'expo-router';
-import { setNotification, iNotification, editNotification, deleteNotification } from '../src/controllers/notification';
-import { supabase } from '../src/utils/supabase'
-
+import { setNotification, iNotification, deleteNotification, updateNotification, getNotifications} from '../src/controllers/notification';
 
 export default function NotificationScreen(){
 // aqui é typNotificationScreenescript
@@ -28,37 +26,24 @@ export default function NotificationScreen(){
     
 
     useEffect(() => {
-        async function getTodos(){
-            const {data: todos}= await supabase.from('notifications').select()
-    
-            if(todos && todos.length > 0){
-                setNotifications(todos)
-            }
-        }
-
-        getTodos();
+        (async () => {
+            const todos = await getNotifications()
+            setNotifications(todos)
+        })()
     },[])
     
     
-    async function handleRegister(){
-        const newNotification = {...req};
-
-            setNotifications([...notifications, newNotification])
-            const resp = await setNotification(newNotification)
-            console.log(resp)
-            
+    async function handleRegister(){    
         if( req.id == -1){
             const newId = notifications.length ? notifications[notifications.length -1].id +1 : 0;
-            const newNotification = {...req, id: newId}
-            
-        
+            const newNotification = {...req, id: newId};
+
             setNotifications([...notifications, newNotification])
             const resp = await setNotification(newNotification)
             console.log(resp)
-
-
         }else{
             setNotifications(notifications.map(n => (n.id == req.id ? req : n)));
+            await updateNotification(req);
         }
         
         setReq({
@@ -77,9 +62,9 @@ export default function NotificationScreen(){
             setReq(notification)
     }
 
-    function deleteNotification(id:number){
-
-        const list = notifications.filter(n => n.id != id )
+    async function delNotification(id:number){
+        console.log(await deleteNotification(id))
+        const list = notifications.filter(n => n.id != id );
             setNotifications(list)
     }
 
@@ -132,7 +117,7 @@ return (
                         <MyItem 
                             style={styles.notificationStyle} 
                                 onEdit={() => {editNotification(item.id)}}
-                                onDel={() => {deleteNotification(item.id)}}
+                                onDel={() => {delNotification(item.id)}}
                                 
                         > {/* pedro */}
 
