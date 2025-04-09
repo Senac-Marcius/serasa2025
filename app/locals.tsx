@@ -7,10 +7,8 @@ import {MyItem} from '../src/components/MyItem';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs';
 import MyButton  from '../src/components/MyButtons';
 import { useRouter } from 'expo-router';
-import {setLocal, iLocal } from '../src/controllers/locals'
+import {setLocal, iLocal, deleteLocal, updateLocal} from '../src/controllers/locals'
 import { supabase } from '../src/utils/supabase' 
-
-
 
 export default function LocalScreen(){
 
@@ -32,8 +30,8 @@ export default function LocalScreen(){
         async function getTodos() {
             const {data: todos} = await supabase.from('locals').select()
 
-            if (todos && todos.length > 1){
-
+            if (todos && todos.length > 0){
+                setLocals(todos)
             }
         }
 
@@ -48,9 +46,13 @@ export default function LocalScreen(){
             setLocals([...locals, newLocal])
             await setLocal(newLocal)
         }else{
-             
             setLocals(locals.map(l => (l.id == req.id) ? req : l));          //map = for it, percorre a lista
-        }
+            const result = await updateLocal(req);
+            if (result && result.length > 0) {
+              setLocals(locals.map(l => (l.id == req.id) ? result[0] : l));
+            }
+          }
+
         setReq({ 
             id: -1,
             name: '',
@@ -68,13 +70,19 @@ export default function LocalScreen(){
             setReq(local) 
     }
 
-    function delLocal(id:number){
-        const list = locals.filter(l => l.id != id)
-        if(list)
-            setLocals(list)           
+    async function DelLocal(id: number) {
+        const resp = await deleteLocal(id)
+        if (resp.status) {
+          const list = locals.filter(l => l.id != id)
+          setLocals(list)
+        }else{
+            setMessage("Existem itens selecionados nessa área. Ele não pode ser deletado")
+        }
     }
 
-    const [unity, setUnit] = useState("metros")              /* exemplo do código de SELECT para copiar */
+    const [unity, setUnit] = useState("selecione a dimensão")              /* exemplo do código de SELECT para copiar */
+
+    const [message, setMessage] = useState("")
     
     
     const router = useRouter();
@@ -83,10 +91,13 @@ export default function LocalScreen(){
     return (
 
             <MyView router={router} style={styles.container}>
-
+                <Text style={styles.title}>LOCAL</Text>
+                {message.length > 0 && (  
+                    <Text style={styles.title}>{message}</Text>
+                )}
                 <View style={styles.row}>
                     <View style={styles.formContainer}>
-                        <Text style={styles.title}>LOCAL</Text>
+                       
                        
                         <Myinput
                         iconName='search'
@@ -139,7 +150,7 @@ export default function LocalScreen(){
                             <MyItem
                                 style={styles.formContainer}
                                 onEdit={ () => {editLocal(item.id)} }
-                                onDel={ () => (delLocal(item.id))}
+                                onDel={ () => (DelLocal(item.id))}
                             >
                                 <Text style={styles.label} > {item.name} </Text>
                                 <Text style={styles.label} > {item.adress} </Text>
