@@ -1,122 +1,139 @@
 import React, { useEffect, useState } from 'react';
-import { View,Text, StyleSheet,FlatList, Button,TextInput} from 'react-native';
-import MyList from '../src/components/MyList'
-import {MyItem} from '../src/components/MyItem'
-import MyView from '../src/components/MyView'
+import { View, Text, StyleSheet, FlatList, Button, TextInput, Alert } from 'react-native';
+import MyList from '../src/components/MyList';
+import { MyItem } from '../src/components/MyItem';
+import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
-import {setCategory, iCategories} from'../src/controllers/category'
+import { setCategory, updateCategory, deleteCategory } from '../src/controllers/category';
 import { supabase } from '../src/utils/supabase';
 
-export default function categoryScreen(){
+interface iCategories {
+    name: string,
+    description: string,
+    id: number,
+    created_at: string
+}
 
-    const [req, setReq] = useState({
+export default function CategoryScreen() {
+    const [req, setReq] = useState<iCategories>({
         name: '',
-        description : '',
-        id: -1,
+        description: '',
+        id: -1, // -1 quer dizer: novo cadastro
         created_at: new Date().toISOString()
     });
 
-    const[categories, setCategories] = useState<iCategories[]>([]);
+    const [categories, setCategories] = useState<iCategories[]>([]);
+    const router = useRouter();
 
-    useEffect( () =>{
-        async function getTodos(){
-            const {data : todos, error } = await supabase.from('categories').select()
+    // Carregar categorias do banco ao abrir a tela
+    useEffect(() => {
+        async function getTodos() {
+            const { data: todos, error } = await supabase.from('categories').select();
 
-            if(error)
-                console.log('aqui: ' + error)
+            if (error) console.log('Erro ao carregar categorias:', error);
 
-            if (todos && todos.length > 1){
-                setCategories(todos)
+            if (todos && todos.length > 0) {
+                setCategories(todos);
             }
         }
 
-        getTodos()
-    },[])
+        getTodos();
+    }, []);
 
-    async function handleRegister(){
-        if(req.id == -1){
-            const newid= categories.length ? categories[categories.length-1].id=1:0;
-            const newCategory = {...req, id : newid};
+    // Cadastrar ou atualizar
+    async function handleRegister() {
+        if (req.id === -1) {
+            const newid = categories.length ? categories[categories.length - 1].id + 1 : 0;
+            const newCategory = { ...req, id: newid };
 
-            setCategories([...categories, newCategory])
-            await setCategory(newCategory)
-        }else{
-            setCategories(categories.map(i =>(i.id == req.id)? req: i )  );
-    
+            setCategories([...categories, newCategory]);
+            await setCategory(newCategory);
+        } else {
+            const updated = await updateCategory(req);
+            if (updated) {
+                setCategories(categories.map(i => i.id === req.id ? req : i));
+            }
         }
-    
+
         setReq({
             name: '',
-            description : '',
+            description: '',
             id: -1,
             created_at: new Date().toISOString()
-        })
+        });
     }
-    
-    function editCategorie(id:number){
-        let item= categories.find(i => i.id== id)
-        if(item)
-        setReq(item)
+
+    // Editar
+    function editCategorie(id: number) {
+        const item = categories.find(i => i.id === id);
+        if (item) setReq(item);
     }
-    function delCategorie(id:number){
-        const list= categories.filter(i => i.id != id)
-        if(list)
-        setCategories(list)
+
+    // Deletar
+    async function delCategorie(id: number) {
+        Alert.alert('Confirmar', 'Tem certeza que deseja excluir esta categoria?', [
+            {
+                text: 'Cancelar',
+                style: 'cancel'
+            },
+            {
+                text: 'Sim',
+                onPress: async () => {
+                    const ok = await deleteCategory(id);
+                    if (ok) {
+                        const list = categories.filter(i => i.id !== id);
+                        setCategories(list);
+                    } else {
+                        alert('Erro ao deletar do banco');
+                    }
+                }
+            }
+        ]);
     }
-    
-    const router = useRouter();
 
     return (
-        <MyView router={router} >
-    {/* aqui é typerscrypt dentro do front */}
-
+        <MyView router={router}>
             <View style={styles.row}>
                 <View style={styles.form}>
-                    <TextInput placeholder="nome" 
+                    <TextInput
+                        placeholder="Nome"
                         value={req.name}
-                        onChangeText={(text) => setReq({...req ,name: text})}
-                    /> 
-                   
-
-                    <TextInput placeholder="description" 
+                        onChangeText={(text) => setReq({ ...req, name: text })}
+                        style={styles.input}
+                    />
+                    <TextInput
+                        placeholder="Descrição"
                         value={req.description}
-                        onChangeText={(text) => setReq({...req ,description: text})}
-                        />
-                        
-                    
-                      
-                   <Button title= 'Cadastrar' onPress= {handleRegister}/>
-                                 
+                        onChangeText={(text) => setReq({ ...req, description: text })}
+                        style={styles.input}
+                    />
+                    <Button title={req.id === -1 ? "Cadastrar" : "Atualizar"} onPress={handleRegister} />
                 </View>
+
                 <MyList
                     data={categories}
                     keyItem={(item) => item.id.toString()}
-                    renderItem={({item}) => (
-                        <MyItem 
-                            onDel={()=>{delCategorie(item.id)}}
-                            onEdit={()=>{editCategorie(item.id)}}
+                    renderItem={({ item }) => (
+                        <MyItem
+                            onDel={() => delCategorie(item.id)}
+                            onEdit={() => editCategorie(item.id)}
                         >
-                                            <Text >{item.name}</Text>
-                            <Text >{item.description}</Text>  
+                            <Text style={styles.postText}>{item.name}</Text>
+                            <Text>{item.description}</Text>
                         </MyItem>
                     )}
-                /> 
+                />
             </View>
         </MyView>
-   
     );
 }
+
 // Estilos
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#fff',
-    },
     row: {
-        flexDirection: 'row', 
-        justifyContent: 'space-between', 
-        alignItems: 'flex-start', 
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
     },
     form: {
         flex: 1,
@@ -129,21 +146,6 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
     },
-    listContainer: {
-        flex: 1, 
-        padding: 10,
-    },
-    title: {
-        fontSize: 22,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 20,
-    },
-    subtitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
     input: {
         borderWidth: 1,
         borderColor: '#ccc',
@@ -151,18 +153,8 @@ const styles = StyleSheet.create({
         padding: 10,
         marginBottom: 10,
     },
-    postCategorie: {        padding: 10,
-        marginVertical: 5,
-        backgroundColor: '#f8f8f8',
-        borderRadius: 5,
-    },
     postText: {
         fontSize: 16,
         fontWeight: 'bold',
-    },
-    postUrl: {
-        fontSize: 14,
-        color: '#007BFF',
-        marginBottom: 5,
     },
 });
