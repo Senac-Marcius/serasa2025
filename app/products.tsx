@@ -25,57 +25,62 @@ export default function productScreen(){
     
     const [products, setProducts] = useState<iProduct[]>([]);
 
-        useEffect(()=> {
-            (async () => {
-                const { data: todos } = await supabase
-                .from('products')
-                .update(updateProduct)
-                .eq('id', deleteProduct)  
-                .select()  
-                
-                if (todos && todos.length > 1) {
-                    setProducts(todos)
-                }
-            }) ()
-        }, [])
-       
-
-
-        async function handleRegister() {  
-            if(req.id == -1) {
-                const newId = products.length ? products[products.length - 1].id + 1 : 0;
-                const newProduct = { ...req, id: newId };
-
-                setProduct([...products, newProduct]);
-                await insertProduct(newProduct)
+    useEffect(()=> {
+        (async () => {
+            const { data: todos, error } = await supabase
+            .from('products')
+            .select()  
             
-                
-            } else {
-                await updateProduct(req)
-                setProducts(products.map)
+            if (error) {
+                console.error('Error fetching products:', error);
+                return;
             }
             
-            setReq({
-                description: '',
-                name: '',
-                id: -1,
-                create_at: new Date().toISOString(),
-                user_id: 6
-            });
-        }
+            if (todos) {
+                setProducts(todos)
+            }
+        }) ()
+    }, []);
+       
 
-        function editProduct(id:number){
-            const product = products.find(p => p.id == id)
-            if(product)
+    
+    async function handleRegister() {
+
+        //se for um item editado, ele deve chamar o registro existente
+        if (req.id == -1) {
+            const newid = products.length? products[products.length - 1].id + 1 : 0;
+            const newProduct = {...req, id: newid}
+    
+            setProducts([...products, newProduct]);
+            await setProduct(newProduct)
+    
+        } else{ //senão, ele deve criar um novo registro
+            await updateProduct(req)//aqui vc vai chamada sua função de editar do controlador
+            setProducts(products.map((d) => (d.id == req.id)? req: d));
+        }
+        setReq({
+            description: '',
+            name: '',
+            id: -1,
+            create_at: new Date().toISOString(),
+            user_id: 6
+        });
+    }
+
+    function editProduct(id:number){
+        const product = products.find(p => p.id == id)
+        if(product)
             setReq(product)
-        }
-        function dellProduct(id:number){
-            const list = products.filter(p => p.id != id)
-            if(list)
-                setProducts(list)
-        }
+    }
+
+    function dellProduct(id:number){
+        const list = products.filter(p => p.id != id)
+        if(list)
+            setProducts(list)
+    }
 
     const router = useRouter();
+
     return (
         <MyView router={router} >
        
@@ -101,7 +106,7 @@ export default function productScreen(){
                     iconName='description' 
                     />
 
-                        <MyButton style={styles.cadastrar} onPress={handleRegister} title='Cadastrar'></MyButton>            
+                    <MyButton style={styles.cadastrar} onPress={handleRegister} title='Cadastrar'/>
                 </View>
 
                 <MyList
@@ -109,17 +114,17 @@ export default function productScreen(){
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item})=>(
                         <MyItem
-                        onEdit={() => editProduct(item.id)}
-                        onDel={() => {
-                            handleRegister(item.id);
-                            dellProduct(item.id);
-                        }}
-                    >
-                        <Text>{item.name}</Text>
-                        <Text>{item.description}</Text>
-                        <Text>{new Date(item.create_at).toLocaleString()}</Text>
-                        <Text>{item.user_id}</Text>
-                    </MyItem>
+                            onEdit={() => editProduct(item.id)}
+                            onDel={async () => {
+                                await deleteProduct(item.id);
+                                dellProduct(item.id);
+                            }}
+                        >
+                            <Text>{item.name}</Text>
+                            <Text>{item.description}</Text>
+                            <Text>{new Date(item.create_at).toLocaleString()}</Text>
+                            <Text>{item.user_id}</Text>
+                        </MyItem>
 
                     )}
                 
