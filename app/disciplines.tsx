@@ -117,7 +117,7 @@ export default function DisciplineScreen() {
             onChangeText={(text) => setReq({ ...req, teacher: text })}
           />
 
-          <Button title={isEditing ? 'Atualizar' : 'Cadastrar'} color="#4CAF50" onPress={handleRegister} />
+          <Button title={isEditing ? 'Atualizar' : 'Cadastrar'} color="#9400d3" onPress={handleRegister} />
         </View>
 
         <View style={styles.listContainer}>
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
     borderLeftWidth: 5,
-    borderLeftColor: '#4CAF50',
+    borderLeftColor: '#9400d3',
   },
   cardTitle: {
     fontSize: 16,
