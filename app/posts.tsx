@@ -7,6 +7,9 @@ import { useRouter } from 'expo-router';
 import {setPost, iPost} from '../src/controllers/posts'
 import { supabase } from '../src/utils/supabase'
 import MyButton from '../src/components/MyButtons'
+import { delPosts, editPosts } from '../src/controllers/posts';
+import { Myinput } from '../src/components/MyInputs';
+
 
 export default function postScreen() {
 
@@ -33,67 +36,47 @@ export default function postScreen() {
           })();
         }, []);
 
-
-
-/*
-        async function getTodos(){
-            const {data: todos}= await supabase.from('posts').select()
-            if(todos && todos.length > 0){
-                setPosts(todos);
-            }
-            
+    async function handleRegister() {
+        if (req.id === -1) {
+          const newid = posts.length ? posts[posts.length - 1].id + 1 : 0;
+          const newPost = { ...req, id: newid };
+          setPosts([...posts, newPost]);
+          await setPost(newPost);
+        } else {
+          const updated = await editPosts(req.id, req);
+          if (updated) {
+            setPosts(posts.map(i => (i.id === req.id ? req : i)));
+          }
         }
-
-        getTodos();
-    },[]);
-    */
-    async function handleRegister(){
-        if(req.id == -1){
-            const newid = posts.length ? posts[posts.length-1].id+1:0;
-            const newPost = {...req, id: newid};
-            setPosts([...posts, newPost])
-            await setPost(newPost)
-        }else{
-            setPosts(posts.map(i =>(i.id == req.id)? req: i )  );
-            //chamar a função do controlador edit
-        }
-    
+      
         setReq({
-            id: -1,
-            url: '',
-            description : '',
-            like: 0,
-            created_at: new Date().toISOString(),
-            user_id : 2,
-        })
-    }
+          id: -1,
+          url: '',
+          description: '',
+          like: 0,
+          created_at: new Date().toISOString(),
+          user_id: 2,
+        });
+      }      
     
-    function editPost(id:number){
-        function editPost(id: number) {
+    function editPost(id: number) {
         const post = posts.find((i) => i.id === id);
         if (post) {
           setReq(post);
         }
       }
-    }
+      
 
-
-    async function delPost(id:number){
-        async function delPost(id: number) {
-            const result = await delPostsDoController(id); 
-            if (result) {
-              setPosts(posts.filter((i) => i.id !== id));
-            }
-          }
-        
-        
+      async function delPost(id: number) {
+        const result = await delPosts(id); // Chama a função do controller
+        if (result) {
+          setPosts(posts.filter((i) => i.id !== id)); // Atualiza o estado local
+        } else {
+          console.error("Erro ao deletar o post");
         }
+      }
+      
         //chamar a função do controlador delete
-
-        const list= posts.filter(i => i.id != id)
-        if(list)
-            setPosts(list)
-    }
     
     const router = useRouter();
 
@@ -103,16 +86,22 @@ export default function postScreen() {
 
             <View style={styles.row}>
                 <View style={styles.form}>
-                    <TextInput placeholder="nome" 
-                        value={req.url}
-                        onChangeText={(text) => setReq({...req ,url: text})}
-                    /> 
-                   
+                <Myinput
+                    label='URL'
+                    iconName=""
+                    placeholder="URL da imagem"
+                    value={req.url}
+                    onChangeText={(text) => setReq({ ...req, url: text })}
+                    />
 
-                    <TextInput placeholder="description" 
-                        value={req.description}
-                        onChangeText={(text) => setReq({...req ,description: text})}
-                        />
+
+                <Myinput
+                    label='Descrição'
+                    iconName=""
+                    placeholder="Descrição"
+                    value={req.description}
+                    onChangeText={(text) => setReq({ ...req, description: text })}
+                    />
                         
                         <MyButton style={{justifyContent:'center'}}
                         title="CADASTRAR" // Passando a propriedade correta para o título do botão
@@ -127,7 +116,7 @@ export default function postScreen() {
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
                         <MyItem 
-                        style={styles.item}
+                        style={item.styles}
                             onDel={()=>{delPost(item.id)}}
                             onEdit={()=>{editPost(item.id)}}
                         >
@@ -168,6 +157,19 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
     },
+    input: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        padding: 10,
+        marginBottom: 10,
+    },
+    item: {
+        marginVertical: 5,
+        padding: 10,
+        backgroundColor: '#EAEAEA',
+        borderRadius: 8,
+    },
     listContainer: {
         flex: 1, 
         padding: 10,
@@ -183,26 +185,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 10,
     },
-    input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
+    button: {
+        backgroundColor: '#007BFF',
         padding: 10,
-        marginBottom: 10,
-    },
-    postCategorie: {
-        padding: 10,
-        marginVertical: 5,
-        backgroundColor: '#f8f8f8',
         borderRadius: 5,
-    },
-    postText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    postUrl: {
-        fontSize: 14,
-        color: '#007BFF',
-        marginBottom: 5,
+        marginTop: 10,
     },
 });
