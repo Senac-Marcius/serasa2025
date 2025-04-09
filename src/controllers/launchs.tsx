@@ -10,7 +10,6 @@ interface iLaunch {
     indicator: string,
     note: string,
     created_at: string,
-    userId: number,
     students_id: number,
     class_id: number,
     employees_id: number,
