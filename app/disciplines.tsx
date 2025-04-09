@@ -4,7 +4,7 @@ import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
 import { iDisciplines, SetDisciplinebd, UpdateDisciplinebd, DeleteDisciplinebd } from '../src/controllers/disciplines';
 import { supabase } from '../src/utils/supabase';
-//111
+
 export default function DisciplineScreen() {
   const [req, setReq] = useState<iDisciplines>({
     id: -1,
@@ -28,8 +28,8 @@ export default function DisciplineScreen() {
   }, []);
 
   function handleRegister() {
-    if (!req.name.trim() || !req.url.trim() || !req.teacher.trim()) {
-      console.log('Preencha todos os campos!');
+    if (!req.name.trim() || !req.url.trim() || !req.teacher.trim() || req.workload <= 0) {
+      console.log('Preencha todos os campos corretamente!');
       return;
     }
 
@@ -98,18 +98,21 @@ export default function DisciplineScreen() {
       <View style={styles.row}>
         <View style={styles.form}>
           <Text style={styles.formTitle}>{isEditing ? 'Editar Disciplina' : 'Nova Disciplina'}</Text>
+
           <TextInput
             style={styles.input}
             placeholder="Nome da disciplina"
             value={req.name}
             onChangeText={(text) => setReq({ ...req, name: text })}
           />
+
           <TextInput
             style={styles.input}
             placeholder="URL"
             value={req.url}
             onChangeText={(text) => setReq({ ...req, url: text })}
           />
+
           <TextInput
             style={styles.input}
             placeholder="Professor"
@@ -117,7 +120,18 @@ export default function DisciplineScreen() {
             onChangeText={(text) => setReq({ ...req, teacher: text })}
           />
 
-          <Button title={isEditing ? 'Atualizar' : 'Cadastrar'} color="#4CAF50" onPress={handleRegister} />
+          <TextInput
+            style={styles.input}
+            placeholder="Carga Horária"
+            value={req.workload.toString()}
+            keyboardType="numeric"
+            onChangeText={(text) => {
+              const number = parseInt(text, 10);
+              setReq({ ...req, workload: isNaN(number) ? 0 : number });
+            }}
+          />
+
+          <Button title={isEditing ? 'Atualizar' : 'Cadastrar'} color="#9400d3" onPress={handleRegister} />
         </View>
 
         <View style={styles.listContainer}>
@@ -200,7 +214,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
     borderLeftWidth: 5,
-    borderLeftColor: '#4CAF50',
+    borderLeftColor: '#9400d3',
   },
   cardTitle: {
     fontSize: 16,
