@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity} f
 import MyView from '../src/components/MyView';
 import MyUpload from '../src/components/MyUpload';
 import { useRouter } from 'expo-router';
-import { setParent,iParent,editParentSupa, delParentSupa,} from '../src/controllers/parentsController';
+import { setParent,iParent,delParent,editParent} from '../src/controllers/parentsController';
 import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
 import { Myinput, MyCheck, MyTextArea} from '../src/components/MyInputs';
@@ -64,19 +64,17 @@ export default function ParentScreen (){
     },[])
 
     async function handleRegister() {
-        if (!req.name || !req.email) {
-            alert('Preencha os campos obrigatórios!');
-            return;
-        }
-    
+
         if (req.id === -1) {
             const newId = parents.length ? parents[parents.length - 1].id + 1 : 0;
             const newParent = { ...req, id: newId };
             setParents([...parents, newParent]);
-            await setParent(newParent);
-        
+            const resp = await setParent(newParent);
+            console.log (resp)
         } else {
+                
             setParents(parents.map(p => (p.id == req.id ? req : p)));
+            await editParent(req)
         }
     
         setReq({
@@ -92,33 +90,24 @@ export default function ParentScreen (){
             userid: 0,
         });
     }
-     /*function editParent(id:number){
-        const parent = parents.find (p => p.id == id)
-        if(parent)
-            setReq(parent)
-     }
-     function delParent(id:number){
-        const list = parents.filter (p=> p.id != id)
-        if (list)
-            setParents(list)
-     }*/
+   
 
-        async function delParent(id: number) {
-                const { error } = await supabase.from('parents').delete().eq('id', id);
-                if (!error) {
-                    const list = parents.filter(r => r.id != id)
-                    setParents(list)
-                } else {
-                    console.error('Erro ao deletar:', error);
-                }
-            }
-        
-            function editParent(id: number) {
-                const parent = parents.find(r => r.id === id);
-                if (parent) {
-                    setReq(parent);
-                }
-            }
+    async function delParentL(id: number) {
+        const error = await delParent (id)
+        if (!error) {
+            const list = parents.filter(r => r.id != id)
+            setParents(list)
+        } else {
+            console.error('Erro ao deletar:', error);
+        }
+    }
+    
+    function editParentL(id: number) {
+        const parent = parents.find(r => r.id === id);
+        if (parent) {
+            setReq(parent);
+        }
+    }
         
     
     const router = useRouter();
@@ -206,12 +195,15 @@ export default function ParentScreen (){
                 </View>
                 
 
-                <FlatList
+                <MyList
                     data={parents}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
-                        <View style={styles.parentsItem}>
-
+                        <MyItem 
+                            style={styles.parentsItem}
+                            onDel={()=> {delParentL(item.id)}}
+                            onEdit={()=> {editParentL(item.id)}}
+                        >
                             <Text>{item.id}</Text>
                             <Text>{item.name}</Text>
                             <Text>{item.rg}</Text>
@@ -222,11 +214,7 @@ export default function ParentScreen (){
                             <Text>{item.kinship}</Text>
                             <Text>{item.createat}</Text>
                             <Text>{item.userid}</Text>
-                                <View style ={styles.buttonContainer}>
-                                    <TouchableOpacity onPress={()=> {editParent(item.id)}}>EDIT</TouchableOpacity>
-                                    <TouchableOpacity onPress={()=> {delParent(item.id)}}>DELETE</TouchableOpacity>
-                                </View>
-                        </View>
+                        </MyItem>
                     )}
                 />
                 {/*parâmetro FlatList é parecido com o forEach do html. */}

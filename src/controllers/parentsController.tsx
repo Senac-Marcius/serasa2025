@@ -15,22 +15,21 @@
       userid: number,
   }
 
-export async function setParent(parent: iParent) {
-    // Aqui você pode aplicar regex ou regras de negócio antes de inserir
-
+  export async function setParent(parent: iParent) {
+    // 🔍 Tratativas com regex
     const { data, error } = await supabase
         .from('parents')
         .insert([parent])
         .select();
 
     if (error) {
-        console.error('Erro ao inserir cadrastro do parente: ', error);
+        console.error('Erro ao inserir record: ', error);
         return [];
     }
 
     return data;
+    
 }
-
 /*async function setParentController(parent:iParent){
     //aqui vem os tratamentos de regex ou do modelo de negó´cio antes de inserir
     const { data, error } = await supabase.from('parents')
@@ -93,16 +92,16 @@ export async function getParents() {
     const { data, error } = await supabase.from('parents').select();
 
     if (error) {
-        console.error('Erro ao buscar records: ', error);
+        console.error('Erro ao buscar cadastros dos familiares: ', error);
         return [];
     }
 
     return data;
 }
 
-export async function editParentSupa(parent: iParent) {
+export async function editParent(parent: iParent) {
     const { error } = await supabase
-        .from('parent')
+        .from('parents')
         .update({
             name: parent.name,
             rg: parent.rg,
@@ -118,8 +117,8 @@ export async function editParentSupa(parent: iParent) {
 
     return error;
 }
-export async function delParentSupa(id: number) {
-    const { error } = await supabase.from('records').delete().eq('id', id);
+export async function delParent(id: number) {
+    const { error } = await supabase.from('parent').delete().eq('id', id);
     return error;
 }
 
