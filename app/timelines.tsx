@@ -135,10 +135,10 @@ export default function TimelineScreen() {
           />
 
           {/* Botão para cadastrar o cronograma */}
-          <MyButton
+          <MyButton style={{justifyContent:'center'}}
             title="CADASTRAR" // Passando a propriedade correta para o título do botão
             onPress={handleRegister} // Passando a função de press
-            style={styles.buttonCadastrar}
+           
             
           />
         </View>
