@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text} from 'react-native';
 import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
-import {iProduct, setProduct} from '../src/controllers/products';
+import {iProduct, setProduct, updateProduct, deleteProduct} from '../src/controllers/products';
 import MyButton from '../src/components/MyButtons';
 import Mytext from '../src/components/MyText';
 import {Myinput} from '../src/components/MyInputs';
@@ -27,7 +27,11 @@ export default function productScreen(){
 
         useEffect(()=> {
             (async () => {
-                const { data: todos } = await supabase.from('products').select()      
+                const { data: todos } = await supabase
+                .from('products')
+                .update(updateProduct)
+                .eq('id', deleteProduct)  
+                .select()  
                 
                 if (todos && todos.length > 1) {
                     setProducts(todos)
@@ -37,24 +41,27 @@ export default function productScreen(){
        
 
 
-        async function handleRegister(){  
-            if(req.id == -1){
+        async function handleRegister() {  
+            if(req.id == -1) {
+                const newId = products.length ? products[products.length - 1].id + 1 : 0;
+                const newProduct = { ...req, id: newId };
 
-                const newId = products.length ? products[products.length - 1].id+1:0;
-                const newProduct = { ...req, id: newId}
+                setProduct([...products, newProduct]);
+                await insertProduct(newProduct)
+            
                 
-                setProducts([...products, newProduct]); 
-                await setProduct(newProduct)
-            }else{ 
-                setProducts ( products.map ( p => (p.id == req.id) ? req : p));
+            } else {
+                await updateProduct(req)
+                setProducts(products.map)
             }
+            
             setReq({
-                description:'',
-                name:'',
+                description: '',
+                name: '',
                 id: -1,
-                create_at:  new Date().toISOString(),
+                create_at: new Date().toISOString(),
                 user_id: 6
-            })  
+            });
         }
 
         function editProduct(id:number){
@@ -102,14 +109,17 @@ export default function productScreen(){
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item})=>(
                         <MyItem
-                            onEdit={()=> editProduct(item.id)}
-                            onDel={() => dellProduct(item.id)}
-                        >
-                                <Text>{item.name}</Text>
-                                <Text>{item.description}</Text>
-                                <Text>{item.create_at}</Text>
-                                <Text>{item.user_id}</Text>
-                        </MyItem>
+                        onEdit={() => editProduct(item.id)}
+                        onDel={() => {
+                            handleRegister(item.id);
+                            dellProduct(item.id);
+                        }}
+                    >
+                        <Text>{item.name}</Text>
+                        <Text>{item.description}</Text>
+                        <Text>{new Date(item.create_at).toLocaleString()}</Text>
+                        <Text>{item.user_id}</Text>
+                    </MyItem>
 
                     )}
                 
