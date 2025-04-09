@@ -29,8 +29,8 @@ const MyItem: React.FC<MytextProps> = ({ children, style, onEdit, onDel, }) => {
           <TouchableOpacity style={styles.card}>
             {children}
             <View  style={styles.button}>
-              <MyButton   onPress={onEdit} title='Editar'></MyButton>
-              <MyButton  style={{marginTop: 20 }} onPress={onDel} title='Deletar'></MyButton> 
+              <MyButton style={{ justifyContent:'center'}}  onPress={onEdit} title='Editar'></MyButton>
+              <MyButton  style={{ justifyContent:'center'}} onPress={onDel} title='Deletar'></MyButton> 
 
             </View>
         </TouchableOpacity>
@@ -43,9 +43,9 @@ const MyCorrelated: React.FC<MyCorrelatedprops> = ({ children, style, onEdit, on
       {children}
       <View >
       {showEditButton &&
-        <MyButton style={styles.button} onPress={onEdit} title="Editar" />}
+        <MyButton style={{ justifyContent:'center'}} onPress={onEdit} title="Editar" />}
         {showDeleteButton &&
-        <MyButton style={{ marginTop: 20 }} onPress={onDel} title="Deletar" />}
+        <MyButton style={{ justifyContent:'center'}} onPress={onDel} title="Deletar" />}
       </View>
     </TouchableOpacity>
 );
@@ -67,10 +67,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
     elevation: 3, 
-    
+   
   },
 
   button:{
-    width: 380
+    alignItems: 'center',
+    justifyContent:'center',
+    gap:10
   }
 })
