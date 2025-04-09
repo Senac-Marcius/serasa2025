@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import {
   View,
-  Text,
   TextInput,
-  Button,
   FlatList,
   TouchableOpacity,
-  StyleSheet,
   ScrollView,
+  StyleSheet,
 } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
+import MyButton from '../src/components/MyButtons';
+import MyText from '../src/components/MyText';
+import { Myinput, MyTextArea } from '../src/components/MyInputs';
 
-  
+
+
 
 type Turma = {
   id: string;
@@ -32,66 +32,12 @@ type Turma = {
   status: string;
 };
 
-const Stack = createNativeStackNavigator();
-
-export default function App() {
+export default function TurmasComCadastro() {
   const [turmas, setTurmas] = useState<Turma[]>([]);
+  const [modoCadastro, setModoCadastro] = useState(false);
 
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Turmas">
-        <Stack.Screen name="Turmas">
-          {(props) => (
-            <TurmasScreen {...props} turmas={turmas} setTurmas={setTurmas} />
-          )}
-        </Stack.Screen>
-        <Stack.Screen name="CadastroTurma">
-          {(props) => (
-            <CadastroTurmaScreen {...props} setTurmas={setTurmas} />
-          )}
-        </Stack.Screen>
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
-
-function TurmasScreen({ navigation, turmas, setTurmas }: any) {
-  const deletarTurma = (id: string) => {
-    setTurmas(turmas.filter((t: Turma) => t.id !== id));
-  };
-
-  return (
-    <View style={styles.container}>
-      <FlatList
-        data={turmas}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.card}>
-            <Text style={styles.title}>{item.curso}</Text>
-            <Text>Código: {item.codigo}</Text>
-            <Text>Turno: {item.turno}</Text>
-            <View style={styles.actions}>
-              <TouchableOpacity onPress={() => {}}>
-                <Ionicons name="pencil" size={20} color="purple" />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => deletarTurma(item.id)}>
-                <Ionicons name="trash" size={20} color="purple" />
-              </TouchableOpacity>
-            </View>
-          </View>
-        )}
-      />
-      <Button
-        title="Cadastrar Turma"
-        onPress={() => navigation.navigate('CadastroTurma')}
-      />
-    </View>
-  );
-}
-
-function CadastroTurmaScreen({ navigation, setTurmas }: any) {
   const [form, setForm] = useState<Turma>({
-    id: Date.now().toString(),
+    id: '',
     curso: '',
     codigo: '',
     turno: '',
@@ -112,44 +58,98 @@ function CadastroTurmaScreen({ navigation, setTurmas }: any) {
   };
 
   const salvar = () => {
-    setTurmas((prev: Turma[]) => [...prev, form]);
-    navigation.goBack();
+    const novaTurma = { ...form, id: Date.now().toString() };
+    setTurmas((prev) => [...prev, novaTurma]);
+    setForm({
+      id: '',
+      curso: '',
+      codigo: '',
+      turno: '',
+      modalidade: '',
+      horario: '',
+      cargaHoraria: '',
+      vagas: '',
+      inicio: '',
+      termino: '',
+      valor: '',
+      docente: '',
+      certificacao: '',
+      status: '',
+    });
+    setModoCadastro(false);
   };
 
+  const deletarTurma = (id: string) => {
+    setTurmas(turmas.filter((t) => t.id !== id));
+  };
+
+  if (modoCadastro) {
+    return (
+      <ScrollView contentContainerStyle={styles.formContainer}>
+        <MyText style={styles.header}>Cadastrar Nova Turma</MyText>
+        {[
+          'codigo',
+          'curso',
+          'turno',
+          'modalidade',
+          'horario',
+          'cargaHoraria',
+          'vagas',
+          'inicio',
+          'termino',
+          'valor',
+          'docente',
+          'certificacao',
+          'status',
+        ].map((campo) => (
+          <TextInput
+            key={campo}
+            style={styles.input}
+            placeholder={campo.charAt(0).toUpperCase() + campo.slice(1)}
+            value={(form as any)[campo]}
+            onChangeText={(text) => handleChange(campo as keyof Turma, text)}
+          />
+        ))}
+        <MyButton title="Salvar" onPress={salvar} />
+        <MyButton title="Cancelar" onPress={() => setModoCadastro(false)} color="gray" />
+      </ScrollView>
+    );
+  }
+
   return (
-    <ScrollView contentContainerStyle={styles.formContainer}>
-      {[
-        'codigo',
-        'curso',
-        'turno',
-        'modalidade',
-        'horario',
-        'cargaHoraria',
-        'vagas',
-        'inicio',
-        'termino',
-        'valor',
-        'docente',
-        'certificacao',
-        'status',
-      ].map((campo) => (
-        <TextInput
-          key={campo}
-          style={styles.input}
-          placeholder={campo.charAt(0).toUpperCase() + campo.slice(1)}
-          value={(form as any)[campo]}
-          onChangeText={(text) => handleChange(campo as keyof Turma, text)}
-        />
-      ))}
-      <Button title="Salvar Turma" onPress={salvar} />
-    </ScrollView>
+    <View style={styles.container}>
+      <MyText style={styles.header}>Turmas Cadastradas</MyText>
+      <FlatList
+        data={turmas}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+            <MyText style={styles.title}>{item.curso}</MyText>
+            <MyText>Código: {item.codigo}</MyText>
+            <MyText>Turno: {item.turno}</MyText>
+            <View style={styles.actions}>
+              <TouchableOpacity onPress={() => {}}>
+                <Ionicons name="pencil" size={20} color="purple" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => deletarTurma(item.id)}>
+                <Ionicons name="trash" size={20} color="purple" />
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+      />
+      <MyButton title="Cadastrar Nova Turma" onPress={() => setModoCadastro(true)} />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
+  container: { flex: 1, padding: 16 },
+  header: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    textAlign: 'center',
   },
   card: {
     backgroundColor: '#fff',
@@ -161,15 +161,8 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  title: {
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  actions: {
-    flexDirection: 'row',
-    gap: 16,
-    marginTop: 8,
-  },
+  title: { fontWeight: 'bold', fontSize: 16 },
+  actions: { flexDirection: 'row', gap: 16, marginTop: 8 },
   formContainer: {
     padding: 16,
     gap: 12,
@@ -180,5 +173,6 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 10,
     backgroundColor: '#fff',
+    marginBottom: 8,
   },
 });
