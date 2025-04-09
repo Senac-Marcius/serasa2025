@@ -17,7 +17,7 @@ export default function ExpenseScreen(){
             created_at : new Date(). toISOString(),
             name: '',
             emails: '',
-            contacts: '',
+            contacts:'',
             costs: '',
             descriptions: '',
             user_id: 1,
@@ -98,7 +98,7 @@ export default function ExpenseScreen(){
                 <Myinput value={req.costs} onChangeText={(text) => setReq({ ...req, costs: text })} placeholder="R$" label="Valores:" iconName='' /> 
 
 
-                    <MyButton style={{ justifyContent:'center'}} onPress={handleRegister} title='Cadastrar'></MyButton>
+                    <MyButton style={{justifyContent:'center'}} onPress={handleRegister} title='Cadastrar'></MyButton>
                 </View>
 
                 <MyList
