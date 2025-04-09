@@ -251,5 +251,5 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
     label:{
         color: "black",
     }
-}) 
+});
 
