@@ -18,16 +18,11 @@ export default function CategoryScreen() {
     const [req, setReq] = useState<iCategories>({
         name: '',
         description: '',
-<<<<<<< HEAD
         id: -1, // -1 quer dizer: novo cadastro
-=======
-        id: -1,
->>>>>>> 39c7ffb718898f6c01083b3c93d4e044baa6f326
         created_at: new Date().toISOString()
     });
 
     const [categories, setCategories] = useState<iCategories[]>([]);
-<<<<<<< HEAD
     const router = useRouter();
 
     // Carregar categorias do banco ao abrir a tela
@@ -37,18 +32,6 @@ export default function CategoryScreen() {
 
             if (error) console.log('Erro ao carregar categorias:', error);
 
-=======
-
-    const router = useRouter();
-
-    // Carregar categorias do banco
-    useEffect(() => {
-        async function getTodos() {
-            const { data: todos, error } = await supabase.from('categories').select();
-
-            if (error) console.log('Erro ao carregar categorias:', error);
-
->>>>>>> 39c7ffb718898f6c01083b3c93d4e044baa6f326
             if (todos && todos.length > 0) {
                 setCategories(todos);
             }
@@ -60,7 +43,6 @@ export default function CategoryScreen() {
     // Cadastrar ou atualizar
     async function handleRegister() {
         if (req.id === -1) {
-<<<<<<< HEAD
             const newid = categories.length ? categories[categories.length - 1].id + 1 : 0;
             const newCategory = { ...req, id: newid };
 
@@ -73,27 +55,6 @@ export default function CategoryScreen() {
             }
         }
 
-=======
-            // Cadastrar
-            const newCategory = {
-                ...req,
-                created_at: new Date().toISOString()
-            };
-
-            const data = await setCategory(newCategory);
-            if (data && data.length > 0) {
-                setCategories([...categories, { ...data[0] }]);
-            }
-        } else {
-            // Atualizar
-            const data = await updateCategory(req);
-            if (data && data.length > 0) {
-                setCategories(categories.map(i => i.id === req.id ? data[0] : i));
-            }
-        }
-
-        // Resetar formulário
->>>>>>> 39c7ffb718898f6c01083b3c93d4e044baa6f326
         setReq({
             name: '',
             description: '',
@@ -146,11 +107,7 @@ export default function CategoryScreen() {
                         onChangeText={(text) => setReq({ ...req, description: text })}
                         style={styles.input}
                     />
-<<<<<<< HEAD
                     <Button title={req.id === -1 ? "Cadastrar" : "Atualizar"} onPress={handleRegister} />
-=======
-                    <Button title="Cadastrar" onPress={handleRegister} />
->>>>>>> 39c7ffb718898f6c01083b3c93d4e044baa6f326
                 </View>
 
                 <MyList
