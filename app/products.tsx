@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
-import { TextInput, Text} from 'react-native-paper';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Text} from 'react-native';
 import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
+import {iProduct, setProduct, updateProduct, deleteProduct} from '../src/controllers/products';
+import MyButton from '../src/components/MyButtons';
+import Mytext from '../src/components/MyText';
+import {Myinput} from '../src/components/MyInputs';
+import { MyItem } from '../src/components/MyItem';
+import MyList from '../src/components/MyList';
+import { supabase } from  '../src/utils/supabase';
+
+
 
 export default function productScreen(){
 //aqui é typescript
@@ -11,102 +19,120 @@ export default function productScreen(){
         description:'',
         name:'',
         id: -1,
-        createAt:  new Date().toISOString(),
-        userId: 0,
+        create_at:  new Date().toISOString(),
+        user_id: 6,
     });
     
-    const [products, setProducts] = useState<{ 
-        description: string,
-        name: string,
-        id: number,
-        userId: number,
-        createAt: string
-        }[]>([]);
+    const [products, setProducts] = useState<iProduct[]>([]);
 
-        function handleRegister(){  
-            if(req.id == -1){
-
-                const newId = products.length ? products[products.length - 1].id+1:0;
-                const newProduct = { ...req, id: newId}
-                
-                setProducts([...products, newProduct]); 
-                
-                
-            }else{ 
-                setProducts ( products.map ( p => (p.id == req.id) ? req : p));
+    useEffect(()=> {
+        (async () => {
+            const { data: todos, error } = await supabase
+            .from('products')
+            .select()  
+            
+            if (error) {
+                console.error('Error fetching products:', error);
+                return;
             }
-            setReq({
-                description:'',
-                name:'',
-                id: -1,
-                createAt:  new Date().toISOString(),
-                userId: 0,})  
-        }
+            
+            if (todos) {
+                setProducts(todos)
+            }
+        }) ()
+    }, []);
+       
 
-        function editProduct(id:number){
-            const product = products.find(p => p.id == id)
-            if(product)
+    
+    async function handleRegister() {
+
+        //se for um item editado, ele deve chamar o registro existente
+        if (req.id == -1) {
+            const newid = products.length? products[products.length - 1].id + 1 : 0;
+            const newProduct = {...req, id: newid}
+    
+            setProducts([...products, newProduct]);
+            await setProduct(newProduct)
+    
+        } else{ //senão, ele deve criar um novo registro
+            await updateProduct(req)//aqui vc vai chamada sua função de editar do controlador
+            setProducts(products.map((d) => (d.id == req.id)? req: d));
+        }
+        setReq({
+            description: '',
+            name: '',
+            id: -1,
+            create_at: new Date().toISOString(),
+            user_id: 6
+        });
+    }
+
+    function editProduct(id:number){
+        const product = products.find(p => p.id == id)
+        if(product)
             setReq(product)
-        }
-        function dellProduct(id:number){
-            const list = products.filter(p => p.id != id)
-            if(list)
-                setProducts(list)
-        }
+    }
+
+    function dellProduct(id:number){
+        const list = products.filter(p => p.id != id)
+        if(list)
+            setProducts(list)
+    }
 
     const router = useRouter();
 
     return (
         <MyView router={router} >
-            
-            <Text style={styles.h1}> Produtos </Text>
-                {/*aqui é typescript dentro do front */ }
-            <Text style={styles.h2}>Minha tela dos Produtos</Text>
-                <View style={styles.row}>
-                    <View style={styles.form}>
-                            
-                        <TextInput style={styles.input}
-                        placeholder="Digite o nome"
-                        value={req.name}
-                        onChangeText={(text)=> setReq({...req, name: text})}
-                        />
-                            
-                        <TextInput style={styles.input}
-                        placeholder="Digite a descrição" 
-                        value={req.description}
-                        onChangeText={(text)=> setReq({...req, description: text})}
-                        />
-                        
+       
+            <Mytext style={styles.h2}>Cadastro de Produtos</Mytext>
+        
+            <View style={styles.row}>
+                <View style={styles.form}>
 
-                        <TouchableOpacity style={styles.cadastrar} onPress={()=>{handleRegister()}}>Cadastrar</TouchableOpacity>
-
-                    </View>
-
-            
-                    <FlatList
-                        data={products}
-                        keyExtractor={(item) => item.id.toString() }
-                        renderItem={({item}) => (
-                            <View  style={styles.cadastroForm}>
-                                <Text>{item.description}</Text>
-                                <Text>{item.name}</Text>
-                                <Text>{item.createAt}</Text>
-                                <Text>{item.userId}</Text>
-                                <View style={styles.buttonsContainer}>
-                                    
-                                    <TouchableOpacity style={styles.edit} onPress={()=>{editProduct(item.id)}}>Edit</TouchableOpacity>
-                                    <TouchableOpacity style={styles.delete}onPress={()=>{dellProduct(item.id)}}>Delete</TouchableOpacity>
-                                </View>  
-                            </View>  
-                                
-                        )
-                        
-                        }
+                    <Myinput 
+                    placeholder="Digite o Nome"
+                    value={req.name}
+                    onChangeText={(text) => setReq({ ...req, name:text })}
+                    label="Produto"
+                    iconName='storefront' 
+                
                     />
-                </View> 
-        </MyView> 
             
+                    <Myinput 
+                    placeholder= "Descrição"
+                    value={req.description}
+                    onChangeText={(text)=>setReq({...req, description:text})}
+                    label= 'Descrição'
+                    iconName='description' 
+                    />
+
+                    <MyButton style={styles.cadastrar} onPress={handleRegister} title='Cadastrar'/>
+                </View>
+
+                <MyList
+                    data={products}
+                    keyItem={(item) => item.id.toString()}
+                    renderItem={({item})=>(
+                        <MyItem
+                            onEdit={() => editProduct(item.id)}
+                            onDel={async () => {
+                                await deleteProduct(item.id);
+                                dellProduct(item.id);
+                            }}
+                        >
+                            <Text>{item.name}</Text>
+                            <Text>{item.description}</Text>
+                            <Text>{new Date(item.create_at).toLocaleString()}</Text>
+                            <Text>{item.user_id}</Text>
+                        </MyItem>
+
+                    )}
+                
+                />
+            </View>
+        </MyView>
     );
+    
 }
 
 
@@ -143,10 +169,6 @@ const styles = StyleSheet.create({
     },
     h2: {
         fontSize: 25,
-        textAlign: 'center', 
-    },
-    h1: {
-        fontSize: 25,
         textAlign: 'center',
         marginRight: 10,
         padding: 20,
@@ -174,10 +196,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         fontSize: 15,
         padding: 40,
-        
-
-
-    },
+      },
     input: {
         fontSize: 15,
         textAlign: 'left',
@@ -206,7 +225,7 @@ const styles = StyleSheet.create({
         marginTop: 80,
         marginBottom: 10,
         padding: 20,
-    }
+    },
 })
     
 
