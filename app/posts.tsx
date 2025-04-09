@@ -6,8 +6,9 @@ import MyView from '../src/components/MyView'
 import { useRouter } from 'expo-router';
 import {setPost, iPost} from '../src/controllers/posts'
 import { supabase } from '../src/utils/supabase'
+import MyButton from '../src/components/MyButtons'
 
-export default function postScreen(){
+export default function postScreen() {
 
     const [req, setReq] = useState({
         id: -1,
@@ -21,17 +22,31 @@ export default function postScreen(){
     const[posts, setPosts] = useState<iPost[]>([])
 
     useEffect(()=>{
+        (async () => {
+            const { data: todos, error } = await supabase.from('posts').select();
+            if (todos && todos.length > 0) {
+              setPosts(todos);
+            }
+            if (error) {
+              console.error("Erro ao buscar os cronogramas:", error);
+            }
+          })();
+        }, []);
+
+
+
+/*
         async function getTodos(){
             const {data: todos}= await supabase.from('posts').select()
-
-            if(todos && todos.length > 1){
-                setPosts(todos)
+            if(todos && todos.length > 0){
+                setPosts(todos);
             }
+            
         }
 
         getTodos();
-    },[])
-    
+    },[]);
+    */
     async function handleRegister(){
         if(req.id == -1){
             const newid = posts.length ? posts[posts.length-1].id+1:0;
@@ -40,6 +55,7 @@ export default function postScreen(){
             await setPost(newPost)
         }else{
             setPosts(posts.map(i =>(i.id == req.id)? req: i )  );
+            //chamar a função do controlador edit
         }
     
         setReq({
@@ -53,14 +69,30 @@ export default function postScreen(){
     }
     
     function editPost(id:number){
-        let item= posts.find(i => i.id== id)
-        if(item)
-        setReq(item)
+        function editPost(id: number) {
+        const post = posts.find((i) => i.id === id);
+        if (post) {
+          setReq(post);
+        }
+      }
     }
-    function delPost(id:number){
+
+
+    async function delPost(id:number){
+        async function delPost(id: number) {
+            const result = await delPostsDoController(id); 
+            if (result) {
+              setPosts(posts.filter((i) => i.id !== id));
+            }
+          }
+        
+        
+        }
+        //chamar a função do controlador delete
+
         const list= posts.filter(i => i.id != id)
         if(list)
-        setPosts(list)
+            setPosts(list)
     }
     
     const router = useRouter();
@@ -82,9 +114,12 @@ export default function postScreen(){
                         onChangeText={(text) => setReq({...req ,description: text})}
                         />
                         
-                    
-                      
-                   <Button title= 'Cadastrar' onPress= {handleRegister}/>
+                        <MyButton style={{justifyContent:'center'}}
+                        title="CADASTRAR" // Passando a propriedade correta para o título do botão
+                        onPress={handleRegister} // Passando a função de press
+
+            />
+                
                                  
                 </View>
                 <MyList
@@ -92,6 +127,7 @@ export default function postScreen(){
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
                         <MyItem 
+                        style={styles.item}
                             onDel={()=>{delPost(item.id)}}
                             onEdit={()=>{editPost(item.id)}}
                         >
@@ -105,8 +141,12 @@ export default function postScreen(){
    
     );
 }
+
+
+
 // Estilos
 const styles = StyleSheet.create({
+
     container: {
         flex: 1,
         padding: 20,
