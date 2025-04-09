@@ -1,265 +1,238 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, TextInputBase, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity } from 'react-native';
 import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
 import MyCalendar from '../src/components/MyCalendar'; 
 import MySearch from '../src/components/MySearch';
-import {Myinput, MyCheck, MyTextArea} from '../src/components/MyInputs'; 
-import {setTimeline, iTimeline} from '../src/controllers/timelines';
+import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs'; 
 import { supabase } from '../src/utils/supabase';
+import { setTimeline, iTimeline, delTimelines as delTimelinesDoController, editTimelines as editTimelinesDoController } from '../src/controllers/timelines';
+import MyButton from '../src/components/MyButtons';
+import MyList from '../src/components/MyList';
+import { MyItem } from '../src/components/MyItem';
 
+export default function TimelineScreen() {
+  const [req, setReq] = useState({
+    id: -1,
+    url: '',
+    class_id: 2,
+    discipline: '',
+    local_id: 1,
+    start_time: '',
+    end_time: '',
+    created_at: new Date().toISOString(),
+  });
 
+  const [timelines, setTimelines] = useState<iTimeline[]>([]);
+  const [busca, setBusca] = useState('');
+  const router = useRouter();
 
-export default function TimelineScreen(){
-// aqui é typescript
-    const [req, setReq] = useState({
-            id: -1,
-            url: '',
-            class_id: 2,
-            discipline: '',
-            local_id: 1,
-            start_time: '',
-            end_time: '',
-            created_at: new Date().toISOString(),
-        
+  // Buscar os cronogramas ao carregar o componente
+  useEffect(() => {
+    (async () => {
+      const { data: todos, error } = await supabase.from('timelines').select();
+      if (todos && todos.length > 0) {
+        setTimelines(todos);
+      }
+      if (error) {
+        console.error("Erro ao buscar os cronogramas:", error);
+      }
+    })();
+  }, []);
+
+  // Função para registrar um novo cronograma ou editar um existente
+  async function handleRegister() {
+    if (req.id === -1) {
+      // Criar novo cronograma
+      const newId = timelines.length ? timelines[timelines.length - 1].id + 1 : 0;
+      const newTimeline = { ...req, id: newId };
+      setTimelines([...timelines, newTimeline]);
+      await setTimeline(newTimeline);
+    } else {
+      // Atualizar cronograma existente
+      setTimelines(timelines.map((item) => (item.id === req.id ? req : item)));
+      await editTimelinesDoController(req.id, req);
+    }
+
+    // Limpar o formulário após o registro
+    setReq({
+      id: -1,
+      url: '',
+      class_id: 2,
+      discipline: '',
+      local_id: 1,
+      start_time: '',
+      end_time: '',
+      created_at: new Date().toISOString(),
     });
+  }
 
-    const [timelines, setTimelines] = useState<iTimeline[]>([]);
-
-    useEffect(() => {
-        (async () => {
-
-            const{ data: todos}= await supabase.from('timelines').select()
-
-            if (todos && todos.length > 1){
-                setTimelines(todos)
-            }
-
-        }) ()
-    },[])
-   
-
-    async function handleRegister() {
-        if(req.id == -1){
-            const newId = timelines.length ? timelines[timelines.length -1].id + 1 : 0;
-            const newTimeline = {...req, id: newId};
-            setTimelines([...timelines, newTimeline]);
-            const result = await setTimeline(newTimeline)
-            console.log(result)
-        }else{
-            setTimelines(timelines.map(s =>(s.id == req.id) ? req : s));
-        }
-        setReq({ 
-            id: -1,
-            url: '',
-            class_id: 2,
-            discipline: '',
-            local_id: 1,
-            start_time: '',
-            end_time: '',
-            created_at: new Date().toISOString(),
-        })
+  // Função para editar um cronograma - Preenche o formulário com os dados existentes
+  function editTimelines(id: number) {
+    const timeline = timelines.find((t) => t.id === id);
+    if (timeline) {
+      setReq(timeline);
     }
-    
-    function editTimelines(id:number){
-        //supabase
+  }
 
-
-        const timeline = timelines.find(s => s.id == id) 
-        if(timeline)
-        setReq(timeline)
+  // Função para deletar um cronograma
+  async function delTimelines(id: number) {
+    const result = await delTimelinesDoController(id); // Chama o controller para deletar
+    if (result) {
+      setTimelines(timelines.filter((t) => t.id !== id));
     }
+  }
 
-    function delTimelines(id:number){
-        //supabase
+  // Função de busca (ainda não implementada)
+  function buscar() {
+    console.log("Buscando por:", busca);
+  }
 
-                const channels = supabase.channel('custom-delete-channel')
-        .on(
-            'postgres_changes',
-            { event: 'DELETE', schema: 'public', table: 'timelines' },
-            (payload) => {
-            console.log('Change received!', payload)
-            }
-        )
-        .subscribe()
+  return (
+    <MyView router={router}>
+      <MySearch
+        style={{ marginTop: 20 }}
+        onChangeText={setBusca}
+        onPress={buscar}
+        busca={busca}
+      />
 
-        
-        const list = timelines.filter(s => s.id != id)
-            setTimelines(list)
-    }
+      {/* Componente de calendário */}
+      <MyCalendar date="2021-10-10" setDate={(date) => console.log(date)} icon="" />
 
-    const router = useRouter();
+      <Text style={styles.header}>Meu Cronograma</Text>
 
-    
-    function buscar(){
-        
-    }
+      <View style={styles.row}>
+        <View style={styles.form}>
+          {/* Campos de input para o formulário de cronograma */}
+          <Myinput
+            value={req.discipline}
+            onChangeText={(text) => setReq({ ...req, discipline: text })}
+            label="Disciplina"          // Label para o campo de disciplina
+            iconName=""             // Nome do ícone para o campo de disciplina
+            placeholder="Digite a disciplina:"
+          />
+          <Myinput
+            value={req.url}
+            onChangeText={(text) => setReq({ ...req, url: text })}
+            label="URL"                 // Label para o campo de URL
+            iconName=""            // Nome do ícone para o campo de URL
+            placeholder="Digite a URL:"
+          />
+          <Myinput
+            value={req.start_time}
+            onChangeText={(text) => setReq({ ...req, start_time: text })}
+            label="Hora de Início"      // Label para o campo de horário de início
+            iconName=""            // Nome do ícone para o campo de horário de início
+            placeholder="Digite o horário de início:"
+          />
+          <Myinput
+            value={req.end_time}
+            onChangeText={(text) => setReq({ ...req, end_time: text })}
+            label="Hora de Término"     // Label para o campo de horário de término
+            iconName=""            // Nome do ícone para o campo de horário de término
+            placeholder="Digite o horário do fim:"
+          />
 
-    const [busca, setBusca] = useState('')
+          {/* Botão para cadastrar o cronograma */}
+          <MyButton
+            title="CADASTRAR" // Passando a propriedade correta para o título do botão
+            onPress={handleRegister} // Passando a função de press
+            style={styles.buttonCadastrar}
+            
+          />
+        </View>
 
+        {/* Lista de cronogramas */}
+        <MyList
+          data={timelines}
+          keyItem={(item) => item.id.toString()}
+          renderItem={({ item }) => (
 
+            <MyItem 
+                style={styles.item}
+                onDel={()=> delTimelines(item.id)}
+                onEdit={()=> editTimelines(item.id)}
 
-    return (
-        <MyView router={router} > 
+            >
+              <Text>{item.discipline}</Text>
+              <Text>{item.url}</Text>
+              <Text>{item.start_time}</Text>
+              <Text>{item.end_time}</Text>
 
-
-        <MySearch
-            style={{marginTop:20}}
-            onChangeText={setBusca}
-            onPress={buscar}
-            busca={busca}
+             
+            </MyItem>
+          )}
         />
-
-
-        
-         {/*aqui chamar o calendario*/}
-         <MyCalendar
-                    date='2021-10-10'
-                    setDate={(date) => console.log(date)}
-                    icon=''
-            />
-
-            {/* aqui é typescript dentro do front */}
-            <text>Meu Cronograma</text>
-            <View style={styles.row}>
-                <View style={styles.form}>
-                    
-                     
-                     <Myinput 
-                     value={req.discipline}
-                     onChangeText={(text) => setReq({...req, discipline:text})}
-                     label=''
-                     iconName=  ''
-                     placeholder='Digite a disciplina:'
-
-                     />
-
-                    <Myinput 
-                     value={req.url}
-                     onChangeText={(text) => setReq({...req,  url:text})}
-                     label=''
-                     iconName=  ''
-                     placeholder='Digite a url:'
-
-                     />
-
-                    <Myinput 
-                     value={req.start_time}
-                     onChangeText={(text) => setReq({...req, start_time:text})}
-                     label=''
-                     iconName=  ''
-                     placeholder='Digite o horário de início:'
-
-                     />
-                     
-                     <Myinput 
-                     value={req.end_time}
-                     onChangeText={(text) => setReq({...req, end_time:text})}
-                     label=''
-                     iconName=  ''
-                     placeholder='Digite o horário do fim:'
-
-                     />
-                     
-                     
-                     
-                     <Button title="CADASTRAR" onPress={ handleRegister } color="purple" />
-                </View>
-
-                <FlatList 
-                    data={timelines}
-                    keyExtractor={ (item) => item.id.toString()}
-                    renderItem={({item}) => (
-                        <View style={ styles.item}>
-                        
-                         
-                            <Text> {item.discipline} </Text>
-                            <Text> {item.url} </Text>
-                            <Text> {item.start_time} </Text>
-                            <Text> {item.end_time} </Text>
-               
-                            <View style={styles.button_capsule}>
-                                <TouchableOpacity style={styles.buttonedit} onPress={ () => { editTimelines (item.id) } } >EDIT</TouchableOpacity>
-                                <TouchableOpacity style={styles.buttondel} onPress={() => {delTimelines (item.id)}}>DELETE</TouchableOpacity>
-
-                            </View>
-                                
-
-
-                        </View>
-                    )}
-                />
-                
-            </View>   
-        </MyView>
-        )             
+      </View>
+    </MyView>
+  );
 }
 
 const styles = StyleSheet.create({
-    button_capsule: {
-         gap: 10,
-    },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  buttonCapsule: {
+    gap: 7,
+    
+    
+  },
+  buttonCadastrar:{
+    alignItems: 'center',
+    padding: 15,  // Aumentando o padding para deixar o botão maior
+    borderRadius: 10,
+    backgroundColor: 'purple',
+    textAlign: 'center',
+    width: '1100%',  // Faz o botão ocupar toda a largura disponível
+    maxWidth: 400,  // Definindo um limite máximo de largura, se necessário
 
-    button: {
-        flexDirection: 'row',
-        alignContent: 'space-between',
-        alignItems: 'center',
-        gap: 10,
-    },
-   
+  },
+  buttonEdit: {
+     alignItems: 'center',
+     padding: 10,
+     borderRadius: 10,
+     backgroundColor: 'purple',
+     textAlign: 'center',
+  },
+  buttonDelete: {
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: 'purple',
+    textAlign: 'center'
+  },
+  buttonText: {
+    color: 'white',
+    textAlign: 'center',
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  form: {
+    flex: 1,
+    marginRight: 10,
+    padding: 20,
+    backgroundColor: '#F2F2F2',
+    borderRadius: 50,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 5,
 
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-    },
-    form: {
-        flex: 1,
-        marginRight: 10,
-        padding: 20,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-        },
-
-       item: {
-        flex: 1,
-        marginRight: 10,
-        padding: 40,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-        marginBottom: 20,
-        
-        },
-
-        buttonedit: {
-            alignItems: 'center',
-            padding: 20,
-            borderRadius: 10,
-            backgroundColor: 'purple',
-            textAlign: 'center',
-        },
-        
-        buttondel:{
-            alignItems: 'center',
-            padding: 20,
-            borderRadius: 10,
-            backgroundColor: 'purple',
-            textAlign: 'center',
-           
-            
-
-        },
-})
-
-
-
-
-
+  },
+  item: {
+    padding: 20,
+    backgroundColor: '#F2F2F2',
+    borderRadius: 10,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 5,
+  },
+});
