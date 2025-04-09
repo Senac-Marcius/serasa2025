@@ -13,7 +13,7 @@ interface MySearchProps {
 
 }
 
-const myView: React.FC< MySearchProps > = ({children, style, title, router}) => { 
+const MyView: React.FC< MySearchProps > = ({children, style, title, router}) => { 
  
   const { width, height } = Dimensions.get('window');
 
@@ -42,7 +42,7 @@ const myView: React.FC< MySearchProps > = ({children, style, title, router}) => 
   return (
     <ScrollView style={[styles.container, style]}>
       <View style={styles.tView}>
-        <MyTopbar router={router} title = {title ? title: ""} />
+        <MyTopbar  />
         {children}
         {/* Conteúdo da tela (pode ser adicionado aqui) */}
         {/* Botão de suporte */}
@@ -52,4 +52,4 @@ const myView: React.FC< MySearchProps > = ({children, style, title, router}) => 
   );
 };
 
-export default myView;
+export default MyView;
