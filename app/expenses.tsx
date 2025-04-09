@@ -98,7 +98,7 @@ export default function ExpenseScreen(){
                 <Myinput value={req.costs} onChangeText={(text) => setReq({ ...req, costs: text })} placeholder="R$" label="Valores:" iconName='' /> 
 
 
-                    <MyButton onPress={handleRegister} title='Cadastrar'></MyButton>
+                    <MyButton style={{ justifyContent:'center'}} onPress={handleRegister} title='Cadastrar'></MyButton>
                 </View>
 
                 <MyList
