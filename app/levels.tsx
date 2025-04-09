@@ -6,45 +6,49 @@ import { Myinput } from '../src/components/MyInputs';
 import MyList from '../src/components/MyList';
 import { useRouter } from 'expo-router';
 import { supabase } from '../src/utils/supabase';
+import MySelect from '../src/components/MySelect';
+import {iLevels, setLevels, getLevels, updateLevels, deleteLevels} from '../src/controllers/levels'; 
 
-interface iLevel {
-  id: number;
-  name: string;
-  description: string;
-  color: 'Verde' | 'Amarelo' | 'Vermelho';
-}
 
 export default function LevelsScreen() {
   const router = useRouter();
-  const [levels, setLevels] = useState<iLevel[]>([]);
+  const [levels, setLevels] = useState<iLevels[]>([]);
 
-  const [form, setForm] = useState<iLevel>({
+  const [form, setForm] = useState({
     id: -1,
     name: '',
     description: '',
-    color: 'Verde',
+    color: 'Selecione uma cor',
+    created_at:  new Date().toISOString(),
   });
 
   useEffect(() => {
     async function fetchLevels() {
       const { data } = await supabase.from('levels').select();
-      if (data) setLevels(data as iLevel[]);
+      if (data) setLevels(data as iLevels[]);
     }
     fetchLevels();
   }, []);
 
   async function handleSave() {
     if (form.id === -1) {
-      const newLevel = { ...form, id: Date.now() }; // id temporário
-      setLevels([...levels, newLevel]);
-      await supabase.from('levels').insert([newLevel]);
+      const newLevels = { ...form, id: Date.now() }; // id temporário
+      setLevels([...levels, newLevels]);
+      await supabase.from('levels').insert([newLevels]);
     } else {
       const updated = levels.map(item => (item.id === form.id ? form : item));
       setLevels(updated);
       await supabase.from('levels').update(form).eq('id', form.id);
     }
 
-    setForm({ id: -1, name: '', description: '', color: 'Verde' });
+    setForm({
+      id: -1,
+      name: '',
+      description: '',
+      color: 'Selecione uma cor',
+      created_at:  new Date().toISOString(),
+      
+     });
   }
 
   async function handleDelete(id: number) {
@@ -52,8 +56,9 @@ export default function LevelsScreen() {
     setLevels(levels.filter(item => item.id !== id));
   }
 
-  function handleEdit(level: iLevel) {
-    setForm(level);
+  function handleEdit(levels: iLevels) {
+    setForm(levels);
+
   }
 
   return (
@@ -74,23 +79,23 @@ export default function LevelsScreen() {
           iconName="description"
         />
 
-        <View style={styles.colorRow}>
-          {['Verde', 'Amarelo', 'Vermelho'].map(cor => (
-            <MyButton
-              key={cor}
-              title={cor}
-              button_type={form.color === cor ? 'capsule' : 'rect'}
-              onPress={() => setForm({ ...form, color: cor as iLevel['color'] })}
-              style={styles.colorButton}
-            />
-          ))}
-        </View>
+        <MySelect 
+          label={form.color}
+          list={[
+            {key:0, option: 'Verde'},
+            {key:1, option: 'Amarelo'},
+            {key:2, option: 'Vermelho'},
+            ]}
+          setLabel={(item) => setForm({...form, color: item})}
+        
+        />
 
         <MyButton
           title={form.id === -1 ? 'CADASTRAR' : 'ATUALIZAR'}
           onPress={handleSave}
           button_type="round"
           style={styles.button}
+        
         />
 
         <MyList
@@ -107,12 +112,14 @@ export default function LevelsScreen() {
                   onPress={() => handleEdit(item)}
                   button_type="rect"
                   style={styles.button}
+                  color='#68228B'
                 />
                 <MyButton
                   title="EXCLUIR"
                   onPress={() => handleDelete(item.id)}
                   button_type="rect"
                   style={styles.button}
+                  color='#8B0000'
                 />
               </View>
             </View>
@@ -125,32 +132,38 @@ export default function LevelsScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+  padding: 12,
   },
+
   item: {
-    padding: 15,
-    marginBottom: 10,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 8,
+  padding: 10,
+  marginBottom: 10,
+  backgroundColor: '#FFE1FF',
+  borderRadius: 8,
   },
+
   itemText: {
-    fontSize: 16,
-    marginBottom: 4,
+  fontSize: 14,
+  marginBottom: 1,
   },
+
   colorRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginVertical: 10,
+  flexDirection: 'row',
+  justifyContent: 'space-around',
+  marginVertical: 10,
   },
+
   colorButton: {
-    paddingHorizontal: 10,
+  paddingHorizontal: 10,
   },
+  
   actionRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  marginTop: -10,
   },
+
   button: {
-    marginTop: 10,
+  marginTop: 7,
   },
 });
