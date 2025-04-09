@@ -1,292 +1,156 @@
 import React, { useEffect, useState } from 'react';
-import { View,Text, StyleSheet,FlatList, Button,TextInput, Touchable, TouchableOpacity} from 'react-native';
-import { Myinput } from '../src/components/MyInputs';
+import { View, Text, StyleSheet } from 'react-native';
 import MyView from '../src/components/MyView';
-import Mytext from '../src/components/MyText';
-import { textStyles } from '../styles/textStyles';
 import MyButton from '../src/components/MyButtons';
+import { Myinput } from '../src/components/MyInputs';
 import MyList from '../src/components/MyList';
-import { MyItem } from '../src/components/MyItem';
 import { useRouter } from 'expo-router';
-import {setLevels , iLevels } from '../src/controllers/levels';
-import { supabase } from '../src/utils/supabase'; 
+import { supabase } from '../src/utils/supabase';
 
-export default function levelsScreen(){
-    const [req, setReq] = useState({
-        name: '',
-        description: '',
-        color: '',
-        id: -1,
-        created_at: new Date().toISOString(),
-          
-    });
- 
-    const [levels,setLevels] = useState<iLevels[]>([])//a chave recebe a lista que esta sendo declarada na interface.
-    
-    useEffect (()=>{
-            async function getTodos(){
-            const {data: todos}= await supabase.from('levels').select()
-
-            if(todos && todos.length > 0){
-                setLevels(todos)
-            }
-        }
-
-        getTodos();
-    },[])
-
-    async function handleRegister (){
-
-        if( req.id == -1){
-            const newId = levels.length ? levels[levels.length -1].id +1 : 0;
-            const newLevel = {...req, id: newId};
- 
-            setLevels([...levels, newLevel]);
-            //await setLevels(l);
-            
-        }else{
-            setLevels(levels.map(l => (l.id == req.id ? req : l)));
-        }
-        
-        setReq({name: '',
-            description: '',
-            color: '',
-            id: -1,
-            created_at: new Date().toISOString(),
-
-        })
-    }
-
-    function editLevels (id: number){
-        const notification = levels.find( l => l.id == id)
-        if(notification)
-            setReq(notification)
-    }
-
-    function deleteLevels (id: number){
-
-        const list = levels.filter(l => l.id != id )
-        setLevels(list)
-    }
-
-    const router = useRouter();
-
-    return (
-        <MyView router  = {router} >
-            
-        {/* aqui é typerscrypt dentro do front */}
-
-            <View style = {styles.row}>
-                <View style = {styles.form}>
-                
-                        
-                        <Myinput 
-                            style= {styles.input}
-                            placeholder= "Digite seu nome" 
-                            value= {req.name}
-                            onChangeText= {(text) => setReq({...req, name: text})}
-                            label= "Nome"
-                            iconName= ''
-
-                        /> 
-                    
-                        <Myinput 
-                            style= {styles.input}  
-                            placeholder= "Digite sua descrição" 
-                            value= {req.description}
-                            onChangeText= {(text) => setReq({...req ,description: text})}
-                            label= "Descrição"
-                            iconName= ''
-                        />
-
-                        <Myinput 
-                            style= {styles.input}
-                            placeholder= "COR" 
-                            value= {req.color}
-                            onChangeText= {(text) => setReq({...req ,color: text})}
-                            label= "Cor"
-                            iconName= ''
-
-                        /> 
-                        
-                    <MyButton title= 'Cadastrar' onPress= {handleRegister}/>
-                                    
-                </View>
-
-                <MyList
-                    data= {levels}
-                    keyItem= {(item) => item.id.toString()}
-                    renderItem= {({item}) =>(
-                       <MyItem
-                            onEdit= {() => {editLevels(item.id)}}
-                            onDel= {() => {deleteLevels(item.id)}}
-                        >
-
-                           <Mytext style={textStyles.textBody}> Nome: {item.name}</Mytext> {/* alex */}
-                           <Mytext style={textStyles.textBody}> Descrição: {item.description}</Mytext>
-                           <Mytext style={textStyles.textBody}> Cor: {item.color}</Mytext>
-                          
-                           
- 
-                            {/*
-                            <View style={styles.buttonsContainer}>
-                                <TouchableOpacity 
-                                style={styles.editButton}
-                                onPress={() => {editLevels(item.id)}}>
-
-                                    <Text style={styles.buttonText}>EDIT</Text>
-
-                                </TouchableOpacity>
-
-                                <TouchableOpacity 
-                                style={styles.delButton}
-                                onPress={() => {deleteLevels(item.id)}}>
-
-                                    <Text style={styles.buttonText}>DELETE</Text>
-
-                                </TouchableOpacity>
-                               
-                            </View>
-                            */}
-
-                        </MyItem>
-
-                    )}
-                />
-               
-            </View>
-        </MyView>
-    );
+interface iLevel {
+  id: number;
+  name: string;
+  description: string;
+  color: 'Verde' | 'Amarelo' | 'Vermelho';
 }
 
-//* Estilos
+export default function LevelsScreen() {
+  const router = useRouter();
+  const [levels, setLevels] = useState<iLevel[]>([]);
+
+  const [form, setForm] = useState<iLevel>({
+    id: -1,
+    name: '',
+    description: '',
+    color: 'Verde',
+  });
+
+  useEffect(() => {
+    async function fetchLevels() {
+      const { data } = await supabase.from('levels').select();
+      if (data) setLevels(data as iLevel[]);
+    }
+    fetchLevels();
+  }, []);
+
+  async function handleSave() {
+    if (form.id === -1) {
+      const newLevel = { ...form, id: Date.now() }; // id temporário
+      setLevels([...levels, newLevel]);
+      await supabase.from('levels').insert([newLevel]);
+    } else {
+      const updated = levels.map(item => (item.id === form.id ? form : item));
+      setLevels(updated);
+      await supabase.from('levels').update(form).eq('id', form.id);
+    }
+
+    setForm({ id: -1, name: '', description: '', color: 'Verde' });
+  }
+
+  async function handleDelete(id: number) {
+    await supabase.from('levels').delete().eq('id', id);
+    setLevels(levels.filter(item => item.id !== id));
+  }
+
+  function handleEdit(level: iLevel) {
+    setForm(level);
+  }
+
+  return (
+    <MyView router={router}>
+      <View style={styles.container}>
+        <Myinput
+          label="Nome:"
+          placeholder="Digite o nome"
+          value={form.name}
+          onChangeText={(text: string) => setForm({ ...form, name: text })}
+          iconName="person"
+        />
+        <Myinput
+          label="Descrição:"
+          placeholder="Digite a descrição"
+          value={form.description}
+          onChangeText={(text: string) => setForm({ ...form, description: text })}
+          iconName="description"
+        />
+
+        <View style={styles.colorRow}>
+          {['Verde', 'Amarelo', 'Vermelho'].map(cor => (
+            <MyButton
+              key={cor}
+              title={cor}
+              button_type={form.color === cor ? 'capsule' : 'rect'}
+              onPress={() => setForm({ ...form, color: cor as iLevel['color'] })}
+              style={styles.colorButton}
+            />
+          ))}
+        </View>
+
+        <MyButton
+          title={form.id === -1 ? 'CADASTRAR' : 'ATUALIZAR'}
+          onPress={handleSave}
+          button_type="round"
+          style={styles.button}
+        />
+
+        <MyList
+          data={levels}
+          keyItem={(item) => item.id.toString()}
+          renderItem={({ item })=> (
+            <View style={styles.item}>
+              <Text style={styles.itemText}>Nome: {item.name}</Text>
+              <Text style={styles.itemText}>Descrição: {item.description}</Text>
+              <Text style={[styles.itemText, { color: item.color.toLowerCase() }]}>{item.color}</Text>
+              <View style={styles.actionRow}>
+                <MyButton
+                  title="EDITAR"
+                  onPress={() => handleEdit(item)}
+                  button_type="rect"
+                  style={styles.button}
+                />
+                <MyButton
+                  title="EXCLUIR"
+                  onPress={() => handleDelete(item.id)}
+                  button_type="rect"
+                  style={styles.button}
+                />
+              </View>
+            </View>
+          )}
+        />
+      </View>
+    </MyView>
+  );
+}
+
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#FFF'
-    },
-
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-    },
-
-    form: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-        marginRight: 10,
-        minWidth: '45%',
-    },
-
-    listContainer: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#E8F5E9',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-        minWidth: '45%',
-    },
-
-    title: {
-        fontSize: 22,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 20,
-    },
-
-    subtitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-
-    input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
-        padding: 10,
-        marginBottom: 10,
-    },
-    
-    postItem: {
-        padding: 10,
-        marginVertical: 5,
-        backgroundColor: '#f8f8f8',
-        borderRadius: 5,
-    },
-
-    postText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-
-    postUrl: {
-        fontSize: 14,
-        color: '#007BFF',
-        marginBottom: 5,
-    },
-
-    buttonText:{
-        color: '#000000',
-        fontWeight:'bold'
-    },
-
-    buttonsContainer:{
-        flexDirection: 'row',
-        alignItems:'center',
-        gap: 20,
-        alignContent: 'space-around',
-    },
-
-    editButton:{ backgroundColor: '#FFFF00',
-        padding: 10,
-        borderRadius: 5,
-        alignItems: 'center',
-        justifyContent:'center',
-
-    },
-
-    delButton:{ backgroundColor: '#f44336',
-        padding: 10,
-        borderRadius: 5,
-        alignItems: 'center',
-        justifyContent: 'center',
-
-    },
-
-    card: {
-        backgroundColor: '#FFF',
-        padding: 10,
-        borderRadius: 5,
-        marginBottom: 10,
-        borderLeftWidth: 5,
-        borderLeftColor: '#DF01A5',
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 2 },
-        shadowRadius: 3,
-      },
-
-      fundo: {
-        height: 40,
-        borderColor: '#CCC',
-        borderWidth: 1,
-        borderRadius: 5,
-        paddingHorizontal: 10,
-        marginBottom: 10,
-        backgroundColor: '#FFF',
-      },
-
+  container: {
+    padding: 20,
+  },
+  item: {
+    padding: 15,
+    marginBottom: 10,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 8,
+  },
+  itemText: {
+    fontSize: 16,
+    marginBottom: 4,
+  },
+  colorRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginVertical: 10,
+  },
+  colorButton: {
+    paddingHorizontal: 10,
+  },
+  actionRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  button: {
+    marginTop: 10,
+  },
 });
-
