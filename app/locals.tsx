@@ -80,7 +80,7 @@ export default function LocalScreen(){
         }
     }
 
-    const [unity, setUnit] = useState("selecione a dimensão")              /* exemplo do código de SELECT para copiar */
+    const [unity, setUnit] = useState("selecione")              /* exemplo do código de SELECT para copiar */
 
     const [message, setMessage] = useState("")
     
@@ -92,7 +92,7 @@ export default function LocalScreen(){
 
             <MyView router={router} style={styles.container}>
                 <Text style={styles.title}>LOCAL</Text>
-                {message.length > 0 && (  
+                {message.length > 1 && (  
                     <Text style={styles.title}>{message}</Text>
                 )}
                 <View style={styles.row}>

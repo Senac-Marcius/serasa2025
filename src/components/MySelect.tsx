@@ -34,7 +34,7 @@ const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {
                 }} 
                 onPress={() => setVisible(!visible)}
             >
-                <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 16,  textAlign: 'center',}}>{label} </Text>
+                <Text style={{ color: 'black', fontSize: 16,  textAlign: 'center',}}>{label} </Text>
                
             </TouchableOpacity>
 
@@ -44,7 +44,7 @@ const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {
                     data={list}
                     keyExtractor={(item) => item.key}
                     renderItem={(i) => (
-                        <TouchableOpacity style = {{backgroundColor: 'purple', borderRadius: 10, width: 315}}onPress={()=>{
+                        <TouchableOpacity style = {{backgroundColor: "#813AB1", borderRadius: 20, width: 315}}onPress={()=>{
                             setLabel(i.item.option);
 
                             if(setKey){
@@ -63,10 +63,10 @@ const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {
                           paddingVertical: 10,  
                           fontSize: 16,
                           backgroundColor: 'white',
-                          color: '#666',
+                          color: "#666",
                           borderWidth: 2,
-                          borderColor: 'purple',
-                          shadowColor: 'purple',
+                          borderColor: "#813AB1",
+                          shadowColor: "#813AB1",
                           shadowOffset: { width: 2, height: 1 },
                           shadowOpacity: 0.8,
                           shadowRadius: 4,
