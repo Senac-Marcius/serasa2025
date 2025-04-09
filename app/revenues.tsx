@@ -10,6 +10,7 @@ import Mytext from '../src/components/MyText';
 import { useRouter } from 'expo-router';
 import {iRevenue,setRevenue, deleteRevenue, updateRevenue} from '../src/controllers/revenues'
 import { supabase } from '../src/utils/supabase';
+import MySelect from '../src/components/MySelect';
 
 export default function RevenueScreen() {
   // Estado para o formulário
@@ -106,7 +107,7 @@ useEffect(()=>{
     }
 }
 
-  
+   const [unity, setUnit] = useState("selecione a dimensão")  
   const router = useRouter();
   return (
 
@@ -155,14 +156,20 @@ useEffect(()=>{
               label='Valor'
             />
 
-            {/* Campo de Status da Bolsa */}
-            <Myinput
-              value={req.scholarship_status}
-              onChangeText={(text) => setReq({ ...req, scholarship_status: text })}
-              iconName=''
-              placeholder='Status da bolsa'
-              label='Status Bolsa'
+            
+             {/* Campo de Status da Bolsa */}
+             <MySelect 
+              label={req.scholarship_status || 'Status da Bolsa'} 
+              setLabel={(text) => setReq({ ...req, scholarship_status: text })}
+              list={[
+                {key: 0, option: 'ativo'},
+                {key: 1, option: 'inativo'},
+              ]}
+              
             />
+
+            
+            
 
             {/* Campo de Desconto */}
             <Myinput
