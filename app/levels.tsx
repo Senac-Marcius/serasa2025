@@ -119,7 +119,7 @@ export default function LevelsScreen() {
                   onPress={() => handleDelete(item.id)}
                   button_type="rect"
                   style={styles.button}
-                  color='#8B0000'
+                  color='#8B008B'
                 />
               </View>
             </View>
