@@ -24,7 +24,7 @@ export async function setLevels(levels:iLevels){
     }
     }
 
-        //BUSCAR TODOS OS REGISTROS
+        // BUSCAR TODOS OS REGISTROS
 
         export async function getLevels() {
         
@@ -40,7 +40,7 @@ export async function setLevels(levels:iLevels){
         return data;
     }
  
-        //ATUALIZAR REGISTRO
+        // ATUALIZAR REGISTRO
 
         export async function updateLevels(levels: iLevels) {
         const { error } = await supabase
@@ -59,7 +59,7 @@ export async function setLevels(levels:iLevels){
 
     }
  
-        //DELETAR REGISTRO
+        // DELETAR REGISTRO
         export async function deleteLevels(id: number) {
         const { error } = await supabase.from('levels').delete().eq('id', id);
         return error;
