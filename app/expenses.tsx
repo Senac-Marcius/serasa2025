@@ -8,6 +8,8 @@ import {Myinput, MyTextArea} from '../src/components/MyInputs';
 import { useRouter } from 'expo-router';
 import { setExpense, delRegister, updateExpense, iexpenses } from '../src/controllers/expenses';
 import { supabase } from '../src/utils/supabase';
+import Mytext from '../src/components/MyText'
+
 
 
 export default function ExpenseScreen(){
@@ -22,6 +24,8 @@ export default function ExpenseScreen(){
             descriptions: '',
             user_id: 1,
     });
+
+    const [message, setMessage] = useState("")
 
     const [expense,setExpenses] = useState< iexpenses[]>([]);
 
@@ -47,6 +51,7 @@ export default function ExpenseScreen(){
         }else{
             setExpenses(expense.map(e => (e.id === req.id ? req : e)));
         await updateExpense(req); 
+        setMessage("Existem campos que não aceitam esses tipos caracteres")
         }
 
         setReq({
@@ -110,13 +115,11 @@ export default function ExpenseScreen(){
 
                             onDel={() => delExpense(item.id)}
                         >
-                            <Text style={styles.textlis} >{item.name}</Text>
-                            <Text style={styles.textlis} >{item.emails}</Text> 
-                            <Text style={styles.textlis} >{item.descriptions}</Text>  
-                            <Text style={styles.textlis} >{item.costs}</Text> 
-                            <Text style={styles.textlis} >{item.user_id}</Text>
-                            
-    
+                            <Mytext style={styles.textlis} >{item.name}</Mytext>
+                            <Mytext style={styles.textlis} >{item.contacts}</Mytext>
+                            <Mytext style={styles.textlis} >{item.emails}</Mytext> 
+                            <Mytext style={styles.textlis} >{item.descriptions}</Mytext>  
+                            <Mytext style={styles.textlis} >{item.costs}</Mytext>     
                         </MyItem>
                     )}
                 /> 
