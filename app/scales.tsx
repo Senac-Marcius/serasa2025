@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'; //Importa o react e atualiza a lista Automaticamente.
-import {View, Text, StyleSheet, FlatList} from 'react-native';//Une  os objetos e o react-native faz a função de trasformar o codigo em multiplas plataformas.
+import {View, Text, StyleSheet} from 'react-native';//Une  os objetos e o react-native faz a função de trasformar o codigo em multiplas plataformas.
 import MyFilter from '../src/components/MyFilter';
 import MySelect from '../src/components/MySelect';
 import MyTimerPicker from '../src/components/MyTimerPiker';
@@ -7,13 +7,13 @@ import MyButton from '../src/components/MyButtons';
 import {MyItem} from '../src/components/MyItem';
 import MyView from '../src/components/MyView';
 import {useRouter} from 'expo-router';
-import {iScale, setScale, updateScale, deleteScale} from '../src/controllers/scales';
+import {iScale, setScale, updateScale, deleteScale, getScale} from '../src/controllers/scales';
 import { supabase } from '../src/utils/supabase'
 import Mytext from '../src/components/MyText';
 import MyList from '../src/components/MyList';
 import { jsiConfigureProps } from 'react-native-reanimated/lib/typescript/core';
 
-//Esse é o codigo correto.
+
 
 export default function ScaleScreen(){
     const [scales, setScales] = useState<iScale[]>([]);
@@ -52,13 +52,13 @@ export default function ScaleScreen(){
         }));
       };
     
-
+        //Mudar para o cntrolador
     useEffect(() => {
         async function getTodos() {
-          const { data: todos } = await supabase.from('scales').select()
+          const retorno = await getScale({})
     
-          if (todos && todos.length > 0) {
-            setScales(todos)
+          if (retorno.status && retorno.data && retorno.data.length> 0) {
+            setScales(retorno.data);
           }
         }
     

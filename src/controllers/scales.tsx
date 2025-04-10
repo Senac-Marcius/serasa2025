@@ -60,4 +60,13 @@ async function deleteScale(id: number) {
     return true;
 }
 
-export { setScale, updateScale, deleteScale, iScale }
+async function getScale (params:any){
+    const { data: todos,error } = await supabase.from('scales').select();
+
+        if (error)
+            return{status: false, error:error}
+        
+        return{status: true, data:todos}
+}
+
+export { getScale, setScale, updateScale, deleteScale, iScale }
