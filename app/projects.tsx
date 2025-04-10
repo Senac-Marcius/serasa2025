@@ -5,7 +5,7 @@ import MyButton from '../src/components/MyButtons';
 import Mytext from '../src/components/MyText';
 import MyView from '../src/components/MyView';
 import MyList from '../src/components/MyList';
-import { Myinput, MyTextArea } from '../src/components/MyInputs';
+import { Myinput, MyTextArea,  } from '../src/components/MyInputs';
 import { useRouter } from 'expo-router';
 import MyCalendar from '../src/components/MyCalendar';
 import { iProject , setProject, updateProject, deleteProject } from '../src/controlador/projects';
