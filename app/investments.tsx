@@ -8,8 +8,7 @@ import {MyItem} from '../src/components/MyItem';
 import MyButton from '../src/components/MyButtons';
 import Mytext from '../src/components/MyText';
 import { useRouter } from 'expo-router';
-import { iInvestment, setInvestment, deleteInvestment, updateInvestment } from '../src/controllers/investments';
-import { supabase } from '../src/utils/supabase';
+import { iInvestment, setInvestment, deleteInvestment, updateInvestment, getInvestments } from '../src/controllers/investments';
 
 export default function investmentScreen(){
  //aqui é typescript   
@@ -28,10 +27,11 @@ export default function investmentScreen(){
 
     useEffect(() => {
         async function getAll() {
-            const { data: all} = await supabase.from('investments').select();
 
-            if (all && all.length > 0) {
-            setInvestments(all)
+            
+            const retorno = await getInvestments({});
+            if (retorno.status && retorno.data && retorno.data.length > 0) {
+            setInvestments(retorno.data);
             }
         }
         getAll();

@@ -11,7 +11,14 @@ interface iInvestment {
     value: string,
 }
 
+async function getInvestments (params:any) {
+    const { data: all, error } = await supabase.from('investments').select();
 
+    if (error) 
+        return {status: false, error: error};
+    
+    return {status: true, data: all};
+}
 
 async function setInvestment(investment:iInvestment){
     //aqui vem os tratamentos de regex ou do modelo de negocio antes de inserir
@@ -97,4 +104,4 @@ async function updateInvestment(updatedInvestment: iInvestment) {
     }
 }
 
-export {setInvestment, deleteInvestment, updateInvestment, iInvestment}
+export {setInvestment, deleteInvestment, updateInvestment, getInvestments, iInvestment}
