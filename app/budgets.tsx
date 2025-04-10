@@ -97,7 +97,9 @@ export default function BudgetScreen(){
     return (
         <MyView  >
             {/* aqui é typescriot dentro do front*/}
-            <Mytext>Minha tela das postagens</Mytext>
+            <Mytext style={styles.title}>
+            Cadastre os orçamentos
+            </Mytext>
             <View style={styles.row}>
                 <View style={styles.form}>
                     <Myinput
@@ -156,7 +158,7 @@ export default function BudgetScreen(){
                        <Text> id: {item.id}</Text>
                            <Text> Url: {item.url}</Text>
                            <Text> CreateAt: {item.created_at}</Text>
-                           <Text> Valor: {item.value}</Text>
+                           <Text> Valor R$: {item.value}</Text>
                            <Text> UserId: {item.user_id}</Text>
                            <Text> Data Inicial: {item.start_date}</Text>
                            <Text> Data Final: {item.end_date}</Text>
@@ -229,6 +231,20 @@ const styles = StyleSheet.create({
         buttonText:{
         color:'#000000',
         fontWeight:'bold',
+         },
+
+         title:{              
+            marginBottom: 8,
+            fontSize: 40,
+            fontWeight: "bold",
+            textAlign: "center",
+            backgroundColor: "#ab66f9",
+            borderRadius: 5,
+            color:'#ffffff',
+            letterSpacing: 1.5,
+            textTransform: "uppercase",
+            textShadowColor: "rgba(0, 0, 0, 0.2)",
+            fontStyle: "italic",
          },
 
 
