@@ -164,7 +164,7 @@ const parseCurrencyInput = (text: string): number => {
                 <Mytext style={styles.title}>PROJETOS</Mytext>
             
                 {/* Aqui é typescript dentro do front */}
-                <Mytext>  Vamos Inovar  </Mytext>
+                <Mytext> ✨ Vamos Inovar ✨ </Mytext>
                 <View style={styles.row}> 
                         
                     <View style={styles.form}>
@@ -319,6 +319,8 @@ const parseCurrencyInput = (text: string): number => {
                         </View>
                     </View> 
 
+                </View>   
+                <View style={styles.listContainer}> 
                     <MyList 
                         data={projects}
                         keyItem={(item) => item.id.toString()}
@@ -376,7 +378,7 @@ const parseCurrencyInput = (text: string): number => {
                             </MyItem>
                         )}
                     />
-                </View>   
+                </View>
             </View>
         </MyView>
     ); 
