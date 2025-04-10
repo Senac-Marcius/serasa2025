@@ -32,7 +32,7 @@ export default function NotificationScreen(){
                 setNotifications(retorno.data);
             }
         }
-            getTodos();s
+            getTodos();
     },[])
     
     
