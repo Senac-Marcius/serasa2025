@@ -4,6 +4,7 @@ import MyTopbar from './MyTopbar';
 import MySupport from './MySupport';
 import { Router } from 'expo-router';
 import MyAccessibility from './MyAccessibility';
+import { TouchableOpacityComponent } from 'react-native';
 
 
 interface MySearchProps {
@@ -14,7 +15,7 @@ interface MySearchProps {
 
 }
 
-const MyView: React.FC< MySearchProps > = ({children, style, title, router}) => { 
+const MyView: React.FC< MySearchProps > = ({children, style}) => { 
  
   const { width, height } = Dimensions.get('window');
 
@@ -40,8 +41,14 @@ const MyView: React.FC< MySearchProps > = ({children, style, title, router}) => 
     },
 
     buttonAcess: {
-      flex: 1, 
-      position: 'relative', 
+ 
+      position: 'absolute',
+      bottom: 20,
+      left: 20,
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: width > 600 ? 60 : 50,
+      height: width > 600 ? 60 : 50,
     },
   });
 
@@ -54,7 +61,7 @@ const MyView: React.FC< MySearchProps > = ({children, style, title, router}) => 
         {/* Botão de suporte */}
         <MySupport style={styles.suporteButton}/>
         <MyAccessibility>
-          <MySupport style={styles.buttonAcess} />
+          <button style={styles.buttonAcess} /> 
         </MyAccessibility>
       </View>
     </ScrollView>
