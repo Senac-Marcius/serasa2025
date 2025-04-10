@@ -2,7 +2,6 @@ import React,{ReactNode} from 'react';
 import { View, StyleSheet, Dimensions, TextStyle, ScrollView} from 'react-native';
 import MyTopbar from './MyTopbar';
 import MySupport from './MySupport';
-import { Router } from 'expo-router';
 import MyAccessibility from './MyAccessibility';
 
 
@@ -10,8 +9,6 @@ interface MySearchProps {
   children: ReactNode;
   style?: TextStyle | TextStyle[]; 
   title?: string;
-  router: Router;  
-
 }
 
 const MyView: React.FC< MySearchProps > = ({children, style}) => { 
