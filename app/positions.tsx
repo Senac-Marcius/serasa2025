@@ -87,7 +87,7 @@ export default function PositionScreen(){
     return (
         <MyView style={{flex: 1}} title="Cargos" router={router}>
             {/*Aqui é TypeScript dentro do front*/}
-            <Text>Minha tela dos cargos</Text>
+            <Text></Text>
             <View style = {styles.row}>
                 <View style = {styles.form}>
                     <Myinput
