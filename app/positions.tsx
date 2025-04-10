@@ -7,7 +7,7 @@ import { Myinput } from "../src/components/MyInputs";
 import MyButton from "../src/components/MyButtons";
 import { useRouter } from 'expo-router';
 import MyTimePicker from "../src/components/MyTimerPiker";
-import {setPosition, deletePosition, updatePosition, iPosition} from "../src/controllers/positions";
+import {setPosition, deletePosition, updatePosition, iPosition, getCargo} from "../src/controllers/positions";
 import {supabase} from '../src/utils/supabase';
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
@@ -29,11 +29,10 @@ export default function PositionScreen(){
    
 
     useEffect(() => {
-        (async () => {
-            const { data: todos } = await supabase.from("positions").select()
-
-            if(todos && todos.length > 0){
-                setPositions(todos);
+        (async function getTodos() {
+            const retorno = await getCargo({})
+            if(retorno.status && retorno.data && retorno.data.length > 0){
+                setPositions(retorno.data);
             }
         }) ();
     }, [])
