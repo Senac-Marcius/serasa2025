@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
 import MyView from '../src/components/MyView';
 import MyButton from '../src/components/MyButtons';
@@ -7,70 +7,99 @@ import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs';
 import { MyItem, MyCorrelated } from '../src/components/MyItem';
 import MyList from '../src/components/MyList';
 import { useRouter } from 'expo-router';
+import {setRecord, iRecord } from '../src/controllers/records'
+import { supabase } from '../src/utils/supabase';
 
 export default function RecordScreen() {
     const router = useRouter();
+    const [records, setRecords] = useState<iRecord[]>([]);
     
 
 
     const [req, setReq] = useState({
-        id: 0,
+        id: -1,
         name: '',
         description: '',
         sick: '',
         health: '',
         allergy: '',
         medication: '',
-        userId: 0,
-        createAt: new Date().toISOString(),
+        user_id: 0,
+        create_at: new Date().toISOString(),
     });
 
-    const [records, setRecords] = useState<{
-        id: number
-        name: string,
-        description: string,
-        sick: string,
-        health: string,
-        allergy: string,
-        medication: string,
-        userId: number,
-        createAt: string,
+    useEffect(() => {
+        async function getTodos () {
+            const { data: todos } = await supabase.from ('records').select()
 
-    }[]>([]);
+            if (todos && todos.length > 1) {
+                setRecords (todos)
+            
+            }
+        }
+        
+        getTodos()
 
-    function handleRegister() {
+    }, [])
+
+   async function handleRegister() {
         if (req.id == -1) {
             const newId = records.length ? records[records.length - 1].id + 1 : 0;
             const newRecord = { ...req, id: newId };
+            setRecords([...records,newRecord]);
+            const resp = await setRecord(newRecord)
+            console.log (resp)
 
-            setRecords([...records, newRecord]);
+                } else {
+                    const { error } = await supabase.from('records')
+                        .update({
+                            name: req.name,
+                            description: req.description,
+                            sick: req.sick,
+                            health: req.health,
+                            allergy: req.allergy,
+                            medication: req.medication,
+                            user_id: req.user_id,
+                        })
+                        .eq('id', req.id);
+            
+                    if (!error) {
+                        setRecords(records.map(r => (r.id === req.id ? req : r)));
+                    } else {
+                        console.error("Erro ao atualizar:", error);
+                    }
+                }
+            
+                // Limpa o formulário após salvar ou atualizar
+                setReq({
+                    id: -1,
+                    name: '',
+                    description: '',
+                    sick: '',
+                    health: '',
+                    allergy: '',
+                    medication: '',
+                    user_id: 0,
+                    create_at: new Date().toISOString(),
+                })
+            }
+        
+
+   async function delRecord(id: number) {
+        const { error } = await supabase.from('records').delete().eq('id', id);
+        if (!error) {
+            const list = records.filter(r => r.id != id)
+            setRecords(list)
         } else {
-            setRecords(records.map(r => (r.id == req.id ? req : r)));
+            console.error('Erro ao deletar:', error);
         }
-
-        setReq({
-            id: -1,
-            name: '',
-            description: '',
-            sick: '',
-            health: '',
-            allergy: '',
-            medication: '',
-            userId: 0,
-            createAt: new Date().toISOString(),
-        })
     }
 
     function editRecord(id: number) {
-        const record = records.find(r => r.id == id)
-        if (record)
-            setReq(record)
-    }
-
-    function delRecord(id: number) {
-        const list = records.filter(r => r.id != id)
-        if (list)
-            setRecords(list)
+        const record = records.find(r => r.id === id);
+        if (record) {
+            setReq(record);
+        }
     }
 
     return (
@@ -118,7 +147,7 @@ export default function RecordScreen() {
                     />
 
                     < Myinput
-                        value={req.sick}
+                        value={req.allergy}
                         onChangeText={(text) => setReq({ ...req, allergy: text })}
                         placeholder='Alergia'
                         label='Coloque as alergias do aluno:'
@@ -126,7 +155,7 @@ export default function RecordScreen() {
                     />
 
                     < Myinput
-                        value={req.sick}
+                        value={req.medication}
                         onChangeText={(text) => setReq({ ...req, medication: text })}
                         placeholder='Medicação'
                         label='Coloque as medicações de uso do aluno:'
@@ -159,9 +188,9 @@ export default function RecordScreen() {
                             <Text style={styles.itemText}>Saúde: {item.health}</Text>
                             <Text style={styles.itemText}>Alergias: {item.allergy}</Text>
                             <Text style={styles.itemText}>Medicações: {item.medication}</Text>
-                            <Text style={styles.itemText}>Usuário Id: {item.userId}</Text>
+                            <Text style={styles.itemText}>Usuário Id: {item.user_id}</Text>
 
-                            <View style={styles.button_round}>
+                           <View style={styles.button_round}>
 
                                 <MyButton
                                     title="EXCLUIR"
@@ -192,10 +221,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
+        alignSelf:"center",
+        
     },
 
     form: {
-        flex: 1,
+        flex: 20,
         marginRight: 20,
         marginLeft: 20,
         padding: 30,
@@ -205,6 +236,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
+        alignItems: "center",
     },
 
     button_round: {
@@ -219,6 +251,7 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: 16,
         marginBottom: 5,
+        
     },
 
     buttonText: {
