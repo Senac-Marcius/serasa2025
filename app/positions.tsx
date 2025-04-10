@@ -1,137 +1,160 @@
-import React, {useState} from "react";
-import{View,Text, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} from "react-native";
-import CurrencyInput from 'react-native-currency-input';
-import {TimeInput} from "@heroui/date-input";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import MyView from '../src/components/MyView';
+import React, {useState, useEffect} from "react";
+import{View,Text, StyleSheet} from "react-native";
+import MyView from "../src/components/MyView";
+import MyList from "../src/components/MyList";
+import {MyItem} from "../src/components/MyItem";
+import { Myinput } from "../src/components/MyInputs";
+import MyButton from "../src/components/MyButtons";
 import { useRouter } from 'expo-router';
+import MyTimePicker from "../src/components/MyTimerPiker";
+import {setPosition, deletePosition, updatePosition, iPosition} from "../src/controllers/positions";
+import {supabase} from '../src/utils/supabase';
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+
 
 export default function PositionScreen(){
 /*Aqui é TypeScript*/
-
+    const [positions, setPositions] = useState<iPosition[]>([]);
     const[req, setReq] = useState({
-        id:-1,
+        id: -1,
         name:"",
         description:"",
         salary: 0,
-        workHours:"",
+        work_hours: "",
         departament:"",
         supervisor:"",
-        creatAt: new Date().toString(),
+        creat_at: new Date().toISOString(),    
     });
 
-    const [positions, setPositions] = useState <{name: string, description: string, salary: number, id: number, workHours: string, departament: string, supervisor: string, creatAt: string }[]> ([])
-    
-    function handleRegister (){
-        if(req.id == -1){
-            const newId = positions.length ? positions [positions.length - 1].id + 1 : 0;
-            const newPosition = {...req, id: newId};
+   
 
-            setPositions([...positions,newPosition]);
-        }else{
-            setPositions(positions.map(p => (p.id == req.id ? req : p)));
+    useEffect(() => {
+        (async () => {
+            const { data: todos } = await supabase.from("positions").select()
+
+            if(todos && todos.length > 0){
+                setPositions(todos);
+            }
+        }) ();
+    }, [])
+
+    async function handleRegister() {
+        if (req.id === -1) {
+          const newId = positions.length ? positions[positions.length - 1].id + 1 : 0;
+          const newPosition = { ...req, id: newId };
+      
+          const result = await setPosition(newPosition);
+          if (result) setPositions([...positions, newPosition]);
+        } else {
+          const updated = await updatePosition(req);
+          if (updated) {
+            setPositions(positions.map(p => (p.id === req.id ? req : p)));
+          }
         }
-        setReq ({
-            id: -1,
-            name:"",
-            description:"",
-            salary: 0,
-            workHours:"",
-            departament:"",
-            supervisor:"",
-            creatAt: new Date().toString()
-        })
-    }
+      
+        setReq({
+          id: -1,
+          name: "",
+          description: "",
+          salary: 0,
+          work_hours: "",
+          departament: "",
+          supervisor: "",
+          creat_at: new Date().toISOString()
+        });
+      }
+      
 
-    function editPosition (id:number){
+    async function editPosition (id:number){
         const position = positions.find(p => p.id == id)
         if(position)
             setReq(position)
 
     }
 
-    function delPosition (id:number){
-        const list = positions.filter(p => p.id != id)
-        setPositions(list)
-    }
-
+    async function delPosition(id: number) {
+        const success = await deletePosition(id);
+        if (success) {
+          const list = positions.filter(p => p.id !== id);
+          setPositions(list);
+        }
+      }
+      
+    
     const router = useRouter();
+    
 
     return (
-        <MyView router={router} >
+        <MyView style={{flex: 1}} title="Cargos" router={router}>
             {/*Aqui é TypeScript dentro do front*/}
-            <Text>Minha tela dos cargos</Text>
+            <Text></Text>
             <View style = {styles.row}>
-                <View style={styles.form}>
-                    <TextInput 
-                        placeholder="Cargo"
+                <View style = {styles.form}>
+                    <Myinput
+                        label="Cargo"
+                        placeholder="Insira um Cargo"
+                        iconName="briefcase"
                         value = {req.name}
                         onChangeText={(text)=> setReq({...req ,name: text })}/>
  
-                    {/*<Myinput 
+                    <Myinput 
                         label="Descrição"
                         placeholder="Insira uma descrição"
                         iconName="briefcase"
                         value = {req.description}
                         onChangeText={(text)=> setReq({...req ,description: text })}/>
-                        */}
 
-                    {/*<CurrencyInput 
-                        placeholder="Salário" />
-                        value = {req.salary}
-                        onChangeText={(text)=> setReq({...req ,salary: text })}/>
+                    <Myinput 
+                        label="Salário"
+                        placeholder="Insira o salário"
+                        iconName="briefcase"
+                        value = {(req.salary).toString()}
+                        onChangeText={(text)=> setReq({...req ,salary: Number(text) })}/> 
 
-                        {req.salary}*/}
+                    <MyTimePicker 
+                    onTimeSelected={(time) => setReq({ ...req, work_hours: time })}
+                    initialTime={req.work_hours}
+                    />
 
-                    {/*<TimeInput 
-                        placeholder="Horas trabalhadas" />
-                        value = {req.workHours}
-                        onChangeText={(text)=> setReq({...req ,workHours: text })}/>
-
-                        {req.workHours}*/}
-
-{/*
                     <Myinput 
                         label="Departamento"
                         placeholder="Insira um departamento"
                         iconName="briefcase"
                         value = {req.departament}
                         onChangeText={(text)=> setReq({...req ,departament: text })}/>
-*/}
 
-{/*
                     <Myinput 
                         label="Supervisor"
                         placeholder="Insira um supervisor"
                         iconName="briefcase"
                         value = {req.supervisor}
-                     onChangeText={(text)=> setReq({...req ,supervisor: text })}/>
-*/}
+                        onChangeText={(text)=> setReq({...req ,supervisor: text })}/>
 
-                    {/*<DateTimePickerModal 
-                        placeholder="Data de cadastro" />*/}
+                  
 
-                    <Button title = "Cadastrar" onPress={handleRegister}/>
+                    <MyButton  title = "Cadastrar" onPress={handleRegister}/>
                 </View> 
-                    <FlatList
-                        data={positions}
-                        keyExtractor={(item) => item.id.toString()}
+                    <MyList
+                        data = {positions}
+                        keyItem = {(item) => item.id.toString()}
                         renderItem={({item}) => (
-                            <View style={styles.card}>
+                            <MyItem style={styles.card}
+                                onEdit={() => editPosition(item.id)}
+                                onDel={() => delPosition(item.id)}>
                                 <Text>{item.name}</Text>
                                 <Text>{item.description}</Text>
                                 <Text>{item.salary}</Text>
-                                <Text>{item.workHours}</Text>
+                                <Text>{item.work_hours}</Text>
                                 <Text>{item.departament}</Text>
                                 <Text>{item.supervisor}</Text>
-                                <Text>{item.creatAt}</Text>
+                                <Text>{item.creat_at}</Text>
 
-                                <View style = {styles.buttonsContanier}>
+                                {/*<View style = {styles.buttonsContanier}>
                                     <TouchableOpacity onPress={()=> { editPosition(item.id) }}>Edit</TouchableOpacity>
                                     <TouchableOpacity onPress={()=> { delPosition(item.id) }}>Delete</TouchableOpacity>
-                                </View>
+                                </View>  MINHA FUNÇÃO DEL E EDIT*/}
                                    
-                            </View>
+                            </MyItem>
                         )}  />                
                     </View>
 

@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     display:"flex",
     borderRadius: 15,
     alignItems: "center",
+    justifyContent: "center",
     flexDirection: "row",
     
   },
