@@ -1,84 +1,158 @@
 import React, { useState } from 'react';
-import { ScrollView, View } from 'react-native';
-import { Button, TextInput, RadioButton, Checkbox } from 'react-native-paper';
-import { DatePickerModal } from 'react-native-paper-dates';
+import { View,Text, StyleSheet,FlatList, Button,TextInput} from 'react-native';
+import MyList from '../src/components/MyList'
+import {MyItem} from '../src/components/MyItem'
+import MyView from '../src/components/MyView'
+import { useRouter } from 'expo-router';
+import { Myinput } from '../src/components/MyInputs';
+import MyButton from '../src/components/MyButtons'
+import MyUpload from '../src/components/MyUpload';
 
-export default function PostScreen() {
 
-    const [description, setDescription] = useState('');
-    const [url, setUrl] = useState('');
-    const [isChecked, setIsChecked] = useState(false);
-    const [selectedRadio, setSelectedRadio] = useState("0");
+export default function postScreen(){
 
-    const [date, setDate] = useState<Date | undefined>(undefined);
-    const [open, setOpen] = useState(false);
+    const [req, setReq] = useState({
+        description : '',
+        id: -1,
+        url: '',
+        createAt: new Date().toISOString(),
+        userId : 0,    
+    });
+ 
+    //aqui estava o veto que foi pro controlador
+    
+    function handleRegister(){
+        if(req.id == -1){
+            const newid= posts.length ? posts[posts.length-1].id=1:0;
+            const newPost = {... req, id: newid};
+            setPosts([...posts, newPost])
+    
+        }else{
+            setPosts(posts.map(i =>(i.id == req.id)? req: i )  );
+    
+        }
+    
+        setReq({
+            id: -1,
+            url: '',
+            description : '',
+            createAt: new Date().toISOString(),
+            userId : 0,
+        })
+    }
+    
+    function editCategorie(id:number){
+        let p= posts.find(i => i.id== id)
+        if(p)
+            setReq(p)
+    }
+    function delCategorie(id:number){
+        const list= posts.filter(i => i.id != id)
+        if(list)
+        setPosts(list)
+    }
+    
+    const router = useRouter();
 
     return (
-        <ScrollView>
-            <View style={{ padding: 20 }}>
-           
+        <MyView router={router} >
 
-                <TextInput
-                    label="Descrição"
-                    value={description}
-                    onChangeText={setDescription}
-                    mode="outlined"
-                />
-
-                <TextInput
-                    label="URL"
-                    value={url}
-                    onChangeText={setUrl}
-                    mode="outlined"
-                />
-
-                {/* Checkbox */}
-                <Checkbox.Item
-                    label="Destaque"
-                    status={isChecked ? 'checked' : 'unchecked'}
-                    onPress={() => setIsChecked(!isChecked)}
-                />
-
-                {/* Radio */}
-                <RadioButton.Group onValueChange={setSelectedRadio} value={selectedRadio}>
-                    <View>
-                        <RadioButton.Item label="Opção 1" value="0" />
-                        <RadioButton.Item label="Opção 2" value="1" />
-                    </View>
-                </RadioButton.Group>
-
-                {/* Botão para abrir o calendário */}
-                <Button mode="outlined" onPress={() => setOpen(true)}>
-                    Selecionar Data
-                </Button>
-
-                {/* Modal do Calendário */}
-                <DatePickerModal
-                    locale="pt"
-                    mode="single"
-                    visible={open}
-                    onDismiss={() => setOpen(false)}
-                    date={date}
-                    onConfirm={(params) => {
-                        setOpen(false);
-                        setDate(params.date);
-                    }}
-                />
-
-                {/* Mostrando a data selecionada */}
-                {date && (
-                    <TextInput
-                        label="Data Selecionada"
-                        value={date.toLocaleDateString()}
-                        mode="outlined"
-                        editable={false}
+            <View style={styles.row}>
+                <View style={styles.form}>
+                    
+                    <Myinput 
+                        value={req.description} 
+                        onChangeText={(text) => setReq({ ...req, description: text })} 
+                        placeholder="Digite o que você esta pensando..." 
+                        label="Descrição" 
+                        iconName='' 
                     />
-                )}
-
-                <Button mode="contained" onPress={() => console.log("Post enviado!")}>
-                    Cadastrar
-                </Button>
+                    
+                    <MyUpload url={req.url} setUrl={(url) => setReq({ ...req, url: url })} />
+                      
+                    <MyButton
+                        title="CADASTRAR"
+                        onPress={handleRegister}
+                        button_type="capsule"
+                    />
+                                 
+                </View>
+                <MyList
+                    data={posts}
+                    keyItem={(item) => item.id.toString()}
+                    renderItem={({item}) => (
+                        <MyItem 
+                            onDel={()=>{delCategorie(item.id)}}
+                            onEdit={()=>{editCategorie(item.id)}}
+                        >
+                            <Text >{item.url}</Text>
+                            <Text >{item.description}</Text>  
+                        </MyItem>
+                    )}
+                /> 
             </View>
-        </ScrollView>
+        </MyView>
+   
     );
 }
+// Estilos
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 20,
+        backgroundColor: '#fff',
+    },
+    row: {
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        alignItems: 'flex-start', 
+    },
+    form: {
+        flex: 1,
+        marginRight: 10,
+        padding: 20,
+        backgroundColor: '#F2F2F2',
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 4 },
+        shadowRadius: 5,
+    },
+    listContainer: {
+        flex: 1, 
+        padding: 10,
+    },
+    title: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 20,
+    },
+    subtitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        padding: 10,
+        marginBottom: 10,
+    },
+    postCategorie: {
+        padding: 10,
+        marginVertical: 5,
+        backgroundColor: '#f8f8f8',
+        borderRadius: 5,
+    },
+    postText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    postUrl: {
+        fontSize: 14,
+        color: '#007BFF',
+        marginBottom: 5,
+    },
+});
