@@ -6,7 +6,8 @@ import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
 import { setCategory, updateCategory, deleteCategory } from '../src/controllers/category';
 import { supabase } from '../src/utils/supabase';
-
+import MyButton from '../src/components/MyButtons';
+import {Myinput} from '../src/components/MyInputs';
 interface iCategories {
     name: string,
     description: string,
@@ -95,25 +96,31 @@ export default function CategoryScreen() {
         <MyView router={router}>
             <View style={styles.row}>
                 <View style={styles.form}>
-                    <TextInput
+                    <Myinput
                         placeholder="Nome"
                         value={req.name}
                         onChangeText={(text) => setReq({ ...req, name: text })}
                         style={styles.input}
+                        iconName=''
+                        label= 'digite o nome da categoria'
                     />
-                    <TextInput
+                    <Myinput
                         placeholder="Descrição"
                         value={req.description}
                         onChangeText={(text) => setReq({ ...req, description: text })}
                         style={styles.input}
+                        iconName=''
+                        label= 'digite o nome da categoria'
                     />
-                    <Button title={req.id === -1 ? "Cadastrar" : "Atualizar"} onPress={handleRegister} />
+                      
+                    <MyButton title={req.id === -1 ? "Cadastrar" : "Atualizar"} onPress={handleRegister} />
                 </View>
 
                 <MyList
                     data={categories}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({ item }) => (
+                        
                         <MyItem
                             onDel={() => delCategorie(item.id)}
                             onEdit={() => editCategorie(item.id)}
