@@ -1,5 +1,5 @@
 
-import React,{ useState } from 'react';
+import React,{ useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
 import  Mytext  from '../src/components/MyText';
 import MyButton from '../src/components/MyButtons';
@@ -8,46 +8,54 @@ import MyView from '../src/components/MyView';
 import {MyItem} from '../src/components/MyItem';
 import { Myinput, MyTextArea } from '../src/components/MyInputs';
 import { useRouter } from 'expo-router';
+import {iCourses, upadateCourse, deleteCourse, setCoursebd} from '../src/controllers/courses'
+import { supabase } from '../src/utils/supabase';
 
 
 //fuction
 export default function CoursesScreen(){
     const [req, setReq] = useState({
-        description: '',
-        Courseplan: '',
-        Orientationplan: '',
-        Workload: '',
         id: -1,
-        userId: 0,
-
+        created_at: new Date().toISOString(),
+        description: '',
+        courseplan: '',
+        orientationplan: '',
+        workload: 0,
+        userId: 1
     });
 
-    const [CoursesPosts, setCourses] = useState<{description: string,
-         Courseplan: string,
-          Orientationplan: string,
-           Workload: string,
-           id: number,
-           userId: number,
-         }[]> ([]);
+    const [CoursesPosts, setCourses] = useState<iCourses[]> ([]);
 
-    function handleRegister(){
+    useEffect(() =>{
+      async function getTodos(){
+        const {data: todos} = await supabase.from('courses').select()
+        if (todos && todos.length > 0 ){
+          setCourses(todos)
+        }
+      }
+      getTodos()
+    }, [])
+
+    async function handleRegister(){
       if(req.id == -1){
         const newId = CoursesPosts.length ? CoursesPosts[CoursesPosts.length -1].id +1 : 0;
         const newCourses = {...req, id: newId};
-
+        const resp = await setCoursebd(newCourses);
+        console.log("Criando",resp)
         setCourses([...CoursesPosts, newCourses]);
       }else{
+        const resp = await upadateCourse(req);	
         setCourses(CoursesPosts.map(c => (c.id == req.id ? req:c)));
+        console.log("Atualizar:", resp);
       }
-
-        
         setReq({
-        description: '',
-        Courseplan: '',
-        Orientationplan: '',
-        Workload: '',
         id: -1,
-        userId: 0,
+        created_at: new Date().toISOString(),
+        description: '',
+        courseplan: '',
+        orientationplan: '',
+        workload: 0,
+        userId: 1,
         })
     }
 
@@ -58,7 +66,9 @@ export default function CoursesScreen(){
       }
     }
 
-    function deleteCourses(id:number){
+    async function deleteCourses(id:number){
+      const resp = await deleteCourse(id);
+      console.log("Deletado:", resp);
      setCourses(CoursesPosts.filter(course => course.id !==id));
     }
 
@@ -78,28 +88,30 @@ export default function CoursesScreen(){
                     onChangeText={(text) => setReq({...req, description: text})}    
                     placeholder="Digite a descrição..."       
                     />
+
+                
                 
                 <Myinput
                     iconName='book'
                     label="Plano de Curso"
-                    value={req.Courseplan}
-                    onChangeText={(text) => setReq({...req, Courseplan: text})}
+                    value={req.courseplan}
+                    onChangeText={(text) => setReq({...req, courseplan: text})}
                     placeholder="Digite o plano de curso..."
                      />
                 
                 <Myinput
                    iconName='school'
                    label="Plano de Orientação"
-                   value={req.Orientationplan}
-                   onChangeText={(text) => setReq({...req,Orientationplan: text})}
+                   value={req.orientationplan}
+                   onChangeText={(text) => setReq({...req,orientationplan: text})}
                    placeholder="Digite o plano de orientação..."
                 />
                 
                 <Myinput
                     iconName='schedule'
                     label='Carga horaria:' 
-                    value={req.Workload}
-                   onChangeText={(text) => setReq({...req,Workload: text})}
+                    value={req.workload.toString()}
+                   onChangeText={(text) => setReq({...req,workload: Number (text)})}
                    placeholder="Digite a carga horária..."
                 />
                 <MyButton title="CADASTRAR" onPress={handleRegister} button_type="rect" />
@@ -114,9 +126,9 @@ export default function CoursesScreen(){
               onDel={()=> deleteCourses(item.id)}
             >
               <Mytext style={styles.listText}>Descrição: {item.description}</Mytext>
-              <Mytext style={styles.listText}>Plano: {item.Courseplan}</Mytext>
-              <Mytext style={styles.listText}>Orientação: {item.Orientationplan}</Mytext>
-              <Mytext style={styles.listText}>Carga: {item.Workload}</Mytext>
+              <Mytext style={styles.listText}>Plano: {item.courseplan}</Mytext>
+              <Mytext style={styles.listText}>Orientação: {item.orientationplan}</Mytext>
+              <Mytext style={styles.listText}>Carga: {item.workload}</Mytext>
 
               
 
