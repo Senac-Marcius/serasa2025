@@ -8,6 +8,9 @@ interface iIten {
     mark: string,
     asset_number: string,
     amount: number, 
+    description: string,
+    category_id: number,
+    product_id: number,
     local_id: number,
     created_at:string
 }

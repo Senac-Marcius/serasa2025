@@ -20,6 +20,9 @@ export default  function itemScreen(){
         asset_number:'',
         amount: 0,
         local_id: 1,
+        category_id:1,
+        product_id: 1,
+        description:'',
         created_at: new Date().toISOString ()        
      });
      const[itens, setItens] = useState<iIten[]>([]);
@@ -57,6 +60,9 @@ export default  function itemScreen(){
             asset_number:'',
             amount: 0,
             local_id: 1,
+            category_id:1,
+            product_id: 1,
+            description:'',
             created_at: new Date().toISOString ()        
         })
      }
@@ -82,8 +88,24 @@ export default  function itemScreen(){
         
         <View style={styles.row}>
             <View style={styles.form}>
+            <Myinput 
+                placeholder="Descrição"
+                value={req.description}
+                onChangeText={(text) => setReq({ ...req, description:text})}
+                label="Descrição do item"
+                 iconName='list' 
+            
+                />
                 <Myinput 
-                placeholder="Marca"
+                placeholder="Categoria"
+                value={req.category_id}
+                onChangeText={(text) => setReq({ ...req, category_id:text })}
+                label="Categoria"
+                 iconName='?' 
+            
+                />
+                <Myinput 
+                placeholder="Digite o nome do item"
                 value={req.mark}
                 onChangeText={(text) => setReq({ ...req, mark:text })}
                 label="Item"
@@ -91,19 +113,27 @@ export default  function itemScreen(){
             
                 />
                 
+                
 
 
                 <Myinput 
-                   placeholder= "Digite o nome"
+                   placeholder= "Digite o numero patrimonial"
                    value={req.name}
                    onChangeText={(text)=>setReq({...req,name:text})}
-                   label="I
-                   
-                   tem" 
+                   label="N° patrimonial" 
                    iconName='user' 
-                   />
+                />
 
-                <MyLink style={{ padding : 20}} url="http://gyuguyg" label="Esqueci minha senha"/>
+                <Myinput 
+                   placeholder= "N°"
+                   value={ String(req.amount) }
+                   onChangeText={(text)=>setReq({...req, amount: Number(text) })}
+                   label=" Quantidade de items"
+                   iconName='Pin' 
+                />
+                
+
+                
 
                 <MyButton title='Cadastrar' onPress={handleRegister}/>
             
