@@ -10,6 +10,7 @@ import {useRouter} from 'expo-router';
 import {iScale, setScale, updateScale, deleteScale} from '../src/controllers/scales';
 import { supabase } from '../src/utils/supabase'
 import Mytext from '../src/components/MyText';
+import MyList from '../src/components/MyList';
 import { jsiConfigureProps } from 'react-native-reanimated/lib/typescript/core';
 
 //Esse é o codigo correto.
@@ -146,22 +147,23 @@ export default function ScaleScreen(){
                     />
                 </View >
                 <View>
-                <FlatList
+                <MyList
                     data={scales}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyItem={(item) => item.id.toString()}
                     renderItem={({ item }) => (
                         <MyItem
-                            style={styles.response}
-                            onEdit={() => editScale(item.id)}
-                            onDel={() => handleDeleteScale(item.id)}
+                        style={styles.response}
+                        onEdit={() => editScale(item.id)}
+                        onDel={() => handleDeleteScale(item.id)}
                         >
-                            <Text>Dia da semana: {item.day}</Text>
-                            <Text>Horário de início: {item.start_time}</Text>
-                            <Text>Horário de término: {item.end_time}</Text>
-                            <Text>Id do Usuário: {item.employ_id}</Text>
-                            <Text>Data da criação: {item.created_at}</Text>
+                        <Text>Dia da semana: {item.day}</Text>
+                        <Text>Horário de início: {item.start_time}</Text>
+                        <Text>Horário de término: {item.end_time}</Text>
+                        <Text>Id do Usuário: {item.employ_id}</Text>
+                        <Text>Data da criação: {item.created_at}</Text>
                         </MyItem>
                     )}
+                    style={styles.listContainer}
                 />
                 </View> 
             </View>       
