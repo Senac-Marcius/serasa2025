@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity} f
 import MyView from '../src/components/MyView';
 import MyUpload from '../src/components/MyUpload';
 import { useRouter } from 'expo-router';
-import { setParent,iParent,delParent,editParent} from '../src/controllers/parentsController';
+import { setParent,iParent,delParent,editParent,getTimeParents} from '../src/controllers/parentsController';
 import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
 import { Myinput, MyCheck, MyTextArea} from '../src/components/MyInputs';
@@ -52,16 +52,17 @@ export default function ParentScreen (){
 
     useEffect(() => {
         async function getTodos(){
-            const {data: todos} = await supabase.from('parents').select()
-
-            if(todos && todos.length > 1){
-                setParents(todos)
+            const retorno = await getTimeParents ({})
+        
+            if(retorno.status && retorno.data && retorno.data.length > 0){
+                setParents(retorno.data)
             }
 
         }
-        getTodos()
 
-    },[])
+        getTodos();
+
+    })
 
     async function handleRegister() {
 

@@ -15,6 +15,19 @@
       userid: number,
   }
 
+
+  export async function getTimeParents(parents: any){
+    const {data: todos,error} = await supabase.from('parents').select()
+
+    if(error){
+        console.log(error)//if não utiliza o else apenas se o primeiro return não retornar o erro. 
+        return {status: false, error:error};
+    }
+    return {status:true, data:todos}
+}
+
+
+
   export async function setParent(parent: iParent) {
     // 🔍 Tratativas com regex
     const { data, error } = await supabase
