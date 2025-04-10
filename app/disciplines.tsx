@@ -1,11 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { iDisciplines, SetDisciplinebd, UpdateDisciplinebd, DeleteDisciplinebd } from '../src/controllers/disciplines';
+import {
+  iDisciplines,
+  SetDisciplinebd,
+  UpdateDisciplinebd,
+  DeleteDisciplinebd,
+} from '../src/controllers/disciplines';
 import { supabase } from '../src/utils/supabase';
-import type { KeyboardTypeOptions } from 'react-native';
 import MyView from '../src/components/MyView';
+import MyButton from '../src/components/MyButtons';
+import MyList from '../src/components/MyList';
+import { Myinput } from '../src/components/MyInputs';
 
 const { width } = Dimensions.get('window');
 
@@ -22,7 +35,7 @@ export default function DisciplineScreen() {
   const [disciplines, setDisciplines] = useState<iDisciplines[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [filtro, setFiltro] = useState('');
-  const [activeScreen, setActiveScreen] = useState<'disciplinas' | 'professores'>('disciplinas');
+  const [activeScreen, setActiveScreen] = useState<'disciplinas' | 'professores' | 'documentos' | 'cursos' | 'calendario'>('disciplinas');
   const router = useRouter();
 
   useEffect(() => {
@@ -60,6 +73,18 @@ export default function DisciplineScreen() {
     });
   };
 
+  function resetForm() {
+    setReq({
+      id: -1,
+      name: '',
+      url: '',
+      workload: 0,
+      created_at: new Date().toISOString(),
+      teacher: '',
+    });
+    setIsEditing(false);
+  }
+
   function handleRegister() {
     if (!req.name.trim() || !req.url.trim() || !req.teacher.trim()) {
       console.log('Preencha todos os campos!');
@@ -67,7 +92,14 @@ export default function DisciplineScreen() {
     }
 
     if (isEditing) {
-      handleUpdate();
+      setDisciplines(disciplines.map((d) => (d.id === req.id ? req : d)));
+
+      (async () => {
+        await UpdateDisciplinebd(req);
+        console.log('Disciplina atualizada.');
+      })();
+
+      resetForm();
       return;
     }
 
@@ -92,15 +124,12 @@ export default function DisciplineScreen() {
     resetForm();
   }
 
-  function handleUpdate() {
-    setDisciplines(disciplines.map((d) => (d.id === req.id ? req : d)));
-
-    (async () => {
-      await UpdateDisciplinebd(req);
-      console.log('Disciplina atualizada.');
-    })();
-
-    resetForm();
+  function handleEdit(id: number) {
+    const discipline = disciplines.find((d) => d.id === id);
+    if (discipline) {
+      setReq(discipline);
+      setIsEditing(true);
+    }
   }
 
   function handleDelete(id: number) {
@@ -111,32 +140,12 @@ export default function DisciplineScreen() {
     })();
   }
 
-  function handleEdit(id: number) {
-    const discipline = disciplines.find((d) => d.id === id);
-    if (discipline) {
-      setReq(discipline);
-      setIsEditing(true);
-    }
-  }
-
-  function resetForm() {
-    setReq({
-      id: -1,
-      name: '',
-      url: '',
-      workload: 0,
-      created_at: new Date().toISOString(),
-      teacher: '',
-    });
-    setIsEditing(false);
-  }
-
   const menuItems = [
-    { icon: 'home-outline', label: 'Home', route: 'home' },
+    { icon: 'home-outline', label: 'Home', route: '/home' },
     { icon: 'account-outline', label: 'Professores', route: 'professores' },
-    { icon: 'file-document-outline', label: 'Documentos', route: 'documents' },
-    { icon: 'library-shelves', label: 'Cursos', route: 'courses' },
-    { icon: 'calendar-month-outline', label: 'Calendário', route: 'calendar' },
+    { icon: 'file-document-outline', label: 'Documentos', route: '/documents' },
+    { icon: 'library-shelves', label: 'Cursos', route: '/courses' },
+    { icon: 'calendar-month-outline', label: 'Calendário', route: '/calendar' },
   ];
 
   return (
@@ -146,102 +155,119 @@ export default function DisciplineScreen() {
           <Text style={styles.menuTitle}>Meu Sistema</Text>
           <View style={styles.menuItems}>
             {menuItems.map((item) => (
-              <TouchableOpacity
+              <MyButton
                 key={item.label}
-                style={styles.menuButton}
-                onPress={() => {
-                  if (item.route === 'professores') setActiveScreen('professores');
-                  else {
-                    setActiveScreen('disciplinas');
-                    router.push(`/${item.route}`);
-                  }
-                }}
-              >
-                <Icon name={item.icon} size={16} color="#6A1B9A" />
-                <Text style={styles.menuText}>{item.label}</Text>
-              </TouchableOpacity>
+                title={item.label}
+                icon={item.icon}
+                button_type="capsule"
+                onPress={() =>
+                  item.route === 'professores'
+                    ? setActiveScreen('professores')
+                    : router.push(item.route)
+                }
+                style={{ marginBottom: 6 }}
+              />
             ))}
           </View>
         </View>
 
-        {activeScreen === 'disciplinas' ? (
-          <View style={styles.main}>
-            <Text style={styles.pageTitle}>Cadastro de Disciplinas</Text>
-            <View style={styles.card}>
-              <Text style={styles.sectionTitle}>{isEditing ? 'Editar Disciplina' : 'Nova Disciplina'}</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Nome da disciplina"
-                value={req.name}
-                onChangeText={(text) => setReq({ ...req, name: text })}
+        <View style={styles.main}>
+          {activeScreen === 'professores' ? (
+            <>
+              <Text style={styles.pageTitle}>Professores Cadastrados</Text>
+              <Myinput
+                iconName="account-search"
+                label="Buscar"
+                placeholder="Buscar por professor ou disciplina..."
+                value={filtro}
+                onChangeText={setFiltro}
               />
-              <TextInput
-                style={styles.input}
-                placeholder="URL"
-                value={req.url}
-                onChangeText={(text) => setReq({ ...req, url: text })}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Professor"
-                value={req.teacher}
-                onChangeText={(text) => setReq({ ...req, teacher: text })}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Carga Horária"
-                keyboardType={'numeric' as KeyboardTypeOptions}
-                value={req.workload.toString()}
-                onChangeText={(text) => setReq({ ...req, workload: parseInt(text || '0') })}
-              />
-              <TouchableOpacity style={styles.primaryButton} onPress={handleRegister}>
-                <Text style={styles.primaryButtonText}>{isEditing ? 'Atualizar' : 'Cadastrar'}</Text>
-              </TouchableOpacity>
-            </View>
-
-            <Text style={styles.sectionTitle}>Disciplinas Cadastradas</Text>
-            <View style={styles.gridContainer}>
-              {disciplines.map((item) => (
-                <View key={item.id} style={styles.cardGridItem}>
-                  <Text style={styles.cardTitle}>{item.name}</Text>
-                  <Text style={styles.cardText}>URL: {item.url}</Text>
-                  <Text style={styles.cardText}>Carga Horária: {item.workload} horas</Text>
-                  <Text style={styles.cardText}>Professor: {item.teacher}</Text>
-                  <View style={styles.actions}>
-                    <TouchableOpacity style={styles.editButton} onPress={() => handleEdit(item.id)}>
-                      <Text style={styles.buttonText}>EDITAR</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(item.id)}>
-                      <Text style={styles.buttonText}>EXCLUIR</Text>
-                    </TouchableOpacity>
+              {professoresAgrupados().map((prof, index) => (
+                <View key={index} style={styles.card}>
+                  <Text style={styles.sectionTitle}>{prof.nome}</Text>
+                  <View style={styles.tagsContainer}>
+                    {prof.disciplinas.map((disc, idx) => (
+                      <View key={idx} style={styles.tag}>
+                        <Text style={styles.tagText}>{disc}</Text>
+                      </View>
+                    ))}
                   </View>
                 </View>
               ))}
-            </View>
-          </View>
-        ) : (
-          <View style={styles.main}>
-            <Text style={styles.pageTitle}>Professores Cadastrados</Text>
-            <TextInput
-              placeholder="Buscar por professor ou disciplina..."
-              style={styles.input}
-              value={filtro}
-              onChangeText={setFiltro}
-            />
-            {professoresAgrupados().map((prof, index) => (
-              <View key={index} style={styles.cardGridItem}>
-                <Text style={styles.cardTitle}>{prof.nome}</Text>
-                <View style={styles.tagsContainer}>
-                  {prof.disciplinas.map((disc, idx) => (
-                    <View key={idx} style={styles.tag}>
-                      <Text style={styles.tagText}>{disc}</Text>
-                    </View>
-                  ))}
-                </View>
+            </>
+          ) : (
+            <>
+              <Text style={styles.pageTitle}>Cadastro de Disciplinas</Text>
+              <View style={styles.card}>
+                <Text style={styles.sectionTitle}>
+                  {isEditing ? 'Editar Disciplina' : ''}
+                </Text>
+                <Myinput
+                  iconName="book"
+                  label="Nome da disciplina"
+                  placeholder="Digite o nome"
+                  value={req.name}
+                  onChangeText={(text) => setReq({ ...req, name: text })}
+                />
+                <Myinput
+                  iconName="link"
+                  label="URL"
+                  placeholder="Digite a URL"
+                  value={req.url}
+                  onChangeText={(text) => setReq({ ...req, url: text })}
+                />
+                <Myinput
+                  iconName="account"
+                  label="Professor"
+                  placeholder="Digite o nome do professor"
+                  value={req.teacher}
+                  onChangeText={(text) => setReq({ ...req, teacher: text })}
+                />
+                <Myinput
+                  iconName="clock-outline"
+                  label="Carga Horária"
+                  placeholder="Digite a carga horária"
+                  value={req.workload.toString()}
+                  onChangeText={(text) => setReq({ ...req, workload: parseInt(text || '0') })}
+                />
+                <MyButton
+                  title={isEditing ? 'Atualizar' : 'Cadastrar'}
+                  button_type="default"
+                  onPress={handleRegister}
+                  style={styles.primaryButton}
+                />
               </View>
-            ))}
-          </View>
-        )}
+
+              <Text style={styles.sectionTitle}>Disciplinas Cadastradas</Text>
+              <MyList
+                data={disciplines}
+                keyItem={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                  <View style={styles.cardGridItem}>
+                    <Text style={styles.cardTitle}>{item.name}</Text>
+                    <Text style={styles.cardText}>URL: {item.url}</Text>
+                    <Text style={styles.cardText}>Carga Horária: {item.workload} horas</Text>
+                    <Text style={styles.cardText}>Professor: {item.teacher}</Text>
+                    <View style={styles.actions}>
+                      <MyButton
+                        title="EDITAR"
+                        button_type="edit"
+                        onPress={() => handleEdit(item.id)}
+                        style={styles.editButton}
+                      />
+                      <MyButton
+                        title="EXCLUIR"
+                        button_type="delete"
+                        onPress={() => handleDelete(item.id)}
+                        style={styles.deleteButton}
+                      />
+                    </View>
+                  </View>
+                )}
+              />
+            </>
+          )}
+        </View>
       </ScrollView>
     </MyView>
   );
@@ -272,20 +298,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 12,
   },
-  menuButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F3E5F5',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 8,
-    gap: 4,
-  },
-  menuText: {
-    fontSize: 14,
-    color: '#6A1B9A',
-    fontWeight: 'bold',
-  },
   main: {
     padding: 20,
   },
@@ -312,31 +324,9 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 2,
   },
-  input: {
-    height: 45,
-    borderColor: '#DDD',
-    borderWidth: 1,
-    borderRadius: 6,
-    paddingHorizontal: 12,
-    marginBottom: 12,
-    backgroundColor: '#FAFAFA',
-  },
   primaryButton: {
     backgroundColor: '#6A1B9A',
-    paddingVertical: 12,
-    borderRadius: 6,
-    alignItems: 'center',
     marginTop: 10,
-  },
-  primaryButtonText: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  gridContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'flex-start',
   },
   cardGridItem: {
     backgroundColor: '#FFF',
@@ -366,21 +356,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   editButton: {
-    backgroundColor: '#9575CD',
-    paddingVertical: 6,
-    paddingHorizontal: 14,
-    borderRadius: 4,
+    marginRight: 8,
   },
-  deleteButton: {
-    backgroundColor: '#EF5350',
-    paddingVertical: 6,
-    paddingHorizontal: 14,
-    borderRadius: 4,
-  },
-  buttonText: {
-    color: '#FFF',
-    fontWeight: 'bold',
-  },
+  deleteButton: {},
   tagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
