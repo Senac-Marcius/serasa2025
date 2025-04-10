@@ -40,7 +40,7 @@ async function deleteLocal(id: number) {
       return {status: false,message: error}
     }
   
-    return {status: true, message: "Removido loval"}
+    return {status: true, message: "Removido local"}
   }
 
 

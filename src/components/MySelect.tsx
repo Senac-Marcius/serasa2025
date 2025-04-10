@@ -3,6 +3,8 @@ import { Text, TextStyle, TouchableOpacity, View, ViewStyle, StyleSheet } from '
 import { FlatList, TextInput } from 'react-native-gesture-handler';
 import { Button, List } from 'react-native-paper'; 
 import { Myinput } from './MyInputs';
+import AntDesign from '@expo/vector-icons/AntDesign';
+
 
 interface MySelectProps {
     label: string;
@@ -18,7 +20,7 @@ const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {
         <View>
             <TouchableOpacity 
                 style={{ 
-                  height: 50, 
+                  height: 28, 
                   margin: 10,
                   width: 300,  
                   borderRadius: 25, 
@@ -34,13 +36,14 @@ const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {
                 }} 
                 onPress={() => setVisible(!visible)}
             >
-                <Text style={{ color: 'black', fontSize: 16,  textAlign: 'center',}}>{label} </Text>
-               
+                <Text style={{ color: '#666666', fontSize: 16, textAlign: 'left', fontWeight: '400'}}>{label} </Text>  
+                <AntDesign style={{position: 'absolute', right: 10}} name="down" size={24} color="purple" />
             </TouchableOpacity>
 
             {
                 visible &&
                 (<FlatList                                                          //estilos
+                    style = {{paddingHorizontal: 15,}}
                     data={list}
                     keyExtractor={(item) => item.key}
                     renderItem={(i) => (
@@ -55,13 +58,13 @@ const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {
                         }}>
                         
                         <Text style = {{
-                          height: 50,  
+                          height: 25,  
                           margin: 5,
                           width: 300,
                           borderRadius: 10,    
                           paddingHorizontal: 15,
-                          paddingVertical: 10,  
-                          fontSize: 16,
+                          paddingVertical: 3,  
+                          fontSize: 13,
                           backgroundColor: 'white',
                           color: "#666",
                           borderWidth: 2,

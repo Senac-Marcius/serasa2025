@@ -80,7 +80,7 @@ export default function LocalScreen(){
         }
     }
 
-    const [unity, setUnit] = useState("selecione")              /* exemplo do código de SELECT para copiar */
+    const [unity, setUnit] = useState("Select")              /* exemplo do código de SELECT para copiar */
 
     const [message, setMessage] = useState("")
     
@@ -91,9 +91,9 @@ export default function LocalScreen(){
     return (
 
             <MyView router={router} style={styles.container}>
-                <Text style={styles.title}>LOCAL</Text>
+                <Text style={styles.title}>CADASTRO DE LOCAIS</Text>
                 {message.length > 1 && (  
-                    <Text style={styles.title}>{message}</Text>
+                <Text style={styles.title}>{message}</Text>
                 )}
                 <View style={styles.row}>
                     <View style={styles.formContainer}>
@@ -109,18 +109,20 @@ export default function LocalScreen(){
                                                                                                         
                         <Myinput
                         iconName='language'
-                        placeholder={ `Digite a sua dimensão em ${unity}:`}
+                        placeholder={ `Ex. do componente ${unity} em ação:`}
                         value={req.dimension}
                         label='Dimensão:'
                         onChangeText={(n) => setReq({...req, dimension: n })}  
                                     
                         />
                       
-                        <MySelect label={unity} setLabel={setUnit}  
+                        <MySelect 
+                        label={unity} setLabel={setUnit}  
                         list={            
                             [
                                 {key:0, option: 'metros'},             /* exemplo do código de SELECT para copiar */
                                 {key:1, option: 'cm'},
+                                
                             ]
                         } />  
 
