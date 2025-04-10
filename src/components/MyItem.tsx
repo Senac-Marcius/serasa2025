@@ -28,9 +28,9 @@ const MyItem: React.FC<MytextProps> = ({ children, style, onEdit, onDel, }) => {
   return (
           <TouchableOpacity style={styles.card}>
             {children}
-            <View  style={styles.button}>
-              <MyButton style={{ justifyContent:'center'}}  onPress={onEdit} title='Editar'></MyButton>
-              <MyButton  style={{ justifyContent:'center'}} onPress={onDel} title='Deletar'></MyButton> 
+            <View>
+              <MyButton onPress={onEdit} title='Editar' color='yellow'></MyButton>
+              <MyButton  style={{marginTop: 20 }} onPress={onDel} title='Deletar' color='red'></MyButton> 
 
             </View>
         </TouchableOpacity>
@@ -69,10 +69,8 @@ const styles = StyleSheet.create({
     elevation: 3, 
    
   },
-
-  button:{
-    alignItems: 'center',
-    justifyContent:'center',
-    gap:10
-  }
+  row : {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',}
 })
