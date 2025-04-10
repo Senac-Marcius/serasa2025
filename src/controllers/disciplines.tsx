@@ -1,36 +1,63 @@
-import React, { useState } from 'react';
 import { supabase } from '../utils/supabase'
 
 interface iDisciplines {
-    id: number; 
-    name: string; 
-    url: string; 
-    workload: string;      
-    createdAt: string; 
-    teacher: string ;
+  id: number;
+  name: string;
+  url: string;
+  workload: number;
+  created_at: string;
+  teacher: string;
 }
 
-const [disciplines, setDisciplines] = useState<iDisciplines[]>([]);
+async function SetDisciplinebd(discipline: iDisciplines): Promise<iDisciplines[] | null> {
+  console.log('Inserindo disciplina...')
+  const { data, error } = await supabase
+    .from('disciplines')
+    .insert([discipline])
+    .select()
 
-  
-  async function SetDisciplines(disciplines:iDisciplines){
-  const { data, error } = await supabase.from('disciplines')
-.insert([
-  disciplines
-])
-.select()
+  if (error) {
+    console.log('Erro ao inserir:', error)
+    return null
+  }
 
-//aqui vem os tratamentos de variavel error
-if(error){
-    alert('Preencha todos os dados!')
-
-    return {}
+  return data as iDisciplines[]
 }
 
-return data
+async function UpdateDisciplinebd(discipline: iDisciplines): Promise<iDisciplines[] | null> {
+  console.log('Atualizando disciplina...')
+  const { data, error } = await supabase
+    .from('disciplines')
+    .update({
+      name: discipline.name,
+      url: discipline.url,
+      workload: discipline.workload,
+      teacher: discipline.teacher
+    })
+    .eq('id', discipline.id)
+    .select()
 
+  if (error) {
+    console.log('Erro ao atualizar:', error)
+    return null
+  }
 
+  return data as iDisciplines[]
 }
 
-export {setDisciplines}
-        
+async function DeleteDisciplinebd(id: number): Promise<boolean> {
+  console.log('Deletando disciplina...')
+  const { error } = await supabase
+    .from('disciplines')
+    .delete()
+    .eq('id', id)
+
+  if (error) {
+    console.log('Erro ao deletar:', error)
+    return false
+  }
+
+  return true
+}
+
+export { SetDisciplinebd, UpdateDisciplinebd, DeleteDisciplinebd, iDisciplines }

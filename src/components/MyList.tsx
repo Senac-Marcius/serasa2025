@@ -6,15 +6,18 @@ interface MyListProps {
     style?: ViewStyle;
     renderItem: (args: { [key: string]: any }) => JSX.Element; 
     keyItem: (item: any, index: number) => string;
+    numColumns? : number ;
+
 }
 
-const MyList: React.FC<MyListProps> = ({ data, style, renderItem, keyItem }) => {
+const MyList: React.FC<MyListProps> = ({ data,numColumns=1, style, renderItem, keyItem }) => {
     return (
         <FlatList 
             data={data} 
             renderItem={renderItem}
             keyExtractor={keyItem}
             style={style} 
+            numColumns = {numColumns}
         />
     );
 };

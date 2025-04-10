@@ -72,7 +72,7 @@ export default function ExpenseScreen(){
         const expenses = expense.find(e => e.id == id )
         if(expenses)
             setReq(expenses)
-    }
+    };
 
     async function delExpense(id:number){
 
