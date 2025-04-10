@@ -6,7 +6,7 @@ import MyView from '../src/components/MyView';
 import MyButton from '../src/components/MyButtons'
 import {Myinput, MyTextArea} from '../src/components/MyInputs';
 import { useRouter } from 'expo-router';
-import { setExpense, iexpenses } from '../src/controllers/expenses';
+import { setExpense, delRegister, updateExpense, iexpenses } from '../src/controllers/expenses';
 import { supabase } from '../src/utils/supabase';
 
 
@@ -17,7 +17,7 @@ export default function ExpenseScreen(){
             created_at : new Date(). toISOString(),
             name: '',
             emails: '',
-            contacts:"",
+            contacts:'',
             costs: '',
             descriptions: '',
             user_id: 1,
@@ -29,7 +29,7 @@ export default function ExpenseScreen(){
         async function getTodos(){
             const {data: todos}= await supabase.from('expenses').select()
 
-            if(todos && todos.length > 1){
+            if(todos && todos.length > 0){
                 setExpenses(todos)
             }
         }
@@ -45,7 +45,8 @@ export default function ExpenseScreen(){
             setExpenses([...expense, newExpense]);
             await setExpense(newExpense)
         }else{
-            setExpenses(expense.map(e => (e.id == req.id ? req : e)));
+            setExpenses(expense.map(e => (e.id === req.id ? req : e)));
+        await updateExpense(req); 
         }
 
         setReq({
@@ -66,10 +67,12 @@ export default function ExpenseScreen(){
         const expenses = expense.find(e => e.id == id )
         if(expenses)
             setReq(expenses)
-    }
+    };
 
-    function delExpense(id:number){
-        const list = expense.filter(e => e.id != id)
+    async function delExpense(id:number){
+
+       delRegister(id)
+        const list = expense.filter(e => e.id != id);
         if(list)
             setExpenses(list)
     }
@@ -172,3 +175,4 @@ const styles = StyleSheet.create({
      },
      
     });
+    

@@ -10,128 +10,25 @@ import {setCollection, iCollection,deleteCollectionById,updateCollectionById} fr
 import { supabase } from '../src/utils/supabase'
 
 
-
-//função userState só retorna para uma variavel const
-
-export default function CollectionScreen() {
-
-    const [req, setReq] = useState({
-        id: 0,
-        name: '',
-        quantity: '',
-        star: '',
-        createAt: new Date().toISOString()
-    });
-
-    const [visible, setVisible] = useState(false);
-
-    const[collections, setCollections] = useState<iCollection[]>([]);
-
-    useEffect(() =>{
-        async function getTodos(){
-
-            const{data:todos} = await supabase.from('collections').select()
-            
-            if (todos && todos.length>0){
-                setCollections(todos)
-         }
-    }
-    getTodos()
-}, [])
-
-
-     async function handleRegister() {
-        if (req.id == -1) {
-            const newId = collections.length ? collections[collections.length - 1].id + 1 : 0
-            const newCollections = {...req, id: newId}
-            setCollections([...collections, newCollections])
-            await setCollection(newCollections)
-             
-
-        } else {
-            setCollections(collections.map(c => (c.id == req.id ? req : c)))
-            const deletecollection = await updateCollectionById(req.id, req)
-            if (!deletecollection) {
-                alert("Erro ao atualizar usuário.")
-                return
-            }
-            
-        }
-        setReq({
-            id: -1,
-            name: '',
-            quantity: '',
-            star: '',
-            createAt: new Date().toISOString()
-        })
-
-    }
-    function editCollections(id: number) {
-        let collection = collections.find(c => c.id == id)
-        if (collection)
-            setReq(collection)
-
-
-    }
-  
-
-    async function deleteCollections(id: number) {
-        const deletecollection = await deleteCollectionById(id)
-        if (deletecollection) {
-            const updatedList = collections.filter(c => c.id != id)
-            setCollections(updatedList)
-        } else {
-            alert("Erro ao deletar usuário.")
-        }
-    }
-
+export default function CollectionPreviewScreen() {
     const router = useRouter();
-
-   
-
-
-    return (//encapsulamento 
-        <MyView router={router} >
-            <View style={styles.formContainer}>
-                <View style={styles.row}>
-                    <View style={styles.form}>
-                        <Myinput
-                            value={req.name}
-                            onChangeText={(text) => setReq({ ...req, name: text })}
-                            placeholder="Nome do livro"
-                            label="Nome do livro"
-                            iconName="book"
-                        />
-
-                        <Myinput
-                            value={req.quantity}
-                            onChangeText={(text) => setReq({ ...req, quantity: text })}
-                            placeholder="Quantidade"
-                            label="Quantidade"
-                            iconName="add"
-                        />
-
-                        <Myinput
-                            value={req.star}
-                            onChangeText={(text) => setReq({ ...req, star: text })}
-                            placeholder="Estrelas"
-                            label="Estrelas"
-                            iconName="star"
-                        />
-
-
-                        <MyModal_mobile1 visible={visible} setVisible={setVisible} style={styles.button_capsule}>
-                            DESEJA CONFIRMAR O CADASTRO?
-
-                            <MyButton
-                                onPress={() => {handleRegister()}}
-                                title="SIM"
-                                style={styles.button_round}
-                            />
-                        </MyModal_mobile1>
-
-                    </View>
-                    <MyList // data faz um foreach (data recebe collections)
+     const[collections, setCollections] = useState<iCollection[]>([]);
+    
+        useEffect(() =>{
+            async function getTodos(){
+    
+                const{data:todos} = await supabase.from('collections').select()
+                
+                if (todos && todos.length>0){
+                    setCollections(todos)
+             }
+        }
+        getTodos()
+    }, [])
+    return (
+    <MyView router={router}>
+         <View>
+         <MyList // data faz um foreach (data recebe collections)
                         data={collections}
                         keyItem={(collections) => collections.id.toString()}
                         renderItem={({ item }) => (
@@ -155,11 +52,10 @@ export default function CollectionScreen() {
                             </View>
                         )}
                     />
-                </View>
-            </View>
-        </MyView >
-    );
-}
+        </View>
+    </MyView>
+)}
+
 const styles = StyleSheet.create({
     button_round: {
         backgroundColor: "#813AB1",
@@ -248,9 +144,11 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
     }
-
-
-
-
 })
+
+
+
+
+
+
 
