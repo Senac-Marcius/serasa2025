@@ -4,7 +4,7 @@ import MySelect from '../src/components/MySelect'
 import MyView from '../src/components/MyView';
 import MyList from '../src/components/MyList';
 import {MyItem} from '../src/components/MyItem';
-import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs';
+import { Myinput } from '../src/components/MyInputs';
 import MyButton  from '../src/components/MyButtons';
 import { useRouter } from 'expo-router';
 import {setLocal, iLocal, deleteLocal, updateLocal} from '../src/controllers/locals'
@@ -122,7 +122,7 @@ export default function LocalScreen(){
                             [
                                 {key:0, option: 'metros'},             /* exemplo do código de SELECT para copiar */
                                 {key:1, option: 'cm'},
-                                
+
                             ]
                         } />  
 

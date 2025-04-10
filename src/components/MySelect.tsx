@@ -20,34 +20,33 @@ const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {
         <View>
             <TouchableOpacity 
                 style={{ 
-                  height: 28, 
-                  margin: 10,
-                  width: 300,  
-                  borderRadius: 25, 
-                  paddingHorizontal: 15,
+                  height: 50, 
+                  margin: 11,
+                  width: 300,   //
+                  borderRadius: 25, //
+                  paddingHorizontal: 15,  //
                   backgroundColor: 'white',  
-                  borderWidth: 2,
+                  borderWidth: 2,  //
                   borderColor: 'purple', 
                   shadowColor: 'purple', 
                   shadowOffset: { width: 2, height: 1 }, 
-                  shadowOpacity: 0.6, 
+                  shadowOpacity: 0.6,  //
                   shadowRadius: 4, 
-                  elevation: 4
                 }} 
                 onPress={() => setVisible(!visible)}
             >
                 <Text style={{ color: '#666666', fontSize: 16, textAlign: 'left', fontWeight: '400'}}>{label} </Text>  
-                <AntDesign style={{position: 'absolute', right: 10}} name="down" size={24} color="purple" />
+                <AntDesign style={{ color:'purple', position: 'absolute', right: 14}} name="down" size={18} color="purple" />
             </TouchableOpacity>
 
             {
                 visible &&
                 (<FlatList                                                          //estilos
-                    style = {{paddingHorizontal: 15,}}
+                    style = {{ borderColor:'white', paddingHorizontal: 18, paddingVertical: 9, backgroundColor: '#813AB1',  shadowOffset: { width: 5, height: 1 }, shadowOpacity: 0.8, shadowRadius: 7,  }}
                     data={list}
                     keyExtractor={(item) => item.key}
                     renderItem={(i) => (
-                        <TouchableOpacity style = {{backgroundColor: "#813AB1", borderRadius: 20, width: 315}}onPress={()=>{
+                        <TouchableOpacity style = {{ borderRadius: 20, width: 315}}onPress={()=>{
                             setLabel(i.item.option);
 
                             if(setKey){
@@ -57,24 +56,7 @@ const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {
                             setVisible(false)
                         }}>
                         
-                        <Text style = {{
-                          height: 25,  
-                          margin: 5,
-                          width: 300,
-                          borderRadius: 10,    
-                          paddingHorizontal: 15,
-                          paddingVertical: 3,  
-                          fontSize: 13,
-                          backgroundColor: 'white',
-                          color: "#666",
-                          borderWidth: 2,
-                          borderColor: "#813AB1",
-                          shadowColor: "#813AB1",
-                          shadowOffset: { width: 2, height: 1 },
-                          shadowOpacity: 0.8,
-                          shadowRadius: 4,
-                          elevation: 4,
-                        }}>{i.item.option}</Text>
+                        <Text>{i.item.option}</Text>
                     </TouchableOpacity>
                     )}
                 />)
