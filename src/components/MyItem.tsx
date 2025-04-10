@@ -26,7 +26,7 @@ interface MyCorrelatedprops{
 
 const MyItem: React.FC<MytextProps> = ({ children, style, onEdit, onDel, }) => {
   return (
-          <TouchableOpacity style={style}>
+          <TouchableOpacity style={styles.card}>
             {children}
             <View>
               <MyButton onPress={onEdit} title='Editar' color='yellow'></MyButton>
@@ -39,13 +39,13 @@ const MyItem: React.FC<MytextProps> = ({ children, style, onEdit, onDel, }) => {
 
 const MyCorrelated: React.FC<MyCorrelatedprops> = ({ children, style, onEdit, onDel, relatedItems, showEditButton = true, showDeleteButton = true }) => {
   return(
-    <TouchableOpacity style={style}>
+    <TouchableOpacity style={styles.card}>
       {children}
-      <View>
+      <View >
       {showEditButton &&
-        <MyButton onPress={onEdit} title="Editar" />}
+        <MyButton style={{ justifyContent:'center'}} onPress={onEdit} title="Editar" />}
         {showDeleteButton &&
-        <MyButton style={{ marginTop: 20 }} onPress={onDel} title="Deletar" />}
+        <MyButton style={{ justifyContent:'center'}} onPress={onDel} title="Deletar" />}
       </View>
     </TouchableOpacity>
 );
@@ -56,8 +56,23 @@ export  {MyItem, MyCorrelated}
 
 
 const styles = StyleSheet.create({
-  row : {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',}
+  card: {
+    backgroundColor: "#f8f9fa",
+    padding: 16,
+    marginBottom: 8,
+    marginHorizontal: 12,
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 3, 
+   
+  },
+
+  button:{
+    alignItems: 'center',
+    justifyContent:'center',
+    gap:10
+  }
 })
