@@ -69,10 +69,8 @@ const styles = StyleSheet.create({
     elevation: 3, 
    
   },
-
-  button:{
-    alignItems: 'center',
-    justifyContent:'center',
-    gap:10
-  }
+  row : {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',}
 })
