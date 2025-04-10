@@ -22,7 +22,7 @@ export default function LevelsScreen() {
     created_at:  new Date().toISOString(),
   });
 
-  useEffect(() => {
+useEffect(() => {
     async function fetchLevels() {
       const { data } = await supabase.from('levels').select();
       if (data) setLevels(data as iLevels[]);
@@ -30,7 +30,7 @@ export default function LevelsScreen() {
     fetchLevels();
   }, []);
 
-  async function handleSave() {
+async function handleSave() {
     if (form.id === -1) {
       const newLevels = { ...form, id: Date.now() }; // id temporário
       setLevels([...levels, newLevels]);
@@ -41,7 +41,7 @@ export default function LevelsScreen() {
       await supabase.from('levels').update(form).eq('id', form.id);
     }
 
-    setForm({
+      setForm({
       id: -1,
       name: '',
       description: '',
@@ -51,12 +51,12 @@ export default function LevelsScreen() {
      });
   }
 
-  async function handleDelete(id: number) {
+async function handleDelete(id: number) {
     await supabase.from('levels').delete().eq('id', id);
     setLevels(levels.filter(item => item.id !== id));
   }
 
-  function handleEdit(levels: iLevels) {
+function handleEdit(levels: iLevels) {
     setForm(levels);
 
   }

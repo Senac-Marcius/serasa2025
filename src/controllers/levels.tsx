@@ -1,13 +1,13 @@
 import React, {useState} from 'react'
 import { supabase } from '../utils/supabase'
-  export interface iLevels{
-        name: string,
-        description: string,
-        color: string,
-        id: number,
-        created_at: string,
+export interface iLevels{
+    name: string,
+    description: string,
+    color: string,
+    id: number,
+    created_at: string,
        
-    }
+}
 
 export async function setLevels(levels: iLevels){
 
@@ -28,16 +28,17 @@ const { data, error } = await supabase.from('levels')
 
 export async function getLevels() {
         
-        const { data, error } = await supabase.from('levels').select();
+    const { data, error } = await supabase.from('levels').select();
  
-        if (error) {
+    if (error) {
 
-            console.error('Erro ao buscar levels: ', error);
+        console.error('Erro ao buscar levels: ', error);
 
-        return [];
-        }
+    return [];
+    
+    }
  
-        return data;
+    return data;
 }
  
         // ATUALIZAR REGISTRO
