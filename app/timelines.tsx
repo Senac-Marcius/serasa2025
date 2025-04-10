@@ -10,6 +10,7 @@ import { setTimeline, iTimeline, delTimelines as delTimelinesDoController, editT
 import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
 import { MyItem } from '../src/components/MyItem';
+import Mytext from '../src/components/MyText';
 
 export default function TimelineScreen() {
   const [req, setReq] = useState({
@@ -107,7 +108,7 @@ export default function TimelineScreen() {
           {/* Campos de input para o formulário de cronograma */}
           <Myinput
             value={req.discipline}
-            onChangeText={(text) => setReq({ ...req, discipline: text })}
+            onChangeText={(text)  => setReq({ ...req, discipline: text })}
             label="Disciplina"          // Label para o campo de disciplina
             iconName=""             // Nome do ícone para o campo de disciplina
             placeholder="Digite a disciplina:"
@@ -155,12 +156,11 @@ export default function TimelineScreen() {
                 onEdit={()=> editTimelines(item.id)}
 
             >
-              <Text>{item.discipline}</Text>
-              <Text>{item.url}</Text>
-              <Text>{item.start_time}</Text>
-              <Text>{item.end_time}</Text>
+              <Mytext style={styles.revenueText}>Disciplina: {item.discipline}</Mytext>
+              <Mytext style={styles.revenueText}>Url: {item.url}</Mytext>
+              <Mytext style={styles.revenueText}>Horário de Início: {item.start_time}</Mytext>
+              <Mytext style={styles.revenueText}>Horário de Término: {item.end_time}</Mytext>
 
-             
             </MyItem>
           )}
         />
@@ -170,7 +170,7 @@ export default function TimelineScreen() {
 }
 
 const styles = StyleSheet.create({
-  header: {
+   header: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
@@ -234,5 +234,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 5,
+  },
+    revenueText: {
+    fontSize: 17,
+    color: '#000000',
+    marginBottom: 3,
+    
   },
 });
