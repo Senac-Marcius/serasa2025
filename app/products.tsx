@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text} from 'react-native';
+import React, { useState } from 'react';
+import { View, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
+import { TextInput, Text} from 'react-native-paper';
 import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
 import {iProduct, setProduct, updateProduct, deleteProduct, getProducts} from '../src/controllers/products';
@@ -19,8 +20,8 @@ export default function productScreen(){
         description:'',
         name:'',
         id: -1,
-        create_at:  new Date().toISOString(),
-        user_id: 6,
+        createAt:  new Date().toISOString(),
+        userId: 0,
     });
     
     const [products, setProducts] = useState<iProduct[]>([]);
@@ -59,72 +60,70 @@ export default function productScreen(){
         });
     }
 
-    function editProduct(id:number){
-        const product = products.find(p => p.id == id)
-        if(product)
+        function editProduct(id:number){
+            const product = products.find(p => p.id == id)
+            if(product)
             setReq(product)
-    }
-
-    function dellProduct(id:number){
-        const list = products.filter(p => p.id != id)
-        if(list)
-            setProducts(list)
-    }
+        }
+        function dellProduct(id:number){
+            const list = products.filter(p => p.id != id)
+            if(list)
+                setProducts(list)
+        }
 
     const router = useRouter();
 
     return (
         <MyView router={router} >
-       
-            <Mytext style={styles.h2}>Cadastro de Produtos</Mytext>
-        
-            <View style={styles.row}>
-                <View style={styles.form}>
-
-                    <Myinput 
-                    placeholder="Digite o Nome"
-                    value={req.name}
-                    onChangeText={(text) => setReq({ ...req, name:text })}
-                    label="Produto"
-                    iconName='storefront' 
-                
-                    />
             
-                    <Myinput 
-                    placeholder= "Descrição"
-                    value={req.description}
-                    onChangeText={(text)=>setReq({...req, description:text})}
-                    label= 'Descrição'
-                    iconName='description' 
+            <Text style={styles.h1}> Produtos </Text>
+                {/*aqui é typescript dentro do front */ }
+            <Text style={styles.h2}>Minha tela dos Produtos</Text>
+                <View style={styles.row}>
+                    <View style={styles.form}>
+                            
+                        <TextInput style={styles.input}
+                        placeholder="Digite o nome"
+                        value={req.name}
+                        onChangeText={(text)=> setReq({...req, name: text})}
+                        />
+                            
+                        <TextInput style={styles.input}
+                        placeholder="Digite a descrição" 
+                        value={req.description}
+                        onChangeText={(text)=> setReq({...req, description: text})}
+                        />
+                        
+
+                        <TouchableOpacity style={styles.cadastrar} onPress={()=>{handleRegister()}}>Cadastrar</TouchableOpacity>
+
+                    </View>
+
+            
+                    <FlatList
+                        data={products}
+                        keyExtractor={(item) => item.id.toString() }
+                        renderItem={({item}) => (
+                            <View  style={styles.cadastroForm}>
+                                <Text>{item.description}</Text>
+                                <Text>{item.name}</Text>
+                                <Text>{item.createAt}</Text>
+                                <Text>{item.userId}</Text>
+                                <View style={styles.buttonsContainer}>
+                                    
+                                    <TouchableOpacity style={styles.edit} onPress={()=>{editProduct(item.id)}}>Edit</TouchableOpacity>
+                                    <TouchableOpacity style={styles.delete}onPress={()=>{dellProduct(item.id)}}>Delete</TouchableOpacity>
+                                </View>  
+                            </View>  
+                                
+                        )
+                        
+                        }
                     />
-
-                    <MyButton style={styles.cadastrar} onPress={handleRegister} title='Cadastrar'/>
-                </View>
-
-                <MyList
-                    data={products}
-                    keyItem={(item) => item.id.toString()}
-                    renderItem={({item})=>(
-                        <MyItem
-                            onEdit={() => editProduct(item.id)}
-                            onDel={async () => {
-                                await deleteProduct(item.id);
-                                dellProduct(item.id);
-                            }}
-                        >
-                            <Text>{item.name}</Text>
-                            <Text>{item.description}</Text>
-                            <Text>{new Date(item.create_at).toLocaleString()}</Text>
-                            <Text>{item.user_id}</Text>
-                        </MyItem>
-
-                    )}
-                
-                />
-            </View>
-        </MyView>
+                </View> 
+        </MyView> 
+            
     );
-    
 }
 
 
@@ -189,7 +188,10 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         fontSize: 15,
         padding: 40,
-      },
+        
+
+
+    },
     input: {
         fontSize: 15,
         textAlign: 'left',
@@ -218,18 +220,6 @@ const styles = StyleSheet.create({
         marginTop: 80,
         marginBottom: 10,
         padding: 20,
-    },
+    }
 })
     
-
-
-
-
-
-
-
-
-
-
-
-
