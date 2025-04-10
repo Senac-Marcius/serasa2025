@@ -12,6 +12,15 @@ interface iTimeline {
   created_at: string;
 }
 
+async function getTimelines(params:any){
+const { data: todos, error } = await supabase.from('timelines').select();
+
+if (error)
+  return{status: false, error: error}
+
+return {status: true, data: todos}
+}
+
 // Function to edit a timeline
 async function editTimelines(id: number, updatedData: Partial<iTimeline>) {
   try {
@@ -107,4 +116,4 @@ async function setTimeline(timeline: iTimeline) {
   return data;
 }
 
-export { setTimeline, iTimeline, delTimelines, editTimelines };
+export { setTimeline, iTimeline, delTimelines, editTimelines, getTimelines };

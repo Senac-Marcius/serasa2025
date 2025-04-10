@@ -6,7 +6,7 @@ import MyCalendar from '../src/components/MyCalendar';
 import MySearch from '../src/components/MySearch';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs'; 
 import { supabase } from '../src/utils/supabase';
-import { setTimeline, iTimeline, delTimelines as delTimelinesDoController, editTimelines as editTimelinesDoController } from '../src/controllers/timelines';
+import { setTimeline, iTimeline, delTimelines as delTimelinesDoController, editTimelines as editTimelinesDoController, getTimelines } from '../src/controllers/timelines';
 import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
 import { MyItem } from '../src/components/MyItem';
@@ -31,16 +31,18 @@ export default function TimelineScreen() {
   // Buscar os cronogramas ao carregar o componente
   useEffect(() => {
     (async () => {
-      const { data: todos, error } = await supabase.from('timelines').select();
-      if (todos && todos.length > 0) {
-        setTimelines(todos);
+      const retorno = await getTimelines({}) 
+      if (retorno.status && retorno.data && retorno.data.length > 0 ) {
+        setTimelines(retorno.data);
       }
-      if (error) {
-        console.error("Erro ao buscar os cronogramas:", error);
-      }
+
     })();
   }, []);
+        
+  
 
+
+    
   // Função para registrar um novo cronograma ou editar um existente
   async function handleRegister() {
     if (req.id === -1) {
