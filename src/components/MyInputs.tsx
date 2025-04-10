@@ -97,4 +97,4 @@ const MyCheck: React.FC<MyCheckProps> = ({ label, checked, onToggle }) => {
   );
 };
 
-export { Myinput, };
+export { Myinput, MyCheck, MyTextArea };
