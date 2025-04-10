@@ -7,13 +7,33 @@ import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs';
 import { MyItem, MyCorrelated } from '../src/components/MyItem';
 import MyList from '../src/components/MyList';
 import { useRouter } from 'expo-router';
-import {setRecord, iRecord } from '../src/controllers/records'
+import {setRecord, iRecord, getRecords } from '../src/controllers/records'
 import { supabase } from '../src/utils/supabase';
 
 export default function RecordScreen() {
-    const router = useRouter();
+    const [isChecked, setIsChecked] = useState(true);
+
     const [records, setRecords] = useState<iRecord[]>([]);
     
+    useEffect (() => {
+        async function getTodos() {
+            const retorno = await  getRecords ({})
+            if (retorno.status && retorno.data && retorno.data.length > 0){
+                setRecords(retorno.data);
+
+            }
+        }
+        getTodos();
+    })
+
+
+    
+
+
+
+
+
+
 
 
     const [req, setReq] = useState({
@@ -28,6 +48,7 @@ export default function RecordScreen() {
         create_at: new Date().toISOString(),
     });
 
+    /* Já puxei esse código no controller
     useEffect(() => {
         async function getTodos () {
             const { data: todos } = await supabase.from ('records').select()
@@ -40,7 +61,7 @@ export default function RecordScreen() {
         
         getTodos()
 
-    }, [])
+    }, [])*/
 
    async function handleRegister() {
         if (req.id == -1) {

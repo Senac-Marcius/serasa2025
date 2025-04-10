@@ -34,15 +34,15 @@ export async function setRecord(record: iRecord) {
 }
 
 // BUSCAR TODOS OS REGISTROS
-export async function getRecords() {
-    const { data, error } = await supabase.from('records').select();
+export async function getRecords(params: any ) {
+    const { data: todos, error } = await supabase.from('records').select();
 
     if (error) {
         console.error('Erro ao buscar records: ', error);
-        return [];
+        return {status: false, error:error };
     }
 
-    return data;
+    return {status: true, data: todos};
 }
 
 // ATUALIZAR REGISTRO
