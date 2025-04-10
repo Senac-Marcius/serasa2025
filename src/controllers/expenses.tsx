@@ -12,7 +12,15 @@ interface iexpenses {
     user_id: number,
 }
 
+async function getExpense(params:any) {
+  const {data: todos, error }= await supabase.from('expenses').select()
 
+  if(error)
+    return{status:false, error: error}
+
+    return{status:true, data: todos}
+}
+  
 
 async function setExpense (expense:iexpenses){
 
@@ -61,4 +69,4 @@ async function updateExpense(expense: iexpenses) {
 }
 
 
-    export{setExpense, delRegister, updateExpense, iexpenses}
+    export{setExpense, delRegister, updateExpense, iexpenses, getExpense}

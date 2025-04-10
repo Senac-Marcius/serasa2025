@@ -6,7 +6,7 @@ import MyView from '../src/components/MyView';
 import MyButton from '../src/components/MyButtons'
 import {Myinput, MyTextArea} from '../src/components/MyInputs';
 import { useRouter } from 'expo-router';
-import { setExpense, delRegister, updateExpense, iexpenses } from '../src/controllers/expenses';
+import { setExpense, delRegister, updateExpense, iexpenses, getExpense } from '../src/controllers/expenses';
 import { supabase } from '../src/utils/supabase';
 import Mytext from '../src/components/MyText'
 
@@ -30,15 +30,14 @@ export default function ExpenseScreen(){
     const [expense,setExpenses] = useState< iexpenses[]>([]);
 
     useEffect(()=>{
-        async function getTodos(){
-            const {data: todos}= await supabase.from('expenses').select()
-
-            if(todos && todos.length > 0){
-                setExpenses(todos)
-            }
+        async function getAll(){
+            const retorno = await getExpense({})
+            if(retorno.status && retorno.data && retorno.data.length > 0){
+                setExpenses(retorno.data)}
         }
 
-        getTodos();
+        getAll();
+        
     },[])
     
 
