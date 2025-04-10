@@ -4,6 +4,8 @@ import { DatePickerModal } from 'react-native-paper-dates';
 import { FaCalendarDays } from "react-icons/fa6";
 import { Myinput } from "./MyInputs";
 
+const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+
 /*interface MyCalendarProp { //teste aula
     style: ViewStyle;
     children: ReactNode;
@@ -78,3 +80,4 @@ const MyCalendar2 = () => { //teste aula
 }*/
 
 export default MyCalendar
+//CORRETO
