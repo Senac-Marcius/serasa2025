@@ -4,8 +4,12 @@ import { Link } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import MyNotify from './MyNotify';
 import MyMenu from './MyMenu';
-
-const MyTopbar: React.FC = () => {
+import { Router } from 'expo-router';
+interface MySearchProps { 
+  title?: string;  
+  router?: Router;
+}
+const MyTopbar: React.FC< MySearchProps > = ({title, router}) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
