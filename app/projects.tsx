@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'; // Esta importando da biblioteca do react para atualizar automaticamente 
-import { StyleSheet, View, FlatList, TouchableOpacity, } from 'react-native'; 
+import { StyleSheet, View, TouchableOpacity, } from 'react-native'; 
 import MySearch from '../src/components/MySearch';
 import MyButton from '../src/components/MyButtons';
 import Mytext from '../src/components/MyText';
@@ -12,6 +12,7 @@ import { iProject , setProject, updateProject, deleteProject } from '../src/cont
 import { supabase } from '../src/utils/supabase';
 import { MyItem } from '../src/components/MyItem';
 import { Picker } from '@react-native-picker/picker';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 
 // Esse é o Projeto Correto 
 
@@ -318,30 +319,61 @@ const parseCurrencyInput = (text: string): number => {
                         </View>
                     </View> 
 
-                    
-                    
-                    <MyList
+                </View>   
+                <View style={styles.listContainer}> 
+                    <MyList 
                         data={projects}
                         keyItem={(item) => item.id.toString()}
                         renderItem={({ item }) => (
-                            
+                        // Container estilizado para cada item da lista
                             <MyItem style={styles.projectContainer}
-                                onDel={ () =>  dellProject( item.id)}
-                                onEdit={ () =>  editProject(item.id)}
-                            > 
-                                <Mytext style={styles.projectText}> Criador: {item.name} </Mytext>
-                                <Mytext style={styles.projectText}> Nome do Projeto: {item.namep} </Mytext> 
-                                <Mytext style={styles.projectText}> Url: {item.url} </Mytext>
-                                <Mytext style={styles.projectText}> Numero do Usuario: {item.user_id} </Mytext>
-                                <Mytext style={styles.projectText}> Recursos: {item.recurces} </Mytext>
-                                <Mytext style={styles.projectText}> Descrição: {item.description} </Mytext>
-                                <Mytext style={styles.projectText}> Atividade: {item.activity} </Mytext>
-                                <Mytext style={styles.projectText}> Tempo Esperado: {item.timeline} </Mytext>
-                                <Mytext style={styles.projectText}> Objetivo: {item.objective} </Mytext>
-                                <Mytext style={styles.projectText}> Metodologia: {item.techniques} </Mytext>
-                                <Mytext style={styles.projectText}> Metodologia: {item.process} </Mytext>
-                                <Mytext style={styles.projectText}> Metodologia: {item.strategies} </Mytext>
-                                <Mytext style={styles.projectText}> Metodologia: {item.planning} </Mytext>
+                                onDel={() => dellProject(item.id)}
+                                onEdit={() => editProject(item.id)}
+                            >
+                                {/* Agrupamento e identificação de cada campo com rótulo claro */}
+                                <View style={styles.projectGroup}>
+                                <Mytext style={styles.projectLabel}>👤 Criador:</Mytext>
+                                <Mytext style={styles.projectText2}>{item.name}</Mytext>
+                                </View>
+
+                                <View style={styles.projectGroup}>
+                                <Mytext style={styles.projectLabel}>📌 Nome do Projeto:</Mytext>
+                                <Mytext style={styles.projectText2}>{item.namep}</Mytext>
+                                </View>
+
+                                <View style={styles.projectGroup}>
+                                <Mytext style={styles.projectLabel}>🔗 URL:</Mytext>
+                                <Mytext style={styles.projectText2}>{item.url}</Mytext>
+                                </View>
+
+                                <View style={styles.projectGroup}>
+                                <Mytext style={styles.projectLabel}>🧑‍💻 Usuário:</Mytext>
+                                <Mytext style={styles.projectText2}>#{item.user_id}</Mytext>
+                                </View>
+
+                                <View style={styles.projectGroup}>
+                                <Mytext style={styles.projectLabel}>💰 Recursos:</Mytext>
+                                <Mytext style={styles.projectText2}>{item.recurces}</Mytext>
+                                </View>
+
+                                <View style={styles.projectGroup}>
+                                <Mytext style={styles.projectLabel}>📝 Descrição:</Mytext>
+                                <Mytext style={styles.projectText2}>{item.description}</Mytext>
+                                </View>
+
+                                <View style={styles.projectGroup}>
+                                <Mytext style={styles.projectLabel}>🎯 Objetivo:</Mytext>
+                                <Mytext style={styles.projectText2}>{item.objective}</Mytext>
+                                </View>
+
+                                {/* Grupo visual para campos relacionados à metodologia */}
+                                <View style={styles.projectGroup}>
+                                <Mytext style={styles.projectLabel}>🧪 Metodologia:</Mytext>
+                                <Mytext style={styles.projectText2}>Técnicas: {item.techniques}</Mytext>
+                                <Mytext style={styles.projectText2}>Processos: {item.process}</Mytext>
+                                <Mytext style={styles.projectText2}>Estratégias: {item.strategies}</Mytext>
+                                <Mytext style={styles.projectText2}>Planejamento: {item.planning}</Mytext>
+                                </View>
                             </MyItem>
                         )}
                     />
@@ -356,7 +388,21 @@ const parseCurrencyInput = (text: string): number => {
 
 const styles = StyleSheet.create({
     
+    projectLabel: {
+        fontSize: 14,
+        fontWeight: '600',      // Deixa o rótulo com destaque
+        color: '#555',          // Cor neutra para contraste
+    },
     
+    projectGroup: {
+        marginBottom: 10,       // Espaço entre grupos de informações
+    },
+    
+    projectText: {
+        fontSize: 14,
+        color: '#333',
+    },
+      
     contentContainer: {
         padding: 20,
         alignItems: 'center',
@@ -415,7 +461,7 @@ const styles = StyleSheet.create({
     },
 
     projectContainer: {
-        marginBottom: 15,        // Espaço entre os projetos
+        marginBottom: 40,        // Espaço entre os projetos
         padding: 10,             // Espaçamento interno
         backgroundColor: '#FFF', // Fundo branco para cada projeto
         borderRadius: 8,         // Bordas arredondadas
@@ -425,7 +471,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column', // Coloca os itens de um projeto em uma coluna
     },
 
-    projectText: {
+    projectText2: {
         fontSize: 14,
         color: '#333',           // Cor do texto
         marginBottom: 5,         // Espaço entre os textos
@@ -462,5 +508,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 
-
+    listContainer: {
+        flex: 1, // Faz a lista ocupar todo o espaço restante abaixo do formulário
+        width: '100%',
+      },
 });
