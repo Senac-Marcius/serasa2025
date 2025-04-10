@@ -115,7 +115,7 @@ export default function ScaleScreen(){
 
     return (
         <MyView router={router} > {/* Aqui é typecript dentro do html*/}
-            <Mytext>CRIE SUA ESCALA</Mytext>
+            <Mytext style={styles.Mytext}>CRIE SUA ESCALA </Mytext>
             <MyFilter
                 style={styles.container}
                 itens={['day', 'starttime']}
@@ -125,19 +125,19 @@ export default function ScaleScreen(){
 
             <View>
                 <View style={styles.form}>
+                    <Mytext style={styles.Mytext}>Dia Selecionado:📅 {selectedDay || 'Nenhum dia selecionado'}</Mytext>
                     <MySelect
                         label={selectedDay || 'Selecione um dia da semana'}
                         list={daysOfWeek}
                         setLabel={handleSetLabel}
                     />
-                    <Mytext>Dia Selecionado:📅 {selectedDay || 'Nenhum dia selecionado'}</Mytext>
 
-                    <Mytext>Horario de início:▶</Mytext>
+                    <Mytext style={styles.Mytext}>Horario de início:▶</Mytext>
                     <MyTimerPicker
                          initialTime={req.start_time}
                         onTimeSelected={(time) => setReq({ ...req, start_time: time })}
                     />
-                    <Mytext>Horario de término:⏹</Mytext>
+                    <Mytext style={styles.Mytext}>Horario de término:⏹</Mytext>
                     <MyTimerPicker
                         initialTime={req.end_time}
                         onTimeSelected={(time) => setReq({ ...req, end_time: time })}
@@ -176,9 +176,9 @@ export default function ScaleScreen(){
 const styles = StyleSheet.create({
     
     container: {
-        alignItems: 'flex-end',
+        alignItems: 'center',
         marginBottom: 20,
-        paddingHorizontal: 50,
+        paddingHorizontal: 20,
         backgroundColor: '#FFFFFF',
         justifyContent: 'center',  
         rowGap: 10,
@@ -186,7 +186,8 @@ const styles = StyleSheet.create({
         width: 'auto',
     },
     Mytext:{
-        justifyContent: 'center'
+        textAlign: 'center',
+        fontSize: 20,
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -212,14 +213,15 @@ const styles = StyleSheet.create({
         marginBottom: 200,
     }, 
     form: {
-        flex: 1,
-        marginRight: 5,
-        padding: 5,
-        backgroundColor: '#FFFFFF',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },  
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 20,
+      paddingHorizontal: 20, // controla o "comprimento" do botão
+      paddingVertical: 10,   // adiciona altura
+      backgroundColor: '#FFFFFF',
+      borderRadius: 8,       // opcional: bordas arredondadas
+      width: 'auto',         // importante para manter o botão ajustado ao conteúdo
+      alignSelf: 'center',   // centraliza horizontalmente dentro do container
     },
     input: {
         height: 40,
