@@ -4,7 +4,6 @@ import MyTopbar from './MyTopbar';
 import MySupport from './MySupport';
 import { Router } from 'expo-router';
 import MyAccessibility from './MyAccessibility';
-import { TouchableOpacityComponent } from 'react-native';
 
 
 interface MySearchProps {
