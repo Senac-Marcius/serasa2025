@@ -5,7 +5,7 @@ import MyButton from '../src/components/MyButtons';
 import Mytext from '../src/components/MyText';
 import MyView from '../src/components/MyView';
 import MyList from '../src/components/MyList';
-import { Myinput, MyTextArea } from '../src/components/MyInputs';
+import { Myinput, MyTextArea  } from '../src/components/MyInputs';
 import { useRouter } from 'expo-router';
 import MyCalendar from '../src/components/MyCalendar';
 import { iProject , setProject, updateProject, deleteProject } from '../src/controlador/projects';
@@ -324,6 +324,7 @@ const parseCurrencyInput = (text: string): number => {
                     <MyList 
                         data={projects}
                         keyItem={(item) => item.id.toString()}
+                        numColumns={2}
                         renderItem={({ item }) => (
                         // Container estilizado para cada item da lista
                             <MyItem style={styles.projectContainer}
@@ -369,7 +370,7 @@ const parseCurrencyInput = (text: string): number => {
                                 {/* Grupo visual para campos relacionados à metodologia */}
                                 <View style={styles.projectGroup}>
                                 <Mytext style={styles.projectLabel}>🧪 Metodologia:</Mytext>
-                                <Mytext style={styles.projectText2}>Técnicas: {item.techniques}</Mytext>
+                                <Mytext style={styles.projectText2}> Técnicas: {item.techniques}</Mytext>
                                 <Mytext style={styles.projectText2}>Processos: {item.process}</Mytext>
                                 <Mytext style={styles.projectText2}>Estratégias: {item.strategies}</Mytext>
                                 <Mytext style={styles.projectText2}>Planejamento: {item.planning}</Mytext>
@@ -450,7 +451,7 @@ const styles = StyleSheet.create({
     },
 
     form: {
-        width: '80%',
+        width: '100%',
         padding: 20,
         backgroundColor: '#F2F2F2',
         borderRadius: 10,
@@ -458,6 +459,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
+        alignSelf: 'center',
     },
 
     projectContainer: {
