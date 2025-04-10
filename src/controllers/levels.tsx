@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import { supabase } from '../utils/supabase'
+
 export interface iLevels{
     name: string,
     description: string,
@@ -26,21 +27,14 @@ const { data, error } = await supabase.from('levels')
 
         // BUSCAR TODOS OS REGISTROS
 
-export async function getLevels() {
-        
-    const { data, error } = await supabase.from('levels').select();
- 
-    if (error) {
-
-        console.error('Erro ao buscar levels: ', error);
-
-    return [];
+export async function getLevels (params:any){
+    const { data: todos, error } = await supabase.from('levels').select();
+    if (error) 
+      return {status: false, error: error}
     
-    }
- 
-    return data;
-}
- 
+    
+    return {status: true, data: todos} 
+ }
         // ATUALIZAR REGISTRO
 
 export async function updateLevels(levels: iLevels) {

@@ -12,6 +12,8 @@ import {iLevels, setLevels, getLevels, updateLevels, deleteLevels} from '../src/
 
 export default function LevelsScreen() {
   const router = useRouter();
+  const [isChecked, setIsChecked] = useState(true);
+
   const [levels, setLevels] = useState<iLevels[]>([]);
 
   const [form, setForm] = useState({
@@ -22,11 +24,18 @@ export default function LevelsScreen() {
     created_at:  new Date().toISOString(),
   });
 
+
 useEffect(() => {
+  //aqui estamos carregando os lançamentos 
     async function fetchLevels() {
-      const { data } = await supabase.from('levels').select();
-      if (data) setLevels(data as iLevels[]);
+      const retorno = await getLevels({})
+      if (retorno.status && retorno.data && retorno.data.length > 0 ) {
+          setLevels(retorno.data); 
+      }
+
     }
+ 
+
     fetchLevels();
   }, []);
 
