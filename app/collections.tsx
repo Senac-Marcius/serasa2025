@@ -6,8 +6,8 @@ import MyView from '../src/components/MyView';
 import { Myinput } from '../src/components/MyInputs'
 import MyList from '../src/components/MyList'
 import { useRouter } from 'expo-router';
-import {setCollection, iCollection,deleteCollectionById,updateCollectionById} from '../src/controllers/collections';
-import { supabase } from '../src/utils/supabase'
+import {setCollection, iCollection,deleteCollectionById,updateCollectionById,getCollections} from '../src/controllers/collections';
+
 
 
 
@@ -30,15 +30,17 @@ export default function CollectionScreen() {
     useEffect(() =>{
         async function getTodos(){
 
-            const{data:todos} = await supabase.from('collections').select()
+            const retorno =await getCollections({})
             
-            if (todos && todos.length>0){
-                setCollections(todos)
+            if (retorno.status && retorno.data && retorno.data.length>0){
+                setCollections(retorno.data);
          }
     }
     getTodos()
 }, [])
 
+
+    
 
      async function handleRegister() {
         if (req.id == -1) {
@@ -183,7 +185,6 @@ const styles = StyleSheet.create({
 
     },
     formContainer: {
-        flex: 1,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -200,6 +201,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 1, height: 10 },
         shadowOpacity: 0.5,
         width: 400,
+       
     },
 
 

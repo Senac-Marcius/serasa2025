@@ -1,62 +1,97 @@
-import React, { useState,useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { MyModal_mobile1 } from '../src/components/MyModal';
 import MyButton from '../src/components/MyButtons';
 import MyView from '../src/components/MyView';
 import { Myinput } from '../src/components/MyInputs'
 import MyList from '../src/components/MyList'
 import { useRouter } from 'expo-router';
-import {setCollection, iCollection,deleteCollectionById,updateCollectionById} from '../src/controllers/collections';
+import { setCollection, iCollection, deleteCollectionById, updateCollectionById } from '../src/controllers/collections';
 import { supabase } from '../src/utils/supabase'
+
 
 
 export default function CollectionPreviewScreen() {
     const router = useRouter();
-     const[collections, setCollections] = useState<iCollection[]>([]);
-    
-        useEffect(() =>{
-            async function getTodos(){
-    
-                const{data:todos} = await supabase.from('collections').select()
-                
-                if (todos && todos.length>0){
-                    setCollections(todos)
-             }
+    const [collections, setCollections] = useState<iCollection[]>([]);
+
+    useEffect(() => {
+        async function getTodos() {
+
+            const { data: todos } = await supabase.from('collections').select()
+
+            if (todos && todos.length > 0) {
+                setCollections(todos)
+            }
         }
         getTodos()
     }, [])
     return (
-    <MyView router={router}>
-         <View>
-         <MyList // data faz um foreach (data recebe collections)
-                        data={collections}
-                        keyItem={(collections) => collections.id.toString()}
-                        renderItem={({ item }) => (
-                            <View style={styles.itemContainer}>
-                                <Text style={styles.itemText}>Nome: {item.name}</Text>
-                                <Text style={styles.itemText}>Quantidade: {item.quantity}</Text>
-                                <View style={styles.buttonsContainer}>
+        <MyView router={router}>
+            <View style={styles.homeBar} >
+                <Text style={styles.textTitle}>
+                    Seja bem vindo a nossa biblioteca
+                </Text>
+            </View>
+            <View style={styles.item}>
+                <FlatList
+                    data={collections}
+                    numColumns={2} // ← coloca em colunas
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <View style={styles.itemContainer}>
+                            <Text style={styles.itemText}>Nome: {item.name}</Text>
+                            <Text style={styles.itemText}>Quantidade: {item.quantity}</Text>
+                            <Text style={styles.itemText}>Estrelas: {item.quantity}</Text>
+                        </View>
+                    )}
+                    
+                />
 
-                                    <TouchableOpacity style={styles.button_round} onPress={() => { deleteCollections(item.id) }}>
-                                        <Text style={styles.buttonText}>X</Text>
-                                    </TouchableOpacity>
-
-                                    <TouchableOpacity style={styles.button_round} onPress={() => { editCollections(item.id) }}>
-                                        <Text style={styles.buttonText}>Edit</Text>
-
-                                    </TouchableOpacity>
-                                </View>
-                                <TouchableOpacity style={styles.button_round} onPress={() => router.push('/collectionsPreview')}>
-                                        <Text style={styles.buttonText}>Visite nosso acervo</Text>
-                                </TouchableOpacity>
-                            </View>
-                        )}
-                    />
-        </View>
-    </MyView>
-)}
+            </View>
+        </MyView >
+    )
+}
 
 const styles = StyleSheet.create({
+    contentContainerStyle:{
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 20,
+        paddingBottom: 100
+    },
+    lista: {
+        display: "flex",
+        flexDirection: "row",
+    },
+    teste: {
+        backgroundColor: "white",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+    },
+    homeBar: {
+        display: "flex",
+        textAlign: "center",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "purple",
+        height: 100,
+        width: "100%"
+
+    },
+    textTitle: {
+        color: 'white',
+        fontSize: 30,
+        marginBottom: 5,
+        justifyContent: "center",
+
+    },
+    item: {
+        display: "flex",
+        flexDirection: "row",
+
+    },
     button_round: {
         backgroundColor: "#813AB1",
         width: 100,
@@ -72,48 +107,18 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-
-    },
-    formContainer: {
-        flex: 1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-
-    form: {
-        marginRight: 10,
-        padding: 20,
-        borderRadius: 30,
-        backgroundColor: 'white',
-        borderColor: 'purple',
-        borderWidth: 0.1,
-        shadowColor: 'purple',
-        shadowOffset: { width: 1, height: 10 },
-        shadowOpacity: 0.5,
-        width: 400,
-    },
-
-
     itemContainer: {
         padding: 15,
         marginBottom: 5,
-        borderRadius: 30,
+        borderRadius: 15,
         backgroundColor: 'white',
         borderColor: 'purple',
         borderWidth: 0.1,
-        shadowColor: 'purple',
-        shadowOffset: { width: 1, height: 10 },
-        shadowOpacity: 0.5,
-        shadowRadius: 10,
         marginLeft: 50,
         marginRight: 50,
         marginTop: 50,
-        width: 500
+        width: 250,
+        height: 250
 
     },
 
