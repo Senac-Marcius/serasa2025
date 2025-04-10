@@ -9,9 +9,7 @@ interface iNotification{
         created_at: string,
         user_id: number,
     };
-    
 
-   
 async function setNotification(notification:iNotification){
     //aqui vem os tratamentos de regex ou do modelo de negócio antes de inserir
 
@@ -47,15 +45,13 @@ async function setNotification(notification:iNotification){
     return data
 }
 
- async function getNotifications() {
+ async function getNotifications(params:any) {
     const { data, error } = await supabase.from('notifications').select();
  
-    if (error) {
-        console.error('Erro ao buscar notifications: ', error);
-        return [];
-    }
+    if (error) 
+        return {status: false, erro: error}
  
-    return data;
+    return {status:true, data: todos}
 }
 
 async function updateNotification(notification: iNotification) {

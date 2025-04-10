@@ -26,10 +26,13 @@ export default function NotificationScreen(){
     
 
     useEffect(() => {
-        (async () => {
-            const todos = await getNotifications()
-            setNotifications(todos)
-        })()
+        async function getTodos(){
+            const retorno = await getNotifications({})
+            if (retorno.status && retorno.data && retorno.data.lenght > 0){
+                setNotifications(retorno.data);
+            }
+        }
+            getTodos();
     },[])
     
     
