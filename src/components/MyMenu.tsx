@@ -90,7 +90,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Records" route="records" icon="disc" />
         <MenuItem label="Revenues" route="revenues" icon="cash-outline" />
         <MenuItem label="Scales" route="scales" icon="speedometer" />
-        <MenuItem label="Schedules" route="schedules" icon="calendar" />
+        <MenuItem label="Timelines" route="timelines" icon="calendar" />
         <MenuItem label="Students" route="students" icon="school" />
         <MenuItem label="Users" route="users" icon="person-circle" />
       </ScrollView>
