@@ -8,8 +8,8 @@ import { Myinput, MyTextArea } from '../src/components/MyInputs';
 import {MyItem} from '../src/components/MyItem';
 import Mytext from '../src/components/MyText';
 import { useRouter } from 'expo-router';
-import {iRevenue,setRevenue, deleteRevenue, updateRevenue} from '../src/controllers/revenues'
-import { supabase } from '../src/utils/supabase';
+import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '../src/controllers/revenues'
+
 import MySelect from '../src/components/MySelect';
 
 export default function RevenueScreen() {
@@ -32,15 +32,17 @@ const [revenues, setRevenues] = useState<iRevenue[]>([]);
 
 useEffect(()=>{
   async function getTodos(){
-    const{data:todos}=await supabase.from('revenues').select()
+    const retorno = await getRevenues({})
 
-    if(todos && todos.length > 0){
-      setRevenues(todos)
+    if(retorno.status && retorno.data && retorno.data?.length > 0){
+      setRevenues(retorno.data);
     }
   }
   getTodos();
 },[])
  
+  // aqui estamos carregando os alunos
+  
   
 
   // Função para cadastrar ou editar uma receita
@@ -218,7 +220,7 @@ useEffect(()=>{
               
               <Mytext style={styles.revenueText}>Desconto: {item.discount_percentage}%</Mytext>
              
-              <Mytext style={styles.revenueText}>Valor: {item.value}</Mytext> 
+              <Mytext style={styles.revenueText}>Valor R$: {item.value}</Mytext> 
               
               <Mydownload style={styles.revenueTexts} url={item.url} />
 

@@ -14,9 +14,17 @@ interface iRevenue{
     user_id: number;
 }
 
+async function getRevenues(params:any) {
+    const {data: todos, error} = await supabase.from('revenues').select();
+    
+    if (error)
+        return {status: false, error: error}
+    
+    return {status:true, data: todos}
+    
+}
 
-// Estado para a lista de receitas
-
+// aqui estamos carregando os alunos
 
 
 
@@ -158,4 +166,4 @@ async function updateRevenue(revenue: iRevenue) {
 
 
 
-export {setRevenue, iRevenue, deleteRevenue, updateRevenue }
+export {setRevenue, iRevenue, deleteRevenue, updateRevenue, getRevenues }
