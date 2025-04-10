@@ -1,32 +1,43 @@
-import React, { useState } from 'react'; // Esta importando da biblioteca do react para atualizar automaticamente 
-import { StyleSheet, View, FlatList, TouchableOpacity, } from 'react-native'; 
-import MySearch from '../src/components/MySearch'
-import {MyTextArea } from '../src/components/MyInputs'
+import React, { useEffect, useState } from 'react'; // Esta importando da biblioteca do react para atualizar automaticamente 
+import { StyleSheet, View, TouchableOpacity, } from 'react-native'; 
+import MySearch from '../src/components/MySearch';
 import MyButton from '../src/components/MyButtons';
 import Mytext from '../src/components/MyText';
 import MyView from '../src/components/MyView';
-import { Myinput } from '../src/components/MyInputs';
+import MyList from '../src/components/MyList';
+import { Myinput, MyTextArea  } from '../src/components/MyInputs';
 import { useRouter } from 'expo-router';
+import MyCalendar from '../src/components/MyCalendar';
+import { iProject , setProject, updateProject, deleteProject } from '../src/controllers/projects';
+import { supabase } from '../src/utils/supabase';
+import { MyItem } from '../src/components/MyItem';
+import { Picker } from '@react-native-picker/picker';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 
-export default function ProjectScreen(){
-    interface Project {
-        name: string;
-        namep: string;
-        id: number;
-        url: string;
-        createAt: string;
-        userId: number;
-        recurces: number;
-        description: string;
-        activity: string;
-        timeline: string;
-        objective: string;
-        methodology: string;
-        techniques: string;
-        strategies: string;
-        planning: string;
-        process: string;
-    }
+// Esse é o Projeto Correto 
+
+
+export default function ProjectScreen(){ 
+    const[projects, setProjects] = useState<iProject[]>([]);
+
+    // Estado para a moeda escolhida e valor bruto digitado pelo usuário
+const [currency, setCurrency] = useState('BRL'); // Moeda selecionada (BRL, USD, EUR)
+const [rawRecurces, setRawRecurces] = useState(''); // Valor como string para exibir formatado
+
+// Função para formatar o número como moeda
+const formatCurrency = (value: number, currency: string = 'BRL') => {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: currency,
+    minimumFractionDigits: 2,
+  }).format(value);
+};
+
+// Função para converter texto do input em número (ex: 1.000,50 => 1000.5)
+const parseCurrencyInput = (text: string): number => {
+  const cleanText = text.replace(/[^\d,]/g, '').replace(',', '.'); // remove tudo exceto dígitos e vírgula
+  return parseFloat(cleanText) || 0;
+};
 
 // Aqui é typescript
     const [req, setReq] = useState ({
@@ -34,12 +45,12 @@ export default function ProjectScreen(){
         namep: '',
         id: -1,
         url: '',
-        createAt: new Date().toISOString(),
-        userId: 0,
+        created_at: new Date().toISOString(),
+        user_id: 1,
         recurces: 0,
         description: '',
         activity: '',
-        timeline: '',
+        time_line: '',
         objective: '',
         methodology: '',
         techniques: '', 
@@ -48,17 +59,42 @@ export default function ProjectScreen(){
         process:'',
     });
 
-    const [ projects, setProjects ] = useState<Project[]>([]);
+    useEffect(() => {
+        async function getTodos() {
+          const { data: todos } = await supabase.from('projects').select()
+    
+          if ( todos && todos.length > 0) {
+            setProjects(todos)
+          }
+        }
+    
+        getTodos()
+      }, [])
 
-    function handleRegister(){
 
+    const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+    const [busca, setBusca] = useState('');
+    const router = useRouter();
+
+    interface CalendarDate {
+        year: number;
+        month: number;
+        day: number;
+    }
+
+    async function handleRegister(){
         if(req.id == -1){ //aqui é quando esta cadastrando
             const newid = projects.length ? projects[projects.length -1].id + 1 : 0;
             const newProjects = { ...req, id: newid };
 
+            console.log("Cadastrando no Supabase:", newProjects);
+
             setProjects([... projects, newProjects])
+            await setProject(newProjects)
+        
         }else{ //aqui é quando esta editando id esta maior do que -1
-            setProjects(projects.map(jTNL => (jTNL.id == req.id)? req : jTNL )); 
+            setProjects(projects.map(jTNL => (jTNL.id == req.id)? req : jTNL ));
+            await updateProject(req); 
         }
         
         setReq({
@@ -66,19 +102,18 @@ export default function ProjectScreen(){
             namep: '',
             id: -1,
             url: '',
-            createAt: new Date().toISOString(),
-            userId: 0,
+            created_at: new Date().toISOString(),
+            user_id: 1,
             recurces: 0,
             description: '',
             activity: '',
-            timeline: '',
+            time_line: '',
             objective: '',
             methodology: '',
-            techniques: '', // Tecnicas 
-            strategies: '', // Estratégias
-            planning: '', // Planejamento 
-            process: '', // processos
-            /** Criar Processos, tecnicas, Estratégias e Planejamento aqui e puxar la embaixo para poder funcionar  */
+            techniques: '', 
+            strategies: '', 
+            planning: '',
+            process:'',
         })
 
     }
@@ -87,12 +122,16 @@ export default function ProjectScreen(){
         const project = projects.find(item => item.id == id)
         if(project)
             setReq(project)
+
+        console.log("Dados enviados para o Supabase:", projects);
     }
 
-    function dellProject(id: number){
+    async function dellProject(id: number){
         const list = projects.filter((item) => item.id !== id);
         setProjects(list);
+        await deleteProject(id);
 
+        
     }
 
     function adicionarProtocolo(url: string){
@@ -102,12 +141,14 @@ export default function ProjectScreen(){
         return url;
     }
 
-    function buscar(){
-
+    function buscar() {
+        const resultado = projects.filter((p) => 
+            p.name.toLowerCase().includes(busca.toLowerCase()) ||
+            p.namep.toLowerCase().includes(busca.toLowerCase())
+        );
+        console.log("Resultados da busca:", resultado);
     }
-
-    const router = useRouter();
-    const [busca, setBusca] = useState('')
+    
     // Criando o textinput para receber e exibir o texto "placeholder" para o usuario digitar
     return ( // Esta sendo feito um emcapsulamento com a abertura da () / {req.description}= usado para mostar o codigo em baixo
         <MyView router={router} >
@@ -123,7 +164,7 @@ export default function ProjectScreen(){
                 <Mytext style={styles.title}>PROJETOS</Mytext>
             
                 {/* Aqui é typescript dentro do front */}
-                <Mytext>  Responda de Maneira Objetiva  </Mytext>
+                <Mytext> ✨ Vamos Inovar ✨ </Mytext>
                 <View style={styles.row}> 
                         
                     <View style={styles.form}>
@@ -153,23 +194,57 @@ export default function ProjectScreen(){
                             onChangeText={(text) => setReq({ ...req, url: adicionarProtocolo(text) })}
                         />
                         
-                        <Mytext  style={styles.label}> Previsão de Inicio: </Mytext>
+                        <Mytext style={styles.label}> Recursos: </Mytext>
                         <Myinput
-                            iconName=''
-                            label =''
-                            placeholder=""
-                            value={req.createAt}
-                            onChangeText={(text) => setReq({ ...req, createAt: text })}
+                        iconName=""
+                        label=""
+                        placeholder="Digite o valor..."
+                        value={rawRecurces} // Mostra valor formatado
+                        onChangeText={(text) => {
+                            setRawRecurces(text); // Salva o valor como string
+                            const parsed = parseCurrencyInput(text);
+                            setReq({ ...req, recurces: parseCurrencyInput(text) }); // Atualiza como número para salvar no Supabase
+                        }}
                         />
-                        
+
+                        <Mytext style={[styles.label, { marginTop: 10 }]}> Moeda: </Mytext>
+
+                        <Picker
+                            selectedValue={currency}
+                            style={{ marginBottom: 15 }}
+                            onValueChange={(itemValue) => setCurrency(itemValue)}
+                            >
+                            <Picker.Item label="R$ - Real" value="BRL" />
+                            <Picker.Item label="$ - Dólar" value="USD" />
+                            <Picker.Item label="€ - Euro" value="EUR" />
+                        </Picker>
+
+
+                        <Mytext style={styles.label}>Previsão de Início:</Mytext>
+                        <MyCalendar
+                            date={date} setDate={setDate} icon="FaCalendarDays" 
+                        />
+
                         <Mytext style={styles.label}> Periodo Esperado: </Mytext>
-                        <Myinput
-                            iconName=''
-                            label =''
-                            placeholder=""
-                            value={req.timeline}
-                            onChangeText={(text) => setReq({ ...req, timeline: text })}
-                        />
+                        <View style={styles.row}>
+                            <View style={{ flex: 1, marginRight: 5 }}>
+                                <Mytext style={[styles.label, { fontSize: 18, fontWeight: '600' }]}>Início</Mytext>
+                                <MyCalendar
+                                date={date} // usa o mesmo estado
+                                setDate={setDate} // mesma função
+                                icon="FaCalendarDays"
+                                />
+                            </View>
+
+                            <View style={{ flex: 1, marginLeft: 5 }}>
+                                <Mytext style={[styles.label, { fontSize: 18, fontWeight: '600' }]}>Término</Mytext>
+                                <MyCalendar
+                                date={date} // mesmo estado novamente
+                                setDate={setDate} // mesma função
+                                icon="FaCalendarDays"
+                                />
+                            </View>
+                        </View>
                         
                         <Mytext style={styles.label}> Descrição: </Mytext>
                         <Myinput
@@ -244,33 +319,63 @@ export default function ProjectScreen(){
                         </View>
                     </View> 
 
-                    
-                    
-                    <FlatList
+                </View>   
+                <View style={styles.listContainer}> 
+                    <MyList 
                         data={projects}
-                        keyExtractor={(item) => item.id.toString()}
+                        keyItem={(item) => item.id.toString()}
+                        numColumns={2}
                         renderItem={({ item }) => (
-                            <View style={styles.projectContainer}> 
-                                <Mytext style={styles.projectText}> Criador: {item.name} </Mytext>
-                                <Mytext style={styles.projectText}> Nome do Projeto: {item.namep} </Mytext> 
-                                <Mytext style={styles.projectText}> Url: {item.url} </Mytext>
-                                <Mytext style={styles.projectText}> Numero do Usuario: {item.userId} </Mytext>
-                                <Mytext style={styles.projectText}> Recursos: {item.recurces} </Mytext>
-                                <Mytext style={styles.projectText}> Descrição: {item.description} </Mytext>
-                                <Mytext style={styles.projectText}> Atividade: {item.activity} </Mytext>
-                                <Mytext style={styles.projectText}> Tempo Esperado: {item.timeline} </Mytext>
-                                <Mytext style={styles.projectText}> Objetivo: {item.objective} </Mytext>
-                                <Mytext style={styles.projectText}> Metodologia: {item.methodology} </Mytext>
-
-                                <View style={styles.buttonsContainer}>
-                                    <TouchableOpacity style={styles.buttonEdit} onPress={ () =>  editProject(item.id) }>  
-                                        <Mytext style={styles.buttonText}>EDIT</Mytext>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={styles.buttonDelete} onPress={ () =>  dellProject( item.id)}>  
-                                        <Mytext style={styles.buttonText}>DELETE</Mytext>
-                                    </TouchableOpacity>
+                        // Container estilizado para cada item da lista
+                            <MyItem style={styles.projectContainer}
+                                onDel={() => dellProject(item.id)}
+                                onEdit={() => editProject(item.id)}
+                            >
+                                {/* Agrupamento e identificação de cada campo com rótulo claro */}
+                                <View style={styles.projectGroup}>
+                                <Mytext style={styles.projectLabel}>👤 Criador:</Mytext>
+                                <Mytext style={styles.projectText2}>{item.name}</Mytext>
                                 </View>
-                            </View>
+
+                                <View style={styles.projectGroup}>
+                                <Mytext style={styles.projectLabel}>📌 Nome do Projeto:</Mytext>
+                                <Mytext style={styles.projectText2}>{item.namep}</Mytext>
+                                </View>
+
+                                <View style={styles.projectGroup}>
+                                <Mytext style={styles.projectLabel}>🔗 URL:</Mytext>
+                                <Mytext style={styles.projectText2}>{item.url}</Mytext>
+                                </View>
+
+                                <View style={styles.projectGroup}>
+                                <Mytext style={styles.projectLabel}>🧑‍💻 Usuário:</Mytext>
+                                <Mytext style={styles.projectText2}>#{item.user_id}</Mytext>
+                                </View>
+
+                                <View style={styles.projectGroup}>
+                                <Mytext style={styles.projectLabel}>💰 Recursos:</Mytext>
+                                <Mytext style={styles.projectText2}>{item.recurces}</Mytext>
+                                </View>
+
+                                <View style={styles.projectGroup}>
+                                <Mytext style={styles.projectLabel}>📝 Descrição:</Mytext>
+                                <Mytext style={styles.projectText2}>{item.description}</Mytext>
+                                </View>
+
+                                <View style={styles.projectGroup}>
+                                <Mytext style={styles.projectLabel}>🎯 Objetivo:</Mytext>
+                                <Mytext style={styles.projectText2}>{item.objective}</Mytext>
+                                </View>
+
+                                {/* Grupo visual para campos relacionados à metodologia */}
+                                <View style={styles.projectGroup}>
+                                <Mytext style={styles.projectLabel}>🧪 Metodologia:</Mytext>
+                                <Mytext style={styles.projectText2}> Técnicas: {item.techniques}</Mytext>
+                                <Mytext style={styles.projectText2}>Processos: {item.process}</Mytext>
+                                <Mytext style={styles.projectText2}>Estratégias: {item.strategies}</Mytext>
+                                <Mytext style={styles.projectText2}>Planejamento: {item.planning}</Mytext>
+                                </View>
+                            </MyItem>
                         )}
                     />
                 </View>
@@ -283,6 +388,22 @@ export default function ProjectScreen(){
     <Button title='DELETE' /> - Esse botão não permite modificar a forma de vizualizar o botão*/ 
 
 const styles = StyleSheet.create({
+    
+    projectLabel: {
+        fontSize: 14,
+        fontWeight: '600',      // Deixa o rótulo com destaque
+        color: '#555',          // Cor neutra para contraste
+    },
+    
+    projectGroup: {
+        marginBottom: 10,       // Espaço entre grupos de informações
+    },
+    
+    projectText: {
+        fontSize: 14,
+        color: '#333',
+    },
+      
     contentContainer: {
         padding: 20,
         alignItems: 'center',
@@ -330,7 +451,7 @@ const styles = StyleSheet.create({
     },
 
     form: {
-        width: '80%',
+        width: '100%',
         padding: 20,
         backgroundColor: '#F2F2F2',
         borderRadius: 10,
@@ -338,10 +459,11 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
+        alignSelf: 'center',
     },
 
     projectContainer: {
-        marginBottom: 15,        // Espaço entre os projetos
+        marginBottom: 40,        // Espaço entre os projetos
         padding: 10,             // Espaçamento interno
         backgroundColor: '#FFF', // Fundo branco para cada projeto
         borderRadius: 8,         // Bordas arredondadas
@@ -351,7 +473,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column', // Coloca os itens de um projeto em uma coluna
     },
 
-    projectText: {
+    projectText2: {
         fontSize: 14,
         color: '#333',           // Cor do texto
         marginBottom: 5,         // Espaço entre os textos
@@ -362,9 +484,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
-        gap: 10,
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-     
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+        elevation: 3,
     },
 
     buttonEdit: {
@@ -386,5 +510,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 
-
+    listContainer: {
+        flex: 1, // Faz a lista ocupar todo o espaço restante abaixo do formulário
+        width: '100%',
+      },
 });

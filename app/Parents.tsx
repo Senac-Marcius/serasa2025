@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity} from 'react-native';
 import MyView from '../src/components/MyView';
-import MyUpload from '../src/components/MyUpload';
 import { useRouter } from 'expo-router';
 import { setParent,iParent,delParent,editParent,getTimeParents} from '../src/controllers/parentsController';
 import MyButton from '../src/components/MyButtons';
@@ -22,23 +21,16 @@ export default function ParentScreen (){
     const [parents,setParents] = useState<iParent[]>([])
 
     const [req, setReq] = useState({
-        id:-1,
-        name: '',
-        rg:'',
-        cpf:'',
-        age:'',
-        phone:'',
-        email:'',
-        kinship:'',
-        createat: new Date().toISOString(),
-        userid: 0,
+        Nome: '',
+        Email:'',
+        parentesco:'',
+        id:0,
+        createAt: new Date().toISOString(),
+        userId: 0,
 
     });
-    
 
-
-    /*Dados movidos para o controlador ↓↓↓
-        const [parents,setParents] = useState<{
+    const [parents,setParents] = useState<{
         Nome: string,
         Email: string,
         parentesco: string,
@@ -77,19 +69,16 @@ export default function ParentScreen (){
             setParents(parents.map(p => (p.id == req.id ? req : p)));
             await editParent(req)
         }
-    
+
+        //setParents([...parents, req])
         setReq({
-            id: -1,
-            name: '',
-            rg: '',
-            cpf: '',
-            age: '',
-            phone: '',
-            email: '',
-            kinship: '',
-            createat: new Date().toISOString(),
-            userid: 0,
-        });
+            id:req.id + 1,
+            Nome: '',
+            Email:'',
+            parentesco:'',
+            createAt: new Date().toISOString(),
+            userId: 0,
+        })
     }
    
 
@@ -119,68 +108,31 @@ export default function ParentScreen (){
     return (
         <MyView router={router} > {/*aqui é typeScript dentro do Front*/}
             {/*View → esse view é diferente do HTML ele contém DIVs e outros atributos,*/}
-            
+            <Text>Minha tela das postagens </Text>
             <View style = {styles.row}>
                 <View style={styles.form}>{/*View no Type pode ser usado para substituir o Form */}
                 {/*<FlatList/> → atibuto para possivel criação de lista */}
-                    <Myinput 
-                        placeholder="Digite"
-                        value={req.name}
-                        onChangeText={(text) => setReq({ ...req, name: text })}
-                        label='Nome do Aluno:'
-                        iconName='person'
+                    <TextInput 
+                        placeholder="Nome:"
+                        value={req.Nome}
+                        onChangeText={(Text) => setReq({...req, Nome: Text})}
             
                     />
-                    
-                    <Myinput
-                        placeholder="Digite"
-                        value={req.rg}
-                        onChangeText={(text) => setReq({ ...req, rg: text })}
-                        label='RG:'
-                        iconName='person'
+                    <TextInput
+                        placeholder="Email:"
+                        value={req.Email}
+                        onChangeText={(Text) => setReq({...req, Email: Text})}
                     />
-                    <Myinput
-                        placeholder="Digite"
-                        value={req.cpf}
-                        onChangeText={(text) => setReq({ ...req, cpf: text })}
-                        label='CPF:'
-                        iconName='person'
+                    <TextInput
+                        placeholder="Parentesco:"
+                        value={req.parentesco}
+                        onChangeText={(Text) => setReq({...req, parentesco: Text})}
                     />
-                    <Myinput
-                        placeholder="Digite"
-                        value={req.age}
-                        onChangeText={(text) => setReq({ ...req, age: text })}
-                        label='Idade:'
-                        iconName='calendar-today'
-                    />
-                    <Myinput
-                        placeholder="Digite"
-                        value={req.phone}
-                        onChangeText={(text) => setReq({ ...req, phone: text })}
-                        label='Telefone:'
-                        iconName='phone'
-                    />
-                    <Myinput
-                        placeholder="Digite"
-                        value={req.email}
-                        onChangeText={(text) => setReq({ ...req, email: text })}
-                        label='E-mail:'
-                        iconName='email'
-                    />
-                    <Myinput
-                        placeholder="Digite"
-                        value={req.kinship}
-                        onChangeText={(text) => setReq({ ...req, kinship: text })}
-                        label='Parentesco:'
-                        iconName='person-outline'
-                    />
-                   
-                    <MyButton
-                        title="CADASTRAR"
-                        onPress={handleRegister}
-                        button_type="round"
-                        style={styles.button_round}
-                    />
+                
+                    <Button 
+                        title='Cadastrar' 
+                        color='blue'
+                        onPress={handleRegister}/>
                    {/*foi aberto uma area de codigo chamar a variavel, equivale o inder do html*/}
                    {/*<Button 
                         title='Editar'
@@ -190,9 +142,6 @@ export default function ParentScreen (){
                         title='Deletar'
                         color='red'
                         onPress={delParent}/>*/}
-                    <View>
-                        <MyUpload setUrl={setDocument} url={urlDocument}/>
-                    </View>
                 </View>
                 
 
@@ -218,8 +167,7 @@ export default function ParentScreen (){
                         </MyItem>
                     )}
                 />
-                {/*parâmetro FlatList é parecido com o forEach do html. */}
-                
+                {/*parâmetro FlatList é parecido com o forEach do html */}
             </View>
 
         </MyView>
@@ -233,10 +181,9 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         flexDirection: 'row', 
         justifyContent: 'space-between', 
         alignItems: 'flex-start', 
-        alignSelf:'center',
     },
     form: {
-        flex: 25,
+        flex: 1,
         marginRight: 20,
         marginLeft:20,
         padding: 20,
@@ -248,7 +195,7 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         shadowRadius: 5,
     },
     parentsItem: {
-        flex: 10,
+        flex: 1,
         marginRight: 20,
         marginLeft:20,
         marginBottom:20,
@@ -264,15 +211,6 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         flexDirection:'row',
         alignItems: 'center',
         gap: 20,
-        alignContent: 'space-around',
-        width:500,
-    },
-    button_round: {
-        borderRadius: 20,
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "row",
-        gap: 10,
-        marginVertical: 5,
+        alignContent: 'space-around'
     },
 })
