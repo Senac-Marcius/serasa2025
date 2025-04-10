@@ -1,170 +1,235 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { ScrollView, View } from 'react-native';
 import { Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Button } from 'react-native';
-import MyTimerPicker  from '../src/components/MyTimerPicker'
+import MyTimePicker  from '../src/components/MyTimerPiker'
 import MyButton from '../src/components/MyButtons';
 import MyView from '../src/components/MyView';
-import MyItem from '../src/components/MyItem';
+import {MyItem} from '../src/components/MyItem';
 import MyList from '../src/components/MyList';
 import { Myinput,MyCheck } from '../src/components/MyInputs';
+import { useRouter } from 'expo-router';
+import { setEmployee,iEmployees,updateEmployee,dellEmployee } from '../src/controllers/employees';
+import { supabase } from '../src/utils/supabase';
 
 
 export default function EmployeeScreen(){
+    const [employees, setEmployees] = useState<iEmployees[]>([])
+    const router = useRouter();
 //aqui é typescript 
     const [req, SetReq] = useState({
-        id:0,
+        id: -1,
         urls:'',
         name:'',
-        datebirth:'',
+        date_birth:'',
         tell:'',
         email:'',
         address:'',
         nationality:'',
-        discPersonality:'',
+        disc_personality:'',
         cpf:'',
         sex:'',
-        martinalStatus:'',
-        position:'',
+        martinal_status:'',
         ethnicity:'',
         deficiency:'',
-        createAt: new Date().toISOString(),
-        isActive: false,
+        created_at: new Date().toISOString(),
+        is_active: '',
+        user_id: 1,
+        positions_id:1
         
     });
-    const [employees, setEmployees]= useState<{
-        id: number,
-        urls: string,
-        name: string,
-        datebirth: string,
-        tell: string,
-        email: string,
-        address: string,
-        nationality: string,
-        discPersonality: string,
-        cpf: string,
-        sex: string,
-        martinalStatus: string,
-        position: string,
-        ethnicity: string,
-        deficiency: string,
-        createAt: string,
-        isActive: boolean,}[]>([])
 
-        function handleRegister(){
-            setEmployees([...employees,req])
+      useEffect(() => {
+        
+        (async () => {
+          const { data: todos } = await supabase.from('employees').select()
+          console.log(todos);
+    
+          if ( todos && todos.length > 0) {
+            setEmployees(todos)
+          }
+        })();
+      }, [])
+   
+
+       async function handleRegister(){
+            if(req.id == -1){
+                const newId = employees.length ? employees[employees.length - 1].id + 1:0
+                const  newEmployee = {...req , id:newId}
+                setEmployees([...employees,newEmployee])
+                await setEmployee(newEmployee)
+            }else{
+                setEmployees(employees.map(e =>(e.id == req.id ? req:e))) 
+                await updateEmployee(req.id,req);
+                
+                
+            }
+            SetReq({
+                id: -1,
+                urls:'',
+                name:'',
+                date_birth:'',
+                tell:'',
+                email:'',
+                address:'',
+                nationality:'',
+                disc_personality:'',
+                cpf:'',
+                sex:'',
+                martinal_status:'',
+                ethnicity:'',
+                deficiency:'',
+                created_at: '',
+                is_active: '',
+                user_id : 1,
+                positions_id:1
+                })
             
         }
+        async function editEmployee(id:number){
+            let employee = employees.find(e => e.id == id)
+            if(employee){
+            SetReq(employee)
+            }   
+        }
+        async function deleteEmployee(id:number){
+            const list = employees.filter(e=> e.id != id)
+            if(list){
+                setEmployees(list);
+                await dellEmployee(id)
+            } 
+            
+    
+        }
 
+    
 
     return(
-        <View>
+        <MyView router={router}>
             {/* aqui é typescript dentro da front*/}
-            <Text>Hello world</Text>
+            <Text>Cadastro de Funcionários</Text>
+            
             <View style={style.row}>
-                <View style={style.form}>
-                    <TextInput
-                        placeholder='Pefril do likendin:'
+                <View  style={style.form}>
+                    <Myinput
                         value={req.urls}
                         onChangeText={(text) => SetReq({...req , urls:text})}
                         placeholder='insira uma url valida'
                         label='Perfil do likendin:'
                         iconName = 'link'
                     />
-                    {req.urls}
-                    <TextInput
-                        placeholder='Nome:'
+                    <Myinput
+                        label = 'Nome:'
+                        placeholder='Digite seu nome'
                         value={req.name}
                         iconName='badge'
                         onChangeText={(text) => SetReq({...req , name:text})}
                     />
-                    {req.name}
-                    <TextInput
-                        placeholder='Idade:'
-                        value={req.datebirth}
-                        onChangeText={(int) => SetReq({...req , datebirth:int})}
+                    <Myinput
+                        label = 'Data de Nascimento:'
+                        iconName='event'
+                        placeholder='Insira a data ANO/MES/DIA'
+                        value={req.date_birth}
+                        onChangeText={(int) => SetReq({...req , date_birth:int})}
                     />
-                    {req.datebirth}
-                    <TextInput
-                        placeholder='Telefone:'
+                    <Myinput
+                        label='Telefone:'
+                        iconName='call'
+                        placeholder='(XX) XXXXX-XXXX'
                         value={req.tell}
                         onChangeText={(int) => SetReq({...req , tell:int})}
                     />
-                    {req.tell}
-                    <TextInput
+                    <Myinput
                         placeholder='Email:'
                         iconName='email'
                         label='Email:'
                         value={req.email}
                         onChangeText={(text) => SetReq({...req , email:text})}
                     />
-                    {req.email}
-                    <TextInput
+                    <Myinput
+                        label='Endereço:'
+                        iconName='home'
                         placeholder='Endereço:'
                         value={req.address}
                         onChangeText={(text) => SetReq({...req , address:text})}
                     />
-                    {req.address}
-                    <TextInput
+                    <Myinput
+                        label='Nacionalidade:'
+                        iconName='person'
                         placeholder='Nacionalidade:'
                         value={req.nationality}
                         onChangeText={(text) => SetReq({...req , nationality:text})}
                     />
-                    {req.nationality}
-                    <TextInput
+                    <Myinput
+                        label='Personalidade:'
+                        iconName='stack'
                         placeholder='Personalidade:'
-                        value={req.discPersonality}
-                        onChangeText={(text) => SetReq({...req , discPersonality:text})}
+                        value={req.disc_personality}
+                        onChangeText={(text) => SetReq({...req , disc_personality:text})}
                     />
-                    {req.discPersonality}
-                    <TextInput
-                        placeholder='C.P.F:'
+                    <Myinput
+                        label='C.P.F:'
+                        iconName='badge'
+                        placeholder='XXX-XXX-XXX-XX'
                         value={req.cpf}
                         onChangeText={(int) => SetReq({...req , cpf:int})}
                     />
-                    {req.cpf}
-                    <TextInput
-                        placeholder='Genêro:'
+                    <Myinput
+                        label='Gênero:'
+                        iconName='badge'
+                        placeholder='Insira seu gênero'
                         value={req.sex}
                         onChangeText={(text) => SetReq({...req , sex:text})}
                     />
-                    {req.sex}
-                    <TextInput
+                    <Myinput
+                        label='Estado Civil:'
+                        iconName='favorite'
                         placeholder='Estado civil:'
-                        value={req.martinalStatus}
-                        onChangeText={(text) => SetReq({...req , martinalStatus:text})}
+                        value={req.martinal_status}
+                        onChangeText={(text) => SetReq({...req , martinal_status:text})}
                     />
-                    {req.martinalStatus}
-                    <TextInput
-                        placeholder='Cargo:'
-                        value={req.position}
-                        onChangeText={(text) => SetReq({...req , position:text})}
-                    />
-                    {req.position}
-                    <TextInput
-                        placeholder='Etnia:'
+                    <Myinput
+                        label='Etnia'
+                        iconName='face'
+                        placeholder='Insira a etnia'
                         value={req.ethnicity}
                         onChangeText={(text) => SetReq({...req , ethnicity:text})}
                     />
-                    {req.ethnicity}
-                    <TextInput
-                        placeholder='Deficiência:'
+                    <Myinput
+                        label='Deficiência:'
+                        iconName='diversity'    
+                        placeholder='Insira algo'
                         value={req.deficiency}
                         onChangeText={(text) => SetReq({...req , deficiency:text})}
                     />
-                    {req.deficiency}
-                    <TextInput
-                        placeholder='Está ativo:'
-                        value={req.isActive}
-                        onChangeText={(bool) => SetReq({...req , isActive:bool})}
+                    <MyTimePicker 
+                        onTimeSelected={(time) => SetReq({ ...req, is_active: time.toString() })}
+                        initialTime={req.is_active}
                     />
 
                     
                    <MyButton title='Cadastrar Funcionário' button_type ='round'  onPress={handleRegister}/>
                 </View>
                 
-
-            </View>
-        </View>
+                
+                <MyList
+                    data={employees}
+                    keyItem={(item)=> item.id.toString() }
+                    renderItem = {({item}) => (
+                
+                        <MyItem style={style.itemText}
+                         onDel={() => {deleteEmployee(item.id)}}
+                         onEdit={() => {editEmployee(item.id)}}
+                        >
+                        Nome:{item.name} / Cargo:{item.positions_id}
+                        ativo desde de:{item.is_active}
+                        </MyItem>
+                    )}
+                />
+                
+            </View>      
+        </MyView>
+       
+        
     );
 
     
@@ -174,26 +239,103 @@ const style = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
+
     },
+
     form: {
         flex: 1,
         marginRight: 10,
         padding: 20,
-        backgroundColor: '#F2F2F2',
+        backgroundColor: 'white',
         borderRadius: 10,
         shadowColor: '#000',
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
+        marginLeft: 50,
+        marginTop: 50,
+
     },
-    button:{
-        flex: 1,
-        marginRight: 10,
-        padding: 20,
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
+
+
+    itemContainer: {
+        padding: 15,
+        marginBottom: 5,
+        borderRadius: 30,
+        backgroundColor: 'white',
+        borderColor: 'purple',
+        borderWidth: 0.1,
+        shadowColor: 'purple',
+        shadowOffset: { width: 1, height: 10 },
+        shadowOpacity: 0.5,
+        shadowRadius: 10,
+        marginLeft: 50,
+        marginRight: 50,
+        marginTop: 50,
+        width: 500
+
+    },
+
+    itemText: {
+        color: 'black',
+        fontSize: 16,
+        marginBottom: 5,
+    },
+    input: {
+        height: 30,
+        borderColor: '#ddd',
+        borderWidth: 1,
+        borderRadius: 5,
+        marginBottom: 15,
+        paddingLeft: 10,
+        fontSize: 16,
+        backgroundColor: '#f9f9f9',
+    },
+
+    buttonsContainer: {
+        flexDirection: 'row',
+        gap: 20
+    },
+
+    deleteButton: {
+        backgroundColor: 'red', // Cor do botão de editar
+        paddingVertical: 12,
+        paddingHorizontal: 24,
+        borderRadius: 30, // Bordas arredondadas
+        marginBottom: 10,
+        alignItems: 'center',
+    },
+
+    editButton: {
+        backgroundColor: '#281259', // Cor do botão de editar
+        paddingVertical: 12,
+        paddingHorizontal: 24,
+        borderRadius: 30, // Bordas arredondadas
+        marginBottom: 10,
+        alignItems: 'center',
+
+    },
+    buttonText: {
+        color: '#fff', // Texto branco
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    inputContainer: {
+        marginBottom: 15, // Espaço entre os campos
+    },
+    label: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 5, // Espaço entre o nome do campo e o input
+        color: '#333', // Cor escura para o texto
+    },
+    inputs: {
+        height: 40,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingLeft: 10,
+        fontSize: 16,
+        backgroundColor: '#f9f9f9',
     }     
-})
+});

@@ -6,7 +6,9 @@ import Mytext from '../src/components/MyText';
 import {textStyles} from '../styles/textStyles';
 import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
-import MyItem from '../src/components/MyItem';
+import {MyItem} from '../src/components/MyItem';
+import { useRouter } from 'expo-router';
+
 
 export default function levelsScreen(){
     const [req, setReq] = useState({
@@ -60,8 +62,11 @@ export default function levelsScreen(){
         setleves(list)
     }
 
+    const router = useRouter();
+    
+
     return (
-        <MyView>
+        <MyView router={router} >
             
         {/* aqui é typerscrypt dentro do front */}
 

@@ -1,53 +1,63 @@
-import React, { useState, Children } from 'react';
-import { View, Text, StyleSheet, TextInput,TouchableOpacity, } from 'react-native' ;
-import {MyItem, MyCorrelated } from '../src/components/MyItem';
+import React, { useEffect, useState} from 'react';
+import { View, Text, StyleSheet } from 'react-native' ;
+import {MyItem} from '../src/components/MyItem';
 import MyList from '../src/components/MyList';
 import MyView from '../src/components/MyView';
 import MyButton from '../src/components/MyButtons'
 import {Myinput, MyTextArea} from '../src/components/MyInputs';
-import { ScrollView } from 'react-native-gesture-handler';
+import { useRouter } from 'expo-router';
+import { setExpense, delRegister, updateExpense, iexpenses } from '../src/controllers/expenses';
+import { supabase } from '../src/utils/supabase';
+
 
 export default function ExpenseScreen(){
 // aqui é typescript
     const [req, setReq] = useState({
-            contact:"",
-            name: '',
-            email: '',
-            description: '',
             id: -1,
-            cost: '',
-            creatAt : new Date(). toISOString(),
-            userId: 0,
+            created_at : new Date(). toISOString(),
+            name: '',
+            emails: '',
+            contacts:'',
+            costs: '',
+            descriptions: '',
+            user_id: 1,
     });
-    const [expense, setExpense ] = useState<{
-        contact: string,
-        name: string,
-        email: string,
-        description: string,
-        id: number,
-        cost: string,
-        creatAt: string,
-        userId: number,
-    }[]>([]) 
 
-    function handleRegister(){
+    const [expense,setExpenses] = useState< iexpenses[]>([]);
+
+    useEffect(()=>{
+        async function getTodos(){
+            const {data: todos}= await supabase.from('expenses').select()
+
+            if(todos && todos.length > 0){
+                setExpenses(todos)
+            }
+        }
+
+        getTodos();
+    },[])
+    
+
+    async function handleRegister(){
         if(req.id == -1){
             const newid = expense.length ? expense[ expense.length - 1].id + 1 :0;
             const newExpense = {...req, id:newid};
-            setExpense([...expense, newExpense]);
+            setExpenses([...expense, newExpense]);
+            await setExpense(newExpense)
         }else{
-            setExpense(expense.map(e => (e.id == req.id ? req : e)));
+            setExpenses(expense.map(e => (e.id === req.id ? req : e)));
+        await updateExpense(req); 
         }
 
         setReq({
-            contact:"",
+            id:-1 ,
+            created_at : new Date(). toISOString(),
             name: '',
-            email: '',
-            description: '',
-            id: -1,
-            cost: '',
-            creatAt : new Date(). toISOString(),
-            userId: 0,
+            emails: '',
+            contacts:'',
+            costs: '',
+            descriptions: '',
+            user_id: 1,
         });
        
         
@@ -57,33 +67,38 @@ export default function ExpenseScreen(){
         const expenses = expense.find(e => e.id == id )
         if(expenses)
             setReq(expenses)
+    };
+
+    async function delExpense(id:number){
+
+       delRegister(id)
+        const list = expense.filter(e => e.id != id);
+        if(list)
+            setExpenses(list)
     }
 
-    function delExpense(id:number){
-        const list = expense.filter(e => e.id != id)
-        if(list)
-            setExpense(list)
-    }
+            const router = useRouter();
+    
 
     return (
         
-        <MyView> 
+        <MyView router={router} > 
             {/* aqui é typecript dentro do front */}
             <Text style={styles.title}>tela de despesas</Text>
             <View style={styles.row}>
                 <View style={styles.form}>
                     <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text })} placeholder="Nome" label="Nomes:" iconName='' />
 
-                    <Myinput value={req.contact} onChangeText={(text) => setReq({ ...req, contact: text })} placeholder="(XX) XXXXX-XXXX" label="Contato:" iconName='phone' />    
+                    <Myinput value={req.contacts} onChangeText={(text) => setReq({ ...req, contacts: text })} placeholder="(XX) XXXXX-XXXX" label="Contato:" iconName='phone' />    
 
-                    <Myinput value={req.email} onChangeText={(text) => setReq({ ...req, email: text })} placeholder="domain@domain.com" label="Email:" iconName='mail' /> 
+                    <Myinput value={req.emails} onChangeText={(text) => setReq({ ...req, emails: text })} placeholder="domain@domain.com" label="Email:" iconName='mail' /> 
 
-                    <MyTextArea value={req.description} onChangeText={(text)=>setReq({...req ,description: text})} iconName='' placeholder='Descrição'   label=''/>
+                    <MyTextArea value={req.descriptions} onChangeText={(text)=>setReq({...req ,descriptions: text})} iconName='' placeholder='Descrição'   label=''/>
 
-                <Myinput value={req.cost} onChangeText={(text) => setReq({ ...req, cost: text })} placeholder="R$" label="Valores:" iconName='' /> 
+                <Myinput value={req.costs} onChangeText={(text) => setReq({ ...req, costs: text })} placeholder="R$" label="Valores:" iconName='' /> 
 
 
-                    <MyButton onPress={handleRegister} title='Cadastrar'></MyButton>
+                    <MyButton style={{justifyContent:'center'}} onPress={handleRegister} title='Cadastrar'></MyButton>
                 </View>
 
                 <MyList
@@ -96,10 +111,10 @@ export default function ExpenseScreen(){
                             onDel={() => delExpense(item.id)}
                         >
                             <Text style={styles.textlis} >{item.name}</Text>
-                            <Text style={styles.textlis} >{item.email}</Text> 
-                            <Text style={styles.textlis} >{item.description}</Text>  
-                            <Text style={styles.textlis} >{item.cost}</Text> 
-                            <Text style={styles.textlis} >{item.userId}</Text>
+                            <Text style={styles.textlis} >{item.emails}</Text> 
+                            <Text style={styles.textlis} >{item.descriptions}</Text>  
+                            <Text style={styles.textlis} >{item.costs}</Text> 
+                            <Text style={styles.textlis} >{item.user_id}</Text>
                             
     
                         </MyItem>
@@ -143,7 +158,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: "#555",
         marginVertical: 4,
-      },
+      } ,
      
      title:{
         marginBottom: 8,
@@ -160,3 +175,4 @@ const styles = StyleSheet.create({
      },
      
     });
+    

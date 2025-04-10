@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, } from 'react-native';
 import Mydownload from '../src/components/MyDownload';
 import MyView from '../src/components/MyView';
@@ -7,6 +7,9 @@ import MyButton from '../src/components/MyButtons';
 import { Myinput, MyTextArea } from '../src/components/MyInputs';
 import {MyItem} from '../src/components/MyItem';
 import Mytext from '../src/components/MyText';
+import { useRouter } from 'expo-router';
+import {iRevenue,setRevenue, deleteRevenue, updateRevenue} from '../src/controllers/revenues'
+import { supabase } from '../src/utils/supabase';
 
 export default function RevenueScreen() {
   // Estado para o formulário
@@ -15,37 +18,56 @@ export default function RevenueScreen() {
     description: '',
     name: '',
     url: '',
-    createAt: new Date().toISOString(),
-    userId: 0,
+    created_at: new Date().toISOString(),
+    user_id: 1,
     value: '',
-    scholarshipStatus: '',
-    discountPercentage: '',
+    scholarship_status: '',
+    discount_percentage: '',
+    
+
   });
 
-  // Estado para a lista de receitas
-  const [revenues, setRevenues] = useState<{
-    id: number;
-    description: string;
-    name: string;
-    url: string;
-    createAt: string;
-    userId: number;
-    value: string;
-    scholarshipStatus: string;
-    discountPercentage: string;
-  }[]>([]);
+const [revenues, setRevenues] = useState<iRevenue[]>([]);
+
+useEffect(()=>{
+  async function getTodos(){
+    const{data:todos}=await supabase.from('revenues').select()
+
+    if(todos && todos.length > 0){
+      setRevenues(todos)
+    }
+  }
+  getTodos();
+},[])
+ 
+  
 
   // Função para cadastrar ou editar uma receita
-  function handleRegister() {
+  async function handleRegister() {
+
     if (req.id == -1) {
       // Cadastra uma nova receita
       const newId = revenues.length ? revenues[revenues.length - 1].id + 1 : 0;
       const newRevenue = { ...req, id: newId };
       setRevenues([...revenues, newRevenue]);
-    } else {
-      // Edita uma receita existente
-      setRevenues(revenues.map(r => (r.id == req.id ? req : r)));
-    }
+      await setRevenue(newRevenue)
+      
+      
+      } else {
+        // Edita uma receita existente
+        setRevenues(revenues.map(r => (r.id == req.id)? req : r) );
+        const result = await updateRevenue(req);
+
+        if (result.error) {
+          console.error("Erro ao atualizar:", result.error.message);
+          alert(`Erro ao atualizar: ${result.error.message}`);
+          return;
+      }
+      // Atualiza o estado local com os dados retornados do Supabase
+      setRevenues(revenues.map(r => r.id === req.id ? result.data : r));
+    
+      }
+      
 
     // Reseta o formulário
     setReq({
@@ -53,11 +75,11 @@ export default function RevenueScreen() {
       description: '',
       name: '',
       url: '',
-      createAt: new Date().toISOString(),
-      userId: 0,
+      created_at: new Date().toISOString(),
+      user_id: 1,
       value: '',
-      scholarshipStatus: '',
-      discountPercentage: '',
+      scholarship_status: '',
+      discount_percentage: '',
     });
   }
 
@@ -68,18 +90,29 @@ export default function RevenueScreen() {
   }
 
   // Função para excluir uma receita
-  function delRevenue(id: number) {
-    const list = revenues.filter(r => r.id != id);
-    setRevenues(list); // Remove a receita da lista
-  }
+  async function delRevenue(id: number) {
+    try {
+        
+        // Chama a função do controller
+        const result = await deleteRevenue(id);
+        
+        
+        // Atualiza o estado local se a exclusão no Supabase foi bem-sucedida
+        setRevenues(revenues.filter(r => r.id !== id));
+        
+    } catch (error) {
+        console.error("Erro inesperado:", error);
+      
+    }
+}
 
   
-
+  const router = useRouter();
   return (
 
-    <MyView>
+    <MyView  router={router} >
       <Mytext style={{ fontSize: 24, fontWeight: 'bold', color: '#333', textAlign: 'center' }}>
-        cadastre as receitas
+         cadastre as receitas
       </Mytext>
 
       {/* Formulário */}
@@ -124,8 +157,8 @@ export default function RevenueScreen() {
 
             {/* Campo de Status da Bolsa */}
             <Myinput
-              value={req.scholarshipStatus}
-              onChangeText={(text) => setReq({ ...req, scholarshipStatus: text })}
+              value={req.scholarship_status}
+              onChangeText={(text) => setReq({ ...req, scholarship_status: text })}
               iconName=''
               placeholder='Status da bolsa'
               label='Status Bolsa'
@@ -133,8 +166,8 @@ export default function RevenueScreen() {
 
             {/* Campo de Desconto */}
             <Myinput
-              value={req.discountPercentage}
-              onChangeText={(text) => setReq({ ...req, discountPercentage: text })}
+              value={req.discount_percentage}
+              onChangeText={(text) => setReq({ ...req, discount_percentage: text })}
               iconName='percent'
               placeholder='Porcentagem de desconto'
               label='Desconto'
@@ -161,11 +194,11 @@ export default function RevenueScreen() {
             >
               <Mytext style={styles.revenueText}>Descrição: {item.description}</Mytext>
               <Mytext style={styles.revenueText}>Nome: {item.name}</Mytext>
-              <Mytext style={styles.revenueText}>ID do Usuário: {item.userId}</Mytext>
+              <Mytext style={styles.revenueText}>ID do Usuário: {item.user_id}</Mytext>
               <Mytext style={styles.revenueText}>Valor: {item.value}</Mytext>
-              <Mytext style={styles.revenueText}>Status da Bolsa: {item.scholarshipStatus}</Mytext>
-              <Mytext style={styles.revenueText}>Desconto: {item.discountPercentage}%</Mytext>
-              <Mytext style={styles.revenueText}>Data: {item.createAt}</Mytext>
+              <Mytext style={styles.revenueText}>Status da Bolsa: {item.scholarship_status}</Mytext>
+              <Mytext style={styles.revenueText}>Desconto: {item.discount_percentage}%</Mytext>
+              <Mytext style={styles.revenueText}>Data: {item.created_at}</Mytext>
               <Mydownload style={styles.revenueText} url={item.url} />
 
       

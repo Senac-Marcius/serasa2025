@@ -1,16 +1,12 @@
-import React, { ReactNode, useState } from 'react'; //função useState só retorna para uma variavel const
-import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, ScrollView, Image, Modal } from 'react-native';
-import { Button } from 'react-native-paper';
+import React, { useState } from 'react'; //função useState só retorna para uma variavel const
+import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
 import { Picker } from "@react-native-picker/picker";
-import { useRouter } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
 import MyTabsbar from '../src/components/MyTabsBar';
-import { Icon } from "react-native-paper";
 import MyButton from '../src/components/MyButtons';
-import MyModal2 from '../src/components/MyModal';
 import MyView from '../src/components/MyView';
-import { Myinput } from '../src/components/MyInputs';
+import { useRouter } from 'expo-router';
 
 
 export default function ItemScreen() { // aqui é TS
@@ -222,13 +218,13 @@ export default function ItemScreen() { // aqui é TS
             file: '',
             typeLoan: '',
         });
-        router.push('/librarie-home');
+        router.push('/librarie');
     };
 
     
 
     return ( //encapsulamento
-        <MyView>
+        <MyView router={router} >
             <Text style={styles.h1}>Cadastro de Itens no Acervo</Text>
             <View style={styles.buttonContainer}>
                 <ScrollView 

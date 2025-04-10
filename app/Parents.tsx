@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity} from 'react-native';
+import MyView from '../src/components/MyView';
+import { useRouter } from 'expo-router';
+
 //import dateTimepicker
 //npm run web → chamar pagina web pelo terminal
 //batatinha
@@ -54,8 +57,10 @@ export default function ParentScreen (){
             setParents(list)
      }
     
+    const router = useRouter();
+
     return (
-        <View>{/*aqui é typeScript dentro do Front*/}
+        <MyView router={router} > {/*aqui é typeScript dentro do Front*/}
             {/*View → esse view é diferente do HTML ele contém DIVs e outros atributos,*/}
             <Text>Minha tela das postagens </Text>
             <View style = {styles.row}>
@@ -115,7 +120,7 @@ export default function ParentScreen (){
                 {/*parâmetro FlatList é parecido com o forEach do html */}
             </View>
 
-        </View>
+        </MyView>
         
     );
 }

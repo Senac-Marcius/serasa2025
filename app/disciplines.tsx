@@ -1,85 +1,101 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
 import MyView from '../src/components/MyView';
-
-
-//esse é o certo
-
+import { useRouter } from 'expo-router';
+import { iDisciplines, SetDisciplinebd, UpdateDisciplinebd, DeleteDisciplinebd } from '../src/controllers/disciplines';
+import { supabase } from '../src/utils/supabase';
+//111
 export default function DisciplineScreen() {
-  const [req, setReq] = useState({
-    id: 0,
+  const [req, setReq] = useState<iDisciplines>({
+    id: -1,
     name: '',
     url: '',
-    workload: '',
-    createdAt: new Date().toISOString(),
+    workload: 0,
+    created_at: new Date().toISOString(),
     teacher: '',
   });
 
-  const [disciplines, setDisciplines] = useState<{ 
-    id: number; 
-    name: string; 
-    url: string; 
-    workload: string; 
-    createdAt: string; 
-    teacher: string 
-  }[]>([]);
-
+  const [disciplines, setDisciplines] = useState<iDisciplines[]>([]);
   const [isEditing, setIsEditing] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await supabase.from('disciplines').select();
+      if (error) console.log('Erro ao carregar disciplinas:', error);
+      if (data) setDisciplines(data);
+    })();
+  }, []);
 
   function handleRegister() {
-    if (!req.name?.trim() || !req.url?.trim() || !req.workload?.trim() || !req.teacher?.trim()) {
-      alert('Preencha todos os campos!');
+    if (!req.name.trim() || !req.url.trim() || !req.teacher.trim()) {
+      console.log('Preencha todos os campos!');
       return;
     }
 
     if (isEditing) {
-      handleUpdate()
+      handleUpdate();
       return;
     }
 
-    const newDiscipline = {
-      ...req,
-      id: new Date().getTime(), 
-    };
+    const newDiscipline = { ...req };
 
-    setDisciplines([...disciplines, newDiscipline])
-    resetForm()
+    (async () => {
+      const result = await SetDisciplinebd(newDiscipline);
+      if (result && result[0]) {
+        setDisciplines([...disciplines, result[0]]);
+        console.log('Disciplina cadastrada com sucesso!');
+      } else {
+        console.log('Erro ao cadastrar disciplina.');
+      }
+    })();
+
+    resetForm();
   }
 
   function handleUpdate() {
-    setDisciplines(disciplines.map((d) => (d.id === req.id ? req : d)))
-    resetForm()
+    setDisciplines(disciplines.map((d) => (d.id === req.id ? req : d)));
+
+    (async () => {
+      await UpdateDisciplinebd(req);
+      console.log('Disciplina atualizada.');
+    })();
+
+    resetForm();
   }
 
   function handleDelete(id: number) {
-    setDisciplines(disciplines.filter((d) => d.id !== id))
+    (async () => {
+      setDisciplines(disciplines.filter((d) => d.id !== id));
+      await DeleteDisciplinebd(id);
+      console.log(`Disciplina ${id} excluída.`);
+    })();
   }
 
   function handleEdit(id: number) {
-    const discipline = disciplines.find((d) => d.id === id)
+    const discipline = disciplines.find((d) => d.id === id);
     if (discipline) {
-      setReq(discipline)
-      setIsEditing(true) 
+      setReq(discipline);
+      setIsEditing(true);
     }
   }
 
   function resetForm() {
     setReq({
-      id: 0,
+      id: -1,
       name: '',
       url: '',
-      workload: '',
-      createdAt: new Date().toISOString(),
+      workload: 0,
+      created_at: new Date().toISOString(),
       teacher: '',
     });
-    setIsEditing(false)
+    setIsEditing(false);
   }
 
   return (
-    <MyView style={styles.container}>
+    <MyView router={router} style={styles.container}>
       <Text style={styles.title}>Disciplinas</Text>
       <View style={styles.row}>
-        {/* Formulário */}
         <View style={styles.form}>
           <Text style={styles.formTitle}>{isEditing ? 'Editar Disciplina' : 'Nova Disciplina'}</Text>
           <TextInput
@@ -96,12 +112,6 @@ export default function DisciplineScreen() {
           />
           <TextInput
             style={styles.input}
-            placeholder="Carga Horária"
-            value={req.workload}
-            onChangeText={(text) => setReq({ ...req, workload: text })}
-          />
-          <TextInput
-            style={styles.input}
             placeholder="Professor"
             value={req.teacher}
             onChangeText={(text) => setReq({ ...req, teacher: text })}
@@ -110,7 +120,6 @@ export default function DisciplineScreen() {
           <Button title={isEditing ? 'Atualizar' : 'Cadastrar'} color="#4CAF50" onPress={handleRegister} />
         </View>
 
-        {/* Lista de Disciplinas */}
         <View style={styles.listContainer}>
           <FlatList
             data={disciplines}
@@ -124,17 +133,11 @@ export default function DisciplineScreen() {
 
                 <View style={styles.actions}>
                   <TouchableOpacity style={styles.editButton} onPress={() => handleEdit(item.id)}>
-
                     <Text style={styles.buttonText}>EDIT</Text>
-
                   </TouchableOpacity>
-
                   <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(item.id)}>
-
                     <Text style={styles.buttonText}>DELETE</Text>
-
                   </TouchableOpacity>
-
                 </View>
               </View>
             )}
@@ -167,10 +170,6 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#F2F2F2',
     borderRadius: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 5,
     marginRight: 10,
     minWidth: '45%',
   },
@@ -193,10 +192,6 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#E8F5E9',
     borderRadius: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 5,
     minWidth: '45%',
   },
   card: {
@@ -206,10 +201,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderLeftWidth: 5,
     borderLeftColor: '#4CAF50',
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 3,
   },
   cardTitle: {
     fontSize: 16,

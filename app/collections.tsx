@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextStyle } from 'react-native';
-import { Button, TextInput, RadioButton, Checkbox } from 'react-native-paper';
-import { useRouter } from 'expo-router';
-import { MyModal_mobile1, MyModal_mobile2, MyModal_mobile3, MyModal_mobilefullscreen, MyModal1_desktop } from '../src/components/MyModal';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { MyModal_mobile1 } from '../src/components/MyModal';
 import MyButton from '../src/components/MyButtons';
 import MyView from '../src/components/MyView';
-import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs'
+import { Myinput } from '../src/components/MyInputs'
 import MyList from '../src/components/MyList'
+import { useRouter } from 'expo-router';
+
 
 //função userState só retorna para uma variavel const
 
@@ -14,7 +14,6 @@ export default function CollectionScreen() {
 
     const [visible, setVisible] = useState(false);
 
-    const router = useRouter();
     const [req, setReq] = useState({
         id: 0,
         name: '',
@@ -64,8 +63,11 @@ export default function CollectionScreen() {
 
     }
 
+    const router = useRouter();
+
+
     return (//encapsulamento 
-        <MyView >
+        <MyView router={router} >
             <View style={styles.formContainer}>
                 <View style={styles.row}>
                     <View style={styles.form}>

@@ -4,10 +4,12 @@ import MyTheme from '../src/components/MyTheme';
 import {Myinput} from '../src/components/MyInputs'; 
 import MyView from '../src/components/MyView';
 import MyButton from '../src/components/MyButtons';
-import MyItem from '../src/components/MyItem';
+import {MyItem} from '../src/components/MyItem';
 import MyList from '../src/components/MyList';
 import Mytext from '../src/components/MyText';
 import {textStyles}  from '../styles/textStyles';
+import { useRouter } from 'expo-router';
+
 
 export default function NotificationScreen(){
 // aqui é typNotificationScreenescript
@@ -63,8 +65,10 @@ export default function NotificationScreen(){
             setNotifications(list)
     }
 
+    const router = useRouter();
+    
 return (
-    <MyView>
+    <MyView router={router} >
           
            
 
