@@ -16,6 +16,14 @@ interface iLaunch {
 }
 
 
+async function  getLaunchs(params:any) {
+  const {data: todos, error} = await supabase.from ('launchs').select();
+
+  if(error)
+    return {status: false, error: error}
+
+  return  {status: true, data: todos}
+}
 
 
 async function setLaunch(launch: iLaunch) {
@@ -44,4 +52,4 @@ return[]
 
 }
 
-export {iLaunch, setLaunch}
+export {iLaunch, setLaunch, getLaunchs}

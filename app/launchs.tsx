@@ -9,8 +9,7 @@ import { Myinput, MyCheck } from '../src/components/MyInputs';
 import MyButton from '../src/components/MyButtons';
 import MyCalendar from '../src/components/MyCalendar';
 import { useRouter } from 'expo-router';
-import {setLaunch, iLaunch} from '../src/controllers/launchs';
-import { supabase } from '../src/utils/supabase';
+import {setLaunch, iLaunch, getLaunchs} from '../src/controllers/launchs';
 import MySelect from '../src/components/MySelect';
 
 
@@ -21,16 +20,34 @@ export default function LaunchScreen() {
 
     useEffect(() => {
         //aqui estamos carregando os lançamentos
-        async function getLaunchs() {
-            const {data: todos} = await supabase.from ('launchs').select();
-            if (todos && todos.length > 0) {
-                setLaunchs(todos);
+        async function getTodos() {
+            const retorno = await getLaunchs({})
+            if (retorno.status && retorno.data && retorno.data.length > 0) {
+                setLaunchs(retorno.data);
             }
         }
 
-        getLaunchs();
+        getTodos();
 
-        //aqui estamos carregando os alunos
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
         setAlunos([
             {key:1, option: "aluno 1"},
             {key:2, option: "aluno 2"},
