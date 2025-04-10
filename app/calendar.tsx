@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Calendar } from 'react-native-calendars';
 import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
 import { supabase } from '../src/utils/supabase';
@@ -17,6 +18,7 @@ export default function CalendarsScreen() {
   });
 
   const [calendars, setCalendars] = useState<iCalendar[]>([]);
+  const [showCalendarView, setShowCalendarView] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -79,11 +81,27 @@ export default function CalendarsScreen() {
     setReq({ ...req, registrationdate: e.target.value });
   }
 
+  function getMarkedDates(calendars: iCalendar[]) {
+    const marked: Record<string, any> = {};
+
+    calendars.forEach((item) => {
+      marked[item.registrationdate] = {
+        selected: true,
+        selectedColor: '#E53935',
+        disabled: true,
+        disableTouchEvent: true,
+      };
+    });
+
+    return marked;
+  }
+
   return (
     <MyView router={router}>
       <View style={styles.container}>
         <Text style={styles.pageTitle}>Cronograma de Matrículas</Text>
 
+        {/* Formulário */}
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>{req.id === -1 ? 'Novo Cronograma' : 'Editar Cronograma'}</Text>
           <TextInput
@@ -98,7 +116,6 @@ export default function CalendarsScreen() {
             onChangeText={(text) => setReq({ ...req, course: text })}
             style={styles.input}
           />
-
           {Platform.OS === 'web' ? (
             <input
               type="date"
@@ -125,51 +142,78 @@ export default function CalendarsScreen() {
               style={styles.input}
             />
           )}
-
           <TextInput
             placeholder="Período"
             value={req.period}
             onChangeText={(text) => setReq({ ...req, period: text })}
             style={styles.input}
           />
-
           <TouchableOpacity style={styles.primaryButton} onPress={handleRegister}>
             <Text style={styles.primaryButtonText}>{req.id === -1 ? 'CADASTRAR' : 'ATUALIZAR'}</Text>
           </TouchableOpacity>
         </View>
 
+        {/* Visualização: Cards ou Calendário com botão fixo */}
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Cronogramas Cadastrados</Text>
-          <View style={styles.gridContainer}>
-            {calendars.map((item) => (
-              <View key={item.id} style={styles.cardGridItem}>
-                <View style={styles.row}>
-                  <Icon name="account" size={20} color="#6A1B9A" />
-                  <Text style={styles.itemText}>Aluno: {item.studentname}</Text>
-                </View>
-                <View style={styles.row}>
-                  <Icon name="book-open-outline" size={20} color="#6A1B9A" />
-                  <Text style={styles.itemText}>Curso: {item.course}</Text>
-                </View>
-                <View style={styles.row}>
-                  <Icon name="calendar" size={20} color="#6A1B9A" />
-                  <Text style={styles.itemText}>Data da Matrícula: {item.registrationdate}</Text>
-                </View>
-                <View style={styles.row}>
-                  <Icon name="clock-outline" size={20} color="#6A1B9A" />
-                  <Text style={styles.itemText}>Período: {item.period}</Text>
-                </View>
-                <View style={styles.actions}>
-                  <TouchableOpacity style={styles.editButton} onPress={() => editCalendar(item.id)}>
-                    <Text style={styles.buttonText}>EDITAR</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.deleteButton} onPress={() => delCalendar(item.id)}>
-                    <Text style={styles.buttonText}>EXCLUIR</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            ))}
+          <View style={styles.cardTitleRow}>
+            <TouchableOpacity
+              onPress={() => setShowCalendarView(!showCalendarView)}
+              style={styles.calendarToggleButton}
+            >
+              <Icon name={showCalendarView ? 'view-list' : 'calendar-month'} size={20} color="#6A1B9A" />
+            </TouchableOpacity>
+            <Text style={styles.sectionTitle}>
+              {showCalendarView ? 'Dias Registrados' : 'Cronogramas Cadastrados'}
+            </Text>
           </View>
+
+          {showCalendarView ? (
+            <Calendar
+              markedDates={getMarkedDates(calendars)}
+              onDayPress={() => {}}
+              theme={{
+                backgroundColor: '#ffffff',
+                calendarBackground: '#ffffff',
+                textSectionTitleColor: '#6A1B9A',
+                dayTextColor: '#333',
+                disabledArrowColor: '#ccc',
+                monthTextColor: '#6A1B9A',
+                indicatorColor: '#6A1B9A',
+                todayTextColor: '#6A1B9A',
+              }}
+            />
+          ) : (
+            <View style={styles.gridContainer}>
+              {calendars.map((item) => (
+                <View key={item.id} style={styles.cardGridItem}>
+                  <View style={styles.row}>
+                    <Icon name="account" size={20} color="#6A1B9A" />
+                    <Text style={styles.itemText}>Aluno: {item.studentname}</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Icon name="book-open-outline" size={20} color="#6A1B9A" />
+                    <Text style={styles.itemText}>Curso: {item.course}</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Icon name="calendar" size={20} color="#6A1B9A" />
+                    <Text style={styles.itemText}>Data: {item.registrationdate}</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Icon name="clock-outline" size={20} color="#6A1B9A" />
+                    <Text style={styles.itemText}>Período: {item.period}</Text>
+                  </View>
+                  <View style={styles.actions}>
+                    <TouchableOpacity style={styles.editButton} onPress={() => editCalendar(item.id)}>
+                      <Text style={styles.buttonText}>EDITAR</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.deleteButton} onPress={() => delCalendar(item.id)}>
+                      <Text style={styles.buttonText}>EXCLUIR</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              ))}
+            </View>
+          )}
         </View>
       </View>
     </MyView>
@@ -198,7 +242,22 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     color: '#6A1B9A',
-    marginBottom: 10,
+  },
+  cardTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 12,
+  },
+  calendarToggleButton: {
+    width: 36,
+    height: 36,
+    backgroundColor: '#fff',
+    borderWidth: 2,
+    borderColor: '#6A1B9A',
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   input: {
     height: 45,
