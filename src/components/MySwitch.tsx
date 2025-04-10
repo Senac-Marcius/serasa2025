@@ -10,7 +10,7 @@ interface MySwitchProps{//refere-se as propriedades que meu elemento vai ter
 const MySwitch: React.FC< MySwitchProps >= ({isEnabled, onToggle}) => {//cria os parametros da tag e faz a tipagem FC=Factory
     return (
         <View style={styles.container}>
-            <Text>{isEnabled ? 'Ligado' : 'Desligado'}</Text>
+            <Text>{isEnabled ? 'Salvar Senha?  ON' : 'Salvar Senha?  OFF'}</Text>
             <Switch //soft purple -- hard purple
                 trackColor={{ false: '#D5BAE7', true: '#813AB1'}} // Cores da trilha
                 thumbColor= {'#000000'} // Cor da bolinha deslizante
