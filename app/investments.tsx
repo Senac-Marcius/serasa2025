@@ -97,7 +97,7 @@ export default function investmentScreen(){
             <Text>Acessibilidade</Text>
         </MyAccessibility>
 
-        <Text>Investimentos</Text>
+        <Text style={styles.title}>Investimentos</Text>
         <View style={styles.row}>
             <View style={styles.form}>
             <Myinput
@@ -251,6 +251,20 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto-Bold',
         color: '#000',
       },
+
+      title:{
+        marginBottom: 8,
+        fontSize: 30,
+        fontWeight: "bold", 
+        textAlign: "center",
+        backgroundColor: "#ab66f9",
+        borderRadius: 5,
+        color:'#ffffff',
+        letterSpacing: 1.5,
+        textTransform: "uppercase",
+        textShadowColor: "rgba(0, 0, 0, 0.2)",
+        fontStyle: "italic",
+     },
 
 });
 

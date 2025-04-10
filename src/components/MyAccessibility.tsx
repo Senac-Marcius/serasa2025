@@ -30,7 +30,7 @@ const MyAccessibility: React.FC<MyAcessProps> = ({label, style, children }) => {
                     </TouchableOpacity>
                 )
             }
-                           {visible && (
+                {visible && (
                 <View style={styles.form}>
                     {children}
                     <MyButton
@@ -53,11 +53,15 @@ const styles = StyleSheet.create({
     },
 
     accessbutton: {
-        backgroundColor: 'white',
-        borderRadius: 50,
-        padding: 10,
-        elevation: 5,
-    },
+      backgroundColor: 'white',
+      borderRadius: 50, // Isso já garante que será circular
+      width: 50, // Definir largura e altura iguais
+      height: 50,
+      justifyContent: 'center', // Centraliza o conteúdo verticalmente
+      alignItems: 'center', // Centraliza o conteúdo horizontalmente
+      padding: 10,
+      elevation: 5,
+  },
     input: {
         padding: 10,
         marginBottom: 10,
