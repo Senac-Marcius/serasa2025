@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View,Text, StyleSheet,FlatList, Button,TextInput, Touchable, TouchableOpacity} from 'react-native';
+import {Myinput} from '../src/components/MyInputs';
 import MyView from '../src/components/MyView';
+import Mytext from '../src/components/MyText';
+import {textStyles} from '../styles/textStyles';
 import MyButton from '../src/components/MyButtons';
-import { Myinput } from '../src/components/MyInputs';
 import MyList from '../src/components/MyList';
+import {MyItem} from '../src/components/MyItem';
 import { useRouter } from 'expo-router';
-import { supabase } from '../src/utils/supabase';
-import MySelect from '../src/components/MySelect';
-import {iLevels, setLevels, getLevels, updateLevels, deleteLevels} from '../src/controllers/levels'; 
 
 
 export default function LevelsScreen() {
@@ -70,109 +70,208 @@ function handleEdit(levels: iLevels) {
 
   }
 
-  return (
-    <MyView router={router}>
-      <View style={styles.container}>
-        <Myinput
-          label="Nome:"
-          placeholder="Digite o nome"
-          value={form.name}
-          onChangeText={(text: string) => setForm({ ...form, name: text })}
-          iconName="person"
-        />
-        <Myinput
-          label="Descrição:"
-          placeholder="Digite a descrição"
-          value={form.description}
-          onChangeText={(text: string) => setForm({ ...form, description: text })}
-          iconName="description"
-        />
+    return (
+        <MyView router={router} >
+            
+        {/* aqui é typerscrypt dentro do front */}
 
-        <MySelect 
-          label={form.color}
-          list={[
-            {key:0, option: 'Verde'},
-            {key:1, option: 'Amarelo'},
-            {key:2, option: 'Vermelho'},
-            ]}
-          setLabel={(item) => setForm({...form, color: item})}
-        
-        />
+            <View style={styles.row}>
+                <View style={styles.form}>
+                
+                        
+                        <Myinput 
+                            style={styles.input}
+                            placeholder="Digite seu nome" 
+                            value={req.name}
+                            onChangeText={(text) => setReq({...req ,name: text})}
+                            label="Nome"
+                            iconName=''
 
-        <MyButton
-          title={form.id === -1 ? 'CADASTRAR' : 'ATUALIZAR'}
-          onPress={handleSave}
-          button_type="round"
-          style={styles.button}
-        
-        />
+                        /> 
+                    
+                        <Myinput 
+                            style={styles.input}  
+                            placeholder="Digite sua descrição" 
+                            value={req.description}
+                            onChangeText={(text) => setReq({...req ,description: text})}
+                            label="Descrição"
+                            iconName=''
+                        />
 
-        <MyList
-          data={levels}
-          keyItem={(item) => item.id.toString()}
-          renderItem={({ item })=> (
-            <View style={styles.item}>
-              <Text style={styles.itemText}>Nome: {item.name}</Text>
-              <Text style={styles.itemText}>Descrição: {item.description}</Text>
-              <Text style={[styles.itemText, { color: item.color.toLowerCase() }]}>{item.color}</Text>
-              <View style={styles.actionRow}>
-                <MyButton
-                  title="EDITAR"
-                  onPress={() => handleEdit(item)}
-                  button_type="rect"
-                  style={styles.button}
-                  color='#68228B'
+                        <Myinput 
+                            style={styles.input}
+                            placeholder="COR" 
+                            value={req.color}
+                            onChangeText={(text) => setReq({...req ,color: text})}
+                            label="Cor"
+                            iconName=''
+
+                        /> 
+                        
+                    <MyButton title='Cadastrar' onPress= {handleRegister}/>
+                                    
+                </View>
+
+                <MyList
+                    data={leves}
+                    keyItem={(item) => item.id.toString()}
+                    renderItem={({item}) =>(
+                       <MyItem
+                            onEdit={() => {editLevels(item.id)}}
+                            onDel={() => {deleteLevels(item.id)}}
+                        >
+
+                           <Mytext style={textStyles.textBody} > Nome: {item.name}</Mytext> {/* alex */}
+                           <Mytext style={textStyles.textBody}> Descrição: {item.description}</Mytext>
+                           <Mytext style={textStyles.textBody}> Cor: {item.color}</Mytext>
+                           <Mytext style={textStyles.textBody}> UserId: {item.userId}</Mytext>
+                           
+ 
+                            {/*
+                            <View style={styles.buttonsContainer}>
+                                <TouchableOpacity 
+                                style={styles.editButton}
+                                onPress={() => {editLevels(item.id)}}>
+
+                                    <Text style={styles.buttonText}>EDIT</Text>
+
+                                </TouchableOpacity>
+
+                                <TouchableOpacity 
+                                style={styles.delButton}
+                                onPress={() => {deleteLevels(item.id)}}>
+
+                                    <Text style={styles.buttonText}>DELETE</Text>
+
+                                </TouchableOpacity>
+                               
+                            </View>
+                            */}
+
+                        </MyItem>
+
+                    )}
                 />
-                <MyButton
-                  title="EXCLUIR"
-                  onPress={() => handleDelete(item.id)}
-                  button_type="rect"
-                  style={styles.button}
-                  color='#8B008B'
-                />
-              </View>
+               
             </View>
-          )}
-        />
-      </View>
-    </MyView>
-  );
+        </MyView>
+    );
 }
 
+// Estilos
 const styles = StyleSheet.create({
-  container: {
-  padding: 12,
-  },
+    container: {
+        flex: 1,
+        padding: 20,
+        backgroundColor: '#FFF'
+    },
+    row: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+    },
+    form: {
+        flex: 1,
+        padding: 20,
+        backgroundColor: '#F2F2F2',
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 4 },
+        shadowRadius: 5,
+        marginRight: 10,
+        minWidth: '45%',
+    },
+    listContainer: {
+        flex: 1,
+        padding: 20,
+        backgroundColor: '#E8F5E9',
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 4 },
+        shadowRadius: 5,
+        minWidth: '45%',
+    },
+    title: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 20,
+    },
+    subtitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        padding: 10,
+        marginBottom: 10,
+    },
+    postItem: {
+        padding: 10,
+        marginVertical: 5,
+        backgroundColor: '#f8f8f8',
+        borderRadius: 5,
+    },
+    postText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    postUrl: {
+        fontSize: 14,
+        color: '#007BFF',
+        marginBottom: 5,
+    },
+    buttonText:{
+        color:'#000000',
+        fontWeight: 'bold'
+    },
+    buttonsContainer:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 20,
+        alignContent:'space-around',
+    },
+    editButton:{ backgroundColor:'#FFFF00',
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent:'center',
 
-  item: {
-  padding: 10,
-  marginBottom: 10,
-  backgroundColor: '#FFE1FF',
-  borderRadius: 8,
-  },
+    },
+    delButton:{ backgroundColor:'#f44336',
+        padding:10,
+        borderRadius:5,
+        alignItems:'center',
+        justifyContent:'center',
 
-  itemText: {
-  fontSize: 14,
-  marginBottom: 1,
-  },
+    },
 
-  colorRow: {
-  flexDirection: 'row',
-  justifyContent: 'space-around',
-  marginVertical: 10,
-  },
+    card: {
+        backgroundColor: '#FFF',
+        padding: 10,
+        borderRadius: 5,
+        marginBottom: 10,
+        borderLeftWidth: 5,
+        borderLeftColor: '#DF01A5',
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 3,
+      },
 
-  colorButton: {
-  paddingHorizontal: 10,
-  },
-  
-  actionRow: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  marginTop: -10,
-  },
+      fundo: {
+        height: 40,
+        borderColor: '#CCC',
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingHorizontal: 10,
+        marginBottom: 10,
+        backgroundColor: '#FFF',
+      },
 
-  button: {
-  marginTop: 7,
-  },
 });
