@@ -1,20 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Dimensions,
-} from 'react-native';
+import {View,Text,StyleSheet,ScrollView,Dimensions,} from 'react-native';
 import { useRouter } from 'expo-router';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {
-  iDisciplines,
-  SetDisciplinebd,
-  UpdateDisciplinebd,
-  DeleteDisciplinebd,
-} from '../src/controllers/disciplines';
-import { supabase } from '../src/utils/supabase';
+import {iDisciplines,SetDisciplinebd,UpdateDisciplinebd,DeleteDisciplinebd, getDisciplines} from '../src/controllers/disciplines';
 import MyView from '../src/components/MyView';
 import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
@@ -39,12 +27,21 @@ export default function DisciplineScreen() {
   const router = useRouter();
 
   useEffect(() => {
-    (async () => {
-      const { data, error } = await supabase.from('disciplines').select();
-      if (error) console.log('Erro ao carregar disciplinas:', error);
-      if (data) setDisciplines(data);
-    })();
+    const fetchDisciplines = async () => {
+      const response = await getDisciplines({});
+  
+      if (!response.status) {
+        console.log('Erro ao carregar disciplinas:', response.data);
+        return;
+      }
+  
+      setDisciplines(response.data as iDisciplines[]);
+    };
+  
+    fetchDisciplines();
   }, []);
+  
+  
 
   const professoresAgrupados = () => {
     const agrupado: { [nome: string]: string[] } = {};

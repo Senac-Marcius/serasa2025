@@ -9,6 +9,15 @@ interface iDisciplines {
   teacher: string;
 }
 
+async function getDisciplines(paramens: any) {
+  const { data, error } = await supabase.from('disciplines').select();
+
+  if (error)
+    return { status: false, data: error };
+
+  return { status: true, data: data };
+}
+
 type DisciplineWithoutId = Omit<iDisciplines, 'id'>;
 
 async function SetDisciplinebd(discipline: DisciplineWithoutId): Promise<iDisciplines[] | null> {
@@ -62,4 +71,4 @@ async function DeleteDisciplinebd(id: number): Promise<boolean> {
   return true;
 }
 
-export { SetDisciplinebd, UpdateDisciplinebd, DeleteDisciplinebd, iDisciplines };
+export { SetDisciplinebd, UpdateDisciplinebd, DeleteDisciplinebd, iDisciplines, getDisciplines };
