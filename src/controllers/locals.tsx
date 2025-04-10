@@ -10,6 +10,17 @@ interface iLocal{
     created_at: string,
 }
 
+async function getLocals (params: any) {
+    const {data: todos, error} = await supabase.from('locals').select();
+
+    if(error) 
+      console.log(error)
+      return {status: false, error: error}
+    
+    return {status: true, data: todos}
+}
+
+
 async function setLocal(local:iLocal){
   //aqui vem os tratamentos de regex ou modelo de negócio antes de inserir
 
@@ -66,7 +77,7 @@ async function deleteLocal(id: number) {
   }
 
 
-export {setLocal, deleteLocal, updateLocal, iLocal}  
+export {setLocal, deleteLocal, updateLocal, iLocal, getLocals}  
 
 
 

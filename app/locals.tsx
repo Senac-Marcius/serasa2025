@@ -7,8 +7,8 @@ import {MyItem} from '../src/components/MyItem';
 import { Myinput } from '../src/components/MyInputs';
 import MyButton  from '../src/components/MyButtons';
 import { useRouter } from 'expo-router';
-import {setLocal, iLocal, deleteLocal, updateLocal} from '../src/controllers/locals'
-import { supabase } from '../src/utils/supabase' 
+import {setLocal, iLocal, deleteLocal, updateLocal, getLocals} from '../src/controllers/locals'
+
 
 export default function LocalScreen(){
 
@@ -28,16 +28,15 @@ export default function LocalScreen(){
                                        //  '< >' -> recebe um tipo. torna-se tipada   -> 
     useEffect(() => {
         async function getTodos() {
-            const {data: todos} = await supabase.from('locals').select()
-
-            if (todos && todos.length > 0){
-                setLocals(todos)
+          const retorno = await getLocals({})
+          if (retorno.status && retorno.data && retorno.data.length > 0) {
+                setLocals(retorno.data);
             }
+        getTodos();    
         }
+    })
 
-        getTodos();
 
-    }, [])
 
     async function handleRegister(){
         if(req.id == -1){
@@ -170,7 +169,7 @@ export default function LocalScreen(){
        
         
     )   
-}               
+}             
 
 const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos funções que criam estilos para fontes
 

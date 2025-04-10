@@ -42,11 +42,11 @@ const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {
             {
                 visible &&
                 (<FlatList                                                          //estilos
-                    style = {{ borderColor:'white', paddingHorizontal: 18, paddingVertical: 9, backgroundColor: '#813AB1',  shadowOffset: { width: 5, height: 1 }, shadowOpacity: 0.8, shadowRadius: 7,  }}
+                    style = {{ borderColor:'white', paddingHorizontal: 18, paddingVertical: 9, backgroundColor: '#813AB1',  shadowOffset: { width: 0.5, height: 0.5 }, shadowOpacity: 0.4, shadowRadius: 7,  }}
                     data={list}
                     keyExtractor={(item) => item.key}
                     renderItem={(i) => (
-                        <TouchableOpacity style = {{ borderRadius: 20, width: 315}}onPress={()=>{
+                        <TouchableOpacity style = {{ borderRadius: 90, width: 315}}onPress={()=>{
                             setLabel(i.item.option);
 
                             if(setKey){
