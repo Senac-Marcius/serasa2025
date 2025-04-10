@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text} from 'react-native';
 import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
-import {iProduct, setProduct, updateProduct, deleteProduct} from '../src/controllers/products';
+import {iProduct, setProduct, updateProduct, deleteProduct, getProducts} from '../src/controllers/products';
 import MyButton from '../src/components/MyButtons';
 import Mytext from '../src/components/MyText';
 import {Myinput} from '../src/components/MyInputs';
 import { MyItem } from '../src/components/MyItem';
 import MyList from '../src/components/MyList';
-import { supabase } from  '../src/utils/supabase';
+
 
 
 
@@ -26,24 +26,16 @@ export default function productScreen(){
     const [products, setProducts] = useState<iProduct[]>([]);
 
     useEffect(()=> {
-        (async () => {
-            const { data: todos, error } = await supabase
-            .from('products')
-            .select()  
-            
-            if (error) {
-                console.error('Error fetching products:', error);
-                return;
-            }
-            
-            if (todos) {
-                setProducts(todos)
-            }
-        }) ()
+        async function getTodos() {
+            const retorno = await getProducts({})
+            if (retorno.status && retorno.data && retorno.data.length > 0) {
+                setProducts(retorno.data);
+            } 
+        }
+        
+        getTodos()
     }, []);
        
-
-    
     async function handleRegister() {
 
         //se for um item editado, ele deve chamar o registro existente

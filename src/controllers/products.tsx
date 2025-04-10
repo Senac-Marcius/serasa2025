@@ -9,6 +9,17 @@ interface iProduct {
     user_id: number,
     create_at: string
 }
+
+async function getProducts(params:any) {
+  const { data: todos, error } = await supabase
+            .from('products')
+            .select();
+
+            if (error)
+              return {status: false, error: error}
+            return {status: true, data: todos}
+
+}
 const [products, setProducts] = useState<iProduct[]>([]);
 
 // No arquivo products.ts (controller)
@@ -62,5 +73,5 @@ const { data, error } = await supabase.from ('products')
     return data 
 }
           
-export {setProduct, updateProduct, deleteProduct, iProduct };
+export {setProduct, updateProduct, deleteProduct, iProduct, getProducts };
 
