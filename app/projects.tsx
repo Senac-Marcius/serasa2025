@@ -8,7 +8,7 @@ import MyList from '../src/components/MyList';
 import { Myinput, MyTextArea  } from '../src/components/MyInputs';
 import { useRouter } from 'expo-router';
 import MyCalendar from '../src/components/MyCalendar';
-import { iProject , setProject, updateProject, deleteProject } from '../src/controlador/projects';
+import { iProject , setProject, updateProject, deleteProject } from '../src/controllers/projects';
 import { supabase } from '../src/utils/supabase';
 import { MyItem } from '../src/components/MyItem';
 import { Picker } from '@react-native-picker/picker';
