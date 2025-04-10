@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
 import { supabase } from '../src/utils/supabase';  // Certifique-se de importar o supabase corretamente
-import { setCalendarsData, iCalendar } from '../src/controllers/calendars';  // Assumindo que iCalendar está corretamente tipado
+import { setCalendarsData, iCalendar, getCalendars } from '../src/controllers/calendars';  // Assumindo que iCalendar está corretamente tipado
 import { Myinput } from '../src/components/MyInputs';
 import Mytext from '../src/components/MyText';
 import MyButton from '../src/components/MyButtons';
@@ -22,31 +22,22 @@ export default function CalendarsScreen() {
   });
 
   // Hook para buscar calendários ao carregar a tela
-  useEffect(() => {
-    async function getCalendars() {
-      const { data: todos, error } = await supabase.from('calendar').select();
+  useEffect (() => {
+    async function getTodos() {
+      const retorno = await getCalendars({})
+      if (retorno.status && retorno.data && retorno.data.length > 0) {
+        setCalendars(retorno.data);
 
-      if (error) {
-        console.error('Erro ao buscar calendários:', error);
-        return;
       }
 
-      if (todos && todos.length > 0) {
-        // Ajuste aqui para garantir que os dados são compatíveis com o tipo iCalendar
-        const calendarData: iCalendar[] = todos.map((calendar: any) => ({
-          id: calendar.id,
-          studentname: calendar.studentname,
-          course: calendar.course,
-          registrationdate: calendar.registrationdate,
-          period: calendar.period,
-          created_at: calendar.created_at,
-        }));
-
-        setCalendars(calendarData);  // Atualiza o estado com os calendários obtidos
-      }
     }
 
-    getCalendars();  // Chama a função ao carregar a tela
+    getTodos();
+
+    
+
+
+    
   }, []);
 
   // Função para registrar o calendário
