@@ -1,130 +1,114 @@
-
-import React,{ useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
-import  Mytext  from '../src/components/MyText';
+import Mytext from '../src/components/MyText';
 import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
 import MyView from '../src/components/MyView';
-import {MyItem} from '../src/components/MyItem';
+import { MyItem } from '../src/components/MyItem';
 import { Myinput, MyTextArea } from '../src/components/MyInputs';
 import { useRouter } from 'expo-router';
 
+export default function CoursesScreen() {
+  const [req, setReq] = useState({
+    description: '',
+    Courseplan: '',
+    Orientationplan: '',
+    Workload: '',
+    id: -1,
+    userId: 0,
+  });
 
-//fuction
-export default function CoursesScreen(){
-    const [req, setReq] = useState({
-        description: '',
-        Courseplan: '',
-        Orientationplan: '',
-        Workload: '',
-        id: -1,
-        userId: 0,
+  const [CoursesPosts, setCourses] = useState<{ description: string, Courseplan: string, Orientationplan: string, Workload: string, id: number, userId: number }[]>([]);
 
+  function handleRegister() {
+    if (req.id == -1) {
+      const newId = CoursesPosts.length ? CoursesPosts[CoursesPosts.length - 1].id + 1 : 0;
+      const newCourses = { ...req, id: newId };
+      setCourses([...CoursesPosts, newCourses]);
+    } else {
+      setCourses(CoursesPosts.map(c => (c.id == req.id ? req : c)));
+    }
+
+    setReq({
+      description: '',
+      Courseplan: '',
+      Orientationplan: '',
+      Workload: '',
+      id: -1,
+      userId: 0,
     });
+  }
 
-    const [CoursesPosts, setCourses] = useState<{description: string,
-         Courseplan: string,
-          Orientationplan: string,
-           Workload: string,
-           id: number,
-           userId: number,
-         }[]> ([]);
-
-    function handleRegister(){
-      if(req.id == -1){
-        const newId = CoursesPosts.length ? CoursesPosts[CoursesPosts.length -1].id +1 : 0;
-        const newCourses = {...req, id: newId};
-
-        setCourses([...CoursesPosts, newCourses]);
-      }else{
-        setCourses(CoursesPosts.map(c => (c.id == req.id ? req:c)));
-      }
-
-        
-        setReq({
-        description: '',
-        Courseplan: '',
-        Orientationplan: '',
-        Workload: '',
-        id: -1,
-        userId: 0,
-        })
+  function editCourses(id: number) {
+    const courseToEdit = CoursesPosts.find(course => course.id === id);
+    if (courseToEdit) {
+      setReq(courseToEdit);
     }
+  }
 
-    function editCourses(id: number) {
-      const courseToEdit = CoursesPosts.find(course => course.id === id);
-      if (courseToEdit) {
-        setReq(courseToEdit); 
-      }
-    }
+  function deleteCourses(id: number) {
+    setCourses(CoursesPosts.filter(course => course.id !== id));
+  }
 
-    function deleteCourses(id:number){
-     setCourses(CoursesPosts.filter(course => course.id !==id));
-    }
+  const router = useRouter();
 
-    const router = useRouter();
-
-
-    return (
-      <ScrollView style={styles.container}>
-      <MyView router={router} >
-        <Mytext>Cursos</Mytext>
+  return (
+    <ScrollView style={styles.container}>
+      <MyView router={router}>
+        <Mytext style={styles.title}>Cursos</Mytext>
         <View style={styles.row}>
-            <View style={styles.form}>
-                <MyTextArea
-                    iconName='description'
-                    label="Descrição"
-                    value={req.description}
-                    onChangeText={(text) => setReq({...req, description: text})}    
-                    placeholder="Digite a descrição..."       
-                    />
-                
-                <Myinput
-                    iconName='book'
-                    label="Plano de Curso"
-                    value={req.Courseplan}
-                    onChangeText={(text) => setReq({...req, Courseplan: text})}
-                    placeholder="Digite o plano de curso..."
-                     />
-                
-                <Myinput
-                   iconName='school'
-                   label="Plano de Orientação"
-                   value={req.Orientationplan}
-                   onChangeText={(text) => setReq({...req,Orientationplan: text})}
-                   placeholder="Digite o plano de orientação..."
-                />
-                
-                <Myinput
-                    iconName='schedule'
-                    label='Carga horaria:' 
-                    value={req.Workload}
-                   onChangeText={(text) => setReq({...req,Workload: text})}
-                   placeholder="Digite a carga horária..."
-                />
-                <MyButton title="CADASTRAR" onPress={handleRegister} button_type="rect" />
-        </View> 
-            <MyList
-          data={CoursesPosts}
-          keyItem={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <MyItem  style={styles.listItem}
+          <View style={styles.form}>
+            <MyTextArea
+              iconName="description"
+              label="Descrição"
+              value={req.description}
+              onChangeText={(text) => setReq({ ...req, description: text })}
+              placeholder="Digite a descrição..."
+            />
 
-              onEdit={()=> editCourses(item.id)}
-              onDel={()=> deleteCourses(item.id)}
-            >
-              <Mytext style={styles.listText}>Descrição: {item.description}</Mytext>
-              <Mytext style={styles.listText}>Plano: {item.Courseplan}</Mytext>
-              <Mytext style={styles.listText}>Orientação: {item.Orientationplan}</Mytext>
-              <Mytext style={styles.listText}>Carga: {item.Workload}</Mytext>
+            <Myinput
+              iconName="book"
+              label="Plano de Curso"
+              value={req.Courseplan}
+              onChangeText={(text) => setReq({ ...req, Courseplan: text })}
+              placeholder="Digite o plano de curso..."
+            />
 
-              
+            <Myinput
+              iconName="school"
+              label="Plano de Orientação"
+              value={req.Orientationplan}
+              onChangeText={(text) => setReq({ ...req, Orientationplan: text })}
+              placeholder="Digite o plano de orientação..."
+            />
 
-            </MyItem>
-          )}
-        />
-      </View>
-    </MyView>
+            <Myinput
+              iconName="schedule"
+              label="Carga horária"
+              value={req.Workload}
+              onChangeText={(text) => setReq({ ...req, Workload: text })}
+              placeholder="Digite a carga horária..."
+            />
+            <MyButton title="CADASTRAR" onPress={handleRegister} button_type="rect" />
+          </View>
+          <MyList
+            data={CoursesPosts}
+            keyItem={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <MyItem
+                style={styles.listItem}
+                onEdit={() => editCourses(item.id)}
+                onDel={() => deleteCourses(item.id)}
+              >
+                <Mytext style={styles.listText}>Descrição: {item.description}</Mytext>
+                <Mytext style={styles.listText}>Plano: {item.Courseplan}</Mytext>
+                <Mytext style={styles.listText}>Orientação: {item.Orientationplan}</Mytext>
+                <Mytext style={styles.listText}>Carga: {item.Workload}</Mytext>
+              </MyItem>
+            )}
+          />
+        </View>
+      </MyView>
     </ScrollView>
   );
 }
@@ -132,13 +116,14 @@ export default function CoursesScreen(){
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#F4F4F4',
     flex: 1,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: '#333',
   },
   row: {
     flexDirection: 'row',
@@ -150,11 +135,12 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 10,
     padding: 20,
-    backgroundColor: '#F2F2F2',
+    backgroundColor: '#FFFFFF',
     borderRadius: 10,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 4 },
+    elevation: 2,
   },
   input: {
     borderBottomWidth: 1,
@@ -167,17 +153,20 @@ const styles = StyleSheet.create({
   },
   listItem: {
     padding: 15,
-    backgroundColor: '#e8e8e8',
-    borderRadius: 8,
+    backgroundColor: '#FFF',
+    borderRadius: 10,
     marginBottom: 10,
-    borderWidth: 1,
-    borderColor: '#ddd',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 2,
   },
   listText: {
     fontSize: 14,
-    marginBottom: 4,
+    color: '#333',
+    marginBottom: 5,
   },
-  buttonsContanier:{
+  buttonsContanier: {
     backgroundColor: '#F2F2F2',
     flexDirection: 'row',
     justifyContent: 'space-between',

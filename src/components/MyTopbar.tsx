@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Link } from 'expo-router';
+import { Link, Router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import MyNotify from './MyNotify';
 import MyMenu from './MyMenu';
 
-const MyTopbar: React.FC = () => {
+interface MyTopbarProps {
+  router?: Router;
+  title?: string;
+}
+
+const MyTopbar: React.FC<MyTopbarProps> = ({ router }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <View style={styles.container}>
       <View style={styles.topbarPill}>
-        {/* Botão de menu */}
         <TouchableOpacity onPress={() => setMenuOpen(!menuOpen)} style={styles.iconButton}>
           <Ionicons name="menu" size={24} color="#fff" />
         </TouchableOpacity>
 
-        {/* Ícones à direita */}
         <View style={styles.rightIcons}>
           <MyNotify />
           <Link href="/perfil" asChild>
@@ -27,7 +30,6 @@ const MyTopbar: React.FC = () => {
         </View>
       </View>
 
-      {/* Renderiza o menu somente quando aberto */}
       {menuOpen && <MyMenu closeMenu={() => setMenuOpen(false)} />}
     </View>
   );
@@ -35,10 +37,13 @@ const MyTopbar: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 16,
+    margin: 0,       
+    padding: 0,      
     zIndex: 2,
   },
   topbarPill: {
+    marginHorizontal: 16, 
+    marginTop: 16,        
     backgroundColor: '#f1f1f1',
     borderRadius: 40,
     borderWidth: 2,
