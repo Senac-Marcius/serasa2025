@@ -4,10 +4,8 @@ import MyList from '../src/components/MyList'
 import { MyItem } from '../src/components/MyItem'
 import MyView from '../src/components/MyView'
 import { useRouter } from 'expo-router';
-import { setPost, iPost } from '../src/controllers/posts'
-import { supabase } from '../src/utils/supabase'
+import { setPost, iPost, delPosts, editPosts, getPosts} from '../src/controllers/posts'
 import MyButton from '../src/components/MyButtons'
-import { delPosts, editPosts } from '../src/controllers/posts';
 import { Myinput } from '../src/components/MyInputs';
 
 
@@ -24,14 +22,13 @@ export default function postScreen() {
     const [posts, setPosts] = useState<iPost[]>([])
 
     useEffect(() => {
+        
         (async () => {
-            const { data: todos, error } = await supabase.from('posts').select();
-            if (todos && todos.length > 0) {
-                setPosts(todos);
+            const retorno = await getPosts({});
+            if (retorno.status && retorno.data && retorno.data.length > 0) {
+                setPosts(retorno.data);
             }
-            if (error) {
-                console.error("Erro ao buscar os cronogramas:", error);
-            }
+
         })();
     }, []);
 

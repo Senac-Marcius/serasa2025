@@ -8,6 +8,17 @@ interface iPost {
   user_id: number,
 }
 
+async function getPosts(params:any) {
+  const { data: todos, error } = await supabase.from('posts').select();
+
+  if (error) 
+    return {status: false, error: error }
+
+  return {status: true, data: todos }
+
+
+}
+
 async function setPost(post: iPost) {
   //aqui vem os tratamentos de regex ou do modelo de negócio antes de inserir
 
@@ -84,4 +95,4 @@ const isValid = (post: iPost) =>
 
 
 
-export { setPost, iPost, delPosts, editPosts } 
+export { setPost, iPost, delPosts, editPosts, getPosts } 
