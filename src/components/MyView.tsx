@@ -3,6 +3,7 @@ import { View, StyleSheet, Dimensions, TextStyle, ScrollView} from 'react-native
 import MyTopbar from './MyTopbar';
 import MySupport from './MySupport';
 import { Router } from 'expo-router';
+import MyAccessibility from './MyAccessibility';
 
 
 interface MySearchProps {
@@ -36,7 +37,12 @@ const MyView: React.FC< MySearchProps > = ({children, style, title, router}) => 
     tView:{
       width: width,
       height: height,
-    }
+    },
+
+    buttonAcess: {
+      flex: 1, 
+      position: 'relative', 
+    },
   });
 
   return (
@@ -47,6 +53,9 @@ const MyView: React.FC< MySearchProps > = ({children, style, title, router}) => 
         {/* Conteúdo da tela (pode ser adicionado aqui) */}
         {/* Botão de suporte */}
         <MySupport style={styles.suporteButton}/>
+        <MyAccessibility>
+          <MySupport style={styles.buttonAcess} />
+        </MyAccessibility>
       </View>
     </ScrollView>
   );
