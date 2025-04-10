@@ -130,7 +130,7 @@ export default function investmentScreen(){
                   />
                     
 
-                <MyButton title='Cadastrar' onPress={ handleRegister }/> 
+                <MyButton style={{justifyContent:'center'}} title='Cadastrar' onPress={ handleRegister }/> 
             </View>
             <Mylist
                 data={investments}
