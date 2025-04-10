@@ -15,7 +15,14 @@ interface iBudgets{
  
 // Estado para a lista de receitas
 
- 
+async function getBudgets(params:any){
+    const {data: todos, error} = await supabase.from('budgets').select()
+
+   if(error)
+    return { status: false, error: error}
+
+   return {status: true, data: todos}
+}
  
  
 async function  setBudget(budget:iBudgets ){
@@ -67,7 +74,7 @@ async function  setBudget(budget:iBudgets ){
 }
 
 
- async function delBudget(id: number): Promise<{ error?: Error }> {
+ async function deleteBudget(id: number): Promise<{ error?: Error }> {
     try {
         const { error } = await supabase
             .from('budgets')
@@ -122,4 +129,4 @@ async function updateBudget(budget: iBudgets): Promise<iBudgets[] | string> {
     return data || [];
 }
  
-export { iBudgets, setBudget,delBudget, updateBudget}
+export { iBudgets, setBudget,deleteBudget, updateBudget,getBudgets}

@@ -7,15 +7,13 @@ import MyView from '../src/components/MyView';
 import Mytext from '../src/components/MyText';
 import { MyItem } from '../src/components/MyItem';
 import { useRouter } from 'expo-router';
-import {iBudgets , setBudget, delBudget, updateBudget} from '../src/controllers/budgets';
-import { supabase } from '../src/utils/supabase';
-
+import {iBudgets , setBudget, deleteBudget, updateBudget, getBudgets} from '../src/controllers/budgets';
 
 
 export default function BudgetScreen(){
     const router = useRouter();
 
-//aqui é typescriot
+//aqui é typescriot 
 
     const [req, setReq] = useState({
 
@@ -34,15 +32,16 @@ export default function BudgetScreen(){
 
     useEffect(()=> {
         async function getTodos(){
-            const {data: todos} = await supabase.from('budgets').select()
-
-            if(todos && todos.length > 0){
-                setBudgets(todos)
+           const retorno = await getBudgets({})
+            if( retorno.status  && retorno.data && retorno.data?.length > 0){
+                setBudgets(retorno.data);
             }
         }
         
         getTodos();
     },[] )
+
+    
 
     async function  handleRegister(){
         if(req.id == -1){
@@ -80,10 +79,8 @@ export default function BudgetScreen(){
 
     async function delBudget(id: number) {
         try {
-            const { error } = await supabase
-                .from('budgets')
-                .delete()
-                .eq('id', id);
+            const { error } = await deleteBudget(id);
+                
             
             if (!error) {
                 // Só atualiza o estado se a operação no banco for bem sucedida
