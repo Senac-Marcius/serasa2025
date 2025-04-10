@@ -29,8 +29,8 @@ const MyItem: React.FC<MytextProps> = ({ children, style, onEdit, onDel, }) => {
           <TouchableOpacity style={style}>
             {children}
             <View>
-              <MyButton onPress={onEdit} title='Editar'></MyButton>
-              <MyButton  style={{marginTop: 20 }} onPress={onDel} title='Deletar'></MyButton> 
+              <MyButton onPress={onEdit} title='Editar' color='yellow'></MyButton>
+              <MyButton  style={{marginTop: 20 }} onPress={onDel} title='Deletar' color='red'></MyButton> 
 
             </View>
         </TouchableOpacity>
