@@ -41,7 +41,7 @@ export default function BudgetScreen(){
         getTodos();
     },[] )
 
-    
+
 
     async function  handleRegister(){
         if(req.id == -1){
@@ -95,7 +95,7 @@ export default function BudgetScreen(){
 
     
     return (
-        <MyView router={router} >
+        <MyView  >
             {/* aqui é typescriot dentro do front*/}
             <Mytext>Minha tela das postagens</Mytext>
             <View style={styles.row}>
