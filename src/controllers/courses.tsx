@@ -65,4 +65,12 @@ async function deleteCourse(id: number){
 
 }
 
-export {setCoursebd, upadateCourse, deleteCourse, iCourses}
+async function getCourses(param:any) {
+  const {data: todos, error} = await supabase.from('courses').select()
+  if(error){
+    return {status: false, error: error}}
+  return{status:true, data: todos}
+}
+  
+
+export {getCourses,setCoursebd, upadateCourse, deleteCourse, iCourses}
