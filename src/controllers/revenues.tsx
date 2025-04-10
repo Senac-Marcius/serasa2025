@@ -37,6 +37,7 @@ async function  setRevenue(revenue:iRevenue ){
     // Validation checks
     if (!idRegex.test(String(revenue.id))) {
         return "Campo id deve conter apenas números";
+        
     }
 
     if (!descriptionRegex.test(revenue.description)) {
