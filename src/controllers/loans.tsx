@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from '../utils/supabase'
+import { error } from 'console';
 
 
 interface iLoans {
@@ -14,22 +15,32 @@ interface iLoans {
     observation: string,
 }
 
+async function getLoans(params: any) {
+    const { data: todos } = await supabase.from('loans').select();
 
-async function setLoanbd(loans: iLoans) {
+    if (error)
+        return {status: false, error: error}
+
+    return {status:todos, data: todos}
+}
+
+async function setLoanbd(loan: iLoans) {
     const { data, error } = await supabase.from('loans')
-    .insert([
-        loans
-    ])
-    .select()
-    
-    if(error){
-         //aqui vem os tratamentos da variável error
+        .insert([
+            loan
+        ])
+        .select()
 
-         return[]
+    if (error) {
+        //aqui vem os tratamentos da variável error
+        console.log(error)
+
+
+        return []
     }
 
     return data
-}  
+}
 
 async function deleteLoansById(id: number) {
     const { error } = await supabase
@@ -46,10 +57,10 @@ async function deleteLoansById(id: number) {
 }
 
 
-async function updateLoansById(id: number, updatedUser: Partial<iLoans>) {
+async function updateLoansById(id: number, updatedLoans: Partial<iLoans>) {
     const { error } = await supabase
         .from('loans')
-        .update(updatedUser)
+        .update(updatedLoans)
         .eq('id', id);
 
     if (error) {
@@ -60,4 +71,4 @@ async function updateLoansById(id: number, updatedUser: Partial<iLoans>) {
 }
 
 
-export {setLoanbd, iLoans}
+export { setLoanbd, iLoans, deleteLoansById, updateLoansById, getLoans }
