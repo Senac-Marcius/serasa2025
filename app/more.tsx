@@ -22,7 +22,7 @@ export default function MoreScreen() {
                         onPress={() => setVisible(!visible)}
                     />
 
-
+                    
 
                 </View>
 
