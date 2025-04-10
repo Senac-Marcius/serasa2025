@@ -98,22 +98,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Locals" route="locals" icon="location" />
         <MenuItem label="Notifications" route="notifications" icon="notifications" />
         <MenuItem label="Parents" route="parents" icon="people-circle" />
-
-        {/* PERFIL – Apenas ícone clicável */}
-        <View style={styles.menuItem}>
-          <TouchableOpacity
-            style={styles.perfilButton}
-            onPress={() => {
-              console.log('Indo para perfil');
-              router.push('/perfil');
-              closeMenu();
-            }}
-          >
-            <Ionicons name="person" size={20} color="#6A1B9A" />
-          </TouchableOpacity>
-          <Text style={styles.menuText}>Perfil</Text>
-        </View>
-
+        <MenuItem label="Perfil" route="perfil" icon="person" />
         <MenuItem label="Positions" route="positions" icon="pin" />
         <MenuItem label="Posts" route="posts" icon="chatbox" />
         <MenuItem label="Products" route="products" icon="cart" />
@@ -184,14 +169,5 @@ const styles = StyleSheet.create({
   menuText: {
     fontSize: 18,
     color: '#FFF',
-  },
-  perfilButton: {
-    backgroundColor: '#FFF',
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 8,
   },
 });

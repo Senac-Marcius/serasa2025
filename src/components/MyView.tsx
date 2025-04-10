@@ -8,8 +8,9 @@ interface MySearchProps {
   children: ReactNode;
   style?: TextStyle | TextStyle[];
   title?: string;
-  router: Router;
+  router?: Router; // <- agora é opcional
 }
+
 
 const MyView: React.FC<MySearchProps> = ({ children, style, title, router }) => {
   return (
@@ -25,12 +26,12 @@ const MyView: React.FC<MySearchProps> = ({ children, style, title, router }) => 
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, // Garante que a View ocupe todo o espaço disponível
+    flex: 1, 
     position: 'relative',
     backgroundColor: '#F4F4F4',
   },
   scrollContainer: {
-    flex: 1, // Faz o conteúdo ocupar o espaço restante sem sobrepor
+    flex: 1, 
     paddingHorizontal: 16,
   },
   suporteButton: {
