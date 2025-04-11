@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from '../utils/supabase';
 
-
-
 interface iLaunch {
     id: number,
     observation: string,
@@ -13,6 +11,18 @@ interface iLaunch {
     students_id: number,
     class_id: number,
     employees_id: number,
+}
+
+
+
+function toListLaunch(data: iLaunch[]){
+  const resp: {key: number, option: string}[] = [];
+
+  data.map((l) => {
+    resp.push({ key: l.id, option: `${l.created_at} - ${l.class_id} - ${l.students_id}`})
+  })
+
+  return resp;
 }
 
 
@@ -27,29 +37,25 @@ async function  getLaunchs(params:any) {
 
 
 async function setLaunch(launch: iLaunch) {
-    //aqui vem os tratamentos de regex ou do modelo de negócio antes de inserir
-    const observationRegex = /^[\w\sáàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ.,;:!?()'"-]{1,1000}$/;
-    const presenceRegex = /^(true|false)$/i;  // Para boolean (aceita "true" ou "false")
-    const indicatorRegex = /^[A-Z0-9_]{1,20}$/;  // Ex: "INDICATOR_01"
-    const noteRegex = /^[\w\sáàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ.,;:!?()'"-]{1,500}$/;
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;  // Formato YYYY-MM-DD
+  //aqui vem os tratamentos de regex ou do modelo de negócio antes de inserir
+  const observationRegex = /^[\w\sáàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ.,;:!?()'"-]{1,1000}$/;
+  const presenceRegex = /^(true|false)$/i;  // Para boolean (aceita "true" ou "false")
+  const indicatorRegex = /^[A-Z0-9_]{1,20}$/;  // Ex: "INDICATOR_01"
+  const noteRegex = /^[\w\sáàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ.,;:!?()'"-]{1,500}$/;
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;  // Formato YYYY-MM-DD
 
 
-const { data, error } = await supabase.from('launchs')
-  .insert([
-   launch
-  ])
-  .select()
+  const { data, error } = await supabase.from('launchs').insert([ launch ]).select()
 
   if(error){
     console.log('Erro ao inserir o lançamento:', error.message)
-//aqui vem os tratamentos da variavel error 
+    //aqui vem os tratamentos da variavel error 
 
-return[]
+    return[]
   }
 
   return data
 
 }
 
-export {iLaunch, setLaunch, getLaunchs}
+export {iLaunch, setLaunch, getLaunchs, toListLaunch}
