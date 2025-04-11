@@ -1,22 +1,18 @@
-import React, { useState } from 'react';
-import {
-  View,
-  TextInput,
-  FlatList,
-  TouchableOpacity,
-  ScrollView,
-  StyleSheet,
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { TextInput, FlatList, TouchableOpacity, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import MyButton from '../src/components/MyButtons';
-import MyText from '../src/components/MyText';
-import { Myinput, MyTextArea } from '../src/components/MyInputs';
+import { createClient } from '@supabase/supabase-js';
+import Mytext from '../src/components/MyText';
+import  MyView  from '../src/components/MyView';
+import MyList from '../src/components/MyList';
 
-
-
+// Configuração do Supabase
+const supabaseUrl = 'https://fcjbnmhbjolybbkervgg.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjamJubWhiam9seWJia2VydmdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI5MzcyNTQsImV4cCI6MjA1ODUxMzI1NH0.mFa5W8ixlKQtaNm_EdGFg3IuooF95Xcn-ArPx_vX4mI';
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 type Turma = {
-  id: string;
+  id: number;
   curso: string;
   codigo: string;
   turno: string;
@@ -35,9 +31,8 @@ type Turma = {
 export default function TurmasComCadastro() {
   const [turmas, setTurmas] = useState<Turma[]>([]);
   const [modoCadastro, setModoCadastro] = useState(false);
-
   const [form, setForm] = useState<Turma>({
-    id: '',
+    id: 0,
     curso: '',
     codigo: '',
     turno: '',
@@ -53,15 +48,40 @@ export default function TurmasComCadastro() {
     status: '',
   });
 
-  const handleChange = (field: keyof Turma, value: string) => {
-    setForm({ ...form, [field]: value });
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const carregarTurmas = async () => {
+    const { data, error } = await supabase.from('class').select('*');
+    if (error) {
+      console.error('Erro ao buscar turmas:', error.message);
+      return;
+    }
+    setTurmas(data as Turma[]);
   };
 
-  const salvar = () => {
-    const novaTurma = { ...form, id: Date.now().toString() };
-    setTurmas((prev) => [...prev, novaTurma]);
+  const salvar = async () => {
+    const requiredFields = [
+      'codigo', 'curso', 'turno', 'modalidade', 'horario', 
+      'cargaHoraria', 'vagas', 'inicio', 'termino', 'valor', 
+      'docente', 'certificacao', 'status'
+    ];
+    for (const field of requiredFields) {
+      if (!form[field as keyof Turma]) {
+        setErrorMessage(`O campo "${field}" é obrigatório.`);
+        return;
+      }
+    }
+
+    setErrorMessage(null);  
+
+    const { data, error } = await supabase.from('class').insert([form]);
+    if (error) {
+      console.error('Erro ao salvar turma:', error.message);
+      return;
+    }
+    carregarTurmas();
     setForm({
-      id: '',
+      id: 0,
       curso: '',
       codigo: '',
       turno: '',
@@ -79,67 +99,78 @@ export default function TurmasComCadastro() {
     setModoCadastro(false);
   };
 
-  const deletarTurma = (id: string) => {
-    setTurmas(turmas.filter((t) => t.id !== id));
+  const deletarTurma = async (id: number) => {
+    const { error } = await supabase.from('class').delete().eq('id', id);
+    if (error) {
+      console.error('Erro ao deletar turma:', error.message);
+      return;
+    }
+    carregarTurmas();
   };
+
+  const editarTurma = (turma: Turma) => {
+    setForm(turma);
+    setModoCadastro(true);
+  };
+
+  useEffect(() => {
+    carregarTurmas();
+  }, []);
 
   if (modoCadastro) {
     return (
-      <ScrollView contentContainerStyle={styles.formContainer}>
-        <MyText style={styles.header}>Cadastrar Nova Turma</MyText>
+      <MyView contentContainerStyle={styles.formContainer}>
+        <Mytext style={styles.header}>Cadastrar Nova Turma</Mytext>
         {[
-          'codigo',
-          'curso',
-          'turno',
-          'modalidade',
-          'horario',
-          'cargaHoraria',
-          'vagas',
-          'inicio',
-          'termino',
-          'valor',
-          'docente',
-          'certificacao',
-          'status',
+          'codigo', 'curso', 'turno', 'modalidade', 'horario',
+          'cargaHoraria', 'vagas', 'inicio', 'termino', 'valor',
+          'docente', 'certificacao', 'status'
         ].map((campo) => (
           <TextInput
             key={campo}
             style={styles.input}
             placeholder={campo.charAt(0).toUpperCase() + campo.slice(1)}
             value={(form as any)[campo]}
-            onChangeText={(text) => handleChange(campo as keyof Turma, text)}
+            onChangeText={(text) => setForm({ ...form, [campo]: text })}
           />
         ))}
-        <MyButton title="Salvar" onPress={salvar} />
-        <MyButton title="Cancelar" onPress={() => setModoCadastro(false)} color="gray" />
-      </ScrollView>
+        {errorMessage && <Mytext style={styles.errorText}>{errorMessage}</Mytext>}
+        <TouchableOpacity style={styles.button} onPress={salvar} >
+          <Mytext style={styles.buttonText}>Salvar</Mytext>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => setModoCadastro(false)}>
+          <Mytext style={styles.buttonText}>Cancelar</Mytext>
+        </TouchableOpacity>
+      </MyView>
     );
   }
 
   return (
-    <View style={styles.container}>
-      <MyText style={styles.header}>Turmas Cadastradas</MyText>
-      <FlatList
+    <MyView style={styles.container}>
+      <Mytext style={styles.header}>Turmas Cadastradas</Mytext>
+      <MyList
         data={turmas}
-        keyExtractor={(item) => item.id}
+        keyItem={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <MyText style={styles.title}>{item.curso}</MyText>
-            <MyText>Código: {item.codigo}</MyText>
-            <MyText>Turno: {item.turno}</MyText>
+            <Mytext style={styles.title}>{item.curso}</Mytext>
+            <Mytext>Código: {item.codigo}</Mytext>
+            <Mytext>Turno: {item.turno}</Mytext>
             <View style={styles.actions}>
-              <TouchableOpacity onPress={() => {}}>
+              <TouchableOpacity onPress={() => editarTurma(item)}>
                 <Ionicons name="pencil" size={20} color="purple" />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => deletarTurma(item.id)}>
                 <Ionicons name="trash" size={20} color="purple" />
               </TouchableOpacity>
             </View>
-          </View>
+    </MyView>
         )}
       />
-      <MyButton title="Cadastrar Nova Turma" onPress={() => setModoCadastro(true)} />
-    </View>
+      <TouchableOpacity style={styles.button} onPress={() => setModoCadastro(true)}>
+        <Mytext style={styles.buttonText}>Cadastrar Nova Turma</Mytext>
+      </TouchableOpacity>
+    </MyView>
   );
 }
 
@@ -152,7 +183,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: '#f0f0f0',
     padding: 16,
     marginVertical: 8,
     borderRadius: 12,
@@ -170,9 +201,26 @@ const styles = StyleSheet.create({
   input: {
     padding: 12,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#993399',
     borderRadius: 10,
     backgroundColor: '#fff',
     marginBottom: 8,
+  },
+  button: {
+    backgroundColor: '#4CAF50',
+    padding: 12,
+    borderRadius: 8,
+    marginVertical: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  errorText: {
+    color: 'red',
+    marginVertical: 8,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
