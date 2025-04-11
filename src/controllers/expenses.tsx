@@ -2,14 +2,25 @@ import React, { useState } from 'react';
 import { supabase } from '../utils/supabase'
 
 interface iexpenses {
-    id: number,
-    created_at: string,
-    name: string,
-    emails: string,
-    contacts: string,
-    costs: string,
-    descriptions: string,
-    user_id: number,
+  id: number,
+  created_at: string,
+  name: string,
+  emails: string,
+  contacts: string,
+  costs: string,
+  descriptions: string,
+  user_id: number,
+}
+
+function toListExpenses (data: iexpenses[]){
+  const resp: {key: Number, option: String} []=[];
+  
+  data.map((e) =>{
+
+    resp.push()
+    resp.push({key: e.id, option: `${e.name} - ${e.created_at}` })
+  })
+  return resp;
 }
 
 async function getExpense(params:any) {
@@ -69,4 +80,4 @@ async function updateExpense(expense: iexpenses) {
 }
 
 
-    export{setExpense, delRegister, updateExpense, iexpenses, getExpense}
+    export{setExpense, delRegister, updateExpense, iexpenses, getExpense, toListExpenses}

@@ -37,7 +37,7 @@ export default function ExpenseScreen(){
         }
 
         getAll();
-        
+
     },[])
     
 
@@ -86,7 +86,7 @@ export default function ExpenseScreen(){
 
     return (
         
-        <MyView router={router} > 
+        <MyView > 
             {/* aqui é typecript dentro do front */}
             <Text style={styles.title}>tela de despesas</Text>
             <View style={styles.row}>
@@ -99,7 +99,7 @@ export default function ExpenseScreen(){
 
                     <MyTextArea value={req.descriptions} onChangeText={(text)=>setReq({...req ,descriptions: text})} iconName='' placeholder='Descrição'   label=''/>
 
-                <Myinput value={req.costs} onChangeText={(text) => setReq({ ...req, costs: text })} placeholder="R$" label="Valores:" iconName='' /> 
+                    <Myinput value={req.costs} onChangeText={(text) => setReq({ ...req, costs: text })} placeholder="R$" label="Valores:" iconName='' /> 
 
 
                     <MyButton style={{justifyContent:'center'}} onPress={handleRegister} title='Cadastrar'></MyButton>
@@ -114,11 +114,12 @@ export default function ExpenseScreen(){
 
                             onDel={() => delExpense(item.id)}
                         >
-                            <Mytext style={styles.textlis} >{item.name}</Mytext>
-                            <Mytext style={styles.textlis} >{item.contacts}</Mytext>
-                            <Mytext style={styles.textlis} >{item.emails}</Mytext> 
-                            <Mytext style={styles.textlis} >{item.descriptions}</Mytext>  
-                            <Mytext style={styles.textlis} >{item.costs}</Mytext>     
+                            <Mytext style={styles.textlis}>Nome: {item.name}</Mytext>
+                            <Mytext style={styles.textlis}>Contato: {item.contacts}</Mytext>
+                            <Mytext style={styles.textlis}>Email: {item.emails}</Mytext> 
+                            <Mytext style={styles.textlis}>Data: {item.created_at}</Mytext>
+                            <Mytext style={styles.textlis}>Descrição: {item.descriptions}</Mytext>  
+                            <Mytext style={styles.textlis}>Valor: {item.costs}</Mytext>     
                         </MyItem>
                     )}
                 /> 
