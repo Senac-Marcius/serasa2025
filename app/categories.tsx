@@ -86,6 +86,15 @@ getTodos();
             }
         ]);
     }
+    async function deleteCategories(id:number){
+        const list = categories.filter(c=> c.id != id)
+        if(list){
+            setCategories(list);
+            await deleteCategory(id)
+        } 
+        
+
+    }
 
     return (
         <MyView >
@@ -117,7 +126,7 @@ getTodos();
                     renderItem={({ item }) => (
                         
                         <MyItem
-                            onDel={() => delCategorie(item.id)}
+                            onDel={() => deleteCategories(item.id)}
                             onEdit={() => editCategorie(item.id)}
                         >
                             <Text style={styles.postText}>{item.name}</Text>
