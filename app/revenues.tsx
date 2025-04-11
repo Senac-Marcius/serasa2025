@@ -7,12 +7,13 @@ import MyButton from '../src/components/MyButtons';
 import { Myinput, MyTextArea } from '../src/components/MyInputs';
 import {MyItem} from '../src/components/MyItem';
 import Mytext from '../src/components/MyText';
-import { useRouter } from 'expo-router';
+
 import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '../src/controllers/revenues'
 
 import MySelect from '../src/components/MySelect';
 
 export default function RevenueScreen() {
+  
   // Estado para o formulário
   const [req, setReq] = useState({
     id: -1,
@@ -54,6 +55,7 @@ useEffect(()=>{
       const newRevenue = { ...req, id: newId };
       setRevenues([...revenues, newRevenue]);
       await setRevenue(newRevenue)
+      
       
       
       } else {
@@ -110,10 +112,10 @@ useEffect(()=>{
 }
 
    const [unity, setUnit] = useState()  
-  const router = useRouter();
+  
   return (
 
-    <MyView  router={router} >
+    <MyView >
       <Mytext style={styles.title}>
          cadastre as receitas
       </Mytext>

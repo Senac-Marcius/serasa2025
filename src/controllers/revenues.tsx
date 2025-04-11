@@ -14,6 +14,23 @@ interface iRevenue{
     user_id: number;
 }
 
+
+
+
+
+function toListRevenues(data:iRevenue[]) {
+   const resp : {key:Number,option:string}[]=[]
+
+   data.map((r)=>{
+    resp.push({key: r.id,option: r.name})
+   })
+   return resp
+}
+
+
+
+
+
 async function getRevenues(params:any) {
     const {data: todos, error} = await supabase.from('revenues').select();
     
@@ -166,4 +183,4 @@ async function updateRevenue(revenue: iRevenue) {
 
 
 
-export {setRevenue, iRevenue, deleteRevenue, updateRevenue, getRevenues }
+export {setRevenue, iRevenue, deleteRevenue, updateRevenue, getRevenues, toListRevenues }
