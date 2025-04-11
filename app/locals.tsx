@@ -1,14 +1,14 @@
 import React, { useState, useEffect} from 'react'; 
-import { Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, View  } from 'react-native';
+import { Text, TextStyle, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, View  } from 'react-native';
 import MySelect from '../src/components/MySelect' 
 import MyView from '../src/components/MyView';
 import MyList from '../src/components/MyList';
 import {MyItem} from '../src/components/MyItem';
-import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs';
+import { Myinput } from '../src/components/MyInputs';
 import MyButton  from '../src/components/MyButtons';
 import { useRouter } from 'expo-router';
-import {setLocal, iLocal, deleteLocal, updateLocal} from '../src/controllers/locals'
-import { supabase } from '../src/utils/supabase' 
+import {setLocal, iLocal, deleteLocal, updateLocal, getLocals} from '../src/controllers/locals'
+
 
 export default function LocalScreen(){
 
@@ -28,16 +28,15 @@ export default function LocalScreen(){
                                        //  '< >' -> recebe um tipo. torna-se tipada   -> 
     useEffect(() => {
         async function getTodos() {
-            const {data: todos} = await supabase.from('locals').select()
-
-            if (todos && todos.length > 0){
-                setLocals(todos)
+          const retorno = await getLocals({})
+          if (retorno.status && retorno.data && retorno.data.length > 0) {
+                setLocals(retorno.data);
             }
+        getTodos();    
         }
+    })
 
-        getTodos();
 
-    }, [])
 
     async function handleRegister(){
         if(req.id == -1){
@@ -80,20 +79,19 @@ export default function LocalScreen(){
         }
     }
 
-    const [unity, setUnit] = useState("selecione a dimensão")              /* exemplo do código de SELECT para copiar */
+    const [unity, setUnit] = useState("Select")              /* exemplo do código de SELECT para copiar */
 
     const [message, setMessage] = useState("")
     
     
     const router = useRouter();
     
-
     return (
 
-            <MyView router={router} style={styles.container}>
-                <Text style={styles.title}>LOCAL</Text>
-                {message.length > 0 && (  
-                    <Text style={styles.title}>{message}</Text>
+            <MyView >
+                <Text style={styles.title}>CADASTRO DE LOCAIS</Text>
+                {message.length > 1 && (  
+                <Text style={styles.title}>{message}</Text>
                 )}
                 <View style={styles.row}>
                     <View style={styles.formContainer}>
@@ -109,18 +107,22 @@ export default function LocalScreen(){
                                                                                                         
                         <Myinput
                         iconName='language'
-                        placeholder={ `Digite a sua dimensão em ${unity}:`}
+                        placeholder={ `Ex. do componente ${unity} em ação:`}
                         value={req.dimension}
                         label='Dimensão:'
                         onChangeText={(n) => setReq({...req, dimension: n })}  
                                     
                         />
+
+                    
                       
-                        <MySelect label={unity} setLabel={setUnit}  
+                        <MySelect 
+                        label={unity} setLabel={setUnit}  
                         list={            
                             [
                                 {key:0, option: 'metros'},             /* exemplo do código de SELECT para copiar */
                                 {key:1, option: 'cm'},
+
                             ]
                         } />  
 
@@ -168,7 +170,9 @@ export default function LocalScreen(){
        
         
     )   
-}               
+}             
+
+
 
 const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos funções que criam estilos para fontes
 
