@@ -1,7 +1,6 @@
-
 import React, { useState } from "react";
-import { TouchableOpacity, Text, StyleSheet, ViewStyle,View } from "react-native";
-import { Icon } from "react-native-paper";
+import { TouchableOpacity, Text, StyleSheet, ViewStyle } from "react-native";
+import { Icon, MD3Colors } from "react-native-paper";
 
 type Button_type =
   | "default"
@@ -9,7 +8,9 @@ type Button_type =
   | "circle"
   | "rect"
   | "capsule"
-  | "loading";
+  | "loading"
+  | "edit"
+  | "delete";
 
 interface MyButtonProps {
   title?: string;
@@ -40,6 +41,10 @@ function getButtonType(button_type: Button_type): any {
       return styles.button_rect;
     case "loading":
       return styles.button_rect;
+    case "edit":
+      return styles.button_edit;
+    case "delete":
+      return styles.button_delete;
     default:
       return styles.button_default;
   }
@@ -64,20 +69,18 @@ const MyButton: React.FC<MyButtonProps> = ({
   const [loading, setLoading] = useState(false);
 
   function onPressIntenal() {
-    if (button_type == "loading") {
+    if (button_type === "loading") {
       setLoading(true);
       setTimeout(() => {
-        () => {
-          onPress && onPress();
-        };
+        onPress && onPress();
         setLoading(false);
       }, 2000);
     } else {
-      onPress != undefined ? onPress() : "";
-      setLoading(true);
+      onPress && onPress();
     }
   }
-  return (<View style={{alignContent:"center", justifyContent:"center"}}>
+
+  return (
     <TouchableOpacity
       style={[
         getButtonType(button_type),
@@ -86,8 +89,8 @@ const MyButton: React.FC<MyButtonProps> = ({
       ]}
       onPress={onPressIntenal}
     >
-      {icon && <Icon size={iconSize} source={icon} color={iconColor}></Icon>}
-      {title && <Text style={{ fontSize: font_size, color: text_color }}>{title}</Text>}
+      {icon && <Icon size={20} source={icon} color="#fff" />}
+      <Text style={styles.button_text}>{title}</Text>
     </TouchableOpacity>
     {bottom_text && <Text  style={{ fontSize: font_size, color: text_color, textAlign:"center" , fontWeight:"bold" }}>{bottom_text}</Text>}
     </View>
@@ -103,15 +106,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   button_capsule: {
-    display:"flex",
     borderRadius: 50,
     alignItems: "center",
     justifyContent: "center",
-    flexDirection: "row",
-    
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   button_round: {
-    display:"flex",
+    backgroundColor: "#813AB1",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
@@ -119,21 +123,45 @@ const styles = StyleSheet.create({
     
   },
   button_rect: {
-    display:"flex",
+    backgroundColor: "#813AB1",
+    padding: 10,
+    borderRadius: 0,
     alignItems: "center",
     justifyContent: "center",
-    flexDirection: "row",
-    borderRadius: 0,
-    
   },
   button_default: {
-    display:"flex",
+    backgroundColor: "#813AB1",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
     borderRadius: 15,
     alignItems: "center",
     justifyContent: "center",
-    flexDirection: "row",
-    
+  },
+  button_edit: {
+    backgroundColor: "#813AB1",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  button_delete: {
+    backgroundColor: "#FF4C4C",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  button_text: {
+    color: "#FFFFFF",
+    fontSize: 14,
+    fontWeight: "600",
   },
 });
 
 export default MyButton;
+
+
+//<MyButton title="EDITAR" button_type="edit" onPress={() => {}} />
+//<MyButton title="EXCLUIR" button_type="delete" onPress={() => {}} />
