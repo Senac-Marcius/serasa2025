@@ -28,7 +28,7 @@ export default function NotificationScreen(){
     useEffect(() => {
         async function getTodos(){
             const retorno = await getNotifications({})
-            if (retorno.status && retorno.data && retorno.data.lenght > 0){
+            if (retorno.status && retorno.data && retorno.data.length > 0){
                 setNotifications(retorno.data);
             }
         }
@@ -74,7 +74,7 @@ export default function NotificationScreen(){
     const router = useRouter();
     
 return (
-    <MyView router={router} >
+    <MyView>
           
            
 
