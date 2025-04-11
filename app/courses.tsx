@@ -96,14 +96,14 @@ export default function CoursesScreen() {
             keyItem={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <MyItem
-                style={styles.listItem}
+                style={styles.cardGridItem}
                 onEdit={() => editCourses(item.id)}
                 onDel={() => deleteCourses(item.id)}
               >
-                <Mytext style={styles.listText}>Descrição: {item.description}</Mytext>
-                <Mytext style={styles.listText}>Plano: {item.Courseplan}</Mytext>
-                <Mytext style={styles.listText}>Orientação: {item.Orientationplan}</Mytext>
-                <Mytext style={styles.listText}>Carga: {item.Workload}</Mytext>
+                <Mytext style={styles.cardTitle}>Descrição: {item.description}</Mytext>
+                <Mytext style={styles.cardTitle}>Plano: {item.Courseplan}</Mytext>
+                <Mytext style={styles.cardTitle}>Orientação: {item.Orientationplan}</Mytext>
+                <Mytext style={styles.cardTitle}>Carga: {item.Workload}</Mytext>
               </MyItem>
             )}
           />
@@ -172,5 +172,22 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     flex: 1,
+  },
+  cardGridItem: {
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+    padding: 16,
+    margin: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 5,
   },
 });

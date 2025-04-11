@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {View,Text,StyleSheet,ScrollView,Dimensions,} from 'react-native';
 import { useRouter } from 'expo-router';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {iDisciplines,SetDisciplinebd,UpdateDisciplinebd,DeleteDisciplinebd, getDisciplines} from '../src/controllers/disciplines';
+import {iDisciplines,SetDisciplinebd,UpdateDisciplinebd,DeleteDisciplinebd, getDisciplines, toListDisciplines} from '../src/controllers/disciplines';
 import MyView from '../src/components/MyView';
 import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
