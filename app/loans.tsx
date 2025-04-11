@@ -54,7 +54,7 @@ export default function LoanScreen() {
 
 
 
-        
+
     }, [])
 
 
@@ -142,7 +142,7 @@ export default function LoanScreen() {
 
 
         return (
-            <MyView router={router} >
+            <MyView >
                 <View style={styles.formConteiner}>
                     <Text>Tela de Empréstimo</Text>
                     <View style={styles.row}>
