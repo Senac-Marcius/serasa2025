@@ -32,7 +32,7 @@ export default function ScaleScreen(){
 
     const [selectedDay, setSelectedDay] = useState<string>('');
 
-    // Definir os dias da semana como lista de opções
+    
     const daysOfWeek = [
         { key: '1', option: 'Segunda-feira' },
         { key: '2', option: 'Terça-feira' },
@@ -114,7 +114,7 @@ export default function ScaleScreen(){
       const router = useRouter();
 
     return (
-        <MyView router={router} > {/* Aqui é typecript dentro do html*/}
+        <MyView> {/* Aqui é typecript dentro do html*/}
             <Mytext style={styles.Mytext}>CRIE SUA ESCALA </Mytext>
             <MyFilter
                 style={styles.container}
