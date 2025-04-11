@@ -113,13 +113,7 @@ export default  function itemScreen(){
                 
 
 
-                <Myinput 
-                   placeholder= "Digite o numero patrimonial"
-                   value={req.asset_number}
-                   onChangeText={(text)=>setReq({...req,asset_number:text})}
-                   label="N° patrimonial" 
-                   iconName='user' 
-                />
+                
 
                 <Myinput 
                    placeholder= "N°"

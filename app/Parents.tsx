@@ -1,92 +1,153 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity} from 'react-native';
 import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
+import { setParent,iParent,delParent,editParent,getTimeParents,toListparent} from '../src/controllers/parents';
+import MyButton from '../src/components/MyButtons';
+import MyList from '../src/components/MyList';
+import { Myinput, MyCheck, MyTextArea} from '../src/components/MyInputs';
+import { MyItem,MyCorrelated } from '../src/components/MyItem';
+import { supabase } from '../src/utils/supabase';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import itemScreen from './itens';
+import { ListItem } from 'native-base';
+import MyUpload from '../src/components/MyUpload';
+
+
 
 //import dateTimepicker
 //npm run web → chamar pagina web pelo terminal
 //batatinha
 export default function ParentScreen (){
-//Aqui é TypeScript
+    const [parents,setParents] = useState<iParent[]>([])
+
     const [req, setReq] = useState({
-        Nome: '',
-        Email:'',
-        parentesco:'',
-        id:0,
-        createAt: new Date().toISOString(),
-        userId: 0,
+        id:-0,
+        name: '',
+        rg: '',
+        cpf:'',
+        age:'',
+        phone:'',
+        email:'',
+        kinship:'',
+        createat: new Date().toISOString(),
+        userid: 0,
 
     });
+   
+    useEffect(() => {
+        async function getTodos(){
+            const retorno = await getTimeParents ({})
+        
+            if(retorno.status && retorno.data && retorno.data.length > 0){
+                setParents(retorno.data)
+            }
 
-    const [parents,setParents] = useState<{
-        Nome: string,
-        Email: string,
-        parentesco: string,
-        id: number,
-        createAt: string,
-        userId: number,
-    
-    }[]>([])/* <> → usado para tipar uma função */
+        }
 
-    function handleRegister() {
-        if(req.id == -1){
-            const newId = parents.length ? parents [parents.length -1].id +1 : 0;
-            const newParents = {...req, id: newId}
-        }else{
-            setParents(parents.map( p =>(p.id == req.id ? req : p)))
+        getTodos();
+
+    })
+
+    async function handleRegister() {
+
+        if (req.id === -1) {
+            const newId = parents.length ? parents[parents.length - 1].id + 1 : 0;
+            const newParent = { ...req, id: newId };
+            setParents([...parents, newParent]);
+            const resp = await setParent(newParent);
+            console.log (resp)
+        } else {
+                
+            setParents(parents.map(p => (p.id == req.id ? req : p)));
+            await editParent(req)
         }
 
         //setParents([...parents, req])
         setReq({
             id:req.id + 1,
-            Nome: '',
-            Email:'',
-            parentesco:'',
-            createAt: new Date().toISOString(),
-            userId: 0,
+            name: '',
+            rg:'',
+            cpf:'',
+            age:'',
+            phone:'',
+            email:'',
+            kinship:'',
+            createat: new Date().toISOString(),
+            userid: 0,
         })
     }
-     function editParent(id:number){
-        const parent = parents.find (p => p.id == id)
-        if(parent)
-            setReq(parent)
-     }
-     function delParent(id:number){
-        const list = parents.filter (p=> p.id != id)
-        if (list)
+
+    async function delParentL(id: number) {
+        const error = await delParent (id)
+        if (!error) {
+            const list = parents.filter(r => r.id != id)
             setParents(list)
-     }
+        } else {
+            console.error('Erro ao deletar:', error);
+        }
+    }
+    
+    function editParentL(id: number) {
+        const parent = parents.find(r => r.id === id);
+        if (parent) {
+            setReq(parent);
+        }
+    }
+        
     
     const router = useRouter();
+    const[urlDocument, setDocument]= useState('')
+
+    
 
     return (
-        <MyView router={router} > {/*aqui é typeScript dentro do Front*/}
+        <MyView> {/*aqui é typeScript dentro do Front*/}
             {/*View → esse view é diferente do HTML ele contém DIVs e outros atributos,*/}
-            <Text>Minha tela das postagens </Text>
             <View style = {styles.row}>
                 <View style={styles.form}>{/*View no Type pode ser usado para substituir o Form */}
                 {/*<FlatList/> → atibuto para possivel criação de lista */}
                     <TextInput 
                         placeholder="Nome:"
-                        value={req.Nome}
-                        onChangeText={(Text) => setReq({...req, Nome: Text})}
-            
+                        value={req.name}
+                        onChangeText={(Text) => setReq({...req, name: Text})}
+                    />
+                    <TextInput 
+                        placeholder="RG:"
+                        value={req.rg}
+                        onChangeText={(Text) => setReq({...req, name: Text})}
+                    />
+                    <TextInput 
+                        placeholder="CPF:"
+                        value={req.cpf}
+                        onChangeText={(Text) => setReq({...req, name: Text})}
                     />
                     <TextInput
+                        placeholder="Idade:"
+                        value={req.age}
+                        onChangeText={(Text) => setReq({...req, email: Text})}
+                    />
+                    <TextInput 
+                        placeholder="Telefone:"
+                        value={req.phone}
+                        onChangeText={(Text) => setReq({...req, name: Text})}
+                    />
+                    <TextInput 
                         placeholder="Email:"
-                        value={req.Email}
-                        onChangeText={(Text) => setReq({...req, Email: Text})}
+                        value={req.email}
+                        onChangeText={(Text) => setReq({...req, name: Text})}
                     />
                     <TextInput
                         placeholder="Parentesco:"
-                        value={req.parentesco}
-                        onChangeText={(Text) => setReq({...req, parentesco: Text})}
+                        value={req.kinship}
+                        onChangeText={(Text) => setReq({...req, kinship: Text})}
                     />
                 
-                    <Button 
-                        title='Cadastrar' 
-                        color='blue'
-                        onPress={handleRegister}/>
+                    <MyButton
+                        title='Cadastrar'
+                        onPress={handleRegister}
+                        button_type='round'
+                        style={styles.button_round}/>
                    {/*foi aberto uma area de codigo chamar a variavel, equivale o inder do html*/}
                    {/*<Button 
                         title='Editar'
@@ -96,28 +157,34 @@ export default function ParentScreen (){
                         title='Deletar'
                         color='red'
                         onPress={delParent}/>*/}
+                        <MyUpload setUrl={setDocument} url={urlDocument}/>
                 </View>
+                
 
-                <FlatList
+                <MyList
                     data={parents}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
-                        <View style={styles.parentsItem}>
-
+                        <MyItem 
+                            style={styles.parentsItem}
+                            onDel={()=> {delParentL(item.id)}}
+                            onEdit={()=> {editParentL(item.id)}}
+                        >
                             <Text>{item.id}</Text>
-                            <Text>{item.Nome}</Text>
-                            <Text>{item.Email}</Text>
-                            <Text>{item.parentesco}</Text>
-                            <Text>{item.createAt}</Text>
-                            <Text>{item.userId}</Text> 
-                                <View style ={styles.buttonContainer}>
-                                    <TouchableOpacity onPress={()=> {editParent(item.id)}}>EDIT</TouchableOpacity>
-                                    <TouchableOpacity onPress={()=> {delParent(item.id)}}>DELETE</TouchableOpacity>
-                                </View>
-                        </View>
+                            <Text>{item.name}</Text>
+                            <Text>{item.rg}</Text>
+                            <Text>{item.cpf}</Text>
+                            <Text>{item.age}</Text>
+                            <Text>{item.phone}</Text>
+                            <Text>{item.email}</Text>
+                            <Text>{item.kinship}</Text>
+                            <Text>{item.createat}</Text>
+                            <Text>{item.userid}</Text>
+                        </MyItem>
                     )}
                 />
                 {/*parâmetro FlatList é parecido com o forEach do html */}
+                
             </View>
 
         </MyView>
@@ -163,4 +230,12 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         gap: 20,
         alignContent: 'space-around'
     },
+    button_round: {
+        display:"flex",
+        borderRadius: 20,
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "row",
+        
+      },
 })
