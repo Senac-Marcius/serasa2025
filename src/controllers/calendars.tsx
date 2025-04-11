@@ -9,6 +9,13 @@ interface iCalendar {
   created_at: string;
 }
 
+function toListCalendar (data: iCalendar[]){
+  const resp: {key:number, option: string}[] = [];
+  data.map ((c) => {
+    resp.push({key: c.id, option: c.studentname})
+  })
+return resp; 
+}
 
 async function getCalendars(params:any) {
   
