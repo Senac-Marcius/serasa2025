@@ -8,10 +8,10 @@ import {MyItem} from '../src/components/MyItem';
 import MyView from '../src/components/MyView';
 import {useRouter} from 'expo-router';
 import {iScale, setScale, updateScale, deleteScale, getScale} from '../src/controllers/scales';
-import { supabase } from '../src/utils/supabase'
 import Mytext from '../src/components/MyText';
 import MyList from '../src/components/MyList';
 import { jsiConfigureProps } from 'react-native-reanimated/lib/typescript/core';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -114,6 +114,7 @@ export default function ScaleScreen(){
       const router = useRouter();
 
     return (
+        <ScrollView>
         <MyView> {/* Aqui é typecript dentro do html*/}
             <Mytext style={styles.Mytext}>CRIE SUA ESCALA </Mytext>
             <MyFilter
@@ -168,6 +169,7 @@ export default function ScaleScreen(){
                 </View> 
             </View>       
         </MyView> 
+        </ScrollView>
     );
 };
 
@@ -186,6 +188,7 @@ const styles = StyleSheet.create({
         width: 'auto',
     },
     Mytext:{
+        color: '#813AB1',
         textAlign: 'center',
         fontSize: 20,
     },
@@ -197,7 +200,7 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         flex: 1,
-        padding: 10,
+        alignItems: 'center',
         backgroundColor: '#F2F2F2',
         borderRadius: 10,
         shadowColor: '#000',
@@ -211,6 +214,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'flex-start',
         marginBottom: 200,
+        gap: 10,
     }, 
     form: {
       alignItems: 'center',
