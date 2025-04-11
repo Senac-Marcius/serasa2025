@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from 'react';
-import { View, Text, StyleSheet } from 'react-native' ;
+import { View, StyleSheet } from 'react-native' ;
 import {MyItem} from '../src/components/MyItem';
 import MyList from '../src/components/MyList';
 import MyView from '../src/components/MyView';
@@ -7,7 +7,6 @@ import MyButton from '../src/components/MyButtons'
 import {Myinput, MyTextArea} from '../src/components/MyInputs';
 import { useRouter } from 'expo-router';
 import { setExpense, delRegister, updateExpense, iexpenses, getExpense } from '../src/controllers/expenses';
-import { supabase } from '../src/utils/supabase';
 import Mytext from '../src/components/MyText'
 
 
@@ -88,7 +87,7 @@ export default function ExpenseScreen(){
         
         <MyView > 
             {/* aqui é typecript dentro do front */}
-            <Text style={styles.title}>tela de despesas</Text>
+            <Mytext style={styles.title}>tela de despesas</Mytext>
             <View style={styles.row}>
                 <View style={styles.form}>
                     <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text })} placeholder="Nome" label="Nomes:" iconName='' />
