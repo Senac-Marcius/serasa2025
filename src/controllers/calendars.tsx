@@ -9,6 +9,7 @@ interface iCalendar {
   created_at: string;
 }
 
+
 async function getCalendars(params:any) {
   
   const { data:todos, error } = await supabase.from('calendar').select();
@@ -39,5 +40,5 @@ async function setCalendarsData(calendar: iCalendar) {
   return data;
 }
 
-export { setCalendarsData, iCalendar, getCalendars };
+export { setCalendarsData, iCalendar, getCalendars, };
 //CORRETO
