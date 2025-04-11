@@ -3,6 +3,7 @@ import { supabase } from '../utils/supabase'
 
 
 interface iCourses{
+    name: string,
     id: number,
     created_at: string,
     description: string,
@@ -12,6 +13,13 @@ interface iCourses{
     userId: number
 }
 
+function toListCourses(data:iCourses[]){
+  const resp: {key: number, option: string} [] = [];
+    data.map((c) =>{
+      resp.push({key: c.id, option: c.name})
+    })
+  return resp;
+}
 
 
 async function setCoursebd(courses:iCourses ){

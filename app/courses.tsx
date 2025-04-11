@@ -15,6 +15,7 @@ import {getCourses,iCourses, upadateCourse, deleteCourse, setCoursebd} from '../
 //fuction
 export default function CoursesScreen(){
     const [req, setReq] = useState({
+        name: '',
         id: -1,
         created_at: new Date().toISOString(),
         description: '',
@@ -53,6 +54,7 @@ export default function CoursesScreen(){
         console.log("Atualizar:", resp);
       }
         setReq({
+        name: '',
         id: -1,
         created_at: new Date().toISOString(),
         description: '',
@@ -86,15 +88,21 @@ export default function CoursesScreen(){
         <View style={styles.row}>
             <View style={styles.form}>
                 <MyTextArea
+                    iconName='name'
+                    label="Nome"
+                    value={req.description}
+                    onChangeText={(text) => setReq({...req, name: text})}    
+                    placeholder="Digite a descrição..."       
+                    />
+
+                <MyTextArea
                     iconName='description'
                     label="Descrição"
                     value={req.description}
                     onChangeText={(text) => setReq({...req, description: text})}    
                     placeholder="Digite a descrição..."       
                     />
-
-                
-                
+                   
                 <Myinput
                     iconName='book'
                     label="Plano de Curso"
@@ -128,13 +136,12 @@ export default function CoursesScreen(){
 
               onEdit={()=> editCourses(item.id)}
               onDel={()=> deleteCourses(item.id)}
-            >
+            > 
+              <Mytext style={styles.listText}>Nome: {item.name}</Mytext>
               <Mytext style={styles.listText}>Descrição: {item.description}</Mytext>
               <Mytext style={styles.listText}>Plano: {item.courseplan}</Mytext>
               <Mytext style={styles.listText}>Orientação: {item.orientationplan}</Mytext>
               <Mytext style={styles.listText}>Carga: {item.workload}</Mytext>
-
-              
 
             </MyItem>
           )}
