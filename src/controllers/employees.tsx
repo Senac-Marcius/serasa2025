@@ -24,7 +24,7 @@ interface iEmployees {
 function toListEmployees(data: iEmployees[]){
   const resp: {key: number, option: string}[] = [];
   data.map((l) => {
-    resp.push({ key: l.id, option: l.name})
+    resp.push({ key: l.id, option: l.name })
   })
 
   return resp;
@@ -35,8 +35,6 @@ async function getEmployees(params:any) {
     console.log(error)
     return {status: false, error: error}
   } 
-
-  
   return {status: true, data: todos}
   
 }

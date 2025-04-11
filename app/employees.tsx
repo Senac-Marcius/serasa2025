@@ -8,7 +8,7 @@ import {MyItem} from '../src/components/MyItem';
 import MyList from '../src/components/MyList';
 import { Myinput,MyCheck } from '../src/components/MyInputs';
 import { useRouter } from 'expo-router';
-import { setEmployee,iEmployees,updateEmployee,dellEmployee } from '../src/controllers/employees';
+import { setEmployee,iEmployees,updateEmployee,dellEmployee,getEmployees,toListEmployees } from '../src/controllers/employees';
 import { supabase } from '../src/utils/supabase';
 
 
@@ -41,12 +41,15 @@ export default function EmployeeScreen(){
       useEffect(() => {
         
         (async () => {
-       
-          console.log(todos);
+            async function getTodos(){
+                const retorno = await getEmployees({})
+                if (retorno.status && retorno.data && retorno.data.length > 0){
+                    setEmployees(retorno.data);
+                }
+            }
+            getTodos()
     
-          if ( todos && todos.length > 0) {
-            setEmployees(todos)
-          }
+          
         })();
       }, [])
    
