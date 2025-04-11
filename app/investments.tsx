@@ -7,7 +7,6 @@ import Mylist from '../src/components/MyList';
 import {MyItem} from '../src/components/MyItem';
 import MyButton from '../src/components/MyButtons';
 import Mytext from '../src/components/MyText';
-import { useRouter } from 'expo-router';
 import { iInvestment, setInvestment, deleteInvestment, updateInvestment, getInvestments } from '../src/controllers/investments';
 
 export default function investmentScreen(){
@@ -28,7 +27,7 @@ export default function investmentScreen(){
     useEffect(() => {
         async function getAll() {
 
-            
+
             const retorno = await getInvestments({});
             if (retorno.status && retorno.data && retorno.data.length > 0) {
             setInvestments(retorno.data);
@@ -86,11 +85,10 @@ export default function investmentScreen(){
 }
     
 
-    const router = useRouter();
     
     
     return (
-      <MyView router={router} >  
+      <MyView>  
               {/* Aqui é typescript dentro do front */}
         
         <MyAccessibility>
