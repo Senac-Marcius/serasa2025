@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
@@ -7,57 +7,67 @@ import MyView from '../src/components/MyView';
 import Mytext from '../src/components/MyText';
 import { MyItem } from '../src/components/MyItem';
 import { useRouter } from 'expo-router';
+import {iBudgets , setBudget, deleteBudget, updateBudget, getBudgets} from '../src/controllers/budgets';
 
 
 export default function BudgetScreen(){
     const router = useRouter();
 
-//aqui é typescriot
+//aqui é typescriot 
 
     const [req, setReq] = useState({
 
+        
+        id: -1,
         name:'',
         url:'',
-        id: -1,
-        createAt: new Date().toISOString(),
-        velue:'',
-        userId: 0,
-        startDate: '',
-        endDate:'',
+        created_at: new Date().toISOString(),
+        value:'',
+        user_id: 3,
+        start_date: '',
+        end_date:'',
         
     });
+    const [budgets, setBudgets] = useState<iBudgets[]>([]);
 
-    const [budgets, setBudgets]= useState<{
-        name: string,
-        url:string,
-        id: number,
-        createAt: string,
-        velue: string,
-        userId: number,
-        startDate: string,
-        endDate: string,
+    useEffect(()=> {
+        async function getTodos(){
+           const retorno = await getBudgets({})
+            if( retorno.status  && retorno.data && retorno.data?.length > 0){
+                setBudgets(retorno.data);
+            }
+        }
+        
+        getTodos();
+    },[] )
 
-    }[]>([])
 
-    function  handleRegister(){
+
+    async function  handleRegister(){
         if(req.id == -1){
-            const newId = budgets.length ? budgets[budgets.length -1].id +1: 0;
+            const newId = budgets.length ? budgets[budgets.length -1].id + 1: 0;
+            console.log(newId)
+
             const newBudget = {...req, id: newId};
 
             setBudgets([...budgets, newBudget]);
+            console.log(newBudget)
+           const resp = await setBudget(newBudget)
+           console.log (resp)
         }else{
-            setBudgets(budgets.map(jTNL=> (jTNL.id == req.id)? req: jTNL));
+            setBudgets(budgets.map(b=> (b.id == req.id)? req: b));
+            const result = await updateBudget(req);
         }
         
         setReq({ 
         id: -1,
         name:'',
         url:'',
-        createAt: new Date().toISOString(),
-        velue:'',
-        userId: 0,
-        startDate: '',
-        endDate:'',
+        created_at: new Date().toISOString(),
+        value:'',
+        user_id: 3,
+        start_date: '',
+        end_date:'',
             })
     }
 
@@ -67,16 +77,29 @@ export default function BudgetScreen(){
         setReq(budget)
     }
 
-    function delBudget(id:number){
-        const list = budgets.filter(b => b.id != id)
-        setBudgets(list)
+    async function delBudget(id: number) {
+        try {
+            const { error } = await deleteBudget(id);
+                
+            
+            if (!error) {
+                // Só atualiza o estado se a operação no banco for bem sucedida
+                setBudgets(budgets.filter(b => b.id !== id));
+            } else {
+                console.error('Erro ao deletar:', error);
+            }
+        } catch (err) {
+            console.error("Erro inesperado:", err);
+        }
     }
 
     
     return (
-        <MyView router={router} >
+        <MyView  >
             {/* aqui é typescriot dentro do front*/}
-            <Mytext>Minha tela das postagens</Mytext>
+            <Mytext style={styles.title}>
+            Cadastre os orçamentos
+            </Mytext>
             <View style={styles.row}>
                 <View style={styles.form}>
                     <Myinput
@@ -96,22 +119,22 @@ export default function BudgetScreen(){
                      
                      <Myinput 
                     placeholder = "Digite o valor"
-                    value={req.velue}
-                    onChangeText={(text) => setReq({...req ,velue: text})} 
+                    value={req.value}
+                    onChangeText={(text) => setReq({...req ,value: text})} 
                     label="valor"
                     iconName="pin"
                      />
                     <Myinput 
                   
-                    value={req.startDate}
-                    onChangeText={(text) => setReq({...req ,startDate: text})} 
+                    value={req.start_date}
+                    onChangeText={(text) => setReq({...req ,start_date: text})} 
                     label="Data Inicial"
                     iconName="pin"
                      />
                     <Myinput 
                   
-                    value={req.endDate}
-                    onChangeText={(text) => setReq({...req ,endDate: text})}
+                    value={req.end_date}
+                    onChangeText={(text) => setReq({...req ,end_date: text})}
                     label="Data Final"
                     iconName="pin"
                      />
@@ -132,12 +155,13 @@ export default function BudgetScreen(){
                         >
                        
                        <Text> Nome: {item.name}</Text>
+                       <Text> id: {item.id}</Text>
                            <Text> Url: {item.url}</Text>
-                           <Text> CreateAt: {item.createAt}</Text>
-                           <Text> Valor: {item.velue}</Text>
-                           <Text> UserId: {item.userId}</Text>
-                           <Text> Data Inicial: {item.startDate}</Text>
-                           <Text> Data Final: {item.endDate}</Text>
+                           <Text> CreateAt: {item.created_at}</Text>
+                           <Text> Valor R$: {item.value}</Text>
+                           <Text> UserId: {item.user_id}</Text>
+                           <Text> Data Inicial: {item.start_date}</Text>
+                           <Text> Data Final: {item.end_date}</Text>
     
                         </MyItem>
                     )}
@@ -207,6 +231,20 @@ const styles = StyleSheet.create({
         buttonText:{
         color:'#000000',
         fontWeight:'bold',
+         },
+
+         title:{              
+            marginBottom: 8,
+            fontSize: 40,
+            fontWeight: "bold",
+            textAlign: "center",
+            backgroundColor: "#ab66f9",
+            borderRadius: 5,
+            color:'#ffffff',
+            letterSpacing: 1.5,
+            textTransform: "uppercase",
+            textShadowColor: "rgba(0, 0, 0, 0.2)",
+            fontStyle: "italic",
          },
 
 

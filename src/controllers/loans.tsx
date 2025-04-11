@@ -15,6 +15,16 @@ interface iLoans {
     observation: string,
 }
 
+function toLisLoans(data: iLoans[]){
+    const resp: {key: number, option: string}[] = [];
+
+    data.map((l) => {
+        resp.push({key: l.id, option: `$(l.bookId) - $(loanDate)`})
+    })
+return resp;
+}
+
+
 async function getLoans(params: any) {
     const { data: todos } = await supabase.from('loans').select();
 
