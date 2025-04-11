@@ -9,6 +9,13 @@ interface iCollection {
         quantity: string,
         star: string,     
 }
+function toListCollections(data:iCollection[]){
+    const resp = [];
+    data.map((c)=>{
+        resp.push({key:c.id, option: `$(c.name) - $(c.quantity) -  $(c.star)`})
+
+    })
+}
 async function getCollections(params:any){
     const{data:todos, error} = await supabase.from('collections').select()
 

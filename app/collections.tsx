@@ -40,7 +40,7 @@ export default function CollectionScreen() {
 }, [])
 
 
-    
+
 
      async function handleRegister() {
         if (req.id == -1) {
@@ -93,7 +93,7 @@ export default function CollectionScreen() {
 
 
     return (//encapsulamento 
-        <MyView router={router} >
+        <MyView >
             <View style={styles.formContainer}>
                 <View style={styles.row}>
                     <View style={styles.form}>
