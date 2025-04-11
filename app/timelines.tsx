@@ -92,7 +92,7 @@ export default function TimelineScreen() {
   }
 
   return (
-    <MyView router={router}>
+    <MyView >
       <MySearch
         style={{ marginTop: 20 }}
         onChangeText={setBusca}
