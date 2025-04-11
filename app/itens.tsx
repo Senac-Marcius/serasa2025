@@ -7,15 +7,13 @@ import { Myinput } from '../src/components/MyInputs';
 import MyButton from '../src/components/MyButtons';
 import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
-import {setIten,dell, edit, iIten} from '../src/controllers/items'
-import { supabase } from '../src/utils/supabase';
+import {setIten,dell, edit, iIten, getItens} from '../src/controllers/items'
 import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
 
 
 export default  function itemScreen(){
      const[req,setReq] = useState({ 
-        id: -1,
-        name:'',
+        id: -1
         mark:'',
         asset_number:'',
         amount: 0,
@@ -27,14 +25,14 @@ export default  function itemScreen(){
      });
      const[itens, setItens] = useState<iIten[]>([]);
 
-     useEffect( ()=>{
-        async function getTodos(){
-            const {data: todos} = await supabase.from ('items').select()
-            if(todos && todos.length > 0) {
-                setItens(todos)
+     useEffect(() => {
+        //aqui estamos carregando os lançamentos
+        async function getTodos() {
+            const retorno = await getItens({})
+            if (retorno.status && retorno.data && retorno.data.length > 0) {
+                setItens(retorno.data);
             }
         }
-     
         getTodos();
 
     
@@ -55,7 +53,6 @@ export default  function itemScreen(){
 
         setReq({
             id: -1,
-            name:'',
             mark:'',
             asset_number:'',
             amount: 0,
@@ -82,7 +79,7 @@ export default  function itemScreen(){
     const router = useRouter();
      
     return (
-        <MyView router={router} >
+        <MyView  >
        
         <Text>Minha tela de itens</Text>
         

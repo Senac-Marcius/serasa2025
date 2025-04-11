@@ -4,7 +4,6 @@ import { supabase } from '../utils/supabase'
 
 interface iIten {
     id: number,
-    name: string,
     mark: string,
     asset_number: string,
     amount: number, 
@@ -14,7 +13,26 @@ interface iIten {
     local_id: number,
     created_at:string
 }
+function toListItens(data:iIten[]){
+    const resp: {key: number, option: string}[]=[];
+    data.map((i) =>{
+        resp.push({key: i.id, option: i.asset_number})
 
+        })
+
+
+ }
+
+
+async function getItens(params:any) {
+    const {data: todos,error} = await supabase.from('itens').select();
+
+
+    if(error)
+            return {status:false,error: error}
+
+        return{status: true,data: todos}
+}
 
 
 async function setIten(iten: iIten) {
@@ -67,4 +85,4 @@ async function edit(iten: iIten) {
     return data;
 }
 
-export { setIten, dell, edit, iIten };
+export { setIten, dell, edit, iIten, getItens,toListItens};
