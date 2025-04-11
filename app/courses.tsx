@@ -55,8 +55,8 @@ export default function CoursesScreen() {
   const router = useRouter();
 
   return (
-    <ScrollView style={styles.container}>
-      <MyView router={router}>
+
+      <MyView>
         <Mytext style={styles.title}>Cursos</Mytext>
         <View style={styles.row}>
           <View style={styles.form}>
@@ -111,7 +111,6 @@ export default function CoursesScreen() {
           />
         </View>
       </MyView>
-    </ScrollView>
   );
 }
 
