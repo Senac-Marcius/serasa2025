@@ -12,7 +12,7 @@ export default function MoreScreen() {
 
     return (
         <View style={styles.container}>
-            <MyView router={router}>
+            <MyView>
                 {/* Botão Saiba Mais */}
                 <View style ={styles.optionsContainer}>
                     <MyButton

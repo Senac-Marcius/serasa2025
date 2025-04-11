@@ -57,7 +57,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
       <TouchableOpacity style={styles.profileSection}>
         <Image source={{ uri: 'https://via.placeholder.com/50' }} style={styles.profileImage} />
         <View>
-          <Text style={styles.profileName}>sung di wo</Text>
+          <Text style={styles.profileName}>Usuário</Text>
           <Text style={styles.profileRole}>Admin</Text>
         </View>
       </TouchableOpacity>
@@ -87,12 +87,13 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Posts" route="posts" icon="chatbox" />
         <MenuItem label="Products" route="products" icon="cart" />
         <MenuItem label="Projects" route="projects" icon="briefcase" />
-        <MenuItem label="Records" route="records" icon="disc" />
+        <MenuItem label="Records" route="records" icon="document-text-outline" />
         <MenuItem label="Revenues" route="revenues" icon="cash-outline" />
         <MenuItem label="Scales" route="scales" icon="speedometer" />
         <MenuItem label="Timelines" route="timelines" icon="calendar" />
         <MenuItem label="Students" route="students" icon="school" />
         <MenuItem label="Users" route="users" icon="person-circle" />
+        <MenuItem label="More" route="more" icon="add-circle" />
       </ScrollView>
     </Animated.View>
   );
