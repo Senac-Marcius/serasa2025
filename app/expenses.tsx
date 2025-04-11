@@ -6,8 +6,10 @@ import MyView from '../src/components/MyView';
 import MyButton from '../src/components/MyButtons'
 import {Myinput, MyTextArea} from '../src/components/MyInputs';
 import { useRouter } from 'expo-router';
-import { setExpense, delRegister, updateExpense, iexpenses } from '../src/controllers/expenses';
+import { setExpense, delRegister, updateExpense, iexpenses, getExpense } from '../src/controllers/expenses';
 import { supabase } from '../src/utils/supabase';
+import Mytext from '../src/components/MyText'
+
 
 
 export default function ExpenseScreen(){
@@ -23,18 +25,19 @@ export default function ExpenseScreen(){
             user_id: 1,
     });
 
+    const [message, setMessage] = useState("")
+
     const [expense,setExpenses] = useState< iexpenses[]>([]);
 
     useEffect(()=>{
-        async function getTodos(){
-            const {data: todos}= await supabase.from('expenses').select()
-
-            if(todos && todos.length > 0){
-                setExpenses(todos)
-            }
+        async function getAll(){
+            const retorno = await getExpense({})
+            if(retorno.status && retorno.data && retorno.data.length > 0){
+                setExpenses(retorno.data)}
         }
 
-        getTodos();
+        getAll();
+
     },[])
     
 
@@ -47,6 +50,7 @@ export default function ExpenseScreen(){
         }else{
             setExpenses(expense.map(e => (e.id === req.id ? req : e)));
         await updateExpense(req); 
+        setMessage("Existem campos que não aceitam esses tipos caracteres")
         }
 
         setReq({
@@ -54,7 +58,7 @@ export default function ExpenseScreen(){
             created_at : new Date(). toISOString(),
             name: '',
             emails: '',
-            contacts:"",
+            contacts:'',
             costs: '',
             descriptions: '',
             user_id: 1,
@@ -82,7 +86,7 @@ export default function ExpenseScreen(){
 
     return (
         
-        <MyView router={router} > 
+        <MyView > 
             {/* aqui é typecript dentro do front */}
             <Text style={styles.title}>tela de despesas</Text>
             <View style={styles.row}>
@@ -95,10 +99,10 @@ export default function ExpenseScreen(){
 
                     <MyTextArea value={req.descriptions} onChangeText={(text)=>setReq({...req ,descriptions: text})} iconName='' placeholder='Descrição'   label=''/>
 
-                <Myinput value={req.costs} onChangeText={(text) => setReq({ ...req, costs: text })} placeholder="R$" label="Valores:" iconName='' /> 
+                    <Myinput value={req.costs} onChangeText={(text) => setReq({ ...req, costs: text })} placeholder="R$" label="Valores:" iconName='' /> 
 
 
-                    <MyButton onPress={handleRegister} title='Cadastrar'></MyButton>
+                    <MyButton style={{justifyContent:'center'}} onPress={handleRegister} title='Cadastrar'></MyButton>
                 </View>
 
                 <MyList
@@ -110,13 +114,12 @@ export default function ExpenseScreen(){
 
                             onDel={() => delExpense(item.id)}
                         >
-                            <Text style={styles.textlis} >{item.name}</Text>
-                            <Text style={styles.textlis} >{item.emails}</Text> 
-                            <Text style={styles.textlis} >{item.descriptions}</Text>  
-                            <Text style={styles.textlis} >{item.costs}</Text> 
-                            <Text style={styles.textlis} >{item.user_id}</Text>
-                            
-    
+                            <Mytext style={styles.textlis}>Nome: {item.name}</Mytext>
+                            <Mytext style={styles.textlis}>Contato: {item.contacts}</Mytext>
+                            <Mytext style={styles.textlis}>Email: {item.emails}</Mytext> 
+                            <Mytext style={styles.textlis}>Data: {item.created_at}</Mytext>
+                            <Mytext style={styles.textlis}>Descrição: {item.descriptions}</Mytext>  
+                            <Mytext style={styles.textlis}>Valor: {item.costs}</Mytext>     
                         </MyItem>
                     )}
                 /> 

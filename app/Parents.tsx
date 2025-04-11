@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity} from 'react-native';
 import MyView from '../src/components/MyView';
-import MyUpload from '../src/components/MyUpload';
 import { useRouter } from 'expo-router';
-import {setParentController, iParent} from '../src/controllers/parentsController';
+import { setParent,iParent,delParent,editParent,getTimeParents,toListparent} from '../src/controllers/parents';
 import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
-import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs';
+import { Myinput, MyCheck, MyTextArea} from '../src/components/MyInputs';
 import { MyItem,MyCorrelated } from '../src/components/MyItem';
 import { supabase } from '../src/utils/supabase';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import itemScreen from './itens';
+import { ListItem } from 'native-base';
+import MyUpload from '../src/components/MyUpload';
 
 
 
@@ -19,11 +21,10 @@ import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 export default function ParentScreen (){
     const [parents,setParents] = useState<iParent[]>([])
 
-//Aqui é TypeScript
     const [req, setReq] = useState({
-        id:-1,
+        id:-0,
         name: '',
-        rg:'',
+        rg: '',
         cpf:'',
         age:'',
         phone:'',
@@ -33,143 +34,120 @@ export default function ParentScreen (){
         userid: 0,
 
     });
-    
-
-
-    /*Dados movidos para o controlador ↓↓↓
-        const [parents,setParents] = useState<{
-        Nome: string,
-        Email: string,
-        parentesco: string,
-        id: number,
-        createAt: string,
-        userId: number,
-    
-    }[]>([])/* <> → usado para tipar uma função */
-    /*Dados movidos para o controlador ↑↑↑*/
-    //a chave recebe a lista que esta sendo declarada na interface.
-
+   
     useEffect(() => {
         async function getTodos(){
-            const {data: todos} = await supabase.from('parents').select()
-
-            if(todos && todos.length > 1){
-                setParents(todos)
+            const retorno = await getTimeParents ({})
+        
+            if(retorno.status && retorno.data && retorno.data.length > 0){
+                setParents(retorno.data)
             }
 
         }
-        getTodos()
 
-    },[])
+        getTodos();
+
+    })
 
     async function handleRegister() {
-        if (!req.name || !req.email) {
-            alert('Preencha os campos obrigatórios!');
-            return;
-        }
-    
+
         if (req.id === -1) {
             const newId = parents.length ? parents[parents.length - 1].id + 1 : 0;
             const newParent = { ...req, id: newId };
             setParents([...parents, newParent]);
-            await setParentController(newParent);
-        
+            const resp = await setParent(newParent);
+            console.log (resp)
         } else {
+                
             setParents(parents.map(p => (p.id == req.id ? req : p)));
+            await editParent(req)
         }
-    
+
+        //setParents([...parents, req])
         setReq({
-            id: -1,
+            id:req.id + 1,
             name: '',
-            rg: '',
-            cpf: '',
-            age: '',
-            phone: '',
-            email: '',
-            kinship: '',
+            rg:'',
+            cpf:'',
+            age:'',
+            phone:'',
+            email:'',
+            kinship:'',
             createat: new Date().toISOString(),
             userid: 0,
-        });
+        })
     }
-     function editParent(id:number){
-        const parent = parents.find (p => p.id == id)
-        if(parent)
-            setReq(parent)
-     }
-     function delParent(id:number){
-        const list = parents.filter (p=> p.id != id)
-        if (list)
+
+    async function delParentL(id: number) {
+        const error = await delParent (id)
+        if (!error) {
+            const list = parents.filter(r => r.id != id)
             setParents(list)
-     }
+        } else {
+            console.error('Erro ao deletar:', error);
+        }
+    }
+    
+    function editParentL(id: number) {
+        const parent = parents.find(r => r.id === id);
+        if (parent) {
+            setReq(parent);
+        }
+    }
+        
     
     const router = useRouter();
     const[urlDocument, setDocument]= useState('')
 
+    
+
     return (
-        <MyView router={router} > {/*aqui é typeScript dentro do Front*/}
+        <MyView> {/*aqui é typeScript dentro do Front*/}
             {/*View → esse view é diferente do HTML ele contém DIVs e outros atributos,*/}
-            
             <View style = {styles.row}>
                 <View style={styles.form}>{/*View no Type pode ser usado para substituir o Form */}
                 {/*<FlatList/> → atibuto para possivel criação de lista */}
-                    <Myinput 
-                        placeholder="Digite"
+                    <TextInput 
+                        placeholder="Nome:"
                         value={req.name}
-                        onChangeText={(text) => setReq({ ...req, name: text })}
-                        label='Nome do Aluno:'
-                        iconName='person'
-            
+                        onChangeText={(Text) => setReq({...req, name: Text})}
                     />
-                    
-                    <Myinput
-                        placeholder="Digite"
+                    <TextInput 
+                        placeholder="RG:"
                         value={req.rg}
-                        onChangeText={(text) => setReq({ ...req, rg: text })}
-                        label='RG:'
-                        iconName='person'
+                        onChangeText={(Text) => setReq({...req, name: Text})}
                     />
-                    <Myinput
-                        placeholder="Digite"
+                    <TextInput 
+                        placeholder="CPF:"
                         value={req.cpf}
-                        onChangeText={(text) => setReq({ ...req, cpf: text })}
-                        label='CPF:'
-                        iconName='person'
+                        onChangeText={(Text) => setReq({...req, name: Text})}
                     />
-                    <Myinput
-                        placeholder="Digite"
+                    <TextInput
+                        placeholder="Idade:"
                         value={req.age}
-                        onChangeText={(text) => setReq({ ...req, age: text })}
-                        label='Idade:'
-                        iconName='calendar-today'
+                        onChangeText={(Text) => setReq({...req, email: Text})}
                     />
-                    <Myinput
-                        placeholder="Digite"
+                    <TextInput 
+                        placeholder="Telefone:"
                         value={req.phone}
-                        onChangeText={(text) => setReq({ ...req, phone: text })}
-                        label='Telefone:'
-                        iconName='phone'
+                        onChangeText={(Text) => setReq({...req, name: Text})}
                     />
-                    <Myinput
-                        placeholder="Digite"
+                    <TextInput 
+                        placeholder="Email:"
                         value={req.email}
-                        onChangeText={(text) => setReq({ ...req, email: text })}
-                        label='E-mail:'
-                        iconName='email'
+                        onChangeText={(Text) => setReq({...req, name: Text})}
                     />
-                    <Myinput
-                        placeholder="Digite"
+                    <TextInput
+                        placeholder="Parentesco:"
                         value={req.kinship}
-                        onChangeText={(text) => setReq({ ...req, kinship: text })}
-                        label='Parentesco:'
-                        iconName='person-outline'
+                        onChangeText={(Text) => setReq({...req, kinship: Text})}
                     />
-                   
+                
                     <MyButton
-                        title="CADASTRAR"
+                        title='Cadastrar'
                         onPress={handleRegister}
-                        button_type="round"
-                        style={styles.button_round}
-                    />
+                        button_type='round'
+                        style={styles.button_round}/>
                    {/*foi aberto uma area de codigo chamar a variavel, equivale o inder do html*/}
                    {/*<Button 
                         title='Editar'
@@ -179,18 +157,19 @@ export default function ParentScreen (){
                         title='Deletar'
                         color='red'
                         onPress={delParent}/>*/}
-                    <View>
                         <MyUpload setUrl={setDocument} url={urlDocument}/>
-                    </View>
                 </View>
                 
 
-                <FlatList
+                <MyList
                     data={parents}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
-                        <View style={styles.parentsItem}>
-
+                        <MyItem 
+                            style={styles.parentsItem}
+                            onDel={()=> {delParentL(item.id)}}
+                            onEdit={()=> {editParentL(item.id)}}
+                        >
                             <Text>{item.id}</Text>
                             <Text>{item.name}</Text>
                             <Text>{item.rg}</Text>
@@ -201,14 +180,10 @@ export default function ParentScreen (){
                             <Text>{item.kinship}</Text>
                             <Text>{item.createat}</Text>
                             <Text>{item.userid}</Text>
-                                <View style ={styles.buttonContainer}>
-                                    <TouchableOpacity onPress={()=> {editParent(item.id)}}>EDIT</TouchableOpacity>
-                                    <TouchableOpacity onPress={()=> {delParent(item.id)}}>DELETE</TouchableOpacity>
-                                </View>
-                        </View>
+                        </MyItem>
                     )}
                 />
-                {/*parâmetro FlatList é parecido com o forEach do html. */}
+                {/*parâmetro FlatList é parecido com o forEach do html */}
                 
             </View>
 
@@ -223,10 +198,9 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         flexDirection: 'row', 
         justifyContent: 'space-between', 
         alignItems: 'flex-start', 
-        alignSelf:'center',
     },
     form: {
-        flex: 25,
+        flex: 1,
         marginRight: 20,
         marginLeft:20,
         padding: 20,
@@ -238,7 +212,7 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         shadowRadius: 5,
     },
     parentsItem: {
-        flex: 10,
+        flex: 1,
         marginRight: 20,
         marginLeft:20,
         marginBottom:20,
@@ -254,15 +228,14 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         flexDirection:'row',
         alignItems: 'center',
         gap: 20,
-        alignContent: 'space-around',
-        width:500,
+        alignContent: 'space-around'
     },
     button_round: {
+        display:"flex",
         borderRadius: 20,
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "row",
-        gap: 10,
-        marginVertical: 5,
-    },
+        
+      },
 })
