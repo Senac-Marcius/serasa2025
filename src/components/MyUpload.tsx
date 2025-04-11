@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { View, Button, Alert, ActivityIndicator,Text, ViewStyle, StyleSheet } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
 import MyButton from "../components/MyButtons";
+import { link } from "fs";
 
 interface MyuploadProps {
   style?: ViewStyle | ViewStyle[]; 
@@ -34,7 +35,7 @@ const MyUpload: React.FC<MyuploadProps> = ({ style, setUrl, url  }) => {
         type: file.mimeType,
       } as any);
       //(Erro de acesso a pagina) → erro causado pro conflito com banco de dados
-      /* Faz o upload para File.io
+       //Faz o upload para File.io
       const response = await fetch("https://file.io", {
         method: "POST",
         body: formData,
@@ -47,8 +48,7 @@ const MyUpload: React.FC<MyuploadProps> = ({ style, setUrl, url  }) => {
         setAlert(`Upload Concluído! Arquivo enviado: ${data.link}`);
       } else {
         setAlert(`Erro no Upload Tente novamente..`);
-      }*/
-        setUrl('http://issoeumteste');
+      }
         setAlert(`Upload Concluído! Arquivo enviado: `);
     } catch (error) {
       setAlert(`Erro", "Não foi possível fazer o upload.`);
