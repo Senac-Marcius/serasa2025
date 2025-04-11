@@ -1,26 +1,43 @@
 import { supabase } from '../utils/supabase';
 
-export interface iCategories {
+interface iCategories {
     name: string,
     description: string,
     id: number,
     created_at: string
 }
 
+function toListCategorie(data:iCategories[]){
+   const resp : {key:number,option: string}[] = [];
+
+   data.map((c) => {
+    resp.push({key:c.id, option: c.name})
+   })
+
+   return resp;
+
+}
 // Criar categoria
 async function setCategory(category: iCategories) {
     const { data, error } = await supabase
         .from('categories')
         .insert([category])
         .select();
-
-    if (error) {
-        console.log('Erro ao cadastrar:', error);
-        return [];
-    }
-
-    return data;
 }
+
+
+async function getCategories(params:any) {
+    const { data: todos, error } = await supabase.from('launchs').select();
+    if (error) 
+        return {status:false,error:error}
+
+    return {status: true,data: todos}
+}
+
+
+    
+
+
 
 // Atualizar categoria
 async function updateCategory(category: iCategories) {
@@ -57,4 +74,4 @@ async function deleteCategory(id: number) {
     return true;
 }
 
-export { setCategory, updateCategory, deleteCategory };
+export { iCategories, setCategory, updateCategory, deleteCategory, getCategories };

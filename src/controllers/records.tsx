@@ -1,5 +1,6 @@
 import React, { useState } from 'react';  
 import { supabase } from '../utils/supabase';
+import { iLaunch } from './launchs';
 
 
 
@@ -15,6 +16,17 @@ export interface iRecord {
     create_at: string,
 
 }  
+
+export function toListRecord (data: iRecord[]) {
+    const resp: {key:number, option: string} [] = [];
+
+    data.map ((r) => {
+        resp.push({key: r.id, option: r.name})
+     })
+
+return resp;
+
+}
 
 // CRIAR REGISTRO
 export async function setRecord(record: iRecord) {
@@ -34,15 +46,15 @@ export async function setRecord(record: iRecord) {
 }
 
 // BUSCAR TODOS OS REGISTROS
-export async function getRecords() {
-    const { data, error } = await supabase.from('records').select();
+export async function getRecords(params: any ) {
+    const { data: todos, error } = await supabase.from('records').select();
 
     if (error) {
         console.error('Erro ao buscar records: ', error);
-        return [];
+        return {status: false, error:error };
     }
 
-    return data;
+    return {status: true, data: todos};
 }
 
 // ATUALIZAR REGISTRO
@@ -68,3 +80,4 @@ export async function deleteRecord(id: number) {
     const { error } = await supabase.from('records').delete().eq('id', id);
     return error;
 }
+
