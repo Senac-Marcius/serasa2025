@@ -12,7 +12,15 @@ interface iBudgets{
     end_date: string;
 }
  
- 
+    function tulistBudgets(data: iBudgets[]){
+        const resp: {key: Number, option: string}[]=[];
+
+        data.map((b) =>{
+        resp.push ({key: b.id, option: b.name})
+        })
+        
+    }
+
 // Estado para a lista de receitas
 
 async function getBudgets(params:any){
@@ -129,4 +137,4 @@ async function updateBudget(budget: iBudgets): Promise<iBudgets[] | string> {
     return data || [];
 }
  
-export { iBudgets, setBudget,deleteBudget, updateBudget,getBudgets}
+export { iBudgets, setBudget, deleteBudget, updateBudget, getBudgets, tulistBudgets}
