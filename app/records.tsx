@@ -6,7 +6,6 @@ import { IconButton } from 'react-native-paper';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs';
 import { MyItem, MyCorrelated } from '../src/components/MyItem';
 import MyList from '../src/components/MyList';
-import { useRouter } from 'expo-router';
 import {setRecord, iRecord, getRecords } from '../src/controllers/records'
 import { supabase } from '../src/utils/supabase';
 
@@ -25,15 +24,6 @@ export default function RecordScreen() {
         }
         getTodos();
     })
-
-
-    
-
-
-
-
-
-
 
 
     const [req, setReq] = useState({
@@ -125,7 +115,7 @@ export default function RecordScreen() {
 
     return (
 
-        <MyView router={router}>
+        <MyView >
 
 
             <View style={styles.row}>
