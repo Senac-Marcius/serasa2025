@@ -1,22 +1,31 @@
-import React, {useState} from 'react'
 import { supabase } from '../utils/supabase'
+
+//fazer o key 
 export interface iLevels{
     name: string,
     description: string,
     color: string,
     id: number,
-    created_at: string,
-       
+    created_at: string,       
 }
 
-export async function setLevels(levels: iLevels){
+function tolevels(data: iLevels[]){
+ const resp: {key: number, option: string} [] = [];     
+
+ data.map((l) => {
+ resp.push({key: l.id, option: `${l.color} - ${l.name} - ${l.description} ` })
+ } )
+
+return resp; 
+}
+
+
+
+export async function setLevel(levels: iLevels){
 
     //* aqui vem os tratamento de regex ou do modelo de negócio antes de inserir.
 
-const { data, error } = await supabase.from('levels')
-    .insert([ levels, {some_column: 'someValue', other_column: 'otherValue'},
-
-        ]) .select()
+    const { data, error } = await supabase.from('levels').insert([ levels ]) .select()
 
     if (error){
         console.error('Erro ao inserir levels: ', error);
@@ -26,21 +35,14 @@ const { data, error } = await supabase.from('levels')
 
         // BUSCAR TODOS OS REGISTROS
 
-export async function getLevels() {
-        
-    const { data, error } = await supabase.from('levels').select();
- 
-    if (error) {
-
-        console.error('Erro ao buscar levels: ', error);
-
-    return [];
+export async function getLevels (params:any){
+    const { data: todos, error } = await supabase.from('levels').select();
+    if (error) 
+      return {status: false, error: error}
     
-    }
- 
-    return data;
-}
- 
+    
+    return {status: true, data: todos} 
+ }
         // ATUALIZAR REGISTRO
 
 export async function updateLevels(levels: iLevels) {
@@ -65,3 +67,4 @@ export async function deleteLevels(id: number) {
         const { error } = await supabase.from('levels').delete().eq('id', id);
         return error;
 }
+//import {deleteLevels, updateLevels, getLevels, setLevels, iLevels } from '../src/controllers/levels';
