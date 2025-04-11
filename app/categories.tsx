@@ -88,7 +88,7 @@ getTodos();
     }
 
     return (
-        <MyView router={router}>
+        <MyView >
             <View style={styles.row}>
                 <View style={styles.form}>
                     <Myinput
