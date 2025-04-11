@@ -11,22 +11,25 @@ interface iUser {
     address: string,
     createAt: string,
     id: number,
-
-    //Userid: number
 }
+    function toListUser(data: iUser[]){
+        const resp: {key:number, option:string} [] = [];
+        data.map((u) => {
+            resp.push({key: u.id, option: u.name})
+           
+
+        })
+        return resp;
+
+    }
+
     //const [users, setUsers] = useState<iUser[]>([])
 
     async function setUser(user:iUser){
-        const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$|^\d{11}$/;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phoneRegex = /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/;
-    
+        
+       
 
-    const { data, error } = await supabase.from('users')
-    .insert([
-      user
-    ])
-    .select()
+    const { data, error } = await supabase.from('users').insert([user]).select()
   
     if(error){
         //aqui vem os tratamentos da varíavel error
@@ -34,7 +37,6 @@ interface iUser {
     }
 
     return data
-            
     }
 
     async function deleteUserById(id: number) {
@@ -42,15 +44,13 @@ interface iUser {
             .from('users')
             .delete()
             .eq('id', id)
-    
         if (error) {
             console.error("Erro ao deletar usuário:")
             return false
         }
-    
+
         return true
     }
-
 
     async function updateUserById(id: number, updatedUser: Partial<iUser>) {
         const { error } = await supabase
@@ -65,4 +65,14 @@ interface iUser {
         return true;
     }
 
- export {setUser, iUser, deleteUserById, updateUserById}
+    async function getUsers(params:any){
+        const { data: todos, error } = await supabase.from("users").select();
+        if (error)
+            return {status:false, error:error}
+           
+        return {status: true, data:todos}
+    }
+
+
+
+ export {setUser, iUser, deleteUserById, updateUserById,getUsers}
