@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity} from 'react-native';
 import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
-import { setParent,iParent,delParent,editParent,getTimeParents} from '../src/controllers/parentsController';
+import { setParent,iParent,delParent,editParent,getTimeParents,toListparent} from '../src/controllers/parents';
 import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
 import { Myinput, MyCheck, MyTextArea} from '../src/components/MyInputs';
@@ -11,6 +11,7 @@ import { supabase } from '../src/utils/supabase';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 import itemScreen from './itens';
 import { ListItem } from 'native-base';
+import MyUpload from '../src/components/MyUpload';
 
 
 
@@ -21,27 +22,19 @@ export default function ParentScreen (){
     const [parents,setParents] = useState<iParent[]>([])
 
     const [req, setReq] = useState({
-        Nome: '',
-        Email:'',
-        parentesco:'',
-        id:0,
-        createAt: new Date().toISOString(),
-        userId: 0,
+        id:-0,
+        name: '',
+        rg: '',
+        cpf:'',
+        age:'',
+        phone:'',
+        email:'',
+        kinship:'',
+        createat: new Date().toISOString(),
+        userid: 0,
 
     });
-
-    const [parents,setParents] = useState<{
-        Nome: string,
-        Email: string,
-        parentesco: string,
-        id: number,
-        createAt: string,
-        userId: number,
-    
-    }[]>([])/* <> → usado para tipar uma função */
-    /*Dados movidos para o controlador ↑↑↑*/
-    //a chave recebe a lista que esta sendo declarada na interface.
-
+   
     useEffect(() => {
         async function getTodos(){
             const retorno = await getTimeParents ({})
@@ -73,14 +66,17 @@ export default function ParentScreen (){
         //setParents([...parents, req])
         setReq({
             id:req.id + 1,
-            Nome: '',
-            Email:'',
-            parentesco:'',
-            createAt: new Date().toISOString(),
-            userId: 0,
+            name: '',
+            rg:'',
+            cpf:'',
+            age:'',
+            phone:'',
+            email:'',
+            kinship:'',
+            createat: new Date().toISOString(),
+            userid: 0,
         })
     }
-   
 
     async function delParentL(id: number) {
         const error = await delParent (id)
@@ -106,33 +102,52 @@ export default function ParentScreen (){
     
 
     return (
-        <MyView router={router} > {/*aqui é typeScript dentro do Front*/}
+        <MyView> {/*aqui é typeScript dentro do Front*/}
             {/*View → esse view é diferente do HTML ele contém DIVs e outros atributos,*/}
-            <Text>Minha tela das postagens </Text>
             <View style = {styles.row}>
                 <View style={styles.form}>{/*View no Type pode ser usado para substituir o Form */}
                 {/*<FlatList/> → atibuto para possivel criação de lista */}
                     <TextInput 
                         placeholder="Nome:"
-                        value={req.Nome}
-                        onChangeText={(Text) => setReq({...req, Nome: Text})}
-            
+                        value={req.name}
+                        onChangeText={(Text) => setReq({...req, name: Text})}
+                    />
+                    <TextInput 
+                        placeholder="RG:"
+                        value={req.rg}
+                        onChangeText={(Text) => setReq({...req, name: Text})}
+                    />
+                    <TextInput 
+                        placeholder="CPF:"
+                        value={req.cpf}
+                        onChangeText={(Text) => setReq({...req, name: Text})}
                     />
                     <TextInput
+                        placeholder="Idade:"
+                        value={req.age}
+                        onChangeText={(Text) => setReq({...req, email: Text})}
+                    />
+                    <TextInput 
+                        placeholder="Telefone:"
+                        value={req.phone}
+                        onChangeText={(Text) => setReq({...req, name: Text})}
+                    />
+                    <TextInput 
                         placeholder="Email:"
-                        value={req.Email}
-                        onChangeText={(Text) => setReq({...req, Email: Text})}
+                        value={req.email}
+                        onChangeText={(Text) => setReq({...req, name: Text})}
                     />
                     <TextInput
                         placeholder="Parentesco:"
-                        value={req.parentesco}
-                        onChangeText={(Text) => setReq({...req, parentesco: Text})}
+                        value={req.kinship}
+                        onChangeText={(Text) => setReq({...req, kinship: Text})}
                     />
                 
-                    <Button 
-                        title='Cadastrar' 
-                        color='blue'
-                        onPress={handleRegister}/>
+                    <MyButton
+                        title='Cadastrar'
+                        onPress={handleRegister}
+                        button_type='round'
+                        style={styles.button_round}/>
                    {/*foi aberto uma area de codigo chamar a variavel, equivale o inder do html*/}
                    {/*<Button 
                         title='Editar'
@@ -142,6 +157,7 @@ export default function ParentScreen (){
                         title='Deletar'
                         color='red'
                         onPress={delParent}/>*/}
+                        <MyUpload setUrl={setDocument} url={urlDocument}/>
                 </View>
                 
 
@@ -168,6 +184,7 @@ export default function ParentScreen (){
                     )}
                 />
                 {/*parâmetro FlatList é parecido com o forEach do html */}
+                
             </View>
 
         </MyView>
@@ -213,4 +230,12 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         gap: 20,
         alignContent: 'space-around'
     },
+    button_round: {
+        display:"flex",
+        borderRadius: 20,
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "row",
+        
+      },
 })
