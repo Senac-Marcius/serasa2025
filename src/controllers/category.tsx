@@ -7,6 +7,16 @@ interface iCategories {
     created_at: string
 }
 
+function toListCategorie(data:iCategories[]){
+   const resp : {key:number,option: string}[] = [];
+
+   data.map((c) => {
+    resp.push({key:c.id, option: c.name})
+   })
+
+   return resp;
+
+}
 // Criar categoria
 async function setCategory(category: iCategories) {
     const { data, error } = await supabase
