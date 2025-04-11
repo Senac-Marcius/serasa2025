@@ -13,7 +13,7 @@ import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer
 
 export default  function itemScreen(){
      const[req,setReq] = useState({ 
-        id: -1
+        id: -1,
         mark:'',
         asset_number:'',
         amount: 0,
@@ -95,8 +95,8 @@ export default  function itemScreen(){
                 />
                 <Myinput 
                 placeholder="Categoria"
-                value={req.category_id}
-                onChangeText={(text) => setReq({ ...req, category_id:text })}
+                value={ String(req.category_id) }
+                onChangeText={(text) => setReq({ ...req, category_id: Number(text) })}
                 label="Categoria"
                  iconName='?' 
             
@@ -113,13 +113,7 @@ export default  function itemScreen(){
                 
 
 
-                <Myinput 
-                   placeholder= "Digite o numero patrimonial"
-                   value={req.name}
-                   onChangeText={(text)=>setReq({...req,name:text})}
-                   label="N° patrimonial" 
-                   iconName='user' 
-                />
+                
 
                 <Myinput 
                    placeholder= "N°"
