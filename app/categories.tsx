@@ -65,27 +65,7 @@ getTodos();
         if (item) setReq(item);
     }
 
-    // Deletar
-    async function delCategorie(id: number) {
-        Alert.alert('Confirmar', 'Tem certeza que deseja excluir esta categoria?', [
-            {
-                text: 'Cancelar',
-                style: 'cancel'
-            },
-            {
-                text: 'Sim',
-                onPress: async () => {
-                    const ok = await deleteCategory(id);
-                    if (ok) {
-                        const list = categories.filter(i => i.id !== id);
-                        setCategories(list);
-                    } else {
-                        alert('Erro ao deletar do banco');
-                    }
-                }
-            }
-        ]);
-    }
+  
     async function deleteCategories(id:number){
         const list = categories.filter(c=> c.id != id)
         if(list){
