@@ -2,6 +2,7 @@ import React, { Children, ReactNode, useState } from 'react'
 import { Text, TextStyle, TouchableOpacity, View, ViewStyle, StyleSheet } from 'react-native';
 import { FlatList, TextInput } from 'react-native-gesture-handler';
 import { Button, List } from 'react-native-paper'; 
+import { Myinput } from './MyInputs';
 
 interface MySelectProps {
     label: string;
@@ -17,31 +18,60 @@ const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {
         <View>
             <TouchableOpacity 
                 style={{ 
-                    backgroundColor: "#813AB1", 
-                    padding: 10, 
-                    borderRadius: 5, 
-                    alignItems: 'center' 
+                  height: 50, 
+                  margin: 10,
+                  width: 300,  
+                  borderRadius: 25, 
+                  paddingHorizontal: 15,
+                  backgroundColor: 'white',  
+                  borderWidth: 2,
+                  borderColor: 'purple', 
+                  shadowColor: 'purple', 
+                  shadowOffset: { width: 2, height: 1 }, 
+                  shadowOpacity: 0.6, 
+                  shadowRadius: 4, 
+                  elevation: 4
                 }} 
                 onPress={() => setVisible(!visible)}
             >
-                <Text style={{ color: 'white', fontWeight: 'bold' }}>{label}</Text>
+                <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 16,  textAlign: 'center',}}>{label} </Text>
+               
             </TouchableOpacity>
 
             {
                 visible &&
-                (<FlatList 
+                (<FlatList                                                          //estilos
                     data={list}
                     keyExtractor={(item) => item.key}
                     renderItem={(i) => (
-                        <TouchableOpacity onPress={()=>{
+                        <TouchableOpacity style = {{backgroundColor: 'purple', borderRadius: 10, width: 315}}onPress={()=>{
                             setLabel(i.item.option);
+
                             if(setKey){
                                 setKey(i.item.option)
                             }
+                            
                             setVisible(false)
                         }}>
                         
-                        <Text>{i.item.option}</Text>
+                        <Text style = {{
+                          height: 50,  
+                          margin: 5,
+                          width: 300,
+                          borderRadius: 10,    
+                          paddingHorizontal: 15,
+                          paddingVertical: 10,  
+                          fontSize: 16,
+                          backgroundColor: 'white',
+                          color: '#666',
+                          borderWidth: 2,
+                          borderColor: 'purple',
+                          shadowColor: 'purple',
+                          shadowOffset: { width: 2, height: 1 },
+                          shadowOpacity: 0.8,
+                          shadowRadius: 4,
+                          elevation: 4,
+                        }}>{i.item.option}</Text>
                     </TouchableOpacity>
                     )}
                 />)

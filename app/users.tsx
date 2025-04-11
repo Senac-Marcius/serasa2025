@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Button, FlatList } from 'react-native';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs'
 import MyView from '../src/components/MyView';
@@ -7,6 +7,9 @@ import MyButton from '../src/components/MyButtons';
 import { Image } from 'react-native';
 import {MyItem} from '../src/components/MyItem'
 import { useRouter } from 'expo-router';
+import {iUser, setUser, deleteUserById, updateUserById} from '../src/controllers/users'
+
+import { supabase } from '../src/utils/supabase'
 
 // Define o estado inicial como false
 //isChecked = valor atual da váriavel, SetIsChecked ele altera o valor da isChecked
@@ -28,33 +31,55 @@ export default function UserScreen() {
         email: '',
         address: '',
         createAt: new Date().toISOString(),
-        id: -1,
-        Userid: 0
-
+        id: 0,
+        //Userid: 0
     });
 
-    const [users, setUsers] = useState<{
-        //tipo, tipo vetor, objeto
-        name: string,
-        password: string,
-        cpf: string,
-        age: string,
-        contact: string,
-        email: string,
-        address: string,
-        createAt: string,
-        id: number,
-        Userid: number
-    }[]>([])
+    // const [users, setUsers] = useState<{
+    //     //tipo, tipo vetor, objeto
+    //     name: string,
+    //     password: string,
+    //     cpf: string,
+    //     age: string,
+    //     contact: string,
+    //     email: string,
+    //     address: string,
+    //     createAt: string,
+    //     id: number,
+    //     Userid: number
+    // }[]>([])
 
-    function handleRegister() {
+    const [users, setUsers] = useState<iUser[]>([])
+
+    useEffect(() => {
+        async function getTodos(){
+            const { data: todos } = await supabase.from("users").select();
+            if (todos && todos.length > 1){
+                setUsers(todos)
+            }
+
+        }
+        getTodos()
+      
+      }, [])
+  
+
+    async function handleRegister() {
         if (req.id == -1) {
             const newId = users.length ? users[users.length - 1].id + 1 : 0
             const newUser = { ...req, id: newId }
             setUsers([...users, newUser])
+            await setUser(newUser)
 
         } else {
-            setUsers(users.map(p => (p.id == req.id ? req : p)))
+            setUsers(users.map(u => (u.id == req.id ? req : u)))
+
+            const sucesso = await updateUserById(req.id, req)
+            if (!sucesso) {
+                alert("Erro ao atualizar usuário.")
+                return
+            }
+            
 
         }
 
@@ -68,22 +93,25 @@ export default function UserScreen() {
             address: '',
             createAt: new Date().toISOString(),
             id: -1,
-            Userid: 0
+           // Userid: 0
         })
 
     }
+
     function editUser(id: number) {
         let user = users.find(u => u.id == id)
         if (user)
             setReq(user)
-
-
     }
 
-    function deleteUser(id: number) {
-        const list = users.filter(u => u.id != id)
-        if (list)
-            setUsers(list)
+    async function deleteUser(id: number) {
+        const sucesso = await deleteUserById(id)
+        if (sucesso) {
+            const updatedList = users.filter(u => u.id !== id)
+            setUsers(updatedList)
+        } else {
+            alert("Erro ao deletar usuário.")
+        }
     }
 
     const router = useRouter();
@@ -92,96 +120,97 @@ export default function UserScreen() {
     //setIsChecked: é uma função usada para atualizar o estado de isChecked.
     //!isChecked: o operador ! inverte o valor atual de isChecked. Se isChecked era true (checkbox marcada), ele se torna false (checkbox desmarcada), e vice-versa.
     return (
-            <MyView router={router} >
+        <MyView router={router} >
 
 
-                <View style={styles.form}>
-                    <Text style={styles.TextIntroducao}>Cadastro de usuários</Text>
-                    <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/8307/8307575.png' }} style={styles.image} />
-                    
- 
-                    {/* Botão para abrir o formulário */}
-                    {!showForm && (
-                        <TouchableOpacity style={styles.startButton} onPress={() => setShowForm(true)}>
-                            <Text style={styles.buttonText}>INICIAR CADASTRO</Text>
+        <View style={styles.form}>
+            <Text style={styles.TextIntroducao}>Cadastro de usuários</Text>
+            <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/8307/8307575.png' }} style={styles.image} />
+            
+
+            {/* Botão para abrir o formulário 
+            {!showForm && (
+                <TouchableOpacity style={styles.startButton} onPress={() => setShowForm(true)}>
+                    <Text style={styles.buttonText}>INICIAR CADASTRO</Text>
+                </TouchableOpacity>
+            )}
+                */}
+
+            {/* Botão para mostrar registro de usuários */}
+
+           {/* <TouchableOpacity style={styles.startRegistros} onPress={() => setShowUsers(!showUsers)}>
+                <Text style={styles.buttonText}>{showUsers ? "Ocultar Registro de Usuários" : "REGISTRO DE USERS"}</Text>
+            </TouchableOpacity>
+             */}
+
+
+
+            {/* Exibir o formulário somente se showForm for true */}
+        
+                <View style={styles.formContainer}>
+                    <View style={styles.form}>
+                        <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text })} placeholder="Digite seu nome..." label="Login" iconName='person' />
+                        <Myinput value={req.password} onChangeText={(text) => setReq({ ...req, password: text })} placeholder="Digite a sua senha..." label="Password" iconName='password' />
+                        <Myinput value={req.cpf} onChangeText={(text) => setReq({ ...req, cpf: text })} placeholder="Digite o seu CPF" label="CPF:" iconName='article' />
+                        <Myinput value={req.age} onChangeText={(text) => setReq({ ...req, age: text })} placeholder="Digite a sua idade" label="Idade:" iconName='celebration' />
+                        <Myinput value={req.contact} onChangeText={(text) => setReq({ ...req, contact: text })} placeholder="(XX) XXXXX-XXXX" label="Contato:" iconName='phone' />
+                        <Myinput value={req.email} onChangeText={(text) => setReq({ ...req, email: text })} placeholder="domain@domain.com" label="Email:" iconName='mail' />
+                        <Myinput value={req.address} onChangeText={(text) => setReq({ ...req, address: text })} placeholder="Digite o seu endereço" label="Endereço" iconName='house' />
+                       
+                        {/* Botão para fechar o formulário 
+                        <TouchableOpacity style={styles.closeButton} onPress={() => setShowForm(false)}>
+                            <Text style={styles.buttonText}>Cancelar</Text>
                         </TouchableOpacity>
-                    )}
+                        */}
+                    </View>
+                    <MyButton
+                            title="CADASTRAR"
+                            onPress={handleRegister}
+                            button_type="round"
+                            style={styles.button_round}
+                        />
+                </View>
+            
 
-                    {/* Botão para mostrar registro de usuários */}
+            {/* Lista de usuários cadastrados */}
+            
+                <MyList
+                    data={users}
+                    keyItem={(item) => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <View style={styles.itemContainer}>
 
-                    <TouchableOpacity style={styles.startRegistros} onPress={() => setShowUsers(!showUsers)}>
-                        <Text style={styles.buttonText}>{showUsers ? "Ocultar Registro de Usuários" : "REGISTRO DE USERS"}</Text>
-                    </TouchableOpacity>
+                            <Text style={styles.itemText}>Nome: {item.name}</Text>
+                            <Text style={styles.itemText}>CPF: {item.cpf}</Text>
+                            <Text style={styles.itemText}>Email: {item.email}</Text>
+                            <Text style={styles.itemText}>Idade: {item.age}</Text>
+                            <Text style={styles.itemText}>Endereço: {item.address}</Text>
+                            <Text style={styles.itemText}>Contato: {item.contact}</Text>
+                            <Text style={styles.itemText}>Criação: {item.createAt}</Text>
 
+                            <View style={styles.buttonsContainer}>
+                                <TouchableOpacity style={styles.deleteButton} onPress={() => deleteUser(item.id)}>
+                                    <Text style={styles.buttonText}>X</Text>
+                                </TouchableOpacity>
 
-                    {/* Exibir o formulário somente se showForm for true */}
-                    {showForm && (
-                        <View style={styles.formContainer}>
-                            <View style={styles.form}>
-                                <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text })} placeholder="Digite seu nome..." label="Login" iconName='person' />
-                                <Myinput value={req.password} onChangeText={(text) => setReq({ ...req, password: text })} placeholder="Digite a sua senha..." label="Password" iconName='password' />
-                                <Myinput value={req.cpf} onChangeText={(text) => setReq({ ...req, cpf: text })} placeholder="Digite o seu CPF" label="CPF:" iconName='article' />
-                                <Myinput value={req.age} onChangeText={(text) => setReq({ ...req, age: text })} placeholder="Digite a sua idade" label="Idade:" iconName='celebration' />
-                                <Myinput value={req.contact} onChangeText={(text) => setReq({ ...req, contact: text })} placeholder="(XX) XXXXX-XXXX" label="Contato:" iconName='phone' />
-                                <Myinput value={req.email} onChangeText={(text) => setReq({ ...req, email: text })} placeholder="domain@domain.com" label="Email:" iconName='mail' />
-                                <Myinput value={req.address} onChangeText={(text) => setReq({ ...req, address: text })} placeholder="Digite o seu endereço" label="Endereço" iconName='house' />
-
-                                <MyButton
-                                    title="CADASTRAR"
-                                    onPress={handleRegister}
-                                    button_type="round"
-                                    style={styles.button_round}
-                                />
-
-                                {/* Botão para fechar o formulário */}
-                                <TouchableOpacity style={styles.closeButton} onPress={() => setShowForm(false)}>
-                                    <Text style={styles.buttonText}>Cancelar</Text>
+                                <TouchableOpacity style={styles.editButton} onPress={() => editUser(item.id)}>
+                                    <Text style={styles.buttonText}>Edit</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
                     )}
 
-                    {/* Lista de usuários cadastrados */}
-                    {showUsers && (
-                        <MyList
-                            data={users}
-                            keyItem={(item) => item.id.toString()}
-                            renderItem={({ item }) => (
-                                <View style={styles.itemContainer}>
 
-                                    <Text style={styles.itemText}>Nome: {item.name}</Text>
-                                    <Text style={styles.itemText}>CPF: {item.cpf}</Text>
-                                    <Text style={styles.itemText}>Email: {item.email}</Text>
-                                    <Text style={styles.itemText}>Idade: {item.age}</Text>
-                                    <Text style={styles.itemText}>Endereço: {item.address}</Text>
-                                    <Text style={styles.itemText}>Contato: {item.contact}</Text>
-                                    <Text style={styles.itemText}>Criação: {item.createAt}</Text>
+                />    
+     </View>
 
-                                    <View style={styles.buttonsContainer}>
-                                        <TouchableOpacity style={styles.deleteButton} onPress={() => deleteUser(item.id)}>
-                                            <Text style={styles.buttonText}>X</Text>
-                                        </TouchableOpacity>
-
-                                        <TouchableOpacity style={styles.editButton} onPress={() => editUser(item.id)}>
-                                            <Text style={styles.buttonText}>Edit</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            )}
-
-
-                        />
-                    )}
-
-                </View>
-
-            </MyView>
+    </MyView>
     );
 }
 
 const styles = StyleSheet.create({
     myView: {
-        backgroundColor: 'purple',
+        flex: 1,
 
     },
     formContainer: {
@@ -193,7 +222,12 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 2, height: 1 },
         shadowOpacity: 0.6,
         shadowRadius: 4,
+ 
+        
+        justifyContent: 'center',
         alignItems: 'center',
+
+        padding: 20,
         // Ocupa toda a largura disponível
     },
     form: {
@@ -253,7 +287,10 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 20,
         alignItems: "center",
+        
         justifyContent: "center",
+
+        
     },
     TextIntroducao: {
         color: '#6A1B9A',
