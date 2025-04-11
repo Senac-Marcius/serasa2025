@@ -34,22 +34,71 @@ interface iItem {
     id: number,
 }
 
-async function setItem(item: iItem){   
+function toListItems(data:iItem[]){
+    const resp = [];
+    data.map((c)=>{
+        resp.push({key:c.id, option: `$(c.typology) - $(c.title) -  $(c.subtitle) - $(c.responsible) -  $(c.translation)
+                - $(c.language) - $(c.image) -  $(c.year) - $(c.edition) -  $(c.publisher) - $(c.location) -  $(c.number_pages)
+                - $(c.serie) -  $(c.volume) - $(c.format) -  $(c.issn) - $(c.isbn) -  $(c.subject) - $(c.keywords) -  $(c.summary) 
+                - $(c.notes) -  $(c.number_copies) - $(c.status) -  $(c.url) - $(c. file) -  $(c.type_loan)` })
 
-const { data, error } = await supabase.from('items_librarie')
+    })
+}
+
+async function getItems(params:any){
+    const{data:todos, error} = await supabase.from('items_librarie').select()
+
+    if(error)
+        return{status:false, error:error}
+
+
+    return{status:true, data:todos}    
+}
+
+async function setItem(item:iItem){
+    //aqui vem os tratamentos de regex ou do modelo de negócio antes de inserir
+ 
+    const { data, error } = await supabase.from('items_librarie')
     .insert([
         item
     ])
-    .select() 
-
-    if (error){
-        console.log (error)
-             // aqui vem os tratamentos da variavel error
-        return []
+    .select()
+    
+    if(error){
+        console.error('Erro',error);
     }
 
     return data
 }
 
-export {setItem, iItem}
+async function deleteItemById(id: number) {
+    const { error } = await supabase
+        .from('items_librarie')
+        .delete()
+        .eq('id', id)
+
+    if (error) {
+        console.error("Erro ao deletar usuário:")
+        return false
+    }
+
+    return true
+}
+
+async function updateItemById(id: number, updatedItem: Partial<iItem>) {
+    const { error } = await supabase
+        .from('items_librarie')
+        .update(updatedItem)
+        .eq('id', id);
+
+    if (error) {
+        console.error("Erro ao atualizar usuário:", error.message);
+        return false;
+    }
+    return true;
+}
+
+
+
+export {iItem, setItem, deleteItemById, updateItemById, getItems}
         

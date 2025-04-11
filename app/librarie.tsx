@@ -13,7 +13,7 @@ import {textStyles} from '../styles/textStyles';
 import { Icon , MD3Colors} from "react-native-paper";
 import {tabsBarStyles} from '../styles/tabsBarStyles';
 import { useRouter } from 'expo-router';
-import {iItem, setItem} from '../src/controllers/librarie';
+import {iItem, setItem, deleteItemById, updateItemById, getItems} from '../src/controllers/librarie';
 import { supabase } from '../src/utils/supabase'
 
 export default function itemScreen() { // aqui é TS
@@ -53,16 +53,17 @@ export default function itemScreen() { // aqui é TS
 
     const[items, setItems] = useState<iItem[]>([])
 
-    useEffect(()=>{
+    useEffect(() =>{
         async function getTodos(){
-            const {data: todos}= await supabase.from('items_librarie').select()
 
-            if(todos && todos.length > 1){
-                setItems(todos)
+            const retorno =await getItems({})
+            
+            if (retorno.status && retorno.data && retorno.data.length>0){
+                setItems(retorno.data);
             }
         }
-        getTodos();
-    },[])
+    getTodos()
+    }, [])
 
     const router = useRouter();
 
