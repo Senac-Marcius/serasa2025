@@ -41,7 +41,7 @@ export default function EmployeeScreen(){
       useEffect(() => {
         
         (async () => {
-          const { data: todos } = await supabase.from('employees').select()
+       
           console.log(todos);
     
           if ( todos && todos.length > 0) {
