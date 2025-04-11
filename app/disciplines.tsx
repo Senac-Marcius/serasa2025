@@ -6,6 +6,7 @@ import MyView from '../src/components/MyView';
 import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
 import { Myinput } from '../src/components/MyInputs';
+import { MyItem } from '../src/components/MyItem';
 
 const { width } = Dimensions.get('window');
 
@@ -150,7 +151,7 @@ export default function DisciplineScreen() {
                     : router.push(item.route)
                 }
                 style={{ marginBottom: 4, height: 32, width: 110 }}
-                font_size={15}
+                font_size={12}
                 iconSize={14}
               />
             ))}
@@ -229,26 +230,16 @@ export default function DisciplineScreen() {
                 data={disciplines}
                 keyItem={(item) => item.id.toString()}
                 renderItem={({ item }) => (
-                  <View style={styles.cardGridItem}>
+                  <MyItem
+                    style={styles.cardGridItem}
+                    onEdit={() => handleEdit(item.id)}
+                    onDel={() => handleDelete(item.id)}
+                  >
                     <Text style={styles.cardTitle}>{item.name}</Text>
                     <Text style={styles.cardText}>URL: {item.url}</Text>
                     <Text style={styles.cardText}>Carga Horária: {item.workload} horas</Text>
                     <Text style={styles.cardText}>Professor: {item.teacher}</Text>
-                    <View style={styles.actions}>
-                      <MyButton
-                        title="EDITAR"
-                        button_type="edit"
-                        onPress={() => handleEdit(item.id)}
-                        style={styles.editButton}
-                      />
-                      <MyButton
-                        title="EXCLUIR"
-                        button_type="delete"
-                        onPress={() => handleDelete(item.id)}
-                        style={styles.deleteButton}
-                      />
-                    </View>
-                  </View>
+                  </MyItem>
                 )}
               />
             </>
