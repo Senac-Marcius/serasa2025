@@ -10,6 +10,23 @@ interface iLocal{
     created_at: string,
 }
 
+
+function toListLocal(data: iLocal[]){
+  const resp: {key: number, option: string}[] = [];
+
+  data.map((l) => {
+    resp.push({ key: l.id, option: l.name})
+  })
+
+  return resp;
+} 
+
+
+//commit, fetch all, entra no git, achar a ultima da dev com filtro dev - corrigind prod e myview, criar uma temporaria - 
+// botao direito create branch => dev_locals1.2, verificar se esta na dev temp, ir para o meu ultimo commit e mergear com
+//juntar a minha dev tem com a dev, mudar o git para o dev ORIGINAL
+
+
 async function getLocals (params: any) {
     const {data: todos, error} = await supabase.from('locals').select();
 
@@ -77,7 +94,7 @@ async function deleteLocal(id: number) {
   }
 
 
-export {setLocal, deleteLocal, updateLocal, iLocal, getLocals}  
+export {setLocal, deleteLocal, updateLocal, iLocal, getLocals, toListLocal }  
 
 
 

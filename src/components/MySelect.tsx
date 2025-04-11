@@ -3,6 +3,7 @@ import { Text, TextStyle, TouchableOpacity, View, ViewStyle, StyleSheet } from '
 import { FlatList, TextInput } from 'react-native-gesture-handler';
 import { Button, List } from 'react-native-paper'; 
 import { Myinput } from './MyInputs';
+import { inputStyles } from '../../styles/inputStyles';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 
@@ -13,6 +14,16 @@ interface MySelectProps {
     setKey?(key:any):void;
 }
 
+interface MyTextAreaProps {
+  value: string;
+  onChangeText: (text: string) => void;
+  placeholder?: string;
+  style?: TextStyle | TextStyle[];
+  label: string;
+  iconName: string;
+}
+
+
 const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {  
     const [visible, setVisible] = useState(false) 
 
@@ -20,8 +31,8 @@ const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {
         <View>
             <TouchableOpacity 
                 style={{ 
-                  height: 50, 
-                  margin: 11,
+                  height: 50, //
+                  margin: 11,  //
                   width: 300,   //
                   borderRadius: 25, //
                   paddingHorizontal: 15,  //
@@ -31,7 +42,7 @@ const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {
                   shadowColor: 'purple', 
                   shadowOffset: { width: 2, height: 1 }, 
                   shadowOpacity: 0.6,  //
-                  shadowRadius: 4, 
+                  shadowRadius: 4,   //
                 }} 
                 onPress={() => setVisible(!visible)}
             >
@@ -65,6 +76,26 @@ const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {
         </View>
     );
 }
+
+const MyTextArea: React.FC<MyTextAreaProps> = ({ value, onChangeText, placeholder, style, label, iconName }) => {
+  return (
+    <View style={inputStyles.container}>
+      
+      <View style={inputStyles.labelContainer}>
+        {/*<Icon style={inputStyles.icon} name="message" size={18} /> */}
+        <Text style={inputStyles.label}>{label}</Text>
+      </View>
+      <TextInput
+        style={[inputStyles.textArea, style]}
+        value={value}
+        onChangeText={onChangeText}
+        placeholder={placeholder}
+        multiline={true}
+      />
+    </View>
+  );
+};
+
 
 export default MySelect
 

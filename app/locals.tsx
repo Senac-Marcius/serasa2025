@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react'; 
-import { Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, View  } from 'react-native';
+import { Text, TextStyle, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, View  } from 'react-native';
 import MySelect from '../src/components/MySelect' 
 import MyView from '../src/components/MyView';
 import MyList from '../src/components/MyList';
@@ -86,10 +86,9 @@ export default function LocalScreen(){
     
     const router = useRouter();
     
-
     return (
 
-            <MyView router={router} style={styles.container}>
+            <MyView >
                 <Text style={styles.title}>CADASTRO DE LOCAIS</Text>
                 {message.length > 1 && (  
                 <Text style={styles.title}>{message}</Text>
@@ -114,6 +113,8 @@ export default function LocalScreen(){
                         onChangeText={(n) => setReq({...req, dimension: n })}  
                                     
                         />
+
+                    
                       
                         <MySelect 
                         label={unity} setLabel={setUnit}  
@@ -170,6 +171,8 @@ export default function LocalScreen(){
         
     )   
 }             
+
+
 
 const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos funções que criam estilos para fontes
 
