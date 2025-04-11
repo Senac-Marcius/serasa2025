@@ -5,6 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 import Mytext from '../src/components/MyText';
 import  MyView  from '../src/components/MyView';
 import MyList from '../src/components/MyList';
+import MyButton from '../src/components/MyButtons';
 
 // Configuração do Supabase
 const supabaseUrl = 'https://fcjbnmhbjolybbkervgg.supabase.co';
@@ -119,7 +120,7 @@ export default function TurmasComCadastro() {
 
   if (modoCadastro) {
     return (
-      <MyView contentContainerStyle={styles.formContainer}>
+      <MyView >
         <Mytext style={styles.header}>Cadastrar Nova Turma</Mytext>
         {[
           'codigo', 'curso', 'turno', 'modalidade', 'horario',
@@ -134,19 +135,13 @@ export default function TurmasComCadastro() {
             onChangeText={(text) => setForm({ ...form, [campo]: text })}
           />
         ))}
-        {errorMessage && <Mytext style={styles.errorText}>{errorMessage}</Mytext>}
-        <TouchableOpacity style={styles.button} onPress={salvar} >
-          <Mytext style={styles.buttonText}>Salvar</Mytext>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => setModoCadastro(false)}>
-          <Mytext style={styles.buttonText}>Cancelar</Mytext>
-        </TouchableOpacity>
+    
       </MyView>
     );
   }
 
   return (
-    <MyView style={styles.container}>
+    <View style={styles.container}>
       <Mytext style={styles.header}>Turmas Cadastradas</Mytext>
       <MyList
         data={turmas}
@@ -164,13 +159,13 @@ export default function TurmasComCadastro() {
                 <Ionicons name="trash" size={20} color="purple" />
               </TouchableOpacity>
             </View>
-    </MyView>
+    </View>
         )}
       />
       <TouchableOpacity style={styles.button} onPress={() => setModoCadastro(true)}>
         <Mytext style={styles.buttonText}>Cadastrar Nova Turma</Mytext>
       </TouchableOpacity>
-    </MyView>
+    </View>
   );
 }
 
