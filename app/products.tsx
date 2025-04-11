@@ -76,7 +76,7 @@ export default function productScreen(){
     const router = useRouter();
 
     return (
-        <MyView router={router} >
+        <MyView>
        
             <Mytext style={styles.h2}>Cadastro de Produtos</Mytext>
         

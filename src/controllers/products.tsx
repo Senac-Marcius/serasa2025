@@ -24,7 +24,7 @@ async function getProducts(params:any) {
   .from('products')
   .select()
     if(error)
-        return {status: false, error: error}
+      return {status: false, error: error}
      return {status: true, data: todos}
   
 }
