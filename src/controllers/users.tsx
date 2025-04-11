@@ -11,19 +11,25 @@ interface iUser {
     address: string,
     createAt: string,
     id: number,
-    //Userid: number
 }
+    function toListUser(data: iUser[]){
+        const resp: {key:number, option:string} [] = [];
+        data.map((u) => {
+            resp.push({key: u.id, option: u.name})
+           
+
+        })
+        return resp;
+
+    }
+
     //const [users, setUsers] = useState<iUser[]>([])
 
     async function setUser(user:iUser){
         
        
 
-    const { data, error } = await supabase.from('users')
-    .insert([
-      user
-    ])
-    .select()
+    const { data, error } = await supabase.from('users').insert([user]).select()
   
     if(error){
         //aqui vem os tratamentos da varíavel error
@@ -46,7 +52,6 @@ interface iUser {
         return true
     }
 
-
     async function updateUserById(id: number, updatedUser: Partial<iUser>) {
         const { error } = await supabase
             .from('users')
@@ -67,5 +72,7 @@ interface iUser {
            
         return {status: true, data:todos}
     }
+
+
 
  export {setUser, iUser, deleteUserById, updateUserById,getUsers}

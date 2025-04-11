@@ -144,13 +144,13 @@ export default function UserScreen() {
         }
     }
 
-    const router = useRouter();
+    //const router = useRouter();
 
     //CHECKBOX:
     //setIsChecked: é uma função usada para atualizar o estado de isChecked.
     //!isChecked: o operador ! inverte o valor atual de isChecked. Se isChecked era true (checkbox marcada), ele se torna false (checkbox desmarcada), e vice-versa.
     return (
-        <MyView router={router} >
+        <MyView  >
 
 
         <View style={styles.form}>
