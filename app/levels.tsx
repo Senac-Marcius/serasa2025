@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View,Text, StyleSheet,FlatList, Button,TextInput, Touchable, TouchableOpacity} from 'react-native';
 import {Myinput} from '../src/components/MyInputs';
 import MyView from '../src/components/MyView';
@@ -8,65 +8,70 @@ import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
 import {MyItem} from '../src/components/MyItem';
 import { useRouter } from 'expo-router';
+import {deleteLevels, updateLevels, getLevels, setLevel, iLevels } from '../src/controllers/levels';
 
 
-export default function levelsScreen(){
-    const [req, setReq] = useState({
-        name: '',
-        description : '',
-        color: '',
-        id: -1,
-        createAt: new Date().toISOString(),
-        userId : 0,    
-    });
- 
-    const[leves, setleves] = useState<{ 
-        name: string,
-        description: string,
-        color: string,
-        id: number,
-        createAt: string,
-        userId: number,
-        }[]>([])
-    
-    function handleRegister (){
+export default function LevelsScreen() {
+  const router = useRouter();
+  const [isChecked, setIsChecked] = useState(true);
 
-        if( req.id == -1){
-            const newId = leves.length ? leves[leves.length -1].id +1 : 0;
-            const newLeves = {...req, id: newId};
- 
-            setleves([...leves, newLeves]);
-        }else{
-            setleves(leves.map(l => (l.id == req.id ? req : l)));
+  const [levels, setLevels] = useState<iLevels[]>([]);
+
+  const [req, setReq] = useState({
+    id: -1,
+    name: '',
+    description: '',
+    color: 'Selecione uma cor',
+    created_at: new Date().toISOString(),
+  });
+
+
+  useEffect(() => {
+    //aqui estamos carregando os lançamentos 
+      async function fetchLevels() {
+        const retorno = await getLevels({})
+        if (retorno.status && retorno.data && retorno.data.length > 0 ) {
+            setLevels(retorno.data); 
         }
-        
-        setReq({name:'',
-            description:'',
-            color: '',
-            id: -1,
-            createAt: new Date().toISOString(),
-            userId : 0,
 
-        })
+      }
+  
+
+      fetchLevels();
+  }, []);
+
+  async function handleRegister() {
+    if (req.id === -1) {
+      const newId = levels.length > 0? levels[levels.length - 1].id + 1: 0;
+      const newLevel = { ...req, id: newId};
+      setLevels([...levels, newLevel]);
+      await setLevel(newLevel)
+    } else {
+      const updated = levels.map(item => (item.id === req.id ? req : item));
+      setLevels(updated);
+      await updateLevels(req)
     }
 
-    function editLevels (id:number){
-        const notification = leves.find( l => l.id == id)
-        if(notification)
-            setReq(notification)
-    }
+      setReq({
+        id: -1,
+        name: '',
+        description: '',
+        color: 'Selecione uma cor',
+        created_at:  new Date().toISOString(),
+     });
+  }
 
-    function deleteLevels (id:number){
+async function deleteLevels(id: number) {
+    setLevels(levels.filter(item => item.id !== id));
+  }
 
-        const list = leves.filter(l => l.id != id )
-        setleves(list)
-    }
+function editLevels(levels: iLevels) {
+    setReq(levels);
 
-    const router = useRouter();
-    
+  }
 
     return (
-        <MyView router={router} >
+        <MyView>
             
         {/* aqui é typerscrypt dentro do front */}
 
@@ -108,7 +113,7 @@ export default function levelsScreen(){
                 </View>
 
                 <MyList
-                    data={leves}
+                    data={levels}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) =>(
                        <MyItem
