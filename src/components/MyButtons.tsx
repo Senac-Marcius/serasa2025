@@ -1,6 +1,12 @@
 import React, { useState } from "react";
-import { TouchableOpacity, Text, StyleSheet, ViewStyle } from "react-native";
-import { Icon, MD3Colors } from "react-native-paper";
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  View,
+} from "react-native";
+import { Icon } from "react-native-paper";
 
 type Button_type =
   | "default"
@@ -14,7 +20,7 @@ type Button_type =
 
 interface MyButtonProps {
   title?: string;
-  bottom_text?:string;
+  bottom_text?: string;
   onPress?: () => void;
   button_type?: Button_type;
   icon?: string;
@@ -24,9 +30,9 @@ interface MyButtonProps {
   color?: string;
   width?: number;
   height?: number;
-  font_size?:number;
-  text_color?:string;
-  gap?:number;
+  font_size?: number;
+  text_color?: string;
+  gap?: number;
 }
 
 function getButtonType(button_type: Button_type): any {
@@ -81,18 +87,39 @@ const MyButton: React.FC<MyButtonProps> = ({
   }
 
   return (
-    <TouchableOpacity
-      style={[
-        getButtonType(button_type),
-        style,
-        { backgroundColor: color, height: height, width: width,gap:gap,},
-      ]}
-      onPress={onPressIntenal}
-    >
-      {icon && <Icon size={20} source={icon} color="#fff" />}
-      <Text style={styles.button_text}>{title}</Text>
-    </TouchableOpacity>
-    {bottom_text && <Text  style={{ fontSize: font_size, color: text_color, textAlign:"center" , fontWeight:"bold" }}>{bottom_text}</Text>}
+    <View>
+      <TouchableOpacity
+        style={[
+          getButtonType(button_type),
+          style,
+          {
+            backgroundColor: color,
+            height: height,
+            width: width,
+            gap: gap,
+          },
+        ]}
+        onPress={onPressIntenal}
+      >
+        {icon && <Icon size={iconSize} source={icon} color={iconColor} />}
+        <Text style={[styles.button_text, { fontSize: font_size, color: text_color }]}>
+          {title}
+        </Text>
+      </TouchableOpacity>
+
+      {bottom_text && (
+        <Text
+          style={{
+            fontSize: font_size,
+            color: text_color,
+            textAlign: "center",
+            fontWeight: "bold",
+            marginTop: 5,
+          }}
+        >
+          {bottom_text}
+        </Text>
+      )}
     </View>
   );
 };
@@ -100,10 +127,9 @@ const MyButton: React.FC<MyButtonProps> = ({
 const styles = StyleSheet.create({
   button_circle: {
     borderRadius: 100,
-    display: "flex",
-    gap: 5,
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
   },
   button_capsule: {
     borderRadius: 50,
@@ -111,31 +137,30 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: 20,
     paddingVertical: 10,
+    flexDirection: "row",
   },
   button_round: {
-    backgroundColor: "#813AB1",
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    
   },
   button_rect: {
-    backgroundColor: "#813AB1",
     padding: 10,
     borderRadius: 0,
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
   },
   button_default: {
-    backgroundColor: "#813AB1",
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 15,
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
   },
   button_edit: {
     backgroundColor: "#813AB1",
@@ -144,6 +169,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
   },
   button_delete: {
     backgroundColor: "#FF4C4C",
@@ -152,16 +178,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
   },
   button_text: {
-    color: "#FFFFFF",
-    fontSize: 14,
     fontWeight: "600",
+    marginLeft: 5,
   },
 });
 
 export default MyButton;
-
-
-//<MyButton title="EDITAR" button_type="edit" onPress={() => {}} />
-//<MyButton title="EXCLUIR" button_type="delete" onPress={() => {}} />

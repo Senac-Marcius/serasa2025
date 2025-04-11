@@ -6,6 +6,7 @@ import MyView from '../src/components/MyView';
 import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
 import { Myinput } from '../src/components/MyInputs';
+import { MyItem } from '../src/components/MyItem';
 
 const { width } = Dimensions.get('window');
 
