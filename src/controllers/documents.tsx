@@ -87,6 +87,6 @@ async function deleteDocument(id: number) {
   }
 }
 
-export {insertDocument, updateDocument, deleteDocument,  iDoc}
+export {insertDocument, updateDocument, deleteDocument,  iDoc}//toListDocument
 
           
