@@ -22,7 +22,7 @@ export default function ParentScreen (){
     const [parents,setParents] = useState<iParent[]>([])
 
     const [req, setReq] = useState({
-        id:-0,
+        id:-1,
         name: '',
         rg: '',
         cpf:'',
@@ -51,7 +51,7 @@ export default function ParentScreen (){
 
     async function handleRegister() {
 
-        if (req.id === -1) {
+        if (req.id == -1) {
             const newId = parents.length ? parents[parents.length - 1].id + 1 : 0;
             const newParent = { ...req, id: newId };
             setParents([...parents, newParent]);
@@ -59,13 +59,34 @@ export default function ParentScreen (){
             console.log (resp)
         } else {
                 
-            setParents(parents.map(p => (p.id == req.id ? req : p)));
-            await editParent(req)
+            //setParents(parents.map(p => (p.id == req.id ? req : p)));
+            //await editParent(req)
+            const { error } = await supabase.from('parents')
+                .update({
+                    name: req.name,
+                    rg: req.rg,
+                    cpf: req.cpf,
+                    age: req.age,
+                    phone: req.phone,
+                    email: req.email,
+                    kinship:req.kinship,
+                    createat:req.createat,
+                    userid: req.userid,
+                })
+                .eq('id', req.id);
+        
+    
+    
+            if (!error) {
+                setParents(parents.map(p => (p.id === req.id ? req : p)));
+            } else {
+                console.error("Erro ao atualizar:", error);
+            }
         }
 
         //setParents([...parents, req])
         setReq({
-            id:req.id + 1,
+            id:-1,
             name: '',
             rg:'',
             cpf:'',
@@ -78,7 +99,7 @@ export default function ParentScreen (){
         })
     }
 
-    async function delParentL(id: number) {
+    /*async function delParentL(id: number) {
         const error = await delParent (id)
         if (!error) {
             const list = parents.filter(r => r.id != id)
@@ -93,10 +114,25 @@ export default function ParentScreen (){
         if (parent) {
             setReq(parent);
         }
-    }
+    }*/
+
+        async function delParentL(id: number) {
+                const { error } = await supabase.from('parents').delete().eq('id', id);
+                if (!error) {
+                    const list = parents.filter(p => p.id != id)
+                    setParents(list)
+                } else {
+                    console.error('Erro ao deletar:', error);
+                }
+            }
         
-    
-    const router = useRouter();
+            function editParentL(id: number) {
+                const parent = parents.find(p => p.id === id);
+                if (parent) {
+                    setReq(parent);
+                }
+            }
+
     const[urlDocument, setDocument]= useState('')
 
     
@@ -115,27 +151,27 @@ export default function ParentScreen (){
                     <TextInput 
                         placeholder="RG:"
                         value={req.rg}
-                        onChangeText={(Text) => setReq({...req, name: Text})}
+                        onChangeText={(Text) => setReq({...req, rg: Text})}
                     />
                     <TextInput 
                         placeholder="CPF:"
                         value={req.cpf}
-                        onChangeText={(Text) => setReq({...req, name: Text})}
+                        onChangeText={(Text) => setReq({...req, cpf: Text})}
                     />
                     <TextInput
                         placeholder="Idade:"
                         value={req.age}
-                        onChangeText={(Text) => setReq({...req, email: Text})}
+                        onChangeText={(Text) => setReq({...req, age: Text})}
                     />
                     <TextInput 
                         placeholder="Telefone:"
                         value={req.phone}
-                        onChangeText={(Text) => setReq({...req, name: Text})}
+                        onChangeText={(Text) => setReq({...req, phone: Text})}
                     />
                     <TextInput 
                         placeholder="Email:"
                         value={req.email}
-                        onChangeText={(Text) => setReq({...req, name: Text})}
+                        onChangeText={(Text) => setReq({...req, email: Text})}
                     />
                     <TextInput
                         placeholder="Parentesco:"
@@ -198,6 +234,7 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         flexDirection: 'row', 
         justifyContent: 'space-between', 
         alignItems: 'flex-start', 
+        alignSelf:"center",
     },
     form: {
         flex: 1,
@@ -236,6 +273,7 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "row",
+        
         
       },
 })
