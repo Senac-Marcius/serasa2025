@@ -10,6 +10,17 @@ interface iNotification{
         user_id: number,
     };
 
+
+function toListNotification(data: iNotification[]){
+    const resp:{key: number, option: string}[] = [];
+
+    data.map((n) => {
+        resp.push({key: n.id, option: n.name})
+    })
+
+    return resp;
+}
+
 async function setNotification(notification:iNotification){
     //aqui vem os tratamentos de regex ou do modelo de negócio antes de inserir
 
@@ -75,4 +86,4 @@ async function deleteNotification(id: number) {
     return error;
 }
 
-export {setNotification, iNotification, deleteNotification, updateNotification, getNotifications}
+export {setNotification, iNotification, deleteNotification, updateNotification, getNotifications, toListNotification}
