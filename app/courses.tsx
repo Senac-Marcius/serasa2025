@@ -8,13 +8,14 @@ import MyView from '../src/components/MyView';
 import {MyItem} from '../src/components/MyItem';
 import { Myinput, MyTextArea } from '../src/components/MyInputs';
 import { useRouter } from 'expo-router';
-import {iCourses, upadateCourse, deleteCourse, setCoursebd} from '../src/controllers/courses'
-import { supabase } from '../src/utils/supabase';
+import {getCourses,iCourses, upadateCourse, deleteCourse, setCoursebd} from '../src/controllers/courses'
+
 
 
 //fuction
 export default function CoursesScreen(){
     const [req, setReq] = useState({
+        name: '',
         id: -1,
         created_at: new Date().toISOString(),
         description: '',
@@ -24,31 +25,36 @@ export default function CoursesScreen(){
         userId: 1
     });
 
-    const [CoursesPosts, setCourses] = useState<iCourses[]> ([]);
+    const [courses, setCourses] = useState<iCourses[]> ([]);
 
     useEffect(() =>{
       async function getTodos(){
-        const {data: todos} = await supabase.from('courses').select()
-        if (todos && todos.length > 0 ){
-          setCourses(todos)
+        const retorno = await getCourses({})
+        if (retorno.status && retorno.data && retorno.data.length > 0 ){
+          setCourses(retorno.data)
         }
       }
       getTodos()
+
+      
+
+
     }, [])
 
     async function handleRegister(){
       if(req.id == -1){
-        const newId = CoursesPosts.length ? CoursesPosts[CoursesPosts.length -1].id +1 : 0;
+        const newId = courses.length ? courses[courses.length -1].id +1 : 0;
         const newCourses = {...req, id: newId};
         const resp = await setCoursebd(newCourses);
         console.log("Criando",resp)
-        setCourses([...CoursesPosts, newCourses]);
+        setCourses([...courses, newCourses]);
       }else{
         const resp = await upadateCourse(req);	
-        setCourses(CoursesPosts.map(c => (c.id == req.id ? req:c)));
+        setCourses(courses.map(c => (c.id == req.id ? req:c)));
         console.log("Atualizar:", resp);
       }
         setReq({
+        name: '',
         id: -1,
         created_at: new Date().toISOString(),
         description: '',
@@ -60,7 +66,7 @@ export default function CoursesScreen(){
     }
 
     function editCourses(id: number) {
-      const courseToEdit = CoursesPosts.find(course => course.id === id);
+      const courseToEdit = courses.find(course => course.id === id);
       if (courseToEdit) {
         setReq(courseToEdit); 
       }
@@ -69,7 +75,7 @@ export default function CoursesScreen(){
     async function deleteCourses(id:number){
       const resp = await deleteCourse(id);
       console.log("Deletado:", resp);
-     setCourses(CoursesPosts.filter(course => course.id !==id));
+     setCourses(courses.filter(course => course.id !==id));
     }
 
     const router = useRouter();
@@ -82,15 +88,21 @@ export default function CoursesScreen(){
         <View style={styles.row}>
             <View style={styles.form}>
                 <MyTextArea
+                    iconName='name'
+                    label="Nome"
+                    value={req.description}
+                    onChangeText={(text) => setReq({...req, name: text})}    
+                    placeholder="Digite a descrição..."       
+                    />
+
+                <MyTextArea
                     iconName='description'
                     label="Descrição"
                     value={req.description}
                     onChangeText={(text) => setReq({...req, description: text})}    
                     placeholder="Digite a descrição..."       
                     />
-
-                
-                
+                   
                 <Myinput
                     iconName='book'
                     label="Plano de Curso"
@@ -117,20 +129,19 @@ export default function CoursesScreen(){
                 <MyButton title="CADASTRAR" onPress={handleRegister} button_type="rect" />
         </View> 
             <MyList
-          data={CoursesPosts}
+          data={courses}
           keyItem={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <MyItem  style={styles.listItem}
 
               onEdit={()=> editCourses(item.id)}
               onDel={()=> deleteCourses(item.id)}
-            >
+            > 
+              <Mytext style={styles.listText}>Nome: {item.name}</Mytext>
               <Mytext style={styles.listText}>Descrição: {item.description}</Mytext>
               <Mytext style={styles.listText}>Plano: {item.courseplan}</Mytext>
               <Mytext style={styles.listText}>Orientação: {item.orientationplan}</Mytext>
               <Mytext style={styles.listText}>Carga: {item.workload}</Mytext>
-
-              
 
             </MyItem>
           )}
