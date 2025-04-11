@@ -1,4 +1,3 @@
-import React, {useState} from 'react'
 import { supabase } from '../utils/supabase'
 
 export interface iLevels{
@@ -6,18 +5,14 @@ export interface iLevels{
     description: string,
     color: string,
     id: number,
-    created_at: string,
-       
+    created_at: string,       
 }
 
-export async function setLevels(levels: iLevels){
+export async function setLevel(levels: iLevels){
 
     //* aqui vem os tratamento de regex ou do modelo de negócio antes de inserir.
 
-const { data, error } = await supabase.from('levels')
-    .insert([ levels, {some_column: 'someValue', other_column: 'otherValue'},
-
-        ]) .select()
+    const { data, error } = await supabase.from('levels').insert([ levels ]) .select()
 
     if (error){
         console.error('Erro ao inserir levels: ', error);
@@ -59,3 +54,4 @@ export async function deleteLevels(id: number) {
         const { error } = await supabase.from('levels').delete().eq('id', id);
         return error;
 }
+//import {deleteLevels, updateLevels, getLevels, setLevels, iLevels } from '../src/controllers/levels';

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View,Text, StyleSheet,FlatList, Button,TextInput, Touchable, TouchableOpacity} from 'react-native';
 import {Myinput} from '../src/components/MyInputs';
 import MyView from '../src/components/MyView';
@@ -8,6 +8,7 @@ import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
 import {MyItem} from '../src/components/MyItem';
 import { useRouter } from 'expo-router';
+import {deleteLevels, updateLevels, getLevels, setLevel, iLevels } from '../src/controllers/levels';
 
 
 export default function LevelsScreen() {
@@ -16,62 +17,61 @@ export default function LevelsScreen() {
 
   const [levels, setLevels] = useState<iLevels[]>([]);
 
-  const [form, setForm] = useState({
+  const [req, setReq] = useState({
     id: -1,
     name: '',
     description: '',
     color: 'Selecione uma cor',
-    created_at:  new Date().toISOString(),
+    created_at: new Date().toISOString(),
   });
 
 
-useEffect(() => {
-  //aqui estamos carregando os lançamentos 
-    async function fetchLevels() {
-      const retorno = await getLevels({})
-      if (retorno.status && retorno.data && retorno.data.length > 0 ) {
-          setLevels(retorno.data); 
+  useEffect(() => {
+    //aqui estamos carregando os lançamentos 
+      async function fetchLevels() {
+        const retorno = await getLevels({})
+        if (retorno.status && retorno.data && retorno.data.length > 0 ) {
+            setLevels(retorno.data); 
+        }
+
       }
+  
 
-    }
- 
-
-    fetchLevels();
+      fetchLevels();
   }, []);
 
-async function handleSave() {
-    if (form.id === -1) {
-      const newLevels = { ...form, id: Date.now() }; // id temporário
-      setLevels([...levels, newLevels]);
-      await supabase.from('levels').insert([newLevels]);
+  async function handleRegister() {
+    if (req.id === -1) {
+      const newId = levels.length > 0? levels[levels.length - 1].id + 1: 0;
+      const newLevel = { ...req, id: newId};
+      setLevels([...levels, newLevel]);
+      await setLevel(newLevel)
     } else {
-      const updated = levels.map(item => (item.id === form.id ? form : item));
+      const updated = levels.map(item => (item.id === req.id ? req : item));
       setLevels(updated);
-      await supabase.from('levels').update(form).eq('id', form.id);
+      await updateLevels(req)
     }
 
-      setForm({
-      id: -1,
-      name: '',
-      description: '',
-      color: 'Selecione uma cor',
-      created_at:  new Date().toISOString(),
-      
+      setReq({
+        id: -1,
+        name: '',
+        description: '',
+        color: 'Selecione uma cor',
+        created_at:  new Date().toISOString(),
      });
   }
 
-async function handleDelete(id: number) {
-    await supabase.from('levels').delete().eq('id', id);
+async function deleteLevels(id: number) {
     setLevels(levels.filter(item => item.id !== id));
   }
 
-function handleEdit(levels: iLevels) {
-    setForm(levels);
+function editLevels(levels: iLevels) {
+    setReq(levels);
 
   }
 
     return (
-        <MyView router={router} >
+        <MyView>
             
         {/* aqui é typerscrypt dentro do front */}
 
@@ -113,7 +113,7 @@ function handleEdit(levels: iLevels) {
                 </View>
 
                 <MyList
-                    data={leves}
+                    data={levels}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) =>(
                        <MyItem
