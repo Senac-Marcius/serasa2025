@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
-import MySupport from '../src/components/MySupport';
+import { View, Text, StyleSheet } from 'react-native';
 import MyView from '../src/components/MyView';
-import { ScrollView } from 'react-native-gesture-handler';
-import {MyItem, MyCorrelated} from '../src/components/MyItem';
+import { MyCorrelated} from '../src/components/MyItem';
 import MyList from '../src/components/MyList';
 import { Myinput, MyCheck } from '../src/components/MyInputs';
 import MyButton from '../src/components/MyButtons';
@@ -14,99 +12,38 @@ import MySelect from '../src/components/MySelect';
 
 
 export default function LaunchScreen() {
-    const [isChecked, setIsChecked] = useState(true);
-
     const [launchs, setLaunchs] = useState<iLaunch[]>([]);
 
     useEffect(() => {
-        //aqui estamos carregando os lançamentos
-        async function getTodos() {
-            const retorno = await getLaunchs({})
-            if (retorno.status && retorno.data && retorno.data.length > 0) {
-                setLaunchs(retorno.data);
-            }
-        }
-
-        getTodos();
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-        setAlunos([
-            {key:1, option: "aluno 1"},
-            {key:2, option: "aluno 2"},
-            {key:3, option: "aluno 3"}
-        ])
-
-        //aqui estamos carregando o req
-        alunos.map( (a) => {
-            setLaunchs([
-                ...launchs,
-                {
-                    id: -1,
-                    observation: '',
-                    presence: true,
-                    indicator: '',
-                    note: '',
-                    created_at: new Date().toString(),
-                    students_id: a.key,
-                    class_id: 0,
-                    employees_id: 0,
-                    
-                }
-            ])
-        })
-
-    }, []);
-
-   
-
-    async function handleRegister() {
-        /*if (req.id == -1) {
-            const newId = launchs.length ? launchs[launchs.length - 1].id + 1 : 0;
-            const newLaunch = { ...req, id: newId };
-            setLaunchs([...launchs, newLaunch])
-            const resp = await setLaunch(newLaunch)
-            console.log (resp)
-        } else {
-            setLaunchs(launchs.map(l => (l.id == req.id ? req : l)));
-
-        }
-        setReq({
+        const listaAlunos = [
+            { key: 1, option: "aluno 1" },
+            { key: 2, option: "aluno 2" },
+            { key: 3, option: "aluno 3" }
+        ];
+    
+        setAlunos(listaAlunos);
+    
+        const novosLaunchs = listaAlunos.map((a) => ({
             id: -1,
             observation: '',
             presence: true,
             indicator: '',
             note: '',
-            created_at: new Date().toISOString(),
-            userId: 0,
-            students_id: 0,
+            created_at: new Date().toString(),
+            students_id: a.key,
             class_id: 0,
             employees_id: 0,
-            
+        }));
+    
+        setLaunchs(novosLaunchs);
+    }, []);
 
-        })*/
+   
+
+    async function handleRegister() {
+       
 
     }
-
-    const router = useRouter();
-
 
     const [turmas, setTurmas] = useState([
         {key:1, option: "turma 1"},
@@ -128,7 +65,7 @@ export default function LaunchScreen() {
     const [ disciplinaSelect, setDisciplinaSelect] = useState({key:-1, option: 'disciplinas'});
 
     return (
-        <MyView router={router} >
+        <MyView>
 
             <View style={styles.row}>
                 <MySelect label={turmaSelect.option} list={turmas} setLabel={(item) => setTurmaSelect(turmas.find(t => t.option == item) || turmaSelect ) } setKey={(key) => setTurmaSelect(turmas.find(t => t.key == key) || turmaSelect ) } /> 
@@ -141,75 +78,71 @@ export default function LaunchScreen() {
                         icon=''
                 />
             </View>
-            
 
-
-            <Text>Alunos:</Text>
+            <h1 style={{textAlign: 'center', marginTop: 50}} >Alunos</h1>
 
             <MyList
                 data={launchs}
                 keyItem={(item) => item.id.toString()}
-                renderItem={({ item }) => {
-                    
-                    return (
-                    <MyCorrelated showEditButton={false} showDeleteButton={false} style={styles.card}>
-                        <Text>{item.students_id}</Text>
+                renderItem={({ item }) => (
+                    <MyCorrelated style={styles.card} showEditButton={false} showDeleteButton={false} style={styles.card}>
+                        <Text style={{marginTop: 20}}>{alunos.find(a => a.key === item.students_id)?.option || item.students_id}</Text>
 
                         <MyCheck
-                            label={item.presence ? "Presente" : "Faltou"}
+                            label={item.presence ? "Presente" : "Faltou    "}
                             checked={item.presence}
                             onToggle={() => {
                                 const updated = launchs.map(r =>
-                                    r.students_id === item.key ? { ...r, presence: !item.presence } : r
+                                    r.students_id === item.students_id ? { ...r, presence: !item.presence } : r
                                 );
                                 setLaunchs(updated);
                             }}
                         />
 
                         <Myinput
+                            label='Observação'
+                            iconName=''
                             placeholder="Digite a Observação:"
                             value={item.observation}
                             onChangeText={(text) => {
                                 const updated = launchs.map(r =>
-                                    r.students_id === item.key ? { ...r, observation: text } : r
+                                    r.students_id === item.students_id ? { ...r, observation: text } : r
                                 );
                                 setLaunchs(updated);
                             }}
-                            label=""
-                            iconName=""
                         />
 
                         <Myinput
-                            placeholder="Digite a Nota:"
+                            label='Nota'
+                            iconName=''
+                            style={styles.campo}
+                            placeholder="A"
                             value={item.note}
                             onChangeText={(text) => {
                                 const updated = launchs.map(r =>
-                                    r.students_id === item.key ? { ...r, note: text } : r
+                                    r.students_id === item.students_id ? { ...r, note: text } : r
                                 );
                                 setLaunchs(updated);
                             }}
-                            label=""
-                            iconName=""
                         />
 
                         <Myinput
-                            placeholder="Indicador"
+                            label='Indicador'
+                            iconName=''
+                            style={styles.campo}
+                            placeholder="1"
                             value={item.indicator}
                             onChangeText={(text) => {
                                 const updated = launchs.map(r =>
-                                    r.students_id === item.key ? { ...r, indicator: text } : r
+                                    r.students_id === item.students_id ? { ...r, indicator: text } : r
                                 );
                                 setLaunchs(updated);
                             }}
-                            label=""
-                            iconName=""
                         />
+
                     </MyCorrelated>
-                    );
-                }}
-                />
-
-
+                )}
+            />
 
             <MyButton title="Salvar" onPress={handleRegister} /> {/*Mybutton*/}
 
@@ -276,6 +209,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'flex-start',
     },
+    campo:{width: 50}
 
 
 }
