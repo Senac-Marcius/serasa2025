@@ -10,15 +10,23 @@ interface iProduct {
     create_at: string
 }
 
+function toListProduct (data: iProduct[]){
+  const resp: {key: number, option: string}[] = [];
+  data.map((p) => {
+ resp.push ({key: p.id, option: p.name})
+
+  })
+   return resp;
+}
+
 async function getProducts(params:any) {
   const { data: todos, error } = await supabase
-            .from('products')
-            .select();
-
-            if (error)
-              return {status: false, error: error}
-            return {status: true, data: todos}
-
+  .from('products')
+  .select()
+    if(error)
+        return {status: false, error: error}
+     return {status: true, data: todos}
+  
 }
 const [products, setProducts] = useState<iProduct[]>([]);
 
@@ -73,5 +81,5 @@ const { data, error } = await supabase.from ('products')
     return data 
 }
           
-export {setProduct, updateProduct, deleteProduct, iProduct, getProducts };
+export {setProduct, updateProduct, deleteProduct, iProduct, getProducts, toListProduct };
 
