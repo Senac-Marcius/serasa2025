@@ -1,17 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Platform } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Calendar } from 'react-native-calendars';
 import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
-import { supabase } from '../src/utils/supabase';  // Certifique-se de importar o supabase corretamente
-import { setCalendarsData, iCalendar } from '../src/controllers/calendars';  // Assumindo que iCalendar está corretamente tipado
-import { Myinput } from '../src/components/MyInputs';
-import Mytext from '../src/components/MyText';
-import MyButton from '../src/components/MyButtons';
-import { MyItem } from '../src/components/MyItem';
-import MyList from '../src/components/MyList';
+import { supabase } from '../src/utils/supabase';
+import { iCalendar, SetCalendarbd, UpdateCalendarbd, DeleteCalendarbd } from '../src/controllers/calendar';
 
 export default function CalendarsScreen() {
-  const [calendars, setCalendars] = useState<iCalendar[]>([]);  // Aqui é um array de iCalendar
   const [req, setReq] = useState<iCalendar>({
     studentname: '',
     course: '',
@@ -21,68 +17,56 @@ export default function CalendarsScreen() {
     created_at: new Date().toISOString(),
   });
 
-  // Hook para buscar calendários ao carregar a tela
+  const [calendars, setCalendars] = useState<iCalendar[]>([]);
+  const [showCalendarView, setShowCalendarView] = useState(false);
+  const router = useRouter();
+
   useEffect(() => {
-    async function getCalendars() {
-      const { data: todos, error } = await supabase.from('calendar').select();
-
-      if (error) {
-        console.error('Erro ao buscar calendários:', error);
-        return;
-      }
-
-      if (todos && todos.length > 0) {
-        // Ajuste aqui para garantir que os dados são compatíveis com o tipo iCalendar
-        const calendarData: iCalendar[] = todos.map((calendar: any) => ({
-          id: calendar.id,
-          studentname: calendar.studentname,
-          course: calendar.course,
-          registrationdate: calendar.registrationdate,
-          period: calendar.period,
-          created_at: calendar.created_at,
-        }));
-
-        setCalendars(calendarData);  // Atualiza o estado com os calendários obtidos
-      }
-    }
-
-    getCalendars();  // Chama a função ao carregar a tela
+    (async () => {
+      const { data, error } = await supabase.from('calendar').select();
+      if (error) console.log('Erro ao carregar calendários:', error);
+      if (data) setCalendars(data as iCalendar[]);
+    })();
   }, []);
 
-  // Função para registrar o calendário
   async function handleRegister() {
-    // Se o id for -1, significa que é um novo calendário
+    if (!req.studentname.trim() || !req.course.trim() || !req.registrationdate.trim() || !req.period.trim()) {
+      console.log('Preencha todos os campos!');
+      return;
+    }
+
     if (req.id === -1) {
-      // Gera um novo ID baseado no último item ou 0 se não houver calendários
-      const newId = calendars.length ? calendars[calendars.length - 1].id + 1 : 0;
-      const newcalendar: iCalendar = { ...req, id: newId };
-
-      // Atualiza o estado local com o novo calendário
-      setCalendars([...calendars, newcalendar]);
-
-      // Envia os dados para o Supabase
-      const { data, error } = await supabase.from('calendar').insert([newcalendar]);
-
-      if (error) {
-        console.error('Erro ao inserir calendário no Supabase:', error);
-      } else {
-        console.log('Calendário inserido com sucesso no Supabase:', data);
+      const result = await SetCalendarbd({
+        studentname: req.studentname,
+        course: req.course,
+        registrationdate: req.registrationdate,
+        period: req.period,
+        created_at: req.created_at,
+      });
+      if (result && result[0]) {
+        setCalendars([...calendars, result[0]]);
       }
     } else {
-      // Atualiza o calendário existente no estado
-      setCalendars(calendars.map((c) => (c.id === req.id ? req : c)));
-
-      // Envia os dados para o Supabase para atualizar
-      const { data, error } = await supabase.from('calendar').upsert([req]);
-
-      if (error) {
-        console.error('Erro ao atualizar calendário no Supabase:', error);
-      } else {
-        console.log('Calendário atualizado com sucesso no Supabase:', data);
+      const result = await UpdateCalendarbd(req);
+      if (result) {
+        setCalendars(calendars.map((c) => (c.id === req.id ? req : c)));
       }
     }
 
-    // Limpa os campos após o registro
+    resetForm();
+  }
+
+  async function delCalendar(id: number) {
+    const success = await DeleteCalendarbd(id);
+    if (success) setCalendars(calendars.filter((c) => c.id !== id));
+  }
+
+  function editCalendar(id: number) {
+    const found = calendars.find((c) => c.id === id);
+    if (found) setReq(found);
+  }
+
+  function resetForm() {
     setReq({
       studentname: '',
       course: '',
@@ -93,84 +77,143 @@ export default function CalendarsScreen() {
     });
   }
 
-  // Função para editar um calendário
-  function editCalendar(id: number) {
-    const edit = calendars.find((c) => c.id === id);
-    if (edit) {
-      setReq(edit);
-    }
+  function handleWebDateChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setReq({ ...req, registrationdate: e.target.value });
   }
 
-  // Função para deletar um calendário
-  async function delCalendar(id: number) {
-    // Deleta o item localmente
-    setCalendars(calendars.filter((c) => c.id !== id));
+  function getMarkedDates(calendars: iCalendar[]) {
+    const marked: Record<string, any> = {};
 
-    try {
-      // Deleta o calendário no Supabase
-      const { data, error } = await supabase.from('calendar').delete().eq('id', id);
-      if (error) {
-        console.error('Erro ao deletar calendário no Supabase:', error);
-      } else {
-        console.log('Calendário deletado com sucesso no Supabase:', data);
-      }
-    } catch (err) {
-      console.error('Erro inesperado ao deletar no Supabase:', err);
-    }
+    calendars.forEach((item) => {
+      marked[item.registrationdate] = {
+        selected: true,
+        selectedColor: '#E53935',
+        disabled: true,
+        disableTouchEvent: true,
+      };
+    });
+
+    return marked;
   }
-
-  const router = useRouter();
 
   return (
     <MyView router={router}>
-      <Mytext>Tela de Cronograma</Mytext>
-      <View style={styles.row}>
-        <View style={styles.form}>
-          <Myinput
-            label="Nome do aluno:"
-            placeholder="Nome do aluno:"
+      <View style={styles.container}>
+        <Text style={styles.pageTitle}>Cronograma de Matrículas</Text>
+
+        {/* Formulário */}
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>{req.id === -1 ? 'Novo Cronograma' : 'Editar Cronograma'}</Text>
+          <TextInput
+            placeholder="Nome do aluno"
             value={req.studentname}
             onChangeText={(text) => setReq({ ...req, studentname: text })}
-            iconName="user"
+            style={styles.input}
           />
-          <Myinput
-            label="Curso:"
-            placeholder="Curso:"
+          <TextInput
+            placeholder="Curso"
             value={req.course}
             onChangeText={(text) => setReq({ ...req, course: text })}
-            iconName="book"
+            style={styles.input}
           />
-          <Myinput
-            label="Data da Matrícula:"
-            placeholder="Data da Matrícula:"
-            value={req.registrationdate}
-            onChangeText={(text) => setReq({ ...req, registrationdate: text })}
-            iconName="calendar"
-          />
-          <Myinput
-            label="Período:"
-            placeholder="Período:"
+          {Platform.OS === 'web' ? (
+            <input
+              type="date"
+              value={req.registrationdate}
+              onChange={handleWebDateChange}
+              style={{
+                height: 45,
+                paddingLeft: 12,
+                paddingRight: 12,
+                marginBottom: 12,
+                borderRadius: 6,
+                border: '1px solid #DDD',
+                backgroundColor: '#FAFAFA',
+                fontFamily: 'sans-serif',
+                width: '100%',
+                boxSizing: 'border-box',
+              }}
+            />
+          ) : (
+            <TextInput
+              placeholder="Data da matrícula"
+              value={req.registrationdate}
+              onChangeText={(text) => setReq({ ...req, registrationdate: text })}
+              style={styles.input}
+            />
+          )}
+          <TextInput
+            placeholder="Período"
             value={req.period}
             onChangeText={(text) => setReq({ ...req, period: text })}
-            iconName="clock"
+            style={styles.input}
           />
-
-          <MyButton title="Acessar" onPress={handleRegister} />
+          <TouchableOpacity style={styles.primaryButton} onPress={handleRegister}>
+            <Text style={styles.primaryButtonText}>{req.id === -1 ? 'CADASTRAR' : 'ATUALIZAR'}</Text>
+          </TouchableOpacity>
         </View>
 
-        <View style={styles.listContainer}>
-          <MyList
-            data={calendars}
-            keyItem={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <MyItem style={styles.list} onEdit={() => editCalendar(item.id)} onDel={() => delCalendar(item.id)}>
-                <Mytext style={styles.item}>Nome do aluno: {item.studentname}</Mytext>
-                <Mytext style={styles.item}>Curso: {item.course}</Mytext>
-                <Mytext style={styles.item}>Data da matrícula: {item.registrationdate}</Mytext>
-                <Mytext style={styles.item}>Período: {item.period}</Mytext>
-              </MyItem>
-            )}
-          />
+        {/* Visualização: Cards ou Calendário com botão fixo */}
+        <View style={styles.card}>
+          <View style={styles.cardTitleRow}>
+            <TouchableOpacity
+              onPress={() => setShowCalendarView(!showCalendarView)}
+              style={styles.calendarToggleButton}
+            >
+              <Icon name={showCalendarView ? 'view-list' : 'calendar-month'} size={20} color="#6A1B9A" />
+            </TouchableOpacity>
+            <Text style={styles.sectionTitle}>
+              {showCalendarView ? 'Dias Registrados' : 'Cronogramas Cadastrados'}
+            </Text>
+          </View>
+
+          {showCalendarView ? (
+            <Calendar
+              markedDates={getMarkedDates(calendars)}
+              onDayPress={() => {}}
+              theme={{
+                backgroundColor: '#ffffff',
+                calendarBackground: '#ffffff',
+                textSectionTitleColor: '#6A1B9A',
+                dayTextColor: '#333',
+                disabledArrowColor: '#ccc',
+                monthTextColor: '#6A1B9A',
+                indicatorColor: '#6A1B9A',
+                todayTextColor: '#6A1B9A',
+              }}
+            />
+          ) : (
+            <View style={styles.gridContainer}>
+              {calendars.map((item) => (
+                <View key={item.id} style={styles.cardGridItem}>
+                  <View style={styles.row}>
+                    <Icon name="account" size={20} color="#6A1B9A" />
+                    <Text style={styles.itemText}>Aluno: {item.studentname}</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Icon name="book-open-outline" size={20} color="#6A1B9A" />
+                    <Text style={styles.itemText}>Curso: {item.course}</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Icon name="calendar" size={20} color="#6A1B9A" />
+                    <Text style={styles.itemText}>Data: {item.registrationdate}</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Icon name="clock-outline" size={20} color="#6A1B9A" />
+                    <Text style={styles.itemText}>Período: {item.period}</Text>
+                  </View>
+                  <View style={styles.actions}>
+                    <TouchableOpacity style={styles.editButton} onPress={() => editCalendar(item.id)}>
+                      <Text style={styles.buttonText}>EDITAR</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.deleteButton} onPress={() => delCalendar(item.id)}>
+                      <Text style={styles.buttonText}>EXCLUIR</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              ))}
+            </View>
+          )}
         </View>
       </View>
     </MyView>
@@ -178,41 +221,114 @@ export default function CalendarsScreen() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+    backgroundColor: '#F4F4F4',
+    flex: 1,
+  },
+  pageTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 20,
+  },
+  card: {
+    backgroundColor: '#F2F2F2',
+    borderRadius: 10,
+    padding: 20,
+    marginBottom: 25,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#6A1B9A',
+  },
+  cardTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 12,
+  },
+  calendarToggleButton: {
+    width: 36,
+    height: 36,
+    backgroundColor: '#fff',
+    borderWidth: 2,
+    borderColor: '#6A1B9A',
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  input: {
+    height: 45,
+    borderColor: '#DDD',
+    borderWidth: 1,
+    borderRadius: 6,
+    paddingHorizontal: 12,
+    marginBottom: 12,
+    backgroundColor: '#FAFAFA',
+  },
+  primaryButton: {
+    backgroundColor: '#6A1B9A',
+    paddingVertical: 12,
+    borderRadius: 6,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  primaryButtonText: {
+    color: '#FFF',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  gridContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    gap: 12,
+  },
+  cardGridItem: {
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+    padding: 16,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 6,
+    elevation: 2,
+    width: '100%',
+    maxWidth: 300,
+    flexGrow: 1,
+  },
+  itemText: {
+    fontSize: 14,
+    color: '#333',
+    marginLeft: 8,
+  },
+  actions: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 12,
+  },
+  editButton: {
+    backgroundColor: '#9575CD',
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    borderRadius: 4,
+  },
+  deleteButton: {
+    backgroundColor: '#EF5350',
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    borderRadius: 4,
+  },
+  buttonText: {
+    color: '#FFF',
+    fontWeight: 'bold',
+  },
   row: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-  },
-  form: {
-    flex: 1,
-    marginRight: 10,
-    padding: 20,
-    backgroundColor: '#F2F2F2',
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 5,
-  },
-  listContainer: {
-    flex: 1,
-  },
-  list: {
-    flex: 1,
-    marginRight: 10,
-    padding: 20,
-    marginBottom: 10,
-    borderWidth: 1,
-    backgroundColor: '#F2F2F2',
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 5,
-  },
-  item: {
-    fontSize: 14,
-    color: '#007BFF',
-    marginBottom: 5,
+    alignItems: 'center',
+    marginBottom: 4,
   },
 });
