@@ -11,6 +11,17 @@ interface iInvestment {
     value: string,
 }
 
+function toListInvestment(data: iInvestment[]) {
+    const resp: {key: number, option: string}[] = [];
+
+    data.map((i) =>{
+        resp.push()
+        resp.push({ key: i.id, option: `${i.created_at} - ${i.name} - ${i.value}`})
+        })
+    return resp;
+}
+
+
 async function getInvestments (params:any) {
     const { data: all, error } = await supabase.from('investments').select();
 
@@ -104,4 +115,4 @@ async function updateInvestment(updatedInvestment: iInvestment) {
     }
 }
 
-export {setInvestment, deleteInvestment, updateInvestment, getInvestments, iInvestment}
+export {setInvestment, deleteInvestment, updateInvestment, getInvestments, toListInvestment,  iInvestment}
