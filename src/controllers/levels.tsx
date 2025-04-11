@@ -1,5 +1,6 @@
 import { supabase } from '../utils/supabase'
 
+//fazer o key 
 export interface iLevels{
     name: string,
     description: string,
@@ -7,6 +8,18 @@ export interface iLevels{
     id: number,
     created_at: string,       
 }
+
+function tolevels(data: iLevels[]){
+ const resp: {key: number, option: string} [] = [];     
+
+ data.map((l) => {
+ resp.push({key: l.id, option: `${l.color} - ${l.name} - ${l.description} ` })
+ } )
+
+return resp; 
+}
+
+
 
 export async function setLevel(levels: iLevels){
 
