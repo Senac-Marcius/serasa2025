@@ -1,43 +1,24 @@
 import { supabase } from '../utils/supabase'
 
 interface iPost {
-<<<<<<< HEAD
-    url: string,
-    description: string,
-    id: number,
-    like: number,
-    create_at: string,
-    user_id: number,
-}
-
-function toListPost(data: iPost[]){
-  const resp: {key: number, option: string}[] = [];
-
-  data.map((i) => {
-    resp.push({ key: i.id, option: `${i.id}`})
-  })
-  return resp;
-}
-
-
-async function setPost(post:iPost){
-    //aqui vem os tratamentos de regex ou do modelo de negócio antes de inserir
- 
-    const { data, error } = await supabase.from('posts')
-    .insert([
-        post
-    ])
-    .select()
-    
-    if(error){
-        console.error('Erro ao buscar posts:', error);
-=======
   id: number,
   url: string,
   description: string,
   like: number,
   user_id: number,
 }
+
+function toListPost(data: iPost[]){
+  const resp: {key: number, option: string}[] = [];
+
+  data.map((p) => {
+    resp.push({ key: p.id, option: `${p.description}`})
+  })
+
+  return resp;
+}
+
+
 
 async function getPosts(params:any) {
   const { data: todos, error } = await supabase.from('posts').select();
@@ -47,7 +28,6 @@ async function getPosts(params:any) {
 
   return {status: true, data: todos }
 
->>>>>>> 3f7606557d78c4c0932b895e643cb74f6da07f1b
 
 }
 
@@ -89,20 +69,7 @@ async function editPosts(id: number, updatedData: Partial<iPost>) {
   }
 }
 
-<<<<<<< HEAD
-async function getPosts(): Promise<iPost[]> {
-    const { data, error } = await supabase.from('posts').select();
-  
-    if (error) {
-      console.error('Erro ao buscar posts:', error);
-      return [];
-    }
-  
-    return data || [];
-}
 
-export {setPost, getPosts, iPost, toListPost} 
-=======
 // aqui função de delete
 
 async function delPosts(id: number) {
@@ -142,4 +109,3 @@ const isValid = (post: iPost) =>
 
 
 export { setPost, iPost, delPosts, editPosts, getPosts } 
->>>>>>> 3f7606557d78c4c0932b895e643cb74f6da07f1b
