@@ -21,6 +21,23 @@ interface iEmployees {
     user_id:number,
     positions_id:number
 }
+function toListEmployees(data: iEmployees[]){
+  const resp: {key: number, option: string}[] = [];
+  data.map((l) => {
+    resp.push({ key: l.id, option: l.name })
+  })
+
+  return resp;
+}
+async function getEmployees(params:any) { 
+  const { data: todos , error} = await supabase.from('employees').select()
+  if(error){
+    console.log(error)
+    return {status: false, error: error}
+  } 
+  return {status: true, data: todos}
+  
+}
 
 async function  setEmployee(employee:iEmployees){
 
@@ -74,6 +91,6 @@ async function  dellEmployee(id:number) {
   return 'Usuario Deletado'
 }
 
-export {setEmployee,updateEmployee,dellEmployee, iEmployees}
+export {setEmployee,updateEmployee,dellEmployee,getEmployees,toListEmployees, iEmployees}
 
         
