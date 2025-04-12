@@ -1,7 +1,6 @@
 import React, { Children, ReactNode, useState } from 'react'
 import { Text, TextStyle, TouchableOpacity, View, ViewStyle, StyleSheet } from 'react-native';
 import { FlatList, TextInput } from 'react-native-gesture-handler';
-import { Button, List } from 'react-native-paper'; 
 import { Myinput } from './MyInputs';
 import { inputStyles } from '../../styles/inputStyles';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -38,7 +37,7 @@ const MySelect: React.FC<MySelectProps> = ({ label, list, setLabel, setKey }) =>
               <AntDesign 
                   name="select1"  //importação de ícones: para ter acesso à eles, IMPORTE: " import AntDesign from '@expo/vector-icons/AntDesign'; " e busque no site:  @expo/vector-icons/AntDesign
                   size={18} 
-                  color="purple" 
+                  color="purple"                                                           
                   style={{  marginLeft: 9,  // Indentação adicional da borda esquerda
                     marginRight: 5}}
               />
