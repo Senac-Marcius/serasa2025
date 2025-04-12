@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import {View,Text,StyleSheet,ScrollView,Dimensions,} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { useRouter } from 'expo-router';
-import {iDisciplines,SetDisciplinebd,UpdateDisciplinebd,DeleteDisciplinebd, getDisciplines, toListDisciplines} from '../src/controllers/disciplines';
+import {iDisciplines,SetDisciplinebd,UpdateDisciplinebd,DeleteDisciplinebd,getDisciplines,} from '../src/controllers/disciplines';
 import MyView from '../src/components/MyView';
 import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
 import { Myinput } from '../src/components/MyInputs';
-import { MyItem } from '../src/components/MyItem';
 
 const { width } = Dimensions.get('window');
 
@@ -29,38 +28,29 @@ export default function DisciplineScreen() {
   useEffect(() => {
     const fetchDisciplines = async () => {
       const response = await getDisciplines({});
-  
       if (!response.status) {
         console.log('Erro ao carregar disciplinas:', response.data);
         return;
       }
-  
       setDisciplines(response.data as iDisciplines[]);
     };
-  
     fetchDisciplines();
   }, []);
-  
-  
 
   const professoresAgrupados = () => {
     const agrupado: { [nome: string]: string[] } = {};
-
     disciplines.forEach((item) => {
       const nome = item.teacher?.trim();
       const disciplina = item.name?.trim();
-
       if (nome && disciplina) {
         if (!agrupado[nome]) agrupado[nome] = [];
         agrupado[nome].push(disciplina);
       }
     });
-
     const listaFormatada = Object.entries(agrupado).map(([nome, disciplinas]) => ({
       nome,
       disciplinas,
     }));
-
     return listaFormatada.filter((prof) => {
       const termo = filtro.toLowerCase();
       return (
@@ -90,12 +80,10 @@ export default function DisciplineScreen() {
 
     if (isEditing) {
       setDisciplines(disciplines.map((d) => (d.id === req.id ? req : d)));
-
       (async () => {
         await UpdateDisciplinebd(req);
         console.log('Disciplina atualizada.');
       })();
-
       resetForm();
       return;
     }
@@ -117,7 +105,6 @@ export default function DisciplineScreen() {
         console.log('Erro ao cadastrar disciplina.');
       }
     })();
-
     resetForm();
   }
 
@@ -149,7 +136,7 @@ export default function DisciplineScreen() {
     <MyView style={styles.container}>
       <ScrollView stickyHeaderIndices={[0]}>
         <View style={styles.menuBar}>
-          <Text style={styles.menuTitle}>Meu Sistema</Text>
+          <Text style={styles.menuTitle}></Text>
           <View style={styles.menuItems}>
             {menuItems.map((item) => (
               <MyButton
@@ -162,7 +149,9 @@ export default function DisciplineScreen() {
                     ? setActiveScreen('professores')
                     : router.push(item.route)
                 }
-                style={{ marginBottom: 6 }}
+                style={{ marginBottom: 4, height: 32, width: 110 }}
+                font_size={15}
+                iconSize={14}
               />
             ))}
           </View>
@@ -277,38 +266,40 @@ const styles = StyleSheet.create({
   },
   menuBar: {
     flexDirection: 'column',
-    padding: 20,
+    padding: 16,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#DDD',
     zIndex: 10,
   },
   menuTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 12,
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 8,
     color: '#6A1B9A',
+    textAlign: 'center',
   },
   menuItems: {
     flexDirection: 'row',
     justifyContent: 'center',
     flexWrap: 'wrap',
-    gap: 12,
+    gap: 8,
   },
   main: {
-    padding: 20,
+    padding: 16,
   },
   pageTitle: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 20,
+    marginBottom: 16,
+    textAlign: 'center',
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: '#6A1B9A',
-    marginBottom: 10,
+    marginBottom: 8,
   },
   card: {
     backgroundColor: '#FFF',
