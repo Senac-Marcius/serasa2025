@@ -15,7 +15,6 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 type Turma = {
   id: number;
   curso: string;
-  codigo: string;
   turno: string;
   modalidade: string;
   horario: string;
@@ -35,7 +34,6 @@ export default function TurmasComCadastro() {
   const [form, setForm] = useState<Turma>({
     id: 0,
     curso: '',
-    codigo: '',
     turno: '',
     modalidade: '',
     horario: '',
@@ -61,13 +59,15 @@ export default function TurmasComCadastro() {
   };
 
   const salvar = async () => {
+    console.log("iniciando processo de salvamento")
     const requiredFields = [
-      'codigo', 'curso', 'turno', 'modalidade', 'horario', 
+      'id', 'curso', 'turno', 'modalidade', 'horario', 
       'cargaHoraria', 'vagas', 'inicio', 'termino', 'valor', 
       'docente', 'certificacao', 'status'
     ];
     for (const field of requiredFields) {
       if (!form[field as keyof Turma]) {
+        console.log(field)
         setErrorMessage(`O campo "${field}" é obrigatório.`);
         return;
       }
@@ -84,7 +84,6 @@ export default function TurmasComCadastro() {
     setForm({
       id: 0,
       curso: '',
-      codigo: '',
       turno: '',
       modalidade: '',
       horario: '',
@@ -123,7 +122,7 @@ export default function TurmasComCadastro() {
       <MyView >
         <Mytext style={styles.header}>Cadastrar Nova Turma</Mytext>
         {[
-          'codigo', 'curso', 'turno', 'modalidade', 'horario',
+          'id', 'curso', 'turno', 'modalidade', 'horario',
           'cargaHoraria', 'vagas', 'inicio', 'termino', 'valor',
           'docente', 'certificacao', 'status'
         ].map((campo) => (
@@ -135,7 +134,12 @@ export default function TurmasComCadastro() {
             onChangeText={(text) => setForm({ ...form, [campo]: text })}
           />
         ))}
-    
+
+       <MyButton 
+       title='Salvar'
+        onPress={salvar}
+       
+       />
       </MyView>
     );
   }
@@ -149,7 +153,7 @@ export default function TurmasComCadastro() {
         renderItem={({ item }) => (
           <View style={styles.card}>
             <Mytext style={styles.title}>{item.curso}</Mytext>
-            <Mytext>Código: {item.codigo}</Mytext>
+            <Mytext>Código: {item.id}</Mytext>
             <Mytext>Turno: {item.turno}</Mytext>
             <View style={styles.actions}>
               <TouchableOpacity onPress={() => editarTurma(item)}>
@@ -162,9 +166,11 @@ export default function TurmasComCadastro() {
     </View>
         )}
       />
-      <TouchableOpacity style={styles.button} onPress={() => setModoCadastro(true)}>
-        <Mytext style={styles.buttonText}>Cadastrar Nova Turma</Mytext>
-      </TouchableOpacity>
+     <MyButton
+      title='Cadastrar nova turma'
+      onPress={() => setModoCadastro(true)}
+
+    />  
     </View>
   );
 }
