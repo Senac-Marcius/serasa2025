@@ -143,40 +143,54 @@ export default function ParentScreen (){
             <View style = {styles.row}>
                 <View style={styles.form}>{/*View no Type pode ser usado para substituir o Form */}
                 {/*<FlatList/> → atibuto para possivel criação de lista */}
-                    <TextInput 
-                        placeholder="Nome:"
+                    <Myinput
+                        placeholder="Digite:"
                         value={req.name}
-                        onChangeText={(Text) => setReq({...req, name: Text})}
+                        onChangeText={(text) => setReq({ ...req, name: text })}
+                        label='Nome do responsavel:'
+                        iconName='person'
                     />
-                    <TextInput 
-                        placeholder="RG:"
+                    <Myinput
+                        placeholder="Digite:"
                         value={req.rg}
-                        onChangeText={(Text) => setReq({...req, rg: Text})}
+                        onChangeText={(text) => setReq({ ...req, rg: text})}
+                        label='RG:'
+                        iconName='fingerprint'
                     />
-                    <TextInput 
-                        placeholder="CPF:"
+                    <Myinput
+                        placeholder="Digite:"
                         value={req.cpf}
                         onChangeText={(Text) => setReq({...req, cpf: Text})}
+                        label='CPF:'
+                        iconName='fingerprint'
                     />
-                    <TextInput
-                        placeholder="Idade:"
+                    <Myinput
+                        placeholder="Digite:"
                         value={req.age}
                         onChangeText={(Text) => setReq({...req, age: Text})}
+                        label='Idade:'
+                        iconName='person'
                     />
-                    <TextInput 
+                    <Myinput
                         placeholder="Telefone:"
                         value={req.phone}
                         onChangeText={(Text) => setReq({...req, phone: Text})}
+                        label='Telefone:'
+                        iconName='phone'
                     />
-                    <TextInput 
-                        placeholder="Email:"
+                    <Myinput
+                        placeholder="Digite:"
                         value={req.email}
                         onChangeText={(Text) => setReq({...req, email: Text})}
+                        label='Email:'
+                        iconName='email'
                     />
-                    <TextInput
-                        placeholder="Parentesco:"
+                    <Myinput
+                        placeholder="Digite:"
                         value={req.kinship}
                         onChangeText={(Text) => setReq({...req, kinship: Text})}
+                        label='Parentesco:'
+                        iconName='person'
                     />
                 
                     <MyButton
@@ -193,7 +207,7 @@ export default function ParentScreen (){
                         title='Deletar'
                         color='red'
                         onPress={delParent}/>*/}
-                        <MyUpload setUrl={setDocument} url={urlDocument}/>
+                        <MyUpload style={styles.button_round} setUrl={setDocument} url={urlDocument}/>
                 </View>
                 
 
