@@ -29,24 +29,24 @@ async function getExpense(params:any) {
   if(error)
     return{status:false, error: error}
 
-    return{status:true, data: todos}
+  return{status:true, data: todos}
 }
   
 
 async function setExpense (expense:iexpenses){
+    //nessa area é regex
 
-    const { data, error } = await supabase.from('expenses')
+    const { data: todos, error } = await supabase.from('expenses')
     .insert([
       expense
     ])
     .select();
 
-    if (error) {
-        console.error('Erro ao inserir no Supabase:', error.message);
-        return [];
-    }
+    if(error)
+        //tratamento do codigo do erro 
+      return{status:false, error: error}
 
-    return data;
+    return{status:true, data: todos}
    
 }
 

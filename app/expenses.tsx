@@ -43,13 +43,15 @@ export default function ExpenseScreen(){
     async function handleRegister(){
         if(req.id == -1){
             const newid = expense.length ? expense[ expense.length - 1].id + 1 :0;
-            const newExpense = {...req, id:newid};
+            const newExpense = {...req,  id:newid};
             setExpenses([...expense, newExpense]);
-            await setExpense(newExpense)
+            const resp = await setExpense(newExpense)
+            if (!resp.status && resp.error)
+                setMessage(resp.error.message)
         }else{
             setExpenses(expense.map(e => (e.id === req.id ? req : e)));
-        await updateExpense(req); 
-        setMessage("Existem campos que não aceitam esses tipos caracteres")
+            await updateExpense(req); 
+            setMessage("Existem campos que não aceitam esses tipos caracteres")
         }
 
         setReq({
@@ -90,6 +92,13 @@ export default function ExpenseScreen(){
             <Mytext style={styles.title}>tela de despesas</Mytext>
             <View style={styles.row}>
                 <View style={styles.form}>
+
+                    {message.length>0 &&  (
+                        <Mytext>
+                            {message}
+                        </Mytext>
+                    )}
+
                     <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text })} placeholder="Nome" label="Nomes:" iconName='' />
 
                     <Myinput value={req.contacts} onChangeText={(text) => setReq({ ...req, contacts: text })} placeholder="(XX) XXXXX-XXXX" label="Contato:" iconName='phone' />    
@@ -102,6 +111,8 @@ export default function ExpenseScreen(){
 
 
                     <MyButton style={{justifyContent:'center'}} onPress={handleRegister} title='Cadastrar'></MyButton>
+
+
                 </View>
 
                 <MyList
