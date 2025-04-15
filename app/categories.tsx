@@ -94,7 +94,8 @@ getTodos();
                         onChangeText={(text) => setReq({ ...req, description: text })}
                         style={styles.input}
                         iconName=''
-                        label= 'digite o nome da categoria'
+                        label= 'descrição'
+                        
                     />
                       
                     <MyButton title={req.id === -1 ? "Cadastrar" : "Atualizar"} onPress={handleRegister} />
