@@ -7,9 +7,7 @@ import MyButton from '../src/components/MyButtons';
 import { Myinput, MyTextArea } from '../src/components/MyInputs';
 import {MyItem} from '../src/components/MyItem';
 import Mytext from '../src/components/MyText';
-
-import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '../src/controllers/revenues'
-
+import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '../src/controllers/revenues';
 import MySelect from '../src/components/MySelect';
 
 export default function RevenueScreen() {
@@ -139,8 +137,8 @@ useEffect(()=>{
             
               setLabel={(text) => setReq({ ...req, scholarship_status: text })}
               list={[
-                {key: 0, option: 'ativo'},
-                {key: 1, option: 'inativo'},
+                {key: 0, option: '1- ATIVO'},
+                {key: 1, option: '2- INATIVO'},
               ]}
             />
 
@@ -180,17 +178,7 @@ useEffect(()=>{
               label='Valor'
             />
 
-           
-
-            
-
-            
-             
-
-            
-            
-
-            
+         
             <View style={styles.row}>
               <MyButton button_type='rect' title="cadastrar" onPress={handleRegister}  />
              
