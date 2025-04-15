@@ -77,7 +77,7 @@ const parseCurrencyInput = (text: string): number => {
     const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
     const [busca, setBusca] = useState('');
     const router = useRouter();
-
+      
     interface CalendarDate {
         year: number;
         month: number;
@@ -166,7 +166,8 @@ const parseCurrencyInput = (text: string): number => {
                 onPress={buscar}
                 busca={busca}
             />
-                
+
+            {/** Fazer um campo de imput para integrantes do projeto com campo de adicionar integrante com a quantidade necessaria, para listar na tabela employess_projects */}    
             
             <View style={styles.contentContainer}>
                 <Mytext style={styles.title}>PROJETOS</Mytext>
@@ -402,7 +403,7 @@ const styles = StyleSheet.create({
       
     contentContainer: {
         padding: 20,
-        alignItems: 'center',
+        alignItems: 'flex-start',
     },
 
     buttonContainer: {
