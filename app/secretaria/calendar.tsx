@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Calendar } from 'react-native-calendars';
-import MyView from '../src/components/MyView';
+import MyView from '../../src/components/MyView';
 import { useRouter } from 'expo-router';
-import { supabase } from '../src/utils/supabase';
-import { iCalendar, SetCalendarbd, UpdateCalendarbd, DeleteCalendarbd } from '../src/controllers/calendar';
+import { supabase } from '../../src/utils/supabase';
+import { iCalendar, SetCalendarbd, UpdateCalendarbd, DeleteCalendarbd } from '../../src/controllers/calendar';
 
 export default function CalendarsScreen() {
   const [req, setReq] = useState<iCalendar>({

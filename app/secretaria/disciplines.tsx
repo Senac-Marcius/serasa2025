@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import MyView from '../../src/components/MyView';
 import { useRouter } from 'expo-router';
-import {iDisciplines,SetDisciplinebd,UpdateDisciplinebd,DeleteDisciplinebd,getDisciplines,} from '../src/controllers/disciplines';
-import MyView from '../src/components/MyView';
-import MyButton from '../src/components/MyButtons';
-import MyList from '../src/components/MyList';
-import { Myinput } from '../src/components/MyInputs';
-
-const { width } = Dimensions.get('window');
-
+import { iDisciplines, SetDisciplinebd, UpdateDisciplinebd, DeleteDisciplinebd, getDisciplines } from '../../src/controllers/disciplines';
+import { supabase } from '../../src/utils/supabase';
+import MyButton from '../../src/components/MyButtons';
+import { Myinput } from '../../src/components/MyInputs';
+import MyList from '../../src/components/MyList';
+//111
 export default function DisciplineScreen() {
   const [req, setReq] = useState<iDisciplines>({
     id: -1,
@@ -321,7 +320,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 16,
     margin: 8,
-    width: width > 768 ? 300 : '100%',
+    //width: width > 768 ? 300 : '100%',
     shadowColor: '#000',
     shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 2 },
