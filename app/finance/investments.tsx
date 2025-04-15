@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet  } from 'react-native';
-import MyView from '../src/components/MyView';
-import MyAccessibility from '../src/components/MyAccessibility';
-import { Myinput, MyTextArea } from '../src/components/MyInputs';
-import Mylist from '../src/components/MyList';
-import {MyItem} from '../src/components/MyItem';
-import MyButton from '../src/components/MyButtons';
-import Mytext from '../src/components/MyText';
+import MyView from '../../src/components/MyView';
+import MyAccessibility from '../../src/components/MyAccessibility';
+import { Myinput, MyTextArea } from '../../src/components/MyInputs';
+import Mylist from '../../src/components/MyList';
+import {MyItem} from '../../src/components/MyItem';
+import MyButton from '../../src/components/MyButtons';
+import Mytext from '../../src/components/MyText';
 import { useRouter } from 'expo-router';
-import { iInvestment, setInvestment, deleteInvestment, updateInvestment } from '../src/controllers/investments';
-import { supabase } from '../src/utils/supabase';
+import { iInvestment, setInvestment, deleteInvestment, updateInvestment } from '../../src/controllers/investments';
+import { supabase } from '../../src/utils/supabase';
 
 export default function investmentScreen(){
  //aqui é typescript   

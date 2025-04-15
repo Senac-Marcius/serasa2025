@@ -1,13 +1,13 @@
 import React, { useEffect, useState} from 'react';
 import { View, StyleSheet } from 'react-native' ;
-import {MyItem} from '../src/components/MyItem';
-import MyList from '../src/components/MyList';
-import MyView from '../src/components/MyView';
-import MyButton from '../src/components/MyButtons'
-import {Myinput, MyTextArea} from '../src/components/MyInputs';
+import {MyItem} from '../../src/components/MyItem';
+import MyList from '../../src/components/MyList';
+import MyView from '../../src/components/MyView';
+import MyButton from '../../src/components/MyButtons'
+import {Myinput, MyTextArea} from '../../src/components/MyInputs';
 import { useRouter } from 'expo-router';
-import { setExpense, delRegister, updateExpense, iexpenses, getExpense } from '../src/controllers/expenses';
-import Mytext from '../src/components/MyText'
+import { setExpense, delRegister, updateExpense, iexpenses, getExpense } from '../../src/controllers/expenses';
+import Mytext from '../../src/components/MyText'
 
 
 

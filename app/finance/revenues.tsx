@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, } from 'react-native';
-import Mydownload from '../src/components/MyDownload';
-import MyView from '../src/components/MyView';
-import MyList from '../src/components/MyList';
-import MyButton from '../src/components/MyButtons';
-import { Myinput, MyTextArea } from '../src/components/MyInputs';
-import {MyItem} from '../src/components/MyItem';
-import Mytext from '../src/components/MyText';
+import Mydownload from '../../src/components/MyDownload';
+import MyView from '../../src/components/MyView';
+import MyList from '../../src/components/MyList';
+import MyButton from '../../src/components/MyButtons';
+import { Myinput, MyTextArea } from '../../src/components/MyInputs';
+import {MyItem} from '../../src/components/MyItem';
+import Mytext from '../../src/components/MyText';
 
-import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '../src/controllers/revenues'
+import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '../../src/controllers/revenues'
 
-import MySelect from '../src/components/MySelect';
+import MySelect from '../../src/components/MySelect';
 
 export default function RevenueScreen() {
   
