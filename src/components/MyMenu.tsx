@@ -79,7 +79,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
       </TouchableOpacity>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <MenuItem label="Administração" route="Administracao/adminIndex" icon="people" />
+        <MenuItem label="Administração" route="Administracao/" icon="people" />
         <MenuItem label="Budgets" route="budgets" icon="wallet" />
         <MenuItem label="Calendar" route="calendar" icon="calendar" />
         <MenuItem label="Categories" route="categories" icon="albums" />
