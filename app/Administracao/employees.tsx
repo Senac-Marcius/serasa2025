@@ -6,7 +6,7 @@ import MyButton from '../../src/components/MyButtons';
 import MyView from '../../src/components/MyView';
 import {MyItem} from '../../src/components/MyItem';
 import MyList from '../../src/components/MyList';
-import { Myinput,MyCheck } from '../../src/components/MyInputs';
+import { Myinput} from '../../src/components/MyInputs';
 import { useRouter } from 'expo-router';
 import { setEmployee,iEmployees,updateEmployee,dellEmployee,getEmployees,toListEmployees } from '../../src/controllers/employees';
 import { supabase } from '../../src/utils/supabase';
