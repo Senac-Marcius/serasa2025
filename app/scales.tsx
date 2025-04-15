@@ -109,7 +109,7 @@ export default function ScaleScreen(){
           setReq(scale);
           setSelectedDay(scale.day);
         }
-      }
+      } 
     
       const router = useRouter();
 
