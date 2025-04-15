@@ -1,19 +1,18 @@
 import React, {useState, useEffect} from 'react'; //Importa o react e atualiza a lista Automaticamente.
-import {View, Text, StyleSheet, FlatList} from 'react-native';//Une  os objetos e o react-native faz a função de trasformar o codigo em multiplas plataformas.
-import MyFilter from '../src/components/MyFilter';
-import MySelect from '../src/components/MySelect';
-import MyTimerPicker from '../src/components/MyTimerPiker';
-import MyButton from '../src/components/MyButtons';
-import {MyItem} from '../src/components/MyItem';
-import MyView from '../src/components/MyView';
+import {View, Text, StyleSheet} from 'react-native';//Une  os objetos e o react-native faz a função de trasformar o codigo em multiplas plataformas.
+import MyFilter from '../../src/components/MyFilter';
+import MySelect from '../../src/components/MySelect';
+import MyTimerPicker from '../../src/components/MyTimerPiker';
+import MyButton from '../../src/components/MyButtons';
+import {MyItem} from '../../src/components/MyItem';
+import MyView from '../../src/components/MyView';
 import {useRouter} from 'expo-router';
-import {iScale, setScale, updateScale, deleteScale} from '../src/controllers/scales';
-import { supabase } from '../src/utils/supabase'
-import Mytext from '../src/components/MyText';
-import MyList from '../src/components/MyList';
-import { jsiConfigureProps } from 'react-native-reanimated/lib/typescript/core';
+import {iScale, setScale, updateScale, deleteScale, getScale} from '../../src/controllers/scales';
+import Mytext from '../../src/components/MyText';
+import MyList from '../../src/components/MyList';
+import { ScrollView } from 'react-native-gesture-handler';
 
-//Esse é o codigo correto.
+
 
 export default function ScaleScreen(){
     const [scales, setScales] = useState<iScale[]>([]);
@@ -32,7 +31,7 @@ export default function ScaleScreen(){
 
     const [selectedDay, setSelectedDay] = useState<string>('');
 
-    // Definir os dias da semana como lista de opções
+    
     const daysOfWeek = [
         { key: '1', option: 'Segunda-feira' },
         { key: '2', option: 'Terça-feira' },
@@ -52,13 +51,13 @@ export default function ScaleScreen(){
         }));
       };
     
-
+        //Mudar para o cntrolador
     useEffect(() => {
         async function getTodos() {
-          const { data: todos } = await supabase.from('scales').select()
+          const retorno = await getScale({})
     
-          if (todos && todos.length > 0) {
-            setScales(todos)
+          if (retorno.status && retorno.data && retorno.data.length> 0) {
+            setScales(retorno.data);
           }
         }
     
@@ -109,13 +108,14 @@ export default function ScaleScreen(){
           setReq(scale);
           setSelectedDay(scale.day);
         }
-      }
+      } 
     
       const router = useRouter();
 
     return (
-        <MyView router={router} > {/* Aqui é typecript dentro do html*/}
-            <Mytext>CRIE SUA ESCALA</Mytext>
+        <ScrollView>
+        <MyView> {/* Aqui é typecript dentro do html*/}
+            <Mytext style={styles.Mytext}>CRIE SUA ESCALA </Mytext>
             <MyFilter
                 style={styles.container}
                 itens={['day', 'starttime']}
@@ -125,19 +125,19 @@ export default function ScaleScreen(){
 
             <View>
                 <View style={styles.form}>
+                    <Mytext style={styles.Mytext}>Dia Selecionado:📅 {selectedDay || 'Nenhum dia selecionado'}</Mytext>
                     <MySelect
                         label={selectedDay || 'Selecione um dia da semana'}
                         list={daysOfWeek}
                         setLabel={handleSetLabel}
                     />
-                    <Mytext>Dia Selecionado:📅 {selectedDay || 'Nenhum dia selecionado'}</Mytext>
 
-                    <Mytext>Horario de início:▶</Mytext>
+                    <Mytext style={styles.Mytext}>Horario de início:▶</Mytext>
                     <MyTimerPicker
                          initialTime={req.start_time}
                         onTimeSelected={(time) => setReq({ ...req, start_time: time })}
                     />
-                    <Mytext>Horario de término:⏹</Mytext>
+                    <Mytext style={styles.Mytext}>Horario de término:⏹</Mytext>
                     <MyTimerPicker
                         initialTime={req.end_time}
                         onTimeSelected={(time) => setReq({ ...req, end_time: time })}
@@ -168,6 +168,7 @@ export default function ScaleScreen(){
                 </View> 
             </View>       
         </MyView> 
+        </ScrollView>
     );
 };
 
@@ -176,9 +177,9 @@ export default function ScaleScreen(){
 const styles = StyleSheet.create({
     
     container: {
-        alignItems: 'flex-end',
+        alignItems: 'center',
         marginBottom: 20,
-        paddingHorizontal: 50,
+        paddingHorizontal: 20,
         backgroundColor: '#FFFFFF',
         justifyContent: 'center',  
         rowGap: 10,
@@ -186,7 +187,9 @@ const styles = StyleSheet.create({
         width: 'auto',
     },
     Mytext:{
-        justifyContent: 'center'
+        color: '#813AB1',
+        textAlign: 'center',
+        fontSize: 20,
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -196,7 +199,7 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         flex: 1,
-        padding: 10,
+        alignItems: 'center',
         backgroundColor: '#F2F2F2',
         borderRadius: 10,
         shadowColor: '#000',
@@ -210,16 +213,18 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'flex-start',
         marginBottom: 200,
+        gap: 10,
     }, 
     form: {
-        flex: 1,
-        marginRight: 5,
-        padding: 5,
-        backgroundColor: '#FFFFFF',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },  
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 20,
+      paddingHorizontal: 20, // controla o "comprimento" do botão
+      paddingVertical: 10,   // adiciona altura
+      backgroundColor: '#FFFFFF',
+      borderRadius: 8,       // opcional: bordas arredondadas
+      width: 'auto',         // importante para manter o botão ajustado ao conteúdo
+      alignSelf: 'center',   // centraliza horizontalmente dentro do container
     },
     input: {
         height: 40,

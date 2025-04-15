@@ -1,5 +1,14 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Animated, StyleSheet, Image, Dimensions, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Animated,
+  StyleSheet,
+  Image,
+  Dimensions,
+  ScrollView,
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -14,8 +23,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
   const router = useRouter();
   const slideAnim = useState(new Animated.Value(-MENU_WIDTH))[0];
 
-  // Animação de entrada do menu
-  React.useEffect(() => {
+  useEffect(() => {
     Animated.timing(slideAnim, {
       toValue: 0,
       duration: 250,
@@ -46,7 +54,12 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
 
   return (
     <Animated.View
-      style={[styles.menu, { height, transform: [{ translateX: slideAnim }] }]}
+      style={[
+        styles.menu,
+        {
+          transform: [{ translateX: slideAnim }],
+        },
+      ]}
     >
       <View style={styles.menuHeader}>
         <TouchableOpacity onPress={closeMenu}>
@@ -55,14 +68,17 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
       </View>
 
       <TouchableOpacity style={styles.profileSection}>
-        <Image source={{ uri: 'https://via.placeholder.com/50' }} style={styles.profileImage} />
+        <Image
+          source={{ uri: 'https://via.placeholder.com/50' }}
+          style={styles.profileImage}
+        />
         <View>
-          <Text style={styles.profileName}>sung di wo</Text>
+          <Text style={styles.profileName}>sung jin-wo</Text>
           <Text style={styles.profileRole}>Admin</Text>
         </View>
       </TouchableOpacity>
 
-      <ScrollView style={styles.scroll}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         <MenuItem label="Budgets" route="budgets" icon="wallet" />
         <MenuItem label="Calendar" route="calendar" icon="calendar" />
         <MenuItem label="Categories" route="categories" icon="albums" />
@@ -74,25 +90,26 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Employees" route="employees" icon="people" />
         <MenuItem label="Expenses" route="expenses" icon="cash" />
         <MenuItem label="Investments" route="investments" icon="trending-up" />
-        <MenuItem label="Itens" route="itens" icon="pricetag" />
+        <MenuItem label="Items" route="items" icon="pricetag" />
         <MenuItem label="Launchs" route="launchs" icon="rocket" />
         <MenuItem label="Levels" route="levels" icon="stats-chart" />
         <MenuItem label="Libraie" route="libraie" icon="book" />
         <MenuItem label="Loans" route="loans" icon="card" />
         <MenuItem label="Locals" route="locals" icon="location" />
         <MenuItem label="Notifications" route="notifications" icon="notifications" />
-        <MenuItem label="Parents" route="Parents" icon="people-circle" />
+        <MenuItem label="Parents" route="parents" icon="people-circle" />
         <MenuItem label="Perfil" route="perfil" icon="person" />
         <MenuItem label="Positions" route="positions" icon="pin" />
         <MenuItem label="Posts" route="posts" icon="chatbox" />
         <MenuItem label="Products" route="products" icon="cart" />
         <MenuItem label="Projects" route="projects" icon="briefcase" />
-        <MenuItem label="Records" route="records" icon="disc" />
+        <MenuItem label="Records" route="records" icon="document-text-outline" />
         <MenuItem label="Revenues" route="revenues" icon="cash-outline" />
         <MenuItem label="Scales" route="scales" icon="speedometer" />
-        <MenuItem label="Schedules" route="schedules" icon="calendar" />
+        <MenuItem label="Timelines" route="timelines" icon="calendar" />
         <MenuItem label="Students" route="students" icon="school" />
         <MenuItem label="Users" route="users" icon="person-circle" />
+        <MenuItem label="More" route="more" icon="add-circle" />
       </ScrollView>
     </Animated.View>
   );
@@ -104,11 +121,12 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     width: MENU_WIDTH,
+    height: height,
     backgroundColor: '#5A2D82',
-    zIndex: 999,
-  },
-  scroll: {
-    paddingHorizontal: 10,
+    zIndex: 9999,
+    elevation: 20,
+    margin: 0,
+    padding: 0,
   },
   menuHeader: {
     paddingVertical: 15,
@@ -138,6 +156,10 @@ const styles = StyleSheet.create({
   profileRole: {
     fontSize: 14,
     color: '#DDD',
+  },
+  scrollContainer: {
+    paddingHorizontal: 10,
+    paddingBottom: 20,
   },
   menuItem: {
     flexDirection: 'row',

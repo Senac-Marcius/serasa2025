@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react'; // Esta importando da biblioteca do react para atualizar automaticamente 
 import { StyleSheet, View, TouchableOpacity, } from 'react-native'; 
-import MySearch from '../src/components/MySearch';
-import MyButton from '../src/components/MyButtons';
-import Mytext from '../src/components/MyText';
-import MyView from '../src/components/MyView';
-import MyList from '../src/components/MyList';
-import { Myinput, MyTextArea  } from '../src/components/MyInputs';
+import MySearch from '../../src/components/MySearch';
+import MyButton from '../../src/components/MyButtons';
+import Mytext from '../../src/components/MyText';
+import MyView from '../../src/components/MyView';
+import MyList from '../../src/components/MyList';
+import { Myinput, MyTextArea  } from '../../src/components/MyInputs';
 import { useRouter } from 'expo-router';
-import MyCalendar from '../src/components/MyCalendar';
-import { iProject , setProject, updateProject, deleteProject } from '../src/controlador/projects';
-import { supabase } from '../src/utils/supabase';
-import { MyItem } from '../src/components/MyItem';
+import MyCalendar from '../../src/components/MyCalendar';
+import { iProject , setProject, updateProject, deleteProject, getProjects } from '../../src/controllers/projects';
+import { supabase } from '../../src/utils/supabase';
+import { MyItem } from '../../src/components/MyItem';
 import { Picker } from '@react-native-picker/picker';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 
@@ -57,25 +57,28 @@ const parseCurrencyInput = (text: string): number => {
         strategies: '', 
         planning: '',
         process:'',
+        
     });
 
     useEffect(() => {
-        async function getTodos() {
-          const { data: todos } = await supabase.from('projects').select()
+        (async () => {
+            async function getTodos(){
+                const retorno = await getProjects({})
+                if (retorno.status && retorno.data && retorno.data.length > 0){
+                    setProjects(retorno.data);
+                }
+            }
+            getTodos()
     
-          if ( todos && todos.length > 0) {
-            setProjects(todos)
-          }
-        }
-    
-        getTodos()
+          
+        })();
       }, [])
 
-
+    const [integrantes, setIntegrantes] = useState<string[]>(['']);
     const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
     const [busca, setBusca] = useState('');
     const router = useRouter();
-
+      
     interface CalendarDate {
         year: number;
         month: number;
@@ -83,6 +86,8 @@ const parseCurrencyInput = (text: string): number => {
     }
 
     async function handleRegister(){
+        const recurcesValue = parseCurrencyInput(rawRecurces);
+        
         if(req.id == -1){ //aqui é quando esta cadastrando
             const newid = projects.length ? projects[projects.length -1].id + 1 : 0;
             const newProjects = { ...req, id: newid };
@@ -93,6 +98,7 @@ const parseCurrencyInput = (text: string): number => {
             await setProject(newProjects)
         
         }else{ //aqui é quando esta editando id esta maior do que -1
+            const updatedProject = { ...req, recurces: recurcesValue };
             setProjects(projects.map(jTNL => (jTNL.id == req.id)? req : jTNL ));
             await updateProject(req); 
         }
@@ -114,8 +120,10 @@ const parseCurrencyInput = (text: string): number => {
             strategies: '', 
             planning: '',
             process:'',
+            
         })
 
+        setRawRecurces('');
     }
 
     function editProject(id: number){
@@ -134,6 +142,7 @@ const parseCurrencyInput = (text: string): number => {
         
     }
 
+
     function adicionarProtocolo(url: string){
         if (!/^https?:\/\//i.test(url)) {
             return 'https://' + url;  // Adiciona 'https://' se não estiver presente
@@ -148,17 +157,30 @@ const parseCurrencyInput = (text: string): number => {
         );
         console.log("Resultados da busca:", resultado);
     }
+
+    function adicionarIntegrante() {
+        setIntegrantes([...integrantes, '']);
+      }
+      
+      function atualizarIntegrante(index: number, valor: string) {
+        const novosIntegrantes = [...integrantes];
+        novosIntegrantes[index] = valor;
+        setIntegrantes(novosIntegrantes);
+      }
+      
     
     // Criando o textinput para receber e exibir o texto "placeholder" para o usuario digitar
     return ( // Esta sendo feito um emcapsulamento com a abertura da () / {req.description}= usado para mostar o codigo em baixo
-        <MyView router={router} >
+       <ScrollView>
+       <MyView router={router} >
             <MySearch 
                 style={{ padding: 20 }} 
                 onChangeText={setBusca}
                 onPress={buscar}
                 busca={busca}
             />
-                
+
+            {/** Fazer um campo de imput para integrantes do projeto com campo de adicionar integrante com a quantidade necessaria, para listar na tabela employess_projects */}    
             
             <View style={styles.contentContainer}>
                 <Mytext style={styles.title}>PROJETOS</Mytext>
@@ -176,6 +198,34 @@ const parseCurrencyInput = (text: string): number => {
                             value={req.name}
                             onChangeText={(text) => setReq({ ...req, name: text })}
                         />
+
+                        <Mytext style={styles.label}>Integrantes do Projeto:</Mytext>
+                        {integrantes.map((nome, index) => (
+                        <View key={index} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+                            <Myinput
+                            placeholder={`Integrante ${index + 1}`}
+                            value={nome}
+                            onChangeText={(text) => atualizarIntegrante(index, text)}
+                            iconName=""
+                            label=""
+                            style={{ flex: 1, marginRight: 10 }}
+                            />
+                        </View>
+                        ))}
+
+                        <TouchableOpacity
+                        onPress={adicionarIntegrante}
+                        style={{
+                            backgroundColor: '#007bff',
+                            padding: 10,
+                            borderRadius: 8,
+                            alignItems: 'center',
+                            marginVertical: 10,
+                        }}
+                        >
+                        <Mytext style={{ color: '#fff', fontWeight: 'bold' }}>+ Adicionar Integrante</Mytext>
+                        </TouchableOpacity>
+
 
                         <Mytext style={styles.label}> Nome do projeto: </Mytext>
                         <Myinput
@@ -199,26 +249,14 @@ const parseCurrencyInput = (text: string): number => {
                         iconName=""
                         label=""
                         placeholder="Digite o valor..."
-                        value={rawRecurces} // Mostra valor formatado
+                        value={`R$ ${rawRecurces}`} // Mostra valor formatado
                         onChangeText={(text) => {
-                            setRawRecurces(text); // Salva o valor como string
-                            const parsed = parseCurrencyInput(text);
-                            setReq({ ...req, recurces: parseCurrencyInput(text) }); // Atualiza como número para salvar no Supabase
+                            const cleanText = text.replace(/[^\d,\.]/g, '');
+                            setRawRecurces(cleanText);
+                            const numericValue = parseCurrencyInput(cleanText);
+                            setReq(prev => ({ ...prev, recurces: numericValue }));
                         }}
                         />
-
-                        <Mytext style={[styles.label, { marginTop: 10 }]}> Moeda: </Mytext>
-
-                        <Picker
-                            selectedValue={currency}
-                            style={{ marginBottom: 15 }}
-                            onValueChange={(itemValue) => setCurrency(itemValue)}
-                            >
-                            <Picker.Item label="R$ - Real" value="BRL" />
-                            <Picker.Item label="$ - Dólar" value="USD" />
-                            <Picker.Item label="€ - Euro" value="EUR" />
-                        </Picker>
-
 
                         <Mytext style={styles.label}>Previsão de Início:</Mytext>
                         <MyCalendar
@@ -324,7 +362,6 @@ const parseCurrencyInput = (text: string): number => {
                     <MyList 
                         data={projects}
                         keyItem={(item) => item.id.toString()}
-                        numColumns={2}
                         renderItem={({ item }) => (
                         // Container estilizado para cada item da lista
                             <MyItem style={styles.projectContainer}
@@ -381,6 +418,7 @@ const parseCurrencyInput = (text: string): number => {
                 </View>
             </View>
         </MyView>
+        </ScrollView>
     ); 
 }
 
@@ -406,7 +444,7 @@ const styles = StyleSheet.create({
       
     contentContainer: {
         padding: 20,
-        alignItems: 'center',
+        alignItems: 'flex-start',
     },
 
     buttonContainer: {

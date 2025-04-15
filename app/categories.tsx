@@ -4,15 +4,10 @@ import MyList from '../src/components/MyList';
 import { MyItem } from '../src/components/MyItem';
 import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
-import { setCategory, updateCategory, deleteCategory } from '../src/controllers/category';
-import { supabase } from '../src/utils/supabase';
+import {  iCategories, setCategory, updateCategory, deleteCategory, getCategories } from '../src/controllers/category';
 
-interface iCategories {
-    name: string,
-    description: string,
-    id: number,
-    created_at: string
-}
+import MyButton from '../src/components/MyButtons';
+import {Myinput} from '../src/components/MyInputs';
 
 export default function CategoryScreen() {
     const [req, setReq] = useState<iCategories>({
@@ -28,17 +23,18 @@ export default function CategoryScreen() {
     // Carregar categorias do banco ao abrir a tela
     useEffect(() => {
         async function getTodos() {
-            const { data: todos, error } = await supabase.from('categories').select();
+       
+            const retorno = await getCategories({})
 
-            if (error) console.log('Erro ao carregar categorias:', error);
-
-            if (todos && todos.length > 0) {
-                setCategories(todos);
+            if (retorno.status && retorno.data && retorno.data.length > 0){
+                getCategories(retorno.data);
             }
-        }
+getTodos();
+            }
+      
 
         getTodos();
-    }, []);
+    },[])
 
     // Cadastrar ou atualizar
     async function handleRegister() {
@@ -92,28 +88,34 @@ export default function CategoryScreen() {
     }
 
     return (
-        <MyView router={router}>
+        <MyView >
             <View style={styles.row}>
                 <View style={styles.form}>
-                    <TextInput
+                    <Myinput
                         placeholder="Nome"
                         value={req.name}
                         onChangeText={(text) => setReq({ ...req, name: text })}
                         style={styles.input}
+                        iconName=''
+                        label= 'digite o nome da categoria'
                     />
-                    <TextInput
+                    <Myinput
                         placeholder="Descrição"
                         value={req.description}
                         onChangeText={(text) => setReq({ ...req, description: text })}
                         style={styles.input}
+                        iconName=''
+                        label= 'digite o nome da categoria'
                     />
-                    <Button title={req.id === -1 ? "Cadastrar" : "Atualizar"} onPress={handleRegister} />
+                      
+                    <MyButton title={req.id === -1 ? "Cadastrar" : "Atualizar"} onPress={handleRegister} />
                 </View>
 
                 <MyList
                     data={categories}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({ item }) => (
+                        
                         <MyItem
                             onDel={() => delCategorie(item.id)}
                             onEdit={() => editCategorie(item.id)}

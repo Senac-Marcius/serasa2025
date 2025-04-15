@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, FlatList, Text, StyleSheet, TextInput, Button, TouchableOpacity,} from 'react-native';
 import MyTheme from '../src/components/MyTheme';
 import {Myinput} from '../src/components/MyInputs'; 
@@ -9,7 +9,7 @@ import MyList from '../src/components/MyList';
 import Mytext from '../src/components/MyText';
 import {textStyles}  from '../styles/textStyles';
 import { useRouter } from 'expo-router';
-
+import { setNotification, iNotification, deleteNotification, updateNotification, getNotifications} from '../src/controllers/notifications';
 
 export default function NotificationScreen(){
 // aqui é typNotificationScreenescript
@@ -17,40 +17,45 @@ export default function NotificationScreen(){
         name:'',
         url:'',
         description:'',
-        classification:'',
         id: -1,
-        creatAt: new Date().toISOString(),
-        userId: 0,
+        created_at: new Date().toISOString(),
+        user_id: 1,
     });
-    
-    const [notifications, setNotifications] = useState<{
-        name: string,
-        url: string,
-        description: string,
-        classification: string,
-        id: number,
-        creatAt: string,
-        userId: number,
-    }[]>([])
 
-    function handleRegister(){
+    const [notifications, setNotifications]= useState<iNotification[]>([])
+    
+
+    useEffect(() => {
+        async function getTodos(){
+            const retorno = await getNotifications({})
+            if (retorno.status && retorno.data && retorno.data.length > 0){
+                setNotifications(retorno.data);
+            }
+        }
+            getTodos();
+    },[])
+    
+    
+    async function handleRegister(){    
         if( req.id == -1){
             const newId = notifications.length ? notifications[notifications.length -1].id +1 : 0;
             const newNotification = {...req, id: newId};
 
-            setNotifications([...notifications, newNotification]);
+            setNotifications([...notifications, newNotification])
+            const resp = await setNotification(newNotification)
+            console.log(resp)
         }else{
             setNotifications(notifications.map(n => (n.id == req.id ? req : n)));
+            await updateNotification(req);
         }
         
         setReq({
             name:'',
             url:'',
             description:'',
-            classification:'',
             id: -1,
-            creatAt: new Date().toISOString(),
-            userId: 0,
+            created_at: new Date().toISOString(),
+            user_id: 1,
         })
     }
 
@@ -60,15 +65,16 @@ export default function NotificationScreen(){
             setReq(notification)
     }
 
-    function deleteNotification(id:number){
-        const list = notifications.filter(n => n.id != id )
+    async function delNotification(id:number){
+        console.log(await deleteNotification(id))
+        const list = notifications.filter(n => n.id != id );
             setNotifications(list)
     }
 
     const router = useRouter();
     
 return (
-    <MyView router={router} >
+    <MyView>
           
            
 
@@ -93,14 +99,6 @@ return (
                         iconName='pending'
                     
                 />
-                <Myinput
-                        style={styles.input}
-                        placeholder = "Digite a classificação:"  
-                        value={req.classification}
-                        onChangeText={(text) => setReq({...req ,classification: text  })}
-                        label="Classificação"
-                        iconName= 'pending'
-                />
 
                 <Myinput
                         style={styles.input}
@@ -122,15 +120,15 @@ return (
                         <MyItem 
                             style={styles.notificationStyle} 
                                 onEdit={() => {editNotification(item.id)}}
-                                onDel={() => {deleteNotification(item.id)}}
+                                onDel={() => {delNotification(item.id)}}
                                 
                         > {/* pedro */}
 
                            <Mytext style={textStyles.textBody} > Nome: {item.name}</Mytext> {/* alex */}
                            <Mytext style={textStyles.textBody}> Descrição: {item.description}</Mytext>
                            <Mytext style={textStyles.textBody}> Url: {item.url}</Mytext>
-                           <Mytext style={textStyles.textBody}> UserId: {item.userId}</Mytext>
-                           <Mytext style={textStyles.textBody}> CreatAt: {item.creatAt}</Mytext>
+                           <Mytext style={textStyles.textBody}> UserId: {item.user_id}</Mytext>
+                           <Mytext style={textStyles.textBody}> CreatAt: {item.created_at}</Mytext>
 
 
                             {/*
