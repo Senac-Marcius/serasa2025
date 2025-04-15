@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, Platform, TouchableOpacity, ScrollView } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Calendar } from 'react-native-calendars';
 import MyView from '../../src/components/MyView';
-import { useRouter } from 'expo-router';
-import { supabase } from '../../src/utils/supabase';  // Certifique-se de importar o supabase corretamente
-import { setCalendarsData, iCalendar } from '../../src/controllers/calendars';  // Assumindo que iCalendar está corretamente tipado
-import { Myinput } from '../../src/components/MyInputs';
-import Mytext from '../../src/components/MyText';
+import { Myinput, MyTextArea } from '../../src/components/MyInputs';
 import MyButton from '../../src/components/MyButtons';
+import MyText from '../../src/components/MyText';
 import { MyItem } from '../../src/components/MyItem';
-import MyList from '../../src/components/MyList';
+import { useRouter } from 'expo-router';
+import { supabase } from '../../src/utils/supabase';
+import { iCalendar, SetCalendarbd, UpdateCalendarbd, DeleteCalendarbd } from '../../src/controllers/calendar';
 
 export default function CalendarsScreen() {
-  const [calendars, setCalendars] = useState<iCalendar[]>([]);  // Aqui é um array de iCalendar
   const [req, setReq] = useState<iCalendar>({
     studentname: '',
     course: '',
@@ -21,68 +21,50 @@ export default function CalendarsScreen() {
     created_at: new Date().toISOString(),
   });
 
-  // Hook para buscar calendários ao carregar a tela
+  const [calendars, setCalendars] = useState<iCalendar[]>([]);
+  const [showCalendarView, setShowCalendarView] = useState(false);
+  const router = useRouter();
+
   useEffect(() => {
-    async function getCalendars() {
-      const { data: todos, error } = await supabase.from('calendar').select();
-
-      if (error) {
-        console.error('Erro ao buscar calendários:', error);
-        return;
-      }
-
-      if (todos && todos.length > 0) {
-        // Ajuste aqui para garantir que os dados são compatíveis com o tipo iCalendar
-        const calendarData: iCalendar[] = todos.map((calendar: any) => ({
-          id: calendar.id,
-          studentname: calendar.studentname,
-          course: calendar.course,
-          registrationdate: calendar.registrationdate,
-          period: calendar.period,
-          created_at: calendar.created_at,
-        }));
-
-        setCalendars(calendarData);  // Atualiza o estado com os calendários obtidos
-      }
-    }
-
-    getCalendars();  // Chama a função ao carregar a tela
+    (async () => {
+      const { data, error } = await supabase.from('calendar').select();
+      if (error) console.log('Erro ao carregar calendários:', error);
+      if (data) setCalendars(data as iCalendar[]);
+    })();
   }, []);
 
-  // Função para registrar o calendário
   async function handleRegister() {
-    // Se o id for -1, significa que é um novo calendário
+    if (!req.studentname.trim() || !req.course.trim() || !req.registrationdate.trim() || !req.period.trim()) {
+      console.log('Preencha todos os campos!');
+      return;
+    }
+
     if (req.id === -1) {
-      // Gera um novo ID baseado no último item ou 0 se não houver calendários
-      const newId = calendars.length ? calendars[calendars.length - 1].id + 1 : 0;
-      const newcalendar: iCalendar = { ...req, id: newId };
-
-      // Atualiza o estado local com o novo calendário
-      setCalendars([...calendars, newcalendar]);
-
-      // Envia os dados para o Supabase
-      const { data, error } = await supabase.from('calendar').insert([newcalendar]);
-
-      if (error) {
-        console.error('Erro ao inserir calendário no Supabase:', error);
-      } else {
-        console.log('Calendário inserido com sucesso no Supabase:', data);
+      const result = await SetCalendarbd({ ...req });
+      if (result && result[0]) {
+        setCalendars([...calendars, result[0]]);
       }
     } else {
-      // Atualiza o calendário existente no estado
-      setCalendars(calendars.map((c) => (c.id === req.id ? req : c)));
-
-      // Envia os dados para o Supabase para atualizar
-      const { data, error } = await supabase.from('calendar').upsert([req]);
-
-      if (error) {
-        console.error('Erro ao atualizar calendário no Supabase:', error);
-      } else {
-        console.log('Calendário atualizado com sucesso no Supabase:', data);
+      const result = await UpdateCalendarbd(req);
+      if (result) {
+        setCalendars(calendars.map((c) => (c.id === req.id ? req : c)));
       }
     }
 
-    // Limpa os campos após o registro
+    resetForm();
+  }
+
+  async function delCalendar(id: number) {
+    const success = await DeleteCalendarbd(id);
+    if (success) setCalendars(calendars.filter((c) => c.id !== id));
+  }
+
+  function editCalendar(id: number) {
+    const found = calendars.find((c) => c.id === id);
+    if (found) setReq(found);
+  }
+
+  function resetForm() {
     setReq({
       studentname: '',
       course: '',
@@ -93,126 +75,213 @@ export default function CalendarsScreen() {
     });
   }
 
-  // Função para editar um calendário
-  function editCalendar(id: number) {
-    const edit = calendars.find((c) => c.id === id);
-    if (edit) {
-      setReq(edit);
-    }
+  function handleWebDateChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setReq({ ...req, registrationdate: e.target.value });
   }
 
-  // Função para deletar um calendário
-  async function delCalendar(id: number) {
-    // Deleta o item localmente
-    setCalendars(calendars.filter((c) => c.id !== id));
-
-    try {
-      // Deleta o calendário no Supabase
-      const { data, error } = await supabase.from('calendar').delete().eq('id', id);
-      if (error) {
-        console.error('Erro ao deletar calendário no Supabase:', error);
-      } else {
-        console.log('Calendário deletado com sucesso no Supabase:', data);
-      }
-    } catch (err) {
-      console.error('Erro inesperado ao deletar no Supabase:', err);
-    }
+  function getMarkedDates(calendars: iCalendar[]) {
+    const marked: Record<string, any> = {};
+    calendars.forEach((item) => {
+      marked[item.registrationdate] = {
+        selected: true,
+        selectedColor: '#E53935',
+        disabled: true,
+        disableTouchEvent: true,
+      };
+    });
+    return marked;
   }
-
-  const router = useRouter();
 
   return (
-    <MyView>
-      <Mytext>Tela de Cronograma</Mytext>
-      <View style={styles.row}>
-        <View style={styles.form}>
+    <MyView router={router} style={styles.container}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 30 }}
+      >
+        <MyText style={styles.pageTitle}>Cronograma de Matrículas</MyText>
+
+        {/* Formulário */}
+        <View style={styles.card}>
+          <MyText style={styles.sectionTitle}>{req.id === -1 ? 'Novo Cronograma' : 'Editar Cronograma'}</MyText>
+
           <Myinput
-            label="Nome do aluno:"
-            placeholder="Nome do aluno:"
+            iconName="account"
+            label="Nome do Aluno"
             value={req.studentname}
             onChangeText={(text) => setReq({ ...req, studentname: text })}
-            iconName="user"
+            placeholder="Digite o nome do aluno..."
           />
+
           <Myinput
-            label="Curso:"
-            placeholder="Curso:"
+            iconName="book"
+            label="Curso"
             value={req.course}
             onChangeText={(text) => setReq({ ...req, course: text })}
-            iconName="book"
+            placeholder="Digite o curso..."
           />
+
+          {Platform.OS === 'web' ? (
+            <input
+              type="date"
+              value={req.registrationdate}
+              onChange={handleWebDateChange}
+              style={{
+                height: 45,
+                paddingLeft: 12,
+                paddingRight: 12,
+                marginBottom: 12,
+                borderRadius: 6,
+                border: '1px solid #DDD',
+                backgroundColor: '#FAFAFA',
+                fontFamily: 'sans-serif',
+                width: '100%',
+                boxSizing: 'border-box',
+              }}
+            />
+          ) : (
+            <Myinput
+              iconName="calendar"
+              label="Data da Matrícula"
+              value={req.registrationdate}
+              onChangeText={(text) => setReq({ ...req, registrationdate: text })}
+              placeholder="AAAA-MM-DD"
+            />
+          )}
+
           <Myinput
-            label="Data da Matrícula:"
-            placeholder="Data da Matrícula:"
-            value={req.registrationdate}
-            onChangeText={(text) => setReq({ ...req, registrationdate: text })}
-            iconName="calendar"
-          />
-          <Myinput
-            label="Período:"
-            placeholder="Período:"
+            iconName="clock"
+            label="Período"
             value={req.period}
             onChangeText={(text) => setReq({ ...req, period: text })}
-            iconName="clock"
+            placeholder="Digite o período..."
           />
 
-          <MyButton title="Acessar" onPress={handleRegister} />
-        </View>
-
-        <View style={styles.listContainer}>
-          <MyList
-            data={calendars}
-            keyItem={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <MyItem style={styles.list} onEdit={() => editCalendar(item.id)} onDel={() => delCalendar(item.id)}>
-                <Mytext style={styles.item}>Nome do aluno: {item.studentname}</Mytext>
-                <Mytext style={styles.item}>Curso: {item.course}</Mytext>
-                <Mytext style={styles.item}>Data da matrícula: {item.registrationdate}</Mytext>
-                <Mytext style={styles.item}>Período: {item.period}</Mytext>
-              </MyItem>
-            )}
+          <MyButton
+            title={req.id === -1 ? 'CADASTRAR' : 'ATUALIZAR'}
+            onPress={handleRegister}
+            button_type="rect"
+            style={styles.primaryButton}
           />
         </View>
-      </View>
+
+        {/* Lista ou Calendário */}
+        <View style={styles.card}>
+          <View style={styles.cardTitleRow}>
+            <TouchableOpacity onPress={() => setShowCalendarView(!showCalendarView)} style={styles.calendarToggleButton}>
+              <Icon name={showCalendarView ? 'view-list' : 'calendar-month'} size={20} color="#6A1B9A" />
+            </TouchableOpacity>
+            <MyText style={styles.sectionTitle}>
+              {showCalendarView ? 'Dias Registrados' : 'Cronogramas Cadastrados'}
+            </MyText>
+          </View>
+
+          {showCalendarView ? (
+            <Calendar
+              markedDates={getMarkedDates(calendars)}
+              onDayPress={() => {}}
+              theme={{
+                backgroundColor: '#ffffff',
+                calendarBackground: '#ffffff',
+                textSectionTitleColor: '#6A1B9A',
+                dayTextColor: '#333',
+                disabledArrowColor: '#ccc',
+                monthTextColor: '#6A1B9A',
+                indicatorColor: '#6A1B9A',
+                todayTextColor: '#6A1B9A',
+              }}
+            />
+          ) : (
+            <View style={styles.gridContainer}>
+              {calendars.map((item) => (
+                <MyItem
+                  key={item.id}
+                  style={styles.cardGridItem}
+                  onEdit={() => editCalendar(item.id)}
+                  onDel={() => delCalendar(item.id)}
+                >
+                  <MyText style={styles.itemText}>👤 Aluno: {item.studentname}</MyText>
+                  <MyText style={styles.itemText}>📘 Curso: {item.course}</MyText>
+                  <MyText style={styles.itemText}>📅 Data: {item.registrationdate}</MyText>
+                  <MyText style={styles.itemText}>⏱️ Período: {item.period}</MyText>
+                </MyItem>
+              ))}
+            </View>
+          )}
+        </View>
+      </ScrollView>
     </MyView>
   );
 }
 
 const styles = StyleSheet.create({
-  row: {
+  container: {
+    padding: 20,
+    backgroundColor: '#F4F4F4',
+    flex: 1,
+  },
+  pageTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#4B0082',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  card: {
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+    padding: 20,
+    marginBottom: 25,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#6A1B9A',
+    marginBottom: 12,
+  },
+  cardTitleRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 12,
   },
-  form: {
-    flex: 1,
-    marginRight: 10,
-    padding: 20,
-    backgroundColor: '#F2F2F2',
+  calendarToggleButton: {
+    width: 36,
+    height: 36,
+    backgroundColor: '#fff',
+    borderWidth: 2,
+    borderColor: '#6A1B9A',
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  primaryButton: {
+    marginTop: 10,
+  },
+  gridContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  cardGridItem: {
+    backgroundColor: '#FFF',
     borderRadius: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 5,
-  },
-  listContainer: {
-    flex: 1,
-  },
-  list: {
-    flex: 1,
-    marginRight: 10,
-    padding: 20,
+    padding: 16,
     marginBottom: 10,
-    borderWidth: 1,
-    backgroundColor: '#F2F2F2',
-    borderRadius: 10,
     shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 5,
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 6,
+    elevation: 2,
+    width: 280,
   },
-  item: {
+  itemText: {
     fontSize: 14,
-    color: '#007BFF',
-    marginBottom: 5,
+    color: '#333',
+    marginBottom: 6,
   },
 });
