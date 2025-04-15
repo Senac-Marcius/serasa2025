@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
-import MyView from '../src/components/MyView';
+import MyView from '../../src/components/MyView';
 import { useRouter } from 'expo-router';
-import { iDisciplines, SetDisciplinebd, UpdateDisciplinebd, DeleteDisciplinebd } from '../src/controllers/disciplines';
-import { supabase } from '../src/utils/supabase';
+import { iDisciplines, SetDisciplinebd, UpdateDisciplinebd, DeleteDisciplinebd } from '../../src/controllers/disciplines';
+import { supabase } from '../../src/utils/supabase';
 //111
 export default function DisciplineScreen() {
   const [req, setReq] = useState<iDisciplines>({
@@ -93,7 +93,7 @@ export default function DisciplineScreen() {
   }
 
   return (
-    <MyView router={router} style={styles.container}>
+    <MyView style={styles.container}>
       <Text style={styles.title}>Disciplinas</Text>
       <View style={styles.row}>
         <View style={styles.form}>

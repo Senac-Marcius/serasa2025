@@ -1,14 +1,14 @@
 
 import React,{ useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
-import  Mytext  from '../src/components/MyText';
-import MyButton from '../src/components/MyButtons';
-import MyList from '../src/components/MyList';
-import MyView from '../src/components/MyView';
-import {MyItem} from '../src/components/MyItem';
-import { Myinput, MyTextArea } from '../src/components/MyInputs';
+import  Mytext  from '../../src/components/MyText';
+import MyButton from '../../src/components/MyButtons';
+import MyList from '../../src/components/MyList';
+import MyView from '../../src/components/MyView';
+import {MyItem} from '../../src/components/MyItem';
+import { Myinput, MyTextArea } from '../../src/components/MyInputs';
 import { useRouter } from 'expo-router';
-import {getCourses,iCourses, upadateCourse, deleteCourse, setCoursebd} from '../src/controllers/courses'
+import {getCourses,iCourses, upadateCourse, deleteCourse, setCoursebd} from '../../src/controllers/courses'
 
 
 
@@ -83,7 +83,7 @@ export default function CoursesScreen(){
 
     return (
       <ScrollView style={styles.container}>
-      <MyView router={router} >
+      <MyView>
         <Mytext>Cursos</Mytext>
         <View style={styles.row}>
             <View style={styles.form}>

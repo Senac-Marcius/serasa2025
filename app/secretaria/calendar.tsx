@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import MyView from '../src/components/MyView';
+import MyView from '../../src/components/MyView';
 import { useRouter } from 'expo-router';
-import { supabase } from '../src/utils/supabase';  // Certifique-se de importar o supabase corretamente
-import { setCalendarsData, iCalendar } from '../src/controllers/calendars';  // Assumindo que iCalendar está corretamente tipado
-import { Myinput } from '../src/components/MyInputs';
-import Mytext from '../src/components/MyText';
-import MyButton from '../src/components/MyButtons';
-import { MyItem } from '../src/components/MyItem';
-import MyList from '../src/components/MyList';
+import { supabase } from '../../src/utils/supabase';  // Certifique-se de importar o supabase corretamente
+import { setCalendarsData, iCalendar } from '../../src/controllers/calendars';  // Assumindo que iCalendar está corretamente tipado
+import { Myinput } from '../../src/components/MyInputs';
+import Mytext from '../../src/components/MyText';
+import MyButton from '../../src/components/MyButtons';
+import { MyItem } from '../../src/components/MyItem';
+import MyList from '../../src/components/MyList';
 
 export default function CalendarsScreen() {
   const [calendars, setCalendars] = useState<iCalendar[]>([]);  // Aqui é um array de iCalendar
@@ -122,7 +122,7 @@ export default function CalendarsScreen() {
   const router = useRouter();
 
   return (
-    <MyView router={router}>
+    <MyView>
       <Mytext>Tela de Cronograma</Mytext>
       <View style={styles.row}>
         <View style={styles.form}>
