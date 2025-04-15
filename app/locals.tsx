@@ -1,6 +1,6 @@
 import React, { useState, useEffect} from 'react'; 
 import { Text, TextStyle, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, View  } from 'react-native';
-import MySelect from '../src/components/MySelect' 
+import MySelect from '../src/components/MySelect'
 import MyView from '../src/components/MyView';
 import MyList from '../src/components/MyList';
 import {MyItem} from '../src/components/MyItem';
