@@ -1,14 +1,14 @@
 import React, {useState, useEffect} from "react";
 import{View,Text, StyleSheet} from "react-native";
-import MyView from "../src/components/MyView";
-import MyList from "../src/components/MyList";
-import {MyItem} from "../src/components/MyItem";
-import { Myinput } from "../src/components/MyInputs";
-import MyButton from "../src/components/MyButtons";
+import MyView from "../../src/components/MyView";
+import MyList from "../../src/components/MyList";
+import {MyItem} from "../../src/components/MyItem";
+import { Myinput } from "../../src/components/MyInputs";
+import MyButton from "../../src/components/MyButtons";
 import { useRouter } from 'expo-router';
-import MyTimePicker from "../src/components/MyTimerPiker";
-import {setPosition, deletePosition, updatePosition, iPosition, getCargo} from "../src/controllers/positions";
-import {supabase} from '../src/utils/supabase';
+import MyTimePicker from "../../src/components/MyTimerPiker";
+import {setPosition, deletePosition, updatePosition, iPosition, getCargo} from "../../src/controllers/positions";
+import {supabase} from '../../src/utils/supabase';
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
 
@@ -92,7 +92,7 @@ export default function PositionScreen(){
                     <Myinput
                         label="Cargo"
                         placeholder="Insira um Cargo"
-                        iconName="briefcase"
+                        iconName="briefcase" 
                         value = {req.name}
                         onChangeText={(text)=> setReq({...req ,name: text })}/>
  
