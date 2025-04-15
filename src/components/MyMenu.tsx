@@ -87,7 +87,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Courses" route="courses" icon="book" />
         <MenuItem label="Disciplines" route="disciplines" icon="document-text" />
         <MenuItem label="Documents" route="documents" icon="document" />
-        <MenuItem label="Employees" route="employees" icon="people" />
+        <MenuItem label="Employees" route="Administracao/employees" icon="people" />
         <MenuItem label="Expenses" route="expenses" icon="cash" />
         <MenuItem label="Investments" route="investments" icon="trending-up" />
         <MenuItem label="Items" route="items" icon="pricetag" />
@@ -99,13 +99,13 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Notifications" route="notifications" icon="notifications" />
         <MenuItem label="Parents" route="parents" icon="people-circle" />
         <MenuItem label="Perfil" route="perfil" icon="person" />
-        <MenuItem label="Positions" route="positions" icon="pin" />
+        <MenuItem label="Positions" route="Administracao/positions" icon="pin" />
         <MenuItem label="Posts" route="posts" icon="chatbox" />
         <MenuItem label="Products" route="products" icon="cart" />
-        <MenuItem label="Projects" route="projects" icon="briefcase" />
+        <MenuItem label="Projects" route="Administracao/projects" icon="briefcase" />
         <MenuItem label="Records" route="records" icon="document-text-outline" />
         <MenuItem label="Revenues" route="revenues" icon="cash-outline" />
-        <MenuItem label="Scales" route="scales" icon="speedometer" />
+        <MenuItem label="Scales" route="Administracao/scales" icon="speedometer" />
         <MenuItem label="Timelines" route="timelines" icon="calendar" />
         <MenuItem label="Students" route="students" icon="school" />
         <MenuItem label="Users" route="users" icon="person-circle" />
