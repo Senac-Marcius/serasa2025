@@ -162,12 +162,13 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
     },
     h2: {
-        fontSize: 25,
+        fontSize: 40,
         textAlign: 'center',
         marginRight: 10,
         padding: 20,
         backgroundColor: '#F2F2F2',
         borderRadius: 10,
+        fontWeight: 'bold',
         
         
     },

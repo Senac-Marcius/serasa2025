@@ -1,63 +1,70 @@
 import React, {useState, useEffect} from 'react';
 import { ScrollView, View } from 'react-native';
 import { Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Button } from 'react-native';
-import MyTimePicker  from '../src/components/MyTimerPiker'
-import MyButton from '../src/components/MyButtons';
-import MyView from '../src/components/MyView';
-import {MyItem} from '../src/components/MyItem';
-import MyList from '../src/components/MyList';
-import { Myinput,MyCheck } from '../src/components/MyInputs';
+import MyTimePicker  from '../../src/components/MyTimerPiker'
+import MyButton from '../../src/components/MyButtons';
+import MyView from '../../src/components/MyView';
+import {MyItem} from '../../src/components/MyItem';
+import MyList from '../../src/components/MyList';
+import { Myinput,MyCheck } from '../../src/components/MyInputs';
 import { useRouter } from 'expo-router';
-import { setEmployee,iEmployees,updateEmployee,dellEmployee } from '../src/controllers/employees';
-import { supabase } from '../src/utils/supabase';
+import { setEmployee,iEmployees,updateEmployee,dellEmployee,getEmployees,toListEmployees } from '../../src/controllers/employees';
+import { supabase } from '../../src/utils/supabase';
+import MyCalendar from '../../src/components/MyCalendar';
 
 
 export default function EmployeeScreen(){
     const [employees, setEmployees] = useState<iEmployees[]>([])
     const router = useRouter();
+    let action = ""
 //aqui é typescript 
     const [req, SetReq] = useState({
         id: -1,
         urls:'',
-        name:'',
         date_birth:'',
-        tell:'',
-        email:'',
-        address:'',
         nationality:'',
         disc_personality:'',
-        cpf:'',
         sex:'',
         martinal_status:'',
         ethnicity:'',
         deficiency:'',
-        created_at: new Date().toISOString(),
+        created_at: '',
         is_active: '',
-        user_id: 1,
-        positions_id:1
+        user_id : 1,
+        positions_id:1,
+        scale_id:1
         
     });
+    if(req.id == -1){
+        action = "Cadastrar Funcionário"
+    }else{
+        action = "Atualizar Dados"
+    }    
 
       useEffect(() => {
         
         (async () => {
-          const { data: todos } = await supabase.from('employees').select()
-          console.log(todos);
-    
-          if ( todos && todos.length > 0) {
-            setEmployees(todos)
-          }
+            async function getTodos(){
+                const retorno = await getEmployees({})
+                if (retorno.status && retorno.data && retorno.data.length > 0){
+                    setEmployees(retorno.data);
+                }
+            }
+            getTodos()
+          
         })();
       }, [])
    
 
        async function handleRegister(){
             if(req.id == -1){
+                
                 const newId = employees.length ? employees[employees.length - 1].id + 1:0
                 const  newEmployee = {...req , id:newId}
                 setEmployees([...employees,newEmployee])
                 await setEmployee(newEmployee)
             }else{
+                
                 setEmployees(employees.map(e =>(e.id == req.id ? req:e))) 
                 await updateEmployee(req.id,req);
                 
@@ -66,14 +73,9 @@ export default function EmployeeScreen(){
             SetReq({
                 id: -1,
                 urls:'',
-                name:'',
                 date_birth:'',
-                tell:'',
-                email:'',
-                address:'',
                 nationality:'',
                 disc_personality:'',
-                cpf:'',
                 sex:'',
                 martinal_status:'',
                 ethnicity:'',
@@ -81,7 +83,8 @@ export default function EmployeeScreen(){
                 created_at: '',
                 is_active: '',
                 user_id : 1,
-                positions_id:1
+                positions_id:1,
+                scale_id:1
                 })
             
         }
@@ -104,6 +107,7 @@ export default function EmployeeScreen(){
     
 
     return(
+        <ScrollView>
         <MyView router={router}>
             {/* aqui é typescript dentro da front*/}
             <Text>Cadastro de Funcionários</Text>
@@ -118,39 +122,11 @@ export default function EmployeeScreen(){
                         iconName = 'link'
                     />
                     <Myinput
-                        label = 'Nome:'
-                        placeholder='Digite seu nome'
-                        value={req.name}
-                        iconName='badge'
-                        onChangeText={(text) => SetReq({...req , name:text})}
-                    />
-                    <Myinput
                         label = 'Data de Nascimento:'
                         iconName='event'
                         placeholder='Insira a data ANO/MES/DIA'
                         value={req.date_birth}
                         onChangeText={(int) => SetReq({...req , date_birth:int})}
-                    />
-                    <Myinput
-                        label='Telefone:'
-                        iconName='call'
-                        placeholder='(XX) XXXXX-XXXX'
-                        value={req.tell}
-                        onChangeText={(int) => SetReq({...req , tell:int})}
-                    />
-                    <Myinput
-                        placeholder='Email:'
-                        iconName='email'
-                        label='Email:'
-                        value={req.email}
-                        onChangeText={(text) => SetReq({...req , email:text})}
-                    />
-                    <Myinput
-                        label='Endereço:'
-                        iconName='home'
-                        placeholder='Endereço:'
-                        value={req.address}
-                        onChangeText={(text) => SetReq({...req , address:text})}
                     />
                     <Myinput
                         label='Nacionalidade:'
@@ -161,17 +137,10 @@ export default function EmployeeScreen(){
                     />
                     <Myinput
                         label='Personalidade:'
-                        iconName='stack'
+                        iconName='groups'
                         placeholder='Personalidade:'
                         value={req.disc_personality}
                         onChangeText={(text) => SetReq({...req , disc_personality:text})}
-                    />
-                    <Myinput
-                        label='C.P.F:'
-                        iconName='badge'
-                        placeholder='XXX-XXX-XXX-XX'
-                        value={req.cpf}
-                        onChangeText={(int) => SetReq({...req , cpf:int})}
                     />
                     <Myinput
                         label='Gênero:'
@@ -196,7 +165,7 @@ export default function EmployeeScreen(){
                     />
                     <Myinput
                         label='Deficiência:'
-                        iconName='diversity'    
+                        iconName='emergency'    
                         placeholder='Insira algo'
                         value={req.deficiency}
                         onChangeText={(text) => SetReq({...req , deficiency:text})}
@@ -204,10 +173,11 @@ export default function EmployeeScreen(){
                     <MyTimePicker 
                         onTimeSelected={(time) => SetReq({ ...req, is_active: time.toString() })}
                         initialTime={req.is_active}
+                        labelText='Esta ativo desde:'
                     />
 
                     
-                   <MyButton title='Cadastrar Funcionário' button_type ='round'  onPress={handleRegister}/>
+                   <MyButton title={action} button_type ='round'  onPress={handleRegister}/>
                 </View>
                 
                 
@@ -220,7 +190,7 @@ export default function EmployeeScreen(){
                          onDel={() => {deleteEmployee(item.id)}}
                          onEdit={() => {editEmployee(item.id)}}
                         >
-                        Nome:{item.name} / Cargo:{item.positions_id}
+                        Nome:{item.ethnicity} / Cargo:{item.positions_id}
                         ativo desde de:{item.is_active}
                         </MyItem>
                     )}
@@ -229,7 +199,7 @@ export default function EmployeeScreen(){
             </View>      
         </MyView>
        
-        
+    </ScrollView>    
     );
 
     
