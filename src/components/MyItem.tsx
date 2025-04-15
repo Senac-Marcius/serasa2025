@@ -26,7 +26,7 @@ interface MyCorrelatedprops{
 
 const MyItem: React.FC<MytextProps> = ({ children, style, onEdit, onDel, }) => {
   return (
-          <TouchableOpacity style={styles.card}>
+          <TouchableOpacity style={[style? style:'', styles.card]}>
             {children}
             <View>
               <MyButton onPress={onEdit} title='Editar' color='yellow'></MyButton>
@@ -39,7 +39,7 @@ const MyItem: React.FC<MytextProps> = ({ children, style, onEdit, onDel, }) => {
 
 const MyCorrelated: React.FC<MyCorrelatedprops> = ({ children, style, onEdit, onDel, relatedItems, showEditButton = true, showDeleteButton = true }) => {
   return(
-    <TouchableOpacity style={styles.card}>
+    <TouchableOpacity style={[style? style:'',  styles.card]}>
       {children}
       <View >
       {showEditButton &&
