@@ -79,7 +79,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
       </TouchableOpacity>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <MenuItem label="Budgets" route="budgets" icon="wallet" />
+        <MenuItem label="Budgets" route="finance/budgets" icon="wallet" />
         <MenuItem label="Calendar" route="calendar" icon="calendar" />
         <MenuItem label="Categories" route="categories" icon="albums" />
         <MenuItem label="Classes" route="classes" icon="school" />
@@ -88,8 +88,8 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Disciplines" route="disciplines" icon="document-text" />
         <MenuItem label="Documents" route="documents" icon="document" />
         <MenuItem label="Employees" route="employees" icon="people" />
-        <MenuItem label="Expenses" route="expenses" icon="cash" />
-        <MenuItem label="Investments" route="investments" icon="trending-up" />
+        <MenuItem label="Expenses" route="finance/expenses" icon="cash" />
+        <MenuItem label="Investments" route="finance/investments" icon="trending-up" />
         <MenuItem label="Items" route="items" icon="pricetag" />
         <MenuItem label="Launchs" route="launchs" icon="rocket" />
         <MenuItem label="Levels" route="levels" icon="stats-chart" />
@@ -104,7 +104,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Products" route="products" icon="cart" />
         <MenuItem label="Projects" route="projects" icon="briefcase" />
         <MenuItem label="Records" route="records" icon="document-text-outline" />
-        <MenuItem label="Revenues" route="revenues" icon="cash-outline" />
+        <MenuItem label="Revenues" route="finance/revenues" icon="cash-outline" />
         <MenuItem label="Scales" route="scales" icon="speedometer" />
         <MenuItem label="Timelines" route="timelines" icon="calendar" />
         <MenuItem label="Students" route="students" icon="school" />
