@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react'; // Esta importando da biblioteca do react para atualizar automaticamente 
 import { StyleSheet, View, TouchableOpacity, } from 'react-native'; 
-import MySearch from '../src/components/MySearch';
-import MyButton from '../src/components/MyButtons';
-import Mytext from '../src/components/MyText';
-import MyView from '../src/components/MyView';
-import MyList from '../src/components/MyList';
-import { Myinput, MyTextArea  } from '../src/components/MyInputs';
+import MySearch from '../../src/components/MySearch';
+import MyButton from '../../src/components/MyButtons';
+import Mytext from '../../src/components/MyText';
+import MyView from '../../src/components/MyView';
+import MyList from '../../src/components/MyList';
+import { Myinput, MyTextArea  } from '../../src/components/MyInputs';
 import { useRouter } from 'expo-router';
-import MyCalendar from '../src/components/MyCalendar';
-import { iProject , setProject, updateProject, deleteProject, getProjects } from '../src/controllers/projects';
-import { supabase } from '../src/utils/supabase';
-import { MyItem } from '../src/components/MyItem';
+import MyCalendar from '../../src/components/MyCalendar';
+import { iProject , setProject, updateProject, deleteProject, getProjects } from '../../src/controllers/projects';
+import { supabase } from '../../src/utils/supabase';
+import { MyItem } from '../../src/components/MyItem';
 import { Picker } from '@react-native-picker/picker';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 
