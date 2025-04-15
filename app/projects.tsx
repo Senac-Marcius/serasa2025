@@ -57,6 +57,7 @@ const parseCurrencyInput = (text: string): number => {
         strategies: '', 
         planning: '',
         process:'',
+        
     });
 
     useEffect(() => {
@@ -73,7 +74,7 @@ const parseCurrencyInput = (text: string): number => {
         })();
       }, [])
 
-
+    const [integrantes, setIntegrantes] = useState<string[]>(['']);
     const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
     const [busca, setBusca] = useState('');
     const router = useRouter();
@@ -119,6 +120,7 @@ const parseCurrencyInput = (text: string): number => {
             strategies: '', 
             planning: '',
             process:'',
+            
         })
 
         setRawRecurces('');
@@ -155,6 +157,17 @@ const parseCurrencyInput = (text: string): number => {
         );
         console.log("Resultados da busca:", resultado);
     }
+
+    function adicionarIntegrante() {
+        setIntegrantes([...integrantes, '']);
+      }
+      
+      function atualizarIntegrante(index: number, valor: string) {
+        const novosIntegrantes = [...integrantes];
+        novosIntegrantes[index] = valor;
+        setIntegrantes(novosIntegrantes);
+      }
+      
     
     // Criando o textinput para receber e exibir o texto "placeholder" para o usuario digitar
     return ( // Esta sendo feito um emcapsulamento com a abertura da () / {req.description}= usado para mostar o codigo em baixo
@@ -185,6 +198,34 @@ const parseCurrencyInput = (text: string): number => {
                             value={req.name}
                             onChangeText={(text) => setReq({ ...req, name: text })}
                         />
+
+                        <Mytext style={styles.label}>Integrantes do Projeto:</Mytext>
+                        {integrantes.map((nome, index) => (
+                        <View key={index} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+                            <Myinput
+                            placeholder={`Integrante ${index + 1}`}
+                            value={nome}
+                            onChangeText={(text) => atualizarIntegrante(index, text)}
+                            iconName=""
+                            label=""
+                            style={{ flex: 1, marginRight: 10 }}
+                            />
+                        </View>
+                        ))}
+
+                        <TouchableOpacity
+                        onPress={adicionarIntegrante}
+                        style={{
+                            backgroundColor: '#007bff',
+                            padding: 10,
+                            borderRadius: 8,
+                            alignItems: 'center',
+                            marginVertical: 10,
+                        }}
+                        >
+                        <Mytext style={{ color: '#fff', fontWeight: 'bold' }}>+ Adicionar Integrante</Mytext>
+                        </TouchableOpacity>
+
 
                         <Mytext style={styles.label}> Nome do projeto: </Mytext>
                         <Myinput
