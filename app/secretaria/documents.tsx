@@ -94,7 +94,7 @@ export default function RecordScreen() {
   
   return (
       
-    <MyView router={router}>
+    <MyView >
       
       <View>
         <Mytext >Solicitação de Documentos</Mytext>
