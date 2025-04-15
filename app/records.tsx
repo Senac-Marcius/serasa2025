@@ -29,6 +29,7 @@ export default function RecordScreen() {
     const [req, setReq] = useState({
         id: -1,
         name: '',
+        cpf: 0,
         description: '',
         sick: '',
         health: '',
@@ -65,6 +66,7 @@ export default function RecordScreen() {
                     const { error } = await supabase.from('records')
                         .update({
                             name: req.name,
+                            cpf: req.cpf,
                             description: req.description,
                             sick: req.sick,
                             health: req.health,
@@ -85,6 +87,7 @@ export default function RecordScreen() {
                 setReq({
                     id: -1,
                     name: '',
+                    cpf: 0,
                     description: '',
                     sick: '',
                     health: '',
@@ -130,6 +133,14 @@ export default function RecordScreen() {
                         value={req.name}
                         onChangeText={(text) => setReq({ ...req, name: text })}
                         label='Nome do Aluno:'
+                        iconName='person'
+                    />
+                    
+                    <Myinput
+                        placeholder="Digite"
+                        value={req.cpf.toString()}
+                        onChangeText={(text) => setReq({ ...req, cpf: Number(text)})}
+                        label='CPF do Aluno:'
                         iconName='person'
                     />
 
@@ -194,6 +205,7 @@ export default function RecordScreen() {
 
                         style={styles.itemText}  /*MyItem */>
                             <Text style={styles.itemText}>Nome: {item.name}</Text>
+                            <Text style={styles.itemText}>CPF: {item.cpf}</Text>
                             <Text style={styles.itemText}>Descrição: {item.description}</Text>
                             <Text style={styles.itemText}>Doença: {item.sick}</Text>
                             <Text style={styles.itemText}>Saúde: {item.health}</Text>
