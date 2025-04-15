@@ -211,7 +211,7 @@ export default function RecordScreen() {
                                 />
 
                                 <MyButton
-                                    title=" EDITAR"
+                                    title="EDITAR"
                                     onPress={() => { editRecord(item.id) }}
                                     button_type="round"
                                     style={styles.button_round}
@@ -255,6 +255,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "row",
+        flex: 20,
 
     },
 
