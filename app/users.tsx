@@ -7,9 +7,8 @@ import MyButton from '../src/components/MyButtons';
 import { Image } from 'react-native';
 import {MyItem} from '../src/components/MyItem'
 import { useRouter } from 'expo-router';
-import {iUser, setUser, deleteUserById, updateUserById} from '../src/controllers/users'
-
-import { supabase } from '../src/utils/supabase'
+import {iUser, setUser, deleteUserById, updateUserById, getUsers} from '../src/controllers/users'
+//import { supabase } from '../src/utils/supabase'
 
 // Define o estado inicial como false
 //isChecked = valor atual da váriavel, SetIsChecked ele altera o valor da isChecked
@@ -53,18 +52,49 @@ export default function UserScreen() {
 
     useEffect(() => {
         async function getTodos(){
-            const { data: todos } = await supabase.from("users").select();
-            if (todos && todos.length > 1){
-                setUsers(todos)
+            const retorno = await getUsers({})
+            if (retorno.status && retorno.data && retorno.data.length > 0){
+                setUsers(retorno.data);
             }
-
         }
         getTodos()
+
+      
       
       }, [])
   
 
     async function handleRegister() {
+        const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$|^\d{11}$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneRegex = /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/;
+
+        if (!req.name || !req.address || !req.password || !req.email || !req.age || req.contact) {
+            alert("Preencha todos os campos obrigatórios.");
+            return;
+        }
+
+        if (!cpfRegex.test(req.cpf)) {
+            alert("CPF inválido. Use formato XXX.XXX.XXX-XX ou apenas 11 dígitos.");
+            return;
+        }
+    
+        if (!emailRegex.test(req.email)) {
+            alert("E-mail inválido. Use username@domain.com");
+            return;
+        }
+    
+        if (!phoneRegex.test(req.contact)) {
+            alert("Contato inválido. Ex: (XX) XXXXX-XXXX");
+            return;
+        }
+    
+        if (isNaN(Number(req.age)) || Number(req.age) < 0) {
+            alert("Idade inválida.");
+            return;
+        }
+    
+
         if (req.id == -1) {
             const newId = users.length ? users[users.length - 1].id + 1 : 0
             const newUser = { ...req, id: newId }
@@ -114,13 +144,13 @@ export default function UserScreen() {
         }
     }
 
-    const router = useRouter();
+    //const router = useRouter();
 
     //CHECKBOX:
     //setIsChecked: é uma função usada para atualizar o estado de isChecked.
     //!isChecked: o operador ! inverte o valor atual de isChecked. Se isChecked era true (checkbox marcada), ele se torna false (checkbox desmarcada), e vice-versa.
     return (
-        <MyView router={router} >
+        <MyView  >
 
 
         <View style={styles.form}>

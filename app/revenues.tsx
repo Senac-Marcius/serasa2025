@@ -7,11 +7,13 @@ import MyButton from '../src/components/MyButtons';
 import { Myinput, MyTextArea } from '../src/components/MyInputs';
 import {MyItem} from '../src/components/MyItem';
 import Mytext from '../src/components/MyText';
-import { useRouter } from 'expo-router';
-import {iRevenue,setRevenue, deleteRevenue, updateRevenue} from '../src/controllers/revenues'
-import { supabase } from '../src/utils/supabase';
+
+import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '../src/controllers/revenues'
+
+import MySelect from '../src/components/MySelect';
 
 export default function RevenueScreen() {
+  
   // Estado para o formulário
   const [req, setReq] = useState({
     id: -1,
@@ -31,15 +33,17 @@ const [revenues, setRevenues] = useState<iRevenue[]>([]);
 
 useEffect(()=>{
   async function getTodos(){
-    const{data:todos}=await supabase.from('revenues').select()
+    const retorno = await getRevenues({})
 
-    if(todos && todos.length > 0){
-      setRevenues(todos)
+    if(retorno.status && retorno.data && retorno.data?.length > 0){
+      setRevenues(retorno.data);
     }
   }
   getTodos();
 },[])
  
+  // aqui estamos carregando os alunos
+  
   
 
   // Função para cadastrar ou editar uma receita
@@ -51,6 +55,7 @@ useEffect(()=>{
       const newRevenue = { ...req, id: newId };
       setRevenues([...revenues, newRevenue]);
       await setRevenue(newRevenue)
+      
       
       
       } else {
@@ -106,12 +111,12 @@ useEffect(()=>{
     }
 }
 
+   const [unity, setUnit] = useState()  
   
-  const router = useRouter();
   return (
 
-    <MyView  router={router} >
-      <Mytext style={{ fontSize: 24, fontWeight: 'bold', color: '#333', textAlign: 'center' }}>
+    <MyView >
+      <Mytext style={styles.title}>
          cadastre as receitas
       </Mytext>
 
@@ -123,47 +128,40 @@ useEffect(()=>{
             <Myinput
               value={req.name}
               onChangeText={(text) => setReq({ ...req, name: text })}
-              iconName=''
+              iconName='badge'
               placeholder='Digite o nome'
               label='Nome'
+            />
+
+            {/* Campo de Status da Bolsa */}
+            <MySelect 
+              label={ 'Status da Bolsa'} 
+            
+              setLabel={(text) => setReq({ ...req, scholarship_status: text })}
+              list={[
+                {key: 0, option: 'ativo'},
+                {key: 1, option: 'inativo'},
+              ]}
             />
 
             {/* Campo de Descrição */}
             <MyTextArea
               value={req.description}
               onChangeText={(text) => setReq({ ...req, description: text })}
-              iconName=''
+              iconName='description'
               placeholder='Digite a descrição'
               label='Descrição'
             />
 
-            {/* Campo de URL */}
-            <Myinput
+             {/* Campo de URL */}
+             <Myinput
               value={req.url}
               onChangeText={(text) => setReq({ ...req, url: text })}
               iconName='link'
               placeholder='Digite a URL'
               label='URL'
             />
-
-            {/* Campo de Valor */}
-            <Myinput
-              value={req.value}
-              onChangeText={(text) => setReq({ ...req, value: text })}
-              iconName=''
-              placeholder='Digite o valor'
-              label='Valor'
-            />
-
-            {/* Campo de Status da Bolsa */}
-            <Myinput
-              value={req.scholarship_status}
-              onChangeText={(text) => setReq({ ...req, scholarship_status: text })}
-              iconName=''
-              placeholder='Status da bolsa'
-              label='Status Bolsa'
-            />
-
+            
             {/* Campo de Desconto */}
             <Myinput
               value={req.discount_percentage}
@@ -172,6 +170,27 @@ useEffect(()=>{
               placeholder='Porcentagem de desconto'
               label='Desconto'
             />
+
+            {/* Campo de Valor */}
+            <Myinput
+              value={req.value}
+              onChangeText={(text) => setReq({ ...req, value: text })}
+              iconName='payments'
+              placeholder='Digite o valor'
+              label='Valor'
+            />
+
+           
+
+            
+
+            
+             
+
+            
+            
+
+            
             <View style={styles.row}>
               <MyButton button_type='rect' title="cadastrar" onPress={handleRegister}  />
              
@@ -190,17 +209,24 @@ useEffect(()=>{
            
               onEdit={() => { editRevenue(item.id) }} 
               onDel= {() => { delRevenue(item.id) }}
-             
-            >
-              <Mytext style={styles.revenueText}>Descrição: {item.description}</Mytext>
-              <Mytext style={styles.revenueText}>Nome: {item.name}</Mytext>
-              <Mytext style={styles.revenueText}>ID do Usuário: {item.user_id}</Mytext>
-              <Mytext style={styles.revenueText}>Valor: {item.value}</Mytext>
-              <Mytext style={styles.revenueText}>Status da Bolsa: {item.scholarship_status}</Mytext>
-              <Mytext style={styles.revenueText}>Desconto: {item.discount_percentage}%</Mytext>
-              <Mytext style={styles.revenueText}>Data: {item.created_at}</Mytext>
-              <Mydownload style={styles.revenueText} url={item.url} />
 
+            >
+              <Mytext style={styles.revenueText}>Nome: {item.name}</Mytext>
+              <Mytext style={styles.revenueText}>Status da Bolsa: {item.scholarship_status}</Mytext>
+              <Mytext style={styles.revenueText}>Data: {item.created_at}</Mytext>
+              <Mytext style={styles.revenueText}>Descrição: {item.description}</Mytext>    
+                     
+              <Mytext style={styles.revenueText}>ID do Usuário: {item.user_id}</Mytext>
+              
+              
+              
+              <Mytext style={styles.revenueText}>Desconto: {item.discount_percentage}%</Mytext>
+             
+              <Mytext style={styles.revenueText}>Valor R$: {item.value}</Mytext> 
+              
+              <Mydownload style={styles.revenueTexts} url={item.url} />
+
+            
       
               
             </MyItem>
@@ -232,7 +258,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 10,
     padding: 20,
-    backgroundColor: '#D3D3D3',
+    backgroundColor: '#0000',
     borderRadius: 10,
     shadowColor: '#000',
     shadowOpacity: 0.1,
@@ -260,4 +286,24 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     
   },
+  title:{               
+    marginBottom: 8,
+    fontSize: 40,
+    fontWeight: "bold", 
+    textAlign: "center",
+    backgroundColor: "#ab66f9",
+    borderRadius: 5,
+    color:'#ffffff',
+    letterSpacing: 1.5,
+    textTransform: "uppercase",
+    textShadowColor: "rgba(0, 0, 0, 0.2)",
+    fontStyle: "italic",
+ },
+ revenueTexts: {
+  fontSize: 14,
+  color: '#000000',
+  marginBottom: 8,
+  marginLeft:541,
+}
+ 
 });
