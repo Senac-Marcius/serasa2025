@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { useRouter } from 'expo-router';
-import {insertDocument, iDoc, updateDocument, deleteDocument} from '../src/controllers/documents'
-import { supabase } from '../src/utils/supabase';
-import MyButton from '../src/components/MyButtons';
-import MyView from '../src/components/MyView';
-import  Mytext  from '../src/components/MyText';
-import { Myinput } from '../src/components/MyInputs';
-import MyList from '../src/components/MyList';
-import { MyItem } from '../src/components/MyItem';
+import {insertDocument, iDoc, updateDocument, deleteDocument} from '../../src/controllers/documents'
+import { supabase } from '../../src/utils/supabase';
+import MyButton from '../../src/components/MyButtons';
+import MyView from '../../src/components/MyView';
+import  Mytext  from '../../src/components/MyText';
+import { Myinput } from '../../src/components/MyInputs';
+import MyList from '../../src/components/MyList';
+import { MyItem } from '../../src/components/MyItem';
 //import MyUpload from '../src/components/MyUpload';
 
 
