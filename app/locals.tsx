@@ -198,11 +198,13 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
         shadowOffset: { width: 8, height: 4 },
         shadowRadius: 7,
     },
+    
     container: {
         flex: 1000,
         padding: 15,
         backgroundColor: "white", 
     },
+
     title:{
         fontSize: 24,
         fontWeight: 'bold',

@@ -55,12 +55,12 @@ const MySelect: React.FC<MySelectProps> = ({ label, list, setLabel, setKey }) =>
               style={{ 
                   height: 50,
                   marginHorizontal: 11,
-                  width: 300,
+                  width: 1330,
                   borderRadius: 25,
                   paddingHorizontal: 15,
                   backgroundColor: 'white',
                   borderWidth: 2,
-                  borderColor: 'purple',
+                  borderColor: '#666',
                   shadowColor: 'purple',
                   shadowOffset: { width: 2, height: 1 },
                   shadowOpacity: 0.6,
@@ -88,7 +88,7 @@ const MySelect: React.FC<MySelectProps> = ({ label, list, setLabel, setKey }) =>
           {visible && (
               <FlatList
                   style={{
-                      width: 300,
+                      width: 1330,
                       marginHorizontal: 11,
                       marginTop: 5,
                       backgroundColor: '#813AB1',
@@ -96,10 +96,11 @@ const MySelect: React.FC<MySelectProps> = ({ label, list, setLabel, setKey }) =>
                       elevation: 4,
                       maxHeight: 200,
                   }}
+
                   data={list}
                   keyExtractor={(item) => item.key}
                   renderItem={({ item }) => (
-                      <TouchableOpacity 
+                        <TouchableOpacity 
                           style={{ 
                               paddingVertical: 12,
                               paddingHorizontal: 15,
@@ -109,7 +110,7 @@ const MySelect: React.FC<MySelectProps> = ({ label, list, setLabel, setKey }) =>
                               if (setKey) setKey(item.key);
                               setVisible(false);
                           }}
-                      >
+                        >
                           <Text style={{ color: 'white', fontSize: 15 }}>
                               {item.option}
                           </Text>
