@@ -1,21 +1,22 @@
 import React, {useState, useEffect} from 'react';
 import { ScrollView, View } from 'react-native';
 import { Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Button } from 'react-native';
-import MyTimePicker  from '../src/components/MyTimerPiker'
-import MyButton from '../src/components/MyButtons';
-import MyView from '../src/components/MyView';
-import {MyItem} from '../src/components/MyItem';
-import MyList from '../src/components/MyList';
-import { Myinput,MyCheck } from '../src/components/MyInputs';
+import MyTimePicker  from '../../src/components/MyTimerPiker'
+import MyButton from '../../src/components/MyButtons';
+import MyView from '../../src/components/MyView';
+import {MyItem} from '../../src/components/MyItem';
+import MyList from '../../src/components/MyList';
+import { Myinput,MyCheck } from '../../src/components/MyInputs';
 import { useRouter } from 'expo-router';
-import { setEmployee,iEmployees,updateEmployee,dellEmployee,getEmployees,toListEmployees } from '../src/controllers/employees';
-import { supabase } from '../src/utils/supabase';
-import MyCalendar from '../src/components/MyCalendar';
+import { setEmployee,iEmployees,updateEmployee,dellEmployee,getEmployees,toListEmployees } from '../../src/controllers/employees';
+import { supabase } from '../../src/utils/supabase';
+import MyCalendar from '../../src/components/MyCalendar';
 
 
 export default function EmployeeScreen(){
     const [employees, setEmployees] = useState<iEmployees[]>([])
     const router = useRouter();
+    let action = ""
 //aqui é typescript 
     const [req, SetReq] = useState({
         id: -1,
@@ -34,6 +35,11 @@ export default function EmployeeScreen(){
         scale_id:1
         
     });
+    if(req.id == -1){
+        action = "Cadastrar Funcionário"
+    }else{
+        action = "Atualizar Dados"
+    }    
 
       useEffect(() => {
         
@@ -45,7 +51,6 @@ export default function EmployeeScreen(){
                 }
             }
             getTodos()
-    
           
         })();
       }, [])
@@ -53,11 +58,13 @@ export default function EmployeeScreen(){
 
        async function handleRegister(){
             if(req.id == -1){
+                
                 const newId = employees.length ? employees[employees.length - 1].id + 1:0
                 const  newEmployee = {...req , id:newId}
                 setEmployees([...employees,newEmployee])
                 await setEmployee(newEmployee)
             }else{
+                
                 setEmployees(employees.map(e =>(e.id == req.id ? req:e))) 
                 await updateEmployee(req.id,req);
                 
@@ -170,7 +177,7 @@ export default function EmployeeScreen(){
                     />
 
                     
-                   <MyButton title='Cadastrar Funcionário' button_type ='round'  onPress={handleRegister}/>
+                   <MyButton title={action} button_type ='round'  onPress={handleRegister}/>
                 </View>
                 
                 
