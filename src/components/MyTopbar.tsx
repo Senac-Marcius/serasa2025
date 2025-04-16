@@ -8,7 +8,9 @@ import MyMenu from './MyMenu';
 interface MyTopbarProps {
   router?: Router;
   title?: string;
+  onMenuToggle: () => void;
 }
+
 
 const MyTopbar: React.FC<MyTopbarProps> = ({ router, title }) => {
   const [menuOpen, setMenuOpen] = useState(false);

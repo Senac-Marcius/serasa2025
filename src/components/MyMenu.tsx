@@ -53,7 +53,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         style={[styles.menuItem, isHovered && styles.menuItemHover]}
       >
         <View style={[styles.hoverBar, isHovered && styles.hoverBarActive]} />
-        <Ionicons name={icon} size={20} color={isHovered ? '#6A1B9A' : '#000'} style={{ marginRight: 12 }} />
+        <Ionicons name={icon} size={20} color={isHovered ? '#6A1B9A' : '#666'} style={{ marginRight: 12 }} />
         <Text style={[styles.menuText, isHovered && styles.menuTextHover]}>{label}</Text>
       </Pressable>
     );
@@ -88,7 +88,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <MenuItem label="Secretaria" route="secretaria" icon="add-circle" />
         <MenuItem label="Budgets" route="budgets" icon="wallet" />
-        <MenuItem label="Calendar" route="calendar" icon="calendar" />
+        <MenuItem label="Calendar" route="secretaria/calendar" icon="calendar" />
         <MenuItem label="Categories" route="categories" icon="albums" />
         <MenuItem label="Classes" route="classes" icon="school" />
         <MenuItem label="Collections" route="collections" icon="cube" />
