@@ -27,6 +27,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
+  switch: {
+    borderRadius: 20, //Força bordas arredondadas
+    overflow: 'hidden', //Impede que o navegador sobrescreva estilos
+},
+
 });
 
 export default MyNotify;
