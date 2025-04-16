@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { supabase } from '../utils/supabase'
 
 interface iInvestment {
+    name: string,
     description: string,
     url: string,
-    name: string,
     id: number,
     created_at: string,
     user_id: number,
@@ -36,6 +36,28 @@ async function setInvestment(investment: iInvestment) {
     }
 }
 
+function toListInvestment(data: iInvestment[]) {
+    const resp : {key: number, option:string}[] = []
+
+    data.map((i)=>{
+        resp.push({key: i.id,option: i.name})
+        })
+        return resp
+    }
+
+
+async function getInvestment(params: any) {
+    const { data: all, error } = await supabase.from('investments').select();
+
+    if (error) 
+        return { status: false, error: error}
+        
+    return{status:true, data: all}
+    
+    }
+
+
+
 async function deleteInvestment(id: number) {
     const { error } = await supabase
         .from('investments')
@@ -43,19 +65,14 @@ async function deleteInvestment(id: number) {
         .eq('id', id);
 
     if (error) {
-        console.error('Erro ao excluir investimento:', error);
-        return []; 
+        console.error('Erro ao excluir investimento:', error.message);
+        return false; 
     }
-    return `Investimento com ID ${id} excluído com sucesso.`;
+    return true
 }
 
 async function updateInvestment(updatedInvestment: iInvestment) {
     try {
-
-        if (!updatedInvestment.id) {
-            throw new Error('ID do investimento é obrigatório para atualização');
-        }
-
         const { data, error } = await supabase
             .from('investments')
             .update({
@@ -85,4 +102,4 @@ async function updateInvestment(updatedInvestment: iInvestment) {
     }
 }
 
-export {setInvestment, deleteInvestment, updateInvestment, iInvestment}
+export {setInvestment, deleteInvestment, updateInvestment, getInvestment, toListInvestment, iInvestment}
