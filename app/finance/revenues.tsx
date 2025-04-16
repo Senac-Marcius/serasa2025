@@ -9,7 +9,7 @@ import {MyItem} from '../../src/components/MyItem';
 import Mytext from '../../src/components/MyText';
 import {MyModal_mobilefullscreen} from '../../src/components/MyModal';
 import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '../../src/controllers/revenues'
-import FinanceDashboard from '../../src/components/MyDashboard';
+
 import MySelect from '../../src/components/MySelect';
 
 export default function RevenueScreen() {
