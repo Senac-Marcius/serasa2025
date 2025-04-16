@@ -9,7 +9,6 @@ import MyButton  from '../src/components/MyButtons';
 import { useRouter } from 'expo-router';
 import {setLocal, iLocal, deleteLocal, updateLocal, getLocals} from '../src/controllers/locals'
 
-
 export default function LocalScreen(){
 
     //onde vou criar a variavel do useState:            é const pq a usestate so aceita const 
@@ -35,8 +34,6 @@ export default function LocalScreen(){
         getTodos();    
         }
     })
-
-
 
     async function handleRegister(){
         if(req.id == -1){
