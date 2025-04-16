@@ -21,7 +21,7 @@ export default function LevelsScreen() {
     id: -1,
     name: '',
     description: '',
-    color: 'Selecione uma cor',
+    color: '',
     created_at: new Date().toISOString(),
   });
 
