@@ -8,6 +8,7 @@ import Mytext from '../../src/components/MyText';
 import { MyItem } from '../../src/components/MyItem';
 import { useRouter } from 'expo-router';
 import {iBudgets , setBudget, deleteBudget, updateBudget, getBudgets} from '../../src/controllers/budgets';
+import {MyModal_mobilefullscreen} from '../../src/components/MyModal';
 
 
 export default function BudgetScreen(){
@@ -28,6 +29,7 @@ export default function BudgetScreen(){
         end_date:'',
         
     });
+    const[visible, setVisible] = useState(false);
     const [budgets, setBudgets] = useState<iBudgets[]>([]);
 
     useEffect(()=> {
@@ -68,13 +70,16 @@ export default function BudgetScreen(){
         user_id: 3,
         start_date: '',
         end_date:'',
-            })
+            });
+        setVisible(false);
+
     }
 
     function editBudget(id:number){
         const budget = budgets.find (b => b.id == id)
         if(budget)
         setReq(budget)
+        setVisible(true);
     }
 
     async function delBudget(id: number) {
@@ -101,6 +106,7 @@ export default function BudgetScreen(){
             Cadastre os orçamentos
             </Mytext>
             <View style={styles.row}>
+            <MyModal_mobilefullscreen visible={visible} setVisible={setVisible}>
                 <View style={styles.form}>
                     <Myinput
                             
@@ -141,8 +147,9 @@ export default function BudgetScreen(){
                      
 
 
-                    <MyButton title ='CADASTRAR' onPress={ handleRegister }/>
+                     <MyButton style={{justifyContent:'center'}} onPress={() => handleRegister ()} title="cadastrar"  />
                 </View>
+               </MyModal_mobilefullscreen>
                 <MyList
 
                     data={budgets}
