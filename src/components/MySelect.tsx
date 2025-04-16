@@ -8,6 +8,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 
 
 interface MySelectProps {
+    antDesing: string;
     caption?: string;
     label: string;
     list: {key:any, option:string}[]
@@ -27,20 +28,22 @@ const MySelect: React.FC<MySelectProps> = ({ caption, label, list, setLabel, set
               marginBottom: 5,
               marginLeft: 11,  
           }}>
-              <AntDesign 
-                  name="select1"  //importação de ícones: para ter acesso à eles, IMPORTE: " import AntDesign from '@expo/vector-icons/AntDesign'; " e busque no site:  @expo/vector-icons/AntDesign
-                  size={18} 
-                  color="purple" 
-                  style={{  marginLeft: 9,  // Indentação adicional da borda esquerda
+                <AntDesign 
+                    name="select1"  //importação de ícones: para ter acesso à eles, IMPORTE: " import AntDesign from '@expo/vector-icons/AntDesign'; " e busque no site:  @expo/vector-icons/AntDesign
+                    size={18} 
+                    color="purple" 
+                    style={{  marginLeft: 9,  // Indentação adicional da borda esquerda
                     marginRight: 5}}
-              />
-              <Text style={{ 
-                  color: '#666', 
-                  fontSize: 16, 
-                  fontWeight: '500' 
-              }}>
-                {caption? caption : 'Selecione abaixo' }
-              </Text>
+                />
+                   
+
+                <Text style={{ 
+                    color: '#666', 
+                    fontSize: 16, 
+                    fontWeight: '500' 
+                }}>
+                    {caption? caption : 'Selecione abaixo' }
+                </Text>
           </View>
 
       
