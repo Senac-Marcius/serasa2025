@@ -133,7 +133,7 @@ export default function RecordScreen() {
         }
     }
      
-
+    const [unity, setUnit] = useState("Selecione a cor")  
 
     return (
 
@@ -203,6 +203,18 @@ export default function RecordScreen() {
                         iconName='medication'
                     />
 
+                    <MySelect
+                    label={unity} setLabel={setUnit}  
+                    list={            
+                        [
+                            {key:0, option: 'VERDE'},             
+                            {key:1, option: 'AMARELO'},
+                            {key:2, option: 'VERMELHO'},
+
+                        ]
+                    } 
+                    />       
+
                     <MyButton
                         title="CADASTRAR"
                         onPress={handleRegister}
@@ -210,9 +222,7 @@ export default function RecordScreen() {
                         style={styles.button_round}
                     />
 
-                  
-                    
-                    
+
                     
                 
 
