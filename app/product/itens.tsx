@@ -1,13 +1,13 @@
 import React ,{ useEffect, useState }from 'react';
 import { Text, View, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} from 'react-native';
-import MyLink from '../src/components/MyLink';
-import {MyItem} from '../src/components/MyItem';
-import MyList from '../src/components/MyList';
-import { Myinput } from '../src/components/MyInputs';
-import MyButton from '../src/components/MyButtons';
-import MyView from '../src/components/MyView';
+import MyLink from '../../src/components/MyLink';
+import {MyItem} from '../../src/components/MyItem';
+import MyList from '../../src/components/MyList';
+import { Myinput } from '../../src/components/MyInputs';
+import MyButton from '../../src/components/MyButtons';
+import MyView from '../../src/components/MyView';
 import { useRouter } from 'expo-router';
-import {setIten,dell, edit, iIten, getItens} from '../src/controllers/items'
+import {setIten,dell, edit, iIten, getItens} from '../../src/controllers/items'
 import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
 
 
