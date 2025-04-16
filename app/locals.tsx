@@ -1,6 +1,6 @@
 import React, { useState, useEffect} from 'react'; 
 import { Text, TextStyle, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, View  } from 'react-native';
-import MySelect from '../src/components/MySelect' 
+import MySelect from '../src/components/MySelect'
 import MyView from '../src/components/MyView';
 import MyList from '../src/components/MyList';
 import {MyItem} from '../src/components/MyItem';
@@ -198,11 +198,13 @@ const styles = StyleSheet.create({            //ESTILIZAÇÃO: aqui convidamos f
         shadowOffset: { width: 8, height: 4 },
         shadowRadius: 7,
     },
+    
     container: {
         flex: 1000,
         padding: 15,
         backgroundColor: "white", 
     },
+
     title:{
         fontSize: 24,
         fontWeight: 'bold',
