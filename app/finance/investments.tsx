@@ -93,9 +93,7 @@ export default function investmentScreen(){
       <MyView router={router} >  
               {/* Aqui é typescript dentro do front */}
         
-        <MyAccessibility>
-            <Text>Acessibilidade</Text>
-        </MyAccessibility>
+       
 
         <Text>Investimentos</Text>
         <View style={styles.row}>
@@ -252,5 +250,5 @@ const styles = StyleSheet.create({
         color: '#000',
       },
 
-});
+})
 

@@ -3,6 +3,7 @@ import { View, StyleSheet, TextStyle } from 'react-native';
 import MyTopbar from './MyTopbar';
 import MySupport from './MySupport';
 import MyAccessibility from './MyAccessibility';
+import { Router } from 'expo-router'; // Importando o Router do expo-router
 
 interface MySearchProps {
   children: ReactNode;
@@ -19,7 +20,12 @@ const MyView: React.FC<MySearchProps> = ({ children, style, title, router }) => 
       <View style={styles.scrollContainer}>
         {children}
       </View>
-      <MySupport style={styles.suporteButton} />
+
+      <View style={styles.containerButton}>
+        <MySupport />
+        <MyAccessibility > </MyAccessibility >
+      </View>
+
     </View>
   );
 };
@@ -30,19 +36,20 @@ const styles = StyleSheet.create({
     position: 'relative',
     backgroundColor: '#F4F4F4',
   },
+  containerButton: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 100,
+  },
+  
   scrollContainer: {
     flex: 1, 
     paddingHorizontal: 16,
   },
-  suporteButton: {
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-    width: 60,
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  
+  
 });
 
 export default MyView;
