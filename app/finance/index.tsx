@@ -1,88 +1,100 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router'; 
 import MyView from '../../src/components/MyView';
 import MyText from '../../src/components/MyText';
 import MyButton from '../../src/components/MyButtons';
-
 import { getExpense } from '../../src/controllers/expenses';
-
+import {getInvestment} from '../../src/controllers/investments'
 import { getBudgets } from '../../src/controllers/budgets';
 import { getRevenues } from '../../src/controllers/revenues';
 
-export default function FinanceIndex() {
-  const [totalExpenses, setTotalExpenses] = useState(0);
-  const [totalInvestments, setTotalInvestments] = useState(0);
-  const [totalBudgets, setTotalBudgets] = useState(0);
-  const [totalRevenues, setTotalRevenues] = useState(0);
+export default function IndexScreen() {
+  const router = useRouter();
 
-
+  const [total, setTotal] = useState({
+    expenses: 0,
+    investments: 0,
+    budgets: 0,
+    revenues: 0,
+  });
 
   useEffect(() => {
-    async function fetchAll() {
-      const [e, i, b] = await Promise.all([
+    async function loadData() {
+      const [resExp, resBud, resRev, resInv] = await Promise.all([
         getExpense({}),
-      
         getBudgets({}),
-        getRevenues({})
+        getRevenues({}),
+        getInvestment({}),
       ]);
 
-      const sumField = (data: any[], field: 'costs' | 'value') =>
-        data.reduce((acc, curr) => {
-          const raw = curr[field] || '0';
-          const value = parseFloat(raw.toString().replace(',', '.'));
-          return acc + (isNaN(value) ? 0 : value);
-        }, 0);
+      const sum = (arr: any[], key: string) =>
+        arr.reduce((acc, item) => acc + parseFloat((item[key] || '0').replace(',', '.')), 0);
 
-      if (e.status && e.data) setTotalExpenses(sumField(e.data, 'costs'));
-      if (i.status && i.data) setTotalInvestments(sumField(i.data, 'value'));
-      if (b.status && b.data) setTotalBudgets(sumField(b.data, 'value'));
+      setTotal({
+        expenses: resExp.status ? sum(resExp.data || [], 'costs') : 0,
+        investments: resInv.status ? sum(resInv.data || [], 'value') : 0,
+        budgets: resBud.status ? sum(resBud.data || [], 'value') : 0,
+        revenues: resRev.status ? sum(resRev.data || [], 'value') : 0,
+      });
     }
 
-    fetchAll();
+    loadData();
   }, []);
 
-  const totalGeral = totalInvestments + totalBudgets + totalRevenues - totalExpenses;
+
 
   return (
-    <MyView>
-      <ScrollView contentContainerStyle={styles.container}>
-        <MyText style={styles.title}>Resumo Financeiro</MyText>
+    <MyView style={styles.container}>
+      <MyText style={styles.title}>Resumo Financeiro</MyText>
 
-        <MyText style={styles.item}>Despesas: R$ {totalExpenses.toFixed(2)}</MyText>
-        <MyText style={styles.item}>Investimentos: R$ {totalInvestments.toFixed(2)}</MyText>
-        <MyText style={styles.item}>Orçamentos: R$ {totalBudgets.toFixed(2)}</MyText>
-        <MyText style={styles.item}>Receitas: R$ {totalRevenues.toFixed(2)}</MyText>
+      <View style={styles.section}>
+        <MyText style={styles.label}>Despesas: R$ {total.expenses.toFixed(2)}</MyText>
+        <MyButton title="Ver despesas" onPress={() => router.push('finance/expenses')} />
+      </View>
 
-        <MyText style={styles.total}>Total Geral: R$ {totalGeral.toFixed(2)}</MyText>
+      <View style={styles.section}>
+        <MyText style={styles.label}>Investimentos: R$ {total.investments.toFixed(2)}</MyText>
+        <MyButton title="Ver investimentos" onPress={() => router.push('finance/investments')} />
+      </View>
 
-        <MyButton title="Ir para Despesas" onPress={() =>('/expenses')} />
-        <MyButton title="Ir para Investimentos" onPress={() => ('/investments')} />
-        <MyButton title="Ir para Orçamentos" onPress={() => ('/budgets')} />
-        <MyButton title="Ir para Receitas" onPress={() =>('/revues')} />
-      </ScrollView>
+      <View style={styles.section}>
+        <MyText style={styles.label}>Orçamentos: R$ {total.budgets.toFixed(2)}</MyText>
+        <MyButton title="Ver orçamentos" onPress={() => router.push('finance/budgets')} />
+      </View>
+
+      <View style={styles.section}>
+        <MyText style={styles.label}>Receitas: R$ {total.revenues.toFixed(2)}</MyText>
+        <MyButton title="Ver receitas" onPress={() => router.push('finance/revenues')} />
+      </View>
     </MyView>
   );
 }
 
+
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+    gap: 16,
   },
   title: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    marginBottom: 20,
+    fontSize: 28,
     textAlign: 'center',
+    fontWeight: 'bold',
+    marginBottom: 16,
+    backgroundColor: '#6c47ff',
+    color: '#fff',
+    padding: 12,
+    borderRadius: 8,
   },
-  item: {
+  section: {
+    backgroundColor: '#f1f1f1',
+    borderRadius: 8,
+    padding: 16,
+    gap: 8,
+  },
+  label: {
     fontSize: 18,
-    marginBottom: 10,
-  },
-  total: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginVertical: 20,
-    color: '#4caf50',
-    textAlign: 'center',
+    color: '#333',
   },
 });
