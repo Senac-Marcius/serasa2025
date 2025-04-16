@@ -8,7 +8,7 @@ import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
 import {MyItem} from '../src/components/MyItem';
 import { useRouter } from 'expo-router';
-import {deleteLevels, updateLevels, getLevels, setLevel, iLevels } from '../src/controllers/levels';
+import {deleteLevel, updateLevels, getLevels, setLevel, iLevels } from '../src/controllers/levels';
 
 
 export default function LevelsScreen() {
@@ -63,6 +63,7 @@ export default function LevelsScreen() {
 
 async function deleteLevels(id: number) {
     setLevels(levels.filter(item => item.id !== id));
+    await deleteLevel(id)
   }
 
 function editLevels(levels: iLevels) {
