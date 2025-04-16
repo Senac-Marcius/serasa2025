@@ -55,7 +55,7 @@ export default function LevelsScreen() {
         id: -1,
         name: '',
         description: '',
-        color: 'Selecione uma cor',
+        color: '',
         created_at:  new Date().toISOString(),
      });
   }
@@ -100,7 +100,7 @@ function editLevels(levels: iLevels) {
 
                         <Myinput 
                             style={styles.input}
-                            placeholder="COR" 
+                            placeholder="Digite uma cor" 
                             value={req.color}
                             onChangeText={(text) => setReq({...req ,color: text})}
                             label="Cor"
