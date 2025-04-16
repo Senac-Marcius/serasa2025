@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import Mytext from '../src/components/MyText';
-import MyButton from '../src/components/MyButtons';
-import MyView from '../src/components/MyView';
-import { MyItem } from '../src/components/MyItem';
-import { Myinput, MyTextArea } from '../src/components/MyInputs';
+import Mytext from '../../src/components/MyText';
+import MyButton from '../../src/components/MyButtons';
+import MyView from '../../src/components/MyView';
+import { MyItem } from '../../src/components/MyItem';
+import { Myinput, MyTextArea } from '../../src/components/MyInputs';
 import { useRouter } from 'expo-router';
 
 export default function CoursesScreen() {
