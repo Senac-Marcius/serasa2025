@@ -70,8 +70,6 @@ export default function NotificationScreen(){
         const list = notifications.filter(n => n.id != id );
             setNotifications(list)
     }
-
-    const router = useRouter();
     
 return (
     <MyView>
