@@ -61,7 +61,7 @@ export default function postScreen() {
         const post = posts.find((i) => i.id == id);
         if (post) {
             setReq(post);
-            
+            setVisible(true);
         }
     }
 
@@ -110,13 +110,13 @@ export default function postScreen() {
                     <Myinput
                         label='Descrição'
                         iconName=""
-                        placeholder="Descrição"
+                        placeholder="Diga algo "
                         value={req.description}
                         onChangeText={(text) => setReq({ ...req, description: text })}
                     />
 
                     <MyButton style={{ justifyContent: 'center' }}
-                        title="CADASTRAR" // Passando a propriedade correta para o título do botão
+                        title="PUBLICAR" // Passando a propriedade correta para o título do botão
                         onPress={handleRegister} // Passando a função de press
 
                     />
