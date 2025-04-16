@@ -7,7 +7,7 @@ import MyButton from '../../src/components/MyButtons';
 import { Myinput, MyTextArea } from '../../src/components/MyInputs';
 import {MyItem} from '../../src/components/MyItem';
 import Mytext from '../../src/components/MyText';
-
+import {MyModal_mobilefullscreen} from '../../src/components/MyModal';
 import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '../../src/controllers/revenues'
 
 import MySelect from '../../src/components/MySelect';
@@ -29,6 +29,7 @@ export default function RevenueScreen() {
 
   });
 
+const[visible, setVisible] = useState(false);
 const [revenues, setRevenues] = useState<iRevenue[]>([]);
 
 useEffect(()=>{
@@ -86,12 +87,15 @@ useEffect(()=>{
       scholarship_status: '',
       discount_percentage: '',
     });
+    setVisible(false);
   }
 
   // Função para editar uma receita
   function editRevenue(id: number) {
     const revenue = revenues.find(r => r.id == id);
-    if (revenue) setReq(revenue); // Carrega os dados da receita no formulário
+    if (revenue) 
+      setReq(revenue); // Carrega os dados da receita no formulário
+      setVisible(true);
   }
 
   // Função para excluir uma receita
@@ -122,7 +126,7 @@ useEffect(()=>{
 
       {/* Formulário */}
       <View style={styles.row}>
-
+        <MyModal_mobilefullscreen visible={visible} setVisible={setVisible}>
         <View style={styles.form}>
             {/* Campo de Nome */}
             <Myinput
@@ -180,23 +184,9 @@ useEffect(()=>{
               label='Valor'
             />
 
-           
-
-            
-
-            
-             
-
-            
-            
-
-            
-            <View style={styles.row}>
-              <MyButton button_type='rect' title="cadastrar" onPress={handleRegister}  />
-             
-            </View>
+            <MyButton style={{justifyContent:'center'}} onPress={() => handleRegister ()} title="cadastrar"  />
         </View>
-
+        </MyModal_mobilefullscreen>
         {/* Lista de Receitas */}
         <MyList
 
@@ -209,6 +199,7 @@ useEffect(()=>{
            
               onEdit={() => { editRevenue(item.id) }} 
               onDel= {() => { delRevenue(item.id) }}
+              style={{gap:10}}
 
             >
               <Mytext style={styles.revenueText}>Nome: {item.name}</Mytext>
@@ -217,14 +208,11 @@ useEffect(()=>{
               <Mytext style={styles.revenueText}>Descrição: {item.description}</Mytext>    
                      
               <Mytext style={styles.revenueText}>ID do Usuário: {item.user_id}</Mytext>
-              
-              
-              
-              <Mytext style={styles.revenueText}>Desconto: {item.discount_percentage}%</Mytext>
+               <Mytext style={styles.revenueText}>Desconto: {item.discount_percentage}%</Mytext>
              
               <Mytext style={styles.revenueText}>Valor R$: {item.value}</Mytext> 
               
-              <Mydownload style={styles.revenueTexts} url={item.url} />
+              <Mydownload  url={item.url} />
 
             
       
