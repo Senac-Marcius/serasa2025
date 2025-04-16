@@ -86,7 +86,7 @@ getTodos();
                         onChangeText={(text) => setReq({ ...req, name: text })}
                         style={styles.input}
                         iconName=''
-                        label= 'digite o nome da categoria'
+                        label= 'Digite o nome da categoria'
                     />
                     <Myinput
                         placeholder="Descrição"
@@ -94,7 +94,7 @@ getTodos();
                         onChangeText={(text) => setReq({ ...req, description: text })}
                         style={styles.input}
                         iconName=''
-                        label= 'descrição'
+                        label= 'Descrição'
                         
                     />
                       
