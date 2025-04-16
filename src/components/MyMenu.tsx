@@ -79,6 +79,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
       </TouchableOpacity>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <MenuItem label="Secretaria" route="secretaria" icon="add-circle" />
         <MenuItem label="Budgets" route="budgets" icon="wallet" />
         <MenuItem label="Calendar" route="calendar" icon="calendar" />
         <MenuItem label="Categories" route="categories" icon="albums" />
@@ -110,6 +111,8 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Students" route="students" icon="school" />
         <MenuItem label="Users" route="users" icon="person-circle" />
         <MenuItem label="More" route="more" icon="add-circle" />
+
+
       </ScrollView>
     </Animated.View>
   );

@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import {
-  iDisciplines,
-  SetDisciplinebd,
-  UpdateDisciplinebd,
-  DeleteDisciplinebd,
-  getDisciplines,
-} from '../src/controllers/disciplines';
-import MyView from '../src/components/MyView';
-import MyButton from '../src/components/MyButtons';
-import MyList from '../src/components/MyList';
-import { Myinput } from '../src/components/MyInputs';
-import { MyItem } from '../src/components/MyItem';
+import {iDisciplines,SetDisciplinebd,UpdateDisciplinebd,DeleteDisciplinebd,getDisciplines,} from '../../src/controllers/disciplines';
+import MyView from '../../src/components/MyView';
+import MyButton from '../../src/components/MyButtons';
+import MyList from '../../src/components/MyList';
+import { Myinput } from '../../src/components/MyInputs';
+import { MyItem } from '../../src/components/MyItem';
 
 const { width } = Dimensions.get('window');
 
