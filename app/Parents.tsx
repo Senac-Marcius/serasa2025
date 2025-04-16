@@ -22,7 +22,7 @@ export default function ParentScreen (){
     const [parents,setParents] = useState<iParent[]>([])
 
     const [req, setReq] = useState({
-        id:-0,
+        id:-1,
         name: '',
         rg: '',
         cpf:'',
@@ -65,7 +65,7 @@ export default function ParentScreen (){
 
         //setParents([...parents, req])
         setReq({
-            id:req.id + 1,
+            id:-1,
             name: '',
             rg:'',
             cpf:'',
@@ -107,37 +107,51 @@ export default function ParentScreen (){
             <View style = {styles.row}>
                 <View style={styles.form}>{/*View no Type pode ser usado para substituir o Form */}
                 {/*<FlatList/> → atibuto para possivel criação de lista */}
-                    <TextInput 
+                    <Myinput 
+                        label="Nome"
+                        iconName="badge"
                         placeholder="Nome:"
                         value={req.name}
                         onChangeText={(Text) => setReq({...req, name: Text})}
                     />
-                    <TextInput 
+                    <Myinput 
+                        label="Rg"
+                        iconName="badge"
                         placeholder="RG:"
                         value={req.rg}
-                        onChangeText={(Text) => setReq({...req, name: Text})}
+                        onChangeText={(Text) => setReq({...req, rg: Text})}
                     />
-                    <TextInput 
+                    <Myinput 
+                        label="cpf"
+                        iconName="badge" 
                         placeholder="CPF:"
                         value={req.cpf}
-                        onChangeText={(Text) => setReq({...req, name: Text})}
+                        onChangeText={(Text) => setReq({...req, cpf: Text})}
                     />
-                    <TextInput
+                    <Myinput 
+                        label="age"
+                        iconName="badge"
                         placeholder="Idade:"
                         value={req.age}
-                        onChangeText={(Text) => setReq({...req, email: Text})}
+                        onChangeText={(Text) => setReq({...req, age: Text})}
                     />
-                    <TextInput 
+                    <Myinput 
+                        label="phone"
+                        iconName="badge"
                         placeholder="Telefone:"
                         value={req.phone}
-                        onChangeText={(Text) => setReq({...req, name: Text})}
+                        onChangeText={(Text) => setReq({...req, phone: Text})}
                     />
-                    <TextInput 
+                    <Myinput 
+                        label="email"
+                        iconName="badge"
                         placeholder="Email:"
                         value={req.email}
-                        onChangeText={(Text) => setReq({...req, name: Text})}
+                        onChangeText={(Text) => setReq({...req, email: Text})}
                     />
-                    <TextInput
+                    <Myinput 
+                        label="kinship"
+                        iconName="badge"
                         placeholder="Parentesco:"
                         value={req.kinship}
                         onChangeText={(Text) => setReq({...req, kinship: Text})}
