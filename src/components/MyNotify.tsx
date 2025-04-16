@@ -1,6 +1,7 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
+import { TouchableOpacity, StyleSheet, ViewStyle,  } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+
 
 interface MyNotifyProps {
   style?: ViewStyle;
@@ -9,13 +10,21 @@ interface MyNotifyProps {
 
 const MyNotify: React.FC<MyNotifyProps> = ({ style, onPress }) => {
   return (
+   
     <TouchableOpacity
-      style={[styles.notifyButton, style]}
-      onPress={onPress || (() => console.log('Abrir notificações'))}
-    >
-      <Ionicons name="notifications" size={20} color="#fff" />
+    style={[styles.notifyButton, style]}
+    onPress={onPress || (() => console.log('Abrir notificações'))} //tirar essa parte
+  >
+  
+
+      <Ionicons name="notifications" size={20} color= "#fff" />
     </TouchableOpacity>
+
+    //aqui faz a list (puxa do da iris)
+  
+
   );
+
 };
 
 const styles = StyleSheet.create({
