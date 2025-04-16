@@ -111,17 +111,18 @@ export default function LocalScreen(){
                                     
                         />
 
-                    
-                      
+
+
                         <MySelect 
                         label={unity} setLabel={setUnit}  
                         list={            
                             [
                                 {key:0, option: 'metros'},             /* exemplo do código de SELECT para copiar */
                                 {key:1, option: 'cm'},
-
                             ]
-                        } />  
+                        } />
+
+
 
                         <Myinput
                         iconName='description'

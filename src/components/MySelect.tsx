@@ -8,23 +8,15 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 
 
 interface MySelectProps {
+    caption?: string;
     label: string;
     list: {key:any, option:string}[]
     setLabel(item:string):void;
     setKey?(key:any):void;
 }
 
-interface MyTextAreaProps {
-  value: string;
-  onChangeText: (text: string) => void;
-  placeholder?: string;
-  style?: TextStyle | TextStyle[];
-  label: string;
-  iconName: string;
-}
 
-
-const MySelect: React.FC<MySelectProps> = ({ label, list, setLabel, setKey }) => {  
+const MySelect: React.FC<MySelectProps> = ({ caption, label, list, setLabel, setKey }) => {  
   const [visible, setVisible] = useState(false);
 
   return (
@@ -47,7 +39,7 @@ const MySelect: React.FC<MySelectProps> = ({ label, list, setLabel, setKey }) =>
                   fontSize: 16, 
                   fontWeight: '500' 
               }}>
-                Uso do select (substitua o texto e o ícone)  {/* Substitua pelo seu texto */}
+                {caption? caption : 'Selecione abaixo' }
               </Text>
           </View>
 
@@ -122,23 +114,6 @@ const MySelect: React.FC<MySelectProps> = ({ label, list, setLabel, setKey }) =>
   );
 };
 
-const MyTextArea: React.FC<MyTextAreaProps> = ({ value, onChangeText, placeholder, style, label, iconName }) => {
-  return (
-    <View style={inputStyles.container}>
-      
-      <View style={inputStyles.labelContainer}>
-        <Text style={inputStyles.label}>{label}</Text>
-      </View>
-      <TextInput
-        style={[inputStyles.textArea, style]}
-        value={value}
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        multiline={true}
-      />
-    </View>
-  );
-};
 
 export default MySelect
 
