@@ -1,11 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Platform } from 'react-native';
+import { View, StyleSheet, Platform, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Calendar } from 'react-native-calendars';
-import MyView from '../src/components/MyView';
+import MyView from '../../src/components/MyView';
+import { Myinput } from '../../src/components/MyInputs';
+import MyButton from '../../src/components/MyButtons';
+import MyText from '../../src/components/MyText';
+import { MyItem } from '../../src/components/MyItem';
 import { useRouter } from 'expo-router';
-import { supabase } from '../src/utils/supabase';
-import { iCalendar, SetCalendarbd, UpdateCalendarbd, DeleteCalendarbd } from '../src/controllers/calendar';
+import {
+  iCalendar,
+  toListCalendar,
+  getCalendars,
+  SetCalendarbd,
+  UpdateCalendarbd,
+  DeleteCalendarbd
+} from '../../src/controllers/calendar';
 
 export default function CalendarsScreen() {
   const [req, setReq] = useState<iCalendar>({
@@ -23,9 +33,12 @@ export default function CalendarsScreen() {
 
   useEffect(() => {
     (async () => {
-      const { data, error } = await supabase.from('calendar').select();
-      if (error) console.log('Erro ao carregar calendários:', error);
-      if (data) setCalendars(data as iCalendar[]);
+      const res = await getCalendars();
+      if (res.status) {
+        setCalendars(res.data as iCalendar[]);
+      } else {
+        console.log('Erro ao carregar calendários:', res.data);
+      }
     })();
   }, []);
 
@@ -48,8 +61,8 @@ export default function CalendarsScreen() {
       }
     } else {
       const result = await UpdateCalendarbd(req);
-      if (result) {
-        setCalendars(calendars.map((c) => (c.id === req.id ? req : c)));
+      if (result && result[0]) {
+        setCalendars(calendars.map((c) => (c.id === req.id ? result[0] : c)));
       }
     }
 
@@ -83,7 +96,6 @@ export default function CalendarsScreen() {
 
   function getMarkedDates(calendars: iCalendar[]) {
     const marked: Record<string, any> = {};
-
     calendars.forEach((item) => {
       marked[item.registrationdate] = {
         selected: true,
@@ -92,30 +104,37 @@ export default function CalendarsScreen() {
         disableTouchEvent: true,
       };
     });
-
     return marked;
   }
 
   return (
-    <MyView router={router}>
-      <View style={styles.container}>
-        <Text style={styles.pageTitle}>Cronograma de Matrículas</Text>
+    <MyView router={router} style={styles.container}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 30 }}
+      >
+        <MyText style={styles.pageTitle}>Cronograma de Matrículas</MyText>
 
         {/* Formulário */}
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>{req.id === -1 ? 'Novo Cronograma' : 'Editar Cronograma'}</Text>
-          <TextInput
-            placeholder="Nome do aluno"
+          <MyText style={styles.sectionTitle}>{req.id === -1 ? 'Novo Cronograma' : 'Editar Cronograma'}</MyText>
+
+          <Myinput
+            iconName="account"
+            label="Nome do Aluno"
             value={req.studentname}
             onChangeText={(text) => setReq({ ...req, studentname: text })}
-            style={styles.input}
+            placeholder="Digite o nome do aluno..."
           />
-          <TextInput
-            placeholder="Curso"
+
+          <Myinput
+            iconName="book"
+            label="Curso"
             value={req.course}
             onChangeText={(text) => setReq({ ...req, course: text })}
-            style={styles.input}
+            placeholder="Digite o curso..."
           />
+
           {Platform.OS === 'web' ? (
             <input
               type="date"
@@ -135,36 +154,40 @@ export default function CalendarsScreen() {
               }}
             />
           ) : (
-            <TextInput
-              placeholder="Data da matrícula"
+            <Myinput
+              iconName="calendar"
+              label="Data da Matrícula"
               value={req.registrationdate}
               onChangeText={(text) => setReq({ ...req, registrationdate: text })}
-              style={styles.input}
+              placeholder="AAAA-MM-DD"
             />
           )}
-          <TextInput
-            placeholder="Período"
+
+          <Myinput
+            iconName="clock"
+            label="Período"
             value={req.period}
             onChangeText={(text) => setReq({ ...req, period: text })}
-            style={styles.input}
+            placeholder="Digite o período..."
           />
-          <TouchableOpacity style={styles.primaryButton} onPress={handleRegister}>
-            <Text style={styles.primaryButtonText}>{req.id === -1 ? 'CADASTRAR' : 'ATUALIZAR'}</Text>
-          </TouchableOpacity>
+
+          <MyButton
+            title={req.id === -1 ? 'CADASTRAR' : 'ATUALIZAR'}
+            onPress={handleRegister}
+            button_type="rect"
+            style={styles.primaryButton}
+          />
         </View>
 
-        {/* Visualização: Cards ou Calendário com botão fixo */}
+        {/* Lista ou Calendário */}
         <View style={styles.card}>
           <View style={styles.cardTitleRow}>
-            <TouchableOpacity
-              onPress={() => setShowCalendarView(!showCalendarView)}
-              style={styles.calendarToggleButton}
-            >
+            <TouchableOpacity onPress={() => setShowCalendarView(!showCalendarView)} style={styles.calendarToggleButton}>
               <Icon name={showCalendarView ? 'view-list' : 'calendar-month'} size={20} color="#6A1B9A" />
             </TouchableOpacity>
-            <Text style={styles.sectionTitle}>
+            <MyText style={styles.sectionTitle}>
               {showCalendarView ? 'Dias Registrados' : 'Cronogramas Cadastrados'}
-            </Text>
+            </MyText>
           </View>
 
           {showCalendarView ? (
@@ -185,37 +208,22 @@ export default function CalendarsScreen() {
           ) : (
             <View style={styles.gridContainer}>
               {calendars.map((item) => (
-                <View key={item.id} style={styles.cardGridItem}>
-                  <View style={styles.row}>
-                    <Icon name="account" size={20} color="#6A1B9A" />
-                    <Text style={styles.itemText}>Aluno: {item.studentname}</Text>
-                  </View>
-                  <View style={styles.row}>
-                    <Icon name="book-open-outline" size={20} color="#6A1B9A" />
-                    <Text style={styles.itemText}>Curso: {item.course}</Text>
-                  </View>
-                  <View style={styles.row}>
-                    <Icon name="calendar" size={20} color="#6A1B9A" />
-                    <Text style={styles.itemText}>Data: {item.registrationdate}</Text>
-                  </View>
-                  <View style={styles.row}>
-                    <Icon name="clock-outline" size={20} color="#6A1B9A" />
-                    <Text style={styles.itemText}>Período: {item.period}</Text>
-                  </View>
-                  <View style={styles.actions}>
-                    <TouchableOpacity style={styles.editButton} onPress={() => editCalendar(item.id)}>
-                      <Text style={styles.buttonText}>EDITAR</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.deleteButton} onPress={() => delCalendar(item.id)}>
-                      <Text style={styles.buttonText}>EXCLUIR</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
+                <MyItem
+                  key={item.id}
+                  style={styles.cardGridItem}
+                  onEdit={() => editCalendar(item.id)}
+                  onDel={() => delCalendar(item.id)}
+                >
+                  <MyText style={styles.itemText}>👤 Aluno: {item.studentname}</MyText>
+                  <MyText style={styles.itemText}>📘 Curso: {item.course}</MyText>
+                  <MyText style={styles.itemText}>📅 Data: {item.registrationdate}</MyText>
+                  <MyText style={styles.itemText}>⏱️ Período: {item.period}</MyText>
+                </MyItem>
               ))}
             </View>
           )}
         </View>
-      </View>
+      </ScrollView>
     </MyView>
   );
 }
@@ -229,19 +237,26 @@ const styles = StyleSheet.create({
   pageTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#4B0082',
     marginBottom: 20,
+    textAlign: 'center',
   },
   card: {
-    backgroundColor: '#F2F2F2',
+    backgroundColor: '#FFF',
     borderRadius: 10,
     padding: 20,
     marginBottom: 25,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 6,
+    elevation: 2,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: '#6A1B9A',
+    marginBottom: 12,
   },
   cardTitleRow: {
     flexDirection: 'row',
@@ -259,31 +274,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  input: {
-    height: 45,
-    borderColor: '#DDD',
-    borderWidth: 1,
-    borderRadius: 6,
-    paddingHorizontal: 12,
-    marginBottom: 12,
-    backgroundColor: '#FAFAFA',
-  },
   primaryButton: {
-    backgroundColor: '#6A1B9A',
-    paddingVertical: 12,
-    borderRadius: 6,
-    alignItems: 'center',
     marginTop: 10,
-  },
-  primaryButtonText: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    fontSize: 16,
   },
   gridContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'flex-start',
     gap: 12,
   },
   cardGridItem: {
@@ -296,39 +292,11 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 6,
     elevation: 2,
-    width: '100%',
-    maxWidth: 300,
-    flexGrow: 1,
+    width: 280,
   },
   itemText: {
     fontSize: 14,
     color: '#333',
-    marginLeft: 8,
-  },
-  actions: {
-    flexDirection: 'row',
-    gap: 10,
-    marginTop: 12,
-  },
-  editButton: {
-    backgroundColor: '#9575CD',
-    paddingVertical: 6,
-    paddingHorizontal: 14,
-    borderRadius: 4,
-  },
-  deleteButton: {
-    backgroundColor: '#EF5350',
-    paddingVertical: 6,
-    paddingHorizontal: 14,
-    borderRadius: 4,
-  },
-  buttonText: {
-    color: '#FFF',
-    fontWeight: 'bold',
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 4,
+    marginBottom: 6,
   },
 });
