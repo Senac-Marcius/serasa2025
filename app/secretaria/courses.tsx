@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import Mytext from '../../src/components/MyText';
 import MyButton from '../../src/components/MyButtons';
-import MyList from '../../src/components/MyList';
 import MyView from '../../src/components/MyView';
 import { MyItem } from '../../src/components/MyItem';
 import { Myinput, MyTextArea } from '../../src/components/MyInputs';
 import { useRouter } from 'expo-router';
-import {getCourses,iCourses, upadateCourse, deleteCourse, setCoursebd} from '../../src/controllers/courses'
-
 
 export default function CoursesScreen() {
   const [req, setReq] = useState({
@@ -20,15 +17,15 @@ export default function CoursesScreen() {
     userId: 0,
   });
 
-  const [CoursesPosts, setCourses] = useState<{ description: string, Courseplan: string, Orientationplan: string, Workload: string, id: number, userId: number }[]>([]);
+  const [CoursesPosts, setCourses] = useState<typeof req[]>([]);
 
   function handleRegister() {
-    if (req.id == -1) {
+    if (req.id === -1) {
       const newId = CoursesPosts.length ? CoursesPosts[CoursesPosts.length - 1].id + 1 : 0;
       const newCourses = { ...req, id: newId };
       setCourses([...CoursesPosts, newCourses]);
     } else {
-      setCourses(CoursesPosts.map(c => (c.id == req.id ? req : c)));
+      setCourses(CoursesPosts.map(c => (c.id === req.id ? req : c)));
     }
 
     setReq({
@@ -43,9 +40,7 @@ export default function CoursesScreen() {
 
   function editCourses(id: number) {
     const courseToEdit = CoursesPosts.find(course => course.id === id);
-    if (courseToEdit) {
-      setReq(courseToEdit);
-    }
+    if (courseToEdit) setReq(courseToEdit);
   }
 
   function deleteCourses(id: number) {
@@ -55,140 +50,133 @@ export default function CoursesScreen() {
   const router = useRouter();
 
   return (
+    <MyView style={styles.page}>
+      <View style={styles.header}>
+        <Mytext style={styles.title}>Cadastro de Cursos</Mytext>
+      </View>
 
-      <MyView>
-        <Mytext style={styles.title}>Cursos</Mytext>
-        <View style={styles.row}>
-          <View style={styles.form}>
-            <MyTextArea
-              iconName="description"
-              label="Descrição"
-              value={req.description}
-              onChangeText={(text) => setReq({ ...req, description: text })}
-              placeholder="Digite a descrição..."
-            />
+      <View style={styles.formContainer}>
+        <MyTextArea
+          iconName="description"
+          label="Descrição"
+          value={req.description}
+          onChangeText={(text) => setReq({ ...req, description: text })}
+          placeholder="Digite a descrição do curso..."
+        />
+        <Myinput
+          iconName="book"
+          label="Plano de Curso"
+          value={req.Courseplan}
+          onChangeText={(text) => setReq({ ...req, Courseplan: text })}
+          placeholder="Digite o plano de curso..."
+        />
+        <Myinput
+          iconName="school"
+          label="Plano de Orientação"
+          value={req.Orientationplan}
+          onChangeText={(text) => setReq({ ...req, Orientationplan: text })}
+          placeholder="Digite o plano de orientação..."
+        />
+        <Myinput
+          iconName="schedule"
+          label="Carga Horária"
+          value={req.Workload}
+          onChangeText={(text) => setReq({ ...req, Workload: text })}
+          placeholder="Digite a carga horária..."
+        />
+        <MyButton title="CADASTRAR" onPress={handleRegister} button_type="rect" style={styles.button} />
+      </View>
 
-            <Myinput
-              iconName="book"
-              label="Plano de Curso"
-              value={req.Courseplan}
-              onChangeText={(text) => setReq({ ...req, Courseplan: text })}
-              placeholder="Digite o plano de curso..."
-            />
-
-            <Myinput
-              iconName="school"
-              label="Plano de Orientação"
-              value={req.Orientationplan}
-              onChangeText={(text) => setReq({ ...req, Orientationplan: text })}
-              placeholder="Digite o plano de orientação..."
-            />
-
-            <Myinput
-              iconName="schedule"
-              label="Carga horária"
-              value={req.Workload}
-              onChangeText={(text) => setReq({ ...req, Workload: text })}
-              placeholder="Digite a carga horária..."
-            />
-            <MyButton title="CADASTRAR" onPress={handleRegister} button_type="rect" />
-          </View>
-          <MyList
-            data={CoursesPosts}
-            keyItem={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <MyItem
-                style={styles.cardGridItem}
-                onEdit={() => editCourses(item.id)}
-                onDel={() => deleteCourses(item.id)}
-              >
-                <Mytext style={styles.cardTitle}>Descrição: {item.description}</Mytext>
-                <Mytext style={styles.cardTitle}>Plano: {item.Courseplan}</Mytext>
-                <Mytext style={styles.cardTitle}>Orientação: {item.Orientationplan}</Mytext>
-                <Mytext style={styles.cardTitle}>Carga: {item.Workload}</Mytext>
-              </MyItem>
-            )}
-          />
+      <View style={styles.listWrapper}>
+        <Mytext style={styles.subTitle}>Cursos Cadastrados</Mytext>
+        <View style={styles.cardGrid}>
+          {CoursesPosts.map((item) => (
+            <MyItem
+              key={item.id}
+              style={styles.card}
+              onEdit={() => editCourses(item.id)}
+              onDel={() => deleteCourses(item.id)}
+            >
+              <Mytext style={styles.cardTitle}>📚 {item.description}</Mytext>
+              <Mytext style={styles.cardInfo}>📘 Plano: {item.Courseplan}</Mytext>
+              <Mytext style={styles.cardInfo}>🎓 Orientação: {item.Orientationplan}</Mytext>
+              <Mytext style={styles.cardInfo}>⏱️ Carga Horária: {item.Workload}</Mytext>
+            </MyItem>
+          ))}
         </View>
-      </MyView>
+      </View>
+    </MyView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    backgroundColor: '#F4F4F4',
+  page: {
     flex: 1,
+    backgroundColor: '#f4f4f4',
+    padding: 20,
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 16,
   },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#333',
+    color: '#4B0082',
   },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    flex: 1,
-  },
-  form: {
-    flex: 1,
-    marginRight: 10,
+  formContainer: {
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
     padding: 20,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 10,
+    elevation: 2,
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 2,
-  },
-  input: {
-    borderBottomWidth: 1,
-    borderColor: '#ccc',
-    marginBottom: 10,
-    paddingVertical: 4,
-  },
-  listContainer: {
-    flex: 1,
-  },
-  listItem: {
-    padding: 15,
-    backgroundColor: '#FFF',
-    borderRadius: 10,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 2,
-  },
-  listText: {
-    fontSize: 14,
-    color: '#333',
-    marginBottom: 5,
-  },
-  buttonsContanier: {
-    backgroundColor: '#F2F2F2',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    flex: 1,
-  },
-  cardGridItem: {
-    backgroundColor: '#FFF',
-    borderRadius: 10,
-    padding: 16,
-    margin: 8,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
+    marginBottom: 30,
+  },
+  button: {
+    marginTop: 16,
+    backgroundColor: '#6A1B9A',
+  },
+  listWrapper: {
+    flex: 1,
+    marginTop: 20,
+  },
+  subTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#4B0082',
+    marginBottom: 10,
+    marginLeft: 6,
+  },
+  cardGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    gap: 12,
+    paddingHorizontal: 6,
+  },
+  card: {
+    backgroundColor: '#fff',
+    padding: 16,
+    borderRadius: 12,
+    width: 280,
+    marginBottom: 12,
+    marginRight: 12,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
   cardTitle: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 5,
+    marginBottom: 6,
+  },
+  cardInfo: {
+    fontSize: 14,
+    color: '#555',
+    marginBottom: 4,
   },
 });
