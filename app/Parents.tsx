@@ -253,3 +253,4 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         
       },
 })
+//versão atualiizada
