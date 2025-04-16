@@ -13,7 +13,7 @@ export default function FinanceIndex() {
   const [totalExpenses, setTotalExpenses] = useState(0);
   const [totalInvestments, setTotalInvestments] = useState(0);
   const [totalBudgets, setTotalBudgets] = useState(0);
-  const [totalRevues, setTotalRevues] = useState(0);
+  const [totalRevenues, setTotalRevenues] = useState(0);
 
 
 
@@ -41,7 +41,7 @@ export default function FinanceIndex() {
     fetchAll();
   }, []);
 
-  const totalGeral = totalInvestments + totalBudgets + totalRevues - totalExpenses;
+  const totalGeral = totalInvestments + totalBudgets + totalRevenues - totalExpenses;
 
   return (
     <MyView>
@@ -51,7 +51,7 @@ export default function FinanceIndex() {
         <MyText style={styles.item}>Despesas: R$ {totalExpenses.toFixed(2)}</MyText>
         <MyText style={styles.item}>Investimentos: R$ {totalInvestments.toFixed(2)}</MyText>
         <MyText style={styles.item}>Orçamentos: R$ {totalBudgets.toFixed(2)}</MyText>
-        <MyText style={styles.item}>Receitas: R$ {totalRevues.toFixed(2)}</MyText>
+        <MyText style={styles.item}>Receitas: R$ {totalRevenues.toFixed(2)}</MyText>
 
         <MyText style={styles.total}>Total Geral: R$ {totalGeral.toFixed(2)}</MyText>
 
