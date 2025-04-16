@@ -25,7 +25,6 @@ export default function LevelsScreen() {
     created_at: new Date().toISOString(),
   });
 
-
   useEffect(() => {
     //aqui estamos carregando os lançamentos 
       async function fetchLevels() {
