@@ -1,47 +1,51 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Text } from 'react-native';
+import {View,StyleSheet,ScrollView,Dimensions,Text,Pressable,} from 'react-native';
 import { useRouter } from 'expo-router';
-import { Ionicons, FontAwesome5, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
+import {Ionicons,FontAwesome5,Feather,MaterialCommunityIcons,} from '@expo/vector-icons';
 
 const menuItems = [
-  { label: 'Dashboard', icon: <Ionicons name="grid-outline" size={20} color="#555" />, route: '/dashboard' },
-  { label: 'Cursos', icon: <Ionicons name="book-outline" size={20} color="#555" />, route: '/courses' },
-  { label: 'Alunos', icon: <Ionicons name="person-outline" size={20} color="#555" />, route: '/students' },
-  { label: 'Transações', icon: <Ionicons name="card-outline" size={20} color="#555" />, route: '/transactions' },
-  { label: 'Chat', icon: <Ionicons name="chatbubble-ellipses-outline" size={20} color="#555" />, route: '/chat' },
-  { label: 'Horários', icon: <Ionicons name="calendar-outline" size={20} color="#555" />, route: '/calendar' },
-  { label: 'Aulas Ao Vivo', icon: <MaterialCommunityIcons name="video-outline" size={20} color="#555" />, route: '/live' },
-  { label: 'Configurações', icon: <Feather name="settings" size={20} color="#555" />, route: '/settings' },
+  { label: 'Cursos', icon: <Ionicons name="school-outline" size={20} color="#555" />, route: 'secretaria/courses' },
+  { label: 'Disciplinas', icon: <Ionicons name="book-outline" size={20} color="#555" />, route: 'secretaria/disciplines' },
+  { label: 'Biblioteca', icon: <Ionicons name="library-outline" size={20} color="#555" />, route: 'secretaria/library' },
+  { label: 'Calendário', icon: <Ionicons name="calendar-outline" size={20} color="#555" />, route: 'secretaria/calendar' },
+  { label: 'Documentos', icon: <Ionicons name="document-text-outline" size={20} color="#555" />, route: 'secretaria/documents' },
+  { label: 'Matrícula', icon: <MaterialCommunityIcons name="clipboard-text-outline" size={20} color="#555" />, route: 'secretaria/registration' },
+  { label: 'Configurações', icon: <Feather name="settings" size={20} color="#555" />, route: 'secretaria/settings' },
 ];
 
 export default function SecretariaHome() {
   const router = useRouter();
-  const [activeRoute, setActiveRoute] = useState('/students');
+  const [activeRoute, setActiveRoute] = useState('');
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const cards = [
     {
       title: 'Disciplinas',
       icon: <Ionicons name="book" size={30} color="#6C63FF" />,
-      route: '/disciplines',
+      route: 'secretaria/disciplines',
       bgColor: '#F3F1FE',
+      value: 12,
     },
     {
       title: 'Cursos',
       icon: <Ionicons name="school" size={30} color="#FFB703" />,
-      route: '/courses',
+      route: 'secretaria/courses',
       bgColor: '#FFF6E5',
+      value: 5,
     },
     {
       title: 'Calendário',
       icon: <Ionicons name="calendar" size={30} color="#2EC4B6" />,
-      route: '/calendar',
+      route: 'secretaria/calendar',
       bgColor: '#E5FBF8',
+      value: 7,
     },
     {
       title: 'Documentos',
       icon: <Ionicons name="document-text" size={30} color="#FF5C8A" />,
-      route: '/documents',
+      route: 'secretaria/documents',
       bgColor: '#FFEAF0',
+      value: 21,
     },
   ];
 
@@ -57,20 +61,27 @@ export default function SecretariaHome() {
 
         {menuItems.map((item, index) => {
           const isActive = item.route === activeRoute;
+          const isHovered = item.route === hoveredItem;
+
           return (
-            <TouchableOpacity
+            <Pressable
               key={index}
-              style={[styles.menuItem, isActive && styles.activeItem].filter(Boolean)}
+              onHoverIn={() => setHoveredItem(item.route)}
+              onHoverOut={() => setHoveredItem(null)}
               onPress={() => {
                 setActiveRoute(item.route);
                 router.push(item.route);
               }}
+              style={[
+                styles.menuItem,
+                (isActive || isHovered) && styles.activeItem,
+              ]}
             >
               <View style={styles.icon}>{item.icon}</View>
-              <Text style={[styles.menuText, isActive && styles.activeText].filter(Boolean)}>
+              <Text style={[styles.menuText, (isActive || isHovered) && styles.activeText]}>
                 {item.label}
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           );
         })}
       </View>
@@ -78,16 +89,18 @@ export default function SecretariaHome() {
       {/* Conteúdo principal */}
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.mainTitle}>Painel da Secretaria</Text>
+
         <View style={styles.cardArea}>
           {cards.map((card, index) => (
-            <TouchableOpacity
+            <Pressable
               key={index}
               style={[styles.card, { backgroundColor: card.bgColor }]}
               onPress={() => router.push(card.route)}
             >
               {card.icon}
               <Text style={styles.cardTitle}>{card.title}</Text>
-            </TouchableOpacity>
+              <Text style={styles.cardNumber}>{card.value}</Text>
+            </Pressable>
           ))}
         </View>
       </ScrollView>
@@ -101,7 +114,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#F9FAFC',
+    backgroundColor: '#F2F3F5',
   },
   sidebar: {
     width: isLarge ? 240 : 200,
@@ -110,7 +123,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRightWidth: 1,
     borderRightColor: '#eee',
-    justifyContent: 'flex-start',
   },
   logoContainer: {
     alignItems: 'center',
@@ -133,6 +145,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 10,
     borderRadius: 8,
+    cursor: 'pointer',
   },
   icon: {
     marginRight: 12,
@@ -158,7 +171,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 20,
+    marginBottom: 24,
   },
   cardArea: {
     flexDirection: 'row',
@@ -176,11 +189,16 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 12,
+    gap: 8,
   },
   cardTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#333',
+  },
+  cardNumber: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#222',
   },
 });

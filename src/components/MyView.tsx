@@ -1,25 +1,23 @@
 import React, { ReactNode } from 'react';
-import { View, StyleSheet, TextStyle } from 'react-native';
+import { View, StyleSheet, TextStyle, ScrollView } from 'react-native';
 import MyTopbar from './MyTopbar';
 import MySupport from './MySupport';
-import MyAccessibility from './MyAccessibility';
 import { Router } from 'expo-router';
 
 interface MySearchProps {
   children: ReactNode;
-  style?: TextStyle | TextStyle[];
+  style?: TextStyle | TextStyle[]; // estilo externo opcional
   title?: string;
-  router?: Router; // <- agora é opcional
+  router?: Router;
 }
-
 
 const MyView: React.FC<MySearchProps> = ({ children, style, title, router }) => {
   return (
     <View style={[styles.container, style]}>
       <MyTopbar router={router} title={title ?? ''} />
-      <View style={styles.scrollContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         {children}
-      </View>
+      </ScrollView>
       <MySupport style={styles.suporteButton} />
     </View>
   );
@@ -27,13 +25,13 @@ const MyView: React.FC<MySearchProps> = ({ children, style, title, router }) => 
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
-    position: 'relative',
-    backgroundColor: '#F4F4F4',
+    flex: 1,
+    backgroundColor: '#F5F7FA', // fundo cinza claro padrão
   },
   scrollContainer: {
-    flex: 1, 
+    flexGrow: 1,
     paddingHorizontal: 16,
+    paddingBottom: 80,
   },
   suporteButton: {
     position: 'absolute',
