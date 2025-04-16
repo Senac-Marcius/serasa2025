@@ -7,8 +7,9 @@ import Mylist from '../../src/components/MyList';
 import {MyItem} from '../../src/components/MyItem';
 import MyButton from '../../src/components/MyButtons';
 import Mytext from '../../src/components/MyText';
-import { iInvestment, setInvestment, deleteInvestment, updateInvestment } from '../../src/controllers/investments';
-import { supabase } from '../../src/utils/supabase';
+import { iInvestment, setInvestment, getInvestment, deleteInvestment, updateInvestment } from '../../src/controllers/investments';
+import {MyModal_mobilefullscreen} from '../../src/components/MyModal';
+
 
 export default function investmentScreen(){
  //aqui é typescript   
@@ -22,15 +23,19 @@ export default function investmentScreen(){
         value: '',
     });
 
+    const [visible, setVisible] = useState(false);
 
     const [investments, setInvestments] = useState<iInvestment[]>([]);
 
+    const [message, setMessage] = useState("");
+
+
     useEffect(() => {
         async function getAll() {
-            const { data: all} = await supabase.from('investments').select();
+            const retorno = await getInvestment({});
 
-            if (all && all.length > 0) {
-            setInvestments(all)
+            if (retorno.status && retorno.data && retorno.data.length > 0) {
+            setInvestments(retorno.data)
             }
         }
         getAll();
@@ -45,54 +50,58 @@ export default function investmentScreen(){
             const nId = investments.length ? investments[investments.length - 1].id + 1 : 0;
             const newInvestment = {...req, id: nId };
             setInvestments([...investments, newInvestment]);
-        } else {
-            console.log('Atualizando investimento:', req);
-            const result = await updateInvestment(req);
-            
-            if (result.error) {
-                console.error('Erro ao atualizar investimento:', result.error.message);
-                return;
+            const resp = await setInvestment(newInvestment)
+            if (resp && resp.length > 0) {
+                console.log('Salvo com sucesso');
             }
-    
-            setInvestments(investments.map(i => (i.id == req.id ? result : i)));
+        } else {
+            setInvestments(investments.map(i => (i.id === req.id ? req : i)));
+            try{
+                await updateInvestment(req);
+                console.log('Atualizando investimento:', req);
+            }catch (error) {
+                console.error('Erro ao atualizar investimento:', error);
+            }
         }
     
         setReq({
-            description: '',
             name: '',
+            description: '',
             url: '',
             id: -1,
             created_at: new Date().toISOString(),
             user_id: 1,
             value: '',
         });
+        setVisible(false);
     }
     
 
     function editInvestment(id:number){
+        console.log('Editando investimento:', id);
         const investment = investments.find(i => i.id == id);
-        if(investment)
-        setReq(investment);
+        if(investment){
+            setReq(investment);
+            setVisible(true);
+        }
     }
 
 
     async function delInvestment(id: number) {
-        try {
-    const result =  await deleteInvestment(id);
-        
-
-        setInvestments (investments.filter(i => i.id !== id));
-    }   catch (error) {
-        console.log(error)
-        }
-}
-
+        deleteInvestment(id)
+        const list = investments.filter(i => i.id != id);
+        if(list) {
+            setInvestments(list);
+        }        
+    
+    }  
     
     return (
       <MyView  >  
               {/* Aqui é typescript dentro do front */}
         <Text style={styles.title}>Investimentos</Text>
         <View style={styles.row}>
+            <MyModal_mobilefullscreen visible={visible} setVisible={setVisible}>
             <View style={styles.form}>
             <Myinput
                     label='Nome'
@@ -124,8 +133,9 @@ export default function investmentScreen(){
                   />
                     
 
-                <MyButton title='Cadastrar' onPress={ handleRegister }/> 
+                <MyButton style={{justifyContent:'center'}} title='Cadastrar' onPress={ handleRegister }/> 
             </View>
+            </MyModal_mobilefullscreen>
             <Mylist
                 data={investments}
                 keyItem={ (item) => item.id.toString() }
@@ -134,8 +144,8 @@ export default function investmentScreen(){
                     onEdit={ () => editInvestment (item.id)  }
                     onDel={ () => delInvestment (item.id)  }
                     >
-                       <Mytext style={styles.investmentText}> Descrição: {item.description}</Mytext>
                        <Mytext style={styles.investmentText}> Nome: {item.name}</Mytext>
+                       <Mytext style={styles.investmentText}> Descrição: {item.description}</Mytext>
                        <Mytext style={styles.investmentText}> Url: {item.url}</Mytext>
                        <Mytext style={styles.investmentText}> Data: {item.created_at}</Mytext>
                        <Mytext style={styles.investmentText}> ID de Usuario: {item.user_id}</Mytext>
