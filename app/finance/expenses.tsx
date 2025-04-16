@@ -3,11 +3,11 @@ import { View, StyleSheet } from 'react-native' ;
 import {MyItem} from '../../src/components/MyItem';
 import MyList from '../../src/components/MyList';
 import MyView from '../../src/components/MyView';
-import MyButton from '../../src/components/MyButtons'
+import MyButton from '../../src/components/MyButtons';
+import {MyModal_mobilefullscreen} from '../../src/components/MyModal'
 import {Myinput, MyTextArea} from '../../src/components/MyInputs';
-import { useRouter } from 'expo-router';
 import { setExpense, delRegister, updateExpense, iexpenses, getExpense } from '../../src/controllers/expenses';
-import Mytext from '../../src/components/MyText'
+import Mytext from '../../src/components/MyText';
 
 
 
@@ -23,6 +23,8 @@ export default function ExpenseScreen(){
             descriptions: '',
             user_id: 1,
     });
+
+    const [visible, setVisible] = useState(false);
 
     const [message, setMessage] = useState("")
 
@@ -65,13 +67,14 @@ export default function ExpenseScreen(){
             user_id: 1,
         });
        
-        
+        setVisible(false);
     }
 
     function editExpense(id:number){
         const expenses = expense.find(e => e.id == id )
         if(expenses)
             setReq(expenses)
+            setVisible(true);
     };
 
     async function delExpense(id:number){
@@ -82,15 +85,13 @@ export default function ExpenseScreen(){
             setExpenses(list)
     }
 
-            const router = useRouter();
-    
-
     return (
         
         <MyView > 
             {/* aqui é typecript dentro do front */}
             <Mytext style={styles.title}>tela de despesas</Mytext>
-            <View style={styles.row}>
+            <MyModal_mobilefullscreen   visible={visible} setVisible={setVisible}>
+
                 <View style={styles.form}>
 
                     {message.length>0 &&  (
@@ -110,10 +111,10 @@ export default function ExpenseScreen(){
                     <Myinput value={req.costs} onChangeText={(text) => setReq({ ...req, costs: text })} placeholder="R$" label="Valores:" iconName='' /> 
 
 
-                    <MyButton style={{justifyContent:'center'}} onPress={handleRegister} title='Cadastrar'></MyButton>
+                    <MyButton style={{justifyContent:'center'}} onPress={() => handleRegister()} title='Cadastrar'></MyButton>
 
-
-                </View>
+                </View>                
+            </MyModal_mobilefullscreen>    
 
                 <MyList
                     data={expense}
@@ -133,7 +134,6 @@ export default function ExpenseScreen(){
                         </MyItem>
                     )}
                 /> 
-            </View>
         </MyView>
     );
 }

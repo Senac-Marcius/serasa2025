@@ -42,7 +42,6 @@ export default function investmentScreen(){
         if(req.id == -1){
             const nId = investments.length ? investments[investments.length - 1].id + 1 : 0;
             const newInvestment = {...req, id: nId };
-
             setInvestments([...investments, newInvestment]);
            await setInvestment(newInvestment)
         }else{
