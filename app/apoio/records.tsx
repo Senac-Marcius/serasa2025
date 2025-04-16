@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
-import MyView from '../src/components/MyView';
-import MyButton from '../src/components/MyButtons';
+import MyView from '../../src/components/MyView';
+import MyButton from '../../src/components/MyButtons';
 import { IconButton } from 'react-native-paper';
-import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs';
-import { MyItem, MyCorrelated } from '../src/components/MyItem';
-import MyList from '../src/components/MyList';
-import {setRecord, iRecord, getRecords } from '../src/controllers/records'
-import { supabase } from '../src/utils/supabase';
-import Mytext from '../src/components/MyText';
-import MyLevels from '../src/components/MyLevels';
+import { Myinput, MyCheck, MyTextArea } from '../../src/components/MyInputs';
+import { MyItem, MyCorrelated } from '../../src/components/MyItem';
+import MyList from '../../src/components/MyList';
+import {setRecord, iRecord, getRecords } from '../../src/controllers/records'
+import { supabase } from '../../src/utils/supabase';
+import Mytext from '../../src/components/MyText';
+import levels from '../apoio/levels';
+import MySelect from '../../src/components/MySelect';
 
 export default function RecordScreen() {
     const [isChecked, setIsChecked] = useState(true);
+
+    const [levels, setLevels] = useState<any[]>([]);
 
     const [records, setRecords] = useState<iRecord[]>([]);
     
@@ -22,10 +25,20 @@ export default function RecordScreen() {
             if (retorno.status && retorno.data && retorno.data.length > 0){
                 setRecords(retorno.data);
 
+            }   
+        }
+
+        async function getLevels() {
+            const { data, error } = await supabase.from('levels').select('*')
+            if (error) {
+                console.error('Erro ao buscar levels:', error)
+            } else {
+                setLevels(data)
             }
         }
-        getTodos();
 
+        getLevels();
+        getTodos();
 
     })
 
@@ -119,6 +132,8 @@ export default function RecordScreen() {
             setReq(record);
         }
     }
+     
+
 
     return (
 
@@ -194,6 +209,12 @@ export default function RecordScreen() {
                         button_type="round"
                         style={styles.button_round}
                     />
+
+                  
+                    
+                    
+                    
+                
 
                 </View>
 
