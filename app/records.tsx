@@ -8,6 +8,8 @@ import { MyItem, MyCorrelated } from '../src/components/MyItem';
 import MyList from '../src/components/MyList';
 import {setRecord, iRecord, getRecords } from '../src/controllers/records'
 import { supabase } from '../src/utils/supabase';
+import Mytext from '../src/components/MyText';
+import MyLevels from '../src/components/MyLevels';
 
 export default function RecordScreen() {
     const [isChecked, setIsChecked] = useState(true);
@@ -23,6 +25,8 @@ export default function RecordScreen() {
             }
         }
         getTodos();
+
+
     })
 
 
@@ -199,40 +203,23 @@ export default function RecordScreen() {
                     keyItem={(item) => item.id.toString()}
                     renderItem={({ item }) => (
 
-                        <MyCorrelated
-                        showDeleteButton = {false}
-                        showEditButton = {false}
-
-                        style={styles.itemText}  /*MyItem */>
-                            <Text style={styles.itemText}>Nome: {item.name}</Text>
-                            <Text style={styles.itemText}>CPF: {item.cpf}</Text>
-                            <Text style={styles.itemText}>Descrição: {item.description}</Text>
-                            <Text style={styles.itemText}>Doença: {item.sick}</Text>
-                            <Text style={styles.itemText}>Saúde: {item.health}</Text>
-                            <Text style={styles.itemText}>Alergias: {item.allergy}</Text>
-                            <Text style={styles.itemText}>Medicações: {item.medication}</Text>
-                            <Text style={styles.itemText}>Usuário Id: {item.user_id}</Text>
-
-                           <View style={styles.button_round}>
-
-                                <MyButton
-                                    title="EXCLUIR"
-                                    onPress={() => { delRecord(item.id) }}
-                                    button_type="round"
-                                    style={styles.button_round}
-                                />
-
-                                <MyButton
-                                    title="EDITAR"
-                                    onPress={() => { editRecord(item.id) }}
-                                    button_type="round"
-                                    style={styles.button_round}
-                                />
-
-
-                            </View>
-                        </MyCorrelated>
-                    )}
+                 <MyItem
+                    style={styles.cardGridItem}
+                    onEdit={() => editRecord(item.id)}
+                    onDel={() => delRecord(item.id)}
+                    >      
+                    <Mytext style={styles.itemText}>Nome: {item.name}</Mytext>
+                    <Mytext style={styles.itemText}>CPF: {item.cpf}</Mytext>
+                    <Mytext style={styles.itemText}>Descrição: {item.description}</Mytext>
+                    <Mytext style={styles.itemText}>Doença: {item.sick}</Mytext>
+                    <Mytext style={styles.itemText}>Saúde: {item.health}</Mytext>
+                    <Mytext style={styles.itemText}>Alergias: {item.allergy}</Mytext>
+                    <Mytext style={styles.itemText}>Medicações: {item.medication}</Mytext>
+                    <Mytext style={styles.itemText}>Usuário Id: {item.user_id}</Mytext>
+                        
+                    </MyItem>  
+                  )}   
+                    
                 />
             </View>
         </MyView>
@@ -282,6 +269,18 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
-    }
+    },
+
+    cardGridItem: {
+        backgroundColor: '#FFF',
+        borderRadius: 10,
+        padding: 16,
+        margin: 8,
+        shadowColor: '#000',
+        shadowOpacity: 0.05,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 6,
+        elevation: 2,
+      },
 
 })
