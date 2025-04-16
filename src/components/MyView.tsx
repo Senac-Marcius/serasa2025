@@ -1,67 +1,58 @@
-import React,{ReactNode} from 'react';
-import { View, StyleSheet, Dimensions, TextStyle, ScrollView} from 'react-native';
+import React, { ReactNode, useState } from 'react';
+import { View, StyleSheet, TextStyle, ScrollView } from 'react-native';
 import MyTopbar from './MyTopbar';
 import MySupport from './MySupport';
-import MyAccessibility from './MyAccessibility';
-
+import MyMenu from './MyMenu';
+import { Router } from 'expo-router';
 
 interface MySearchProps {
   children: ReactNode;
-  style?: TextStyle | TextStyle[]; 
+  style?: TextStyle | TextStyle[];
   title?: string;
+  router?: Router;
 }
 
-const MyView: React.FC< MySearchProps > = ({children, style}) => { 
- 
-  const { width, height } = Dimensions.get('window');
-
-  
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1, 
-      position: 'relative', 
-    },
-    suporteButton: {
-      position: 'absolute', 
-      bottom: 20, 
-      right: 20,
-      width: width > 600 ? 60 : 50,
-      height: width > 600 ? 60 : 50,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-
-    tView:{
-      width: width,
-      height: height,
-    },
-
-    buttonAcess: {
- 
-      position: 'absolute',
-      bottom: 20,
-      left: 20,
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: width > 600 ? 60 : 50,
-      height: width > 600 ? 60 : 50,
-    },
-  });
+const MyView: React.FC<MySearchProps> = ({ children, style, title, router }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <ScrollView style={[styles.container, style]}>
-      <View style={styles.tView}>
-        <MyTopbar  />
+    <View style={[styles.container, style]}>
+      {/* Topbar recebe o controle do menu */}
+      <MyTopbar router={router} title={title ?? ''} onMenuToggle={() => setMenuOpen(!menuOpen)} />
+
+      {/* Conteúdo da tela */}
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         {children}
-        {/* Conteúdo da tela (pode ser adicionado aqui) */}
-        {/* Botão de suporte */}
-        <MySupport style={styles.suporteButton}/>
-        <MyAccessibility>
-          <button style={styles.buttonAcess} /> 
-        </MyAccessibility>
-      </View>
-    </ScrollView>
+      </ScrollView>
+
+      {/* Botão de suporte fixo */}
+      <MySupport style={styles.suporteButton} />
+
+      {/* Menu lateral colado na esquerda */}
+      {menuOpen && <MyMenu closeMenu={() => setMenuOpen(false)} />}
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F2F3F5', // fundo cinza claro para todas as telas
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    paddingHorizontal: 16,
+    paddingBottom: 80,
+  },
+  suporteButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default MyView;

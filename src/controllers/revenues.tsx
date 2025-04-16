@@ -15,8 +15,33 @@ interface iRevenue{
 }
 
 
-// Estado para a lista de receitas
 
+
+
+function toListRevenues(data:iRevenue[]) {
+   const resp : {key:Number,option:string}[]=[]
+
+   data.map((r)=>{
+    resp.push({key: r.id,option: r.name})
+   })
+   return resp
+}
+
+
+
+
+
+async function getRevenues(params:any) {
+    const {data: todos, error} = await supabase.from('revenues').select();
+    
+    if (error)
+        return {status: false, error: error}
+    
+    return {status:true, data: todos}
+    
+}
+
+// aqui estamos carregando os alunos
 
 
 
@@ -37,6 +62,7 @@ async function  setRevenue(revenue:iRevenue ){
     // Validation checks
     if (!idRegex.test(String(revenue.id))) {
         return "Campo id deve conter apenas números";
+        
     }
 
     if (!descriptionRegex.test(revenue.description)) {
@@ -157,4 +183,4 @@ async function updateRevenue(revenue: iRevenue) {
 
 
 
-export {setRevenue, iRevenue, deleteRevenue, updateRevenue }
+export {setRevenue, iRevenue, deleteRevenue, updateRevenue, getRevenues, toListRevenues }
