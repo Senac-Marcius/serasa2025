@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Button, TextInput, Alert } from 'react-native';
-import MyList from '../src/components/MyList';
-import { MyItem } from '../src/components/MyItem';
-import MyView from '../src/components/MyView';
+import MyList from '../../src/components/MyList';
+import { MyItem } from '../../src/components/MyItem';
+import MyView from '../../src/components/MyView';
 import { useRouter } from 'expo-router';
-import {  iCategories, setCategory, updateCategory, deleteCategory, getCategories } from '../src/controllers/category';
+import {  iCategories, setCategory, updateCategory, deleteCategory, getCategories } from '../../src/controllers/category';
 
-import MyButton from '../src/components/MyButtons';
-import {Myinput} from '../src/components/MyInputs';
+import MyButton from '../../src/components/MyButtons';
+import {Myinput} from '../../src/components/MyInputs';
 
 export default function CategoryScreen() {
     const [req, setReq] = useState<iCategories>({
@@ -65,26 +65,15 @@ getTodos();
         if (item) setReq(item);
     }
 
-    // Deletar
-    async function delCategorie(id: number) {
-        Alert.alert('Confirmar', 'Tem certeza que deseja excluir esta categoria?', [
-            {
-                text: 'Cancelar',
-                style: 'cancel'
-            },
-            {
-                text: 'Sim',
-                onPress: async () => {
-                    const ok = await deleteCategory(id);
-                    if (ok) {
-                        const list = categories.filter(i => i.id !== id);
-                        setCategories(list);
-                    } else {
-                        alert('Erro ao deletar do banco');
-                    }
-                }
-            }
-        ]);
+  
+    async function deleteCategories(id:number){
+        const list = categories.filter(c=> c.id != id)
+        if(list){
+            setCategories(list);
+            await deleteCategory(id)
+        } 
+        
+
     }
 
     return (
@@ -97,7 +86,7 @@ getTodos();
                         onChangeText={(text) => setReq({ ...req, name: text })}
                         style={styles.input}
                         iconName=''
-                        label= 'digite o nome da categoria'
+                        label= 'Digite o nome da categoria'
                     />
                     <Myinput
                         placeholder="Descrição"
@@ -105,7 +94,8 @@ getTodos();
                         onChangeText={(text) => setReq({ ...req, description: text })}
                         style={styles.input}
                         iconName=''
-                        label= 'digite o nome da categoria'
+                        label= 'Descrição'
+                        
                     />
                       
                     <MyButton title={req.id === -1 ? "Cadastrar" : "Atualizar"} onPress={handleRegister} />
@@ -117,7 +107,7 @@ getTodos();
                     renderItem={({ item }) => (
                         
                         <MyItem
-                            onDel={() => delCategorie(item.id)}
+                            onDel={() => deleteCategories(item.id)}
                             onEdit={() => editCategorie(item.id)}
                         >
                             <Text style={styles.postText}>{item.name}</Text>

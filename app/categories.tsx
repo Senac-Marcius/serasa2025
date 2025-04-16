@@ -65,26 +65,15 @@ getTodos();
         if (item) setReq(item);
     }
 
-    // Deletar
-    async function delCategorie(id: number) {
-        Alert.alert('Confirmar', 'Tem certeza que deseja excluir esta categoria?', [
-            {
-                text: 'Cancelar',
-                style: 'cancel'
-            },
-            {
-                text: 'Sim',
-                onPress: async () => {
-                    const ok = await deleteCategory(id);
-                    if (ok) {
-                        const list = categories.filter(i => i.id !== id);
-                        setCategories(list);
-                    } else {
-                        alert('Erro ao deletar do banco');
-                    }
-                }
-            }
-        ]);
+  
+    async function deleteCategories(id:number){
+        const list = categories.filter(c=> c.id != id)
+        if(list){
+            setCategories(list);
+            await deleteCategory(id)
+        } 
+        
+
     }
 
     return (
@@ -97,7 +86,7 @@ getTodos();
                         onChangeText={(text) => setReq({ ...req, name: text })}
                         style={styles.input}
                         iconName=''
-                        label= 'digite o nome da categoria'
+                        label= 'Digite o nome da categoria'
                     />
                     <Myinput
                         placeholder="Descrição"
@@ -105,7 +94,9 @@ getTodos();
                         onChangeText={(text) => setReq({ ...req, description: text })}
                         style={styles.input}
                         iconName=''
-                        label= 'digite o nome da categoria'
+                        label= 'digite a descrição do produto'
+                        label= 'Descrição'
+                        
                     />
                       
                     <MyButton title={req.id === -1 ? "Cadastrar" : "Atualizar"} onPress={handleRegister} />
@@ -117,7 +108,7 @@ getTodos();
                     renderItem={({ item }) => (
                         
                         <MyItem
-                            onDel={() => delCategorie(item.id)}
+                            onDel={() => deleteCategories(item.id)}
                             onEdit={() => editCategorie(item.id)}
                         >
                             <Text style={styles.postText}>{item.name}</Text>
