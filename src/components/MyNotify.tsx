@@ -18,6 +18,9 @@ const MyNotify: React.FC<MyNotifyProps> = ({ style, onPress }) => {
     </TouchableOpacity>
 
     //aqui faz a list (puxa do da iris)
+    
+
+
 
   );
 
