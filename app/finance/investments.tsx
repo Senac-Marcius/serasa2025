@@ -7,7 +7,6 @@ import Mylist from '../../src/components/MyList';
 import {MyItem} from '../../src/components/MyItem';
 import MyButton from '../../src/components/MyButtons';
 import Mytext from '../../src/components/MyText';
-import { useRouter } from 'expo-router';
 import { iInvestment, setInvestment, deleteInvestment, updateInvestment } from '../../src/controllers/investments';
 import { supabase } from '../../src/utils/supabase';
 
@@ -38,23 +37,26 @@ export default function investmentScreen(){
     },[])
     
 
+
     async function handleRegister(){
+        console.log('Dados do formulário:', req);
+    
         if(req.id == -1){
             const nId = investments.length ? investments[investments.length - 1].id + 1 : 0;
             const newInvestment = {...req, id: nId };
             setInvestments([...investments, newInvestment]);
-           await setInvestment(newInvestment)
-        }else{
-            setInvestments(investments.map(i => (i.id == req.id ? req : i)));
+        } else {
+            console.log('Atualizando investimento:', req);
             const result = await updateInvestment(req);
-            if(result.error){
-                console.log('Investment updated successfully:', result.error.message);
+            
+            if (result.error) {
+                console.error('Erro ao atualizar investimento:', result.error.message);
                 return;
             }
+    
             setInvestments(investments.map(i => (i.id == req.id ? result : i)));
-
         }
-
+    
         setReq({
             description: '',
             name: '',
@@ -65,6 +67,7 @@ export default function investmentScreen(){
             value: '',
         });
     }
+    
 
     function editInvestment(id:number){
         const investment = investments.find(i => i.id == id);
@@ -83,18 +86,12 @@ export default function investmentScreen(){
         console.log(error)
         }
 }
-    
 
-    const router = useRouter();
-    
     
     return (
-      <MyView router={router} >  
+      <MyView  >  
               {/* Aqui é typescript dentro do front */}
-        
-       
-
-        <Text>Investimentos</Text>
+        <Text style={styles.title}>Investimentos</Text>
         <View style={styles.row}>
             <View style={styles.form}>
             <Myinput
@@ -249,5 +246,18 @@ const styles = StyleSheet.create({
         color: '#000',
       },
 
+      title:{
+        marginBottom: 8,
+        fontSize: 30,
+        fontWeight: "bold", 
+        textAlign: "center",
+        backgroundColor: "#ab66f9",
+        borderRadius: 5,
+        color:'#ffffff',
+        letterSpacing: 1.5,
+        textTransform: "uppercase",
+        textShadowColor: "rgba(0, 0, 0, 0.2)",
+        fontStyle: "italic",
+     },
 })
 
