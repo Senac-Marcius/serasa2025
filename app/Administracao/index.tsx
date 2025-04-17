@@ -2,18 +2,20 @@ import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import MyView from '../../src/components/MyView';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function HomeScreen() {
     const router = useRouter();
 
     const buttons = [
-        { title: 'Funcionários', screen: 'Administracao/employees' },
+        { title: 'Funcionários', screen: 'Administracao/employees?view=table' },
         { title: 'Cargos', screen: 'Administracao/positions' },
         { title: 'Projetos', screen: 'Administracao/projects' },
         { title: 'Escala', screen: 'Administracao/scales' },
     ];
 
     return (
+    <ScrollView>
         <MyView >
             {buttons.map((button, index) => (
                 <TouchableOpacity
@@ -25,6 +27,7 @@ export default function HomeScreen() {
                 </TouchableOpacity>
             ))}
         </MyView>
+    </ScrollView>
     );
 }
 

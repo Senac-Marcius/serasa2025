@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Button, TextInput, Alert } from 'react-native';
-import MyList from '../src/components/MyList';
-import { MyItem } from '../src/components/MyItem';
-import MyView from '../src/components/MyView';
+import MyList from '../../src/components/MyList';
+import { MyItem } from '../../src/components/MyItem';
+import MyView from '../../src/components/MyView';
 import { useRouter } from 'expo-router';
-import {  iCategories, setCategory, updateCategory, deleteCategory, getCategories } from '../src/controllers/category';
+import {  iCategories, setCategory, updateCategory, deleteCategory, getCategories } from '../../src/controllers/category';
 
-import MyButton from '../src/components/MyButtons';
-import {Myinput} from '../src/components/MyInputs';
+import MyButton from '../../src/components/MyButtons';
+import {Myinput} from '../../src/components/MyInputs';
 
 export default function CategoryScreen() {
     const [req, setReq] = useState<iCategories>({
@@ -94,7 +94,6 @@ getTodos();
                         onChangeText={(text) => setReq({ ...req, description: text })}
                         style={styles.input}
                         iconName=''
-                        label= 'digite a descrição do produto'
                         label= 'Descrição'
                         
                     />
