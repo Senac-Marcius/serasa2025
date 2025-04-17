@@ -79,3 +79,4 @@ const styles = StyleSheet.create ({
 })
 
 export default MyUpload;
+//versão atualiizada
