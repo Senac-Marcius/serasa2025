@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Button, TextInput } from 'react-native';
 import MyList from '../src/components/MyList'
-import { MyItem } from '../src/components/MyItem'
+import { MyCorrelated } from '../src/components/MyItem'
 import MyView from '../src/components/MyView'
 import { useRouter } from 'expo-router';
 import { setPost, iPost, delPosts, editPosts, getPosts} from '../src/controllers/posts'
@@ -9,7 +9,8 @@ import MyButton from '../src/components/MyButtons'
 import { Myinput } from '../src/components/MyInputs';
 import {MyModal_mobile3} from '../src/components/MyModal'
 import { Card, Paragraph, Title } from 'react-native-paper';
-
+import { MaterialIcons } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native';
 
 
 export default function postScreen() {
@@ -23,6 +24,9 @@ export default function postScreen() {
     });
 
     const [posts, setPosts] = useState<iPost[]>([])
+
+    const [menuVisible, setMenuVisible] = useState(false);
+    const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
 
     useEffect(() => {
         
@@ -75,6 +79,12 @@ export default function postScreen() {
         }
     }
 
+    function openOptions(id: number) {
+        setSelectedPostId(id);
+        setMenuVisible(!menuVisible);
+    }
+
+
 
     const router = useRouter();
 
@@ -94,6 +104,7 @@ export default function postScreen() {
     }
 
     return (
+        
         <MyView router={router} >
            
             <MyModal_mobile3  visible={visible} setVisible={setVisible}>
@@ -128,23 +139,45 @@ export default function postScreen() {
                     keyItem={(item) => item.id.toString()}
                     renderItem={({ item }) => (
                         
-                        <MyItem
+                        <MyCorrelated
                             style={item.styles}
-                            onDel={() => { delPost(item.id) }}
-                            onEdit={() => { editPost(item.id) }}
+                            showEditButton={false}
+                            showDeleteButton={false}
                         >  
-                            <Card.Cover source={{ uri: item.url }} />
-                            <Card.Content style={{ width: 150, height: 150, borderRadius: 10 }}> {/* tamanho da imagem*/}
-                            <Paragraph>{item.description} </Paragraph> {/* descrição do post*/}
-                            <Paragraph>{item.like} </Paragraph> {/* quantidade de likes*/}
+                            {/* Botão de três pontinhos */}
+                            <TouchableOpacity
+                                style={{ position: 'absolute', top: 10, right: 10, zIndex: 2 }}
+                                onPress={() => openOptions(item.id)}
+                            >
+                                <MaterialIcons name="more-vert" size={24} color="black" />
+                            </TouchableOpacity>
+
+                            {menuVisible && (
+                                <View style={{ backgroundColor: '#c7c7c7', borderBottomLeftRadius: 8, borderBottomRightRadius: 8, borderTopLeftRadius: 8, height: 150, width: 150, alignItems: 'center', justifyContent: 'center', position: 'absolute', padding: 10, top: 10, right: 25, zIndex: 2, gap:10}}>
+                                    <MyButton style={{ justifyContent:'center', width: 130 }} onPress={() => editPost(item.id)} title="Editar"  color="yellow"/>
+                                    <MyButton style={{ justifyContent:'center', width: 130 }} onPress={() => delPost(item.id) } title="Deletar"  color="red" />
+                                </View>
+                            )}
+                        
+                            <Card.Cover source={{ uri: item.url }} /> {/* aqui é a imagem*/}
+                            <Card.Content style={{ width: 150, height: 70, borderRadius: 10 }}> 
+                                <Paragraph>{item.description}</Paragraph>
+                                <Paragraph>{item.like}</Paragraph>
                             </Card.Content>      
-                            <MyButton title='like' button_type='circle'  onPress={() => like(item.id, +1) }/> {/* aqui ele adiciona mais um like e também é o botão*/}
-                            <MyButton title='deslike' button_type='circle'  onPress={() => like(item.id, -1) }/> {/* aqui ele subtrai mais um like e também é o botão*/}
-                        </MyItem>
+
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10 }}>
+                                <MyButton title='like' button_type='circle' onPress={() => like(item.id, +1)} />
+                                <MyButton title='deslike' button_type='circle' onPress={() => like(item.id, -1)} />
+                            </View>
+
+                      </MyCorrelated>
+                      
                         /*final do feed*/
                     )}
                 />
         </MyView>
+
+
 
     );
 }
