@@ -1,29 +1,50 @@
 import React from 'react';
-import { View } from 'react-native';
-import { useState } from 'react';
-import  MyTheme from '../../src/components/MyTheme'
-import  MyView from '../../src/components/MyView'
-import MyLogin from '../../src/components/MyLogin';
-import MyText from '../../src/components/MyText';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { useRouter } from 'expo-router';
+import MyView from '../../src/components/MyView';
 
 export default function HomeScreen() {
     const router = useRouter();
-    const [email, setEmail] = useState('')
-    const [pass, setPass] = useState('')
+
+    const buttons = [
+        { title: 'Funcionários', screen: 'Administracao/employees' },
+        { title: 'Cargos', screen: 'Administracao/positions' },
+        { title: 'Projetos', screen: 'Administracao/projects' },
+        { title: 'Escala', screen: 'Administracao/scales' },
+    ];
 
     return (
-        <MyView router={router} style={{ flex: 1 }}>
-            <MyTheme chendTheme={()=>{}} fontSize={()=>{}}/>
-
-            {/* Conteúdo da Página */}
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <MyLogin email={email} pass={pass} changeEmail={setEmail} changepass={setPass}>
-
-                <MyText>Bem vind@ </MyText>
-
-            </MyLogin>
-            </View>
+        <MyView >
+            {buttons.map((button, index) => (
+                <TouchableOpacity
+                    key={index}
+                    style={styles.button}
+                    onPress={() => router.push(button.screen)}
+                >
+                    <Text style={styles.buttonText}>{button.title}</Text>
+                </TouchableOpacity>
+            ))}
         </MyView>
-    );  
-} 
+    );
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+    },
+    button: {
+        backgroundColor: '#007AFF',
+        padding: 15,
+        borderRadius: 10,
+        marginVertical: 10,
+        width: '100%',
+        alignItems: 'center',
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },})
