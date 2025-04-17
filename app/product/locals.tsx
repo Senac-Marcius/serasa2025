@@ -114,7 +114,7 @@ export default function LocalScreen(){
 
 
                         <MySelect 
-                        label={unity} setLabel={setUnit}  
+                        label={unity} setLabel={setUnit} 
                         list={            
                             [
                                 {key:0, option: 'metros'},             /* exemplo do código de SELECT para copiar */

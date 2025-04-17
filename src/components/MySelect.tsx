@@ -8,7 +8,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 
 
 interface MySelectProps {
-    antDesing: string;
+  
     caption?: string;
     label: string;
     list: {key:any, option:string}[]
@@ -28,46 +28,51 @@ const MySelect: React.FC<MySelectProps> = ({ caption, label, list, setLabel, set
               marginBottom: 5,
               marginLeft: 11,  
           }}>
-                <AntDesign 
+               
+               <AntDesign 
                     name="select1"  //importação de ícones: para ter acesso à eles, IMPORTE: " import AntDesign from '@expo/vector-icons/AntDesign'; " e busque no site:  @expo/vector-icons/AntDesign
                     size={18} 
-                    color="purple" 
-                    style={{  marginLeft: 9,  // Indentação adicional da borda esquerda
+                    color="#6A1B9A" 
+                    style={{  marginLeft: 0.1,  // Indentação adicional da borda esquerda
                     marginRight: 5}}
-                />
-                   
+                />  
 
-                <Text style={{ 
-                    color: '#666', 
+                <Text 
+                
+                style={{ 
+                    color: '#6A1B9A', 
                     fontSize: 16, 
-                    fontWeight: '500' 
+                    fontWeight: '300' 
                 }}>
-                    {caption? caption : 'Selecione abaixo' }
+                    {caption? caption : 'Selecione abaixo:' }
                 </Text>
+
+                
+
           </View>
 
       
           <TouchableOpacity 
               style={{ 
-                  height: 50,
-                  marginHorizontal: 11,
-                  width: 300,
-                  borderRadius: 25,
-                  paddingHorizontal: 15,
+                  height: 44,  //tudo ok
+                  marginHorizontal: 1, //
+                  width: 1353, //
+                  borderRadius: 11,
+                  paddingHorizontal: 15, //
                   backgroundColor: 'white',
-                  borderWidth: 2,
-                  borderColor: 'purple',
-                  shadowColor: 'purple',
-                  shadowOffset: { width: 2, height: 1 },
+                  borderWidth: 0.1, //
+                  borderColor: '#666', //
+                  shadowColor: '#666',
+                  shadowOffset: { width: 0, height: 0 }, ///
                   shadowOpacity: 0.6,
-                  shadowRadius: 4,
+                  shadowRadius: 0, //
                   flexDirection: 'row',
                   alignItems: 'center',
               }} 
               onPress={() => setVisible(!visible)}
           >
               <Text style={{ 
-                  color: '#666666', 
+                  color: '#666', 
                   fontSize: 15,
                   fontWeight: '400',
                   flex: 1,
@@ -84,8 +89,8 @@ const MySelect: React.FC<MySelectProps> = ({ caption, label, list, setLabel, set
           {visible && (
               <FlatList
                   style={{
-                      width: 300,
-                      marginHorizontal: 11,
+                      width: 1353,
+                      marginHorizontal: 1,
                       marginTop: 5,
                       backgroundColor: '#813AB1',
                       borderRadius: 10,
