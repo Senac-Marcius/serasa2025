@@ -146,21 +146,21 @@ export default function postScreen() {
                         >  
                             {/* Botão de três pontinhos */}
                             <TouchableOpacity
-                                style={{ position: 'absolute', top: 10, right: 10, zIndex: 2 }}
+                                style={{ position: 'absolute', top: 10, right: -15, zIndex: 2 }}
                                 onPress={() => openOptions(item.id)}
                             >
                                 <MaterialIcons name="more-vert" size={24} color="black" />
                             </TouchableOpacity>
 
                             {menuVisible && (
-                                <View style={{ backgroundColor: '#c7c7c7', borderBottomLeftRadius: 8, borderBottomRightRadius: 8, borderTopLeftRadius: 8, height: 150, width: 150, alignItems: 'center', justifyContent: 'center', position: 'absolute', padding: 10, top: 10, right: 25, zIndex: 2, gap:10}}>
-                                    <MyButton style={{ justifyContent:'center', width: 130 }} onPress={() => editPost(item.id)} title="Editar"  color="yellow"/>
-                                    <MyButton style={{ justifyContent:'center', width: 130 }} onPress={() => delPost(item.id) } title="Deletar"  color="red" />
+                                <View style={{ backgroundColor: '#c7c7c7', borderBottomLeftRadius: 8, borderBottomRightRadius: 8, borderTopLeftRadius: 8, height: 110, width: 110, alignItems: 'center', justifyContent: 'center', position: 'absolute', padding: 10, top: 10, right: 25, zIndex: 2, gap:10}}>
+                                    <MyButton  width={65} font_size={15} onPress={() => editPost(item.id)} title="Editar"  color="yellow"/>
+                                    <MyButton width={65} font_size={15} onPress={() => delPost(item.id) } title="Deletar"  color="red" />
                                 </View>
                             )}
                         
                             <Card.Cover source={{ uri: item.url }} /> {/* aqui é a imagem*/}
-                            <Card.Content style={{ width: 150, height: 70, borderRadius: 10 }}> 
+                            <Card.Content style={{ width: 150, height: 70, borderRadius: 10}}> 
                                 <Paragraph>{item.description}</Paragraph>
                                 <Paragraph>{item.like}</Paragraph>
                             </Card.Content>      
