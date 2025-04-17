@@ -3,7 +3,7 @@ import { View, StyleSheet, TextStyle } from 'react-native';
 import MyTopbar from './MyTopbar';
 import MySupport from './MySupport';
 import MyAccessibility from './MyAccessibility';
-import { Router } from 'expo-router';
+import {Router } from 'expo-router';
 
 interface MySearchProps {
   children: ReactNode;
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1, 
     position: 'relative',
-    backgroundColor: '#F4F4F4',
+    backgroundColor: '#EDEDED',
   },
   scrollContainer: {
     flex: 1, 
