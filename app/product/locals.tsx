@@ -1,13 +1,13 @@
 import React, { useState, useEffect} from 'react'; 
 import { Text, TextStyle, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, View  } from 'react-native';
-import MySelect from '../src/components/MySelect'
-import MyView from '../src/components/MyView';
-import MyList from '../src/components/MyList';
-import {MyItem} from '../src/components/MyItem';
-import { Myinput } from '../src/components/MyInputs';
-import MyButton  from '../src/components/MyButtons';
+import MySelect from '../../src/components/MySelect'
+import MyView from '../../src/components/MyView';
+import MyList from '../../src/components/MyList';
+import {MyItem} from '../../src/components/MyItem';
+import { Myinput } from '../../src/components/MyInputs';
+import MyButton  from '../../src/components/MyButtons';
 import { useRouter } from 'expo-router';
-import {setLocal, iLocal, deleteLocal, updateLocal, getLocals} from '../src/controllers/locals'
+import {setLocal, iLocal, deleteLocal, updateLocal, getLocals} from '../../src/controllers/locals'
 
 export default function LocalScreen(){
 
@@ -111,17 +111,18 @@ export default function LocalScreen(){
                                     
                         />
 
-                    
-                      
+
+
                         <MySelect 
-                        label={unity} setLabel={setUnit}  
+                        label={unity} setLabel={setUnit} 
                         list={            
                             [
                                 {key:0, option: 'metros'},             /* exemplo do código de SELECT para copiar */
                                 {key:1, option: 'cm'},
-
                             ]
-                        } />  
+                        } />
+
+
 
                         <Myinput
                         iconName='description'
