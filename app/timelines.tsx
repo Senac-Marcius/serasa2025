@@ -12,6 +12,7 @@ import MyList from '../src/components/MyList';
 import { MyItem } from '../src/components/MyItem';
 import Mytext from '../src/components/MyText';
 import MyTimerPicker from '../src/components/MyTimerPiker';
+import { text } from 'stream/consumers';
 
 export default function TimelineScreen() {
   const [req, setReq] = useState({
@@ -94,11 +95,14 @@ export default function TimelineScreen() {
 
   return (
     <MyView router={router}>
+
+      <Text style={styles.text}> Meu Cronograma</Text>
       <MySearch
-        style={{ marginTop: 20 }}
+        style={{ marginTop: 10 }}
         onChangeText={setBusca}
         onPress={buscar}
         busca={busca}
+        
       />
 
       {/* Componente de calendário */}
@@ -116,7 +120,7 @@ export default function TimelineScreen() {
         initialTime={req.start_time}
       />
 
-      <Text style={styles.header}>Meu Cronograma</Text>
+      
 
       <View style={styles.row}>
         <View style={styles.form}>
@@ -258,4 +262,17 @@ const styles = StyleSheet.create({
     marginBottom: 3,
     
   },
+  text:{               
+    marginBottom: 8,
+    fontSize: 40,
+    fontWeight: "bold", 
+    textAlign: "center",
+    backgroundColor: "#ab66f9",
+    borderRadius: 5,
+    color:'#ffffff',
+    letterSpacing: 1.5,
+    textTransform: "uppercase",
+    textShadowColor: "rgba(0, 0, 0, 0.2)",
+    fontStyle: "italic",
+ },
 });
