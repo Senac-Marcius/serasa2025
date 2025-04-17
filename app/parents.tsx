@@ -79,17 +79,17 @@ export default function ParentScreen (){
     }
 
     async function delParentL(id: number) {
-        const error = await delParent (id)
-        if (!error) {
-            const list = parents.filter(r => r.id != id)
-            setParents(list)
-        } else {
-            console.error('Erro ao deletar:', error);
-        }
+        const { error } = await supabase.from('parents').delete().eq('id', id);
+               if (!error) {
+                   const list = parents.filter(p => p.id != id)
+                   setParents(list)
+               } else {
+                   console.error('Erro ao deletar:', error);
+               }
     }
     
     function editParentL(id: number) {
-        const parent = parents.find(r => r.id === id);
+        const parent = parents.find(p => p.id === id);
         if (parent) {
             setReq(parent);
         }
