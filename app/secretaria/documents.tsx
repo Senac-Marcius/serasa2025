@@ -71,7 +71,7 @@ export default function DocumentsScreen() {
 
       <MyDocument type='teste' user_id={5}></MyDocument>
       
-      <View style={styles.viewStyle}>
+      {/*<View style={styles.viewStyle}>
         
         <View style={styles.viewCabeçalho}>
           <Mytext style={styles.titulo}>Solicitação de Documentos</Mytext>
@@ -101,7 +101,7 @@ export default function DocumentsScreen() {
         
         <MyButton title={req.id != -1 ? "Atualizar":"Cadastrar"} color={'#813AB1'} onPress={handleRegister} button_type="rect" />
         
-      </View>
+      </View>*/}
       
             
 
