@@ -29,7 +29,6 @@ export default function CollectionScreen() {
 
     useEffect(() =>{
         async function getTodos(){
-
             const retorno =await getCollections({})
             
             if (retorno.status && retorno.data && retorno.data.length>0){
