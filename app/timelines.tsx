@@ -14,6 +14,9 @@ import Mytext from '../src/components/MyText';
 import MyTimerPicker from '../src/components/MyTimerPiker';
 import { text } from 'stream/consumers';
 import { Icon } from 'react-native-paper';
+import { getDisciplines, iDisciplines } from '../src/controllers/disciplines';
+
+
 
 
 export default function TimelineScreen() {
@@ -33,6 +36,8 @@ export default function TimelineScreen() {
   const [busca, setBusca] = useState('');
   const router = useRouter();
   const [filtro, setFiltro] = useState('');
+  const [disciplines, setDisciplines] = useState<iDisciplines[]>([]);
+  
 
   // Buscar os cronogramas ao carregar o componente
   useEffect(() => {
@@ -41,14 +46,24 @@ export default function TimelineScreen() {
       if (todos && todos.length > 0) {
         setTimelines(todos);
       }
+  
+      const result = await getDisciplines({});
+      if (result.status) {
+        setDisciplines(result.data as iDisciplines[]);
+      } else {
+        console.log('Erro ao buscar disciplinas:', result.data);
+      }
+  
       if (error) {
         console.error("Erro ao buscar os cronogramas:", error);
       }
     })();
   }, []);
+  
 
   // Função para registrar um novo cronograma ou editar um existente
   async function handleRegister() {
+    
     if (req.id === -1) {
       // Criar novo cronograma
       const newId = timelines.length ? timelines[timelines.length - 1].id + 1 : 0;
@@ -57,8 +72,8 @@ export default function TimelineScreen() {
       await setTimeline(newTimeline);
     } else {
       // Atualizar cronograma existente
-      setTimelines(timelines.map((item) => (item.id === req.id ? req : item)));
-      await editTimelinesDoController(req.id, req);
+      setTimelines(timelines.map(T => (T.id === req.id ? req : T)));
+      await editTimelinesDoController(req);
     }
 
     // Limpar o formulário após o registro
@@ -77,12 +92,11 @@ export default function TimelineScreen() {
 
   // Função para editar um cronograma - Preenche o formulário com os dados existentes
   function editTimelines(id: number) {
-    const timeline = timelines.find((t) => t.id === id);
+    const timeline = timelines.find(T =>T.id == id);
     if (timeline) {
       setReq(timeline);
     }
-  }
-
+  };
   // Função para deletar um cronograma
   async function delTimelines(id: number) {
     const result = await delTimelinesDoController(id); // Chama o controller para deletar
@@ -98,22 +112,73 @@ export default function TimelineScreen() {
 
   return (
     <MyView router={router}>
-
+      <View style={{ flexDirection: 'row', flex: 1, backgroundColor: '#f0f2f5' }}>
+        <View style={{ flex: 1, backgroundColor: '#f0f2f5' }}>
+          <View style={{ padding: 20 }}>
+             <View style={styles.headerRow}>
+              <Text style={styles.title}>Disciplinas</Text>
+              <MyButton title='Nova disciplina' icon='plus' onPress={handleRegister }/>
+              
+             </View>
+          </View>
+        </View>
+      </View>
+      
       <Text style={styles.text}> Meu Cronograma</Text>
           <View style={styles.searchWrapper}>
               <TextInput
-                placeholder=""
+                placeholder="Busque o Professor"
                 value={filtro}
                 onChangeText={setFiltro}
                 style={styles.searchInput}
                 placeholderTextColor="#999"
               />
-              
-              
+             
+                
             </View>
-        
-        
-      
+
+            <View style={styles.table}>
+  <View style={styles.tableRowHeader}>
+    <Text style={styles.th}>Disciplina</Text>
+    <Text style={styles.th}>Professor</Text>
+    <Text style={styles.th}>Local</Text>
+    <Text style={styles.th}>Turma</Text>
+    <Text style={styles.th}>Carga</Text>
+    <Text style={styles.th}>Ações</Text>
+  </View>
+
+  {timelines
+  ?.filter((item) => {
+  
+    const disciplina = disciplines.find((d) => d.id === Number(item.discipline_id));
+    return disciplina?.name?.toLowerCase().includes(filtro.toLowerCase());
+  })
+  .map((item) => {
+    const disciplina = disciplines.find((d) => d.id === Number(item.discipline_id));
+
+    return (
+      <View style={styles.tableRow} key={item.id}>
+        <Text style={styles.td}>{disciplina?.name || '-'}</Text>
+        <Text style={styles.td}>{disciplina?.teacher || '-'}</Text>
+        <Text style={styles.td}>{item.local_id}</Text>
+        <Text style={styles.td}>{item.class_id}</Text>
+        <Text style={styles.td}>{disciplina?.workload ? disciplina.workload + 'h' : '-'}</Text>
+        <View style={styles.actions}>
+          <TouchableOpacity onPress={() => editTimelines(item.id)}>
+            <Text style={styles.edit}>Editar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => delTimelines(item.id)}>
+            <Text style={styles.del}>Excluir</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  })}
+
+ 
+
+</View>
+
 
       {/* Componente de calendário */}
       <MyCalendar date={req.date} setDate={(date) => setReq({ ...req, date: date })} icon=""
