@@ -14,6 +14,7 @@ import MySelect from '../../src/components/MySelect';
 
 export default function RevenueScreen() {
   
+  
   // Estado para o formulário
   const [req, setReq] = useState({
     id: -1,
@@ -23,7 +24,7 @@ export default function RevenueScreen() {
     created_at: new Date().toISOString(),
     user_id: 1,
     value: '',
-    scholarship_status: '',
+    scholarship_status: '02- Inativo',
     discount_percentage: '',
     
 
@@ -84,7 +85,7 @@ useEffect(()=>{
       created_at: new Date().toISOString(),
       user_id: 1,
       value: '',
-      scholarship_status: '',
+      scholarship_status: '02- Inativo',
       discount_percentage: '',
     });
     setVisible(false);
@@ -115,7 +116,7 @@ useEffect(()=>{
     }
 }
 
-   const [unity, setUnit] = useState()  
+   
   
   return (
 
@@ -126,6 +127,7 @@ useEffect(()=>{
 
       {/* Formulário */}
       <View style={styles.row}>
+        
         <MyModal_mobilefullscreen visible={visible} setVisible={setVisible}>
         <View style={styles.form}>
             {/* Campo de Nome */}
@@ -139,12 +141,11 @@ useEffect(()=>{
 
             {/* Campo de Status da Bolsa */}
             <MySelect 
-              label={ 'Status da Bolsa'} 
-            
+              label={ req.scholarship_status } 
               setLabel={(text) => setReq({ ...req, scholarship_status: text })}
               list={[
-                {key: 0, option: 'ativo'},
-                {key: 1, option: 'inativo'},
+                {key: 0, option: '01- Ativo'},
+                {key: 1, option: '02- Inativo'},
               ]}
             />
 
