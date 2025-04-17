@@ -14,6 +14,7 @@ import { TextInput } from 'react-native';
 
 
 import MySelect from '../../src/components/MySelect';
+import MySearch from '../../src/components/MySearch';
 
 export default function RevenueScreen() {
   
@@ -32,7 +33,7 @@ export default function RevenueScreen() {
     
 
   });
-  const [searchTerm, setSearchTerm] = useState('');
+const [searchTerm, setSearchTerm] = useState('');
 const[visible, setVisible] = useState(false);
 const [revenues, setRevenues] = useState<iRevenue[]>([]);
 
@@ -118,14 +119,28 @@ useEffect(()=>{
       
     }
 }
+// logica do compo
 const getFilteredRevenues = () => {
   if (!searchTerm) return revenues; // Retorna tudo se não houver busca
   
-  return revenues.filter(item => 
-    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.value.toString().includes(searchTerm)
-  );
+  const term = searchTerm.toLowerCase();
+  
+  return revenues.filter(item => {
+    // Converte o desconto para string e trata o símbolo %
+    const discountStr = item.discount_percentage?.toString() || '';
+    const discountPercent = discountStr ? `${discountStr}%` : '';
+    
+    return (
+      item.name?.toLowerCase().includes(term) ||
+      item.description?.toLowerCase().includes(term) ||
+      item.value?.toString().includes(searchTerm) || // Mantém sem lowercase para números
+      item.id?.toString().includes(searchTerm) ||
+      item.url?.toLowerCase().includes(term) ||
+      item.scholarship_status?.toLowerCase().includes(term) ||
+      discountStr.includes(searchTerm) || // Busca o número cru (25)
+      discountPercent.includes(searchTerm) // Busca o formato com % (25%)
+    );
+  });
 };
    
   
@@ -133,19 +148,16 @@ const getFilteredRevenues = () => {
 
     <MyView >
       <Mytext style={styles.title}>
-         cadastre as receitas
+         💰cadastre as receitas
       </Mytext>
 
-      <View style={styles.searchWrapper}>
-      <TextInput
+    <MySearch
+       style={styles.searchInput}
+       onChangeText={setSearchTerm}
+        onPress={()=> {setSearchTerm(searchTerm)}}
+        busca={searchTerm}
         placeholder="Buscar receitas..."
-        value={searchTerm}
-        onChangeText={setSearchTerm}
-        style={styles.searchInput}
-        placeholderTextColor="#999"
-      />
-      <Icon name="magnify" size={20} color="#999" style={styles.searchIcon} />
-    </View>
+    />
 
 
 
@@ -225,7 +237,7 @@ const getFilteredRevenues = () => {
            
               onEdit={() => { editRevenue(item.id) }} 
               onDel= {() => { delRevenue(item.id) }}
-              style={{gap:10}}
+              style={{gap:8}}
 
             >
               <Mytext style={styles.revenueText}>Nome: {item.name}</Mytext>
