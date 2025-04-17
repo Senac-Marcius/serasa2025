@@ -7,7 +7,7 @@ export default function HomeScreen() {
     const router = useRouter();
 
     const buttons = [
-        { title: 'Funcionários', screen: 'Administracao/employees' },
+        { title: 'Funcionários', screen: 'Administracao/employees?view=table' },
         { title: 'Cargos', screen: 'Administracao/positions' },
         { title: 'Projetos', screen: 'Administracao/projects' },
         { title: 'Escala', screen: 'Administracao/scales' },
