@@ -244,8 +244,8 @@ const styles = StyleSheet.create({
 
     },
     delButton:{ backgroundColor:'#f44336',
-        padding:10,
-        borderRadius:5,
+        padding: 10,
+        borderRadius: 5,
         alignItems:'center',
         justifyContent:'center',
 
