@@ -15,6 +15,7 @@ export interface iRecord {
     medication: string,
     user_id: number,
     create_at: string,
+    level_id: number,
 
 }  
 
@@ -71,6 +72,7 @@ export async function updateRecord(record: iRecord) {
             allergy: record.allergy,
             medication: record.medication,
             user_id: record.user_id,
+            level_id: record.level_id, 
         })
         .eq('id', record.id);
 

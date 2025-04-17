@@ -9,36 +9,54 @@ import MyList from '../../src/components/MyList';
 import {setRecord, iRecord, getRecords } from '../../src/controllers/records'
 import { supabase } from '../../src/utils/supabase';
 import Mytext from '../../src/components/MyText';
-import levels from '../apoio/levels';
+import { getLevels } from '../../src/controllers/levels';
 import MySelect from '../../src/components/MySelect';
+import { getUsers } from '../../src/controllers/users';
 
 export default function RecordScreen() {
     const [isChecked, setIsChecked] = useState(true);
 
     const [levels, setLevels] = useState<any[]>([]);
 
+    const [users, setUsers] = useState<any[]>([]);
+
     const [records, setRecords] = useState<iRecord[]>([]);
     
     useEffect (() => {
-        async function getTodos() {
+        (async () => {
             const retorno = await  getRecords ({})
             if (retorno.status && retorno.data && retorno.data.length > 0){
                 setRecords(retorno.data);
 
             }   
-        }
+        })();
 
-        async function getLevels() {
-            const { data, error } = await supabase.from('levels').select('*')
-            if (error) {
-                console.error('Erro ao buscar levels:', error)
-            } else {
-                setLevels(data)
-            }
-        }
+        (async () => {
+            const retorno = await  getLevels ({})
+            if (retorno.status && retorno.data && retorno.data.length > 0){
+                const ls: any[] = []
 
-        getLevels();
-        getTodos();
+                retorno.data.map((l) => {
+                    ls.push({key: l.id, option: l.name})
+                })
+
+                setLevels(ls);
+            }   
+        })();
+
+        (async () => {
+            const retorno = await  getUsers ({})
+            if (retorno.status && retorno.data && retorno.data.length > 0){
+                const ls: any[] = []
+
+                retorno.data.map((l) => {
+                    ls.push({key: l.id, option: l.name})
+                })
+
+                setUsers(ls);
+            }   
+        })();
+
 
     })
 
@@ -53,6 +71,7 @@ export default function RecordScreen() {
         allergy: '',
         medication: '',
         user_id: 0,
+        level_id: 0,
         create_at: new Date().toISOString(),
     });
 
@@ -81,16 +100,7 @@ export default function RecordScreen() {
 
                 } else {
                     const { error } = await supabase.from('records')
-                        .update({
-                            name: req.name,
-                            cpf: req.cpf,
-                            description: req.description,
-                            sick: req.sick,
-                            health: req.health,
-                            allergy: req.allergy,
-                            medication: req.medication,
-                            user_id: req.user_id,
-                        })
+                        .update(req)
                         .eq('id', req.id);
             
                     if (!error) {
@@ -111,6 +121,7 @@ export default function RecordScreen() {
                     allergy: '',
                     medication: '',
                     user_id: 0,
+                    level_id: 0,
                     create_at: new Date().toISOString(),
                 })
             }
@@ -204,16 +215,19 @@ export default function RecordScreen() {
                     />
 
                     <MySelect
-                    label={unity} setLabel={setUnit}  
-                    list={            
-                        [
-                            {key:0, option: 'VERDE'},             
-                            {key:1, option: 'AMARELO'},
-                            {key:2, option: 'VERMELHO'},
+                        label={ levels.find(l => l.id == req.level_id) }
+                        setLabel={ () => {}}
+                        setKey={ (key)=> setReq ({...req, level_id: key }) }  
+                        list={levels} 
+                    />   
 
-                        ]
-                    } 
-                    />       
+                    <MySelect
+                        label={ users.find(l => l.id == req.user_id) }
+                        setLabel={ () => {}}
+                        setKey={ (key)=> setReq ({...req, user_id: key }) }  
+                        list={users} 
+                    />   
+                        
 
                     <MyButton
                         title="CADASTRAR"
