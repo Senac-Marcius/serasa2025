@@ -17,6 +17,7 @@ export default function productScreen(){
     const [req, setReq] = useState({
         description:'',
         name:'',
+        amount: 0,
         id: -1,
         create_at:  new Date().toISOString(),
         user_id: 6,
@@ -55,6 +56,7 @@ export default function productScreen(){
         setReq({
             description: '',
             name: '',
+            amount: 0,
             id: -1,
             create_at: new Date().toISOString(),
             user_id: 6
@@ -100,6 +102,13 @@ export default function productScreen(){
                     iconName='description' 
                     />
 
+                    <Myinput 
+                    placeholder= "Quantidade"
+                    value={ String(req.amount) }
+                    onChangeText={(text)=>setReq({...req, amount: Number(text) })}
+                    label= 'Quantidade'
+                    iconName='123' 
+                    />
                     <MyButton style={styles.cadastrar} onPress={handleRegister} title='Cadastrar'/>
                 </View>
 
@@ -116,6 +125,7 @@ export default function productScreen(){
                         >
                             <Text>{item.name}</Text>
                             <Text>{item.description}</Text>
+                            <Text>{item.amount}</Text>
                             <Text>{new Date(item.create_at).toLocaleString()}</Text>
                             <Text>{item.user_id}</Text>
                         </MyItem>
@@ -162,12 +172,13 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
     },
     h2: {
-        fontSize: 25,
+        fontSize: 40,
         textAlign: 'center',
         marginRight: 10,
         padding: 20,
         backgroundColor: '#F2F2F2',
         borderRadius: 10,
+        
         
         
     },

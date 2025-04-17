@@ -87,6 +87,7 @@ async function deleteDocument(id: number) {
   }
 }
 
-export {insertDocument, updateDocument, deleteDocument,  iDoc}
+export {insertDocument, updateDocument, deleteDocument,  iDoc}//toListDocument
 
+//criar uma branch temporária, a partir da dev, juntar com essa dev e depois juntar com a dev principal
           
