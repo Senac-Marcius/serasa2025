@@ -94,6 +94,7 @@ export default function documentRegister( ){
                     { key: 'atestado', option: 'Atestado' },
                     { key: 'declaração', option: 'Declaração' },
                     { key: 'histórico', option: 'Histórico' },
+                    { key: 'teste', option: 'Teste' },
                 ]}  
             />
 
