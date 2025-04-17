@@ -9,13 +9,21 @@ interface MyNotifyProps {
 
 const MyNotify: React.FC<MyNotifyProps> = ({ style, onPress }) => {
   return (
+   
     <TouchableOpacity
-      style={[styles.notifyButton, style]}
-      onPress={onPress || (() => console.log('Abrir notificações'))}
-    >
-      <Ionicons name="notifications" size={20} color="#fff" />
+    style={[styles.notifyButton, style]}
+    onPress={onPress || (() => console.log('Abrir notificações'))} //tirar essa parte
+  >
+      <Ionicons name="notifications" size={20} color= "#fff" />
     </TouchableOpacity>
+
+    //aqui faz a list (puxa do da iris)
+    
+
+
+
   );
+
 };
 
 const styles = StyleSheet.create({
@@ -27,6 +35,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
+  switch: {
+    borderRadius: 20, //Força bordas arredondadas
+    overflow: 'hidden', //Impede que o navegador sobrescreva estilos
+},
+
 });
 
 export default MyNotify;
