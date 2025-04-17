@@ -270,9 +270,9 @@ const styles = StyleSheet.create({
     
   },
   revenueText: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#000000',
-    marginBottom: 5,
+    marginBottom: 3,
     
   },
   title:{               

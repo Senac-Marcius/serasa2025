@@ -37,19 +37,7 @@ const MyItem: React.FC<MyItemProps> = ({ children, style, onEdit, onDel }) => {
         );
 }
 
-const MyCorrelated: React.FC<MyCorrelatedprops> = ({ children, style, onEdit, onDel, relatedItems, showEditButton = true, showDeleteButton = true }) => {
-  return(
-    <TouchableOpacity style={[style? style:'',  styles.card]}>
-      {children}
-      <View >
-      {showEditButton &&
-        <MyButton style={{ justifyContent:'center'}} onPress={onEdit} title="Editar" />}
-        {showDeleteButton &&
-        <MyButton style={{ justifyContent:'center'}} onPress={onDel} title="Deletar" />}
-      </View>
-    </View>
-  );
-};
+
 
 const MyCorrelated: React.FC<MyCorrelatedProps> = ({children,style,onEdit,onDel,relatedItems,showEditButton = true,showDeleteButton = true,}) => {
   return (
