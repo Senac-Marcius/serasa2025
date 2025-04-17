@@ -60,6 +60,8 @@ const parseCurrencyInput = (text: string): number => {
         
     });
 
+    const [idUs, setidUs] = useState<number[]>([])
+
     useEffect(() => {
         (async () => {
             async function getTodos(){
@@ -69,6 +71,8 @@ const parseCurrencyInput = (text: string): number => {
                 }
             }
             getTodos()
+
+            /* Chamar o get do users para mostrar na caixa de seleção pelo nome do usuario  */
     
           
         })();
@@ -90,7 +94,7 @@ const parseCurrencyInput = (text: string): number => {
         
         if(req.id == -1){ //aqui é quando esta cadastrando
             const newid = projects.length ? projects[projects.length -1].id + 1 : 0;
-            const newProjects = { ...req, id: newid };
+            const newProjects = { ...req, id: newid, integrantes };
 
             console.log("Cadastrando no Supabase:", newProjects);
 
@@ -98,7 +102,7 @@ const parseCurrencyInput = (text: string): number => {
             await setProject(newProjects)
         
         }else{ //aqui é quando esta editando id esta maior do que -1
-            const updatedProject = { ...req, recurces: recurcesValue };
+            const updatedProject = { ...req, recurces: recurcesValue, integrantes };
             setProjects(projects.map(jTNL => (jTNL.id == req.id)? req : jTNL ));
             await updateProject(req); 
         }
@@ -201,30 +205,65 @@ const parseCurrencyInput = (text: string): number => {
 
                         <Mytext style={styles.label}>Integrantes do Projeto:</Mytext>
                         {integrantes.map((nome, index) => (
-                        <View key={index} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+                        <View
+                            key={index}
+                            style={{ 
+                                flexDirection: 'row', 
+                                alignItems: 'center', 
+                                marginBottom: 12,
+                                gap: 8,
+                             }}
+                        >
                             <Myinput
                             placeholder={`Integrante ${index + 1}`}
                             value={nome}
                             onChangeText={(text) => atualizarIntegrante(index, text)}
                             iconName=""
                             label=""
-                            style={{ flex: 1, marginRight: 10 }}
+                            style={{ 
+                                flex: 1,
+                                paddingHorizontal: 12,
+                                paddingVertical: 10,
+                            }}
                             />
+
+                            
+                            <TouchableOpacity
+                            onPress={() => {
+                                const novos = [...integrantes];
+                                novos.splice(index, 1);
+                                setIntegrantes(novos);
+                            }}
+                            style={{
+                                backgroundColor: '#ff4d4f',
+                                borderRadius: 100,
+                                width: 36,
+                                height: 36,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                            >
+                            <Mytext style={{ color: '#fff', fontSize: 18 }}>–</Mytext>
+                            </TouchableOpacity>
+                            
+                            
+                            {index === integrantes.length - 1 && (
+                            <TouchableOpacity
+                                onPress={adicionarIntegrante}
+                                style={{
+                                    backgroundColor: '#28a745',
+                                    borderRadius: 100,
+                                    width: 36,
+                                    height: 36,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <Mytext style={{ color: '#fff', fontSize: 20 }}>+</Mytext>
+                            </TouchableOpacity>
+                            )}
                         </View>
                         ))}
-
-                        <TouchableOpacity
-                        onPress={adicionarIntegrante}
-                        style={{
-                            backgroundColor: '#007bff',
-                            padding: 10,
-                            borderRadius: 8,
-                            alignItems: 'center',
-                            marginVertical: 10,
-                        }}
-                        >
-                        <Mytext style={{ color: '#fff', fontWeight: 'bold' }}>+ Adicionar Integrante</Mytext>
-                        </TouchableOpacity>
 
 
                         <Mytext style={styles.label}> Nome do projeto: </Mytext>
@@ -350,6 +389,8 @@ const parseCurrencyInput = (text: string): number => {
                                     style={{ height: 50 }}
                                 />
 
+                                {/* <>Fazer um botão que ao clicar ele abre a caixa de seleção do usuario e quando clico no usuario ele adioca ao meu users </>*/}
+
                             </View>
 
                         <View style={styles.buttonContainer}> 
@@ -372,6 +413,7 @@ const parseCurrencyInput = (text: string): number => {
                                 <View style={styles.projectGroup}>
                                 <Mytext style={styles.projectLabel}>👤 Criador:</Mytext>
                                 <Mytext style={styles.projectText2}>{item.name}</Mytext>
+
                                 </View>
 
                                 <View style={styles.projectGroup}>

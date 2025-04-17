@@ -11,6 +11,7 @@ import { useRouter } from 'expo-router';
 import { setEmployee,iEmployees,updateEmployee,dellEmployee,getEmployees,toListEmployees } from '../../src/controllers/employees';
 import { supabase } from '../../src/utils/supabase';
 import MyCalendar from '../../src/components/MyCalendar';
+import { useLocalSearchParams } from 'expo-router';
 
 
 export default function EmployeeScreen(){
@@ -18,6 +19,12 @@ export default function EmployeeScreen(){
     const router = useRouter();
     let action = ""
 //aqui é typescript 
+const params = useLocalSearchParams();
+const viewParam = params.view as 'form' | 'table' | undefined;
+let hidden = 'flex'
+const [currentView, setCurrentView] = useState<'form' | 'table' | null>(
+    viewParam || null
+);
     const [req, SetReq] = useState({
         id: -1,
         urls:'',
@@ -50,10 +57,15 @@ export default function EmployeeScreen(){
                     setEmployees(retorno.data);
                 }
             }
+            
             getTodos()
           
         })();
-      }, [])
+        if (viewParam) {
+            setCurrentView(viewParam);
+            hidden = 'none'
+          }
+        }, [viewParam]);
    
 
        async function handleRegister(){
@@ -104,14 +116,24 @@ export default function EmployeeScreen(){
     
         }
 
-    
+    console.log(params)
 
     return(
-        <ScrollView>
+    <ScrollView>
+        <View style={[{ display: 'none' }]}>
+        
+          <MyButton
+            title='Alterar dados de Funcionários'
+            onPress={() => setCurrentView('form')}
+          />
+          <MyButton
+            title='Lista de Funcionários'
+            onPress={() => setCurrentView('table')}
+          />
+        </View>
         <MyView router={router}>
             {/* aqui é typescript dentro da front*/}
-            <Text>Cadastro de Funcionários</Text>
-            
+           {currentView === 'form' && ( 
             <View style={style.row}>
                 <View  style={style.form}>
                     <Myinput
@@ -179,26 +201,32 @@ export default function EmployeeScreen(){
                     
                    <MyButton title={action} button_type ='round'  onPress={handleRegister}/>
                 </View>
+                </View>
+                )}
                 
-                
-                <MyList
+                {currentView === 'table' && (
+                <View>
+                    <MyList style={style.itemContainer}
                     data={employees}
                     keyItem={(item)=> item.id.toString() }
                     renderItem = {({item}) => (
                 
-                        <MyItem style={style.itemText}
+                        <MyItem 
                          onDel={() => {deleteEmployee(item.id)}}
-                         onEdit={() => {editEmployee(item.id)}}
+                         onEdit={() => {editEmployee(item.id),setCurrentView('form')}}
                         >
                         Nome:{item.ethnicity} / Cargo:{item.positions_id}
                         ativo desde de:{item.is_active}
                         </MyItem>
-                    )}
-                />
                 
-            </View>      
-        </MyView>
-       
+                    )}
+                    />
+                </View>)}    
+                
+               
+                
+                      
+        </MyView>   
     </ScrollView>    
     );
 
