@@ -2,8 +2,9 @@ import React, { ReactNode, useState } from 'react';
 import { View, StyleSheet, TextStyle, ScrollView } from 'react-native';
 import MyTopbar from './MyTopbar';
 import MySupport from './MySupport';
+import MyAccessibility from './MyAccessibility';
+import { Router } from 'expo-router'; // Importando o Router do expo-router
 import MyMenu from './MyMenu';
-import { Router } from 'expo-router';
 
 interface MySearchProps {
   children: ReactNode;
@@ -52,7 +53,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 80,
   },
-
+  suporteButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   
   
 });
