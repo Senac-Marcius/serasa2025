@@ -15,6 +15,16 @@
       userid: number,
   }
 
+  export function toListparent (data: iParent[]){
+    //const resp = {key:Number,Option: string}
+    const resp: {key:number, option: string}[]=[];
+
+    data.map((p) => {
+        resp.push({ key: p.id,option:p.name})
+    })
+    return resp
+  }
+
 
   export async function getTimeParents(parents: any){
     const {data: todos,error} = await supabase.from('parents').select()

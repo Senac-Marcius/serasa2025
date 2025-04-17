@@ -1,6 +1,11 @@
-
 import React, { useState } from "react";
-import { TouchableOpacity, Text, StyleSheet, ViewStyle,View } from "react-native";
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  View,
+} from "react-native";
 import { Icon } from "react-native-paper";
 
 type Button_type =
@@ -9,11 +14,13 @@ type Button_type =
   | "circle"
   | "rect"
   | "capsule"
-  | "loading";
+  | "loading"
+  | "edit"
+  | "delete";
 
 interface MyButtonProps {
   title?: string;
-  bottom_text?:string;
+  bottom_text?: string;
   onPress?: () => void;
   button_type?: Button_type;
   icon?: string;
@@ -23,9 +30,9 @@ interface MyButtonProps {
   color?: string;
   width?: number;
   height?: number;
-  font_size?:number;
-  text_color?:string;
-  gap?:number;
+  font_size?: number;
+  text_color?: string;
+  gap?: number;
 }
 
 function getButtonType(button_type: Button_type): any {
@@ -40,6 +47,10 @@ function getButtonType(button_type: Button_type): any {
       return styles.button_rect;
     case "loading":
       return styles.button_rect;
+    case "edit":
+      return styles.button_edit;
+    case "delete":
+      return styles.button_delete;
     default:
       return styles.button_default;
   }
@@ -53,43 +64,62 @@ const MyButton: React.FC<MyButtonProps> = ({
   color = "#813AB1",
   icon,
   style,
-  font_size = 16,
+  font_size = 14,
   text_color = "white",
-  iconSize = 30,
-  gap = 10,
+  iconSize = 20,
+  gap = 6,
   iconColor = "white",
-  height = button_type == "circle" ? 50 : 50,
-  width = button_type == "circle" ? 50 : 190,
+  height,
+  width,
 }) => {
   const [loading, setLoading] = useState(false);
 
   function onPressIntenal() {
-    if (button_type == "loading") {
+    if (button_type === "loading") {
       setLoading(true);
       setTimeout(() => {
-        () => {
-          onPress && onPress();
-        };
+        onPress && onPress();
         setLoading(false);
       }, 2000);
     } else {
-      onPress != undefined ? onPress() : "";
-      setLoading(true);
+      onPress && onPress();
     }
   }
-  return (<View style={{alignContent:"center", justifyContent:"center"}}>
-    <TouchableOpacity
-      style={[
-        getButtonType(button_type),
-        style,
-        { backgroundColor: color, height: height, width: width,gap:gap,},
-      ]}
-      onPress={onPressIntenal}
-    >
-      {icon && <Icon size={iconSize} source={icon} color={iconColor}></Icon>}
-      {title && <Text style={{ fontSize: font_size, color: text_color }}>{title}</Text>}
-    </TouchableOpacity>
-    {bottom_text && <Text  style={{ fontSize: font_size, color: text_color, textAlign:"center" , fontWeight:"bold" }}>{bottom_text}</Text>}
+
+  return (
+    <View>
+      <TouchableOpacity
+        style={[
+          getButtonType(button_type),
+          style,
+          {
+            backgroundColor: color,
+            height: height ?? undefined,
+            width: width ?? undefined,
+            gap: gap,
+          },
+        ]}
+        onPress={onPressIntenal}
+      >
+        {icon && <Icon size={iconSize} source={icon} color={iconColor} />}
+        <Text style={[styles.button_text, { fontSize: font_size, color: text_color }]}>
+          {title}
+        </Text>
+      </TouchableOpacity>
+
+      {bottom_text && (
+        <Text
+          style={{
+            fontSize: font_size,
+            color: text_color,
+            textAlign: "center",
+            fontWeight: "bold",
+            marginTop: 5,
+          }}
+        >
+          {bottom_text}
+        </Text>
+      )}
     </View>
   );
 };
@@ -97,42 +127,62 @@ const MyButton: React.FC<MyButtonProps> = ({
 const styles = StyleSheet.create({
   button_circle: {
     borderRadius: 100,
-    display: "flex",
-    gap: 5,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  button_capsule: {
-    display:"flex",
-    borderRadius: 50,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    
+  },
+  button_capsule: {
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    flexDirection: "row",
   },
   button_round: {
-    display:"flex",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    
   },
   button_rect: {
-    display:"flex",
+    padding: 10,
+    borderRadius: 0,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    borderRadius: 0,
-    
   },
   button_default: {
-    display:"flex",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
     borderRadius: 15,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    
+  },
+  button_edit: {
+    backgroundColor: "#A569BD",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+  button_delete: {
+    backgroundColor: "#FF6B6B",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+  button_text: {
+    fontWeight: "600",
+    marginLeft: 4,
   },
 });
 

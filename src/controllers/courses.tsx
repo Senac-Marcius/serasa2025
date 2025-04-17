@@ -3,6 +3,7 @@ import { supabase } from '../utils/supabase'
 
 
 interface iCourses{
+    name: string,
     id: number,
     created_at: string,
     description: string,
@@ -12,6 +13,13 @@ interface iCourses{
     userId: number
 }
 
+function toListCourses(data:iCourses[]){
+  const resp: {key: number, option: string} [] = [];
+    data.map((c) =>{
+      resp.push({key: c.id, option: c.name})
+    })
+  return resp;
+}
 
 
 async function setCoursebd(courses:iCourses ){
@@ -65,4 +73,12 @@ async function deleteCourse(id: number){
 
 }
 
-export {setCoursebd, upadateCourse, deleteCourse, iCourses}
+async function getCourses(param:any) {
+  const {data: todos, error} = await supabase.from('courses').select()
+  if(error){
+    return {status: false, error: error}}
+  return{status:true, data: todos}
+}
+  
+
+export {getCourses,setCoursebd, upadateCourse, deleteCourse, iCourses}

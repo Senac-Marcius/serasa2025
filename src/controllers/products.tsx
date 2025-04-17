@@ -5,9 +5,29 @@ import { supabase } from '../utils/supabase'
 interface iProduct {
     description: string,
     name: string,
+    amount: number,
     id: number,
     user_id: number,
     create_at: string
+}
+
+function toListProduct (data: iProduct[]){
+  const resp: {key: number, option: string}[] = [];
+  data.map((p) => {
+ resp.push ({key: p.id, option: p.name})
+
+  })
+   return resp;
+}
+
+async function getProducts(params:any) {
+  const { data: todos, error } = await supabase
+  .from('products')
+  .select()
+    if(error)
+      return {status: false, error: error}
+     return {status: true, data: todos}
+  
 }
 const [products, setProducts] = useState<iProduct[]>([]);
 
@@ -62,5 +82,5 @@ const { data, error } = await supabase.from ('products')
     return data 
 }
           
-export {setProduct, updateProduct, deleteProduct, iProduct };
+export {setProduct, updateProduct, deleteProduct, iProduct, getProducts, toListProduct };
 
