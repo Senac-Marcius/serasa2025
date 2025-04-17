@@ -9,6 +9,9 @@ import {MyItem} from '../../src/components/MyItem';
 import Mytext from '../../src/components/MyText';
 import {MyModal_mobilefullscreen} from '../../src/components/MyModal';
 import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '../../src/controllers/revenues'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { TextInput } from 'react-native';
+
 
 import MySelect from '../../src/components/MySelect';
 
@@ -29,7 +32,7 @@ export default function RevenueScreen() {
     
 
   });
-
+  const [searchTerm, setSearchTerm] = useState('');
 const[visible, setVisible] = useState(false);
 const [revenues, setRevenues] = useState<iRevenue[]>([]);
 
@@ -115,7 +118,15 @@ useEffect(()=>{
       
     }
 }
-
+const getFilteredRevenues = () => {
+  if (!searchTerm) return revenues; // Retorna tudo se não houver busca
+  
+  return revenues.filter(item => 
+    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.value.toString().includes(searchTerm)
+  );
+};
    
   
   return (
@@ -124,6 +135,20 @@ useEffect(()=>{
       <Mytext style={styles.title}>
          cadastre as receitas
       </Mytext>
+
+      <View style={styles.searchWrapper}>
+      <TextInput
+        placeholder="Buscar receitas..."
+        value={searchTerm}
+        onChangeText={setSearchTerm}
+        style={styles.searchInput}
+        placeholderTextColor="#999"
+      />
+      <Icon name="magnify" size={20} color="#999" style={styles.searchIcon} />
+    </View>
+
+
+
 
       {/* Formulário */}
       <View style={styles.row}>
@@ -191,7 +216,7 @@ useEffect(()=>{
         {/* Lista de Receitas */}
         <MyList
 
-          data={revenues}
+          data={getFilteredRevenues()}  // Dados já filtrados
           keyItem={(item) => item.id.toString()}
           renderItem={({ item }) => (
             
@@ -293,6 +318,26 @@ const styles = StyleSheet.create({
   color: '#000000',
   marginBottom: 8,
   marginLeft:541,
-}
+},
+searchWrapper: {
+  marginBottom: 16,
+  position: 'relative',
+},
+searchInput: {
+  backgroundColor: '#fff',
+  borderRadius: 8,
+  paddingVertical: 10,
+  paddingHorizontal: 16,
+  paddingRight: 40,
+  borderWidth: 1,
+  borderColor: '#ccc',
+  fontSize: 14,
+},
+searchIcon: {
+  position: 'absolute',
+  right: 16,
+  top: '50%',
+  transform: [{ translateY: -10 }],
+},
  
 });
