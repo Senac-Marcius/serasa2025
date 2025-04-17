@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity} from 'react-native';
-import MyView from '../src/components/MyView';
+import MyView from '../../src/components/MyView';
 import { useRouter } from 'expo-router';
-import { setParent,iParent,delParent,editParent,getTimeParents,toListparent} from '../src/controllers/parents';
-import MyButton from '../src/components/MyButtons';
-import MyList from '../src/components/MyList';
-import { Myinput, MyCheck, MyTextArea} from '../src/components/MyInputs';
-import { MyItem,MyCorrelated } from '../src/components/MyItem';
-import { supabase } from '../src/utils/supabase';
+import { setParent,iParent,delParent,editParent,getTimeParents,toListparent} from '../../src/controllers/parents';
+import MyButton from '../../src/components/MyButtons';
+import MyList from '../../src/components/MyList';
+import { Myinput, MyCheck, MyTextArea} from '../../src/components/MyInputs';
+import { MyItem,MyCorrelated } from '../../src/components/MyItem';
+import { supabase } from '../../src/utils/supabase';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
-import itemScreen from './itens';
+import itemScreen from '../itens';
 import { ListItem } from 'native-base';
-import MyUpload from '../src/components/MyUpload';
+import MyUpload from '../../src/components/MyUpload';
 
 
 
