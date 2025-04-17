@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity,TextInput } from 'react-native';
 import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
 import MyCalendar from '../src/components/MyCalendar'; 
@@ -13,6 +13,8 @@ import { MyItem } from '../src/components/MyItem';
 import Mytext from '../src/components/MyText';
 import MyTimerPicker from '../src/components/MyTimerPiker';
 import { text } from 'stream/consumers';
+import { Icon } from 'react-native-paper';
+
 
 export default function TimelineScreen() {
   const [req, setReq] = useState({
@@ -30,6 +32,7 @@ export default function TimelineScreen() {
   const [timelines, setTimelines] = useState<iTimeline[]>([]);
   const [busca, setBusca] = useState('');
   const router = useRouter();
+  const [filtro, setFiltro] = useState('');
 
   // Buscar os cronogramas ao carregar o componente
   useEffect(() => {
@@ -97,13 +100,20 @@ export default function TimelineScreen() {
     <MyView router={router}>
 
       <Text style={styles.text}> Meu Cronograma</Text>
-      <MySearch
-        style={{ marginTop: 10 }}
-        onChangeText={setBusca}
-        onPress={buscar}
-        busca={busca}
+          <View style={styles.searchWrapper}>
+              <TextInput
+                placeholder=""
+                value={filtro}
+                onChangeText={setFiltro}
+                style={styles.searchInput}
+                placeholderTextColor="#999"
+              />
+              
+              
+            </View>
         
-      />
+        
+      
 
       {/* Componente de calendário */}
       <MyCalendar date={req.date} setDate={(date) => setReq({ ...req, date: date })} icon=""
@@ -275,4 +285,136 @@ const styles = StyleSheet.create({
     textShadowColor: "rgba(0, 0, 0, 0.2)",
     fontStyle: "italic",
  },
+
+
+ sidebar: {
+  width: 220,
+  backgroundColor: '#FFF',
+  padding: 16,
+  borderRightWidth: 1,
+  borderRightColor: '#ddd',
+},
+sidebarTitle: {
+  fontSize: 18,
+  fontWeight: '700',
+  marginBottom: 20,
+  color: '#3A3A3A',
+},
+menuItem: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  paddingVertical: 10,
+  paddingHorizontal: 12,
+  borderRadius: 8,
+  marginBottom: 6,
+},
+menuItemActive: {
+  backgroundColor: '#E6F8F3',
+  borderLeftWidth: 4,
+  borderLeftColor: '#3AC7A8',
+},
+menuLabel: {
+  fontSize: 14,
+  color: '#444',
+},
+menuLabelActive: {
+  color: '#1EB980',
+  fontWeight: '600',
+},
+headerRow: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  marginBottom: 10,
+  alignItems: 'center',
+},
+title: { fontSize: 22, fontWeight: '700', color: '#333' },
+buttonNew: {
+  backgroundColor: '#3AC7A8',
+  paddingHorizontal: 14,
+  paddingVertical: 6,
+  borderRadius: 6,
+},
+buttonNewText: { color: '#fff', fontWeight: '600' },
+searchWrapper: {
+  marginBottom: 16,
+  position: 'relative',
+},
+searchInput: {
+  backgroundColor: '#fff',
+  borderRadius: 8,
+  paddingVertical: 10,
+  paddingHorizontal: 16,
+  paddingRight: 40,
+  borderWidth: 1,
+  borderColor: '#ccc',
+  fontSize: 14,
+},
+searchIcon: {
+  position: 'absolute',
+  right: 16,
+  top: '50%',
+  transform: [{ translateY: -10 }],
+},
+card: {
+  backgroundColor: '#FFF',
+  borderRadius: 10,
+  padding: 20,
+  marginBottom: 20,
+},
+formTitle: {
+  fontSize: 18,
+  fontWeight: '600',
+  color: '#3AC7A8',
+  marginBottom: 12,
+},
+formButtons: {
+  flexDirection: 'row',
+  marginTop: 16,
+},
+table: {
+  backgroundColor: '#FFF',
+  borderRadius: 10,
+  padding: 8,
+},
+tableRowHeader: {
+  flexDirection: 'row',
+  paddingVertical: 10,
+  borderBottomWidth: 1,
+  borderBottomColor: '#ddd',
+},
+tableRow: {
+  flexDirection: 'row',
+  paddingVertical: 12,
+  borderBottomWidth: 1,
+  borderBottomColor: '#eee',
+},
+th: { flex: 1, fontWeight: '600', fontSize: 13, color: '#333' },
+td: { flex: 1, fontSize: 13, color: '#444' },
+tdStatus: { flex: 1 },
+statusActive: {
+  backgroundColor: '#D8FEEB',
+  color: '#1EB980',
+  paddingHorizontal: 10,
+  paddingVertical: 4,
+  fontSize: 12,
+  fontWeight: '600',
+  borderRadius: 12,
+  alignSelf: 'flex-start',
+},
+actions: {
+  flex: 1,
+  flexDirection: 'row',
+  justifyContent: 'flex-start',
+  gap: 12,
+  paddingLeft: 8,
+},
+edit: { color: '#3AC7A8', fontWeight: '600', fontSize: 13 },
+del: { color: '#D63031', fontWeight: '600', fontSize: 13 },
+avatar: {
+  width: 24,
+  height: 24,
+  borderRadius: 12,
+},
 });
+
+
