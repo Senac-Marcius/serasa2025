@@ -10,6 +10,7 @@ import MyButton from './MyButtons';
 interface MydownloadProps {
     style?: ViewStyle;
     url: string;
+    
 
 }
 
@@ -29,7 +30,18 @@ const Mydownload: React.FC<MydownloadProps> = ({ style, url }) => {
     }
 
     return (
-        <MyButton  onPress={onDownload} icon='download' iconSize={20} iconColor='white' title='Download' font_size={14} text_color='white'/>
+        <MyButton style={styles.button}  onPress={onDownload} 
+        icon='download' 
+        iconSize={20} 
+        iconColor='white' 
+        title='Download' 
+        font_size={14} 
+        text_color='white'
+        color='#4CAF50'
+
+
+
+        />
    
       
     );
@@ -42,7 +54,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         flexDirection: 'row',
         marginBottom: 20,
-        backgroundColor:"rgb(144, 3, 238)",
+        backgroundColor:'#4CAF50',
         width:190,
         padding:15,
     },
