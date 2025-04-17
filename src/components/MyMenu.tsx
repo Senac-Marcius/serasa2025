@@ -107,6 +107,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Students" route="students" icon="school" />
         <MenuItem label="Users" route="users" icon="person-circle" />
         <MenuItem label="More" route="more" icon="add-circle" />
+        <MenuItem label="Trabalhe Conosco" route='Administracao/employees?view=form'  icon="cash" />
       </ScrollView>
     </Animated.View>
   );
