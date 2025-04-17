@@ -95,12 +95,12 @@ export default function ScaleScreen() {
       <MyView>
         <View style={styles.buttonGroup}>
           <MyButton
-            style={styles.menuButton}
+            style={styles.Button}
             title='CRIAR ESCALA'
             onPress={() => setCurrentView('form')}
           />
           <MyButton
-            style={styles.menuButton}
+            style={styles.Button}
             title='MINHA ESCALA'
             onPress={() => setCurrentView('table')}
           />
@@ -126,13 +126,19 @@ export default function ScaleScreen() {
               initialTime={req.end_time}
               onTimeSelected={(time) => setReq({ ...req, end_time: time })}
             />
-
-            <MyButton title='Cadastrar' onPress={handleRegister} />
+            
+            <MyButton title={req.id === -1 ? 'CADASTRAR' : 'ATUALIZAR CADASTRO'}  onPress={handleRegister} />
           </View>
         )}
 
         {currentView === 'table' && (
           <View style={styles.listContainer}>
+            <MyFilter
+              style={styles.container}
+              itens={['segunda-feira', 'starttime']}
+              onSend={(filter) => console.log('Filtro aplicado:', filter)}
+              onPress={(item) => console.log('Filtro pressionado:', item)}
+              />
             <View style={styles.tableHeader}>
               <Text style={styles.tableHeaderText}>Dia</Text>
               <Text style={styles.tableHeaderText}>Início</Text>
@@ -160,14 +166,15 @@ export default function ScaleScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 5,
+    padding: 20,
+    backgroundColor: '#fff',
   },
   buttonGroup: {
     flexDirection: 'column',
     alignItems: 'center',
     marginVertical: 10,
   },
-  menuButton: {
+  Button: {
     backgroundColor: '#813AB1',
     paddingVertical: 10,
     paddingHorizontal: 16,
@@ -179,7 +186,7 @@ const styles = StyleSheet.create({
   },
   Mytext: {
     color: '#813AB1',
-    textAlign: 'center',
+    textAlign: 'left',
     fontSize: 15,
     fontWeight: 'bold',
     marginVertical: 5,
@@ -199,14 +206,15 @@ const styles = StyleSheet.create({
     minHeight: '40%',
   },
   form: {
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    marginBottom: 20,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    width: 'auto',
+    flex: 1,
+    marginRight: 10,
+    padding: 20,
+    backgroundColor: '#F2F2F2',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 5,
   },
   tableHeader: {
     flexDirection: 'row',
