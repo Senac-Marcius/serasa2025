@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { Myinput } from './MyInputs';
 import MyButton from './MyButtons';
 import { insertDocument, updateDocument, iDoc } from '../../src/controllers/documents';
+import MyUpload from './MyUpload';
 
 interface MyDocumentProps {
   type: string;
@@ -48,18 +49,11 @@ const MyDocument: React.FC<MyDocumentProps> = ({ type, user_id }) => {
 
   return (
     <View style={styles.container}>
-      <Myinput
-        iconName="document"
-        label="Nome do Documento"
-        value={req.name}
-        onChangeText={(text) => setReq({ ...req, name: text })}
-      />
-
-      <MyButton
-        title="Simular Upload de Arquivo"
-        onPress={() => setReq({ ...req, url: 'https://meuarquivo.com/arquivo.pdf' })}
-        color="#555"
-        button_type="rect"
+      
+      <MyUpload 
+        url={req.url} 
+        setUrl={(newUrl) => setReq({ ...req, url: newUrl })} 
+        setName={(newName) => setReq({ ...req, name: newName })}
       />
 
       <MyButton
@@ -72,9 +66,7 @@ const MyDocument: React.FC<MyDocumentProps> = ({ type, user_id }) => {
       <MyButton
         title="Visualizar Todos os Documentos"
         onPress={() => router.push('/secretaria/documentsFilter')}
-
         color="#aaa"
-        //button_type="ghost"
       />
     </View>
   );
