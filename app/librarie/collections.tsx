@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { MyModal_mobile1 } from '../src/components/MyModal';
 import MyButton from '../src/components/MyButtons';
@@ -6,45 +6,64 @@ import MyView from '../src/components/MyView';
 import { Myinput } from '../src/components/MyInputs'
 import MyList from '../src/components/MyList'
 import { useRouter } from 'expo-router';
+import {setCollection, iCollection,deleteCollectionById,updateCollectionById,getCollections} from '../src/controllers/collections';
+
+
 
 
 //função userState só retorna para uma variavel const
 
 export default function CollectionScreen() {
 
-    const [visible, setVisible] = useState(false);
-
     const [req, setReq] = useState({
         id: 0,
         name: '',
         quantity: '',
         star: '',
-        creatAt: new Date().toISOString()
+        createAt: new Date().toISOString()
     });
-    const [collections, setCollections] = useState<{
-        name: string,
-        quantity: string,
-        star: string,
-        creatAt: string,
-        id: number,
-    }[]>([])
 
-    function handleRegister() {
+    const [visible, setVisible] = useState(false);
+
+    const[collections, setCollections] = useState<iCollection[]>([]);
+
+    useEffect(() =>{
+        async function getTodos(){
+            const retorno =await getCollections({})
+            
+            if (retorno.status && retorno.data && retorno.data.length>0){
+                setCollections(retorno.data);
+         }
+    }
+    getTodos()
+}, [])
+
+
+
+
+     async function handleRegister() {
         if (req.id == -1) {
             const newId = collections.length ? collections[collections.length - 1].id + 1 : 0
-            const newcollections = { ...req, id: newId }
-            setCollections([...collections, newcollections])
+            const newCollections = {...req, id: newId}
+            setCollections([...collections, newCollections])
+            await setCollection(newCollections)
+             
 
         } else {
             setCollections(collections.map(c => (c.id == req.id ? req : c)))
-
+            const deletecollection = await updateCollectionById(req.id, req)
+            if (!deletecollection) {
+                alert("Erro ao atualizar usuário.")
+                return
+            }
+            
         }
         setReq({
             id: -1,
             name: '',
             quantity: '',
             star: '',
-            creatAt: new Date().toISOString()
+            createAt: new Date().toISOString()
         })
 
     }
@@ -55,19 +74,25 @@ export default function CollectionScreen() {
 
 
     }
+  
 
-    function deleteCollections(id: number) {
-        const list = collections.filter(c => c.id != id)
-        if (list)
-            setCollections(list)
-
+    async function deleteCollections(id: number) {
+        const deletecollection = await deleteCollectionById(id)
+        if (deletecollection) {
+            const updatedList = collections.filter(c => c.id != id)
+            setCollections(updatedList)
+        } else {
+            alert("Erro ao deletar usuário.")
+        }
     }
 
     const router = useRouter();
 
+   
+
 
     return (//encapsulamento 
-        <MyView router={router} >
+        <MyView >
             <View style={styles.formContainer}>
                 <View style={styles.row}>
                     <View style={styles.form}>
@@ -124,8 +149,10 @@ export default function CollectionScreen() {
                                         <Text style={styles.buttonText}>Edit</Text>
 
                                     </TouchableOpacity>
-
                                 </View>
+                                <TouchableOpacity style={styles.button_round} onPress={() => router.push('/collectionsPreview')}>
+                                        <Text style={styles.buttonText}>Visite nosso acervo</Text>
+                                </TouchableOpacity>
                             </View>
                         )}
                     />
@@ -157,7 +184,6 @@ const styles = StyleSheet.create({
 
     },
     formContainer: {
-        flex: 1,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -174,6 +200,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 1, height: 10 },
         shadowOpacity: 0.5,
         width: 400,
+       
     },
 
 
@@ -227,3 +254,4 @@ const styles = StyleSheet.create({
 
 
 })
+
