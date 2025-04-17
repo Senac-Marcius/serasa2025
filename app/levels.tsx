@@ -8,7 +8,7 @@ import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
 import {MyItem} from '../src/components/MyItem';
 import { useRouter } from 'expo-router';
-import {deleteLevels, updateLevels, getLevels, setLevel, iLevels } from '../src/controllers/levels';
+import {deleteLevel, updateLevels, getLevels, setLevel, iLevels } from '../src/controllers/levels';
 
 
 export default function LevelsScreen() {
@@ -21,10 +21,9 @@ export default function LevelsScreen() {
     id: -1,
     name: '',
     description: '',
-    color: 'Selecione uma cor',
+    color: '',
     created_at: new Date().toISOString(),
   });
-
 
   useEffect(() => {
     //aqui estamos carregando os lançamentos 
@@ -56,13 +55,14 @@ export default function LevelsScreen() {
         id: -1,
         name: '',
         description: '',
-        color: 'Selecione uma cor',
+        color: '',
         created_at:  new Date().toISOString(),
      });
   }
 
 async function deleteLevels(id: number) {
     setLevels(levels.filter(item => item.id !== id));
+    await deleteLevel(id)
   }
 
 function editLevels(levels: iLevels) {
@@ -100,7 +100,7 @@ function editLevels(levels: iLevels) {
 
                         <Myinput 
                             style={styles.input}
-                            placeholder="COR" 
+                            placeholder="Digite uma cor" 
                             value={req.color}
                             onChangeText={(text) => setReq({...req ,color: text})}
                             label="Cor"
@@ -244,8 +244,8 @@ const styles = StyleSheet.create({
 
     },
     delButton:{ backgroundColor:'#f44336',
-        padding:10,
-        borderRadius:5,
+        padding: 10,
+        borderRadius: 5,
         alignItems:'center',
         justifyContent:'center',
 
