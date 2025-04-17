@@ -27,9 +27,12 @@ async function setCategory(category: iCategories) {
 
 
 async function getCategories(params:any) {
-    const { data: todos, error } = await supabase.from('launchs').select();
-    if (error) 
+    const { data: todos, error } = await supabase.from('categories').select();
+    if (error) {
+        console.log('aqui')
+        console.log(error)
         return {status:false,error:error}
+    }
 
     return {status: true,data: todos}
 }

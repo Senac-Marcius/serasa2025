@@ -13,30 +13,23 @@ export default function CategoryScreen() {
     const [req, setReq] = useState<iCategories>({
         name: '',
         description: '',
-        id: -1, // -1 quer dizer: novo cadastro
+        id: -1, 
         created_at: new Date().toISOString()
     });
 
     const [categories, setCategories] = useState<iCategories[]>([]);
     const router = useRouter();
 
-    // Carregar categorias do banco ao abrir a tela
     useEffect(() => {
-        async function getTodos() {
-       
-            const retorno = await getCategories({})
-
-            if (retorno.status && retorno.data && retorno.data.length > 0){
-                getCategories(retorno.data);
+        (async () => {
+            const retorno = await getCategories({});
+            if (retorno.status && retorno.data && retorno.data.length > 0) {
+                setCategories(retorno.data); 
             }
-getTodos();
-            }
-      
+        })();
+    }, []);
 
-        getTodos();
-    },[])
-
-    // Cadastrar ou atualizar
+   
     async function handleRegister() {
         if (req.id === -1) {
             const newid = categories.length ? categories[categories.length - 1].id + 1 : 0;
@@ -59,7 +52,7 @@ getTodos();
         });
     }
 
-    // Editar
+   
     function editCategorie(id: number) {
         const item = categories.find(i => i.id === id);
         if (item) setReq(item);
