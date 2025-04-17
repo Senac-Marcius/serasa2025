@@ -13,6 +13,8 @@ import { supabase } from '../../src/utils/supabase';
 import { MyItem } from '../../src/components/MyItem';
 import { Picker } from '@react-native-picker/picker';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
+
 
 // Esse é o Projeto Correto 
 
@@ -80,8 +82,10 @@ const parseCurrencyInput = (text: string): number => {
 
     const [integrantes, setIntegrantes] = useState<string[]>(['']);
     const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-    const [busca, setBusca] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredRevenues, setFilteredRevenues] = useState<iProject[]>([]);
     const router = useRouter();
+    const navigation = useNavigation();
       
     interface CalendarDate {
         year: number;
@@ -103,8 +107,8 @@ const parseCurrencyInput = (text: string): number => {
         
         }else{ //aqui é quando esta editando id esta maior do que -1
             const updatedProject = { ...req, recurces: recurcesValue, integrantes };
-            setProjects(projects.map(jTNL => (jTNL.id == req.id)? req : jTNL ));
-            await updateProject(req); 
+            setProjects(projects.map(jTNL => (jTNL.id === req.id ? updatedProject : jTNL)));
+            await updateProject(updatedProject); 
         }
         
         setReq({
@@ -130,6 +134,22 @@ const parseCurrencyInput = (text: string): number => {
         setRawRecurces('');
     }
 
+    const getFilteredProjects = () => {
+        if (!searchTerm) return projects;
+      
+        const term = searchTerm.toLowerCase();
+      
+        return projects.filter(item => {
+          return (
+            item.name?.toLowerCase().includes(term) ||
+            item.url?.toLowerCase().includes(term) ||
+            item.objective?.toLowerCase().includes(term) ||
+            item.time_line?.toLowerCase().includes(term) ||
+            item.methodology?.toLowerCase().includes(term)
+          );
+        });
+      };
+
     function editProject(id: number){
         const project = projects.find(item => item.id == id)
         if(project)
@@ -154,13 +174,13 @@ const parseCurrencyInput = (text: string): number => {
         return url;
     }
 
-    function buscar() {
+    /*function buscar() {
         const resultado = projects.filter((p) => 
             p.name.toLowerCase().includes(busca.toLowerCase()) ||
             p.namep.toLowerCase().includes(busca.toLowerCase())
         );
         console.log("Resultados da busca:", resultado);
-    }
+    }*/
 
     function adicionarIntegrante() {
         setIntegrantes([...integrantes, '']);
@@ -178,10 +198,11 @@ const parseCurrencyInput = (text: string): number => {
        <ScrollView>
        <MyView router={router} >
             <MySearch 
+                placeholder=''
                 style={{ padding: 20 }} 
-                onChangeText={setBusca}
-                onPress={buscar}
-                busca={busca}
+                onChangeText={setSearchTerm}
+                onPress={() => setFilteredRevenues(getFilteredProjects())}
+                busca={searchTerm}
             />
 
             {/** Fazer um campo de imput para integrantes do projeto com campo de adicionar integrante com a quantidade necessaria, para listar na tabela employess_projects */}    
