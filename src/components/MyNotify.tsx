@@ -19,8 +19,8 @@ const MyNotify: React.FC<MyNotifyProps> = ({ style, onPress }) => {
 
     //aqui faz a list (puxa do da iris)
     
-
-
+  
+    
 
   );
 
