@@ -111,7 +111,7 @@ export default function ExpenseScreen(){
                     <Myinput value={req.costs} onChangeText={(text) => setReq({ ...req, costs: text })} placeholder="R$" label="Valores:" iconName='' /> 
 
 
-                    <MyButton style={{justifyContent:'center'}} onPress={() => handleRegister()} title='Cadastrar'></MyButton>
+                    <MyButton style={{justifyContent:'center'}} onPress={() => handleRegister()} title={req.id == -1 ? "Cadastra": "Atualizar"}></MyButton>
 
                 </View>                
             </MyModal_mobilefullscreen>    
