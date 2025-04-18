@@ -8,33 +8,70 @@ import { MyItem, MyCorrelated } from '../../src/components/MyItem';
 import MyList from '../../src/components/MyList';
 import {setRecord, iRecord, getRecords } from '../../src/controllers/records'
 import { supabase } from '../../src/utils/supabase';
+import Mytext from '../../src/components/MyText';
+import { getLevels } from '../../src/controllers/levels';
+import MySelect from '../../src/components/MySelect';
+import { getUsers } from '../../src/controllers/users';
 
 export default function RecordScreen() {
     const [isChecked, setIsChecked] = useState(true);
 
+    const [levels, setLevels] = useState<any[]>([]);
+
+    const [users, setUsers] = useState<any[]>([]);
+
     const [records, setRecords] = useState<iRecord[]>([]);
     
     useEffect (() => {
-        async function getTodos() {
+        (async () => {
             const retorno = await  getRecords ({})
             if (retorno.status && retorno.data && retorno.data.length > 0){
                 setRecords(retorno.data);
 
-            }
-        }
-        getTodos();
+            }   
+        })();
+
+        (async () => {
+            const retorno = await  getLevels ({})
+            if (retorno.status && retorno.data && retorno.data.length > 0){
+                const ls: any[] = []
+
+                retorno.data.map((l) => {
+                    ls.push({key: l.id, option: l.name})
+                })
+
+                setLevels(ls);
+            }   
+        })();
+
+        (async () => {
+            const retorno = await  getUsers ({})
+            if (retorno.status && retorno.data && retorno.data.length > 0){
+                const ls: any[] = []
+
+                retorno.data.map((l) => {
+                    ls.push({key: l.id, option: l.name})
+                })
+
+                setUsers(ls);
+            }   
+        })();
+
+
     })
 
 
     const [req, setReq] = useState({
         id: -1,
         name: '',
+        cpf: 0,
         description: '',
         sick: '',
         health: '',
         allergy: '',
         medication: '',
         user_id: 0,
+        level_id: 0,
         create_at: new Date().toISOString(),
     });
 
@@ -63,15 +100,7 @@ export default function RecordScreen() {
 
                 } else {
                     const { error } = await supabase.from('records')
-                        .update({
-                            name: req.name,
-                            description: req.description,
-                            sick: req.sick,
-                            health: req.health,
-                            allergy: req.allergy,
-                            medication: req.medication,
-                            user_id: req.user_id,
-                        })
+                        .update(req)
                         .eq('id', req.id);
             
                     if (!error) {
@@ -85,12 +114,14 @@ export default function RecordScreen() {
                 setReq({
                     id: -1,
                     name: '',
+                    cpf: 0,
                     description: '',
                     sick: '',
                     health: '',
                     allergy: '',
                     medication: '',
                     user_id: 0,
+                    level_id: 0,
                     create_at: new Date().toISOString(),
                 })
             }
@@ -112,6 +143,8 @@ export default function RecordScreen() {
             setReq(record);
         }
     }
+     
+    const [unity, setUnit] = useState("Selecione a cor")  
 
     return (
 
@@ -130,6 +163,14 @@ export default function RecordScreen() {
                         value={req.name}
                         onChangeText={(text) => setReq({ ...req, name: text })}
                         label='Nome do Aluno:'
+                        iconName='person'
+                    />
+                    
+                    <Myinput
+                        placeholder="Digite"
+                        value={req.cpf.toString()}
+                        onChangeText={(text) => setReq({ ...req, cpf: Number(text)})}
+                        label='CPF do Aluno:'
                         iconName='person'
                     />
 
@@ -173,12 +214,31 @@ export default function RecordScreen() {
                         iconName='medication'
                     />
 
+                    <MySelect
+                        label={ levels.find(l => l.id == req.level_id) }
+                        setLabel={ () => {}}
+                        setKey={ (key)=> setReq ({...req, level_id: key }) }  
+                        list={levels} 
+                    />   
+
+                    <MySelect
+                        label={ users.find(l => l.id == req.user_id) }
+                        setLabel={ () => {}}
+                        setKey={ (key)=> setReq ({...req, user_id: key }) }  
+                        list={users} 
+                    />   
+                        
+
                     <MyButton
                         title="CADASTRAR"
                         onPress={handleRegister}
                         button_type="round"
                         style={styles.button_round}
                     />
+
+
+                    
+                
 
                 </View>
 
@@ -188,39 +248,23 @@ export default function RecordScreen() {
                     keyItem={(item) => item.id.toString()}
                     renderItem={({ item }) => (
 
-                        <MyCorrelated
-                        showDeleteButton = {false}
-                        showEditButton = {false}
-
-                        style={styles.itemText}  /*MyItem */>
-                            <Text style={styles.itemText}>Nome: {item.name}</Text>
-                            <Text style={styles.itemText}>Descrição: {item.description}</Text>
-                            <Text style={styles.itemText}>Doença: {item.sick}</Text>
-                            <Text style={styles.itemText}>Saúde: {item.health}</Text>
-                            <Text style={styles.itemText}>Alergias: {item.allergy}</Text>
-                            <Text style={styles.itemText}>Medicações: {item.medication}</Text>
-                            <Text style={styles.itemText}>Usuário Id: {item.user_id}</Text>
-
-                           <View style={styles.button_round}>
-
-                                <MyButton
-                                    title="EXCLUIR"
-                                    onPress={() => { delRecord(item.id) }}
-                                    button_type="round"
-                                    style={styles.button_round}
-                                />
-
-                                <MyButton
-                                    title=" EDITAR"
-                                    onPress={() => { editRecord(item.id) }}
-                                    button_type="round"
-                                    style={styles.button_round}
-                                />
-
-
-                            </View>
-                        </MyCorrelated>
-                    )}
+                 <MyItem
+                    style={styles.cardGridItem}
+                    onEdit={() => editRecord(item.id)}
+                    onDel={() => delRecord(item.id)}
+                    >      
+                    <Mytext style={styles.itemText}>Nome: {item.name}</Mytext>
+                    <Mytext style={styles.itemText}>CPF: {item.cpf}</Mytext>
+                    <Mytext style={styles.itemText}>Descrição: {item.description}</Mytext>
+                    <Mytext style={styles.itemText}>Doença: {item.sick}</Mytext>
+                    <Mytext style={styles.itemText}>Saúde: {item.health}</Mytext>
+                    <Mytext style={styles.itemText}>Alergias: {item.allergy}</Mytext>
+                    <Mytext style={styles.itemText}>Medicações: {item.medication}</Mytext>
+                    <Mytext style={styles.itemText}>Usuário Id: {item.user_id}</Mytext>
+                        
+                    </MyItem>  
+                  )}   
+                    
                 />
             </View>
         </MyView>
@@ -255,6 +299,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "row",
+        flex: 20,
 
     },
 
@@ -269,6 +314,18 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
-    }
+    },
+
+    cardGridItem: {
+        backgroundColor: '#FFF',
+        borderRadius: 10,
+        padding: 16,
+        margin: 8,
+        shadowColor: '#000',
+        shadowOpacity: 0.05,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 6,
+        elevation: 2,
+      },
 
 })
