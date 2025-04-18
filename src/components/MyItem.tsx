@@ -2,91 +2,59 @@ import React, { ReactNode } from 'react';
 import { Text, View, TouchableOpacity, ViewStyle, StyleSheet } from 'react-native';
 import MyButton from './MyButtons';
 
-type RelatedItem = {
-  id: number;
-  name: string;
-};
 
 interface MyItemProps {
   children?: ReactNode;
   style?: ViewStyle | ViewStyle[];
   onEdit?(): void;
   onDel?(): void;
+
 }
 
-interface MyCorrelatedProps {
-  children?: ReactNode;
-  style?: ViewStyle | ViewStyle[];
-  onEdit?(): void;
-  onDel?(): void;
-  relatedItems?: RelatedItem[];
-  showEditButton?: boolean;
-  showDeleteButton?: boolean;
-}
-
-const MyItem: React.FC<MyItemProps> = ({ children, style, onEdit, onDel }) => {
+const MyItem: React.FC<MyItemProps> = ({ children, style, onEdit, onDel}) => {
   return (
     <View style={[styles.card, style]}>
       <View style={styles.content}>{children}</View>
       <View style={styles.buttonGroupShiftSlightLeft}>
-        <MyButton
+        {onEdit && (<MyButton
           onPress={onEdit}
           title="EDITAR"
           button_type="edit"
-          height={34}
-          width={90}
-          font_size={13}
-          color="#8E44AD"
-        />
-        <MyButton
+        />)}
+        {onDel && (<MyButton
           onPress={onDel}
           title="EXCLUIR"
           button_type="delete"
-          height={34}
-          width={90}
-          font_size={13}
           color="#E74C3C"
           style={{ marginLeft: 10 }}
-        />
+        />)}
       </View>
     </View>
   );
 };
 
-const MyCorrelated: React.FC<MyCorrelatedProps> = ({children,style,onEdit,onDel,relatedItems,showEditButton = true,showDeleteButton = true,}) => {
-  return (
-    <View style={[styles.card, style]}>
-      <View style={styles.content}>{children}</View>
-      <View style={styles.buttonGroupShiftSlightLeft}>
-        {showEditButton && (
-          <MyButton
+const MyTb : React.FC<MyItemProps> = ({children, onEdit, onDel }) =>{
+    return(
+      <View style={[styles.tableRow]}>
+        {children}
+        <View style={styles.actions}>
+        {onEdit && ( <MyButton
             onPress={onEdit}
             title="EDITAR"
             button_type="edit"
-            height={34}
-            width={90}
-            font_size={13}
-            color="#8E44AD"
-          />
-        )}
-        {showDeleteButton && (
-          <MyButton
+          />)}
+        {onDel && (<MyButton
             onPress={onDel}
             title="EXCLUIR"
             button_type="delete"
-            height={34}
-            width={90}
-            font_size={13}
             color="#E74C3C"
-            style={{ marginLeft: 10 }}
-          />
-        )}
+            
+          />)}
+        </View>
       </View>
-    </View>
-  );
-};
+    );
 
-export { MyItem, MyCorrelated };
+};
 
 const styles = StyleSheet.create({
   card: {
@@ -101,13 +69,50 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 2,
   },
+  
   content: {
-    marginBottom: 12,
-  },
-  buttonGroupShiftSlightLeft: {
+    width:'100%',
     flexDirection: 'row',
+    marginBottom: 12,
+    alignItems:'center',
+    
+  },
+
+  buttonGroupShiftSlightLeft: {
     justifyContent: 'flex-start',
     paddingLeft: 8,
     gap: 10,
+    marginRight: 20,
   },
+
+  th: {
+    flex: 1,
+     fontWeight: '600',
+      fontSize: 13,
+       color: '#333'
+    },
+    
+    td: {
+      flex: 1,
+      fontSize: 13,
+      color: '#444' 
+     },
+
+     actions: {
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      gap: 12,
+      paddingLeft: 8,
+    },
+    
+    tableRow: {
+      flexDirection: 'row',
+      paddingVertical: 12,
+      borderBottomWidth: 1,
+      borderBottomColor: '#eee',
+    },
+    
 });
+
+export { MyItem, MyTb };

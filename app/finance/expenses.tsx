@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import { View, StyleSheet } from 'react-native' ;
-import {MyItem} from '../../src/components/MyItem';
+import {MyItem, MyTb} from '../../src/components/MyItem';
 import MyList from '../../src/components/MyList';
 import MyView from '../../src/components/MyView';
 import MyButton from '../../src/components/MyButtons';
@@ -87,7 +87,7 @@ export default function ExpenseScreen(){
 
     return (
         
-        <MyView > 
+        <MyView style={{ flex: 1, backgroundColor: '#f0f2f5' }}> 
             {/* aqui é typecript dentro do front */}
             <Mytext style={styles.title}>tela de despesas</Mytext>
             <MyModal_mobilefullscreen   visible={visible} setVisible={setVisible}>
@@ -117,21 +117,35 @@ export default function ExpenseScreen(){
             </MyModal_mobilefullscreen>    
 
                 <MyList
+                    style={styles.table}
                     data={expense}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
-                        <MyItem style={styles.card} 
+                        <MyTb
                             onEdit={()=> editExpense(item.id)}
 
                             onDel={() => delExpense(item.id)}
                         >
-                            <Mytext style={styles.textlis}>Nome: {item.name}</Mytext>
-                            <Mytext style={styles.textlis}>Contato: {item.contacts}</Mytext>
-                            <Mytext style={styles.textlis}>Email: {item.emails}</Mytext> 
-                            <Mytext style={styles.textlis}>Data: {item.created_at}</Mytext>
-                            <Mytext style={styles.textlis}>Descrição: {item.descriptions}</Mytext>  
-                            <Mytext style={styles.textlis}>Valor: {item.costs}</Mytext>     
-                        </MyItem>
+                            <Mytext style={styles.td}> {item.name}</Mytext>
+                            <Mytext style={styles.td}> {item.contacts}</Mytext>
+                            <Mytext style={styles.td}> {item.emails}</Mytext> 
+                            <Mytext style={styles.td}> {item.created_at}</Mytext>
+                            <Mytext style={styles.td}>{item.descriptions}</Mytext>  
+                            <Mytext style={styles.td}> {item.costs}</Mytext>     
+                        </MyTb>
+                    
+                    )}
+                    header= {(
+                         <View style={styles.tableRowHeader}>
+                            <Mytext style={styles.th}>Nome</Mytext>
+                            <Mytext style={styles.th}>Contato</Mytext>
+                            <Mytext style={styles.th}>Email</Mytext>
+                            <Mytext style={styles.th}>Data</Mytext>
+                            <Mytext style={styles.th}>Descrição</Mytext>
+                            <Mytext style={styles.th}>Valor</Mytext>
+                            <Mytext style={styles.th}>Ações</Mytext>
+                        </View>
+
                     )}
                 /> 
         </MyView>
@@ -139,11 +153,13 @@ export default function ExpenseScreen(){
 }
 
 const styles = StyleSheet.create({
-    row : {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
+   
+    table: {
+      backgroundColor: '#FFF',
+      borderRadius: 10,
+      padding: 8,
     },
+    
     form: {
         flex: 1,
         marginRight: 10,
@@ -155,24 +171,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
     },
-    card: {
-        backgroundColor: "#f8f9fa",
-        padding: 16,
-        marginBottom: 8,
-        marginHorizontal: 12,
-        borderRadius: 8,
-        shadowColor: "#000",
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 2 },
-        shadowRadius: 4,
-        elevation: 3, // Sombra para Android
-      },
-      textlis: {
-        fontSize: 14,
-        color: "#555",
-        marginVertical: 4,
-      } ,
-     
+   
      title:{
         marginBottom: 8,
         fontSize: 30,
@@ -186,6 +185,25 @@ const styles = StyleSheet.create({
         textShadowColor: "rgba(0, 0, 0, 0.2)",
         fontStyle: "italic",
      },
-     
+
+    th: {
+         flex: 1,
+          fontWeight: '600',
+           fontSize: 13,
+            color: '#333'
+         },
+
+    td: {
+         flex: 1,
+         fontSize: 13,
+         color: '#444' 
+        },
+
+    tableRowHeader: {
+        flexDirection: 'row',
+        paddingVertical: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ddd',
+      },
     });
     
