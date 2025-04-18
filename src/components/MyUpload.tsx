@@ -8,7 +8,7 @@ import { link } from "fs";
 interface MyuploadProps {
   style?: ViewStyle | ViewStyle[]; 
   setUrl(url: string): void;
-  setName(name: string): void;//para atualizar de acordo com o nome do arquivo
+  setName?(name: string): void;//para atualizar de acordo com o nome do arquivo
   url: string;
 }
 
@@ -46,7 +46,7 @@ const MyUpload: React.FC<MyuploadProps> = ({ style, setUrl, setName, url  }) => 
 
       if (data.success) {
         setUrl(data.link); // Atualiza a variável URL
-        setName(file.name); //atualiza o nome com o nome do arquivo escolhido
+        setName? setName(file.name): ''; //atualiza o nome com o nome do arquivo escolhido
         setAlert(`Upload Concluído! Arquivo enviado: ${data.link}`);
       } else {
         setAlert(`Erro no Upload Tente novamente..`);
