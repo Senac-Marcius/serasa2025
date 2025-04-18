@@ -14,6 +14,7 @@ import { MyItem } from '../../src/components/MyItem';
 import { Picker } from '@react-native-picker/picker';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import { MyModal1_desktop, MyModal_mobilefullscreen } from '../../src/components/MyModal';
 
 
 // Esse é o Projeto Correto 
@@ -103,7 +104,7 @@ const parseCurrencyInput = (text: string): number => {
             console.log("Cadastrando no Supabase:", newProjects);
 
             setProjects([... projects, newProjects])
-            await setProject(newProjects)
+            await setProject(newProjects, idUs)
         
         }else{ //aqui é quando esta editando id esta maior do que -1
             const updatedProject = { ...req, recurces: recurcesValue, integrantes };
@@ -152,8 +153,10 @@ const parseCurrencyInput = (text: string): number => {
 
     function editProject(id: number){
         const project = projects.find(item => item.id == id)
-        if(project)
+        if(project){
             setReq(project)
+            setVisible(true)
+        }
 
         console.log("Dados enviados para o Supabase:", projects);
     }
@@ -184,13 +187,16 @@ const parseCurrencyInput = (text: string): number => {
 
     function adicionarIntegrante() {
         setIntegrantes([...integrantes, '']);
-      }
+    }
       
-      function atualizarIntegrante(index: number, valor: string) {
+    function atualizarIntegrante(index: number, valor: string) {
         const novosIntegrantes = [...integrantes];
         novosIntegrantes[index] = valor;
         setIntegrantes(novosIntegrantes);
-      }
+    }
+
+    const [visible, setVisible] = useState(false)
+
       
     
     // Criando o textinput para receber e exibir o texto "placeholder" para o usuario digitar
@@ -212,214 +218,220 @@ const parseCurrencyInput = (text: string): number => {
             
                 {/* Aqui é typescript dentro do front */}
                 <Mytext> ✨ Vamos Inovar ✨ </Mytext>
-                <View style={styles.row}> 
-                        
-                    <View style={styles.form}>
-                        <Mytext style={styles.label}>Criador do projeto:</Mytext>
-                        <Myinput
-                            iconName=''
-                            label =''
-                            placeholder="Nome Completo"
-                            value={req.name}
-                            onChangeText={(text) => setReq({ ...req, name: text })}
-                        />
 
-                        <Mytext style={styles.label}>Integrantes do Projeto:</Mytext>
-                        {integrantes.map((nome, index) => (
-                        <View
-                            key={index}
-                            style={{ 
-                                flexDirection: 'row', 
-                                alignItems: 'center', 
-                                marginBottom: 12,
-                                gap: 8,
-                             }}
-                        >
+                <MyModal_mobilefullscreen visible={visible} setVisible={() => setVisible(true)}>
+                    <ScrollView>
+                    <View style={styles.row}> 
+                            
+                        <View style={styles.form}>
+                            <Mytext style={styles.label}>Criador do projeto:</Mytext>
                             <Myinput
-                            placeholder={`Integrante ${index + 1}`}
-                            value={nome}
-                            onChangeText={(text) => atualizarIntegrante(index, text)}
-                            iconName=""
-                            label=""
-                            style={{ 
-                                flex: 1,
-                                paddingHorizontal: 12,
-                                paddingVertical: 10,
-                            }}
+                                iconName=''
+                                label =''
+                                placeholder="Nome Completo"
+                                value={req.name}
+                                onChangeText={(text) => setReq({ ...req, name: text })}
                             />
 
-                            
-                            <TouchableOpacity
-                            onPress={() => {
-                                const novos = [...integrantes];
-                                novos.splice(index, 1);
-                                setIntegrantes(novos);
-                            }}
-                            style={{
-                                backgroundColor: '#ff4d4f',
-                                borderRadius: 100,
-                                width: 36,
-                                height: 36,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}
+                            <Mytext style={styles.label}>Integrantes do Projeto:</Mytext>
+                            {integrantes.map((nome, index) => (
+                            <View
+                                key={index}
+                                style={{ 
+                                    flexDirection: 'row', 
+                                    alignItems: 'center', 
+                                    marginBottom: 12,
+                                    gap: 8,
+                                }}
                             >
-                            <Mytext style={{ color: '#fff', fontSize: 18 }}>–</Mytext>
-                            </TouchableOpacity>
-                            
-                            
-                            {index === integrantes.length - 1 && (
-                            <TouchableOpacity
-                                onPress={adicionarIntegrante}
+                                <Myinput
+                                placeholder={`Integrante ${index + 1}`}
+                                value={nome}
+                                onChangeText={(text) => atualizarIntegrante(index, text)}
+                                iconName=""
+                                label=""
+                                style={{ 
+                                    flex: 1,
+                                    paddingHorizontal: 12,
+                                    paddingVertical: 10,
+                                }}
+                                />
+
+                                
+                                <TouchableOpacity
+                                onPress={() => {
+                                    const novos = [...integrantes];
+                                    novos.splice(index, 1);
+                                    setIntegrantes(novos);
+                                }}
                                 style={{
-                                    backgroundColor: '#28a745',
+                                    backgroundColor: '#ff4d4f',
                                     borderRadius: 100,
                                     width: 36,
                                     height: 36,
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                 }}
-                            >
-                                <Mytext style={{ color: '#fff', fontSize: 20 }}>+</Mytext>
-                            </TouchableOpacity>
-                            )}
-                        </View>
-                        ))}
-
-
-                        <Mytext style={styles.label}> Nome do projeto: </Mytext>
-                        <Myinput
-                            iconName=''
-                            label =''
-                            placeholder="Digite aqui..."
-                            value={req.namep}
-                            onChangeText={(text) => setReq({ ...req, namep: text })}
-                        />
-                        <Mytext style={styles.label}> Site: </Mytext>
-                        <Myinput
-                            iconName=''
-                            label =''
-                            placeholder="Digite aqui..."
-                            value={req.url}
-                            onChangeText={(text) => setReq({ ...req, url: adicionarProtocolo(text) })}
-                        />
-                        
-                        <Mytext style={styles.label}> Recursos: </Mytext>
-                        <Myinput
-                        iconName=""
-                        label=""
-                        placeholder="Digite o valor..."
-                        value={`R$ ${rawRecurces}`} // Mostra valor formatado
-                        onChangeText={(text) => {
-                            const cleanText = text.replace(/[^\d,\.]/g, '');
-                            setRawRecurces(cleanText);
-                            const numericValue = parseCurrencyInput(cleanText);
-                            setReq(prev => ({ ...prev, recurces: numericValue }));
-                        }}
-                        />
-
-                        <Mytext style={styles.label}>Previsão de Início:</Mytext>
-                        <MyCalendar
-                            date={date} setDate={setDate} icon="FaCalendarDays" 
-                        />
-
-                        <Mytext style={styles.label}> Periodo Esperado: </Mytext>
-                        <View style={styles.row}>
-                            <View style={{ flex: 1, marginRight: 5 }}>
-                                <Mytext style={[styles.label, { fontSize: 18, fontWeight: '600' }]}>Início</Mytext>
-                                <MyCalendar
-                                date={date} // usa o mesmo estado
-                                setDate={setDate} // mesma função
-                                icon="FaCalendarDays"
-                                />
+                                >
+                                <Mytext style={{ color: '#fff', fontSize: 18 }}>–</Mytext>
+                                </TouchableOpacity>
+                                
+                                
+                                {index === integrantes.length - 1 && (
+                                <TouchableOpacity
+                                    onPress={adicionarIntegrante}
+                                    style={{
+                                        backgroundColor: '#28a745',
+                                        borderRadius: 100,
+                                        width: 36,
+                                        height: 36,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <Mytext style={{ color: '#fff', fontSize: 20 }}>+</Mytext>
+                                </TouchableOpacity>
+                                )}
                             </View>
+                            ))}
 
-                            <View style={{ flex: 1, marginLeft: 5 }}>
-                                <Mytext style={[styles.label, { fontSize: 18, fontWeight: '600' }]}>Término</Mytext>
-                                <MyCalendar
-                                date={date} // mesmo estado novamente
-                                setDate={setDate} // mesma função
-                                icon="FaCalendarDays"
-                                />
-                            </View>
-                        </View>
-                        
-                        <Mytext style={styles.label}> Descrição: </Mytext>
-                        <Myinput
-                            iconName=''
-                            label =''
-                            placeholder="Digite aqui..."
-                            value={req.description}
-                            onChangeText={(TextArea) => setReq({ ...req, description: TextArea })}
-                        />
-                        
-                        <Mytext style={styles.label}> Objetivo: </Mytext>
-                        <Myinput
-                            iconName=''
-                            label =''
-                            placeholder="Digite aqui..."
-                            value={req.objective}
-                            onChangeText={(text) => setReq({ ...req, objective: text })}
-                        />
-                        
-                        <Mytext style={styles.label}> Qual Atividade proposta: </Mytext>
-                        <Myinput
-                            iconName=''
-                            placeholder="Digite aqui..."
-                            value={req.activity}
-                            onChangeText={(text) => setReq({ ...req, activity: text })}
-                            label=''
+
+                            <Mytext style={styles.label}> Nome do projeto: </Mytext>
+                            <Myinput
+                                iconName=''
+                                label =''
+                                placeholder="Digite aqui..."
+                                value={req.namep}
+                                onChangeText={(text) => setReq({ ...req, namep: text })}
+                            />
+                            <Mytext style={styles.label}> Site: </Mytext>
+                            <Myinput
+                                iconName=''
+                                label =''
+                                placeholder="Digite aqui..."
+                                value={req.url}
+                                onChangeText={(text) => setReq({ ...req, url: adicionarProtocolo(text) })}
+                            />
                             
-                        />
-                        
-                        <Mytext style={styles.label}> Quais as Metodologias abordadas: </Mytext>
+                            <Mytext style={styles.label}> Recursos: </Mytext>
+                            <Myinput
+                            iconName=""
+                            label=""
+                            placeholder="Digite o valor..."
+                            value={`R$ ${rawRecurces}`} // Mostra valor formatado
+                            onChangeText={(text) => {
+                                const cleanText = text.replace(/[^\d,\.]/g, '');
+                                setRawRecurces(cleanText);
+                                const numericValue = parseCurrencyInput(cleanText);
+                                setReq(prev => ({ ...prev, recurces: numericValue }));
+                            }}
+                            />
+
+                            <Mytext style={styles.label}>Previsão de Início:</Mytext>
+                            <MyCalendar
+                                date={date} setDate={setDate} icon="FaCalendarDays" 
+                            />
+
+                            <Mytext style={styles.label}> Periodo Esperado: </Mytext>
                             <View style={styles.row}>
-                                <MyTextArea
-                                    iconName='message'
-                                    label="Técnicas"
-                                    value={req.techniques} // Passa o estado como valor
-                                    onChangeText={(text) => setReq({ ...req, techniques: text })} // Atualiza o estado ao digitar
-                                    placeholder="Digite aqui..."
-                                    style={{ height: 50 }}
-                                />
-                                <MyTextArea
-                                    iconName='message'
-                                    label="Processos"
-                                    value={req.process} // Passa o estado como valor
-                                    onChangeText={(text) => setReq({ ...req, process: text })} // Atualiza o estado ao digitar
-                                    placeholder="Digite aqui..."
-                                    style={{ height: 50 }}
-                                />
+                                <View style={{ flex: 1, marginRight: 5 }}>
+                                    <Mytext style={[styles.label, { fontSize: 18, fontWeight: '600' }]}>Início</Mytext>
+                                    <MyCalendar
+                                    date={date} // usa o mesmo estado
+                                    setDate={setDate} // mesma função
+                                    icon="FaCalendarDays"
+                                    />
+                                </View>
+
+                                <View style={{ flex: 1, marginLeft: 5 }}>
+                                    <Mytext style={[styles.label, { fontSize: 18, fontWeight: '600' }]}>Término</Mytext>
+                                    <MyCalendar
+                                    date={date} // mesmo estado novamente
+                                    setDate={setDate} // mesma função
+                                    icon="FaCalendarDays"
+                                    />
+                                </View>
                             </View>
+                            
+                            <Mytext style={styles.label}> Descrição: </Mytext>
+                            <Myinput
+                                iconName=''
+                                label =''
+                                placeholder="Digite aqui..."
+                                value={req.description}
+                                onChangeText={(TextArea) => setReq({ ...req, description: TextArea })}
+                            />
+                            
+                            <Mytext style={styles.label}> Objetivo: </Mytext>
+                            <Myinput
+                                iconName=''
+                                label =''
+                                placeholder="Digite aqui..."
+                                value={req.objective}
+                                onChangeText={(text) => setReq({ ...req, objective: text })}
+                            />
+                            
+                            <Mytext style={styles.label}> Qual Atividade proposta: </Mytext>
+                            <Myinput
+                                iconName=''
+                                placeholder="Digite aqui..."
+                                value={req.activity}
+                                onChangeText={(text) => setReq({ ...req, activity: text })}
+                                label=''
+                                
+                            />
+                            
+                            <Mytext style={styles.label}> Quais as Metodologias abordadas: </Mytext>
+                                <View style={styles.row}>
+                                    <MyTextArea
+                                        iconName='message'
+                                        label="Técnicas"
+                                        value={req.techniques} // Passa o estado como valor
+                                        onChangeText={(text) => setReq({ ...req, techniques: text })} // Atualiza o estado ao digitar
+                                        placeholder="Digite aqui..."
+                                        style={{ height: 50 }}
+                                    />
+                                    <MyTextArea
+                                        iconName='message'
+                                        label="Processos"
+                                        value={req.process} // Passa o estado como valor
+                                        onChangeText={(text) => setReq({ ...req, process: text })} // Atualiza o estado ao digitar
+                                        placeholder="Digite aqui..."
+                                        style={{ height: 50 }}
+                                    />
+                                </View>
 
-                            <View style={styles.row}>
-                                <MyTextArea
-                                    iconName='message'
-                                    label="Estratégias"
-                                    value={req.strategies} // Passa o estado como valor
-                                    onChangeText={(text) => setReq({ ...req, strategies: text })} // Atualiza o estado ao digitar
-                                    placeholder="Digite aqui..."
-                                    style={{ height: 50 }}
-                                />
-                                <MyTextArea
-                                    iconName='message'
-                                    label="Planejamento"
-                                    value={req.planning} // Passa o estado como valor
-                                    onChangeText={(text) => setReq({ ...req, planning: text })} // Atualiza o estado ao digitar
-                                    placeholder="Digite aqui..."
-                                    style={{ height: 50 }}
-                                />
+                                <View style={styles.row}>
+                                    <MyTextArea
+                                        iconName='message'
+                                        label="Estratégias"
+                                        value={req.strategies} // Passa o estado como valor
+                                        onChangeText={(text) => setReq({ ...req, strategies: text })} // Atualiza o estado ao digitar
+                                        placeholder="Digite aqui..."
+                                        style={{ height: 50 }}
+                                    />
+                                    <MyTextArea
+                                        iconName='message'
+                                        label="Planejamento"
+                                        value={req.planning} // Passa o estado como valor
+                                        onChangeText={(text) => setReq({ ...req, planning: text })} // Atualiza o estado ao digitar
+                                        placeholder="Digite aqui..."
+                                        style={{ height: 50 }}
+                                    />
 
-                                {/* <>Fazer um botão que ao clicar ele abre a caixa de seleção do usuario e quando clico no usuario ele adioca ao meu users </>*/}
+                                    {/* <>Fazer um botão que ao clicar ele abre a caixa de seleção do usuario e quando clico no usuario ele adioca ao meu users </>*/}
 
+                                </View>
+
+                            <View style={styles.buttonContainer}> 
+                                <MyButton title={req.id == -1? "Cadastrar" : "Atualizar"} onPress={handleRegister} />
                             </View>
+                        </View> 
 
-                        <View style={styles.buttonContainer}> 
-                            <MyButton title="Cadastrar" onPress={handleRegister} />
-                        </View>
-                    </View> 
+                    </View>   
+                    </ScrollView>
+                </MyModal_mobilefullscreen>
 
-                </View>   
                 <View style={styles.listContainer}> 
                     <MyList 
                         data={projects}
