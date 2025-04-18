@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import { View, StyleSheet } from 'react-native' ;
-import {MyItem, MyTb} from '../../src/components/MyItem';
+import {MyTb} from '../../src/components/MyItem';
 import MyList from '../../src/components/MyList';
 import MyView from '../../src/components/MyView';
 import MyButton from '../../src/components/MyButtons';
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
       borderRadius: 10,
       padding: 8,
     },
-    
+
     form: {
         flex: 1,
         marginRight: 10,
