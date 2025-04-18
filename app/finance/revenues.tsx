@@ -9,8 +9,12 @@ import {MyItem} from '../../src/components/MyItem';
 import Mytext from '../../src/components/MyText';
 import {MyModal_mobilefullscreen} from '../../src/components/MyModal';
 import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '../../src/controllers/revenues'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { TextInput } from 'react-native';
+
 
 import MySelect from '../../src/components/MySelect';
+import MySearch from '../../src/components/MySearch';
 
 export default function RevenueScreen() {
   
@@ -29,7 +33,7 @@ export default function RevenueScreen() {
     
 
   });
-
+const [searchTerm, setSearchTerm] = useState('');
 const[visible, setVisible] = useState(false);
 const [revenues, setRevenues] = useState<iRevenue[]>([]);
 
@@ -115,15 +119,48 @@ useEffect(()=>{
       
     }
 }
-
+// logica do compo
+const getFilteredRevenues = () => {
+  if (!searchTerm) return revenues; // Retorna tudo se não houver busca
+  
+  const term = searchTerm.toLowerCase();
+  
+  return revenues.filter(item => {
+    // Converte o desconto para string e trata o símbolo %
+    const discountStr = item.discount_percentage?.toString() || '';
+    const discountPercent = discountStr ? `${discountStr}%` : '';
+    
+    return (
+      item.name?.toLowerCase().includes(term) ||
+      item.description?.toLowerCase().includes(term) ||
+      item.value?.toString().includes(searchTerm) || // Mantém sem lowercase para números
+      item.id?.toString().includes(searchTerm) ||
+      item.url?.toLowerCase().includes(term) ||
+      item.scholarship_status?.toLowerCase().includes(term) ||
+      discountStr.includes(searchTerm) || // Busca o número cru (25)
+      discountPercent.includes(searchTerm) // Busca o formato com % (25%)
+    );
+  });
+};
    
   
   return (
 
     <MyView >
       <Mytext style={styles.title}>
-         cadastre as receitas
+         💰cadastre as receitas
       </Mytext>
+
+    <MySearch
+       style={styles.searchInput}
+       onChangeText={setSearchTerm}
+        onPress={()=> {setSearchTerm(searchTerm)}}
+        busca={searchTerm}
+        placeholder="Buscar receitas..."
+    />
+
+
+
 
       {/* Formulário */}
       <View style={styles.row}>
@@ -191,7 +228,7 @@ useEffect(()=>{
         {/* Lista de Receitas */}
         <MyList
 
-          data={revenues}
+          data={getFilteredRevenues()}  // Dados já filtrados
           keyItem={(item) => item.id.toString()}
           renderItem={({ item }) => (
             
@@ -200,7 +237,7 @@ useEffect(()=>{
            
               onEdit={() => { editRevenue(item.id) }} 
               onDel= {() => { delRevenue(item.id) }}
-              style={{gap:10}}
+              style={{gap:8}}
 
             >
               <Mytext style={styles.revenueText}>Nome: {item.name}</Mytext>
@@ -270,9 +307,9 @@ const styles = StyleSheet.create({
     
   },
   revenueText: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#000000',
-    marginBottom: 5,
+    marginBottom: 3,
     
   },
   title:{               
@@ -293,6 +330,26 @@ const styles = StyleSheet.create({
   color: '#000000',
   marginBottom: 8,
   marginLeft:541,
-}
+},
+searchWrapper: {
+  marginBottom: 16,
+  position: 'relative',
+},
+searchInput: {
+  backgroundColor: '#fff',
+  borderRadius: 8,
+  paddingVertical: 10,
+  paddingHorizontal: 16,
+  paddingRight: 40,
+  borderWidth: 1,
+  borderColor: '#ccc',
+  fontSize: 14,
+},
+searchIcon: {
+  position: 'absolute',
+  right: 16,
+  top: '50%',
+  transform: [{ translateY: -10 }],
+},
  
 });
