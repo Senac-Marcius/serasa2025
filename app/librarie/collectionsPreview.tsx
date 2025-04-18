@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native';
-import { MyModal_mobile1 } from '../src/components/MyModal';
-import MyButton from '../src/components/MyButtons';
-import MyView from '../src/components/MyView';
-import { Myinput } from '../src/components/MyInputs'
+import { MyModal_mobile1 } from '../../src/components/MyModal';
+import MyButton from '../../src/components/MyButtons';
+import MyView from '../../src/components/MyView';
+import { Myinput } from '../../src/components/MyInputs'
 import { useRouter } from 'expo-router';
-import { setCollection, iCollection, deleteCollectionById, updateCollectionById, getCollections } from '../src/controllers/collections';
+import { setCollection, iCollection, deleteCollectionById, updateCollectionById, getCollections } from '../../src/controllers/collections';
 import 'bootstrap/dist/css/bootstrap.css';
 import Carousel from 'react-bootstrap/Carousel';
-import MyFilter from '../src/components/MyFilter';
-import MySearch from '../src/components/MySearch'
+import MyFilter from '../../src/components/MyFilter';
 
 
 
@@ -39,20 +38,20 @@ export default function CollectionPreviewScreen() {
                         <Carousel>
                             <Carousel.Item>
                                 <Image
-                                    source={require('../images/slide1biblioteca.png')}
+                                    source={require('./assets/slide1biblioteca.png')}
                                     style={{ width: 1300, height: 400, resizeMode: 'contain' }}
                                 />
                             </Carousel.Item>
                             <Carousel.Item>
                                 <Image
-                                    source={require('../images/slide2biblioteca.png')}
+                                    source={require('./assets/slide2biblioteca.png')}
                                     style={{ width: 1200, height: 400, resizeMode: 'contain' }}
 
                                 />
                             </Carousel.Item>
                             <Carousel.Item>
                                 <Image
-                                    source={require('../images/slide3biblioteca.png')}
+                                    source={require('./assets/slide3biblioteca.png')}
                                     style={{ width: 1200, height: 400, resizeMode: 'contain' }}
 
                                 />
@@ -76,16 +75,20 @@ export default function CollectionPreviewScreen() {
                             numColumns={3}
                             keyExtractor={(item) => item.id.toString()}
                             renderItem={({ item }) => (
+                                    <TouchableOpacity
+                                      style={styles.itemContainer}
+                                      onPress={() => router.push({ pathname:'librarie/collectionDetail', params: { id: item.id.toString() }, })}
+                                    >
                                 <View style={styles.itemContainer}>
                                     <Text style={styles.itemText}>Nome: {item.name}</Text>
                                     <Text style={styles.itemText}>Quantidade: {item.quantity}</Text>
                                     <Text style={styles.itemText}>Estrelas: {item.quantity}</Text>
                                 </View>
+                                </TouchableOpacity>
                             )}
                         />
                     </View>
                 </View>
-            
         </MyView >
         </ScrollView>
     )

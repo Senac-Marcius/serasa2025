@@ -150,7 +150,7 @@ export default function CollectionScreen() {
 
                                     </TouchableOpacity>
                                 </View>
-                                <TouchableOpacity style={styles.button_round} onPress={() => router.push('/collectionsPreview')}>
+                                <TouchableOpacity style={styles.button_round} onPress={() => router.push('../librarie/collectionsPreview')}>
                                         <Text style={styles.buttonText}>Visite nosso acervo</Text>
                                 </TouchableOpacity>
                             </View>
