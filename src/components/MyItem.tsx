@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { Text, View, TouchableOpacity, ViewStyle, StyleSheet } from 'react-native';
 import MyButton from './MyButtons';
+import { Button } from 'react-native-paper';
 
 
 interface MyItemProps {
@@ -8,7 +9,7 @@ interface MyItemProps {
   style?: ViewStyle | ViewStyle[];
   onEdit?(): void;
   onDel?(): void;
-
+  button?: ReactNode;
 }
 
 const MyItem: React.FC<MyItemProps> = ({ children, style, onEdit, onDel}) => {
@@ -33,7 +34,7 @@ const MyItem: React.FC<MyItemProps> = ({ children, style, onEdit, onDel}) => {
   );
 };
 
-const MyTb : React.FC<MyItemProps> = ({children, onEdit, onDel }) =>{
+const MyTb : React.FC<MyItemProps> = ({children, onEdit, onDel, button }) =>{
     return(
       <View style={[styles.tableRow]}>
         {children}
@@ -49,7 +50,7 @@ const MyTb : React.FC<MyItemProps> = ({children, onEdit, onDel }) =>{
             button_type="delete"
             color="#E74C3C"
             
-          />)}
+          />)}{button}
         </View>
       </View>
     );

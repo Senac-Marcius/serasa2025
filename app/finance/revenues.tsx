@@ -5,7 +5,7 @@ import MyView from '../../src/components/MyView';
 import MyList from '../../src/components/MyList';
 import MyButton from '../../src/components/MyButtons';
 import { Myinput, MyTextArea } from '../../src/components/MyInputs';
-import {MyItem} from '../../src/components/MyItem';
+import {MyItem, MyTb} from '../../src/components/MyItem';
 import Mytext from '../../src/components/MyText';
 import {MyModal_mobilefullscreen} from '../../src/components/MyModal';
 import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '../../src/controllers/revenues'
@@ -146,26 +146,11 @@ const getFilteredRevenues = () => {
   
   return (
 
-    <MyView >
+    <MyView style={{ flex: 1, backgroundColor: '#f0f2f5' }} >
       <Mytext style={styles.title}>
          💰cadastre as receitas
       </Mytext>
-
-    <MySearch
-       style={styles.searchInput}
-       onChangeText={setSearchTerm}
-        onPress={()=> {setSearchTerm(searchTerm)}}
-        busca={searchTerm}
-        placeholder="Buscar receitas..."
-    />
-
-
-
-
-      {/* Formulário */}
-      <View style={styles.row}>
-        
-        <MyModal_mobilefullscreen visible={visible} setVisible={setVisible}>
+<MyModal_mobilefullscreen visible={visible} setVisible={setVisible}>
         <View style={styles.form}>
             {/* Campo de Nome */}
             <Myinput
@@ -225,41 +210,58 @@ const getFilteredRevenues = () => {
             <MyButton style={{justifyContent:'center'}} onPress={() => handleRegister ()} title="cadastrar"  />
         </View>
         </MyModal_mobilefullscreen>
+    <MySearch
+       style={styles.searchInput}
+       onChangeText={setSearchTerm}
+        onPress={()=> {setSearchTerm(searchTerm)}}
+        busca={searchTerm}
+    />
+
+
+
+        
+        
         {/* Lista de Receitas */}
         <MyList
-
+          style={styles.table}
           data={getFilteredRevenues()}  // Dados já filtrados
           keyItem={(item) => item.id.toString()}
           renderItem={({ item }) => (
             
            
-            <MyItem
+            <MyTb
            
               onEdit={() => { editRevenue(item.id) }} 
               onDel= {() => { delRevenue(item.id) }}
-              style={{gap:8}}
+              button={(
+                <Mydownload  url={item.url} />
+              )}
 
             >
-              <Mytext style={styles.revenueText}>Nome: {item.name}</Mytext>
-              <Mytext style={styles.revenueText}>Status da Bolsa: {item.scholarship_status}</Mytext>
-              <Mytext style={styles.revenueText}>Data: {item.created_at}</Mytext>
-              <Mytext style={styles.revenueText}>Descrição: {item.description}</Mytext>    
-                     
-              <Mytext style={styles.revenueText}>ID do Usuário: {item.user_id}</Mytext>
-               <Mytext style={styles.revenueText}>Desconto: {item.discount_percentage}%</Mytext>
-             
-              <Mytext style={styles.revenueText}>Valor R$: {item.value}</Mytext> 
-              
-              <Mydownload  url={item.url} />
+              <Mytext style={styles.td}>{item.name}</Mytext>
+              <Mytext style={styles.td}>{item.scholarship_status}</Mytext>
+              <Mytext style={styles.td}>{item.created_at}</Mytext>
+              <Mytext style={styles.td}>{item.description}</Mytext>    
+              <Mytext style={styles.td}>{item.user_id}</Mytext>
+              <Mytext style={styles.td}>{item.discount_percentage}%</Mytext>
+              <Mytext style={styles.td}>{item.value}</Mytext> 
+            </MyTb>
+          )}
+          header={(
+            <View style={styles.tableRowHeader}>
+              <Mytext style={styles.th}>Nome</Mytext>
+              <Mytext style={styles.th}>Status</Mytext>
+              <Mytext style={styles.th}>Data</Mytext>
+              <Mytext style={styles.th}>Descrição</Mytext>
+              <Mytext style={styles.th}>Id de usuario</Mytext>
+              <Mytext style={styles.th}>Valor de desconto</Mytext>
+              <Mytext style={styles.th}>Valor</Mytext>
+              <Mytext style={styles.th}>Ações</Mytext>
+            </View>
 
-            
-      
-              
-            </MyItem>
           )}
         />
 
-      </View>
     </MyView>
   );
 };
@@ -270,6 +272,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-start',
   },
+
+  table: {
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+    padding: 8,
+  },
+  
   buttons: {
      alignItems:"center",
      justifyContent:"center",
@@ -292,6 +301,14 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 3,
   },
+
+  th: {
+    flex: 1,
+     fontWeight: '600',
+      fontSize: 13,
+       color: '#333'
+    },
+
   revenueStyle: {
     flex: 1,
     marginRight: 10,
@@ -312,6 +329,14 @@ const styles = StyleSheet.create({
     marginBottom: 3,
     
   },
+
+  tableRowHeader: {
+    flexDirection: 'row',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+  },
+
   title:{               
     marginBottom: 8,
     fontSize: 40,
@@ -345,6 +370,13 @@ searchInput: {
   borderColor: '#ccc',
   fontSize: 14,
 },
+
+td: {
+  flex: 1,
+  fontSize: 13,
+  color: '#444' 
+ },
+
 searchIcon: {
   position: 'absolute',
   right: 16,

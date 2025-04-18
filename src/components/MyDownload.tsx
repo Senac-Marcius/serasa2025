@@ -38,7 +38,7 @@ const Mydownload: React.FC<MydownloadProps> = ({ style, url }) => {
         font_size={14} 
         text_color='white'
         color='#4CAF50'
-
+    
 
 
         />
@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
         backgroundColor:'#4CAF50',
         width:190,
         padding:15,
+    
     },
 });
 
