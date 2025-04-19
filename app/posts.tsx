@@ -11,9 +11,31 @@ import {MyModal_mobile3} from '../src/components/MyModal'
 import { Card, Paragraph, Title } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import { Image } from 'react-native';
 
 
 export default function postScreen() {
+
+    async function pickImage() {
+        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    
+        if (permissionResult.granted === false) {
+            alert("Permissão para acessar a galeria é necessária!");
+            return;
+        }
+    
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            quality: 1,
+        });
+    
+        if (!result.canceled) {
+            const uri = result.assets[0].uri;
+            setReq({ ...req, url: uri });
+        }
+    }    
 
     const [req, setReq] = useState({
         id: -1,
@@ -24,7 +46,6 @@ export default function postScreen() {
     });
 
     const [posts, setPosts] = useState<iPost[]>([])
-
     const [menuVisible, setMenuVisible] = useState(false);
     const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
 
@@ -59,6 +80,8 @@ export default function postScreen() {
             like: 0,
             user_id: 2,
         });
+
+        setVisible(false); // Isso fecha a caixinha/modal
     }
 
     function editPost(id: number) {
@@ -79,11 +102,16 @@ export default function postScreen() {
         }
     }
 
+ 
     function openOptions(id: number) {
-        setSelectedPostId(id);
-        setMenuVisible(!menuVisible);
+        if (selectedPostId === id && menuVisible) {
+            setMenuVisible(false);
+            setSelectedPostId(null);
+        } else {
+            setSelectedPostId(id);
+            setMenuVisible(true);
+        }
     }
-
 
 
     const router = useRouter();
@@ -116,7 +144,12 @@ export default function postScreen() {
                         value={req.url}
                         onChangeText={(text) => setReq({ ...req, url: text })}
                     />
-
+                    
+                    <MyButton
+                        title="Selecionar Imagem"
+                        onPress={pickImage}
+                        color="yellow"
+                    />
 
                     <Myinput
                         label='Descrição'
@@ -133,6 +166,7 @@ export default function postScreen() {
                     />
                 </View>
             </MyModal_mobile3>
+
 
             <MyList // é o feed
                     data={posts}
@@ -152,7 +186,7 @@ export default function postScreen() {
                                 <MaterialIcons name="more-vert" size={24} color="black" />
                             </TouchableOpacity>
 
-                            {menuVisible && (
+                            {menuVisible && selectedPostId === item.id && (
                                 <View style={{ backgroundColor: '#c7c7c7', borderBottomLeftRadius: 8, borderBottomRightRadius: 8, borderTopLeftRadius: 8, height: 110, width: 110, alignItems: 'center', justifyContent: 'center', position: 'absolute', padding: 10, top: 10, right: 25, zIndex: 2, gap:10}}>
                                     <MyButton  width={65} font_size={15} onPress={() => editPost(item.id)} title="Editar"  color="yellow"/>
                                     <MyButton width={65} font_size={15} onPress={() => delPost(item.id) } title="Deletar"  color="red" />
@@ -165,7 +199,7 @@ export default function postScreen() {
                                 <Paragraph>{item.like}</Paragraph>
                             </Card.Content>      
 
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10 }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10 }}> {/* botão de like e deslike*/}
                                 <MyButton title='like' button_type='circle' onPress={() => like(item.id, +1)} />
                                 <MyButton title='deslike' button_type='circle' onPress={() => like(item.id, -1)} />
                             </View>
