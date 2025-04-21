@@ -170,15 +170,10 @@ export default function TimelineScreen() {
                 <Text style={styles.td}>{item.local_id}</Text>
                 <Text style={styles.td}>{item.class_id}</Text>
                 <Text style={styles.td}>{item.start_time ? item.start_time + 'h' : '-'}</Text>
-                <Text style={styles.td}>{item.end_time ? item.end_time + 'h' : '-'}</Text>
-                <View style={styles.actions}>
-                  <TouchableOpacity onPress={() => editTimelines(item.id)}>
-                    <Text style={styles.edit}>Editar</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => delTimelines(item.id)}>
-                    <Text style={styles.del}>Excluir</Text>
-                  </TouchableOpacity>
-                </View>
+                <Text style={[styles.td, styles.actions]}>
+                  <Text style={styles.edit} onPress={() => editTimelines(item.id)}>Editar</Text>{' '}
+                  <Text style={styles.del} onPress={() => delTimelines(item.id)}>Excluir</Text>
+                </Text>
               </View>
             ))}
         </View>
@@ -245,11 +240,8 @@ const styles = StyleSheet.create({
   th: { flex: 1, fontWeight: '600', fontSize: 13, color: '#333' },
   td: { flex: 1, fontSize: 13, color: '#444' },
   actions: {
-    flex: 1,
     flexDirection: 'row',
-    justifyContent: 'flex-start',
     gap: 12,
-    paddingLeft: 8,
   },
   edit: { color: '#3AC7A8', fontWeight: '600', fontSize: 13 },
   del: { color: '#D63031', fontWeight: '600', fontSize: 13 },
