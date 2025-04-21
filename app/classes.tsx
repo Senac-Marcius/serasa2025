@@ -1,16 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TextInput, FlatList, TouchableOpacity, StyleSheet, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { createClient } from '@supabase/supabase-js';
-import Mytext from '../src/components/MyText';
-import  MyView  from '../src/components/MyView';
+import { Ionicons } from '@expo/vector-icons';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import MyText from '../src/components/MyText';
+import MyView from '../src/components/MyView';
 import MyList from '../src/components/MyList';
 import MyButton from '../src/components/MyButtons';
 
-// Configuração do Supabase
 const supabaseUrl = 'https://fcjbnmhbjolybbkervgg.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjamJubWhiam9seWJia2VydmdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI5MzcyNTQsImV4cCI6MjA1ODUxMzI1NH0.mFa5W8ixlKQtaNm_EdGFg3IuooF95Xcn-ArPx_vX4mI';
+const supabaseAnonKey = 'ey...'; // sua chave aqui
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+const Stack = createNativeStackNavigator();
 
 type Turma = {
   id: number;
@@ -28,11 +32,23 @@ type Turma = {
   status: string;
 };
 
-export default function TurmasComCadastro() {
+export default function TurmasScreenWrapper() {
+  return (
+    <Stack.Navigator initialRouteName="TurmasScreen" screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="TurmasScreen" component={TurmasScreen} />
+      <Stack.Screen name="TabelaCompleta" component={TabelaCompletaScreen} />
+    </Stack.Navigator>
+  );
+}
+
+
+function TurmasScreen({ navigation }: any) {
   const [turmas, setTurmas] = useState<Turma[]>([]);
+  const [pesquisa, setPesquisa] = useState('');
   const [modoCadastro, setModoCadastro] = useState(false);
-  const [form, setForm] = useState<Turma>({
-    id: 0,
+  const [editandoId, setEditandoId] = useState<number | null>(null);
+
+  const [form, setForm] = useState<Omit<Turma, 'id'>>({
     curso: '',
     turno: '',
     modalidade: '',
@@ -50,18 +66,14 @@ export default function TurmasComCadastro() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const carregarTurmas = async () => {
-    const { data, error } = await supabase.from('class').select('*');
-    if (error) {
-      console.error('Erro ao buscar turmas:', error.message);
-      return;
-    }
-    setTurmas(data as Turma[]);
+    const { data } = await supabase.from('class').select('*').order('id', { ascending: false });
+    setTurmas(data || []);
   };
 
   const salvar = async () => {
     console.log("iniciando processo de salvamento")
     const requiredFields = [
-      'id', 'curso', 'turno', 'modalidade', 'horario', 
+     'curso', 'turno', 'modalidade', 'horario', 
       'cargaHoraria', 'vagas', 'inicio', 'termino', 'valor', 
       'docente', 'certificacao', 'status'
     ];
@@ -72,17 +84,33 @@ export default function TurmasComCadastro() {
         return;
       }
     }
+    setErrorMessage(null);
 
-    setErrorMessage(null);  
-
-    const { data, error } = await supabase.from('class').insert([form]);
-    if (error) {
-      console.error('Erro ao salvar turma:', error.message);
-      return;
+    if (editandoId) {
+      await supabase.from('class').update(form).eq('id', editandoId);
+    } else {
+      await supabase.from('class').insert([form]);
     }
+
     carregarTurmas();
+    resetarForm();
+    setModoCadastro(false);
+  };
+
+  const deletarTurma = async (id: number) => {
+    await supabase.from('class').delete().eq('id', id);
+    carregarTurmas();
+  };
+
+  const editarTurma = (turma: Turma) => {
+    const { id, ...rest } = turma;
+    setForm(rest);
+    setEditandoId(id);
+    setModoCadastro(true);
+  };
+
+  const resetarForm = () => {
     setForm({
-      id: 0,
       curso: '',
       turno: '',
       modalidade: '',
@@ -96,65 +124,70 @@ export default function TurmasComCadastro() {
       certificacao: '',
       status: '',
     });
-    setModoCadastro(false);
-  };
-
-  const deletarTurma = async (id: number) => {
-    const { error } = await supabase.from('class').delete().eq('id', id);
-    if (error) {
-      console.error('Erro ao deletar turma:', error.message);
-      return;
-    }
-    carregarTurmas();
-  };
-
-  const editarTurma = (turma: Turma) => {
-    setForm(turma);
-    setModoCadastro(true);
+    setEditandoId(null);
   };
 
   useEffect(() => {
     carregarTurmas();
   }, []);
 
+  const turmasFiltradas = turmas.filter((turma) =>
+    turma.curso.toLowerCase().includes(pesquisa.toLowerCase())
+  );
+
   if (modoCadastro) {
     return (
-      <MyView >
-        <Mytext style={styles.header}>Cadastrar Nova Turma</Mytext>
-        {[
-          'id', 'curso', 'turno', 'modalidade', 'horario',
-          'cargaHoraria', 'vagas', 'inicio', 'termino', 'valor',
-          'docente', 'certificacao', 'status'
-        ].map((campo) => (
+      <MyView>
+        <MyText style={styles.header}>{editandoId ? 'Editar Turma' : 'Cadastrar Nova Turma'}</MyText>
+
+        {/* Exibindo o ID, mas o campo é somente leitura */}
+        {editandoId && (
+          <TextInput
+            style={styles.input}
+            placeholder="ID (somente leitura)"
+            value={editandoId.toString()}
+            editable={false}
+          />
+        )}
+
+        {Object.keys(form).map((campo) => (
           <TextInput
             key={campo}
             style={styles.input}
-            placeholder={campo.charAt(0).toUpperCase() + campo.slice(1)}
+            placeholder={campo}
             value={(form as any)[campo]}
             onChangeText={(text) => setForm({ ...form, [campo]: text })}
           />
         ))}
 
-       <MyButton 
-       title='Salvar'
-        onPress={salvar}
-       
-       />
+        <MyButton title="Salvar" onPress={salvar} />
+        <MyButton title="Cancelar" onPress={() => { resetarForm(); setModoCadastro(false); }} />
       </MyView>
     );
   }
 
   return (
     <View style={styles.container}>
-      <Mytext style={styles.header}>Turmas Cadastradas</Mytext>
-      <MyList
-        data={turmas}
-        keyItem={(item) => item.id.toString()}
+      <MyText style={styles.header}>Turmas</MyText>
+      <TextInput
+        placeholder="Pesquisar por turma..."
+        value={pesquisa}
+        onChangeText={setPesquisa}
+        style={styles.input}
+      />
+      <MyButton title="Cadastrar nova turma" onPress={() => setModoCadastro(true)} />
+      <MyText style={styles.subHeader}>Últimas Turmas</MyText>
+      <FlatList
+        data={turmasFiltradas.slice(0, 5)}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <Mytext style={styles.title}>{item.curso}</Mytext>
-            <Mytext>Código: {item.id}</Mytext>
-            <Mytext>Turno: {item.turno}</Mytext>
+            <MyText style={styles.title}>{item.curso}</MyText>
+            <MyText>Código: {item.id}</MyText>
+            <MyText>Turno: {item.turno}</MyText>
+            <MyText>Modalidade: {item.modalidade}</MyText>
+            <MyText>Carga Horária: {item.cargaHoraria}</MyText>
+            <MyText>Dias de Aula: {item.horario}</MyText>
             <View style={styles.actions}>
               <TouchableOpacity onPress={() => editarTurma(item)}>
                 <Ionicons name="pencil" size={20} color="purple" />
@@ -163,14 +196,44 @@ export default function TurmasComCadastro() {
                 <Ionicons name="trash" size={20} color="purple" />
               </TouchableOpacity>
             </View>
-    </View>
+          </View>
         )}
       />
-     <MyButton
-      title='Cadastrar nova turma'
-      onPress={() => setModoCadastro(true)}
+      <MyButton title="Ver todas as turmas" onPress={() => navigation.navigate('TabelaCompleta')} />
+    </View>
+  );
+}
 
-    />  
+function TabelaCompletaScreen({ navigation }: any) {
+  const [turmas, setTurmas] = useState<Turma[]>([]);
+
+  const carregarTurmas = async () => {
+    const { data } = await supabase.from('class').select('*').order('id', { ascending: false });
+    setTurmas(data || []);
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', carregarTurmas);
+    return unsubscribe;
+  }, [navigation]);
+
+  return (
+    <View style={styles.container}>
+      <MyText style={styles.header}>Tabela Completa de Turmas</MyText>
+      <FlatList
+        data={turmas}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+            {Object.entries(item).map(([key, value]) => (
+              <MyText key={key}>
+                <MyText style={{ fontWeight: 'bold' }}>{key}:</MyText> {value}
+              </MyText>
+            ))}
+          </View>
+        )}
+      />
+      <MyButton title="Voltar" onPress={() => navigation.goBack()} />
     </View>
   );
 }
@@ -178,26 +241,16 @@ export default function TurmasComCadastro() {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16 },
   header: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 16,
+    marginBottom: 12,
     textAlign: 'center',
   },
-  card: {
-    backgroundColor: '#f0f0f0',
-    padding: 16,
-    marginVertical: 8,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  title: { fontWeight: 'bold', fontSize: 16 },
-  actions: { flexDirection: 'row', gap: 16, marginTop: 8 },
-  formContainer: {
-    padding: 16,
-    gap: 12,
+  subHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 8,
   },
   input: {
     padding: 12,
@@ -205,23 +258,23 @@ const styles = StyleSheet.create({
     borderColor: '#993399',
     borderRadius: 10,
     backgroundColor: '#fff',
-    marginBottom: 8,
+    marginBottom: 12,
   },
-  button: {
-    backgroundColor: '#4CAF50',
-    padding: 12,
-    borderRadius: 8,
-    marginVertical: 10,
+  card: {
+    backgroundColor: '#f9f9f9',
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 12,
+    elevation: 2,
   },
-  buttonText: {
-    color: '#fff',
-    textAlign: 'center',
+  title: {
     fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 4,
   },
-  errorText: {
-    color: 'red',
-    marginVertical: 8,
-    fontWeight: 'bold',
-    textAlign: 'center',
+  actions: {
+    flexDirection: 'row',
+    gap: 16,
+    marginTop: 8,
   },
 });
