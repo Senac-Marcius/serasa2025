@@ -5,7 +5,8 @@ import { iLaunch } from './launchs';
 
 
 export interface iRecord {
-    id: number
+    id: number,
+    cpf: number,
     name: string,
     description: string,
     sick: string,
@@ -14,6 +15,7 @@ export interface iRecord {
     medication: string,
     user_id: number,
     create_at: string,
+    level_id: number,
 
 }  
 
@@ -63,12 +65,14 @@ export async function updateRecord(record: iRecord) {
         .from('records')
         .update({
             name: record.name,
+            cpf: record.cpf,
             description: record.description,
             sick: record.sick,
             health: record.health,
             allergy: record.allergy,
             medication: record.medication,
             user_id: record.user_id,
+            level_id: record.level_id, 
         })
         .eq('id', record.id);
 

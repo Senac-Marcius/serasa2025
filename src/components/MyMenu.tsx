@@ -90,7 +90,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Budgets" route="budgets" icon="wallet" />
         <MenuItem label="Calendar" route="secretaria/calendar" icon="calendar" />
         <MenuItem label="Categories" route="categories" icon="albums" />
-        <MenuItem label="Classes" route="classes" icon="school" />
+        <MenuItem label="Classes" route="sala_de_aula/classes" icon="school" />
         <MenuItem label="Collections" route="collections" icon="cube" />
         <MenuItem label="Courses" route="courses" icon="book" />
         <MenuItem label="Disciplines" route="secretaria/disciplines" icon="document-text" />
@@ -99,7 +99,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Expenses" route="expenses" icon="cash" />
         <MenuItem label="Investments" route="investments" icon="trending-up" />
         <MenuItem label="Items" route="items" icon="pricetag" />
-        <MenuItem label="Launchs" route="launchs" icon="rocket" />
+        <MenuItem label="Launchs" route="sala_de_aula/launchs" icon="rocket" />
         <MenuItem label="Levels" route="levels" icon="stats-chart" />
         <MenuItem label="Libraie" route="libraie" icon="book" />
         <MenuItem label="Loans" route="loans" icon="card" />
@@ -114,8 +114,8 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Records" route="records" icon="document-text-outline" />
         <MenuItem label="Revenues" route="revenues" icon="cash-outline" />
         <MenuItem label="Scales" route="scales" icon="speedometer" />
-        <MenuItem label="Timelines" route="timelines" icon="calendar" />
-        <MenuItem label="Students" route="students" icon="school" />
+        <MenuItem label="Timelines" route="sala_de_aula/timelines" icon="calendar" />
+        <MenuItem label="Students" route="sala_de_aula/students" icon="school" />
         <MenuItem label="Users" route="users" icon="person-circle" />
         <MenuItem label="More" route="more" icon="add-circle" />
       </ScrollView>

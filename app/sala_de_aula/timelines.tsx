@@ -1,27 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity } from 'react-native';
-import MyView from '../src/components/MyView';
+import MyView from '../../src/components/MyView';
 import { useRouter } from 'expo-router';
-import MyCalendar from '../src/components/MyCalendar'; 
-import MySearch from '../src/components/MySearch';
-import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs'; 
-import { supabase } from '../src/utils/supabase';
-import { setTimeline, iTimeline, delTimelines as delTimelinesDoController, editTimelines as editTimelinesDoController } from '../src/controllers/timelines';
-import MyButton from '../src/components/MyButtons';
-import MyList from '../src/components/MyList';
-import { MyItem } from '../src/components/MyItem';
-import Mytext from '../src/components/MyText';
+import MyCalendar from '../../src/components/MyCalendar'; 
+import MySearch from '../../src/components/MySearch';
+import { Myinput, MyCheck, MyTextArea } from '../../src/components/MyInputs'; 
+import { supabase } from '../../src/utils/supabase';
+import { setTimeline, iTimeline, delTimelines as delTimelinesDoController, editTimelines as editTimelinesDoController } from '../../src/controllers/timelines';
+import MyButton from '../../src/components/MyButtons';
+import MyList from '../../src/components/MyList';
+import { MyItem } from '../../src/components/MyItem';
+import Mytext from '../../src/components/MyText';
+import MyTimerPicker from '../../src/components/MyTimerPiker';
 
 export default function TimelineScreen() {
   const [req, setReq] = useState({
     id: -1,
-    url: '',
     class_id: 2,
-    discipline: '',
+    discipline_id: '',
     local_id: 1,
     start_time: '',
     end_time: '',
+    date:  new Date().toISOString(),
     created_at: new Date().toISOString(),
+    teacher_id: '',
   });
 
   const [timelines, setTimelines] = useState<iTimeline[]>([]);
@@ -58,13 +60,14 @@ export default function TimelineScreen() {
     // Limpar o formulário após o registro
     setReq({
       id: -1,
-      url: '',
       class_id: 2,
-      discipline: '',
+      discipline_id: '',
       local_id: 1,
       start_time: '',
       end_time: '',
+      date: new Date().toISOString(),
       created_at: new Date().toISOString(),
+      teacher_id: '',
     });
   }
 
@@ -99,7 +102,19 @@ export default function TimelineScreen() {
       />
 
       {/* Componente de calendário */}
-      <MyCalendar date="2021-10-10" setDate={(date) => console.log(date)} icon="" />
+      <MyCalendar date={req.date} setDate={(date) => setReq({ ...req, date: date })} icon=""
+       />
+
+      {/* Componente Relogio */}
+      <MyTimerPicker
+        onTimeSelected={(text)  => setReq({ ...req, end_time: text })} 
+        initialTime={req.end_time}
+      />
+
+      <MyTimerPicker
+        onTimeSelected={(text)  => setReq({ ...req, start_time: text })} 
+        initialTime={req.start_time}
+      />
 
       <Text style={styles.header}>Meu Cronograma</Text>
 
@@ -107,33 +122,34 @@ export default function TimelineScreen() {
         <View style={styles.form}>
           {/* Campos de input para o formulário de cronograma */}
           <Myinput
-            value={req.discipline}
-            onChangeText={(text)  => setReq({ ...req, discipline: text })}
+            value={req.teacher_id}
+            onChangeText={(text)  => setReq({ ...req, teacher_id: text })}
+            label="Professor"          // Label para o campo de disciplina
+            iconName=""             // Nome do ícone para o campo de disciplina
+            placeholder="Digite o nome do Professor:"
+          />
+          <Myinput
+            value={req.discipline_id}
+            onChangeText={(text)  => setReq({ ...req, discipline_id: text })}
             label="Disciplina"          // Label para o campo de disciplina
             iconName=""             // Nome do ícone para o campo de disciplina
             placeholder="Digite a disciplina:"
           />
           <Myinput
-            value={req.url}
-            onChangeText={(text) => setReq({ ...req, url: text })}
-            label="URL"                 // Label para o campo de URL
-            iconName=""            // Nome do ícone para o campo de URL
-            placeholder="Digite a URL:"
+            value={req.local_id?.toString()}
+            onChangeText={(text)  => setReq({ ...req, local_id: Number(text) })}
+            label="Local"
+            iconName=""           // Label para o campo de disciplinalocal
+            placeholder="Digite o Local:"
           />
           <Myinput
-            value={req.start_time}
-            onChangeText={(text) => setReq({ ...req, start_time: text })}
-            label="Hora de Início"      // Label para o campo de horário de início
-            iconName=""            // Nome do ícone para o campo de horário de início
-            placeholder="Digite o horário de início:"
+            value={req.class_id?.toString()}
+            onChangeText={(text)  => setReq({ ...req, class_id: Number(text) })}
+            label="Turma"          // Label para o campo de disciplina
+            iconName=""             // Nome do ícone para o campo de disciplina
+            placeholder="Digite o Turma:"
           />
-          <Myinput
-            value={req.end_time}
-            onChangeText={(text) => setReq({ ...req, end_time: text })}
-            label="Hora de Término"     // Label para o campo de horário de término
-            iconName=""            // Nome do ícone para o campo de horário de término
-            placeholder="Digite o horário do fim:"
-          />
+       
 
           {/* Botão para cadastrar o cronograma */}
           <MyButton style={{justifyContent:'center'}}
@@ -156,10 +172,11 @@ export default function TimelineScreen() {
                 onEdit={()=> editTimelines(item.id)}
 
             >
-              <Mytext style={styles.revenueText}>Disciplina: {item.discipline}</Mytext>
-              <Mytext style={styles.revenueText}>Url: {item.url}</Mytext>
-              <Mytext style={styles.revenueText}>Horário de Início: {item.start_time}</Mytext>
-              <Mytext style={styles.revenueText}>Horário de Término: {item.end_time}</Mytext>
+              <Mytext style={styles.revenueText}>Professor: {item.Professor_id}</Mytext>
+              <Mytext style={styles.revenueText}>Disciplina: {item.discipline_id}</Mytext>
+              <Mytext style={styles.revenueText}>Local: {item.local_id}</Mytext>
+              <Mytext style={styles.revenueText}>Turma: {item.class_id}</Mytext>
+
 
             </MyItem>
           )}
