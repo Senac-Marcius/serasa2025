@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity,TextInput } from 'react-native';
+import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity,TextInput,Pressable } from 'react-native';
 import MyView from '../src/components/MyView';
 import { useRouter } from 'expo-router';
 import MyCalendar from '../src/components/MyCalendar'; 
 import MySearch from '../src/components/MySearch';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs'; 
 import { supabase } from '../src/utils/supabase';
-import { setTimeline, iTimeline, delTimelines as delTimelinesDoController, editTimelines as editTimelinesDoController } from '../src/controllers/timelines';
+import { setTimeline, iTimeline, delTimelines as delTimelinesDoController, editTimelines as editTimelinesDoController,getTimelines,  } from '../src/controllers/timelines';
 import MyButton from '../src/components/MyButtons';
 import MyList from '../src/components/MyList';
 import { MyItem } from '../src/components/MyItem';
@@ -14,7 +14,7 @@ import Mytext from '../src/components/MyText';
 import MyTimerPicker from '../src/components/MyTimerPiker';
 import { text } from 'stream/consumers';
 import { Icon } from 'react-native-paper';
-import { getDisciplines, iDisciplines } from '../src/controllers/disciplines';
+
 
 
 
@@ -36,8 +36,10 @@ export default function TimelineScreen() {
   const [busca, setBusca] = useState('');
   const router = useRouter();
   const [filtro, setFiltro] = useState('');
-  const [disciplines, setDisciplines] = useState<iDisciplines[]>([]);
-  
+  const [disciplines, setDisciplines] = useState<iTimeline[]>([]);
+  const [showForm, setShowForm] = useState(false);
+ const [isEditing, setIsEditing] = useState(false);
+
 
   // Buscar os cronogramas ao carregar o componente
   useEffect(() => {
@@ -47,9 +49,9 @@ export default function TimelineScreen() {
         setTimelines(todos);
       }
   
-      const result = await getDisciplines({});
+      const result = await getTimelines({});
       if (result.status) {
-        setDisciplines(result.data as iDisciplines[]);
+        setDisciplines(result.data as iTimeline[]);
       } else {
         console.log('Erro ao buscar disciplinas:', result.data);
       }
@@ -57,12 +59,16 @@ export default function TimelineScreen() {
       if (error) {
         console.error("Erro ao buscar os cronogramas:", error);
       }
+      
     })();
   }, []);
+
+
   
 
   // Função para registrar um novo cronograma ou editar um existente
-  async function handleRegister() {
+  
+     async function handleRegister() {
     
     if (req.id === -1) {
       // Criar novo cronograma
@@ -75,6 +81,7 @@ export default function TimelineScreen() {
       setTimelines(timelines.map(T => (T.id === req.id ? req : T)));
       await editTimelinesDoController(req);
     }
+
 
     // Limpar o formulário após o registro
     setReq({
@@ -116,72 +123,31 @@ export default function TimelineScreen() {
         <View style={{ flex: 1, backgroundColor: '#f0f2f5' }}>
           <View style={{ padding: 20 }}>
              <View style={styles.headerRow}>
-              <Text style={styles.title}>Disciplinas</Text>
-              <MyButton title='Nova disciplina' icon='plus' onPress={handleRegister }/>
-              
+              <Text style={styles.title}>Meu Cronograma</Text>
+              <Pressable style={styles.buttonNewText} onPress={() => { ; ; setShowForm(true); }}>
+                 <Text style={styles.buttonCapsule}>+ Novo Cronograma</Text>
+              </Pressable>
              </View>
           </View>
         </View>
       </View>
       
-      <Text style={styles.text}> Meu Cronograma</Text>
+
           <View style={styles.searchWrapper}>
               <TextInput
-                placeholder="Busque o Professor"
+                placeholder="Busque professor"
                 value={filtro}
                 onChangeText={setFiltro}
                 style={styles.searchInput}
                 placeholderTextColor="#999"
-              />
-             
                 
-            </View>
-
-            <View style={styles.table}>
-  <View style={styles.tableRowHeader}>
-    <Text style={styles.th}>Disciplina</Text>
-    <Text style={styles.th}>Professor</Text>
-    <Text style={styles.th}>Local</Text>
-    <Text style={styles.th}>Turma</Text>
-    <Text style={styles.th}>Carga</Text>
-    <Text style={styles.th}>Ações</Text>
-  </View>
-
-  {timelines
-  ?.filter((item) => {
-  
-    const disciplina = disciplines.find((d) => d.id === Number(item.discipline_id));
-    return disciplina?.name?.toLowerCase().includes(filtro.toLowerCase());
-  })
-  .map((item) => {
-    const disciplina = disciplines.find((d) => d.id === Number(item.discipline_id));
-
-    return (
-      <View style={styles.tableRow} key={item.id}>
-        <Text style={styles.td}>{disciplina?.name || '-'}</Text>
-        <Text style={styles.td}>{disciplina?.teacher || '-'}</Text>
-        <Text style={styles.td}>{item.local_id}</Text>
-        <Text style={styles.td}>{item.class_id}</Text>
-        <Text style={styles.td}>{disciplina?.workload ? disciplina.workload + 'h' : '-'}</Text>
-        <View style={styles.actions}>
-          <TouchableOpacity onPress={() => editTimelines(item.id)}>
-            <Text style={styles.edit}>Editar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => delTimelines(item.id)}>
-            <Text style={styles.del}>Excluir</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  })}
-
- 
-
-</View>
-
-
-      {/* Componente de calendário */}
-      <MyCalendar date={req.date} setDate={(date) => setReq({ ...req, date: date })} icon=""
+              />   
+       </View>
+       {/* Campos de input para o formulário de cronograma */}
+       <Text style={styles.formTitle}>Cadastro de Cronogramas</Text>
+           {showForm && ( <View style={styles.card}>
+         {/* Componente de calendário */}
+      <MyCalendar  date={req.date} setDate={(date) => setReq({ ...req, date: date })} icon=""
        />
 
       {/* Componente Relogio */}
@@ -194,76 +160,76 @@ export default function TimelineScreen() {
         onTimeSelected={(text)  => setReq({ ...req, start_time: text })} 
         initialTime={req.start_time}
       />
+    <Myinput iconName="" label="Professor" placeholder="Digite o nome do Professor:" value={req.teacher_id} onChangeText={(text) => setReq({ ...req, teacher_id: text })} />
+    <Myinput iconName="" label="Disciplina" placeholder="Digite a disciplina:" value={req.discipline_id} onChangeText={(text) => setReq({ ...req, discipline_id: text })} />
+    <Myinput iconName="" label="Local" placeholder="Digite o Local" value={req.local_id?.toString()} onChangeText={(text) => setReq({ ...req, local_id:  Number(text) })} />
+    <Myinput iconName="" label="Turma" placeholder="Digite o Turma:" value={req.class_id?.toString()} onChangeText={(text) => setReq({ ...req, class_id:  Number(text) })} />
+                
+    <View style={styles.formButtons}>
+      <MyButton title={isEditing ? 'Atualizar' : 'Cadastrar'} button_type="default" onPress={handleRegister} style={{ flex: 1, marginRight: 8 }} />
+      <MyButton title="Cancelar" onPress={() => { ; setShowForm(false); }} style={{ flex: 1, marginLeft: 8, backgroundColor: '#EEE' }} />
+   </View>
+    </View>
+ )}
 
-      
+   <View style={styles.table}>
+  <View style={styles.tableRowHeader}>
+    <Text style={styles.th}>Professor</Text>
+    <Text style={styles.th}>Disciplina</Text>
+    <Text style={styles.th}>Local</Text>
+    <Text style={styles.th}>Turma</Text>
+    <Text style={styles.th}>Carga</Text>
+    <Text style={styles.th}>Ações</Text>
+  </View>
+
+  {timelines
+  ?.filter((item) => {
+  
+    const timeline = timelines.find((t) => t.id === Number(item.discipline_id));
+    return timeline?.teacher_id?.toLowerCase().includes(filtro.toLowerCase());
+  })
+  .map((item) => {
+    const timeline = timelines.find((t) => t.id === Number(item.discipline_id));
+
+    return (
+      <View style={styles.tableRow} key={item.id}>
+        <Text style={styles.td}>{timeline?.discipline_id || '-'}</Text>
+        <Text style={styles.td}>{timeline?.teacher_id || '-'}</Text>
+        <Text style={styles.td}>{item.local_id}</Text>
+        <Text style={styles.td}>{item.class_id}</Text>
+        <Text style={styles.td}>{timeline?.start_time? timeline.start_time + 'h' : '-'}</Text>
+        <Text style={styles.td}>{timeline?.end_time? timeline.end_time + 'h' : '-'}</Text>
+        <View style={styles.actions}>
+          <TouchableOpacity onPress={() => editTimelines(item.id)}>
+            <Text style={styles.edit}>Editar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => delTimelines(item.id)}>
+            <Text style={styles.del}>Excluir</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  })}
+
+
+
+</View>
+
 
       <View style={styles.row}>
         <View style={styles.form}>
-          {/* Campos de input para o formulário de cronograma */}
-          <Myinput
-            value={req.teacher_id}
-            onChangeText={(text)  => setReq({ ...req, teacher_id: text })}
-            label="Professor"          // Label para o campo de disciplina
-            iconName=""             // Nome do ícone para o campo de disciplina
-            placeholder="Digite o nome do Professor:"
-          />
-          <Myinput
-            value={req.discipline_id}
-            onChangeText={(text)  => setReq({ ...req, discipline_id: text })}
-            label="Disciplina"          // Label para o campo de disciplina
-            iconName=""             // Nome do ícone para o campo de disciplina
-            placeholder="Digite a disciplina:"
-          />
-          <Myinput
-            value={req.local_id?.toString()}
-            onChangeText={(text)  => setReq({ ...req, local_id: Number(text) })}
-            label="Local"
-            iconName=""           // Label para o campo de disciplinalocal
-            placeholder="Digite o Local:"
-          />
-          <Myinput
-            value={req.class_id?.toString()}
-            onChangeText={(text)  => setReq({ ...req, class_id: Number(text) })}
-            label="Turma"          // Label para o campo de disciplina
-            iconName=""             // Nome do ícone para o campo de disciplina
-            placeholder="Digite o Turma:"
-          />
-       
-
-          {/* Botão para cadastrar o cronograma */}
-          <MyButton style={{justifyContent:'center'}}
-            title="CADASTRAR" // Passando a propriedade correta para o título do botão
-            onPress={handleRegister} // Passando a função de press
-           
-            
-          />
+    
         </View>
 
         {/* Lista de cronogramas */}
-        <MyList
-          data={timelines}
-          keyItem={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-
-            <MyItem 
-                style={styles.item}
-                onDel={()=> delTimelines(item.id)}
-                onEdit={()=> editTimelines(item.id)}
-
-            >
-              <Mytext style={styles.revenueText}>Professor: {item.Professor_id}</Mytext>
-              <Mytext style={styles.revenueText}>Disciplina: {item.discipline_id}</Mytext>
-              <Mytext style={styles.revenueText}>Local: {item.local_id}</Mytext>
-              <Mytext style={styles.revenueText}>Turma: {item.class_id}</Mytext>
-
-
-            </MyItem>
-          )}
-        />
+        
+        
       </View>
     </MyView>
   );
-}
+} 
+
+
 
 const styles = StyleSheet.create({
    header: {
@@ -272,8 +238,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonCapsule: {
-    gap: 7,
-    
+    padding: 10,
+    borderRadius: 100, // Aumente o valor para arredondar mais
+    backgroundColor: 'purple',
+    textAlign: 'center',
+    color: 'white', // Para o texto do botão ficar legível
+
     
   },
   buttonCadastrar:{
@@ -392,17 +362,18 @@ headerRow: {
   marginBottom: 10,
   alignItems: 'center',
 },
-title: { fontSize: 22, fontWeight: '700', color: '#333' },
+title: { fontSize: 22, fontWeight: '700', color: 'purple' },
 buttonNew: {
-  backgroundColor: '#3AC7A8',
-  paddingHorizontal: 14,
+  backgroundColor: 'purple',
+  paddingHorizontal: 20,
   paddingVertical: 6,
   borderRadius: 6,
 },
-buttonNewText: { color: '#fff', fontWeight: '600' },
+buttonNewText: { backgroundColor: 'purple', fontWeight: '700' },
 searchWrapper: {
-  marginBottom: 16,
+  marginBottom: 30,
   position: 'relative',
+
 },
 searchInput: {
   backgroundColor: '#fff',
@@ -429,7 +400,7 @@ card: {
 formTitle: {
   fontSize: 18,
   fontWeight: '600',
-  color: '#3AC7A8',
+  color: 'purple',
   marginBottom: 12,
 },
 formButtons: {
