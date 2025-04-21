@@ -127,17 +127,20 @@ export default function TimelineScreen() {
 
         {showForm && (
           <View style={styles.card}>
+            <Mytext style={styles.titlee}>Data </Mytext>
             <MyCalendar date={req.date} setDate={(date) => setReq({ ...req, date })} icon="" />
 
+            <Mytext style={styles.titlee}>Horário de Início </Mytext>
+            <MyTimerPicker
+              onTimeSelected={(text) => setReq({ ...req, start_time: text })}
+              initialTime={req.start_time}
+            />
+            <Mytext style={styles.titlee}>Horário do Fim </Mytext>
             <MyTimerPicker
               onTimeSelected={(text) => setReq({ ...req, end_time: text })}
               initialTime={req.end_time}
             />
 
-            <MyTimerPicker
-              onTimeSelected={(text) => setReq({ ...req, start_time: text })}
-              initialTime={req.start_time}
-            />
 
             <Myinput iconName="" label="Professor" placeholder="Digite o nome do Professor:" value={req.teacher_id} onChangeText={(text) => setReq({ ...req, teacher_id: text })} />
             <Myinput iconName="" label="Disciplina" placeholder="Digite a disciplina:" value={req.discipline_id} onChangeText={(text) => setReq({ ...req, discipline_id: text })} />
@@ -157,7 +160,9 @@ export default function TimelineScreen() {
             <Text style={styles.th}>Disciplina</Text>
             <Text style={styles.th}>Local</Text>
             <Text style={styles.th}>Turma</Text>
-            <Text style={styles.th}>Carga</Text>
+            <Text style={styles.th}>Horário de Início</Text>
+            <Text style={styles.th}>Horário do fim</Text>
+            <Text style={styles.th}>Data</Text>
             <Text style={styles.th}>Ações</Text>
           </View>
 
@@ -170,6 +175,8 @@ export default function TimelineScreen() {
                 <Text style={styles.td}>{item.local_id}</Text>
                 <Text style={styles.td}>{item.class_id}</Text>
                 <Text style={styles.td}>{item.start_time ? item.start_time + 'h' : '-'}</Text>
+                <Text style={styles.td}>{item.end_time ? item.end_time + 'h' : '-'}</Text>
+                <Text style={styles.td}>{item.date}</Text>
                 <Text style={[styles.td, styles.actions]}>
                   <Text style={styles.edit} onPress={() => editTimelines(item.id)}>Editar</Text>{' '}
                   <Text style={styles.del} onPress={() => delTimelines(item.id)}>Excluir</Text>
@@ -190,6 +197,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: { fontSize: 22, fontWeight: '700', color: 'purple' },
+  titlee: { fontSize: 15, fontWeight: '700', color: 'purple' },
+
   buttonNewText: { backgroundColor: 'purple', fontWeight: '700' },
   buttonCapsule: {
     padding: 10,
@@ -245,4 +254,5 @@ const styles = StyleSheet.create({
   },
   edit: { color: '#3AC7A8', fontWeight: '600', fontSize: 13 },
   del: { color: '#D63031', fontWeight: '600', fontSize: 13 },
+  
 });
