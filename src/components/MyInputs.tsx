@@ -1,38 +1,20 @@
-import React, { ReactNode, useState } from 'react';
+import React from 'react';
 import { TextInput, TextStyle, View, Text, Pressable } from 'react-native';
-import { inputStyles } from '../../styles/inputStyles';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-
-//npm install react-native-vector-icons @types/react-native-vector-icons
-
-/*
-//Exemplo de uso do TextArea
-<MyTextArea
-  iconName='message'
-  label="Descrição"
-  value={req.address} // Passa o estado como valor
-  onChangeText={(text) => setReq({ ...req, ..... })} // Atualiza o estado ao digitar
-  placeholder="Digite sua mensagem aqui..."
-  style={{ height: 150 }}
-/>
-*/
-
 interface MyinputProps {
-  value: string;  // valor do input
+  value: string;
   onChangeText: (text: string) => void;
   placeholder?: string;
   style?: TextStyle | TextStyle[];
   label: string;
   iconName: string;
-
 }
 
 interface MyCheckProps {
   label: string;
   checked: boolean;
   onToggle: () => void;
-  //função que será chamada quando a checkbox for alterada
 }
 
 interface MyTextAreaProps {
@@ -44,55 +26,88 @@ interface MyTextAreaProps {
   iconName: string;
 }
 
+const inputContainerStyle = {
+  flexDirection: 'row' as const,
+  alignItems: 'center' as const,
+  backgroundColor: '#FFFFFF',
+  borderWidth: 1,
+  borderColor: '#D9D9D9',
+  borderRadius: 8,
+  paddingHorizontal: 12,
+  height: 42,
+};
+
+const inputTextStyle = {
+  flex: 1,
+  fontSize: 14,
+  color: '#000',
+  paddingVertical: 0,
+};
+
+const labelStyle = {
+  fontWeight: '600' as const,
+  marginBottom: 6,
+  color: '#6A1B9A',
+  fontSize: 14,
+};
+
 const Myinput: React.FC<MyinputProps> = ({ value, onChangeText, placeholder, style, label, iconName }) => {
   return (
-    <View style={[inputStyles.container]} >
-
-      <View style={inputStyles.labelContainer}>
-        <Icon style={[inputStyles.icon]} name={iconName} size={18} />
-        <Text style={inputStyles.label}>{label}</Text>
+    <View style={{ marginBottom: 14 }}>
+      <Text style={labelStyle}>{label}</Text>
+      <View style={inputContainerStyle}>
+        <Icon name={iconName} size={18} color="#6A1B9A" style={{ marginRight: 8 }} />
+        <TextInput
+          value={value}
+          onChangeText={onChangeText}
+          placeholder={placeholder}
+          placeholderTextColor="#999"
+          style={[inputTextStyle, style]}
+        />
       </View>
-
-      <TextInput
-        style={[inputStyles.input, style]}
-        value={value}  // valor do input
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-      />
-
     </View>
   );
 };
 
 const MyTextArea: React.FC<MyTextAreaProps> = ({ value, onChangeText, placeholder, style, label, iconName }) => {
   return (
-    <View style={inputStyles.container}>
-      
-      <View style={inputStyles.labelContainer}>
-        {/*<Icon style={inputStyles.icon} name="message" size={18} /> */}
-        <Icon style={[inputStyles.icon]} name={iconName} size={18} />
-        <Text style={inputStyles.label}>{label}</Text>
+    <View style={{ marginBottom: 14 }}>
+      <Text style={labelStyle}>{label}</Text>
+      <View style={{
+        ...inputContainerStyle,
+        alignItems: 'flex-start',
+        paddingTop: 10,
+        minHeight: 100
+      }}>
+        <Icon name={iconName} size={18} color="#6A1B9A" style={{ marginRight: 8, marginTop: 4 }} />
+        <TextInput
+          value={value}
+          onChangeText={onChangeText}
+          placeholder={placeholder}
+          placeholderTextColor="#999"
+          multiline
+          style={[inputTextStyle, { minHeight: 80, textAlignVertical: 'top' }, style]}
+        />
       </View>
-      <TextInput
-        style={[inputStyles.textArea, style]}
-        value={value}
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        multiline={true}
-      />
     </View>
   );
 };
 
 const MyCheck: React.FC<MyCheckProps> = ({ label, checked, onToggle }) => {
   return (
-    <Pressable style={inputStyles.checkboxContainer} onPress={onToggle}>
-
-      <View style={[inputStyles.checkbox, checked && inputStyles.checkboxChecked]}>
-        {checked && <Icon name="check" size={16} color="white" />}
-        {!checked && <Icon name="close" size={16} color="white" />}
+    <Pressable style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }} onPress={onToggle}>
+      <View style={{
+        width: 22,
+        height: 22,
+        borderRadius: 6,
+        backgroundColor: checked ? '#6A1B9A' : '#AAA',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 8
+      }}>
+        <Icon name={checked ? 'check' : 'close'} size={16} color="white" />
       </View>
-      <Text style={inputStyles.checkboxLabel}>{label}</Text>
+      <Text style={{ fontSize: 14, color: '#333' }}>{label}</Text>
     </Pressable>
   );
 };
