@@ -9,6 +9,7 @@ interface iexpenses {
   contacts: string,
   costs: string,
   descriptions: string,
+  url: string,
   user_id: number,
 }
 
