@@ -7,6 +7,7 @@ import { Myinput } from '../src/components/MyInputs'
 import MyList from '../src/components/MyList'
 import { useRouter } from 'expo-router';
 import {setCollection, iCollection,deleteCollectionById,updateCollectionById,getCollections} from '../src/controllers/collections';
+import {getItems} from '../src/controllers/librarie';
 
 
 
@@ -29,8 +30,7 @@ export default function CollectionScreen() {
 
     useEffect(() =>{
         async function getTodos(){
-
-            const retorno =await getCollections({})
+            const retorno = await getItems({})
             
             if (retorno.status && retorno.data && retorno.data.length>0){
                 setCollections(retorno.data);
@@ -151,7 +151,7 @@ export default function CollectionScreen() {
 
                                     </TouchableOpacity>
                                 </View>
-                                <TouchableOpacity style={styles.button_round} onPress={() => router.push('/collectionsPreview')}>
+                                <TouchableOpacity style={styles.button_round} onPress={() => router.push('../librarie/collectionsPreview')}>
                                         <Text style={styles.buttonText}>Visite nosso acervo</Text>
                                 </TouchableOpacity>
                             </View>
