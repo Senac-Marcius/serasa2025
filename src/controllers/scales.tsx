@@ -9,6 +9,16 @@ interface iScale {
     employ_id: number,
 }
 
+function toListScale (data: iScale[]){
+    const resp: {key: number, option:string}[] = [];
+
+    data.map((s) => {
+        resp.push({key: s.id, option:`${s.day} - ${s.start_time} - ${s.end_time}`})
+    })
+
+    return resp;
+}
+
 async function setScale(scale: Omit<iScale, 'id'>) {
     const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
@@ -60,4 +70,13 @@ async function deleteScale(id: number) {
     return true;
 }
 
-export { setScale, updateScale, deleteScale, iScale }
+async function getScale (params:any){
+    const { data: todos,error } = await supabase.from('scales').select();
+
+        if (error)
+            return{status: false, error:error}
+        
+        return{status: true, data:todos}
+}
+
+export { getScale, setScale, updateScale, deleteScale, iScale, toListScale }
