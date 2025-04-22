@@ -7,11 +7,7 @@ import { Usuario } from './type';
   
 
 interface Props{
-    usuarios:[
-    id: string,
-    nome: string,
-    email: string
-];
+    usuarios:Usuario[];
 }
 
 const TabelaUsuarios: React.FC<Props> = ({ usuarios }) => {

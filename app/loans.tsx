@@ -8,6 +8,7 @@ import MyList from '../src/components/MyList';
 import { useRouter } from 'expo-router';
 import { iLoans, setLoanbd,deleteLoansById,updateLoansById, getLoans } from '../src/controllers/loans'
 import { supabase } from '../src/utils/supabase';
+import TabelaUsuarios from '../src/librarie/loantable';
 
 
 export default function LoanScreen() {
