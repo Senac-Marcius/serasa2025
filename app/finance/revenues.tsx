@@ -150,7 +150,10 @@ const getFilteredRevenues = () => {
       <Mytext style={styles.title}>
          💰cadastre as receitas
       </Mytext>
-<MyModal_mobilefullscreen visible={visible} setVisible={setVisible}>
+<MyModal_mobilefullscreen
+ visible={visible} 
+ setVisible={setVisible}>
+  
         <View style={styles.form}>
             {/* Campo de Nome */}
             <Myinput
@@ -210,6 +213,7 @@ const getFilteredRevenues = () => {
             <MyButton style={{justifyContent:'center'}} onPress={() => handleRegister ()} title="cadastrar"  />
         </View>
         </MyModal_mobilefullscreen>
+
     <MySearch
        style={styles.searchInput}
        onChangeText={setSearchTerm}
@@ -233,6 +237,7 @@ const getFilteredRevenues = () => {
            
               onEdit={() => { editRevenue(item.id) }} 
               onDel= {() => { delRevenue(item.id) }}
+              
               button={(
                 <Mydownload  url={item.url} />
               )}
@@ -245,18 +250,21 @@ const getFilteredRevenues = () => {
               <Mytext style={styles.td}>{item.user_id}</Mytext>
               <Mytext style={styles.td}>{item.discount_percentage}%</Mytext>
               <Mytext style={styles.td}>{item.value}</Mytext> 
+              <Mydownload  url={item.url} />
             </MyTb>
           )}
           header={(
             <View style={styles.tableRowHeader}>
               <Mytext style={styles.th}>Nome</Mytext>
-              <Mytext style={styles.th}>Status</Mytext>
-              <Mytext style={styles.th}>Data</Mytext>
+              <Mytext style={styles.th}>Status da Bolsa</Mytext>
+              <Mytext style={styles.th}>Data do documento</Mytext>
               <Mytext style={styles.th}>Descrição</Mytext>
               <Mytext style={styles.th}>Id de usuario</Mytext>
               <Mytext style={styles.th}>Valor de desconto</Mytext>
               <Mytext style={styles.th}>Valor</Mytext>
+              
               <Mytext style={styles.th}>Ações</Mytext>
+              
             </View>
 
           )}
@@ -304,7 +312,7 @@ const styles = StyleSheet.create({
 
   th: {
     flex: 1,
-     fontWeight: '600',
+     fontWeight: '900',
       fontSize: 13,
        color: '#333'
     },
