@@ -8,6 +8,8 @@ interface MyModalprops {
     style?: ViewStyle;
     visible: boolean;
     setVisible(visible: boolean): void
+    title:string;
+    closeButtonTitle?: string;
 
 }
 
@@ -19,7 +21,11 @@ interface MyModalprops {
 
 //Neste exemplo foi utilizado o MyModal_mobile1: 
 
-/* <MyModal_mobile1 visible={visible} setVisible={setVisible}>
+/* <MyModal_mobile1 
+   visible={visible} 
+   setVisible={setVisible}
+   title="Abrir Modal"
+   closeButtonTitle="Fechar">
 
    </MyModal_mobile1> */
 
@@ -57,7 +63,7 @@ interface MyModalprops {
 // borderColor: 'purple',
 
 
-const MyModal_mobile1: React.FC<MyModalprops> = ({ children, style, visible, setVisible, }) => { //
+const MyModal_mobile1: React.FC<MyModalprops> = ({ children, style, visible, setVisible,title, closeButtonTitle }) => { //
     function onClose() {
         setVisible(false)
     };
@@ -65,7 +71,7 @@ const MyModal_mobile1: React.FC<MyModalprops> = ({ children, style, visible, set
         <View >
             <MyButton
                 onPress={() => { setVisible(true) }}
-                title="CADASTRAR"
+                title= {title}
                  />
 
             {visible && (<Modal transparent={true} visible={visible} animationType="fade"   >
@@ -73,7 +79,7 @@ const MyModal_mobile1: React.FC<MyModalprops> = ({ children, style, visible, set
                     <View style={styles.modalContent1}  >
                         {children}
                         <MyButton onPress={onClose}
-                            title="voltar"
+                             title={closeButtonTitle || "voltar"}
                             style={styles.button_round}
                         />
 
@@ -84,7 +90,7 @@ const MyModal_mobile1: React.FC<MyModalprops> = ({ children, style, visible, set
     );
 
 }
-const MyModal_mobile2: React.FC<MyModalprops> = ({ children, style, visible, setVisible, }) => { //
+const MyModal_mobile2: React.FC<MyModalprops> = ({ children, style, visible, setVisible,title, closeButtonTitle }) => { //
     function onClose() {
         setVisible(false)
     };
@@ -93,13 +99,13 @@ const MyModal_mobile2: React.FC<MyModalprops> = ({ children, style, visible, set
         <View >
             <MyButton
                 onPress={() => { setVisible(true) }}
-                title="CADASTRAR" />
+                title= {title} />
             {visible && (<Modal transparent={true} visible={visible} animationType="fade"   >
                 <View style={styles.background} >
                     <View style={styles.modalContent2}  >
                         {children}
                         <MyButton onPress={onClose}
-                            title="X"
+                             title={closeButtonTitle || "voltar"}
                         />
                     </View>
                 </View>
@@ -108,7 +114,7 @@ const MyModal_mobile2: React.FC<MyModalprops> = ({ children, style, visible, set
     );
 
 }
-const MyModal_mobile3: React.FC<MyModalprops> = ({ children, style, visible, setVisible, }) => { //
+const MyModal_mobile3: React.FC<MyModalprops> = ({ children, style, visible, setVisible,title, closeButtonTitle }) => { //
     function onClose() {
         setVisible(false)
     };
@@ -117,13 +123,13 @@ const MyModal_mobile3: React.FC<MyModalprops> = ({ children, style, visible, set
         <View >
             <MyButton
                 onPress={() => { setVisible(true) }}
-                title="CADASTRAR" />
+                title= {title}/>
             {visible && (<Modal transparent={true} visible={visible} animationType="fade"   >
                 <View style={styles.background} >
                     <View style={styles.modalContent3}  >
                         {children}
                         <MyButton onPress={onClose}
-                            title="X"
+                             title={closeButtonTitle || "voltar"}
                         />
                     </View>
                 </View>
@@ -132,7 +138,7 @@ const MyModal_mobile3: React.FC<MyModalprops> = ({ children, style, visible, set
     );
 
 }
-const MyModal_mobilefullscreen: React.FC<MyModalprops> = ({ children, style, visible, setVisible, }) => { //
+const MyModal_mobilefullscreen: React.FC<MyModalprops> = ({ children, style, visible, setVisible,title, closeButtonTitle }) => { //
     function onClose() {
         setVisible(false)
     };
@@ -141,13 +147,13 @@ const MyModal_mobilefullscreen: React.FC<MyModalprops> = ({ children, style, vis
         <View >
             <MyButton
                 onPress={() => { setVisible(true) }}
-                title="CADASTRAR" />
+                title= {title}/>
             {visible && (<Modal transparent={true} visible={visible} animationType="fade"   >
                 <View style={styles.background} >
                     <View style={styles.modalContent4}  >
                         {children}
                         <MyButton onPress={onClose}
-                            title="X"
+                             title={closeButtonTitle || "voltar"}
                         />
                     </View>
                 </View>
@@ -155,7 +161,7 @@ const MyModal_mobilefullscreen: React.FC<MyModalprops> = ({ children, style, vis
         </View>
     );
 }
-const MyModal1_desktop: React.FC<MyModalprops> = ({ children, style, visible, setVisible, }) => { //
+const MyModal1_desktop: React.FC<MyModalprops> = ({ children, style, visible, setVisible,title, closeButtonTitle }) => { //
     function onClose() {
         setVisible(false)
     };
@@ -164,13 +170,13 @@ const MyModal1_desktop: React.FC<MyModalprops> = ({ children, style, visible, se
         <View >
             <MyButton
                 onPress={() => { setVisible(true) }}
-                title="CADASTRAR" />
+                title= {title} />
             {visible && (<Modal transparent={true} visible={visible} animationType="fade"   >
                 <View style={styles.background} >
                     <View style={styles.modalContent5}  >
                         {children}
                         <MyButton onPress={onClose}
-                            title="X"
+                             title={closeButtonTitle || "voltar"}
                         />
                     </View>
                 </View>
