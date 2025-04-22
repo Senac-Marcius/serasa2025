@@ -100,11 +100,11 @@ const styles = StyleSheet.create({
      },
 
      actions: {
-      flex: 2,
+      flex: 1,
       flexDirection: 'row',
       justifyContent: 'flex-start',
-      gap: 1,
-      paddingLeft: 0,
+      gap: 12,
+      paddingLeft: 8,
     },
     
     tableRow: {
