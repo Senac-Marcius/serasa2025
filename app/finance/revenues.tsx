@@ -249,8 +249,8 @@ const getFilteredRevenues = () => {
               <Mytext style={styles.td}>{item.description}</Mytext>    
               <Mytext style={styles.td}>{item.user_id}</Mytext>
               <Mytext style={styles.td}>{item.discount_percentage}%</Mytext>
-              <Mytext style={styles.td}>{item.value}</Mytext> 
-              <Mydownload  url={item.url} />
+              <Mytext style={styles.td}>R${item.value}</Mytext> 
+              
             </MyTb>
           )}
           header={(
@@ -262,7 +262,6 @@ const getFilteredRevenues = () => {
               <Mytext style={styles.th}>Id de usuario</Mytext>
               <Mytext style={styles.th}>Valor de desconto</Mytext>
               <Mytext style={styles.th}>Valor</Mytext>
-              
               <Mytext style={styles.th}>Ações</Mytext>
               
             </View>
