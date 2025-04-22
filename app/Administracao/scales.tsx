@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
   buttonGroup: {
     flexDirection: 'column',
     alignItems: 'center',
-    marginVertical: 10,
+    marginVertical: 15,
   },
   Button: {
     backgroundColor: '#813AB1',
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: 1 },
     shadowRadius: 5,
   },
   tableHeader: {
