@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
+  Pressable,
   Animated,
   StyleSheet,
   Image,
@@ -22,6 +22,7 @@ interface HamburgerMenuProps {
 export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
   const router = useRouter();
   const slideAnim = useState(new Animated.Value(-MENU_WIDTH))[0];
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   useEffect(() => {
     Animated.timing(slideAnim, {
@@ -39,18 +40,24 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
     label: string;
     route: string;
     icon: keyof typeof Ionicons.glyphMap;
-  }) => (
-    <TouchableOpacity
-      style={styles.menuItem}
-      onPress={() => {
-        router.push(`/${route}`);
-        closeMenu();
-      }}
-    >
-      <Ionicons name={icon} size={20} color="#FFF" style={{ marginRight: 8 }} />
-      <Text style={styles.menuText}>{label}</Text>
-    </TouchableOpacity>
-  );
+  }) => {
+    const isHovered = hoveredItem === route;
+    return (
+      <Pressable
+        onPress={() => {
+          router.push(`/${route}`);
+          closeMenu();
+        }}
+        onHoverIn={() => setHoveredItem(route)}
+        onHoverOut={() => setHoveredItem(null)}
+        style={[styles.menuItem, isHovered && styles.menuItemHover]}
+      >
+        <View style={[styles.hoverBar, isHovered && styles.hoverBarActive]} />
+        <Ionicons name={icon} size={20} color={isHovered ? '#6A1B9A' : '#666'} style={{ marginRight: 12 }} />
+        <Text style={[styles.menuText, isHovered && styles.menuTextHover]}>{label}</Text>
+      </Pressable>
+    );
+  };
 
   return (
     <Animated.View
@@ -62,33 +69,34 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
       ]}
     >
       <View style={styles.menuHeader}>
-        <TouchableOpacity onPress={closeMenu}>
-          <Ionicons name="close" size={26} color="#FFF" />
-        </TouchableOpacity>
+        <Pressable onPress={closeMenu}>
+          <Ionicons name="close" size={26} color="#4A148C" />
+        </Pressable>
       </View>
 
-      <TouchableOpacity style={styles.profileSection}>
+      <Pressable style={styles.profileSection}>
         <Image
-          source={{ uri: 'https://via.placeholder.com/50' }}
+          source={{ uri: 'https://i.pravatar.cc/150?img=1' }}
           style={styles.profileImage}
         />
         <View>
-          <Text style={styles.profileName}>sung jin-wo</Text>
-          <Text style={styles.profileRole}>Admin</Text>
+          <Text style={styles.profileName}>Sung Jin-Woo</Text>
+          <Text style={styles.profileRole}>Administrador</Text>
         </View>
-      </TouchableOpacity>
+      </Pressable>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <MenuItem label="Administração" route="Administracao/" icon="people" />
+        <MenuItem label="Secretaria" route="secretaria" icon="add-circle" />
         <MenuItem label="Budgets" route="budgets" icon="wallet" />
-        <MenuItem label="Calendar" route="calendar" icon="calendar" />
+        <MenuItem label="Calendar" route="secretaria/calendar" icon="calendar" />
         <MenuItem label="Categories" route="categories" icon="albums" />
         <MenuItem label="Classes" route="classes" icon="school" />
         <MenuItem label="Collections" route="collections" icon="cube" />
         <MenuItem label="Courses" route="courses" icon="book" />
-        <MenuItem label="Disciplines" route="disciplines" icon="document-text" />
-        <MenuItem label="Documents" route="documents" icon="document" />
-        <MenuItem label="Employees" route="administracao/employees" icon="people" />
+        <MenuItem label="Disciplines" route="secretaria/disciplines" icon="document-text" />
+        <MenuItem label="Documents" route="secretaria/documents" icon="document" />
+        <MenuItem label="Employees" route="employees" icon="people" />
         <MenuItem label="Expenses" route="expenses" icon="cash" />
         <MenuItem label="Investments" route="investments" icon="trending-up" />
         <MenuItem label="Items" route="items" icon="pricetag" />
@@ -96,21 +104,19 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Levels" route="levels" icon="stats-chart" />
         <MenuItem label="Libraie" route="libraie" icon="book" />
         <MenuItem label="Loans" route="loans" icon="card" />
-        <MenuItem label="Locals" route="locals" icon="location" />
+        <MenuItem label="Locals" route="product/locals" icon="location" />
         <MenuItem label="Notifications" route="notifications" icon="notifications" />
         <MenuItem label="Parents" route="parents" icon="people-circle" />
         <MenuItem label="Perfil" route="perfil" icon="person" />
-        <MenuItem label="Positions" route="Administracao/positions" icon="pin" />
         <MenuItem label="Posts" route="posts" icon="chatbox" />
         <MenuItem label="Products" route="products" icon="cart" />
-        <MenuItem label="Projects" route="Administracao/projects" icon="briefcase" />
         <MenuItem label="Records" route="records" icon="document-text-outline" />
         <MenuItem label="Revenues" route="revenues" icon="cash-outline" />
-        <MenuItem label="Scales" route="Administracao/scales" icon="speedometer" />
         <MenuItem label="Timelines" route="timelines" icon="calendar" />
         <MenuItem label="Students" route="students" icon="school" />
         <MenuItem label="Users" route="users" icon="person-circle" />
         <MenuItem label="More" route="more" icon="add-circle" />
+        <MenuItem label="Trabalhe Conosco" route='Administracao/employees?view=form'  icon="cash" />
       </ScrollView>
     </Animated.View>
   );
@@ -123,53 +129,81 @@ const styles = StyleSheet.create({
     left: 0,
     width: MENU_WIDTH,
     height: height,
-    backgroundColor: '#5A2D82',
+    backgroundColor: '#FFFFFF',
     zIndex: 9999,
     elevation: 20,
-    margin: 0,
-    padding: 0,
+    paddingTop: 16,
+    borderRightWidth: 1,
+    borderRightColor: '#E0E0E0',
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
   },
   menuHeader: {
-    paddingVertical: 15,
-    paddingHorizontal: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
     alignItems: 'flex-end',
   },
   profileSection: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
-    paddingHorizontal: 10,
+    paddingHorizontal: 16,
   },
   profileImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     marginRight: 10,
     borderWidth: 2,
-    borderColor: '#FFF',
-    backgroundColor: '#FFF',
+    borderColor: '#4A148C',
   },
   profileName: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#FFF',
+    fontWeight: '600',
+    color: '#333',
   },
   profileRole: {
-    fontSize: 14,
-    color: '#DDD',
+    fontSize: 13,
+    color: '#777',
   },
   scrollContainer: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 8,
     paddingBottom: 20,
   },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 12,
-    paddingRight: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    marginBottom: 4,
+    backgroundColor: '#FFFFFF',
+    position: 'relative',
+  },
+  menuItemHover: {
+    backgroundColor: '#F3E5F5',
+  },
+  hoverBar: {
+    position: 'absolute',
+    left: 0,
+    height: '100%',
+    width: 4,
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
+    backgroundColor: 'transparent',
+  },
+  hoverBarActive: {
+    backgroundColor: '#6A1B9A',
   },
   menuText: {
-    fontSize: 18,
-    color: '#FFF',
+    fontSize: 15,
+    color: '#333',
+    fontWeight: '500',
+  },
+  menuTextHover: {
+    color: '#6A1B9A',
+    fontWeight: '600',
   },
 });
