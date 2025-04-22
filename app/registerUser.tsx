@@ -1,12 +1,11 @@
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import MyButton from '../src/components/MyButtons';
 import { Myinput } from '../src/components/MyInputs';
-import MyList from '../src/components/MyList';
 import MyView from '../src/components/MyView';
-import { deleteUserById, getUserById, iUser, setUser, updateUserById } from '../src/controllers/users';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { getUserById, getUsers, iUser, setUser, updateUserById } from '../src/controllers/users';
 
 export default function UserScreen() {
     const { id } = useLocalSearchParams();
@@ -24,7 +23,7 @@ export default function UserScreen() {
         createAt: new Date().toISOString(),
         id: -1,
     });
-   //visualizo se o id existe no campo da url, caso exista eu edito.
+    //visualizo se o id existe no campo da url, caso exista eu edito.
 
     useEffect(() => {
         async function fetchUser() {
@@ -40,7 +39,17 @@ export default function UserScreen() {
         }
         fetchUser();
     }, [id]);
-    
+
+    useEffect(() => {
+        async function getTodos() {
+            const retorno = await getUsers({})
+            if (retorno.status && retorno.data && retorno.data.length > 0) {
+                setUsers(retorno.data);
+            }
+        }
+        getTodos()
+    }, [])
+
     async function handleRegister() {
         const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$|^\d{11}$/;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -70,12 +79,12 @@ export default function UserScreen() {
         //     alert("Idade inválida.");
         //     return;
         // }
-
         if (req.id == -1) {
             const newId = users.length ? users[users.length - 1].id + 1 : 0
             const newUser = { ...req, id: newId }
             setUsers([...users, newUser])
-            await setUser(newUser)
+            const result = await setUser(newUser)
+            router.push("/")
 
         } else {
             setUsers(users.map(u => (u.id == req.id ? req : u)))
@@ -85,7 +94,9 @@ export default function UserScreen() {
                 alert("Erro ao atualizar usuário.")
                 return
             }
+
         }
+
 
         setReq({
             name: '',
@@ -121,7 +132,10 @@ export default function UserScreen() {
                                     onPress={handleRegister}
                                     button_type="round"
                                     style={styles.button_round}
+
+
                                 />
+
                             </View>
                         </View>
                         <Image source={require('../assets/imageUserLogin.svg')} style={styles.image} />
