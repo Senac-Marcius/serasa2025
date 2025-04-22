@@ -8,9 +8,10 @@ interface MySearchProps {
     onChangeText(busca: string): void; 
     onPress(): void;
     busca: string;
+    placeholder: string;
 }
 
-const MySearch: React.FC<MySearchProps> = ({ onChangeText, style, onPress, busca }) => {
+const MySearch: React.FC<MySearchProps> = ({ onChangeText, style, onPress, busca, placeholder }) => {
 
     function keyPress(event: any) {
         if (event.nativeEvent.key == 'Enter') {
@@ -65,7 +66,7 @@ const MySearch: React.FC<MySearchProps> = ({ onChangeText, style, onPress, busca
                         backgroundColor: 'white',
                     }}
                     value={busca}
-                    placeholder="Pesquisar..."
+                    placeholder={placeholder? placeholder : "Pesquisar..."}
                     onChangeText={(text) => onChangeText(text)}
                     onKeyPress={keyPress}
                 />
@@ -75,3 +76,50 @@ const MySearch: React.FC<MySearchProps> = ({ onChangeText, style, onPress, busca
 };
 
 export default MySearch;
+
+
+/* Exemplo de uso
+
+// Componente ListagemRevenues.tsx
+const [searchTerm, setSearchTerm] = useState('');
+const [filteredRevenues, setFilteredRevenues] = useState(revenues);
+
+const getFilteredRevenues = () => {
+  if (!searchTerm) return revenues;
+
+  const term = searchTerm.toLowerCase();
+
+  return revenues.filter(item => {
+    const discountStr = item.discount_percentage?.toString() || '';
+    const discountPercent = discountStr ? `${discountStr}%` : '';
+
+    return (
+      item.name?.toLowerCase().includes(term) ||
+      item.description?.toLowerCase().includes(term) ||
+      item.value?.toString().includes(searchTerm) ||
+      item.id?.toString().includes(searchTerm) ||
+      item.url?.toLowerCase().includes(term) ||
+      item.scholarship_status?.toLowerCase().includes(term) ||
+      discountStr.includes(searchTerm) ||
+      discountPercent.includes(searchTerm)
+    );
+  });
+};
+
+const handleSearch = () => {
+  const resultado = getFilteredRevenues();
+  setFilteredRevenues(resultado);
+};
+
+
+Ai vc usa o componente assim:
+
+<MySearch 
+  style={{ marginBottom: 10 }}
+  busca={searchTerm}
+  placeholder="Buscar receita..."
+  onChangeText={setSearchTerm}
+  onPress={handleSearch}
+/>
+
+*/
