@@ -9,6 +9,7 @@ import {MyItem, MyTb} from '../../src/components/MyItem';
 import { useRouter } from 'expo-router';
 import {iBudgets , setBudget, deleteBudget, updateBudget, getBudgets} from '../../src/controllers/budgets';
 import {MyModal_mobilefullscreen} from '../../src/components/MyModal';
+import MySearch from '../../src/components/MySearch';
 
 
 export default function BudgetScreen(){
@@ -29,6 +30,7 @@ export default function BudgetScreen(){
         end_date:'',
         
     });
+    const [searchTerm, setSearchTerm] = useState('');
     const[visible, setVisible] = useState(false);
     const [budgets, setBudgets] = useState<iBudgets[]>([]);
 
@@ -97,7 +99,22 @@ export default function BudgetScreen(){
             console.error("Erro inesperado:", err);
         }
     }
-
+    const getFilteredBudgets = () => {
+        if (!searchTerm || searchTerm.trim() === '') return budgets;
+        
+        const term = searchTerm.toLowerCase();
+        
+        return budgets.filter(item => {
+            return (
+                item.id?.toString().includes(searchTerm) ||
+                item.name?.toLowerCase().includes(term) ||
+                item.url?.toLowerCase().includes(term) ||
+                item.created_at?.toLowerCase().includes(term) ||
+                item.value?.toString().includes(searchTerm) ||
+                item.end_date?.toLowerCase().includes(term)
+            );
+        });
+    };
     
     return (
         <MyView  >
@@ -105,9 +122,10 @@ export default function BudgetScreen(){
             <Mytext style={styles.title}>
             Cadastre os orçamentos
             </Mytext>
-            <View style={styles.row}>
+            
             <MyModal_mobilefullscreen visible={visible} setVisible={setVisible}>
                 <View style={styles.form}>
+                    
                     <Myinput
                             
                             value={req.name}
@@ -150,9 +168,16 @@ export default function BudgetScreen(){
                      <MyButton style={{justifyContent:'center'}} onPress={() => handleRegister ()} title="cadastrar"  />
                 </View>
                </MyModal_mobilefullscreen>
+
+               <MySearch
+                     style={styles.searchInput}
+                     onChangeText={setSearchTerm}
+                    onPress={()=> {setSearchTerm(searchTerm)}}
+                    busca={searchTerm}
+                />
                 <MyList
 
-                    data={budgets}
+                    data={getFilteredBudgets()}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
                     
@@ -166,25 +191,26 @@ export default function BudgetScreen(){
                             <Text style={styles.td}>{item.url}</Text>
                            <Text style={styles.td}> {item.created_at}</Text>
                            <Text style={styles.td}> {item.value}</Text>
-                           <Text style={styles.td}> {item.user_id}</Text>
                            <Text style={styles.td}> {item.start_date}</Text>
                            <Text style={styles.td}> {item.end_date}</Text>
+                          
     
                         </MyTb>
                     )}
                     header={(
                         <View style={styles.tableRowHeader}>
                         <Text style={styles.th}>Nome</Text>
-                        <Mytext style={styles.th}>Id</Mytext>
-                        <Mytext style={styles.th}>url </Mytext>
-                        <Text style={styles.th}>CreateAt</Text>
-                        <Mytext style={styles.th}>Valor</Mytext>
-                        <Mytext style={styles.th}>Id de usuario</Mytext>
-                        <Mytext style={styles.th}>Data Iniciaç</Mytext>
+                        <Text style={styles.th}>Id</Text>
+                        <Text style={styles.th}>url </Text>
+                        <Text style={styles.th}>created_at </Text>
+                        <Text style={styles.th}>Valor</Text>
+                        <Text style={styles.th}>Data Inicial</Text>
+                        <Text style={styles.th}>Data Final</Text>
+                        <Text style={styles.th}>Ações</Text>
                         </View>
                     )}
                 />
-            </View>
+            
         </MyView>
     );
 }
@@ -283,6 +309,17 @@ const styles = StyleSheet.create({
                 paddingVertical: 10,
                 borderBottomWidth: 1,
                 borderBottomColor: '#ddd',
+              },
+
+              searchInput: {
+                backgroundColor: '#fff',
+                borderRadius: 8,
+                paddingVertical: 10,
+                paddingHorizontal: 16,
+                paddingRight: 40,
+                borderWidth: 1,
+                borderColor: '#ccc',
+                fontSize: 14,
               },
              
 

@@ -10,13 +10,13 @@ import MyButton from './MyButtons';
 interface MydownloadProps {
     style?: ViewStyle;
     url: string;
-    
+
 
 }
 
 const Mydownload: React.FC<MydownloadProps> = ({ style, url }) => {
 
-    function onDownload(){
+    function onDownload() {
         // Validação básica da URL
         if (!url || !url.startsWith('http')) {
             Alert.alert('Erro', 'URL inválida');
@@ -30,38 +30,30 @@ const Mydownload: React.FC<MydownloadProps> = ({ style, url }) => {
     }
 
     return (
-        <MyButton style={styles.button}  onPress={onDownload} 
-        icon='download' 
-        iconSize={20} 
-        iconColor='white' 
-        title='Download' 
-        font_size={14} 
-        text_color='white'
-        color='#4CAF50'
-    
+        <MyButton style={styles.button} onPress={onDownload}
+            icon='camera'
+            gap={0}            
 
-
+            iconColor='white'
+            color='#4CAF50'
         />
-   
-      
+
+
     );
 }
 
 const styles = StyleSheet.create({
     button: {
-        display: "flex", 
+        display: "flex",
         borderRadius: 8,
-        justifyContent: "center",
-        flexDirection: 'row',
-        marginBottom: 20,
-        backgroundColor:'#4CAF50',
-        width:100,
-        padding:15,
-        paddingVertical: 6,paddingHorizontal: 12,
+        padding:0,
+        backgroundColor: '#4CAF50',
+
         alignItems: "center",
-           
-           
-    
+        justifyContent: 'center'
+
+
+
     },
 });
 
