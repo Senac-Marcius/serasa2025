@@ -2,7 +2,9 @@ import React, { ReactNode } from 'react';
 import { View, StyleSheet, TextStyle } from 'react-native';
 import MyTopbar from './MyTopbar';
 import MySupport from './MySupport';
+import { Router } from 'expo-router';
 import MyAccessibility from './MyAccessibility';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface MySearchProps {
   children: ReactNode;
@@ -17,7 +19,9 @@ const MyView: React.FC<MySearchProps> = ({ children, style, title, router }) => 
     <View style={[styles.container, style]}>
       <MyTopbar router={router} title={title ?? ''} />
       <View style={styles.scrollContainer}>
+          <ScrollView>
         {children}
+        </ScrollView>
       </View>
       <MySupport style={styles.suporteButton} />
     </View>
