@@ -37,22 +37,25 @@ async function  getTimelines(params:any) {
 
 
 // Function to edit a timeline
-async function editTimelines(updatedData: iTimeline) {
-     const { data, error } = await supabase
+async function editTimelines(id: number, updatedData: Partial<iTimeline>) {
+  try {
+    const { data, error } = await supabase
       .from('timelines')
       .update(updatedData) // Pass updated data
-      .eq('id', updatedData.id)
+      .eq('id', id)
       .select(); // Fetch updated timeline to ensure it's correct
 
     if (error) {
-      console.error('Error updating timeline:', error.message);
+      console.error('Error updating timeline:', error);
       return null;
     }
 
     return data; // Return updated data
-  } 
-  
-
+  } catch (error) {
+    console.error('Unexpected error during edit:', error);
+    return null;
+  }
+}
 
 // Function to delete a timeline
 async function delTimelines(id: number) {
