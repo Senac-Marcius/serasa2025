@@ -50,13 +50,17 @@ const Mydownload: React.FC<MydownloadProps> = ({ style, url }) => {
 const styles = StyleSheet.create({
     button: {
         display: "flex", 
-        borderRadius: 20,
+        borderRadius: 8,
         justifyContent: "center",
         flexDirection: 'row',
         marginBottom: 20,
         backgroundColor:'#4CAF50',
-        width:190,
+        width:100,
         padding:15,
+        paddingVertical: 6,paddingHorizontal: 12,
+        alignItems: "center",
+           
+           
     
     },
 });
