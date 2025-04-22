@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
-import { Text, View, TouchableOpacity, ViewStyle, StyleSheet } from 'react-native';
+import {  View, ViewStyle, StyleSheet } from 'react-native';
 import MyButton from './MyButtons';
-import { Button } from 'react-native-paper';
+
 
 
 interface MyItemProps {
@@ -100,11 +100,11 @@ const styles = StyleSheet.create({
      },
 
      actions: {
-      flex: 1,
+      flex: 2,
       flexDirection: 'row',
       justifyContent: 'flex-start',
-      gap: 12,
-      paddingLeft: 8,
+      gap: 1,
+      paddingLeft: 0,
     },
     
     tableRow: {

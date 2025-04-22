@@ -8,7 +8,7 @@ import {MyModal_mobilefullscreen} from '../../src/components/MyModal'
 import {Myinput, MyTextArea} from '../../src/components/MyInputs';
 import { setExpense, delRegister, updateExpense, iexpenses, getExpense } from '../../src/controllers/expenses';
 import Mytext from '../../src/components/MyText';
-
+import Mydownload from '../../src/components/MyDownload';
 
 
 export default function ExpenseScreen(){
@@ -21,6 +21,7 @@ export default function ExpenseScreen(){
             contacts:'',
             costs: '',
             descriptions: '',
+            url: '',
             user_id: 1,
     });
 
@@ -63,6 +64,7 @@ export default function ExpenseScreen(){
             emails: '',
             contacts:'',
             costs: '',
+            url: '',
             descriptions: '',
             user_id: 1,
         });
@@ -111,7 +113,7 @@ export default function ExpenseScreen(){
                     <Myinput value={req.costs} onChangeText={(text) => setReq({ ...req, costs: text })} placeholder="R$" label="Valores:" iconName='' /> 
 
 
-                    <MyButton style={{justifyContent:'center'}} onPress={() => handleRegister()} title={req.id == -1 ? "Cadastra": "Atualizar"}></MyButton>
+                    <MyButton style={{justifyContent:'center'}} onPress={() => handleRegister()} title={req.id == -1 ? "Cadastra" : "Atualizar"}></MyButton>
 
                 </View>                
             </MyModal_mobilefullscreen>    
@@ -125,6 +127,10 @@ export default function ExpenseScreen(){
                             onEdit={()=> editExpense(item.id)}
 
                             onDel={() => delExpense(item.id)}
+
+                            button={(
+                                <Mydownload  url={item.url} />
+                              )}
                         >
                             <Mytext style={styles.td}> {item.name}</Mytext>
                             <Mytext style={styles.td}> {item.contacts}</Mytext>
@@ -153,7 +159,9 @@ export default function ExpenseScreen(){
 }
 
 const styles = StyleSheet.create({
-   
+
+    downloadB:{},
+
     table: {
       backgroundColor: '#FFF',
       borderRadius: 10,
