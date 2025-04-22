@@ -5,7 +5,7 @@ import MyList from '../../src/components/MyList';
 import  { Myinput} from '../../src/components/MyInputs';
 import MyView from '../../src/components/MyView';
 import Mytext from '../../src/components/MyText';
-import { MyItem } from '../../src/components/MyItem';
+import {MyItem, MyTb} from '../../src/components/MyItem';
 import { useRouter } from 'expo-router';
 import {iBudgets , setBudget, deleteBudget, updateBudget, getBudgets} from '../../src/controllers/budgets';
 import {MyModal_mobilefullscreen} from '../../src/components/MyModal';
@@ -156,21 +156,32 @@ export default function BudgetScreen(){
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
                     
-                        <MyItem 
+                        <MyTb
                        onEdit ={()=> editBudget(item.id)}
                        onDel ={()=> delBudget(item.id)}
                         >
                        
-                       <Text> Nome: {item.name}</Text>
-                       <Text> id: {item.id}</Text>
-                           <Text> Url: {item.url}</Text>
-                           <Text> CreateAt: {item.created_at}</Text>
-                           <Text> Valor R$: {item.value}</Text>
-                           <Text> UserId: {item.user_id}</Text>
-                           <Text> Data Inicial: {item.start_date}</Text>
-                           <Text> Data Final: {item.end_date}</Text>
+                            <Text style={styles.td}>{item.name}</Text>
+                            <Text style={styles.td}> {item.id}</Text>
+                            <Text style={styles.td}>{item.url}</Text>
+                           <Text style={styles.td}> {item.created_at}</Text>
+                           <Text style={styles.td}> {item.value}</Text>
+                           <Text style={styles.td}> {item.user_id}</Text>
+                           <Text style={styles.td}> {item.start_date}</Text>
+                           <Text style={styles.td}> {item.end_date}</Text>
     
-                        </MyItem>
+                        </MyTb>
+                    )}
+                    header={(
+                        <View style={styles.tableRowHeader}>
+                        <Text style={styles.th}>Nome</Text>
+                        <Mytext style={styles.th}>Id</Mytext>
+                        <Mytext style={styles.th}>url </Mytext>
+                        <Text style={styles.th}>CreateAt</Text>
+                        <Mytext style={styles.th}>Valor</Mytext>
+                        <Mytext style={styles.th}>Id de usuario</Mytext>
+                        <Mytext style={styles.th}>Data Iniciaç</Mytext>
+                        </View>
                     )}
                 />
             </View>
@@ -253,6 +264,27 @@ const styles = StyleSheet.create({
             textShadowColor: "rgba(0, 0, 0, 0.2)",
             fontStyle: "italic",
          },
+
+         th: {
+            flex: 1,
+             fontWeight: '900',
+              fontSize: 13,
+               color: '#333'
+            },
+
+        td: {
+            flex: 1,
+            fontSize: 13,
+            color: '#444'
+             },
+
+         tableRowHeader: {
+                flexDirection: 'row',
+                paddingVertical: 10,
+                borderBottomWidth: 1,
+                borderBottomColor: '#ddd',
+              },
+             
 
 
 });
