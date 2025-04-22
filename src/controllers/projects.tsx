@@ -20,7 +20,23 @@ interface iProject {
         process: string;
     }
 
+function toListProjects(data: iProject[]){
+  const resp: {key: number, option: string}[] = [];
+  data.map((l) => {
+    resp.push({ key: l.id, option: l.name })
+  })
 
+  return resp;
+}
+
+async function getProjects(params:any) {
+  const { data: todos , error} = await supabase.from('projects').select()
+  if(error){
+    console.log(error)
+    return {status: false, error: error}
+  } 
+  return {status: true, data: todos}
+}
 
 async function setProject(project: iProject) {
   const { data, error } = await supabase
@@ -69,5 +85,5 @@ async function deleteProject(id: number) {
 
 
 
-export {setProject, updateProject, deleteProject, iProject}
+export {setProject, updateProject, deleteProject, toListProjects, getProjects, iProject}
           
