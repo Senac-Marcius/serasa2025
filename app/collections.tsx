@@ -1,13 +1,13 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { MyModal_mobile1 } from '../src/components/MyModal';
+import { MyModal } from '../src/components/MyModal';
 import MyButton from '../src/components/MyButtons';
 import MyView from '../src/components/MyView';
 import { Myinput } from '../src/components/MyInputs'
 import MyList from '../src/components/MyList'
 import { useRouter } from 'expo-router';
-import {setCollection, iCollection,deleteCollectionById,updateCollectionById,getCollections} from '../src/controllers/collections';
-import {getItems} from '../src/controllers/librarie';
+import { setCollection, iCollection, deleteCollectionById, updateCollectionById, getCollections } from '../src/controllers/collections';
+import { getItems } from '../src/controllers/librarie';
 
 
 
@@ -26,29 +26,29 @@ export default function CollectionScreen() {
 
     const [visible, setVisible] = useState(false);
 
-    const[collections, setCollections] = useState<iCollection[]>([]);
+    const [collections, setCollections] = useState<iCollection[]>([]);
 
-    useEffect(() =>{
-        async function getTodos(){
+    useEffect(() => {
+        async function getTodos() {
             const retorno = await getItems({})
-            
-            if (retorno.status && retorno.data && retorno.data.length>0){
+
+            if (retorno.status && retorno.data && retorno.data.length > 0) {
                 setCollections(retorno.data);
-         }
-    }
-    getTodos()
-}, [])
+            }
+        }
+        getTodos()
+    }, [])
 
 
 
 
-     async function handleRegister() {
+    async function handleRegister() {
         if (req.id == -1) {
             const newId = collections.length ? collections[collections.length - 1].id + 1 : 0
-            const newCollections = {...req, id: newId}
+            const newCollections = { ...req, id: newId }
             setCollections([...collections, newCollections])
             await setCollection(newCollections)
-             
+
 
         } else {
             setCollections(collections.map(c => (c.id == req.id ? req : c)))
@@ -57,7 +57,7 @@ export default function CollectionScreen() {
                 alert("Erro ao atualizar usuário.")
                 return
             }
-            
+
         }
         setReq({
             id: -1,
@@ -75,7 +75,7 @@ export default function CollectionScreen() {
 
 
     }
-  
+
 
     async function deleteCollections(id: number) {
         const deletecollection = await deleteCollectionById(id)
@@ -89,7 +89,7 @@ export default function CollectionScreen() {
 
     const router = useRouter();
 
-   
+
 
 
     return (//encapsulamento 
@@ -122,15 +122,21 @@ export default function CollectionScreen() {
                         />
 
 
-                        <MyModal_mobile1 visible={visible} setVisible={setVisible} style={styles.button_capsule}>
+                        <MyModal
+                            visible={visible}
+                            setVisible={setVisible}
+                            style={styles.button_capsule}
+                            title="Empréstimo"
+                            closeButtonTitle="Fechar"
+                        >
                             DESEJA CONFIRMAR O CADASTRO?
 
                             <MyButton
-                                onPress={() => {handleRegister()}}
+                                onPress={() => { handleRegister() }}
                                 title="SIM"
                                 style={styles.button_round}
                             />
-                        </MyModal_mobile1>
+                        </MyModal>
 
                     </View>
                     <MyList // data faz um foreach (data recebe collections)
@@ -152,7 +158,7 @@ export default function CollectionScreen() {
                                     </TouchableOpacity>
                                 </View>
                                 <TouchableOpacity style={styles.button_round} onPress={() => router.push('../librarie/collectionsPreview')}>
-                                        <Text style={styles.buttonText}>Visite nosso acervo</Text>
+                                    <Text style={styles.buttonText}>Visite nosso acervo</Text>
                                 </TouchableOpacity>
                             </View>
                         )}
@@ -201,7 +207,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 1, height: 10 },
         shadowOpacity: 0.5,
         width: 400,
-       
+
     },
 
 

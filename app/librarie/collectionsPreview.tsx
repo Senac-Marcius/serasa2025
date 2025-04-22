@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView }
 import MyButton from '../../src/components/MyButtons';
 import MyView from '../../src/components/MyView';
 import { Myinput } from '../../src/components/MyInputs'
-import { useRouter } from 'expo-router';
+import { useRouter, Link } from 'expo-router';
 import { setCollection, iCollection, deleteCollectionById, updateCollectionById, getCollections } from '../../src/controllers/collections';
 import 'bootstrap/dist/css/bootstrap.css';
 import Carousel from 'react-bootstrap/Carousel';
@@ -11,9 +11,8 @@ import MyFilter from '../../src/components/MyFilter';
 import MySearch from '../../src/components/MySearch';
 import { getItems, iItem } from '../../src/controllers/librarie';
 import { supabase } from '../../src/utils/supabase';
-
-
-
+import { Ionicons } from '@expo/vector-icons';
+import MyMenu from '../../src/components/MyMenu';
 
 
 
@@ -22,7 +21,7 @@ export default function CollectionPreviewScreen() {
     const router = useRouter();
     const [collections, setCollections] = useState<iCollection[]>([]);
     const [items, setItems] = useState<iItem[]>([])
-    const [busca, setBusca] = useState("");
+
 
     useEffect(() => {
         //     async function getTodos() {
@@ -44,27 +43,29 @@ export default function CollectionPreviewScreen() {
         getTodos2()
     }, [])
 
-    const [filtroSelecionado, setFiltroSelecionado] = useState("Todos");
+    const [search, setSearch] = useState("");
 
-    async function buscarItens() {
-        const resultado = await getItemsComFiltro(busca, filtroSelecionado);
-        setItems(resultado);
+    const [selectFilter, setSelectFilter] = useState("Todos");
+
+    async function itemsSearch() {
+        const result = await getItemsWithFilter(search, selectFilter);
+        setItems(result);
     }
-    const filtrados = items.filter((item) =>
-        item.title?.toLowerCase().includes(busca.toLowerCase())
+    const filtered = items.filter((item) =>
+        item.title?.toLowerCase().includes(search.toLowerCase())
     );
 
-    async function getItemsComFiltro(busca: string, filtroSelecionado: string) {
+    async function getItemsWithFilter(search: string, selectFilter: string) {
         let query = supabase
             .from('items_librarie')
             .select('*');
 
-        if (busca) {
-            query = query.ilike('title', `%${busca}%`);
+        if (search) {
+            query = query.ilike('title', `%${search}%`);
         }
 
-        if (filtroSelecionado && filtroSelecionado !== 'Todos') {
-            query = query.eq('categoria', filtroSelecionado);
+        if (selectFilter && selectFilter !== 'Todos') {
+            query = query.eq('categoria', selectFilter);
         }
 
         const { data, error } = await query;
@@ -75,74 +76,101 @@ export default function CollectionPreviewScreen() {
 
         return data || [];
     }
-    
+    const [menuOpen, setMenuOpen] = useState(false);
     return (
         <ScrollView>
-            <MyView router={router} style={styles.View}>
-                <View>
-                    <View style={styles.containerCarousel}>
-                        <Carousel>
-                            <Carousel.Item>
-                                <Image
-                                    source={require('./assets/slide1biblioteca.png')}
-                                    style={{ width: 1300, height: 500, resizeMode: 'cover' }}
-                                />
-                            </Carousel.Item>
-                            <Carousel.Item>
-                                <Image
-                                    source={require('./assets/slide2biblioteca.png')}
-                                    style={{ width: 1200, height: 500, resizeMode: 'cover' }}
-
-                                />
-                            </Carousel.Item>
-                            <Carousel.Item>
-                                <Image
-                                    source={require('./assets/slide3biblioteca.png')}
-                                    style={{ width: 1200, height: 500, resizeMode: 'cover' }}
-
-                                />
-                            </Carousel.Item>
-                        </Carousel>
-                    </View>
-                    <MySearch
-                        style = {styles.containerSearch}
-                        busca={busca}
-                        onChangeText={(text) => setBusca(text)}
-                        onPress={buscarItens}
-                    />
-
-                    <MyFilter
-                        itens={['Todos', 'Livros', 'Revistas']}
-                        style = {styles.containerFilter}
-                        onSend={(filtro) => {
-                            setFiltroSelecionado(filtro);
-                            buscarItens();
-                        }}
-                        onPress={(item) => console.log('Filtro pressionado:', item)}
-                    />
-                </View>
-                <View style={styles.item2}>
-                    <View>
-                        <FlatList
-                            data={items}
-                            numColumns={3}
-                            keyExtractor={(item) => item.id.toString()}
-                            renderItem={({ item }) => (
-                                <TouchableOpacity
-                                    style={styles.itemContainer}
-                                    onPress={() => router.push({ pathname: 'librarie/collectionDetail', params: { id: item.id.toString() }, })}
-                                >
-                                    <View style={styles.itemContainer}>
-                                        <Text style={styles.itemText}>Nome: {item.title}</Text>
-                                        <Text style={styles.itemText}>Quantidade: {item.subtitle}</Text>
-                                        <Text style={styles.itemText}>Estrelas: {item.edition}</Text>
-                                    </View>
+            <View style={styles.View}>
+            {menuOpen && <MyMenu closeMenu={() => setMenuOpen(false)} />}
+                    <View style={styles.topbarPill}>
+                        <TouchableOpacity onPress={() => setMenuOpen(!menuOpen)} style={styles.iconButton}>
+                            <Ionicons name="menu" size={24} color="#fff" />
+                        </TouchableOpacity>
+                            <Text style={styles.textTitle}>
+                                Biblioteca - Nosso Acervo
+                            </Text>
+                        <View style={styles.rightIcons}>
+                            <Link href="/perfil" asChild>
+                                <TouchableOpacity style={styles.iconButton}>
+                                    <Ionicons name="person" size={25} color="#fff" />
+                                    <Text style={styles.buttonText}>
+                                        Úsuario
+                                    </Text>
                                 </TouchableOpacity>
-                            )}
-                        />
-                    </View>
+                            </Link>
+                            <Link href="librarie/pageEmployee" asChild>
+                                <TouchableOpacity style={styles.iconButton}>
+                                    <Ionicons name="person" size={25} color="#fff" />
+                                    <Text style={styles.buttonText}>
+                                        Funcionário
+                                    </Text>
+                                </TouchableOpacity>
+                            </Link>
+                        </View>
+                    
                 </View>
-            </MyView >
+                <View style={styles.containerCarousel}>
+                    <Carousel>
+                        <Carousel.Item>
+                            <Image
+                                source={require('./assets/slide1biblioteca.png')}
+                                style={{ width: 1300, height: 470, resizeMode: 'cover' }}
+                            />
+                        </Carousel.Item>
+                        <Carousel.Item>
+                            <Image
+                                source={require('./assets/slide2biblioteca.png')}
+                                style={{ width: 1200, height: 470, resizeMode: 'cover' }}
+
+                            />
+                        </Carousel.Item>
+                        <Carousel.Item>
+                            <Image
+                                source={require('./assets/slide3biblioteca.png')}
+                                style={{ width: 1200, height: 470, resizeMode: 'cover' }}
+
+                            />
+                        </Carousel.Item>
+                    </Carousel>
+                </View>
+                <MySearch
+                    style={styles.containerSearch}
+                    busca={search}
+                    onChangeText={(text) => setSearch(text)}
+                    onPress={itemsSearch}
+                />
+
+                <MyFilter
+                    itens={['Todos', 'Livros', 'Revistas']}
+                    style={styles.containerFilter}
+                    onSend={(filtro) => {
+                        setSelectFilter(filtro);
+                        itemsSearch();
+                    }}
+                    onPress={(item) => console.log('Filtro pressionado:', item)}
+                />
+            </View>
+            <View style={styles.item2}>
+                <View>
+                    <FlatList
+                        data={items}
+                        numColumns={3}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity
+                                style={styles.itemContainer}
+                                onPress={() => router.push({ pathname: 'librarie/collectionDetail', params: { id: item.id.toString() }, })}
+                            >
+                                <View style={styles.itemContainer}>
+                                    <Text style={styles.itemText}>Nome: {item.title}</Text>
+                                    <Text style={styles.itemText}>Quantidade: {item.subtitle}</Text>
+                                    <Text style={styles.itemText}>Estrelas: {item.edition}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        )}
+                    />
+                </View>
+                
+            </View>
         </ScrollView>
     )
 }
@@ -150,15 +178,20 @@ export default function CollectionPreviewScreen() {
 const styles = StyleSheet.create({
     View: {
         backgroundColor: "#fff7f7",
+        margin: 0,       
+        padding: 0,      
+        zIndex: 2,
     },
 
     containerCarousel: {
         display: "flex",
         width: "100%",
-        height: 550,
+        height: 500,
         justifyContent: "center",
         alignItems: "center",
         padding: 30,
+        backgroundColor: "#750097",
+        borderRadius: 30,
 
     },
     containerFilter: {
@@ -169,13 +202,13 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         margin: 10,
     },
-    containerSearch:{
-        paddingHorizontal: 10,
-        paddingVertical: 10,
+    containerSearch: {
+        paddingHorizontal: 20,
+        paddingVertical: 20,
         backgroundColor: '#FFFFFF',
         justifyContent: 'center',
         borderRadius: 50,
-        color:"purple"
+        color: "purple"
 
     },
     contentContainerStyle: {
@@ -186,17 +219,22 @@ const styles = StyleSheet.create({
     },
 
     textTitle: {
-        color: 'white',
+        color: '#750097',
         fontSize: 30,
         marginBottom: 5,
         justifyContent: "center",
 
+    },
+    titleView: {
+        display: "flex",
+        justifyContent: "center",
     },
     item2: {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "row",
+        backgroundColor: "#fff7f7",
 
     },
     FlatList: {
@@ -225,8 +263,8 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         backgroundColor: 'white',
         borderColor: 'purple',
-        borderStyle:'solid',
-        borderWidth:5,
+        borderStyle: 'solid',
+        borderWidth: 3,
         marginLeft: 50,
         marginRight: 50,
         marginTop: 50,
@@ -242,17 +280,15 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginBottom: 5,
     },
-    input: {
-        height: 30,
-        borderColor: '#ddd',
-        borderWidth: 1,
-        borderRadius: 5,
-        marginBottom: 15,
-        paddingLeft: 10,
-        fontSize: 16,
-        backgroundColor: '#f9f9f9',
+    iconButton: {
+        backgroundColor: '#6A1B9A',
+        padding: 10,
+        borderRadius: 30,
+        marginHorizontal: 4,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
     },
-
     buttonsContainer: {
         flexDirection: 'row',
         gap: 50,
@@ -263,7 +299,27 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
-    }
+    },
+    rightIcons: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    topbarPill: {
+        marginHorizontal: 16,
+        marginTop: 16,
+        backgroundColor: '#f1f1f1',
+        borderRadius: 40,
+        borderWidth: 2,
+        borderColor: '#9C27B0',
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        flexDirection: 'row',
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: 'center',
+        margin: 15,
+        zIndex: 5,
+    },
 })
 
 

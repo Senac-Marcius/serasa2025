@@ -93,7 +93,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Items" route="items" icon="pricetag" />
         <MenuItem label="Launchs" route="launchs" icon="rocket" />
         <MenuItem label="Levels" route="levels" icon="stats-chart" />
-        <MenuItem label="Libraie" route="libraie" icon="book" />
+        <MenuItem label="Librarie" route="librarie" icon="book" />
         <MenuItem label="Loans" route="loans" icon="card" />
         <MenuItem label="Locals" route="locals" icon="location" />
         <MenuItem label="Notifications" route="notifications" icon="notifications" />

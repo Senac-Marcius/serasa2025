@@ -1,61 +1,62 @@
 import { useLocalSearchParams } from 'expo-router';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router';
-import { MyModal_mobile1 } from '../../src/components/MyModal';
+import { MyModal } from '../../src/components/MyModal';
 import MyView from '../../src/components/MyView';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native';
-import {getItems} from '../../src/controllers/librarie';
+import {getItems, iItem, setItem} from '../../src/controllers/librarie';
 import { setCollection, iCollection, deleteCollectionById, updateCollectionById, getCollections } from '../../src/controllers/collections';
 
 export default function CollectionDetail() {
     const { id } = useLocalSearchParams();
-
     const router = useRouter();
-    const [collections, setCollections] = useState<iCollection[]>([]);
-
+  
+    const [items, setItems] = useState<iItem[]>([]);
     const [visible, setVisible] = useState(false);
-
+  
     useEffect(() => {
-        async function getTodos() {
-            const retorno = await getItems({})
-
-            if (retorno.status && retorno.data && retorno.data.length > 0) {
-                setCollections(retorno.data);
-            }
+      async function getTodos() {
+        const retorno = await getItems({});
+  
+        if (retorno.status && retorno.data && retorno.data.length > 0) {
+          setItems(retorno.data);
         }
-        getTodos()
-    }, [])
-    const collection = collections.find((item) => item.id.toString() === id);
+      }
+  
+      getTodos();
+    }, []);
+  
+    const item = items.find((item) => item.id.toString() === id);
+  
     return (
-                <MyView style={styles.View}>
-                    <ScrollView>
-                <View style={styles.item2}>
-                    
-                    {collection ? (
-                        <View style={styles.itemContainer}>
-                            <Text style={styles.itemText}>Nome: {collection.name}</Text>
-                            <Text style={styles.itemText}>Quantidade: {collection.quantity}</Text>
-                            <Text style={styles.itemText}>Estrelas: {collection.quantity}</Text>
-
-
-                            <MyModal_mobile1 visible={visible} setVisible={setVisible} style={styles.button_capsule}
-                            title="Empréstimo"
-                            closeButtonTitle="Fechar"
-                            >
-                                Deseja realizar o empréstimo deste exemplar?
-                            </MyModal_mobile1>
-
-                        </View>
-                    ) : (
-                        <Text style={styles.itemText}>Carregando...</Text>
-                    )}
-                    </View>
-                    </ScrollView>
-                </MyView>
-            
-        
-    )
-};
+      <MyView style={styles.View}>
+        <ScrollView>
+          <View style={styles.item2}>
+            {item ? (
+              <View style={styles.itemContainer}>
+                <Text style={styles.itemText}>Nome: {item.title}</Text>
+                <Text style={styles.itemText}>Quantidade: {item.subtitle}</Text>
+                <Text style={styles.itemText}>Estrelas: {item.summary}</Text>
+  
+                <MyModal
+                  visible={visible}
+                  setVisible={setVisible}
+                  style={styles.button_capsule}
+                  title="Empréstimo"
+                  closeButtonTitle="Fechar"
+                >
+                fdfgdfgdfgdf
+                </MyModal>
+              </View>
+            ) : (
+              <Text style={styles.itemText}>Carregando item...</Text>
+            )}
+          </View>
+        </ScrollView>
+      </MyView>
+    );
+  }
+    
 const styles = StyleSheet.create({
     View: {
         backgroundColor: "#fff7f7",
