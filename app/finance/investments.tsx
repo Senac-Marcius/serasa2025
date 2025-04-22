@@ -4,11 +4,12 @@ import MyView from '../../src/components/MyView';
 import MyAccessibility from '../../src/components/MyAccessibility';
 import { Myinput, MyTextArea } from '../../src/components/MyInputs';
 import Mylist from '../../src/components/MyList';
-import {MyItem} from '../../src/components/MyItem';
+import {MyTb} from '../../src/components/MyItem';
 import MyButton from '../../src/components/MyButtons';
 import Mytext from '../../src/components/MyText';
 import { iInvestment, setInvestment, getInvestment, deleteInvestment, updateInvestment } from '../../src/controllers/investments';
 import {MyModal_mobilefullscreen} from '../../src/components/MyModal';
+import MySearch from '../../src/components/MySearch';
 
 
 export default function investmentScreen(){
@@ -27,7 +28,7 @@ export default function investmentScreen(){
 
     const [investments, setInvestments] = useState<iInvestment[]>([]);
 
-    const [message, setMessage] = useState("");
+    const [searchTerm, setSearchTerm] = useState('');
 
 
     useEffect(() => {
@@ -41,7 +42,24 @@ export default function investmentScreen(){
         getAll();
     },[])
     
+    const getFilteredInvestments = () => {
+        if (!searchTerm) return investments; // Retorna tudo se não houver busca
+        
+        const term = searchTerm.toLowerCase();
+        
+        return investments.filter(item => {
 
+          return (
+            item.name?.toLowerCase().includes(term) ||
+            item.description?.toLowerCase().includes(term) ||
+            item.value?.toString().includes(searchTerm) ||
+            item.id?.toString().includes(searchTerm) ||
+            item.url?.toLowerCase().includes(term) 
+
+
+          )
+        });
+      };
 
     async function handleRegister(){
         console.log('Dados do formulário:', req);
@@ -97,12 +115,16 @@ export default function investmentScreen(){
     }  
     
     return (
-      <MyView  >  
+      <MyView style={{ flex: 1, backgroundColor: '#f0f2f5'}} >
+          
               {/* Aqui é typescript dentro do front */}
-        <Text style={styles.title}>Investimentos</Text>
-        <View style={styles.row}>
+
+        <Mytext style={styles.title}>Investimentos</Mytext>
+
             <MyModal_mobilefullscreen visible={visible} setVisible={setVisible}>
+
             <View style={styles.form}>
+
             <Myinput
                     label='Nome'
                     placeholder='Nome'
@@ -133,31 +155,75 @@ export default function investmentScreen(){
                   />
                     
 
-                <MyButton style={{justifyContent:'center'}} title='Cadastrar' onPress={ handleRegister }/> 
+                <MyButton style={{justifyContent:'center'}} onPress={ handleRegister } title={req.id == -1 ? "cadastrar" : "Atualizar"} /> 
             </View>
+
             </MyModal_mobilefullscreen>
-            <Mylist
-                data={investments}
+
+            <MySearch
+                style={styles.searchInput}
+                onChangeText={setSearchTerm}
+                 onPress={()=> {setSearchTerm(searchTerm)}}
+                 busca={searchTerm}
+            />
+            
+            <Mylist style={styles.table}
+                data={getFilteredInvestments()}
                 keyItem={ (item) => item.id.toString() }
                 renderItem={({item}) => (
-                    <MyItem style={styles.item}
+                    <MyTb style={styles.item}
                     onEdit={ () => editInvestment (item.id)  }
                     onDel={ () => delInvestment (item.id)  }
                     >
-                       <Mytext style={styles.investmentText}> Nome: {item.name}</Mytext>
-                       <Mytext style={styles.investmentText}> Descrição: {item.description}</Mytext>
-                       <Mytext style={styles.investmentText}> Url: {item.url}</Mytext>
-                       <Mytext style={styles.investmentText}> Data: {item.created_at}</Mytext>
-                       <Mytext style={styles.investmentText}> ID de Usuario: {item.user_id}</Mytext>
-                        </MyItem> 
+                       <Mytext style={styles.td}> {item.name}</Mytext>
+                       <Mytext style={styles.td}> {item.description}</Mytext>
+                       <Mytext style={styles.td}> {item.url}</Mytext>
+                       <Mytext style={styles.td}> {item.created_at}</Mytext>
+                       <Mytext style={styles.td}> {item.value}</Mytext>
+                       </MyTb> 
+                )}
+                header={(
+                    <View style={styles.tableRowHeader}>
+                    <Mytext style={styles.th}>Nome</Mytext>
+                    <Mytext style={styles.th}>Descrição</Mytext>
+                    <Mytext style={styles.th}>Url</Mytext>
+                    <Mytext style={styles.th}>Data</Mytext>
+                    <Mytext style={styles.th}>Valor</Mytext>
+                    <Mytext style={styles.th}>Ações</Mytext>
+                </View>
                 )}
             />
-        </View>
       </MyView>   
     );
 } 
 
 const styles = StyleSheet.create({
+    th: {
+        flex: 1,
+         fontWeight: '600',
+          fontSize: 13,
+           color: '#333'
+        },
+
+    tableRowHeader: {
+        flexDirection: 'row',
+        paddingVertical: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ddd',
+      },
+
+    td: {
+        flex: 1,
+        fontSize: 13,
+        color: '#444' 
+       },
+
+    table: {
+        backgroundColor: '#FFF',
+        borderRadius: 10,
+        padding: 8,
+      },
+
     row: {
         flexDirection: 'row',  
         justifyContent: 'space-between', 
@@ -176,9 +242,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#F2F2F2',
         borderRadius: 10,
         shadowColor: '#000',
-        shadowOpacity: 0.2,
+        shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 10,
+        shadowRadius: 5,
     },
 
     formInput: {
@@ -218,6 +284,17 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 10,
+      },
+
+      searchInput: {
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        paddingVertical: 10,
+        paddingHorizontal: 16,
+        paddingRight: 40,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        fontSize: 14,
       },
 
     editButtonText: {
