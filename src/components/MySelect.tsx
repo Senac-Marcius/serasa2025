@@ -41,8 +41,8 @@ const MySelect: React.FC<MySelectProps> = ({ caption, label, list, setLabel, set
                 
                 style={{ 
                     color: '#6A1B9A', 
-                    fontSize: 16, 
-                    fontWeight: '300' 
+                    fontSize: 14, 
+                    fontWeight: '600' 
                 }}>
                     {caption? caption : 'Selecione abaixo:' }
                 </Text>
@@ -57,12 +57,12 @@ const MySelect: React.FC<MySelectProps> = ({ caption, label, list, setLabel, set
                   height: 44,  //tudo ok
                   marginHorizontal: 1, //
                   width: 1353, //
-                  borderRadius: 11,
+                  borderRadius: 9,
                   paddingHorizontal: 15, //
                   backgroundColor: 'white',
                   borderWidth: 0.1, //
-                  borderColor: '#666', //
-                  shadowColor: '#666',
+                  borderColor: '#D9D9D9', //
+                  //shadowColor: 'red',
                   shadowOffset: { width: 0, height: 0 }, ///
                   shadowOpacity: 0.6,
                   shadowRadius: 0, //
@@ -124,4 +124,3 @@ const MySelect: React.FC<MySelectProps> = ({ caption, label, list, setLabel, set
 
 
 export default MySelect
-
