@@ -31,7 +31,7 @@ const Mydownload: React.FC<MydownloadProps> = ({ style, url }) => {
 
     return (
         <MyButton style={styles.button} onPress={onDownload}
-            icon='camera'
+            icon='download'
             gap={0}            
 
             iconColor='white'
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding:0,
         backgroundColor: '#4CAF50',
-
+        paddingVertical:5,
         alignItems: "center",
         justifyContent: 'center'
 

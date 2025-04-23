@@ -160,7 +160,7 @@ export default function ExpenseScreen(){
 
 const styles = StyleSheet.create({
 
-    downloadB:{},
+
 
     table: {
       backgroundColor: '#FFF',

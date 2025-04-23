@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, Text, StyleSheet, TextInput, Button, TouchableOpacity,} from 'react-native';
-import MyTheme from '../src/components/MyTheme';
-import {Myinput} from '../src/components/MyInputs'; 
-import MyView from '../src/components/MyView';
-import MyButton from '../src/components/MyButtons';
-import {MyItem} from '../src/components/MyItem';
-import MyList from '../src/components/MyList';
-import Mytext from '../src/components/MyText';
-import {textStyles}  from '../styles/textStyles';
-import { useRouter } from 'expo-router';
-import { setNotification, iNotification, deleteNotification, updateNotification, getNotifications} from '../src/controllers/notifications';
+import MyTheme from '../../src/components/MyTheme';
+import {Myinput} from '../../src/components/MyInputs'; 
+import MyView from '../../src/components/MyView';
+import MyButton from '../../src/components/MyButtons';
+import {MyItem} from '../../src/components/MyItem';
+import MyList from '../../src/components/MyList';
+import Mytext from '../../src/components/MyText';
+import {textStyles}  from '../../styles/textStyles';
+import { setNotification, iNotification, deleteNotification, updateNotification, getNotifications} from '../../src/controllers/notifications';
 
 export default function NotificationScreen(){
 // aqui é typNotificationScreenescript
@@ -70,8 +69,6 @@ export default function NotificationScreen(){
         const list = notifications.filter(n => n.id != id );
             setNotifications(list)
     }
-
-    const router = useRouter();
     
 return (
     <MyView>

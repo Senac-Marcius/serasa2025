@@ -9,6 +9,26 @@ interface iDoc{
   created_at: string;
 }
 
+// LISTAR DOCUMENTOS POR TIPO
+async function getListDocuments(params: { type: string }) {
+  try {
+    const { data, error } = await supabase
+      .from('documents')
+      .select()
+      .eq('type', params.type);
+
+    if (error) {
+      console.error('Erro ao listar documentos por tipo: ', error.message);
+      return [];
+    }
+
+    return data;
+  } catch (err) {
+    console.error('Erro inesperado ao listar documentos: ', err);
+    return [];
+  }
+}
+
 
 
 //função do banco de dados - CREATE
@@ -87,6 +107,7 @@ async function deleteDocument(id: number) {
   }
 }
 
-export {insertDocument, updateDocument, deleteDocument,  iDoc}
+export {insertDocument, updateDocument, deleteDocument, getListDocuments, iDoc}//toListDocument
 
+//criar uma branch temporária, a partir da dev, juntar com essa dev e depois juntar com a dev principal
           
