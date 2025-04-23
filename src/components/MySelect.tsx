@@ -46,12 +46,8 @@ const MySelect: React.FC<MySelectProps> = ({ caption, label, list, setLabel, set
                 }}>
                     {caption? caption : 'Selecione abaixo:' }
                 </Text>
-
-                
-
           </View>
 
-      
           <TouchableOpacity 
               style={{ 
                   height: 44,  //tudo ok
