@@ -151,9 +151,9 @@ export default function LoanScreen() {
                             <Myinput
                                 value={req.bookId}
                                 onChangeText={(text) => setReq({ ...req, bookId: text })}
-                                placeholder="Nome do Livro:"
-                                label="Nome do Livro:"
-                                iconName="book"
+                                placeholder="Nome usuario:"
+                                label="Nome usuario:"
+                                iconName="user"
                             />
 
                         
