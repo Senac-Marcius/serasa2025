@@ -27,6 +27,7 @@ const MyNotify: React.FC<MyNotifyProps> = ({ style }) => {
       const retorno = await getNotifications({});
       if (retorno.status && retorno.data && retorno.data.length > 0) {
         setNotifications(retorno.data);
+
       }
     }
     getTodos();
@@ -74,7 +75,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
     justifyContent: 'center',
     alignItems: 'center',
+    
   },
+
   notificationContainer: {
     position: 'absolute',
     top: 60,
@@ -90,9 +93,12 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 10,
     zIndex: 1000,
+
   },
+
   notificationList: {
     flexGrow: 0,
+
   },
 });
 

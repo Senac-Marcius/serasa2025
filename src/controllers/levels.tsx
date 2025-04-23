@@ -6,7 +6,8 @@ export interface iLevels{
     description: string,
     color: string,
     id: number,
-    created_at: string,       
+    created_at: string,    
+
 }
 
 function tolevels(data: iLevels[]){
@@ -17,15 +18,14 @@ function tolevels(data: iLevels[]){
  } )
 
 return resp; 
+
 }
-
-
 
 export async function setLevel(levels: iLevels){
 
     //* aqui vem os tratamento de regex ou do modelo de negócio antes de inserir.
 
-    const { data, error } = await supabase.from('levels').insert([ levels ]) .select()
+    const { data, error } = await supabase.from('levels').insert([ levels ]).select()
 
     if (error){
         console.error('Erro ao inserir levels: ', error);
@@ -63,8 +63,10 @@ export async function updateLevels(levels: iLevels) {
 }
  
         // DELETAR REGISTRO
-export async function deleteLevel(id: number) {
-        const { error } = await supabase.from('levels').delete().eq('id', id);
-        return error;
+
+        export async function deleteLevel(id: number) {
+          const { error } = await supabase.from('levels').delete().eq('id', id);
+          return error;
 }
+
 //import {deleteLevels, updateLevels, getLevels, setLevels, iLevels } from '../src/controllers/levels';
