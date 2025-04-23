@@ -30,6 +30,7 @@ interface iItem {
     url: string,
     file: string,
     type_loan: string,
+    incorporated: string,
     created_at: string,
     id: number,
 }

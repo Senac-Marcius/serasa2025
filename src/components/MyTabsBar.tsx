@@ -1,15 +1,14 @@
 import React, { ReactNode, useState } from 'react';
 import { Text, TouchableOpacity, TextStyle, ViewStyle, StyleSheet } from 'react-native';
-import { tabsBarStyles } from '../../styles/tabsBarStyles';
 import { FlatList } from 'react-native-gesture-handler';
 
 interface MyTabsbarProps {  
   items: string[]; // Lista de nomes das abas (ex: ["Identificação", "Publicação"]
-  style: ViewStyle; // Estilo personalizado para o container principal
-  itemStyle: ViewStyle;   // Estilo para cada item/aba normal
-  activeItemStyle: ViewStyle; // Estilo para o item/aba selecionado
-  textStyle: TextStyle;  // Estilo para cada texto/aba normal
-  activeTextStyle: TextStyle; // Estilo para o texto/aba selecionado
+  style?: ViewStyle; // Estilo personalizado para o container principal
+  itemStyle?: ViewStyle;   // Estilo para cada item/aba normal
+  activeItemStyle?: ViewStyle; // Estilo para o item/aba selecionado
+  textStyle?: TextStyle;  // Estilo para cada texto/aba normal
+  activeTextStyle?: TextStyle; // Estilo para o texto/aba selecionado
   onPress: (item:string, index: number) => void; // Função quando clica numa aba
   initialActiveIndex: number; // Qual aba começa selecionada (padrão: 0 = primeira)
 }
@@ -27,20 +26,20 @@ const MyTabsbar: React.FC<MyTabsbarProps> = ({ items, style, itemStyle, activeIt
   return (
       <FlatList horizontal // rolar para os lados
         showsHorizontalScrollIndicator ={false} // para não mostrar um indicador de rolagem
-        style={tabsBarStyles.tabsContainer}
+        style={[styles.tabsContainer, style]}
         data={items}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item, index}) => (
           <TouchableOpacity 
-            style={[tabsBarStyles.tabItem, itemStyle,
-            activeIndex == index && [tabsBarStyles.activeTabItem, activeItemStyle] // Estilos diferentes se for a aba ativa
+            style={[styles.tabItem, itemStyle,
+            activeIndex == index && [styles.activeTabItem, activeItemStyle] // Estilos diferentes se for a aba ativa
             ]}
             onPress={() => handlePress(item, index)} // Chamando a função
             >
             <Text
             style={[
-              tabsBarStyles.tabText, textStyle,
-              activeIndex == index && [tabsBarStyles.activeTabText, activeTextStyle] // Estilos diferentes se for a aba ativa
+              styles.tabText, textStyle,
+              activeIndex == index && [styles.activeTabText, activeTextStyle] // Estilos diferentes se for a aba ativa
             ]}
           >
             {item}
@@ -50,5 +49,47 @@ const MyTabsbar: React.FC<MyTabsbarProps> = ({ items, style, itemStyle, activeIt
     />
   ); 
 };
+
+const styles = StyleSheet.create({
+  tabsContainer: {
+    flex: 1,
+    padding: 20,
+    marginRight: 50,
+    marginLeft: 50,
+    marginVertical: 0,
+    marginHorizontal: 20,
+    borderRadius: 10,
+    minHeight: 90,
+  },
+  tabItem: { // Estilo para cada aba
+      paddingHorizontal: 10,
+      paddingVertical: 20,
+      marginRight: 15,
+      marginHorizontal: 40,
+      height: 50,
+      width: 250,
+      borderRadius: 50,
+      backgroundColor: '#F2F2F2',
+      borderWidth: 2,
+      borderColor: '#0F2259',
+      justifyContent: 'center',
+      alignItems: 'center',
+  },
+  activeTabItem: { // Estilo quando a aba está ativa
+      backgroundColor: '#AD6CD9',
+      borderBottomWidth: 5,
+      borderBottomColor: '#0F2259',
+  },
+  tabText: { // Estilo do texto normal
+      color: 'black',
+      fontSize: 16,
+      fontFamily: 'Poppins_400Regular',
+      justifyContent: 'center',
+  },
+  activeTabText: { // Estilo do texto quando a aba está ativa
+      fontWeight: 'bold',
+      color: 'white',
+  },
+});
 
 export default MyTabsbar  
