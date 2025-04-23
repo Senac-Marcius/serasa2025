@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import {View,Text,StyleSheet,ScrollView,TouchableOpacity,Pressable,} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Pressable, } from 'react-native';
 import MyView from '../../src/components/MyView';
 import { useRouter } from 'expo-router';
 import MyCalendar from '../../src/components/MyCalendar';
 import MySearch from '../../src/components/MySearch';
 import { Myinput } from '../../src/components/MyInputs';
 import { supabase } from '../../src/utils/supabase';
-import {setTimeline,iTimeline,delTimelines as delTimelinesDoController,editTimelines as editTimelinesDoController,getTimelines,} from '../../src/controllers/timelines';
+import { setTimeline, iTimeline, delTimelines as delTimelinesDoController, editTimelines as editTimelinesDoController, getTimelines, } from '../../src/controllers/timelines';
 import MyButton from '../../src/components/MyButtons';
 import Mytext from '../../src/components/MyText';
 import MyTimerPicker from '../../src/components/MyTimerPiker';
@@ -60,7 +60,7 @@ export default function TimelineScreen() {
       await setTimeline(newTimeline);
     } else {
       setTimelines(timelines.map((T) => (T.id === req.id ? req : T)));
-      await editTimelinesDoController(req);
+      await editTimelinesDoController(req.id, req);
     }
 
     setReq({
@@ -106,8 +106,8 @@ export default function TimelineScreen() {
             <View style={{ padding: 20 }}>
               <View style={styles.headerRow}>
                 <Text style={styles.title}>Meu Cronograma</Text>
-                <Pressable style={styles.buttonNewText} onPress={() => setShowForm(true)}>
-                  <Text style={styles.buttonCapsule}>+ Novo Cronograma</Text>
+                <Pressable style={styles.buttonCapsule} onPress={() => setShowForm(true)}>
+                  <Text style={{ color: 'white' }} >+ Novo Cronograma</Text>
                 </Pressable>
               </View>
             </View>
@@ -197,12 +197,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: { fontSize: 22, fontWeight: '700', color: 'purple' },
-  titlee: { fontSize: 15, fontWeight: '700', color: 'purple' },
+
+
+
+  titlee: {
+    fontWeight: 'bold',
+    marginBottom: 6,
+    color: '#6a1b97',
+    fontSize: 14,
+    fontStyle:'normal',
+    fontFamily:'Roboto',
+  },
 
   buttonNewText: { backgroundColor: 'purple', fontWeight: '700' },
   buttonCapsule: {
     padding: 10,
-    borderRadius: 100,
+    borderRadius: 50,
     backgroundColor: 'purple',
     textAlign: 'center',
     color: 'white',
@@ -217,6 +227,7 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 20,
   },
+
   formTitle: {
     fontSize: 18,
     fontWeight: '600',
@@ -254,5 +265,5 @@ const styles = StyleSheet.create({
   },
   edit: { color: '#3AC7A8', fontWeight: '600', fontSize: 13 },
   del: { color: '#D63031', fontWeight: '600', fontSize: 13 },
-  
+
 });
