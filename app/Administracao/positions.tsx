@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import MyView from "../../src/components/MyView";
-import MyList from "../../src/components/MyList";
-import { MyItem } from "../../src/components/MyItem";
 import { Myinput } from "../../src/components/MyInputs";
 import MyButton from "../../src/components/MyButtons";
 import { useRouter } from 'expo-router';
@@ -12,6 +10,7 @@ import { setPosition, deletePosition, updatePosition, iPosition, getCargo } from
 export default function PositionScreen() {
   const [positions, setPositions] = useState<iPosition[]>([]);
   const [showList, setShowList] = useState(false);
+  const [expandedId, setExpandedId] = useState<number | null>(null);
   const [req, setReq] = useState({
     id: -1,
     name: "",
@@ -72,6 +71,10 @@ export default function PositionScreen() {
     }
   }
 
+  const toggleExpand = (id: number) => {
+    setExpandedId(prev => (prev === id ? null : id));
+  };
+
   const router = useRouter();
 
   return (
@@ -127,34 +130,34 @@ export default function PositionScreen() {
         </TouchableOpacity>
 
         {showList && (
-          <View style={styles.cardContainer}>
+          <View style={styles.listContainer}>
             {positions.map((item) => (
-              <MyItem
+              <TouchableOpacity
                 key={item.id}
-                style={styles.card}
-                onEdit={() => editPosition(item.id)}
-                onDel={() => delPosition(item.id)}
+                style={styles.listItem}
+                onPress={() => toggleExpand(item.id)}
               >
+                <Text style={styles.hoverHint}>Clique para obter todas as informações</Text>
                 <Text style={styles.titleText}>{item.name}</Text>
-                <Text style={styles.cardText}>
-                  <Text style={styles.bold}>Descrição: </Text>{item.description}
-                </Text>
-                <Text style={styles.cardText}>
-                  <Text style={styles.bold}>Salário: </Text>R$ {item.salary}
-                </Text>
-                <Text style={styles.cardText}>
-                  <Text style={styles.bold}>Carga horária: </Text>{item.work_hours}
-                </Text>
-                <Text style={styles.cardText}>
-                  <Text style={styles.bold}>Departamento: </Text>{item.departament}
-                </Text>
-                <Text style={styles.cardText}>
-                  <Text style={styles.bold}>Supervisor: </Text>{item.supervisor}
-                </Text>
-                <Text style={styles.cardText}>
-                  <Text style={styles.bold}>Criado em: </Text>{item.creat_at}
-                </Text>
-              </MyItem>
+                <Text style={styles.cardText}><Text style={styles.bold}>Descrição: </Text>{item.description}</Text>
+                <Text style={styles.cardText}><Text style={styles.bold}>Salário: </Text>R$ {item.salary}</Text>
+                {expandedId === item.id && (
+                  <>
+                    <Text style={styles.cardText}><Text style={styles.bold}>Carga horária: </Text>{item.work_hours}</Text>
+                    <Text style={styles.cardText}><Text style={styles.bold}>Departamento: </Text>{item.departament}</Text>
+                    <Text style={styles.cardText}><Text style={styles.bold}>Supervisor: </Text>{item.supervisor}</Text>
+                    <Text style={styles.cardText}><Text style={styles.bold}>Criado em: </Text>{item.creat_at}</Text>
+                    <View style={styles.actionButtons}>
+                      <TouchableOpacity onPress={() => editPosition(item.id)}>
+                        <Text style={styles.edit}>Editar</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => delPosition(item.id)}>
+                        <Text style={styles.del}>Excluir</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </>
+                )}
+              </TouchableOpacity>
             ))}
           </View>
         )}
@@ -165,15 +168,15 @@ export default function PositionScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    padding: 35,
     alignItems: 'center',
   },
   form: {
     width: '100%',
-    maxWidth: 500,
+    maxWidth: 1700,
     backgroundColor: '#F2F2F2',
     borderRadius: 16,
-    padding: 20,
+    padding: 24,
     shadowColor: '#000',
     shadowOpacity: 0.08,
     shadowOffset: { width: 0, height: 2 },
@@ -181,37 +184,6 @@ const styles = StyleSheet.create({
     elevation: 3,
     gap: 12,
     marginBottom: 20,
-  },
-  cardContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    padding: 10,
-  },
-  card: {
-    flex: 1,
-    minWidth: 160,
-    maxWidth: 300,
-    margin: 8,
-    padding: 16,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    shadowColor: '#00000010',
-    shadowOpacity: 0.15,
-    shadowOffset: { width: 1, height: 3 },
-    shadowRadius: 5,
-    elevation: 2,
-  },
-  titleText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#111',
-    marginBottom: 6,
-  },
-  cardText: {
-    fontSize: 14,
-    color: '#333',
-    marginBottom: 4,
   },
   mainButton: {
     marginTop: 8,
@@ -226,8 +198,56 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 16,
   },
+  listContainer: {
+    width: '100%',
+    maxWidth: 1300,
+    marginTop: 16,
+  },
+  listItem: {
+    padding: 18,
+    backgroundColor: '#fff',
+    marginBottom: 14,
+    borderRadius: 14,
+    shadowColor: '#00000010',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  hoverHint: {
+    fontSize: 12,
+    fontStyle: 'italic',
+    color: '#555',
+    opacity: 0.5,
+    marginBottom: 6,
+  },
+  titleText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#111',
+    marginBottom: 6,
+  },
+  cardText: {
+    fontSize: 14,
+    color: '#333',
+    marginBottom: 4,
+  },
   bold: {
     fontWeight: 'bold',
     color: '#000',
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    gap: 20,
+    marginTop: 10,
+  },
+  edit: {
+    color: '#2a9d8f',
+    fontWeight: 'bold',
+  },
+  del: {
+    color: '#e63946',
+    fontWeight: 'bold',
   },
 });
