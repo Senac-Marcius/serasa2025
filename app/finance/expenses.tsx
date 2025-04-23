@@ -9,6 +9,7 @@ import {Myinput, MyTextArea} from '../../src/components/MyInputs';
 import { setExpense, delRegister, updateExpense, iexpenses, getExpense } from '../../src/controllers/expenses';
 import Mytext from '../../src/components/MyText';
 import Mydownload from '../../src/components/MyDownload';
+import MySearch from '../../src/components/MySearch';
 
 
 export default function ExpenseScreen(){
@@ -24,6 +25,8 @@ export default function ExpenseScreen(){
             url: '',
             user_id: 1,
     });
+
+    const [searchTerm, setSearchTerm] = useState('');
 
     const [visible, setVisible] = useState(false);
 
@@ -41,6 +44,25 @@ export default function ExpenseScreen(){
         getAll();
 
     },[])
+
+    const getFilteredExpenses = () => {
+        if (!searchTerm) return expense; // Retorna tudo se não houver busca
+        
+        const term = searchTerm.toLowerCase();
+        
+        return expense.filter(item => {
+
+          return (
+            item.name?.toLowerCase().includes(term) ||
+            item.descriptions?.toLowerCase().includes(term) ||
+            item.costs?.toString().includes(searchTerm) ||
+            item.id?.toString().includes(searchTerm) ||
+            item.url?.toLowerCase().includes(term) 
+
+
+          )
+        });
+      };
     
 
     async function handleRegister(){
@@ -117,10 +139,16 @@ export default function ExpenseScreen(){
 
                 </View>                
             </MyModal_mobilefullscreen>    
+            <MySearch
+                style={styles.searchInput}
+                onChangeText={setSearchTerm}
+                 onPress={()=> {setSearchTerm(searchTerm)}}
+                 busca={searchTerm}
+            />
 
                 <MyList
                     style={styles.table}
-                    data={expense}
+                    data={getFilteredExpenses()}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
                         <MyTb
@@ -160,7 +188,16 @@ export default function ExpenseScreen(){
 
 const styles = StyleSheet.create({
 
-
+    searchInput: {
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        paddingVertical: 10,
+        paddingHorizontal: 16,
+        paddingRight: 40,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        fontSize: 14,
+      },
 
     table: {
       backgroundColor: '#FFF',
