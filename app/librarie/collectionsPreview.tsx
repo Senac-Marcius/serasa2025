@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native';
-import MyButton from '../../src/components/MyButtons';
-import MyView from '../../src/components/MyView';
-import { Myinput } from '../../src/components/MyInputs'
 import { useRouter, Link } from 'expo-router';
-import { setCollection, iCollection, deleteCollectionById, updateCollectionById, getCollections } from '../../src/controllers/collections';
+import { iCollection } from '../../src/controllers/collections';
 import 'bootstrap/dist/css/bootstrap.css';
 import Carousel from 'react-bootstrap/Carousel';
-import MyFilter from '../../src/components/MyFilter';
 import MySearch from '../../src/components/MySearch';
 import { getItems, iItem } from '../../src/controllers/librarie';
 import { supabase } from '../../src/utils/supabase';
 import { Ionicons } from '@expo/vector-icons';
 import MyMenu from '../../src/components/MyMenu';
+import MySelect from '../../src/components/MySelect';
+import MyFilter from '../../src/components/MyFilter';
+
+
 
 
 
@@ -21,17 +21,18 @@ export default function CollectionPreviewScreen() {
     const router = useRouter();
     const [collections, setCollections] = useState<iCollection[]>([]);
     const [items, setItems] = useState<iItem[]>([])
+    const [search, setSearch] = useState("");
+
+    const [selectFilter, setSelectFilter] = useState("Todos");
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    const [subject, setSubject] = useState("Todos");
+    const [year, setYear] = useState("Todos");
+    const [responsible, setResponsible] = useState("Todos");
+    const [edition, setEdition] = useState("Todos");
 
 
     useEffect(() => {
-        //     async function getTodos() {
-        //         const retorno = await getCollections({})
-
-        //         if (retorno.status && retorno.data && retorno.data.length > 0) {
-        //             setCollections(retorno.data);
-        //         }
-        //     }
-        // getTodos()
         async function getTodos2() {
 
             const retorno = await getItems({})
@@ -43,30 +44,37 @@ export default function CollectionPreviewScreen() {
         getTodos2()
     }, [])
 
-    const [search, setSearch] = useState("");
-
-    const [selectFilter, setSelectFilter] = useState("Todos");
+    useEffect(() => {
+        itemsSearch();
+    }, [search, subject, year, responsible, edition]);
 
     async function itemsSearch() {
-        const result = await getItemsWithFilter(search, selectFilter);
+        const result = await getItemsWithFilter(search, selectFilter, subject, year, responsible, edition);
         setItems(result);
     }
     const filtered = items.filter((item) =>
         item.title?.toLowerCase().includes(search.toLowerCase())
     );
 
-    async function getItemsWithFilter(search: string, selectFilter: string) {
+    async function getItemsWithFilter(
+        search: string,
+        selectFilter: string,
+        subject: string,
+        year: string,
+        responsible: string,
+        edition: string) {
+
+
         let query = supabase
             .from('items_librarie')
             .select('*');
 
-        if (search) {
-            query = query.ilike('title', `%${search}%`);
-        }
-
-        if (selectFilter && selectFilter !== 'Todos') {
-            query = query.eq('categoria', selectFilter);
-        }
+        if (search) query = query.ilike('title', `%${search}%`);
+        if (selectFilter && selectFilter !== 'Todos') query = query.eq('categoria', selectFilter);
+        if (subject !== 'Todos') query = query.eq('subject', subject);
+        if (year !== 'Todos') query = query.eq('typology', year);
+        if (responsible !== 'Todos') query = query.eq('responsible', responsible);
+        if (edition !== 'Todos') query = query.eq('edition', edition);
 
         const { data, error } = await query;
 
@@ -76,37 +84,38 @@ export default function CollectionPreviewScreen() {
 
         return data || [];
     }
-    const [menuOpen, setMenuOpen] = useState(false);
+
+
     return (
         <ScrollView>
             <View style={styles.View}>
-            {menuOpen && <MyMenu closeMenu={() => setMenuOpen(false)} />}
-                    <View style={styles.topbarPill}>
-                        <TouchableOpacity onPress={() => setMenuOpen(!menuOpen)} style={styles.iconButton}>
-                            <Ionicons name="menu" size={24} color="#fff" />
-                        </TouchableOpacity>
-                            <Text style={styles.textTitle}>
-                                Biblioteca - Nosso Acervo
-                            </Text>
-                        <View style={styles.rightIcons}>
-                            <Link href="/perfil" asChild>
-                                <TouchableOpacity style={styles.iconButton}>
-                                    <Ionicons name="person" size={25} color="#fff" />
-                                    <Text style={styles.buttonText}>
-                                        Úsuario
-                                    </Text>
-                                </TouchableOpacity>
-                            </Link>
-                            <Link href="librarie/pageEmployee" asChild>
-                                <TouchableOpacity style={styles.iconButton}>
-                                    <Ionicons name="person" size={25} color="#fff" />
-                                    <Text style={styles.buttonText}>
-                                        Funcionário
-                                    </Text>
-                                </TouchableOpacity>
-                            </Link>
-                        </View>
-                    
+                {menuOpen && <MyMenu closeMenu={() => setMenuOpen(false)} />}
+                <View style={styles.topbarPill}>
+                    <TouchableOpacity onPress={() => setMenuOpen(!menuOpen)} style={styles.iconButton}>
+                        <Ionicons name="menu" size={24} color="#fff" />
+                    </TouchableOpacity>
+                    <Text style={styles.textTitle}>
+                        BIBLIOTECA
+                    </Text>
+                    <View style={styles.rightIcons}>
+                        <Link href="/perfil" asChild>
+                            <TouchableOpacity style={styles.iconButton}>
+                                <Ionicons name="person" size={25} color="#fff" />
+                                <Text style={styles.buttonText}>
+                                    Úsuario
+                                </Text>
+                            </TouchableOpacity>
+                        </Link>
+                        <Link href="librarie/pageEmployee" asChild>
+                            <TouchableOpacity style={styles.iconButton}>
+                                <Ionicons name="person" size={25} color="#fff" />
+                                <Text style={styles.buttonText}>
+                                    Funcionário
+                                </Text>
+                            </TouchableOpacity>
+                        </Link>
+                    </View>
+
                 </View>
                 <View style={styles.containerCarousel}>
                     <Carousel>
@@ -132,44 +141,122 @@ export default function CollectionPreviewScreen() {
                         </Carousel.Item>
                     </Carousel>
                 </View>
-                <MySearch
-                    style={styles.containerSearch}
-                    busca={search}
-                    onChangeText={(text) => setSearch(text)}
-                    onPress={itemsSearch}
-                />
-
-                <MyFilter
-                    itens={['Todos', 'Livros', 'Revistas']}
-                    style={styles.containerFilter}
-                    onSend={(filtro) => {
-                        setSelectFilter(filtro);
-                        itemsSearch();
-                    }}
-                    onPress={(item) => console.log('Filtro pressionado:', item)}
-                />
-            </View>
-            <View style={styles.item2}>
-                <View>
-                    <FlatList
-                        data={items}
-                        numColumns={3}
-                        keyExtractor={(item) => item.id.toString()}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity
-                                style={styles.itemContainer}
-                                onPress={() => router.push({ pathname: 'librarie/collectionDetail', params: { id: item.id.toString() }, })}
-                            >
-                                <View style={styles.itemContainer}>
-                                    <Text style={styles.itemText}>Nome: {item.title}</Text>
-                                    <Text style={styles.itemText}>Quantidade: {item.subtitle}</Text>
-                                    <Text style={styles.itemText}>Estrelas: {item.edition}</Text>
-                                </View>
-                            </TouchableOpacity>
-                        )}
+                <View style={styles.containerfilter}>
+                    <MySearch
+                        style={styles.containerSearch}
+                        busca={search}
+                        onChangeText={(text) => setSearch(text)}
+                        onPress={itemsSearch}
                     />
+                    <View style={styles.ViewFilters}>
+                        <View style={styles.ViewSelect}>
+                            <Text style={styles.itemTextFilter}>  Assunto </Text>
+                            <MySelect
+                                label={subject}
+                                setLabel={(val) => { setSubject(val); itemsSearch(); }}
+                                list={[
+                                    { key: 0, option: 'Todos' },
+                                    { key: 1, option: 'Ficção Científica' },
+                                    { key: 2, option: 'Romance' },
+                                    { key: 3, option: "Terror" },
+                                    { key: 4, option: "Suspense" },
+                                    { key: 5, option: "Mistério" },
+                                    { key: 6, option: "Fantasia" },
+                                    { key: 7, option: "Outros" },
+                                ]}
+                            />
+                        </View>
+                        <View style={styles.ViewSelect}>
+                            <Text style={styles.itemTextFilter}>  Ano </Text>
+                            <MySelect
+                                label={year}
+                                setLabel={(val) => { setYear(val); itemsSearch(); }}
+                                list={[
+                                    { key: 0, option: 'Todos' },
+                                    { key: 1, option: 'Livro' },
+                                    { key: 2, option: 'Publicação Seriada' },
+                                    { key: 3, option: "Artigo" },
+                                    { key: 4, option: "Audiolivro" },
+                                    { key: 5, option: "Ebook" },
+                                    { key: 6, option: "Mapa" },
+                                    { key: 7, option: "Outros" },
+                                ]}
+                            />
+                        </View>
+                        <View style={styles.ViewSelect}>
+                            <Text style={styles.itemTextFilter}>  Autores </Text>
+                            <MySelect
+                                label={responsible}
+                                setLabel={(val) => { setResponsible(val); itemsSearch(); }}
+                                list={[
+                                    { key: 0, option: 'Todos' },
+                                    { key: 1, option: 'Jane Austen' },
+                                    { key: 2, option: 'Colleen Hoover' },
+                                    { key: 3, option: "J.R.R. Tolkien" },
+                                    { key: 4, option: "J.K. Rowling" },
+                                    { key: 5, option: "Arthur C. Clarke" },
+                                    { key: 6, option: "Isaac Asimov" },
+                                    { key: 7, option: "Dan Brown" },
+                                    { key: 8, option: "Stephen King" },
+                                    { key: 9, option: "H.P. Lovecraft" },
+                                    { key: 10, option: "Agatha Christie" },
+                                    { key: 11, option: "Arthur Conan Doyle" },
+                                ]}
+                            />
+                        </View>
+                        <View style={styles.ViewSelect}>
+                            <Text style={styles.itemTextFilter}>  Edição </Text>
+                            <MySelect
+                                label={edition}
+                                setLabel={(val) => { setEdition(val); itemsSearch(); }}
+                                list={[
+                                    { key: 0, option: 'Todos' },
+                                    { key: 1, option: '1ª' },
+                                    { key: 2, option: '2ª' },
+                                    { key: 3, option: '3ª' }
+                                ]}
+                            />
+                        </View>
+                    </View>
+
+                    {/* <MyFilter
+                        itens={['mais avaliados']}
+                        style={styles.containerfilter}
+                        onSend={(filtro) => {
+                            setSelectFilter(filtro);
+                            itemsSearch();
+                        }}
+                        onPress={(item) => console.log('Filtro pressionado:', item)}
+                    /> */}
                 </View>
-                
+
+                <View style={styles.item2}>
+                    <View>
+                        {items.length === 0 ? (
+                            <Text style={styles.noResultText}>
+                                Nenhum item encontrado com os filtros ou busca informados.
+                            </Text>
+                        ) : (
+                            <FlatList
+                                data={items}
+                                numColumns={3}
+                                keyExtractor={(item) => item.id.toString()}
+                                renderItem={({ item }) => (
+                                    <TouchableOpacity
+                                        onPress={() => router.push({ pathname: 'librarie/collectionDetail', params: { id: item.id.toString() }, })}
+                                    >
+                                        <View style={styles.itemContainer}>
+                                            <View style={styles.styleimg}><Image source={{ uri: item.image }} style={styles.image}></Image></View>
+                                            <Text style={styles.itemTitlename}>{item.title}</Text>
+                                            <Text style={styles.itemText}> {item.responsible}</Text>
+                                        </View>
+
+                                    </TouchableOpacity>
+                                )}
+                            />
+                        )}
+                    </View>
+                </View>
             </View>
         </ScrollView>
     )
@@ -178,9 +265,10 @@ export default function CollectionPreviewScreen() {
 const styles = StyleSheet.create({
     View: {
         backgroundColor: "#fff7f7",
-        margin: 0,       
-        padding: 0,      
+        margin: 0,
+        padding: 0,
         zIndex: 2,
+        height: "100%"
     },
 
     containerCarousel: {
@@ -194,13 +282,15 @@ const styles = StyleSheet.create({
         borderRadius: 30,
 
     },
-    containerFilter: {
-        paddingHorizontal: 10,
-        paddingVertical: 10,
-        backgroundColor: '#FFFFFF',
-        justifyContent: 'center',
-        borderRadius: 50,
-        margin: 10,
+    ViewSelect: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center"
+    },
+    ViewFilters: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
     },
     containerSearch: {
         paddingHorizontal: 20,
@@ -211,11 +301,27 @@ const styles = StyleSheet.create({
         color: "purple"
 
     },
+    containerfilter: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+        height: 200,
+        marginTop: 30,
+        backgroundColor: "#750097",
+        borderRadius: 30,
+    },
     contentContainerStyle: {
         justifyContent: 'center',
         alignItems: 'center',
         gap: 20,
         paddingBottom: 100
+    },
+    itemTextFilter: {
+        color: '#750097',
+        fontSize: 20,
+        marginBottom: 5,
+        justifyContent: "center",
     },
 
     textTitle: {
@@ -224,6 +330,13 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         justifyContent: "center",
 
+    },
+    itemTitlename: {
+        color: 'grey',
+        fontSize: 18,
+        fontWeight: "bold",
+        marginBottom: 5,
+        justifyContent: "center",
     },
     titleView: {
         display: "flex",
@@ -259,8 +372,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     itemContainer: {
-        padding: 15,
-        marginBottom: 5,
+        padding: 25,
+        margin: 5,
         backgroundColor: 'white',
         borderColor: 'purple',
         borderStyle: 'solid',
@@ -268,18 +381,39 @@ const styles = StyleSheet.create({
         marginLeft: 50,
         marginRight: 50,
         marginTop: 50,
-        width: 250,
-        height: 400,
+        width: 300,
+        height: 480,
         alignItems: "center",
-        justifyContent: "flex-end"
-
+        justifyContent: "flex-start",
+        shadowColor: '#750097',
+        shadowOffset: { width: 2, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 3,
     },
-
+    image: {
+        width: 200,
+        height: 270,
+        borderColor: "#750097"
+    },
+    styleimg: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        margin: 10,
+    },
+    noResultText: {
+        color: '#750097',
+        fontSize: 30,
+        fontWeight: 'bold',
+        marginTop: 30,
+        textAlign: 'center',
+    },
     itemText: {
         color: 'black',
         fontSize: 16,
         marginBottom: 5,
     },
+
     iconButton: {
         backgroundColor: '#6A1B9A',
         padding: 10,
