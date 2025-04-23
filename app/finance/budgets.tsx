@@ -24,7 +24,7 @@ export default function BudgetScreen(){
         name:'',
         url:'',
         created_at: new Date().toISOString(),
-        value:'',
+        value: '',
         user_id: 3,
         start_date: '',
         end_date:'',
