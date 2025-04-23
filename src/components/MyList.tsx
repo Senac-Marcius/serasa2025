@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ViewStyle, StyleSheet } from 'react-native';
+import { View, ViewStyle, StyleSheet, Dimensions } from 'react-native';
 
 interface MyListProps {
   data: any[];
@@ -7,6 +7,10 @@ interface MyListProps {
   renderItem: (args: { item: any; index: number }) => JSX.Element;
   keyItem: (item: any, index: number) => string;
 }
+
+const { width } = Dimensions.get('window');
+
+const cardMinWidth = width > 768 ? 240 : width - 24;
 
 const MyList: React.FC<MyListProps> = ({ data, style, renderItem, keyItem }) => {
   return (
@@ -25,12 +29,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'flex-start',
-    paddingHorizontal: 16,
-    paddingBottom: 24,
-    gap: 16,
+    paddingHorizontal: 8,
+    paddingBottom: 16,
   },
   cardWrapper: {
-    width: 300, // Tamanho fixo para os cards
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: cardMinWidth,
+    maxWidth: cardMinWidth,
+    margin: 4, 
   },
 });
 

@@ -5,6 +5,7 @@ import { supabase } from '../utils/supabase'
 interface iProduct {
     description: string,
     name: string,
+    amount: number,
     id: number,
     user_id: number,
     create_at: string

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { supabase } from '../utils/supabase'
 import { Timestamp } from "react-native-reanimated/lib/typescript/commonTypes";
+import { error } from "console";
 
 interface iPosition {
     id:number,
@@ -13,6 +14,15 @@ interface iPosition {
     creat_at: string;
 }
 
+
+async function getCargo(params: any) {
+const { data: todos, error } = await supabase.from("positions").select()
+if (error)
+  return {status:false, error : error}
+
+return { status: true, data: todos}
+
+}
 
 async function deletePosition(id: number) {
     try {
@@ -81,6 +91,6 @@ async function setPosition (position: iPosition) {
         return null
     }
 }
-export { setPosition, updatePosition, deletePosition, iPosition };
+export { setPosition, updatePosition, deletePosition, iPosition,getCargo };
 
 //
