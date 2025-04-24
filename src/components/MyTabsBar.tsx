@@ -1,5 +1,5 @@
-import React, { ReactNode, useState } from 'react';
-import { Text, TouchableOpacity, TextStyle, ViewStyle, StyleSheet, View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Text, TouchableOpacity, TextStyle, ViewStyle, StyleSheet, View, AccessibilityState } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 
 interface MyTabsbarProps {
@@ -24,36 +24,51 @@ const MyTabsbar: React.FC<MyTabsbarProps> = ({
   initialActiveIndex = 0,
 }) => {
   const [activeIndex, setActiveIndex] = useState(initialActiveIndex);
+  const flatListRef = useRef<FlatList>(null);
 
   const handlePress = (item: string, index: number) => {
     setActiveIndex(index);
     onPress(item, index);
+
+    flatListRef.current?.scrollToIndex({
+      index,
+      animated: true,
+      viewPosition: 0.5, 
+    });
+  };
+
+  const renderItem = ({ item, index }: { item: string; index: number }) => {
+    const isActive = activeIndex === index;
+    const accessibilityState: AccessibilityState = { selected: isActive };
+
+    return (
+      <TouchableOpacity
+        style={[styles.tabItem, itemStyle, isActive && [styles.activeTabItem, activeItemStyle]]}
+        onPress={() => handlePress(item, index)}
+        accessibilityRole="tab"
+        accessibilityState={accessibilityState}
+        accessibilityLabel={`Aba ${item}`}
+      >
+        <Text style={[styles.tabText, textStyle, isActive && [styles.activeTabText, activeTextStyle]]}>
+          {item}
+        </Text>
+        {isActive && <View style={styles.underline} />}
+      </TouchableOpacity>
+    );
   };
 
   return (
     <FlatList
+      ref={flatListRef}
       horizontal
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={[styles.tabsContainer, style]}
       data={items}
       keyExtractor={(item, index) => index.toString()}
-      renderItem={({ item, index }) => {
-        const isActive = activeIndex === index;
-
-        return (
-          <TouchableOpacity
-            style={[styles.tabItem, itemStyle, isActive && [styles.activeTabItem, activeItemStyle]]}
-            onPress={() => handlePress(item, index)}
-          >
-            <Text style={[styles.tabText, textStyle, isActive && [styles.activeTabText, activeTextStyle]]}>
-              {item}
-            </Text>
-            {isActive && <View style={styles.underline} />}
-          </TouchableOpacity>
-        );
-      }}
+      renderItem={renderItem}
+      extraData={activeIndex}
     />
-  );
+  );         
 };
 
 const styles = StyleSheet.create({
