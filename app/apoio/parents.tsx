@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity} from 'react-native';
-import MyView from '../src/components/MyView';
+import { View, Text, StyleSheet, TextInput, Button, FlatList,TouchableOpacity,Image} from 'react-native';
+import MyView from '../../src/components/MyView';
 import { useRouter } from 'expo-router';
-import { setParent,iParent,delParent,editParent,getTimeParents,toListparent} from '../src/controllers/parents';
-import MyButton from '../src/components/MyButtons';
-import MyList from '../src/components/MyList';
-import { Myinput, MyCheck, MyTextArea} from '../src/components/MyInputs';
-import { MyItem,MyCorrelated } from '../src/components/MyItem';
-import { supabase } from '../src/utils/supabase';
+import { setParent,iParent,delParent,editParent,getTimeParents,toListparent} from '../../src/controllers/parents';
+import MyButton from '../../src/components/MyButtons';
+import MyList from '../../src/components/MyList';
+import { Myinput, MyCheck, MyTextArea} from '../../src/components/MyInputs';
+import { MyItem,MyCorrelated } from '../../src/components/MyItem';
+import { supabase } from '../../src/utils/supabase';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
-import itemScreen from './itens';
+import itemScreen from '../itens';
 import { ListItem } from 'native-base';
-import MyUpload from '../src/components/MyUpload';
+import MyUpload from '../../src/components/MyUpload';
 
 
 
@@ -22,7 +22,7 @@ export default function ParentScreen (){
     const [parents,setParents] = useState<iParent[]>([])
 
     const [req, setReq] = useState({
-        id:-0,
+        id:-1,
         name: '',
         rg: '',
         cpf:'',
@@ -65,7 +65,7 @@ export default function ParentScreen (){
 
         //setParents([...parents, req])
         setReq({
-            id:req.id + 1,
+            id:-1,
             name: '',
             rg:'',
             cpf:'',
@@ -79,17 +79,17 @@ export default function ParentScreen (){
     }
 
     async function delParentL(id: number) {
-        const error = await delParent (id)
-        if (!error) {
-            const list = parents.filter(r => r.id != id)
-            setParents(list)
-        } else {
-            console.error('Erro ao deletar:', error);
-        }
+        const { error } = await supabase.from('parents').delete().eq('id', id);
+               if (!error) {
+                   const list = parents.filter(p => p.id != id)
+                   setParents(list)
+               } else {
+                   console.error('Erro ao deletar:', error);
+               }
     }
     
     function editParentL(id: number) {
-        const parent = parents.find(r => r.id === id);
+        const parent = parents.find(p => p.id === id);
         if (parent) {
             setReq(parent);
         }
@@ -102,42 +102,58 @@ export default function ParentScreen (){
     
 
     return (
-        <MyView> {/*aqui é typeScript dentro do Front*/}
+        <MyView>
+        
+        {/*aqui é typeScript dentro do Front*/}
             {/*View → esse view é diferente do HTML ele contém DIVs e outros atributos,*/}
             <View style = {styles.row}>
                 <View style={styles.form}>{/*View no Type pode ser usado para substituir o Form */}
                 {/*<FlatList/> → atibuto para possivel criação de lista */}
-                    <TextInput 
+                    <Myinput 
+                        label="Nome"
+                        iconName="badge"
                         placeholder="Nome:"
                         value={req.name}
                         onChangeText={(Text) => setReq({...req, name: Text})}
                     />
-                    <TextInput 
+                    <Myinput 
+                        label="Rg"
+                        iconName="badge"
                         placeholder="RG:"
                         value={req.rg}
-                        onChangeText={(Text) => setReq({...req, name: Text})}
+                        onChangeText={(Text) => setReq({...req, rg: Text})}
                     />
-                    <TextInput 
+                    <Myinput 
+                        label="cpf"
+                        iconName="badge" 
                         placeholder="CPF:"
                         value={req.cpf}
-                        onChangeText={(Text) => setReq({...req, name: Text})}
+                        onChangeText={(Text) => setReq({...req, cpf: Text})}
                     />
-                    <TextInput
+                    <Myinput 
+                        label="age"
+                        iconName="badge"
                         placeholder="Idade:"
                         value={req.age}
-                        onChangeText={(Text) => setReq({...req, email: Text})}
+                        onChangeText={(Text) => setReq({...req, age: Text})}
                     />
-                    <TextInput 
+                    <Myinput 
+                        label="phone"
+                        iconName="badge"
                         placeholder="Telefone:"
                         value={req.phone}
-                        onChangeText={(Text) => setReq({...req, name: Text})}
+                        onChangeText={(Text) => setReq({...req, phone: Text})}
                     />
-                    <TextInput 
+                    <Myinput 
+                        label="email"
+                        iconName="badge"
                         placeholder="Email:"
                         value={req.email}
-                        onChangeText={(Text) => setReq({...req, name: Text})}
+                        onChangeText={(Text) => setReq({...req, email: Text})}
                     />
-                    <TextInput
+                    <Myinput 
+                        label="kinship"
+                        iconName="badge"
                         placeholder="Parentesco:"
                         value={req.kinship}
                         onChangeText={(Text) => setReq({...req, kinship: Text})}
@@ -180,6 +196,20 @@ export default function ParentScreen (){
                             <Text>{item.kinship}</Text>
                             <Text>{item.createat}</Text>
                             <Text>{item.userid}</Text>
+                            {/*<View style={styles.tableRow} key={item.id}>
+                                <Text style={styles.td}>{item.name}</Text>
+                                <View style={[styles.td, { flexDirection: 'row', alignItems: 'center', gap: 8 }]}> 
+                                <Image source={{ uri: 'https://i.pravatar.cc/150?u=' + item.teacher }} style={styles.avatar} />
+                                <Text>{item.teacher}</Text>
+                                </View>
+                                <Text style={styles.td}>{item.url}</Text>
+                                <Text style={styles.td}>{item.workload}h</Text>
+                                <Text style={styles.td}>{new Date(item.created_at).toLocaleDateString()}</Text>
+                                <View style={styles.tdStatus}><Text style={styles.statusActive}>Ativo</Text></View>
+                                <View style={styles.actions}>
+                                
+                                </View>
+                            </View>*/}
                         </MyItem>
                     )}
                 />
@@ -201,21 +231,21 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
     },
     form: {
         flex: 1,
-        marginRight: 20,
-        marginLeft:20,
-        padding: 20,
+        marginRight: 100,
+        marginLeft:100,
+        padding:20 ,
         backgroundColor: '#F2F2F2',
         borderRadius: 10,
         shadowColor: '#000',
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
+        
     },
     parentsItem: {
-        flex: 1,
+        flex: 10,
         marginRight: 20,
         marginLeft:20,
-        marginBottom:20,
         padding: 30,
         backgroundColor: '#F2F2F2',
         borderRadius: 10,
@@ -223,7 +253,9 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
+        
     },
+    
     buttonContainer: {
         flexDirection:'row',
         alignItems: 'center',
@@ -238,4 +270,38 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         flexDirection: "row",
         
       },
+      tableRow: {
+        flexDirection: 'row',
+        paddingVertical: 12,
+        
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee',
+      },
+      th: { flex: 1, fontWeight: '600', fontSize: 13, color: '#333' },
+      td: { flex: 1, fontSize: 13, color: '#444' },
+      tdStatus: { flex: 1 },
+      statusActive: {
+        backgroundColor: '#D8FEEB',
+        color: '#1EB980',
+        paddingHorizontal: 50,
+        paddingVertical: 4,
+        fontSize: 12,
+        fontWeight: '600',
+        borderRadius: 12,
+        alignSelf: 'flex-start',
+      },
+      actions: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        gap: 12,
+        paddingLeft: 8,
+      },
+      avatar: {
+        width: 24,
+        height: 24,
+        borderRadius: 12,
+      },
 })
+
+//versão atualiizada
