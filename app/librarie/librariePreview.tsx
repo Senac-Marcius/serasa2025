@@ -278,19 +278,23 @@ export default function CollectionViewScreen() {
               data={dataToShow}
               keyExtractor={(item) => item.id.toString()}
               contentContainerStyle={styles.grid}
-              numColumns={2}
+              numColumns={3}
               renderItem={({ item }) => (
                   <View style={styles.card}>
-                    <Image source={{ uri: item.image }} style={styles.image} />
-                    <Text style={styles.title}>{item.title}</Text>
-                    <Text style={styles.subtitle}>{item.subtitle}</Text>
-                    <Text style={styles.detail}>Autor: {item.responsible}</Text>
-                    <Text style={styles.detail}>Idioma: {item.language}</Text>
-                    <Text style={styles.detail}>Ano: {item.year}</Text>
-                    <Text style={styles.detail}>CDD: {item.cdd}</Text>
-                    <TouchableOpacity>
-                      <Text style={styles.link}>Ver mais...</Text>
-                    </TouchableOpacity>
+                    <View>
+                      <Image source={{ uri: item.image }} style={styles.image} />
+                    </View>
+                    <View style={styles.cardText}>
+                      <Text style={styles.title}>{item.title}</Text>
+                      <Text style={styles.subtitle}>{item.subtitle}</Text>
+                      <Text style={styles.detail}>Autor: {item.responsible}</Text>
+                      <Text style={styles.detail}>Idioma: {item.language}</Text>
+                      <Text style={styles.detail}>Ano: {item.year}</Text>
+                      <Text style={styles.detail}>CDD: {item.cdd}</Text>
+                      <TouchableOpacity>
+                        <Text style={styles.link}>Ver mais...</Text>
+                      </TouchableOpacity>
+                    </View>  
                   </View>
               )}
             />
@@ -404,11 +408,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 10,
     paddingTop: 10,
-    width: '100%',
   },
   filterSidebar: {
     maxWidth: 200,
     padding: 10,
+    margin: 23,
     backgroundColor: '#ad6cd9',
     borderRadius: 10,
   },
@@ -434,34 +438,57 @@ const styles = StyleSheet.create({
   mainContent: {
     flex: 1,
     padding: 10,
+    margin: 5,
+    backgroundColor:"transparent",
+    borderRadius: 10,
   },
   grid: {
-    padding: 10,
+    padding: 0,
+    
   },
   card: {
     flex: 1,
-    margin: 5,
+    flexDirection: 'row',
+    margin: 10,
     backgroundColor: '#ecdef0',
     padding: 8,
     borderRadius: 8,
     elevation: 2,
+    width: 170,
+    height: 200,
   },
   image: {
-    //width: '100%',
-    height: 400,
+    width: 120,
+    height: 180,
     borderRadius: 6,
+    margin: 3,
   },
-
-
-  contentWrapper: {
-    flexDirection: 'row',
+  cardText:{
     flex: 1,
+    justifyContent: 'center',
+    padding: 12,
   },
-  
+  title: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    textAlignVertical:'top',
+  },
+  subtitle: {
+    fontStyle: 'italic',
+    fontSize: 16,
+  },
+  detail: {
+    fontSize: 16,
+    color: '#444',
+  },
+  link: {
+    color: '#6200ea',
+    marginTop: 10,
+    fontWeight: 'bold',
+    textAlign:"right",
+  },
 
 
-
-  
   
   sidebar: {
     width: 130,
@@ -470,8 +497,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginRight: 10,
   },
-  
- 
   
   filterSubtitle: {
     fontWeight: 'bold',
@@ -495,22 +520,5 @@ const styles = StyleSheet.create({
   filterLabel: { color: '#666' },
   
   
-  title: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginTop: 6,
-  },
-  subtitle: {
-    fontStyle: 'italic',
-    fontSize: 14,
-  },
-  detail: {
-    fontSize: 12,
-    color: '#444',
-  },
-  link: {
-    color: '#6200ea',
-    marginTop: 4,
-    fontWeight: 'bold',
-  },
+  
 });
