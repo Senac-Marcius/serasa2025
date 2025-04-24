@@ -6,6 +6,9 @@ import MyButton from "../../src/components/MyButtons";
 import { useRouter } from 'expo-router';
 import MyTimePicker from "../../src/components/MyTimerPiker";
 import { setPosition, deletePosition, updatePosition, iPosition, getCargo } from "../../src/controllers/positions";
+import Mytext from "../../src/components/MyText";
+import { MyTb } from "../../src/components/MyItem";
+import MyList from "../../src/components/MyList";
 
 export default function PositionScreen() {
   const [positions, setPositions] = useState<iPosition[]>([]);
@@ -130,34 +133,34 @@ export default function PositionScreen() {
         </TouchableOpacity>
 
         {showList && (
+          
           <View style={styles.listContainer}>
             {positions.map((item) => (
+              
               <TouchableOpacity
                 key={item.id}
                 style={styles.listItem}
                 onPress={() => toggleExpand(item.id)}
               >
-                <Text style={styles.hoverHint}>Clique para obter todas as informações</Text>
-                <Text style={styles.titleText}>{item.name}</Text>
-                <Text style={styles.cardText}><Text style={styles.bold}>Descrição: </Text>{item.description}</Text>
-                <Text style={styles.cardText}><Text style={styles.bold}>Salário: </Text>R$ {item.salary}</Text>
+                <Mytext style={styles.hoverHint}>Clique para obter todas as informações</Mytext>
+                <Mytext style={styles.titleText}>{item.name}</Mytext>
+                <Mytext style={styles.cardText}><Text style={styles.bold}>Descrição: </Text>{item.description}</Mytext>
+                <Mytext style={styles.cardText}><Text style={styles.bold}>Salário: </Text>R$ {item.salary}</Mytext>
                 {expandedId === item.id && (
                   <>
-                    <Text style={styles.cardText}><Text style={styles.bold}>Carga horária: </Text>{item.work_hours}</Text>
-                    <Text style={styles.cardText}><Text style={styles.bold}>Departamento: </Text>{item.departament}</Text>
-                    <Text style={styles.cardText}><Text style={styles.bold}>Supervisor: </Text>{item.supervisor}</Text>
-                    <Text style={styles.cardText}><Text style={styles.bold}>Criado em: </Text>{item.creat_at}</Text>
+                    <Mytext style={styles.cardText}><Text style={styles.bold}>Carga horária: </Text>{item.work_hours}</Mytext>
+                    <Mytext style={styles.cardText}><Text style={styles.bold}>Departamento: </Text>{item.departament}</Mytext>
+                    <Mytext style={styles.cardText}><Text style={styles.bold}>Supervisor: </Text>{item.supervisor}</Mytext>
+                    <Mytext style={styles.cardText}><Text style={styles.bold}>Criado em: </Text>{item.creat_at}</Mytext>
                     <View style={styles.actionButtons}>
-                      <TouchableOpacity onPress={() => editPosition(item.id)}>
-                        <Text style={styles.edit}>Editar</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity onPress={() => delPosition(item.id)}>
-                        <Text style={styles.del}>Excluir</Text>
-                      </TouchableOpacity>
+                        <MyButton color="yellow" title="Editar" onPress={() => editPosition(item.id)}/>
+                        <MyButton color="red" title="Deletar" onPress={() => delPosition(item.id)}/>
+                  
                     </View>
                   </>
                 )}
               </TouchableOpacity>
+              
             ))}
           </View>
         )}
