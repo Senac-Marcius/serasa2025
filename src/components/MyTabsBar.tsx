@@ -1,95 +1,88 @@
 import React, { ReactNode, useState } from 'react';
-import { Text, TouchableOpacity, TextStyle, ViewStyle, StyleSheet } from 'react-native';
+import { Text, TouchableOpacity, TextStyle, ViewStyle, StyleSheet, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 
-interface MyTabsbarProps {  
-  items: string[]; // Lista de nomes das abas (ex: ["Identificação", "Publicação"]
-  style?: ViewStyle; // Estilo personalizado para o container principal
-  itemStyle?: ViewStyle;   // Estilo para cada item/aba normal
-  activeItemStyle?: ViewStyle; // Estilo para o item/aba selecionado
-  textStyle?: TextStyle;  // Estilo para cada texto/aba normal
-  activeTextStyle?: TextStyle; // Estilo para o texto/aba selecionado
-  onPress: (item:string, index: number) => void; // Função quando clica numa aba
-  initialActiveIndex: number; // Qual aba começa selecionada (padrão: 0 = primeira)
+interface MyTabsbarProps {
+  items: string[];
+  style?: ViewStyle;
+  itemStyle?: ViewStyle;
+  activeItemStyle?: ViewStyle;
+  textStyle?: TextStyle;
+  activeTextStyle?: TextStyle;
+  onPress: (item: string, index: number) => void;
+  initialActiveIndex: number;
 }
 
-const MyTabsbar: React.FC<MyTabsbarProps> = ({ items, style, itemStyle, activeItemStyle, textStyle, activeTextStyle, onPress, initialActiveIndex = 0 }) => {
+const MyTabsbar: React.FC<MyTabsbarProps> = ({
+  items,
+  style,
+  itemStyle,
+  activeItemStyle,
+  textStyle,
+  activeTextStyle,
+  onPress,
+  initialActiveIndex = 0,
+}) => {
+  const [activeIndex, setActiveIndex] = useState(initialActiveIndex);
 
-  const [activeIndex, setActiveIndex] = useState(initialActiveIndex); //(começa com a primeira ou outra que a pessoa definir) 
-  
-  // copia isso aqui tbm
   const handlePress = (item: string, index: number) => {
-    setActiveIndex(index); // Atualiza a aba ativa
-    onPress(item, index);   // Chama a função onPress passada (avisa que houve clique)
+    setActiveIndex(index);
+    onPress(item, index);
   };
-  
+
   return (
-      <FlatList horizontal // rolar para os lados
-        showsHorizontalScrollIndicator ={false} // para não mostrar um indicador de rolagem
-        style={[styles.tabsContainer, style]}
-        data={items}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item, index}) => (
-          <TouchableOpacity 
-            style={[styles.tabItem, itemStyle,
-            activeIndex == index && [styles.activeTabItem, activeItemStyle] // Estilos diferentes se for a aba ativa
-            ]}
-            onPress={() => handlePress(item, index)} // Chamando a função
-            >
-            <Text
-            style={[
-              styles.tabText, textStyle,
-              activeIndex == index && [styles.activeTabText, activeTextStyle] // Estilos diferentes se for a aba ativa
-            ]}
+    <FlatList
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={[styles.tabsContainer, style]}
+      data={items}
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={({ item, index }) => {
+        const isActive = activeIndex === index;
+
+        return (
+          <TouchableOpacity
+            style={[styles.tabItem, itemStyle, isActive && [styles.activeTabItem, activeItemStyle]]}
+            onPress={() => handlePress(item, index)}
           >
-            {item}
-          </Text>
+            <Text style={[styles.tabText, textStyle, isActive && [styles.activeTabText, activeTextStyle]]}>
+              {item}
+            </Text>
+            {isActive && <View style={styles.underline} />}
           </TouchableOpacity>
-      )}
+        );
+      }}
     />
-  ); 
+  );
 };
 
 const styles = StyleSheet.create({
   tabsContainer: {
-    flex: 1,
-    padding: 20,
-    marginRight: 50,
-    marginLeft: 50,
-    marginVertical: 0,
-    marginHorizontal: 20,
-    borderRadius: 10,
-    minHeight: 90,
+    paddingHorizontal: 16,
   },
-  tabItem: { // Estilo para cada aba
-      paddingHorizontal: 10,
-      paddingVertical: 20,
-      marginRight: 15,
-      marginHorizontal: 40,
-      height: 50,
-      width: 250,
-      borderRadius: 50,
-      backgroundColor: '#F2F2F2',
-      borderWidth: 2,
-      borderColor: '#0F2259',
-      justifyContent: 'center',
-      alignItems: 'center',
+  tabItem: {
+    paddingVertical: 10,
+    marginRight: 20,
+    alignItems: 'center',
   },
-  activeTabItem: { // Estilo quando a aba está ativa
-      backgroundColor: '#AD6CD9',
-      borderBottomWidth: 5,
-      borderBottomColor: '#0F2259',
+  activeTabItem: {
+    // sem background, só o underline vai aparecer
   },
-  tabText: { // Estilo do texto normal
-      color: 'black',
-      fontSize: 16,
-      fontFamily: 'Poppins_400Regular',
-      justifyContent: 'center',
+  tabText: {
+    fontSize: 14,
+    color: '#0C1D40',
+    fontFamily: 'Poppins_400Regular',
   },
-  activeTabText: { // Estilo do texto quando a aba está ativa
-      fontWeight: 'bold',
-      color: 'white',
+  activeTabText: {
+    fontWeight: 'bold',
+    color: '#5A2D82',
+  },
+  underline: {
+    marginTop: 4,
+    height: 2,
+    width: '100%',
+    backgroundColor: '#5A2D82',
   },
 });
 
-export default MyTabsbar  
+export default MyTabsbar;

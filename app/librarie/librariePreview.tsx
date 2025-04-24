@@ -120,6 +120,7 @@ export default function CollectionViewScreen() {
 
         {menuOpen && <MyMenu closeMenu={() => setMenuOpen(false)} />}
       </View>
+      <View style={styles.tabsbar}>
       <MyTabsbar
         items={tabs}
         style={styles.tabsContainer}
@@ -130,6 +131,7 @@ export default function CollectionViewScreen() {
         onPress={handleTabPress}
         initialActiveIndex={0}
       />
+      </View>
       {/* Barra de busca */}
       <TextInput
         placeholder="Digite sua busca aqui..."
@@ -292,42 +294,39 @@ const styles = StyleSheet.create({
     fontSize: 16, 
     fontWeight: 'bold',
   },
+  tabsbar: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems:'center',
+  },
   tabsContainer: {
-    flex: 1,
-    padding: 20,
-    marginRight: 50,
-    marginLeft: 50,
-    marginVertical: 0,
-    marginHorizontal: 20,
-    borderRadius: 10,
-    minHeight: 90,
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    height: 110,
   },
   tabItem: { // Estilo para cada aba
-      paddingHorizontal: 10,
-      paddingVertical: 20,
-      marginRight: 15,
-      marginHorizontal: 40,
-      height: 50,
-      width: 250,
-      backgroundColor: '#black',
-      borderWidth: 2,
+      paddingVertical: 10,
+      marginRight: 25,
       justifyContent: 'center',
       alignItems: 'center',
   },
   activeTabItem: { // Estilo quando a aba está ativa
-      backgroundColor: '#AD6CD9',
-      borderBottomWidth: 5,
-      borderBottomColor: '#0F2259',
+  },
+  underline: {
+    marginTop: 4,
+    height: 2,
+    width: '100%',
+    backgroundColor: '#5A2D82',
   },
   tabText: { // Estilo do texto normal
-      color: 'black',
-      fontSize: 16,
+      color: '#0C1D40',
+      fontSize: 20,
       fontFamily: 'Poppins_400Regular',
       justifyContent: 'center',
   },
   activeTabText: { // Estilo do texto quando a aba está ativa
       fontWeight: 'bold',
-      color: 'white',
+      color: '#5A2D82',
   },
   searchInput: {
     margin: 10,
