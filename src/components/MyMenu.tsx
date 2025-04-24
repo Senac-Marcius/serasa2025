@@ -86,6 +86,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
       </Pressable>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <MenuItem label="Administração" route="Administracao/" icon="people" />
         <MenuItem label="Secretaria" route="secretaria" icon="add-circle" />
         <MenuItem label="Budgets" route="budgets" icon="wallet" />
         <MenuItem label="Calendar" route="secretaria/calendar" icon="calendar" />
@@ -107,17 +108,15 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Notifications" route="notifications" icon="notifications" />
         <MenuItem label="Parents" route="parents" icon="people-circle" />
         <MenuItem label="Perfil" route="perfil" icon="person" />
-        <MenuItem label="Positions" route="positions" icon="pin" />
         <MenuItem label="Posts" route="posts" icon="chatbox" />
         <MenuItem label="Products" route="products" icon="cart" />
-        <MenuItem label="Projects" route="projects" icon="briefcase" />
         <MenuItem label="Records" route="records" icon="document-text-outline" />
         <MenuItem label="Revenues" route="revenues" icon="cash-outline" />
-        <MenuItem label="Scales" route="scales" icon="speedometer" />
         <MenuItem label="Timelines" route="timelines" icon="calendar" />
         <MenuItem label="Students" route="students" icon="school" />
         <MenuItem label="Users" route="users" icon="person-circle" />
         <MenuItem label="More" route="more" icon="add-circle" />
+        <MenuItem label="Trabalhe Conosco" route='Administracao/employees?view=form'  icon="cash" />
       </ScrollView>
     </Animated.View>
   );
