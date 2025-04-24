@@ -2,15 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Button, TextInput, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Usuario } from './type';
-
+import { iLoans } from '../../src/controllers/loans';
 
   
 
-interface Props{
-    usuarios:Usuario[];
-}
+type Props = {
+  data: iLoans[];
+  onEdit: (id: number) => void;
+  onDelete: (id: number) => void;
+};
 
-const TabelaUsuarios: React.FC<Props> = ({ usuarios }) => {
+
+const TabelaUsuarios: React.FC<Props> = ({ data, onEdit, onDelete }) => {
     return (
       <table style={{ borderCollapse: 'collapse', width: '100%' }}>
         <thead>
@@ -21,13 +24,22 @@ const TabelaUsuarios: React.FC<Props> = ({ usuarios }) => {
           </tr>
         </thead>
         <tbody>
-          {usuarios.map((usuarios) => (
-            <tr key={usuarios.id}>
-              <td style={tdStyle}>{usuarios.id}</td>
-              <td style={tdStyle}>{usuarios.nome}</td>
-              <td style={tdStyle}>{usuarios.email}</td>
-            </tr>
-          ))}
+        {data.map((loan) => (
+                <tr key={loan.id}>
+                  <td>{loan.id}</td>
+                  <td>{loan.bookId}</td>
+                  <td>{loan.loanDate}</td>
+                  <td>{loan.expectedLoanDate}</td>
+                  <td>{loan.effectiveLoanDate}</td>
+                  <td>{loan.renewal}</td>
+                  <td>{loan.statusLoan}</td>
+                  <td>{loan.observation}</td>
+                  <td>
+                    <button onClick={() => onEdit(loan.id)}>Editar</button>
+                    <button onClick={() => onDelete(loan.id)}>Deletar</button>
+                </td>
+              </tr>
+))}
         </tbody>
       </table>
     );

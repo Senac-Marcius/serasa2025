@@ -8,13 +8,16 @@ import MyList from '../src/components/MyList';
 import { useRouter } from 'expo-router';
 import { iLoans, setLoanbd,deleteLoansById,updateLoansById, getLoans } from '../src/controllers/loans'
 import { supabase } from '../src/utils/supabase';
-import TabelaUsuarios from '../src/librarie/loantable';
+import TabelaUsuarios from './librarie/loantable';
+import { ScrollView } from 'react-native-gesture-handler';
+import { textStyles } from '../styles/textStyles';
 
 
 export default function LoanScreen() {
 
     const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-
+   
+ 
 
     const [req, setReq] = useState({ //useState retorna uma variavel e uma função para alteral a variavel (req e setReq)
         id: -1,
@@ -124,18 +127,7 @@ export default function LoanScreen() {
             }
         }
     
-        // async function updateLoansById(id: number, updatedLoans: Partial<iLoans>) {
-        //     const { error } = await supabase
-        //         .from('loans')
-        //         .update(updatedLoans)
-        //         .eq('id', id);
-    
-        //     if (error) {
-        //         console.error("Erro ao atualizar empréstimo:", error.message);
-        //         return false;
-        //     }
-        //     return true;
-        // }
+       
     
     
 
@@ -143,9 +135,10 @@ export default function LoanScreen() {
 
 
         return (
-            <MyView >
+            <ScrollView >
                 <View style={styles.formConteiner}>
-                    <Text>Tela de Empréstimo</Text>
+                <Text style={styles.textStyles}>Tela de Empréstimo</Text>
+                    
                     <View style={styles.row}>
                         <View style={styles.form}>
 
@@ -157,31 +150,37 @@ export default function LoanScreen() {
                                 iconName="user"
                             />
 
+                             <MyCalendar
+                             value={req.loanDate.split('T')[0]}
+                             date={req.loanDate.split('T')[0]}
+                             setDate={(date) => setReq({...req, expectedLoanDate: date}) }
+                             placeholder=""
+                             label="Data de Empréstimo:"
+                             iconName="book"
+                             
+                             />
                         
 
 
-                            <Myinput
-                                value={req.expectedLoanDate}
-                                onChangeText={(date) => setReq({ ...req, expectedLoanDate: date })}
-                                placeholder="Data prevista de Devolução:"
-                                label="Data prevista de Devolução:"
-                                iconName="book"
-                            />
-
-                            <Myinput
-                                value={req.effectiveLoanDate}
-                                onChangeText={(date) => setReq({ ...req, effectiveLoanDate: date })}
-                                placeholder="Data Efetiva de Devolução:"
-                                label="Data Efetiva de Devolução:"
-                                iconName="book"
-
-                            />
                             <MyCalendar
-                             date={req.effectiveLoanDate} 
+                             value={req.expectedLoanDate.split('T')[0]}
+                             date={req.expectedLoanDate.split('T')[0]}
+                             setDate={(date) => setReq({...req, expectedLoanDate: date}) }
+                             placeholder=""
+                             label="Data prevista de Devolução:"
+                             iconName="book"
+                             
+                             />
+
+
+                           
+                            <MyCalendar
+                             value={req.effectiveLoanDate.split('T')[0]}
+                             date={req.effectiveLoanDate.split('T')[0]}
                              setDate={(date) => setReq({...req, effectiveLoanDate: date}) }
-                             placeholder="Data Efetiva de Devolução:" 
+                             placeholder=""
                              label="Data Efetiva de Devolução:"
-                             icon="book"
+                             iconName="book"
                              />
 
 
@@ -209,9 +208,6 @@ export default function LoanScreen() {
                                 iconName="question"
                             />
 
-                            <MyCalendar 
-                            date={req.loanDate} 
-                            setDate={(date) => setReq({...req, loanDate: date}) } icon="FaCalendarDays" />
 
                             <MyButton
                                 title='Emprestar'
@@ -235,6 +231,8 @@ export default function LoanScreen() {
                                     <Text>{item.observation}</Text>
                                     <Text>{item.creatAt}</Text>
 
+                            
+                                    
                                     <MyButton
                                         title='Editar'
                                         onPress={() => { editLoans(item.id) }}
@@ -246,13 +244,21 @@ export default function LoanScreen() {
                                         button_type='round'
                                     />
 
+                                <Text>
+                                    <TabelaUsuarios 
+                                        data={loans} 
+                                        onEdit={editLoans} 
+                                        onDelete={deleteLoans} 
+                                    />
+                                </Text>
+                                  
                                 </View>
 
                             )}
                         />
                     </View>
                 </View>
-            </MyView>
+            </ScrollView>
         ); //encapsulamento
     }
 
@@ -261,7 +267,9 @@ export default function LoanScreen() {
         row: {
             flexDirection: 'row',
             justifyContent: 'space-between',
-            alignItems: 'flex-start'
+            alignItems: 'flex-start',
+            marginRight: 5,
+            
         },
         form: {
             flex: 1,
@@ -293,6 +301,14 @@ export default function LoanScreen() {
             shadowRadius: 5,
             color: "pink"
         },
+        textStyles:{
+            fontSize: 24, 
+            fontWeight: 'bold', 
+            color: '#6a0dad', 
+            textAlign: 'center', 
+            marginBottom: 20 
+        },
+
         buttonContainer: {
             color: "blue"
         },
