@@ -18,7 +18,7 @@ function HorizontalMenu() {
     const navigation = useNavigation();
     const handlePress = (item: {label:string, route: string}) => {
         console.log('Clicou em:', item);
-        navigation.navigate(item.route);  Navega para a rota definida no item
+        navigation.navigate(item.route);  //Navega para a rota definida no item
     }
   return (
     <View style={styles.container}>
