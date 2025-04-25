@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import {View,Text,StyleSheet,ScrollView,TouchableOpacity,Pressable,} from 'react-native';
-import MyView from '../src/components/MyView';
+import MyView from '../../src/components/MyView';
 import { useRouter } from 'expo-router';
-import MyCalendar from '../src/components/MyCalendar';
-import MySearch from '../src/components/MySearch';
-import { Myinput } from '../src/components/MyInputs';
-import { supabase } from '../src/utils/supabase';
-import {setTimeline,iTimeline,delTimelines as delTimelinesDoController,editTimelines as editTimelinesDoController,getTimelines,} from '../src/controllers/timelines';
-import MyButton from '../src/components/MyButtons';
-import Mytext from '../src/components/MyText';
-import MyTimerPicker from '../src/components/MyTimerPiker';
+import MyCalendar from '../../src/components/MyCalendar';
+import MySearch from '../../src/components/MySearch';
+import { Myinput } from '../../src/components/MyInputs';
+import { supabase } from '../../src/utils/supabase';
+import {setTimeline,iTimeline,delTimelines as delTimelinesDoController,editTimelines as editTimelinesDoController,getTimelines,} from '../../src/controllers/timelines';
+import MyButton from '../../src/components/MyButtons';
+import Mytext from '../../src/components/MyText';
+import MyTimerPicker from '../../src/components/MyTimerPiker';
 
 export default function TimelineScreen() {
   const [req, setReq] = useState({

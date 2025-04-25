@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import {  View } from 'react-native';
+import {  View ,} from 'react-native';
 import { TimePickerModal } from 'react-native-paper-dates';
 import MyButton from './MyButtons';
 import {  StyleSheet } from 'react-native';
 import { Myinput } from './MyInputs';
+import { Input } from 'native-base';
 
 
 interface MyTimerPickerProps {
   onTimeSelected: (time: string) => void; // Callback para atualizar o estado no pai
   initialTime?: string; // Valor inicial (opcional)
+  labelText?: string;
 }
 
-export default function MyTimerPicker({ onTimeSelected, initialTime = '' }: MyTimerPickerProps) {
+export default function MyTimerPicker({ onTimeSelected, initialTime = '' ,labelText = ''}: MyTimerPickerProps) {
   const [open, setOpen] = useState(false);
 
 
@@ -25,8 +27,8 @@ export default function MyTimerPicker({ onTimeSelected, initialTime = '' }: MyTi
     <View style={styles.container}>
     <Myinput
       placeholder="HH:MM"
-      label="Insira um horário"
-      iconName="clock"
+      label={labelText}
+      iconName="alarm"
       value={initialTime}
       onChangeText={() => {}}
     />
@@ -54,7 +56,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',   // Alinha o botão e o campo de input na horizontal
     alignItems: 'center',   // Centraliza verticalmente
     justifyContent: 'space-between', // Cria espaço entre os elementos
-    padding: 10,
   },
   button: {
     backgroundColor: '#6200ea', // Cor de fundo
