@@ -101,15 +101,16 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Levels" route="levels" icon="stats-chart" />
         <MenuItem label="Libraie" route="libraie" icon="book" />
         <MenuItem label="Loans" route="loans" icon="card" />
-        <MenuItem label="Locals" route="product/locals" icon="location" />
+        <MenuItem label="Locals" route="infraestrutura/locals" icon="location" />
         <MenuItem label="Notifications" route="notifications" icon="notifications" />
         <MenuItem label="Parents" route="parents" icon="people-circle" />
         <MenuItem label="Perfil" route="perfil" icon="person" />
         <MenuItem label="Positions" route="positions" icon="pin" />
         <MenuItem label="Posts" route="posts" icon="chatbox" />
-        <MenuItem label="Products" route="products" icon="cart" />
+        <MenuItem label="Infraestrutura" route="Infraestrutura" icon="cube-outline"/>
         <MenuItem label="Projects" route="projects" icon="briefcase" />
-        <MenuItem label="Records" route="records" icon="document-text-outline" />
+        <MenuItem label="Records" route="records" icon="document-text-outline"/>
+        <MenuItem label="Revenues" route="revenues" icon="cash-outline" />
         <MenuItem label="Scales" route="scales" icon="speedometer" />
         <MenuItem label="Timelines" route="timelines" icon="calendar" />
         <MenuItem label="Students" route="students" icon="school" />
