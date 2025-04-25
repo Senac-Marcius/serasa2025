@@ -50,52 +50,68 @@ async function  setRevenue(revenue:iRevenue ){
     // aqui vem os tratamnetos de regex ou do modelo de negocio antes de inserir
    
       //* Regex definitions
-      const idRegex = /^\d+$/;
-    const descriptionRegex = /^[\w\s.,!?-]{1,500}$/;
-    const nameRegex = /^[A-Za-zÀ-ÿ\s-]{2,100}$/;
-    const urlRegex = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
-    const created_atRegex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T\d{2}:\d{2}:\d{2}/;
-    const valueRegex = /^(R\$\s*)?\d+(,\d{2})?$/;
-    const scholarship_statusRegex = /^(ativo|inativo|pendente)$/;
-    const discount_percentageRegex = /^(100|\d{1,2}(,\d+)?)$/;
-
-    // Validation checks
-    if (!idRegex.test(String(revenue.id))) {
-        return "Campo id deve conter apenas números";
+      const validations = {
+        // ID - Números inteiros positivos (melhorado para evitar zeros à esquerda)
+        id: /^[1-9]\d*$/,
         
-    }
-
-    if (!descriptionRegex.test(revenue.description)) {
-        return "Campo description deve ter entre 1 e 500 caracteres (letras, números ou pontuação básica)";
-    }
-
-    if (!nameRegex.test(revenue.name)) {
-        return "Campo name deve conter apenas letras, espaços ou hífens (2-100 caracteres)";
-    }
-
-    if (!urlRegex.test(revenue.url)) {
-        return "Campo url deve conter o seguinte formato https://dominio";
-    }
-
-    if (!created_atRegex.test(revenue.created_at)) {
-        return "Campo createAt deve conter o seguinte formato YYYY-MM-DD";
-    }
-
-    if (!idRegex.test(String(revenue.user_id))) {
-        return "Campo userId deve conter apenas números";
-    }
-
-    if (!valueRegex.test(revenue.value)) {
-        return "Campo value deve ser um valor monetário (ex: '100', 'R$ 50,00')";
-    }
-
-    if (!scholarship_statusRegex.test(revenue.scholarship_status)) {
-        return "Campo scholarshipStatus deve ser 'ativo', 'inativo' ou 'pendente'";
-    }
-
-    if (!discount_percentageRegex.test(revenue.discount_percentage)) {
-        return "Campo discountPercentage deve ser uma porcentagem válida (0% a 100%)";
-    }
+        // Descrição - Permite mais símbolos e quebras de linha
+        description: /^[\s\S]{1,500}$/,
+        
+        // Nome - Melhor suporte para caracteres internacionais e apóstrofos
+        name: /^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]{2,100}$/,
+        
+        // URL - Versão mais flexível que aceita mais casos reais
+        url: /^(https?:\/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?$/,
+        
+        // Data - Aceita frações de segundo e fusos horários
+        created_at: /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})?$/,
+        
+        // Valor Monetário - Aceita formatos com pontos de milhar
+        value: /^R?\$?\s?\d{1,3}(\.\d{3})*(,\d{2})?$/,
+        
+        // Status da Bolsa - Compatível com seu formato "02-Inativo"
+        scholarship_status: /^(0[1-9]|1[0-2])-?\s?(Ativo|Inativo|Pendente)$/i,
+        
+        // Porcentagem - Melhor tratamento do símbolo %
+        discount_percentage: /^(100|\d{1,2})(,\d+)?%?$/
+      };
+      
+      // Função de validação atualizada
+      function validateRevenue(revenue: iRevenue): string | null {
+        if (!validations.id.test(String(revenue.id))) {
+          return "ID deve ser um número inteiro positivo (ex: 1, 2, 3...)";
+        }
+      
+        if (!validations.name.test(revenue.name)) {
+          return "Nome deve conter 2-100 caracteres (letras, espaços, hífens ou apóstrofos)";
+        }
+      
+        if (!validations.description.test(revenue.description)) {
+          return "Descrição deve ter entre 1-500 caracteres (aceita pontuação e quebras de linha)";
+        }
+      
+        if (!validations.url.test(revenue.url)) {
+          return "URL inválida (formatos aceitos: http://exemplo.com ou https://exemplo.com/path)";
+        }
+      
+        if (!validations.created_at.test(revenue.created_at)) {
+          return "Data deve estar no formato ISO 8601 (ex: 2023-12-31T23:59:59)";
+        }
+      
+        if (!validations.value.test(revenue.value)) {
+          return "Valor monetário inválido (ex: 1.000,00 ou R$ 1.234,56)";
+        }
+      
+        if (!validations.scholarship_status.test(revenue.scholarship_status)) {
+          return "Status inválido (formatos aceitos: 'Ativo', '01-Inativo' ou '12 - Pendente')";
+        }
+      
+        if (!validations.discount_percentage.test(revenue.discount_percentage)) {
+          return "Porcentagem inválida (0-100%, com ou sem símbolo %)";
+        }
+      
+        return null; // Retorna null se todas as validações passarem
+      }
     
 
  //*
@@ -184,4 +200,4 @@ async function updateRevenue(revenue: iRevenue) {
 
 
 
-export {setRevenue, iRevenue, deleteRevenue, updateRevenue, getRevenues, toListRevenues }
+export {setRevenue, iRevenue, deleteRevenue, updateRevenue, getRevenues, toListRevenues,  }

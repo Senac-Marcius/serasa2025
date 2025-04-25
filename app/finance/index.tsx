@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
     padding: 20,
     gap: 16,
   },
+  
   section1: {
     backgroundColor: '#c3f091', // Verde claro de fundo
     borderLeftWidth: 4,
