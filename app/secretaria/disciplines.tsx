@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  Pressable,
-  Image,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { View, Text, StyleSheet, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import {
   iDisciplines,
@@ -18,7 +10,9 @@ import {
 } from '../../src/controllers/disciplines';
 import MyView from '../../src/components/MyView';
 import MyButton from '../../src/components/MyButtons';
+import MyList from '../../src/components/MyList';
 import { Myinput } from '../../src/components/MyInputs';
+import { MyItem } from '../../src/components/MyItem';
 
 const Sidebar = () => {
   const router = useRouter();
@@ -130,6 +124,7 @@ export default function DisciplineScreen() {
   }
 
   return (
+<<<<<<< HEAD
     <MyView style={{ flex: 1, backgroundColor: '#f0f2f5' }}>
       <View style={{ flexDirection: 'row', flex: 1, backgroundColor: '#f0f2f5' }}>
         <Sidebar />
@@ -145,6 +140,43 @@ export default function DisciplineScreen() {
             <View style={styles.searchWrapper}>
               <TextInput
                 placeholder="Buscar por nome ou professor"
+=======
+    <MyView style={styles.container}>
+      <ScrollView stickyHeaderIndices={[0]}>
+        <View style={styles.menuBar}>
+          <View style={styles.menuItems}>
+            {menuItems.map((item) => (
+              <MyButton
+                key={item.label}
+                title={item.label}
+                icon={item.icon}
+                button_type="capsule"
+                onPress={() =>
+                  item.route === 'professores'
+                    ? setActiveScreen('professores')
+                    : router.push(item.route)
+                }
+                style={{ marginBottom: 4, height: 32, width: 110 }}
+                font_size={12}
+                iconSize={14}
+              />
+            ))}
+          </View>
+        </View>
+
+        <View style={styles.main}>
+          {activeScreen === 'professores' ? (
+            <>
+              <Text style={styles.pageTitle}>Professores</Text>
+              <Text style={styles.subtitle}>
+                {professoresAgrupados().length} professores cadastrados
+              </Text>
+
+              <Myinput
+                iconName="account-search"
+                label="Buscar"
+                placeholder="Buscar por nome..."
+>>>>>>> 6440ef589c6c0e1b11d7a4ade188218ecff1a393
                 value={filtro}
                 onChangeText={setFiltro}
                 style={styles.searchInput}
