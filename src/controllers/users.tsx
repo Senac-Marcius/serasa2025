@@ -102,7 +102,7 @@ async function updateUserById(id: number, updatedUser: Partial<iUser>) {
 }
 
 async function getUsers(params: any) {
-    const { data: todos, error } = await supabase.from("users").select();
+    const { data: todos, error } = await supabase.from("users").select().order('id',{ascending:true});
     if (error)
         return { status: false, error: error }
 
@@ -178,5 +178,7 @@ async function getLoggedUserId() {
         return null;
     }
 }
+
+//npx playwrite codagen http://localh
 
 export { setUser, iUser, deleteUserById, updateUserById, getUsers, getUserByEmail, isStudent, isEmployee, getUserById }

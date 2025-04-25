@@ -26,6 +26,16 @@ export default function UserScreen() {
     //visualizo se o id existe no campo da url, caso exista eu edito.
 
     useEffect(() => {
+        async function getTodos() {
+            const retorno = await getUsers({})
+            if (retorno.status && retorno.data && retorno.data.length > 0) {
+                setUsers(retorno.data);
+            }
+        }
+        getTodos()
+    }, [])
+
+    useEffect(() => {
         async function fetchUser() {
             //se não existe o id, eu retorno
             if (!id) return;
@@ -40,15 +50,7 @@ export default function UserScreen() {
         fetchUser();
     }, [id]);
 
-    useEffect(() => {
-        async function getTodos() {
-            const retorno = await getUsers({})
-            if (retorno.status && retorno.data && retorno.data.length > 0) {
-                setUsers(retorno.data);
-            }
-        }
-        getTodos()
-    }, [])
+  
 
     async function handleRegister() {
         const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$|^\d{11}$/;
@@ -84,6 +86,7 @@ export default function UserScreen() {
             const newUser = { ...req, id: newId }
             setUsers([...users, newUser])
             const result = await setUser(newUser)
+            console.log(users)
             router.push("/")
 
         } else {
@@ -110,7 +113,7 @@ export default function UserScreen() {
             id: -1,
         })
     }
-
+    
     return (
         <MyView style={{ backgroundColor: '#7B28BB' }} >
             <ScrollView>

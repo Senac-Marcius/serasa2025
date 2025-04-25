@@ -112,7 +112,7 @@ export default function RecordScreen() {
             setReq(record);
         }
     }
-
+    
     return (
 
         <MyView >
