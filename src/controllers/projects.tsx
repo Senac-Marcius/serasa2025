@@ -39,7 +39,7 @@ async function getProjects(params:any) {
 }
 
 async function setProject(project: iProject, ids: number[]) {
-  const { data, error } = await supabase.from('projects').insert([project]).select;
+  const { data, error } = await supabase.from('projects').insert([project]).select();
 
   if (error) {
     console.error(error);
