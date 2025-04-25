@@ -3,19 +3,13 @@ import { View, StyleSheet, Platform, TouchableOpacity, ScrollView } from 'react-
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Calendar } from 'react-native-calendars';
 import MyView from '../../src/components/MyView';
-import { Myinput } from '../../src/components/MyInputs';
+import { Myinput, MyTextArea } from '../../src/components/MyInputs';
 import MyButton from '../../src/components/MyButtons';
 import MyText from '../../src/components/MyText';
 import { MyItem } from '../../src/components/MyItem';
 import { useRouter } from 'expo-router';
-import {
-  iCalendar,
-  toListCalendar,
-  getCalendars,
-  SetCalendarbd,
-  UpdateCalendarbd,
-  DeleteCalendarbd
-} from '../../src/controllers/calendar';
+import { supabase } from '../../src/utils/supabase';
+import { iCalendar, SetCalendarbd, UpdateCalendarbd, DeleteCalendarbd } from '../../src/controllers/calendar';
 
 export default function CalendarsScreen() {
   const [req, setReq] = useState<iCalendar>({

@@ -1,21 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  Pressable,
-  Image,
-} from 'react-native';
+import {View,Text,StyleSheet,TextInput,Pressable,Image,} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useRouter } from 'expo-router';
-import {
-  iDisciplines,
-  SetDisciplinebd,
-  UpdateDisciplinebd,
-  DeleteDisciplinebd,
-  getDisciplines,
-} from '../../src/controllers/disciplines';
+import {iDisciplines,SetDisciplinebd,UpdateDisciplinebd,DeleteDisciplinebd,getDisciplines,} from '../../src/controllers/disciplines';
 import MyView from '../../src/components/MyView';
 import MyButton from '../../src/components/MyButtons';
 import { Myinput } from '../../src/components/MyInputs';
