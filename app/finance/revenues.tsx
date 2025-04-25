@@ -25,8 +25,10 @@ export default function RevenueScreen() {
     created_at: new Date().toISOString(),
     user_id: 1,
     value: '',
-    scholarship_status: '02- Inativo',
+    scholarship_status: '',
     discount_percentage: '',
+    tipo_mensalidade: ''
+
     
 
   });
@@ -86,8 +88,9 @@ useEffect(()=>{
       created_at: new Date().toISOString(),
       user_id: 1,
       value: '',
-      scholarship_status: '02- Inativo',
+      scholarship_status: '',
       discount_percentage: '',
+      tipo_mensalidade: ''
     });
     setVisible(false);
   }
@@ -134,8 +137,10 @@ const getFilteredRevenues = () => {
       item.id?.toString().includes(searchTerm) ||
       item.url?.toLowerCase().includes(term) ||
       item.scholarship_status?.toLowerCase().includes(term) ||
+      item.tipo_mensalidade?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       discountStr.includes(searchTerm) || // Busca o número cru (25)
       discountPercent.includes(searchTerm) // Busca o formato com % (25%)
+      
     );
   });
 };
@@ -169,6 +174,18 @@ const getFilteredRevenues = () => {
               label='Nome'
             />
 
+            <MySelect 
+              label={req.tipo_mensalidade } 
+              caption= "Tipo da mensalidade"
+              setLabel={(text) => setReq({...req, tipo_mensalidade: text})}
+              list={[
+                {key: 1, option: "Cobrança de Mensalidades "},
+                {key: 2, option: "Taxas escolares"},
+                {key: 3, option: "Negociação de débitos"},
+                {key: 4, option: "Bolsa de estudos e descontos"},
+                // ... outros tipos
+              ]}
+            />
             {/* Campo de Status da Bolsa */}
             <MySelect 
               label={ req.scholarship_status } 
@@ -239,6 +256,7 @@ const getFilteredRevenues = () => {
 
             >
               <Mytext style={styles.td}>{item.name}</Mytext>
+              <Mytext style={styles.td}>{item.tipo_mensalidade}</Mytext>
               <Mytext style={styles.td}>{item.scholarship_status}</Mytext>
               <Mytext style={styles.td}>{item.created_at}</Mytext>
               <Mytext style={styles.td}>{item.description}</Mytext>    
@@ -246,16 +264,18 @@ const getFilteredRevenues = () => {
               <Mytext style={styles.td}>{item.discount_percentage}%</Mytext>
               <Mytext style={styles.td}>R${item.value}</Mytext> 
               
+              
             </MyTb>
           )}
           header={(
             <View style={styles.tableRowHeader}>
               <Mytext style={styles.th}>Nome</Mytext>
+              <Mytext style={styles.th}>Tipo da mensalidade</Mytext>
               <Mytext style={styles.th}>Status da Bolsa</Mytext>
               <Mytext style={styles.th}>Data do documento</Mytext>
               <Mytext style={styles.th}>Descrição</Mytext>
               <Mytext style={styles.th}>Id de usuario</Mytext>
-              <Mytext style={styles.th}>Valor de desconto</Mytext>
+              <Mytext style={styles.th}>Desconto</Mytext>
               <Mytext style={styles.th}>Valor</Mytext>
               <Mytext style={styles.th}>Ações</Mytext>
               
