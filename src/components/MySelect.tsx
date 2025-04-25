@@ -52,7 +52,7 @@ const MySelect: React.FC<MySelectProps> = ({ caption, label, list, setLabel, set
               style={{ 
                   height: 44,  //tudo ok
                   marginHorizontal: 1, //
-                  width: 1353, //
+                  width: '100%', //
                   borderRadius: 9,
                   paddingHorizontal: 15, //
                   backgroundColor: 'white',
