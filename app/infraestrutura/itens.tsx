@@ -11,7 +11,7 @@ import {setIten,dell, edit, iIten, getItens} from '../../src/controllers/items'
 import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
 
 
-export default  function itemScreen(){
+export default  function itemScreen(product_id:Number){
      const[req,setReq] = useState({ 
         id: -1,
         mark:'',

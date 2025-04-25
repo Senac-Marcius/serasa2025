@@ -25,6 +25,8 @@ export default function HomeScreen() {
 
             </MyLogin>
             </View>
+            
         </MyView>
+        
     );  
 } 
