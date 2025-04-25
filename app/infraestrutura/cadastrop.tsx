@@ -21,7 +21,7 @@ const generateId = (): string => Math.random().toString(36).substring(2, 15);
 
 const currencyFormatter = (value: number | null): string => {
   if (value === null) return 'N/A';
-  return `R$ ${value.toFixed(2).replace('.', ',')}`;
+  return `${value.toFixed(2).replace('.', ',')}`;
 };
 
 const validateProduct = (name: string, price: string | null): { valid: boolean; message?: string } => {

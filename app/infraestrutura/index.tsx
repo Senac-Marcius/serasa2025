@@ -21,7 +21,7 @@ export default function HomeScreen() {
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <MyLogin email={email} pass={pass} changeEmail={setEmail} changepass={setPass}>
 
-                <MyText>Bem vind@ </MyText>
+                <MyText>Bem vindos </MyText>
 
             </MyLogin>
             </View>
