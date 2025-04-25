@@ -2,29 +2,54 @@
 import React from 'react';
 import { View } from 'react-native';
 import { useState } from 'react';
-import  MyTheme from '../../src/components/MyTheme'
 import  MyView from '../../src/components/MyView'
-import MyLogin from '../../src/components/MyLogin';
-import MyText from '../../src/components/MyText';
 import { useRouter } from 'expo-router';
+import { StyleSheet } from 'react-native';
+import  MyList  from '../../src/components/MyList';
+import {delItem, editItem}  from '../../src/controllers/items';
+import { MyItem } from '../../src/components/MyItem';
 
 export default function HomeScreen() {
     const router = useRouter();
-    const [email, setEmail] = useState('')
-    const [pass, setPass] = useState('')
 
     return (
         <MyView router={router} style={{ flex: 1 }}>
-            <MyTheme chendTheme={()=>{}} fontSize={()=>{}}/>
+            
 
-            {/* Conteúdo da Página */}
+            {<MyList
+            data={itens}
+            keyItem={(i) => i.id.toString()}
+            renderItem={({item})=>(
+                <MyItem 
+                    onDel={()=>{delItem(item.id)}}
+                    onEdit={()=>{editItem(item.id)}}
+                >
+                    <text >{item.name}</text>
+                    <text >{item.mark}</text>
+                    <text>{item.assetNumber}</text>
+                    <text>{item.amount}</text>
+                    <View style={styles.buttonsContainer}></View>
+
+                </MyItem>
+
+            )}
+            
+            />}
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <MyLogin email={email} pass={pass} changeEmail={setEmail} changepass={setPass}>
+            
 
-                <MyText>Bem vindos </MyText>
-
-            </MyLogin>
+                
             </View>
         </MyView>
     );  
-} 
+} const styles = StyleSheet.create ({
+
+    buttonsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        fontSize: 15,
+        padding: 40,
+        
+    },
+})
