@@ -4,14 +4,11 @@ import Mydownload from '../../src/components/MyDownload';
 import MyView from '../../src/components/MyView';
 import MyList from '../../src/components/MyList';
 import MyButton from '../../src/components/MyButtons';
-import { Myinput, MyTextArea } from '../../src/components/MyInputs';
-import {MyItem, MyTb} from '../../src/components/MyItem';
+import {Myinput, MyTextArea } from '../../src/components/MyInputs';
+import {MyTb} from '../../src/components/MyItem';
 import Mytext from '../../src/components/MyText';
 import {MyModal_mobilefullscreen} from '../../src/components/MyModal';
 import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '../../src/controllers/revenues'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { TextInput } from 'react-native';
-
 
 import MySelect from '../../src/components/MySelect';
 import MySearch from '../../src/components/MySearch';
@@ -34,7 +31,7 @@ export default function RevenueScreen() {
 
   });
 const [searchTerm, setSearchTerm] = useState('');
-const[visible, setVisible] = useState(false);
+const [visible, setVisible] = useState(false);
 const [revenues, setRevenues] = useState<iRevenue[]>([]);
 
 useEffect(()=>{
@@ -48,7 +45,7 @@ useEffect(()=>{
   getTodos();
 },[])
  
-  // aqui estamos carregando os alunos
+
   
   
 
@@ -148,11 +145,19 @@ const getFilteredRevenues = () => {
 
     <MyView style={{ flex: 1, backgroundColor: '#f0f2f5' }} >
       <Mytext style={styles.title}>
-         💰cadastre as receitas
+         Receitas Escolares
       </Mytext>
-<MyModal_mobilefullscreen
- visible={visible} 
- setVisible={setVisible}>
+
+      <MySearch
+       style={styles.searchInput}
+       onChangeText={setSearchTerm}
+        onPress={()=> {setSearchTerm(searchTerm)}}
+        busca={searchTerm}
+    />
+
+  <MyModal_mobilefullscreen
+    visible={visible} 
+    setVisible={setVisible}>
   
         <View style={styles.form}>
             {/* Campo de Nome */}
@@ -214,17 +219,6 @@ const getFilteredRevenues = () => {
         </View>
         </MyModal_mobilefullscreen>
 
-    <MySearch
-       style={styles.searchInput}
-       onChangeText={setSearchTerm}
-        onPress={()=> {setSearchTerm(searchTerm)}}
-        busca={searchTerm}
-    />
-
-
-
-        
-        
         {/* Lista de Receitas */}
         <MyList
           style={styles.table}
@@ -232,7 +226,7 @@ const getFilteredRevenues = () => {
           keyItem={(item) => item.id.toString()}
           renderItem={({ item }) => (
             
-           
+           /* Componente de listagem */
             <MyTb
            
               onEdit={() => { editRevenue(item.id) }} 
@@ -274,10 +268,35 @@ const getFilteredRevenues = () => {
 };
 
 const styles = StyleSheet.create({
-  row: {
+  row:{
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+  },
+
+  title:{               
+    marginBottom: 8,
+    fontSize: 40,
+    fontWeight: "bold", 
+    textAlign: "center",
+    backgroundColor: "#666666 ",
+    borderRadius: 5,
+    color:'#1A1A1A',
+    letterSpacing: 1.5,
+    textTransform: "uppercase",
+    textShadowColor: "rgba(0, 0, 0, 0.2)",
+    fontStyle: "italic",
+  },
+
+  searchInput: {
+    backgroundColor: '#F5F5F5',
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    paddingRight: 5,
+    borderWidth: 5,
+    borderColor: '#F5F5F5',
+    fontSize: 14,
   },
 
   table: {
@@ -286,16 +305,6 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   
-  buttons: {
-     alignItems:"center",
-     justifyContent:"center",
-     flexDirection: 'row',
-     gap: 10,
-     marginTop: 10,
-     width: '100%',
-     
-  }
-  ,
   form: {
     flex: 1,
     marginRight: 10,
@@ -309,34 +318,6 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
 
-  th: {
-    flex: 1,
-     fontWeight: '900',
-      fontSize: 13,
-       color: '#333'
-    },
-
-  revenueStyle: {
-    flex: 1,
-    marginRight: 10,
-    padding: 15,
-    backgroundColor: '#D3D3D3',
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 5,
-    elevation: 3,
-    marginBottom: 10,
-    
-  },
-  revenueText: {
-    fontSize: 13,
-    color: '#000000',
-    marginBottom: 3,
-    
-  },
-
   tableRowHeader: {
     flexDirection: 'row',
     paddingVertical: 10,
@@ -344,51 +325,21 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ddd',
   },
 
-  title:{               
-    marginBottom: 8,
-    fontSize: 40,
-    fontWeight: "bold", 
-    textAlign: "center",
-    backgroundColor: "#ab66f9",
-    borderRadius: 5,
-    color:'#ffffff',
-    letterSpacing: 1.5,
-    textTransform: "uppercase",
-    textShadowColor: "rgba(0, 0, 0, 0.2)",
-    fontStyle: "italic",
- },
- revenueTexts: {
-  fontSize: 14,
-  color: '#000000',
-  marginBottom: 8,
-  marginLeft:541,
-},
-searchWrapper: {
-  marginBottom: 16,
-  position: 'relative',
-},
-searchInput: {
-  backgroundColor: '#fff',
-  borderRadius: 8,
-  paddingVertical: 10,
-  paddingHorizontal: 16,
-  paddingRight: 40,
-  borderWidth: 1,
-  borderColor: '#ccc',
-  fontSize: 14,
-},
+  th: {
+    flex: 1,
+    fontWeight: '900',
+    fontSize: 13,
+    color: '#333',
+    textAlign: 'center',
+  },
 
-td: {
-  flex: 1,
-  fontSize: 13,
-  color: '#444' 
- },
+  td: {
+    flex: 1,
+    fontSize: 13,
+    color: '#444',
+    textAlign: 'center',
+  },
 
-searchIcon: {
-  position: 'absolute',
-  right: 16,
-  top: '50%',
-  transform: [{ translateY: -10 }],
-},
- 
+
+  
 });
