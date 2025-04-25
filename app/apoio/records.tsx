@@ -144,7 +144,6 @@ export default function RecordScreen() {
         }
     }
      
-    const [unity, setUnit] = useState("Selecione a cor")  
 
     return (
 
