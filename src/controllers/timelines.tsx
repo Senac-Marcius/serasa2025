@@ -19,7 +19,7 @@ function toListTimeline(data: iTimeline[]){
   const resp: {key: number, option: string}[] = [];
 
   data.map((t) => {
-    resp.push({ key: t.id, option: `${t.created_at} - ${t.class_id} - ${t.local_id}`})
+    resp.push({ key: t.id, option: `${t.created_at} - ${t.class_id} - ${t.local_id} - ${t.discipline_id} - ${t.start_time} - ${t.end_time} - ${t.date} - ${t.teacher_id} `})
   })
 
   return resp;
@@ -27,7 +27,7 @@ function toListTimeline(data: iTimeline[]){
 
 
 async function  getTimelines(params:any) {
-  const {data: todos, error} = await supabase.from ('launchs').select();
+  const {data: todos, error} = await supabase.from ('timelines').select();
 
   if(error)
     return {status: false, error: error}
