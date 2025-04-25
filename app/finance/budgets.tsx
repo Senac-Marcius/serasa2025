@@ -1,13 +1,15 @@
 import React, {useState,useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import MyButton from '../src/components/MyButtons';
-import MyList from '../src/components/MyList';
-import  { Myinput} from '../src/components/MyInputs';
-import MyView from '../src/components/MyView';
-import Mytext from '../src/components/MyText';
-import { MyItem } from '../src/components/MyItem';
+import MyButton from '../../src/components/MyButtons';
+import MyList from '../../src/components/MyList';
+import  { Myinput} from '../../src/components/MyInputs';
+import MyView from '../../src/components/MyView';
+import Mytext from '../../src/components/MyText';
+import {MyItem, MyTb} from '../../src/components/MyItem';
 import { useRouter } from 'expo-router';
-import {iBudgets , setBudget, deleteBudget, updateBudget, getBudgets} from '../src/controllers/budgets';
+import {iBudgets , setBudget, deleteBudget, updateBudget, getBudgets} from '../../src/controllers/budgets';
+import {MyModal_mobilefullscreen} from '../../src/components/MyModal';
+import MySearch from '../../src/components/MySearch';
 
 
 export default function BudgetScreen(){
@@ -22,12 +24,14 @@ export default function BudgetScreen(){
         name:'',
         url:'',
         created_at: new Date().toISOString(),
-        value:'',
+        value: '',
         user_id: 3,
         start_date: '',
         end_date:'',
         
     });
+    const [searchTerm, setSearchTerm] = useState('');
+    const[visible, setVisible] = useState(false);
     const [budgets, setBudgets] = useState<iBudgets[]>([]);
 
     useEffect(()=> {
@@ -68,13 +72,16 @@ export default function BudgetScreen(){
         user_id: 3,
         start_date: '',
         end_date:'',
-            })
+            });
+        setVisible(false);
+
     }
 
     function editBudget(id:number){
         const budget = budgets.find (b => b.id == id)
         if(budget)
         setReq(budget)
+        setVisible(true);
     }
 
     async function delBudget(id: number) {
@@ -92,7 +99,22 @@ export default function BudgetScreen(){
             console.error("Erro inesperado:", err);
         }
     }
-
+    const getFilteredBudgets = () => {
+        if (!searchTerm || searchTerm.trim() === '') return budgets;
+        
+        const term = searchTerm.toLowerCase();
+        
+        return budgets.filter(item => {
+            return (
+                item.id?.toString().includes(searchTerm) ||
+                item.name?.toLowerCase().includes(term) ||
+                item.url?.toLowerCase().includes(term) ||
+                item.created_at?.toLowerCase().includes(term) ||
+                item.value?.toString().includes(searchTerm) ||
+                item.end_date?.toLowerCase().includes(term)
+            );
+        });
+    };
     
     return (
         <MyView  >
@@ -100,8 +122,10 @@ export default function BudgetScreen(){
             <Mytext style={styles.title}>
             Cadastre os orçamentos
             </Mytext>
-            <View style={styles.row}>
+            
+            <MyModal_mobilefullscreen visible={visible} setVisible={setVisible}>
                 <View style={styles.form}>
+                    
                     <Myinput
                             
                             value={req.name}
@@ -141,32 +165,52 @@ export default function BudgetScreen(){
                      
 
 
-                    <MyButton title ='CADASTRAR' onPress={ handleRegister }/>
+                     <MyButton style={{justifyContent:'center'}} onPress={() => handleRegister ()} title="cadastrar"  />
                 </View>
+               </MyModal_mobilefullscreen>
+
+               <MySearch
+                     style={styles.searchInput}
+                     onChangeText={setSearchTerm}
+                    onPress={()=> {setSearchTerm(searchTerm)}}
+                    busca={searchTerm}
+                />
                 <MyList
 
-                    data={budgets}
+                    data={getFilteredBudgets()}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
                     
-                        <MyItem 
+                        <MyTb
                        onEdit ={()=> editBudget(item.id)}
                        onDel ={()=> delBudget(item.id)}
                         >
                        
-                       <Text> Nome: {item.name}</Text>
-                       <Text> id: {item.id}</Text>
-                           <Text> Url: {item.url}</Text>
-                           <Text> CreateAt: {item.created_at}</Text>
-                           <Text> Valor R$: {item.value}</Text>
-                           <Text> UserId: {item.user_id}</Text>
-                           <Text> Data Inicial: {item.start_date}</Text>
-                           <Text> Data Final: {item.end_date}</Text>
+                            <Text style={styles.td}>{item.name}</Text>
+                            <Text style={styles.td}> {item.id}</Text>
+                            <Text style={styles.td}>{item.url}</Text>
+                           <Text style={styles.td}> {item.created_at}</Text>
+                           <Text style={styles.td}> {item.value}</Text>
+                           <Text style={styles.td}> {item.start_date}</Text>
+                           <Text style={styles.td}> {item.end_date}</Text>
+                          
     
-                        </MyItem>
+                        </MyTb>
+                    )}
+                    header={(
+                        <View style={styles.tableRowHeader}>
+                        <Text style={styles.th}>Nome</Text>
+                        <Text style={styles.th}>Id</Text>
+                        <Text style={styles.th}>url </Text>
+                        <Text style={styles.th}>created_at </Text>
+                        <Text style={styles.th}>Valor</Text>
+                        <Text style={styles.th}>Data Inicial</Text>
+                        <Text style={styles.th}>Data Final</Text>
+                        <Text style={styles.th}>Ações</Text>
+                        </View>
                     )}
                 />
-            </View>
+            
         </MyView>
     );
 }
@@ -246,6 +290,38 @@ const styles = StyleSheet.create({
             textShadowColor: "rgba(0, 0, 0, 0.2)",
             fontStyle: "italic",
          },
+
+         th: {
+            flex: 1,
+             fontWeight: '900',
+              fontSize: 13,
+               color: '#333'
+            },
+
+        td: {
+            flex: 1,
+            fontSize: 13,
+            color: '#444'
+             },
+
+         tableRowHeader: {
+                flexDirection: 'row',
+                paddingVertical: 10,
+                borderBottomWidth: 1,
+                borderBottomColor: '#ddd',
+              },
+
+              searchInput: {
+                backgroundColor: '#fff',
+                borderRadius: 8,
+                paddingVertical: 10,
+                paddingHorizontal: 16,
+                paddingRight: 40,
+                borderWidth: 1,
+                borderColor: '#ccc',
+                fontSize: 14,
+              },
+             
 
 
 });
