@@ -76,7 +76,7 @@ export default function LocalScreen(){
         }
     }
 
-    const [unity, setUnit] = useState("Select")              /* exemplo do código de SELECT para copiar */
+    const [unity, setUnit] = useState("Select")           /* exemplo do código de SELECT para copiar */
 
     const [message, setMessage] = useState("")
     
