@@ -8,7 +8,6 @@ import {MyItem} from '../../src/components/MyItem';
 import MyList from '../../src/components/MyList';
 import Mytext from '../../src/components/MyText';
 import {textStyles}  from '../../styles/textStyles';
-import { useRouter } from 'expo-router';
 import { setNotification, iNotification, deleteNotification, updateNotification, getNotifications} from '../../src/controllers/notifications';
 
 export default function NotificationScreen(){
@@ -70,8 +69,6 @@ export default function NotificationScreen(){
         const list = notifications.filter(n => n.id != id );
             setNotifications(list)
     }
-
-    const router = useRouter();
     
 return (
     <MyView>
