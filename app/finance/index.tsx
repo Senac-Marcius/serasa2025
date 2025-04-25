@@ -48,25 +48,27 @@ export default function IndexScreen() {
     <MyView style={styles.container}>
       <MyText style={styles.title}>Resumo Financeiro</MyText>
 
-      <View style={styles.section}>
+      <View style={styles.section1}>
+        <MyText style={styles.label}>Receitas: R$ {total.revenues.toFixed(2)}</MyText>
+        <MyButton title="Ver receitas" onPress={() => router.push('finance/revenues')} />
+      </View>
+
+      <View style={styles.section2}>
         <MyText style={styles.label}>Despesas: R$ {total.expenses.toFixed(2)}</MyText>
         <MyButton title="Ver despesas" onPress={() => router.push('finance/expenses')} />
       </View>
 
-      <View style={styles.section}>
+      <View style={styles.section3}>
         <MyText style={styles.label}>Investimentos: R$ {total.investments.toFixed(2)}</MyText>
         <MyButton title="Ver investimentos" onPress={() => router.push('finance/investments')} />
       </View>
 
-      <View style={styles.section}>
+      <View style={styles.section4}>
         <MyText style={styles.label}>Orçamentos: R$ {total.budgets.toFixed(2)}</MyText>
         <MyButton title="Ver orçamentos" onPress={() => router.push('finance/budgets')} />
       </View>
 
-      <View style={styles.section}>
-        <MyText style={styles.label}>Receitas: R$ {total.revenues.toFixed(2)}</MyText>
-        <MyButton title="Ver receitas" onPress={() => router.push('finance/revenues')} />
-      </View>
+     
     </MyView>
   );
 }
@@ -77,6 +79,39 @@ const styles = StyleSheet.create({
     padding: 20,
     gap: 16,
   },
+  section1: {
+    backgroundColor: '#c3f091', // Verde claro de fundo
+    borderLeftWidth: 4,
+    borderLeftColor: '#2ecc71', // Borda lateral verde
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  section2: {
+    backgroundColor: '#FEA1B6', // vermelho claro de fundo
+    borderLeftWidth: 4,
+    borderLeftColor: '#FF0000', // Borda lateral vermelho
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  section3: {
+    backgroundColor: '#add8e6', // Azul claro de fundo
+    borderLeftWidth: 4,
+    borderLeftColor: '#0000ff', // Borda lateral Azul
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  section4: {
+    backgroundColor: '#ffff9e', // Amarelo claro de fundo
+    borderLeftWidth: 4,
+    borderLeftColor: '#FFc222', // Borda lateral Amarelo
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+
   title: {
     fontSize: 28,
     textAlign: 'center',
