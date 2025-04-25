@@ -18,23 +18,24 @@ function HorizontalMenu() {
     const navigation = useNavigation();
     const handlePress = (item: {label:string, route: string}) => {
         console.log('Clicou em:', item);
-        navigation.navigate(item.route); // Navega para a rota definida no item
+        //navigation.navigate(item.route);  Navega para a rota definida no item
     }
   return (
     <View style={styles.container}>
       {menuItems.map((item, index) => (
         <TouchableOpacity key={index} onPress={() => handlePress(item)}>
         <MenuItem label={item.label}/>
+        <MenuItens label={item.label}/>
         </TouchableOpacity>
       ))}
     </View>
   );
 }
-/*const MenuItens = ({ label }: { label: string }) => (
+const MenuItens = ({ label }: { label: string }) => (
     <View style={styles.menuItem}>
       <Text>{label}</Text>
     </View>
-  );*/
+  );
 
 function MenuItem({ label }: { label: string }) {
     <Text>{label}</Text>
