@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   
+  
   section1: {
     backgroundColor: '#c3f091', // Verde claro de fundo
     borderLeftWidth: 4,
@@ -88,6 +89,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 8,
   },
+  
   section2: {
     backgroundColor: '#FEA1B6', // vermelho claro de fundo
     borderLeftWidth: 4,
@@ -123,12 +125,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
   },
-  section: {
-    backgroundColor: '#f1f1f1',
-    borderRadius: 8,
-    padding: 16,
-    gap: 8,
-  },
+  
   label: {
     fontSize: 18,
     color: '#333',
