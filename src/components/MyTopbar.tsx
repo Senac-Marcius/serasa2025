@@ -36,9 +36,9 @@ const MyTopbar: React.FC<MyTopbarProps> = ({ router, title }) => {
           <TouchableOpacity style={styles.iconButton}>
             <MaterialCommunityIcons name="lightning-bolt-outline" size={20} color="#4A148C" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconButton}>
-            <MaterialCommunityIcons name="bell-outline" size={20} color="#4A148C" />
-          </TouchableOpacity>
+
+          <MyNotify style={styles.iconButton}/>
+          
           <TouchableOpacity style={styles.iconButton}>
             <MaterialCommunityIcons name="cog-outline" size={20} color="#4A148C" />
           </TouchableOpacity>
