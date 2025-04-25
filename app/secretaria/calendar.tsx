@@ -113,7 +113,7 @@ export default function CalendarsScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 30 }}
       >
-        <MyText style={styles.pageTitle}>Cronograma de Matrículas</MyText>
+        <MyText style={styles.pageTitle}>Cronograma Escolar</MyText>
 
         {/* Formulário */}
         <View style={styles.card}>
@@ -121,18 +121,18 @@ export default function CalendarsScreen() {
 
           <Myinput
             iconName="account"
-            label="Nome do Aluno"
+            label="Categoria da Reunião"
             value={req.studentname}
             onChangeText={(text) => setReq({ ...req, studentname: text })}
-            placeholder="Digite o nome do aluno..."
+            placeholder="Digite a categoria da reunião..."
           />
 
           <Myinput
             iconName="book"
-            label="Curso"
+            label="Motivo da Reunião"
             value={req.course}
             onChangeText={(text) => setReq({ ...req, course: text })}
-            placeholder="Digite o curso..."
+            placeholder="Digite o Motivo da Reunião..."
           />
 
           {Platform.OS === 'web' ? (
@@ -214,8 +214,8 @@ export default function CalendarsScreen() {
                   onEdit={() => editCalendar(item.id)}
                   onDel={() => delCalendar(item.id)}
                 >
-                  <MyText style={styles.itemText}>👤 Aluno: {item.studentname}</MyText>
-                  <MyText style={styles.itemText}>📘 Curso: {item.course}</MyText>
+                  <MyText style={styles.itemText}>👤 Categoria da Reunião: {item.studentname}</MyText>
+                  <MyText style={styles.itemText}>📘 Motivo da Reunião: {item.course}</MyText>
                   <MyText style={styles.itemText}>📅 Data: {item.registrationdate}</MyText>
                   <MyText style={styles.itemText}>⏱️ Período: {item.period}</MyText>
                 </MyItem>
