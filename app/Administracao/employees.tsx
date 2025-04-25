@@ -143,12 +143,9 @@ const [currentView, setCurrentView] = useState<'form' | 'table' | null>(
                         label='Perfil do likendin:'
                         iconName = 'link'
                     />
-                    <Myinput
+                    <MyCalendar
                         label = 'Data de Nascimento:'
-                        iconName='event'
-                        placeholder='Insira a data ANO/MES/DIA'
-                        value={req.date_birth}
-                        onChangeText={(int) => SetReq({...req , date_birth:int})}
+                        date={req.date_birth} setDate={(int) =>SetReq({...req , date_birth:int})} icon="FaCalendarDays" 
                     />
                     <Myinput
                         label='Nacionalidade:'
