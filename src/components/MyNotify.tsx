@@ -31,7 +31,7 @@ const MyNotify: React.FC<MyNotifyProps> = ({ style }) => {
       }
     }
     getTodos();
-  }, []);
+  }, [notifications]);
 
   return (
     <View>
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3E5F5', // lilás claro
     borderRadius: 12,
     padding: 12,
-    maxHeight: 300,
+    height:"100vh",
     width: 320,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 6 },
