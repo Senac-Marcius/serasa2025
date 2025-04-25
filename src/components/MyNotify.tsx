@@ -4,7 +4,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { MyCorrelated } from './MyItem';
 import Mytext from './MyText';
 import MyList from './MyList';
-import { textStyles } from '../../styles/textStyles';
 
 import {
   setNotification,
@@ -51,11 +50,11 @@ const MyNotify: React.FC<MyNotifyProps> = ({ style }) => {
             keyItem={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <MyCorrelated showEditButton={false} showDeleteButton={false}>
-                <Mytext style={textStyles.textBody}>Nome: {item.name}</Mytext>
-                <Mytext style={textStyles.textBody}>Descrição: {item.description}</Mytext>
-                <Mytext style={textStyles.textBody}>Url: {item.url}</Mytext>
-                <Mytext style={textStyles.textBody}>UserId: {item.user_id}</Mytext>
-                <Mytext style={textStyles.textBody}>CreatAt: {item.created_at}</Mytext>
+                <Mytext>Nome: {item.name}</Mytext>
+                <Mytext>Descrição: {item.description}</Mytext>
+                <Mytext>Url: {item.url}</Mytext>
+                <Mytext>UserId: {item.user_id}</Mytext>
+                <Mytext>CreatAt: {item.created_at}</Mytext>
               </MyCorrelated>
             )}
           />
