@@ -10,7 +10,6 @@ import {MyItem} from '../../src/components/MyItem';
 import { useRouter } from 'expo-router';
 import {deleteLevel, updateLevels, getLevels, setLevel, iLevels } from '../../src/controllers/levels';
 
-
 export default function LevelsScreen() {
   const router = useRouter();
   const [isChecked, setIsChecked] = useState(true);
@@ -37,7 +36,6 @@ export default function LevelsScreen() {
 
       }
   
-
       fetchLevels();
   }, []);
 
@@ -81,7 +79,6 @@ function editLevels(levels: iLevels) {
 
             <View style={styles.row}>
                 <View style={styles.form}>
-                
                         
                         <Myinput 
                             style={styles.input}
