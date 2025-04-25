@@ -115,6 +115,7 @@ export default function ScaleScreen() {
               setLabel={handleSetLabel}
             />
 
+
             <Mytext style={styles.Mytext}>Horário de início:</Mytext>
             <MyTimerPicker
               initialTime={req.start_time}
