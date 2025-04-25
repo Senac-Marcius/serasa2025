@@ -4,6 +4,7 @@ import { View, Button, Alert, ActivityIndicator,Text, ViewStyle, StyleSheet } fr
 import * as DocumentPicker from "expo-document-picker";
 import MyButton from "../components/MyButtons";
 import { link } from "fs";
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 interface MyuploadProps {
   style?: ViewStyle | ViewStyle[]; 
@@ -60,23 +61,45 @@ const MyUpload: React.FC<MyuploadProps> = ({ style, setUrl, setName, url  }) => 
   };
 
   return (
-    <View>
-      <MyButton title="Upload" onPress={pickDocument} button_type="round" style={styles.button_round} />
-      {loading && <ActivityIndicator size="large" color="#A020F0"/>}
-      {url && (<Text>Arquivo enviado: {url}</Text>)}
-      {alert && (<Text> {alert} </Text>)}
+    <View style={styles.buttonWrapper}>
+      <MyButton
+        title="Upload"
+        onPress={pickDocument}
+        button_type="round"
+        style={styles.button_round}
+      />
+      <AntDesign
+        name="upload"
+        size={30}
+        color="black"
+        style={styles.icon}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create ({
     button_round: {
-    borderRadius: 20,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
     gap: 10,
-}
+},
+wrapper: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: 10, // ou use marginRight/marginLeft no ícone
+},
+buttonWrapper: {
+  position: 'relative',
+  justifyContent: 'center',
+},
+icon: {
+  position: 'absolute',
+  left: 100, // ajuste conforme a margem do botão
+  zIndex: 1,
+},
 
 })
 
