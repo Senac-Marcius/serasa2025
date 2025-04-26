@@ -9,7 +9,7 @@ import MyText from '../../src/components/MyText';
 import { MyItem } from '../../src/components/MyItem';
 import { useRouter } from 'expo-router';
 import { supabase } from '../../src/utils/supabase';
-import { iCalendar, SetCalendarbd, UpdateCalendarbd, DeleteCalendarbd } from '../../src/controllers/calendar';
+import { iCalendar, SetCalendarbd, UpdateCalendarbd, DeleteCalendarbd, getCalendars } from '../../src/controllers/calendar';
 
 export default function CalendarsScreen() {
   const [req, setReq] = useState<iCalendar>({
