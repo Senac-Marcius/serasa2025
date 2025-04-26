@@ -121,18 +121,18 @@ export default function CalendarsScreen() {
 
           <Myinput
             iconName="account"
-            label="Nome do Aluno"
+            label="Tipo de Evento"
             value={req.studentname}
             onChangeText={(text) => setReq({ ...req, studentname: text })}
-            placeholder="Digite o nome do aluno..."
+            placeholder="Digite o Tipo de Evento..."
           />
 
           <Myinput
             iconName="book"
-            label="Curso"
+            label="Motivo da Reunião"
             value={req.course}
             onChangeText={(text) => setReq({ ...req, course: text })}
-            placeholder="Digite o curso..."
+            placeholder="Digite o Motivo da Reunião"
           />
 
           {Platform.OS === 'web' ? (
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#FFF',
     borderRadius: 10,
-    padding: 20,
+    padding: 40,
     marginBottom: 25,
     shadowColor: '#000',
     shadowOpacity: 0.05,
