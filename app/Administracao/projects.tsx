@@ -42,7 +42,6 @@ const parseCurrencyInput = (text: string): number => {
         id: -1,
         url: '',
         created_at: new Date().toISOString(),
-        user_id: 1,
         recurces: 0,
         description: '',
         activity: '',
@@ -64,14 +63,11 @@ const parseCurrencyInput = (text: string): number => {
         setIntegrantes([...integrantes, {key: -1, option:''}]);
     }
 
-    function atulizarIntegranteKey(index:number, pkey: number){
-        const i = {...integrantes[index], key: pkey}
-        setIntegrantes( integrantes.map(jTNL => (jTNL.key == i.key ? i : jTNL)) );
-    }
-
-    function atulizarIntegranteName(index:number, pOption: string){
-        const i = {...integrantes[index], option: pOption}
-        setIntegrantes( integrantes.map(jTNL => (jTNL.key == i.key ? i : jTNL)) );
+    function atulizarIntegranteKey(pindex:number, pkey: number){
+        const name = idUs.find(u => u.key == pkey)?.option || ''
+        const i = { key: pkey, option: name}
+        setIntegrantes( integrantes.map((jTNL, index) => (index == pindex ? i : jTNL)) );
+        //console.log(integrantes)
     }
 
 
@@ -107,11 +103,11 @@ const parseCurrencyInput = (text: string): number => {
     async function handleRegister(){
         const recurcesValue = parseCurrencyInput(rawRecurces);
         
-        if(req.id == -1){ //aqui é quando esta cadastrando
+        if(req.id === -1){ //aqui é quando esta cadastrando
             const newid = projects.length ? projects[projects.length -1].id + 1 : 0;
-            const newProjects = { ...req, id: newid, integrantes };
+            const newProjects = { ...req, id: newid };
 
-            console.log("Cadastrando no Supabase:", newProjects);
+            //console.log("Cadastrando no Supabase:", newProjects);
 
             setProjects([... projects, newProjects])
             await setProject(newProjects, integrantes)
@@ -128,7 +124,6 @@ const parseCurrencyInput = (text: string): number => {
             id: -1,
             url: '',
             created_at: new Date().toISOString(),
-            user_id: 1,
             recurces: 0,
             description: '',
             activity: '',
@@ -143,6 +138,7 @@ const parseCurrencyInput = (text: string): number => {
         })
 
         setRawRecurces('');
+        setVisible(false)
     }
 
     const getFilteredProjects = () => {
@@ -168,7 +164,7 @@ const parseCurrencyInput = (text: string): number => {
             setVisible(true)
         }
 
-        console.log("Dados enviados para o Supabase:", projects);
+        //console.log("Dados enviados para o Supabase:", projects);
     }
 
     async function dellProject(id: number){
@@ -245,7 +241,7 @@ const parseCurrencyInput = (text: string): number => {
                             >
                                 <MySelect 
                                     label={uOption.option || "Selecione um usuario"}
-                                    setLabel={(option) => atulizarIntegranteName(index, option)}
+                                    setLabel={() => {}}
                                     list={idUs}
                                     setKey={(key) => atulizarIntegranteKey(index, key)}
                                     caption={`Integrante ${index + 1}`}
@@ -370,7 +366,7 @@ const parseCurrencyInput = (text: string): number => {
                             <Mytext style={styles.label}> Qual Atividade proposta: </Mytext>
                             <Myinput
                                 iconName=''
-                                placeholder="Digite aqui..."
+                                placeholder="Liste em topicos..."
                                 value={req.activity}
                                 onChangeText={(text) => setReq({ ...req, activity: text })}
                                 label=''
@@ -385,7 +381,7 @@ const parseCurrencyInput = (text: string): number => {
                                         value={req.techniques} // Passa o estado como valor
                                         onChangeText={(text) => setReq({ ...req, techniques: text })} // Atualiza o estado ao digitar
                                         placeholder="Digite aqui..."
-                                        style={{ height: 50 }}
+                                        style={{ height: 80 }}
                                     />
                                     <MyTextArea
                                         iconName='message'
@@ -393,7 +389,7 @@ const parseCurrencyInput = (text: string): number => {
                                         value={req.process} // Passa o estado como valor
                                         onChangeText={(text) => setReq({ ...req, process: text })} // Atualiza o estado ao digitar
                                         placeholder="Digite aqui..."
-                                        style={{ height: 50 }}
+                                        style={{ height: 80 }}
                                     />
                                 </View>
 
@@ -404,7 +400,7 @@ const parseCurrencyInput = (text: string): number => {
                                         value={req.strategies} // Passa o estado como valor
                                         onChangeText={(text) => setReq({ ...req, strategies: text })} // Atualiza o estado ao digitar
                                         placeholder="Digite aqui..."
-                                        style={{ height: 50 }}
+                                        style={{ height: 80 }}
                                     />
                                     <MyTextArea
                                         iconName='message'
@@ -412,7 +408,7 @@ const parseCurrencyInput = (text: string): number => {
                                         value={req.planning} // Passa o estado como valor
                                         onChangeText={(text) => setReq({ ...req, planning: text })} // Atualiza o estado ao digitar
                                         placeholder="Digite aqui..."
-                                        style={{ height: 50 }}
+                                        style={{ height: 80 }}
                                     />
 
                                     {/* <>Fazer um botão que ao clicar ele abre a caixa de seleção do usuario e quando clico no usuario ele adioca ao meu users </>*/}
