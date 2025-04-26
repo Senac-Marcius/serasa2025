@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#FFF',
     borderRadius: 10,
-    padding: 20,
+    padding: 40,
     marginBottom: 25,
     shadowColor: '#000',
     shadowOpacity: 0.05,
@@ -274,12 +274,14 @@ const styles = StyleSheet.create({
   gridContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
+    gap: 10,
+    padding: 20,
   },
+  
   cardGridItem: {
     backgroundColor: '#FFF',
     borderRadius: 10,
-    padding: 16,
+    padding: 16, //padding interno
     marginBottom: 10,
     shadowColor: '#000',
     shadowOpacity: 0.05,
@@ -287,7 +289,9 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 2,
     width: 280,
+    flexBasis: '18%', // ocupa toda a largura possível
   },
+  
   itemText: {
     fontSize: 14,
     color: '#333',
