@@ -88,7 +88,6 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <MenuItem label="Administração" route="Administracao/" icon="people" />
         <MenuItem label="Secretaria" route="secretaria" icon="add-circle" />
-        <MenuItem label="Budgets" route="budgets" icon="wallet" />
         <MenuItem label="Calendar" route="secretaria/calendar" icon="calendar" />
         <MenuItem label="Categories" route="categories" icon="albums" />
         <MenuItem label="Classes" route="classes" icon="school" />
@@ -97,8 +96,6 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Disciplines" route="secretaria/disciplines" icon="document-text" />
         <MenuItem label="Documents" route="secretaria/documents" icon="document" />
         <MenuItem label="Employees" route="employees" icon="people" />
-        <MenuItem label="Expenses" route="expenses" icon="cash" />
-        <MenuItem label="Investments" route="investments" icon="trending-up" />
         <MenuItem label="Items" route="items" icon="pricetag" />
         <MenuItem label="Launchs" route="launchs" icon="rocket" />
         <MenuItem label="Levels" route="levels" icon="stats-chart" />
@@ -109,7 +106,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Parents" route="parents" icon="people-circle" />
         <MenuItem label="Perfil" route="perfil" icon="person" />
         <MenuItem label="Posts" route="posts" icon="chatbox" />
-        <MenuItem label="Infraestrutura" route="Infraestrutura" icon="cube-outline"/>
+        <MenuItem label="Infraestrutura" route="infraestrutura" icon="cube-outline"/>
         <MenuItem label="Projects" route="projects" icon="briefcase" />
         <MenuItem label="Records" route="records" icon="document-text-outline"/>
         <MenuItem label="Revenues" route="revenues" icon="cash-outline" />

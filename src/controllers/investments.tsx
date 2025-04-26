@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { supabase } from '../utils/supabase'
 
 interface iInvestment {
+    name: string,
     description: string,
     url: string,
-    name: string,
     id: number,
     created_at: string,
     user_id: number,
@@ -13,40 +13,50 @@ interface iInvestment {
 
 
 
-async function setInvestment(investment:iInvestment){
-    //aqui vem os tratamentos de regex ou do modelo de negocio antes de inserir
-    const urlRegex = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
-    const dateRegex = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})?)?$/;
-    const nameRegex = /^[a-zA-Z0-9\sáàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ]{2,100}$/;
-    const valueRegex = /^\d+(\.\d{1,2})?$/;
+async function setInvestment(investment: iInvestment) {
+    /*console.log('Enviando para Supabase:', investment);*/
 
-    if (!urlRegex.test(investment.url)) {
-        return ('URL inválida');
-    }
-    if (!dateRegex.test(investment.created_at)) {
-        throw ('Data de criação inválida');
-    }
-    if (!nameRegex.test(investment.name)) {
-        throw ('Nome inválido');
-    }
-    if (!valueRegex.test(investment.value)) {
-        throw ('Valor inválido');
-    }
+    try {
+        const { data, error } = await supabase
+            .from('investments')
+            .insert([investment])
+            .select();
 
-    const { data, error } = await supabase
-    .from('investments')
-    .insert([
-    investment
-    ])
-    .select()
-    
+        /*console.log('Resposta do Supabase:', { data, error });*/
 
-    if(error){
-        //aqui vem os tratamentos de variavel error
-        return []
+        if (error) {
+            console.error('Erro ao cadastrar investimento no Supabase:', error);
+            return [];
+        }
+
+        return data;
+    } catch (e) {
+        console.error('Exceção ao tentar inserir no Supabase:', e);
+        return [];
     }
-    return data
 }
+
+function toListInvestment(data: iInvestment[]) {
+    const resp : {key: number, option:string}[] = []
+
+    data.map((i)=>{
+        resp.push({key: i.id,option: i.name})
+        })
+        return resp
+    }
+
+
+async function getInvestment(params: any) {
+    const { data: all, error } = await supabase.from('investments').select();
+
+    if (error) 
+        return { status: false, error: error}
+        
+    return{status:true, data: all}
+    
+    }
+
+
 
 async function deleteInvestment(id: number) {
     const { error } = await supabase
@@ -55,19 +65,14 @@ async function deleteInvestment(id: number) {
         .eq('id', id);
 
     if (error) {
-        console.error('Erro ao excluir investimento:', error);
-        return []; 
+        console.error('Erro ao excluir investimento:', error.message);
+        return false; 
     }
-    return `Investimento com ID ${id} excluído com sucesso.`;
+    return true
 }
 
 async function updateInvestment(updatedInvestment: iInvestment) {
     try {
-
-        if (!updatedInvestment.id) {
-            throw new Error('ID do investimento é obrigatório para atualização');
-        }
-
         const { data, error } = await supabase
             .from('investments')
             .update({
@@ -97,4 +102,4 @@ async function updateInvestment(updatedInvestment: iInvestment) {
     }
 }
 
-export {setInvestment, deleteInvestment, updateInvestment, iInvestment}
+export {setInvestment, deleteInvestment, updateInvestment, getInvestment, toListInvestment, iInvestment}
