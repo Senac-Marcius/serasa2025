@@ -113,12 +113,12 @@ export default function CollectionPreviewScreen() {
                         </View>
                         <View style={styles.rightIcons}>
                                 <TouchableOpacity style={styles.button_capsule} onPress={()=>router.push({ pathname:''})}>
-                                <MaterialCommunityIcons name="lightning-bolt-outline" size={20} color="white" />
+                                <MaterialCommunityIcons name="book-open-variant" size={20} color="#750097" />
                                 <Text style={styles.buttonText}>Meus empréstimos</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity style={styles.button_round} onPress={()=>router.push({ pathname:'librarie/pageEmployee'})}>
-                                <MaterialCommunityIcons name="cog-outline" size={20} color="white" />
+                                <MaterialCommunityIcons name="account-hard-hat" size={20} color="#750097" />
                                 <Text style={styles.buttonText}>Funcionários</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.avatarButton}>
@@ -372,14 +372,14 @@ const styles = StyleSheet.create({
         flexDirection: "row",
     },
     button_round: {
-        backgroundColor: "#813AB1",
+        backgroundColor: "#EDE7F6",
         width: 150,
         padding: 10,
         borderRadius: 20,
         flexDirection:"row"
     },
     button_capsule: {
-        backgroundColor: "#813AB1",
+        backgroundColor: "#EDE7F6",
         width: 200,
         padding: 10,
         borderRadius: 20,
@@ -429,7 +429,7 @@ const styles = StyleSheet.create({
 
     },
     buttonText: {
-        color: '#fff',
+        color: '#750097',
         fontSize: 13,
         fontWeight: 'bold',
     },
