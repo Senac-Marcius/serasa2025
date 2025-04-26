@@ -2,14 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Platform, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Calendar } from 'react-native-calendars';
-import MyView from '../src/components/MyView';
-import { Myinput, MyTextArea } from '../src/components/MyInputs';
-import MyButton from '../src/components/MyButtons';
-import MyText from '../src/components/MyText';
-import { MyItem } from '../src/components/MyItem';
+import MyView from '../../src/components/MyView';
+import { Myinput } from '../../src/components/MyInputs';
+import MyButton from '../../src/components/MyButtons';
+import MyText from '../../src/components/MyText';
+import { MyItem } from '../../src/components/MyItem';
 import { useRouter } from 'expo-router';
-import { supabase } from '../src/utils/supabase';
-import { iCalendar, SetCalendarbd, UpdateCalendarbd, DeleteCalendarbd } from '../src/controllers/calendar';
+import {
+  iCalendar,
+  toListCalendar,
+  getCalendars,
+  SetCalendarbd,
+  UpdateCalendarbd,
+  DeleteCalendarbd
+} from '../../src/controllers/calendar';
 
 export default function CalendarsScreen() {
   const [req, setReq] = useState<iCalendar>({
@@ -27,9 +33,12 @@ export default function CalendarsScreen() {
 
   useEffect(() => {
     (async () => {
-      const { data, error } = await supabase.from('calendar').select();
-      if (error) console.log('Erro ao carregar calendários:', error);
-      if (data) setCalendars(data as iCalendar[]);
+      const res = await getCalendars();
+      if (res.status) {
+        setCalendars(res.data as iCalendar[]);
+      } else {
+        console.log('Erro ao carregar calendários:', res.data);
+      }
     })();
   }, []);
 
@@ -40,14 +49,20 @@ export default function CalendarsScreen() {
     }
 
     if (req.id === -1) {
-      const result = await SetCalendarbd({ ...req });
+      const result = await SetCalendarbd({
+        studentname: req.studentname,
+        course: req.course,
+        registrationdate: req.registrationdate,
+        period: req.period,
+        created_at: req.created_at,
+      });
       if (result && result[0]) {
         setCalendars([...calendars, result[0]]);
       }
     } else {
       const result = await UpdateCalendarbd(req);
-      if (result) {
-        setCalendars(calendars.map((c) => (c.id === req.id ? req : c)));
+      if (result && result[0]) {
+        setCalendars(calendars.map((c) => (c.id === req.id ? result[0] : c)));
       }
     }
 

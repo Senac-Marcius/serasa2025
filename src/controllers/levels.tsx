@@ -63,7 +63,7 @@ export async function updateLevels(levels: iLevels) {
 }
  
         // DELETAR REGISTRO
-export async function deleteLevels(id: number) {
+export async function deleteLevel(id: number) {
         const { error } = await supabase.from('levels').delete().eq('id', id);
         return error;
 }
