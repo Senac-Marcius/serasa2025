@@ -79,7 +79,14 @@ export default function RecordScreen(user_id:Number) {
  
    async function handleRegister() {
         if (req.id == -1) {
+
+            if(req.user_id == -1){
+                //CHAMAR O TOAST
+                return
+            }
+
             const newId = records.length ? records[records.length - 1].id + 1 : 0;
+
             const newRecord = { ...req, id: newId };
             setRecords([...records,newRecord]);
             const resp = await setRecord(newRecord)
