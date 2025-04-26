@@ -10,8 +10,7 @@ import {setIten,dell, edit, iIten, getItens} from '../../src/controllers/items'
 import { MyModal_mobilefullscreen } from '../../src/components/MyModal';
 
 
-
-export function itemScreen(){
+export default  function itemScreen(product_id:Number){
      const[req,setReq] = useState({ 
         id: -1,
         mark:'',
