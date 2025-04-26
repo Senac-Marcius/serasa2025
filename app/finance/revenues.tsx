@@ -12,6 +12,7 @@ import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '..
 
 import MySelect from '../../src/components/MySelect';
 import MySearch from '../../src/components/MySearch';
+import { getUsers, toListUser } from '../../src/controllers/users';
 
 export default function RevenueScreen() {
   
@@ -23,7 +24,7 @@ export default function RevenueScreen() {
     name: '',
     url: '',
     created_at: new Date().toISOString(),
-    user_id: 1,
+    user_id: -1,
     value: '',
     scholarship_status: '',
     discount_percentage: '',
@@ -32,6 +33,7 @@ export default function RevenueScreen() {
     
 
   });
+
 const [searchTerm, setSearchTerm] = useState('');
 const [visible, setVisible] = useState(false);
 const [revenues, setRevenues] = useState<iRevenue[]>([]);
@@ -48,20 +50,22 @@ useEffect(()=>{
 },[])
  
 
-  
-  
 
   // Função para cadastrar ou editar uma receita
   async function handleRegister() {
-
     if (req.id == -1) {
       // Cadastra uma nova receita
-      const newId = revenues.length ? revenues[revenues.length - 1].id + 1 : 0;
-      const newRevenue = { ...req, id: newId };
+      const newId = revenues.length ? revenues[revenues.length - 1].id + 1 : 1;
+      const newUserId = revenues.length ? Math.max(...revenues.map(r => r.user_id)) + 1 : 1;
+      
+      const newRevenue = { 
+        ...req, 
+        id: newId,
+        user_id: newUserId // Atribui o novo user_id único
+      };
+      
       setRevenues([...revenues, newRevenue]);
-      await setRevenue(newRevenue)
-      
-      
+      await setRevenue(newRevenue);
       
       } else {
         // Edita uma receita existente
