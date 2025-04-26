@@ -16,8 +16,6 @@ interface iUser {
         const resp: {key:number, option:string} [] = [];
         data.map((u) => {
             resp.push({key: u.id, option: u.name})
-           
-
         })
         return resp;
 
@@ -75,4 +73,4 @@ interface iUser {
 
 
 
- export {setUser, iUser, deleteUserById, updateUserById,getUsers}
+ export {setUser, iUser, deleteUserById, updateUserById,getUsers, toListUser}
