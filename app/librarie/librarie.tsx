@@ -2,19 +2,18 @@ import React, { useState, useEffect } from 'react'; //função useState só reto
 import { View, StyleSheet, ScrollView, FlatList } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
-import MyTheme from '../src/components/MyTheme';
-import MyText from '../src/components/MyText';
-import MyTabsbar from '../src/components/MyTabsBar';
-import MyButton from '../src/components/MyButtons';
-import MyView from '../src/components/MyView';
-import MySelect from '../src/components/MySelect';
-import { Myinput, MyTextArea } from '../src/components/MyInputs';
-import {textStyles} from '../styles/textStyles';
+import MyTheme from '../../src/components/MyTheme';
+import MyText from '../../src/components/MyText';
+import MyTabsbar from '../../src/components/MyTabsBar';
+import MyButton from '../../src/components/MyButtons';
+import MyView from '../../src/components/MyView';
+import MySelect from '../../src/components/MySelect';
+import { Myinput, MyTextArea, MyCheck } from '../../src/components/MyInputs';
+import {textStyles} from '../../styles/textStyles';
 import { Icon , MD3Colors} from "react-native-paper";
-import {tabsBarStyles} from '../styles/tabsBarStyles';
 import { useRouter } from 'expo-router';
-import {iItem, setItem, deleteItemById, updateItemById, getItems} from '../src/controllers/librarie';
-import { supabase } from '../src/utils/supabase'
+import {iItem, setItem, getItems} from '../../src/controllers/librarie';
+import { supabase } from '../../src/utils/supabase'
 
 export default function itemScreen() { // aqui é TS
 
@@ -49,6 +48,7 @@ export default function itemScreen() { // aqui é TS
         url: '',
         file: '',
         type_loan: '',
+        incorporated: '',
     });
 
     const[items, setItems] = useState<iItem[]>([])
@@ -117,6 +117,7 @@ export default function itemScreen() { // aqui é TS
             url: '',
             file: '',
             type_loan: '',
+            incorporated: '',
         });
         //setSelectedFile(null); // Limpa o selectedPdf após o registro
 
@@ -204,6 +205,7 @@ export default function itemScreen() { // aqui é TS
             url: '',
             file: '',
             type_loan: '',
+            incorporated:'',
         });
         router.push('/librarieHome');
     };
@@ -213,7 +215,7 @@ export default function itemScreen() { // aqui é TS
     const [language, setLanguage] = useState("Selecione o Idioma") 
     const [format, setFormat] = useState("Selecione o Formato") 
     const [status, setStatus] = useState("Selecione o Status")
-    const [type_loan, settype_loan] = useState("Selecione o Tipo de Empréstimo")  
+    const [type_loan, setType_loan] = useState("Selecione o Tipo de Empréstimo") 
 
     return ( //encapsulamento
         <MyView router={router} style={{ flex: 1 }}>
@@ -249,11 +251,11 @@ export default function itemScreen() { // aqui é TS
             </View>
             <MyTabsbar
                 items={tabs}
-                style={tabsBarStyles.tabsContainer}
-                itemStyle={tabsBarStyles.tabItem}
-                activeItemStyle={tabsBarStyles.activeTabItem}
-                textStyle={tabsBarStyles.tabText}
-                activeTextStyle={tabsBarStyles.activeTabText}
+                style={styles.tabsContainer}
+                itemStyle={styles.tabItem}
+                activeItemStyle={styles.activeTabItem}
+                textStyle={styles.tabText}
+                activeTextStyle={styles.activeTabText}
                 onPress={handleTabPress}
                 initialActiveIndex={0}
             />
@@ -452,7 +454,7 @@ export default function itemScreen() { // aqui é TS
                                     }
                                 />
                                 <MySelect
-                                    label={type_loan} setLabel={settype_loan} 
+                                    label={type_loan} setLabel={setType_loan} 
                                     list={            
                                         [ 
                                             {key:1, option: 'Domiciliar'},            
@@ -474,6 +476,12 @@ export default function itemScreen() { // aqui é TS
                                     icon=""
                                     style={styles.button_capsule2}
                                 />
+                                {/*< MyCheck
+                                    label={incorporated ? "Sim" : "Não"} 
+                                    checked={incorporated}
+                                    onToggle= {() => {
+                                    }}
+                                />*/}
                             </>
                         )}
                         <MyButton
@@ -583,6 +591,45 @@ const styles = StyleSheet.create({
         marginVertical: 30,
         marginHorizontal: 20,
     },
+    tabsContainer: {
+        flex: 1,
+        padding: 20,
+        marginRight: 50,
+        marginLeft: 50,
+        marginVertical: 0,
+        marginHorizontal: 20,
+        borderRadius: 10,
+        minHeight: 90,
+      },
+      tabItem: { // Estilo para cada aba
+          paddingHorizontal: 10,
+          paddingVertical: 20,
+          marginRight: 15,
+          marginHorizontal: 40,
+          height: 50,
+          width: 250,
+          borderRadius: 50,
+          backgroundColor: '#F2F2F2',
+          borderWidth: 2,
+          borderColor: '#0F2259',
+          justifyContent: 'center',
+          alignItems: 'center',
+      },
+      activeTabItem: { // Estilo quando a aba está ativa
+          backgroundColor: '#AD6CD9',
+          borderBottomWidth: 5,
+          borderBottomColor: '#0F2259',
+      },
+      tabText: { // Estilo do texto normal
+          color: 'black',
+          fontSize: 16,
+          fontFamily: 'Poppins_400Regular',
+          justifyContent: 'center',
+      },
+      activeTabText: { // Estilo do texto quando a aba está ativa
+          fontWeight: 'bold',
+          color: 'white',
+      },
     card: {
         backgroundColor: '#F2F2F2',
         padding: 20,
