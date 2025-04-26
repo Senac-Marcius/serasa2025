@@ -3,11 +3,12 @@ import { View, Text, StyleSheet, FlatList, Button, TextInput, Alert } from 'reac
 import MyList from '../../src/components/MyList';
 import { MyItem } from '../../src/components/MyItem';
 import MyView from '../../src/components/MyView';
+import Mytext from '../../src/components/MyText';
 import { useRouter } from 'expo-router';
-import {  iCategories, setCategory, updateCategory, deleteCategory, getCategories } from '../../src/controllers/category';
-
-import MyButton from '../../src/components/MyButtons';
+import {iCategories, setCategory, updateCategory, deleteCategory, getCategories } from '../../src/controllers/category';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';import MyButton from '../../src/components/MyButtons';
 import {Myinput} from '../../src/components/MyInputs';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 export default function CategoryScreen() {
     const [req, setReq] = useState<iCategories>({
@@ -78,18 +79,35 @@ getTodos();
 
     return (
         <MyView >
+            <Mytext style={styles.h1}>Cadastro de Categorias</Mytext>
             <View style={styles.row}>
                 <View style={styles.form}>
+
+                    <FontAwesome5
+                        name="user-edit" //adicionei os icones de acordo com o MySelect e estão estruturados de acordo com cada input. Essa estrutura pertence ao input da descrição
+                        size={15} 
+                        color="#6A1B9A" 
+                        style={{  marginLeft: 0.1,  // Indentação adicional da borda esquerda
+                        marginRight: 5}}/>
+                    
                     <Myinput
-                        placeholder="Nome"
+                        placeholder="Digite o nome da categoria"
                         value={req.name}
                         onChangeText={(text) => setReq({ ...req, name: text })}
                         style={styles.input}
                         iconName=''
-                        label= 'Digite o nome da categoria'
+                        label= 'Nome'
                     />
+
+                    <MaterialIcons
+                        name="description" //adicionei os icones de acordo com o MySelect e estão estruturados de acordo com cada input. Essa estrutura pertence ao input da descrição
+                        size={15} 
+                        color="#6A1B9A" 
+                        style={{  marginLeft: 0.1,  // Indentação adicional da borda esquerda
+                        marginRight: 5}}/>
+                   
                     <Myinput
-                        placeholder="Descrição"
+                        placeholder=" Digite o nome da Descrição"
                         value={req.description}
                         onChangeText={(text) => setReq({ ...req, description: text })}
                         style={styles.input}
@@ -122,6 +140,15 @@ getTodos();
 
 // Estilos
 const styles = StyleSheet.create({
+    h1:{
+        fontSize: 24,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: "black",
+        backgroundColor: "white",
+        padding: 10,
+        borderRadius: 5,
+    },
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
