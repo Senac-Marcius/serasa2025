@@ -111,6 +111,11 @@ export default function CollectionPreviewScreen() {
                                 <Ionicons name="menu" size={20} color="#4A148C" />
                             </TouchableOpacity>
                         </View>
+                        <View>
+                            <Text style={styles.textTitle}>
+                                Biblioteca
+                            </Text>
+                        </View>
                         <View style={styles.rightIcons}>
                                 <TouchableOpacity style={styles.button_capsule} onPress={()=>router.push({ pathname:''})}>
                                 <MaterialCommunityIcons name="book-open-variant" size={20} color="#750097" />
@@ -298,7 +303,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         padding: 30,
         backgroundColor: "#750097",
-        borderRadius: 20,
+        borderRadius: 10,
 
     },
     ViewSelect: {
@@ -316,7 +321,6 @@ const styles = StyleSheet.create({
         display: "flex",
         justifyContent: 'center',
         alignItems: "center",
-        borderRadius: 60,
         color: "purple"
 
     },
@@ -326,11 +330,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width: "100%",
         height: 350,
-        marginTop: 30,
+        marginTop: 15,
         paddingBottom: 90,
         gap: 40,
         backgroundColor: "#750097",
-        borderRadius: 20,
+        borderRadius: 10,
         flexDirection: "column",
     },
     itemTextFilter: {
@@ -341,6 +345,8 @@ const styles = StyleSheet.create({
     },
 
     textTitle: {
+        fontFamily: 'Poppins, sans-serif',
+        fontWeight:600,
         color: '#750097',
         fontSize: 30,
         marginBottom: 5,

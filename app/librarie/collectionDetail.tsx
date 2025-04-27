@@ -5,7 +5,8 @@ import { MyModal } from '../../src/components/MyModal';
 import MyView from '../../src/components/MyView';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, FlatList, Image, ScrollView, } from 'react-native';
 import { getItems, iItem, setItem } from '../../src/controllers/librarie';
-import { Ionicons,MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import TabelaUsuarios from './loantable'
 import MyMenu from '../../src/components/MyMenu';
 import { setCollection, iCollection, deleteCollectionById, updateCollectionById, getCollections } from '../../src/controllers/collections';
 
@@ -77,15 +78,19 @@ export default function CollectionDetail() {
                 <Text style={styles.itemText}>Edição: {item.edition}</Text>
               </View>
               <View style={styles.containerModal}>
-              <MyModal
-                visible={visible}
-                setVisible={setVisible}
-                style={styles.button_capsule}
-                title="Empréstimo"
-                closeButtonTitle="Fechar"
-              >
-                fdfgdfgdfgdf
-              </MyModal>
+                <MyModal
+                  visible={visible}
+                  setVisible={setVisible}
+                  style={styles.modal}
+                  title="Empréstimo"
+                  closeButtonTitle="Fechar"
+                >
+                  <TabelaUsuarios
+                 data={[]} 
+                 onEdit={(id) => console.log("Editar", id)}
+                 onDelete={(id) => console.log("Deletar", id)}
+                  />
+                </MyModal>
               </View>
             </View>
           ) : (
@@ -138,8 +143,8 @@ const styles = StyleSheet.create({
     gap: 40,
 
   },
-  containerText:{
-    maxWidth:"60%"
+  containerText: {
+    maxWidth: "60%"
   },
   itemText: {
     color: 'black',
@@ -164,9 +169,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
   },
-  containerModal:{
-justifyContent: 'center',
+  containerModal: {
+    justifyContent: 'center',
     alignItems: 'center',
+
+  },
+  modal:{
+    width:700,
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -251,6 +260,6 @@ justifyContent: 'center',
     width: 100,
     padding: 10,
     borderRadius: 20,
-},
+  },
 
 })
