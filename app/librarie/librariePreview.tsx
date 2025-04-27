@@ -31,19 +31,36 @@ export default function CollectionViewScreen() {
   const [selectedResponsible, setSelectedResponsible] = useState<string[]>([]);
   const [selectedSubject, setSelectedSubject] = useState<string[]>([]);
   const [visible, setVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null); 
+  const [selectedItem, setSelectedItem] = useState<ItemType | null>(null); 
 
   interface ItemType { //Atributos que vão aparecer no card dos itens
-    id: number;
-    image: string;
-    title: string;
-    subtitle: string;
-    typology: string;
-    year: number;
-    language: string;
-    responsible: string;
-    subject: string;
-    cdd: string;
+    typology: string,
+    title: string,
+    subtitle: string,
+    responsible: string,
+    translation: string,
+    language: string,
+    image: string,
+    year: number,
+    edition: string,
+    publisher: string,
+    location: string,
+    number_pages: number,
+    serie: string,
+    volume: number,
+    format: string,
+    isbn: string,
+    issn: string,
+    cdd: string,
+    call_number: string,
+    subject: string,
+    keywords: string,
+    summary: string,
+    notes: string,
+    number_copies: number,
+    status: string,
+    file: string,
+    type_loan: string,
   }
   // Puxa os itens do BD
   useEffect(() => {
@@ -159,12 +176,12 @@ export default function CollectionViewScreen() {
     // outros itens
   ];
 
-  const handleItemPress = (item) => {
+  const handleItemPress = (item : ItemType) => {
     setSelectedItem(item); // Armazena o item selecionado
     setVisible(true); // Abre o modal
   };
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item }: { item: ItemType }) => (
     <View style={styles.card}>
       <View>
         <Image source={{ uri: item.image }} style={styles.image} />
@@ -328,54 +345,55 @@ export default function CollectionViewScreen() {
               contentContainerStyle={styles.grid}
               numColumns={3}
               renderItem={ renderItem }
-            />  
-                  
-            <MyModal
-              visible={visible}
-              setVisible={setVisible}
-              style={styles.Modal}
-              title="Ver mais"
-              closeButtonTitle="Fechar"
-            >
-              <View style={styles.modalBackground}>
-                <View style={styles.modalContainer}>
-                  {/* Dentro do modal, mostra os dados do item selecionado */}
-                  {selectedItem && (
-                    <>
-                      <Image source={{ uri: selectedItem.image }} style={styles.image} />
-                      <Text style={styles.title}>Título: {selectedItem.title}</Text>
-                      <Text style={styles.subtitle}>Subtítulo: {selectedItem.subtitle}</Text>
-                      <Text style={styles.detail}>Autor: {selectedItem.responsible}</Text>
-                      <Text style={styles.detail}>Tradutor: {selectedItem.translation}</Text>
-                      <Text style={styles.detail}>Idioma: {selectedItem.language}</Text>
-                      <Text style={styles.detail}>Ano: {selectedItem.year}</Text>
-                      <Text style={styles.detail}>Edição: {selectedItem.edition}</Text>
-                      <Text style={styles.detail}>Editora: {selectedItem.publisher}</Text>
-                      <Text style={styles.detail}>Local: {selectedItem.location}</Text>
-                      <Text style={styles.detail}>Nº de Páginas: {selectedItem.number_pages}</Text>
-                      <Text style={styles.detail}>Série: {selectedItem.serie}</Text>
-                      <Text style={styles.detail}>Volume: {selectedItem.volume}</Text>
-                      <Text style={styles.detail}>Formato: {selectedItem.format}</Text>
-                      <Text style={styles.detail}>ISBN: {selectedItem.isbn}</Text>
-                      <Text style={styles.detail}>ISSN: {selectedItem.issn}</Text>
-                      <Text style={styles.detail}>CDD: {selectedItem.cdd}</Text>
-                      <Text style={styles.detail}>Nº de Chamada: {selectedItem.call_number}</Text>
-                      <Text style={styles.detail}>Assuntos: {selectedItem.subject}</Text>
-                      <Text style={styles.detail}>Palavras-Chave: {selectedItem.keywords}</Text>
-                      <Text style={styles.detail}>Resumo: {selectedItem.keywords}</Text>
-                      <Text style={styles.detail}>Notas: {selectedItem.notes}</Text>
-                      <Text style={styles.detail}>Nº de Exemplares: {selectedItem.number_copies}</Text>
-                      <Text style={styles.detail}>Status: {selectedItem.status}</Text>
-                      <Text style={styles.detail}>Arquivo: {selectedItem.file}</Text>
-                      <Text style={styles.detail}>Tipo de Empréstimo: {selectedItem.type_loan}</Text> 
+            />       
+              <MyModal
+                visible={visible}
+                setVisible={setVisible}
+                style={styles.Modal}
+                title="Ver mais" //style={styles.buttonLink}
+                closeButtonTitle="Fechar" //style={styles.buttonModal}
+              >
+                <ScrollView>
+                  <View style={styles.modalContainer}>
+                    <View style={styles.modalList}>
+                      {/* Dentro do modal, mostra os dados do item selecionado */}
+                      {selectedItem && (
+                        <>
+                          <Image source={{ uri: selectedItem.image }} style={styles.image} />
+                          <Text style={styles.title}>Título: {selectedItem.title}</Text>
+                          <Text style={styles.subtitle}>Subtítulo: {selectedItem.subtitle}</Text>
+                          <Text style={styles.detail}>Autor: {selectedItem.responsible}</Text>
+                          <Text style={styles.detail}>Tradutor: {selectedItem.translation}</Text>
+                          <Text style={styles.detail}>Idioma: {selectedItem.language}</Text>
+                          <Text style={styles.detail}>Ano: {selectedItem.year}</Text>
+                          <Text style={styles.detail}>Edição: {selectedItem.edition}</Text>
+                          <Text style={styles.detail}>Editora: {selectedItem.publisher}</Text>
+                          <Text style={styles.detail}>Local: {selectedItem.location}</Text>
+                          <Text style={styles.detail}>Nº de Páginas: {selectedItem.number_pages}</Text>
+                          <Text style={styles.detail}>Série: {selectedItem.serie}</Text>
+                          <Text style={styles.detail}>Volume: {selectedItem.volume}</Text>
+                          <Text style={styles.detail}>Formato: {selectedItem.format}</Text>
+                          <Text style={styles.detail}>ISBN: {selectedItem.isbn}</Text>
+                          <Text style={styles.detail}>ISSN: {selectedItem.issn}</Text>
+                          <Text style={styles.detail}>CDD: {selectedItem.cdd}</Text>
+                          <Text style={styles.detail}>Nº de Chamada: {selectedItem.call_number}</Text>
+                          <Text style={styles.detail}>Assuntos: {selectedItem.subject}</Text>
+                          <Text style={styles.detail}>Palavras-Chave: {selectedItem.keywords}</Text>
+                          <Text style={styles.detail}>Resumo: {selectedItem.keywords}</Text>
+                          <Text style={styles.detail}>Notas: {selectedItem.notes}</Text>
+                          <Text style={styles.detail}>Nº de Exemplares: {selectedItem.number_copies}</Text>
+                          <Text style={styles.detail}>Status: {selectedItem.status}</Text>
+                          <Text style={styles.detail}>Arquivo: {selectedItem.file}</Text>
+                          <Text style={styles.detail}>Tipo de Empréstimo: {selectedItem.type_loan}</Text> 
+                        </>
+                      )}
                       <TouchableOpacity onPress={() => setVisible(false)} style={styles.closeButton}>
                         <Text style={styles.closeButtonText}>Fechar</Text>
                       </TouchableOpacity>
-                    </>
-                  )}
-                </View>
-              </View>  
-            </MyModal>
+                    </View>
+                  </View>  
+                </ScrollView>
+              </MyModal>
           </View> 
         </View>
       </View> 
@@ -533,9 +551,6 @@ const styles = StyleSheet.create({
     height: 45,
     borderRadius: 25, 
   },
-  
-
-
   contentContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -577,7 +592,6 @@ const styles = StyleSheet.create({
   },
   grid: {
     padding: 0,
-    
   },
   card: {
     flex: 1,
@@ -620,6 +634,34 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign:"right",
   },
+  Modal: {
+    display: 'flex',
+    width: 630,
+    height: 530,
+    backgroundColor: '#f2f2f2',
+    borderRadius: 20,
+    borderWidth: 4,
+    borderColor: 'purple',
+    alignItems: 'center',
+},
+buttonModal: {
+  backgroundColor: "transparent",
+  alignItems: 'flex-end',
+  justifyContent: 'flex-end',
+},
+modalContainer: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: 530,
+  height: 530,
+
+},  
+modalList: {
+  backgroundColor: '#f2f2f2',
+  width: '100%',
+  
+},
 
 
   
@@ -630,22 +672,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginRight: 10,
   },
-  
-  filterSubtitle: {
-    fontWeight: 'bold',
-    fontSize: 14,
-    marginTop: 10,
-    marginBottom: 5,
-  },
-  
-  
-  
-  filterOptionText: {
-    fontSize: 12,
-    color: '#333',
-  },
-  
-  
   filterBar: {
     paddingHorizontal: 10,
     paddingVertical: 6,
@@ -656,36 +682,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
   },
-  Modal: {
-    display: 'flex',
-    width: 327,
-    height: 327,
-    padding: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    borderWidth: 4,
-    borderColor: 'purple',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-},
-  buttonModal: {
-    backgroundColor: "transparent",
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
-  },
-  modalBackground: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContainer: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    width: '80%',
-    alignItems: 'center',
-  },
+  
+  
+  
   closeButton: {
     marginTop: 20,
     padding: 10,
