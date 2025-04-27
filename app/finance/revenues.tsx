@@ -34,20 +34,29 @@ export default function RevenueScreen() {
 
   });
 
-const [searchTerm, setSearchTerm] = useState('');
-const [visible, setVisible] = useState(false);
-const [revenues, setRevenues] = useState<iRevenue[]>([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [visible, setVisible] = useState(false);
+    const [revenues, setRevenues] = useState<iRevenue[]>([]);
+    const [users, setUsers] = useState<any[]>([]);
 
-useEffect(()=>{
-  async function getTodos(){
-    const retorno = await getRevenues({})
+useEffect(() => {
+          (async () => {
+            const retorno = await getRevenues({})
+            if(retorno.status && retorno.data && retorno.data?.length > 0){
+              setRevenues(retorno.data);
+            }
+          })();
 
-    if(retorno.status && retorno.data && retorno.data?.length > 0){
-      setRevenues(retorno.data);
-    }
-  }
-  getTodos();
-},[])
+          (async () => {
+            const retorno = await  getUsers ({})
+            if (retorno.status && retorno.data && retorno.data.length > 0){
+                setUsers(toListUser(retorno.data));
+            }  
+        })();
+
+})
+
+
  
 
 
@@ -90,7 +99,7 @@ useEffect(()=>{
       name: '',
       url: '',
       created_at: new Date().toISOString(),
-      user_id: 1,
+      user_id: -1,
       value: '',
       scholarship_status: '',
       discount_percentage: '',
@@ -123,7 +132,7 @@ useEffect(()=>{
       
     }
 }
-// logica do compo
+// logica do campo de pesquisa
 const getFilteredRevenues = () => {
   if (!searchTerm) return revenues; // Retorna tudo se não houver busca
   
@@ -169,17 +178,35 @@ const getFilteredRevenues = () => {
     setVisible={setVisible}>
   
         <View style={styles.form}>
-            {/* Campo de Nome */}
-            <Myinput
-              value={req.name}
-              onChangeText={(text) => setReq({ ...req, name: text })}
-              iconName='badge'
-              placeholder='Digite o nome'
-              label='Nome'
-            />
+            
+        <MySelect
+  label={users.find(l => l.key == req.user_id)?.option || 'Selecione um usuário'}
+  setLabel={() => {}}
+  setKey={(key) => {
+    const selectedUser = users.find(user => user.key === key);
+    setReq({
+      ...req,
+      user_id: key,
+      name: selectedUser?.option || '' // Usamos 'option' que contém o nome exibido
+    });
+  }}
+  list={users}
+  caption="Usuários"
+/>
+
+<Myinput
+  value={req.name}
+  onChangeText={(text) => setReq({ ...req, name: text })}
+  iconName='badge'
+  placeholder='Nome será preenchido automaticamente'
+  label='Nome'
+  
+/>
+            
+
 
             <MySelect 
-              label={req.tipo_mensalidade } 
+              label={req.tipo_mensalidade  || 'Selecione um tipo de mensalidade'} 
               caption= "Tipo da mensalidade"
               setLabel={(text) => setReq({...req, tipo_mensalidade: text})}
               list={[
@@ -192,7 +219,7 @@ const getFilteredRevenues = () => {
             />
             {/* Campo de Status da Bolsa */}
             <MySelect 
-              label={ req.scholarship_status } 
+              label={ req.scholarship_status || 'Selecione um Status da Bolsa'} 
               caption= "Status da Bolsa"
               setLabel={(text) => setReq({ ...req, scholarship_status: text })}
               list={[
