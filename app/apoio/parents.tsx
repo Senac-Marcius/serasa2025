@@ -48,7 +48,7 @@ export default function ParentScreen (){
         getTodos();
 
     })
-    //HandleRegister pode falhar se a idade conter mais de dois digitos, SupaBase age esta com o tipo INT2(aceita somente 2 digitos)
+    //HandleRegister pode falhar se a idade conter mais de dois digitos, SupaBase age esta com o tipo INT2
     async function handleRegister() {
 
         if (req.id === -1) {
@@ -75,8 +75,8 @@ export default function ParentScreen (){
             name: '',
             rg:'',
             cpf:'',
-            age:'',//aceita somente dois digitos
-            phone:'',//aceita somente numeros
+            age:'',
+            phone:'',
             email:'',
             kinship:'',
             createat: new Date().toISOString(),
@@ -127,7 +127,7 @@ export default function ParentScreen (){
 
       <View style={styles.actions}>
         <MyButton title='Cadastrar' onPress={handleRegister} button_type='round' style={styles.button_round} />
-        <MyUpload setUrl={setDocument} url={urlDocument} />
+        <MyUpload />
       </View>
     </View>
 
@@ -167,10 +167,10 @@ export default function ParentScreen (){
 // smepre que for criado um objeto deve-se adicionar o mesmo no Import
 const styles = StyleSheet.create({
     container: {
-      padding: 24,
+      padding: 10,
       backgroundColor: '#fff',
       flex: 1,
-      gap: 24,
+      gap: 20,
     },
     sectionTitle: {
       fontSize: 20,
@@ -179,13 +179,13 @@ const styles = StyleSheet.create({
       color: '#111',
     },
     formSection: {
-      backgroundColor: '#f5f5f5',
+      backgroundColor: '#D4D4D4',
       borderRadius: 16,
       padding: 20,
       shadowColor: '#000',
       shadowOpacity: 0.05,
       shadowRadius: 10,
-      elevation: 3,
+      elevation: 8,
     },
     inputGroup: {
       gap: 12,
@@ -198,8 +198,8 @@ const styles = StyleSheet.create({
     },
     listSection: {
       flex: 1,
-      padding: 16,
-      backgroundColor: '#fafafa',
+      padding: 13,
+      backgroundColor: '#D4D4D4',
       borderRadius: 16,
     },
     parentsItem: {
