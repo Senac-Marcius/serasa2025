@@ -30,7 +30,7 @@ interface iItem {
     url: string,
     file: string,
     type_loan: string,
-    incorporated: string,
+    incorporated: boolean,
     created_at: string,
     id: number,
 }
@@ -64,7 +64,10 @@ async function setItem(item:iItem){
     
     if(error){
         console.error('Erro',error);
+        return null;
     }
+
+    console.log('Item inserido com sucesso:', data);
 
     return data
 }
@@ -76,7 +79,7 @@ async function deleteItemById(id: number) {
         .eq('id', id)
 
     if (error) {
-        console.error("Erro ao deletar usuário:")
+        console.error("Erro ao deletar item:")
         return false
     }
 
@@ -90,7 +93,7 @@ async function updateItemById(id: number, updatedItem: Partial<iItem>) {
         .eq('id', id);
 
     if (error) {
-        console.error("Erro ao atualizar usuário:", error.message);
+        console.error("Erro ao atualizar item:", error.message);
         return false;
     }
     return true;
