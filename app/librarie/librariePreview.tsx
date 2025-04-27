@@ -184,13 +184,16 @@ export default function CollectionViewScreen() {
         />
         </View>
         {/* Barra de busca */}
-        <MySearch
-          //placeholder="Digite sua busca aqui..."
-          style = {styles.searchContainer}
-          busca={search}
-          onChangeText={setSearch}
-          onPress={searchItems}
-        />
+        <View style={styles.searchView}>
+          <MySearch
+            style = {styles.searchContainer}
+            styleInput={styles.search}
+            busca={search}
+            placeholder="Digite aqui a sua busca..."
+            onChangeText={setSearch}
+            onPress={searchItems}
+          />
+        </View>
         {/* Filtros + Lista lado a lado */}
         <View style={styles.contentContainer}>
           {showFilters && (
@@ -394,14 +397,28 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       color: '#5A2D82',
   },
+  searchView: {
+  display: 'flex', 
+  justifyContent: 'center', 
+  alignItems: 'center',
+  marginTop: 20,
+  },
   searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 8,
+    width:'95%',
     paddingHorizontal: 10,
-    margin: 10,
-    padding: 8,
-    width:'100%',
+    marginTop: 10,
+    backgroundColor:'transparent',
+  },
+  search: {
+    paddingHorizontal: 10,
+    borderColor:"#0C1D40",
+    borderWidth: 2,
+    width: '100%',
+    height: 500,
+    paddingLeft: 40, // para dar espaço pro ícone
+    paddingRight: 10,
+    fontSize: 18,
+    borderRadius: 25,
   },
   contentContainer: {
     flex: 1,

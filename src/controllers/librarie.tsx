@@ -38,7 +38,7 @@ interface iItem {
 function toListItems(data:iItem[]){
     const resp = [];
     data.map((c)=>{
-        resp.push({key:c.id, option: '$(c.typology) - $(c.title) -  $(c.subtitle) - $(c.responsible) -  $(c.translation) - $(c.language) - $(c.image) -  $(c.year) - $(c.edition) -  $(c.publisher) - $(c.location) -  $(c.number_pages) - $(c.serie) -  $(c.volume) - $(c.format) -  $(c.issn) - $(c.isbn) -  $(c.subject) - $(c.keywords) -  $(c.summary) - $(c.notes) -  $(c.number_copies) - $(c.status) -  $(c.url) - $(c. file) -  $(c.type_loan)' })
+        resp.push({key:c.id, option: '$(c.typology) - $(c.title) -  $(c.subtitle) - $(c.responsible) -  $(c.translation) - $(c.language) - $(c.image) -  $(c.year) - $(c.edition) -  $(c.publisher) - $(c.location) -  $(c.number_pages) - $(c.serie) -  $(c.volume) - $(c.format) -  $(c.issn) - $(c.isbn) -  $(c.subject) - $(c.keywords) -  $(c.summary) - $(c.notes) -  $(c.number_copies) - $(c.status) -  $(c.url) - $(c. file) -  $(c.type_loan) -  $(c.incorporated:)' })
 
     })
 }

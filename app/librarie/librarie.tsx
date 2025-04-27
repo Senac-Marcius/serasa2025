@@ -121,7 +121,7 @@ export default function itemScreen() { // aqui é TS
         });
         //setSelectedFile(null); // Limpa o selectedPdf após o registro
 
-        router.push('/librarieRegisterList');
+        router.push('librarie/librariePreview');
     };
 
     // Estados para as abas
@@ -207,7 +207,7 @@ export default function itemScreen() { // aqui é TS
             type_loan: '',
             incorporated:'',
         });
-        router.push('/librarieHome');
+        router.push('librarie/librariePreview');
     };
 
     //Selects/Pickers
@@ -447,9 +447,7 @@ export default function itemScreen() { // aqui é TS
                                     list={            
                                         [ 
                                             {key:1, option: 'Disponível'},            
-                                            {key:2, option: 'Emprestado'},
-                                            {key:3, option: "Reservado" },
-                                            {key:4, option: "Perdido"},
+                                            {key:2, option: 'Indisponível'},
                                         ]
                                     }
                                 />
@@ -485,9 +483,9 @@ export default function itemScreen() { // aqui é TS
                             </>
                         )}
                         <MyButton
-                            title="INCORPORAR ITEM NO ACERVO"
+                            title="CADASTRAR"
                             onPress={ handleRegister }
-                            button_type="round"
+                            button_type="capsule"
                             icon=""
                             style={styles.buttonRegister}
                         />    
