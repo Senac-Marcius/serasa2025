@@ -45,7 +45,7 @@ const MyModal: React.FC<MyModalprops> = ({ children, style, visible, setVisible,
 
             {visible && (<Modal transparent={true} visible={visible} animationType="fade"   >
                 <View style={styles.background} >
-                    <View style={styles.MyModal}  >
+                    <View style={[styles.MyModal, style]}  >
                         {children}
                         <MyButton onPress={onClose}
                              title ={closeButtonTitle || "voltar"}
@@ -59,7 +59,6 @@ const MyModal: React.FC<MyModalprops> = ({ children, style, visible, setVisible,
     );
 
 }
-
 
 
 const styles = StyleSheet.create({

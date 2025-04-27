@@ -26,6 +26,11 @@ export default function pageEmployee() {
                 <Ionicons name="menu" size={20} color="#4A148C" />
               </TouchableOpacity>
             </View>
+            <View>
+              <Text style={styles.textTitle}>
+                Funcionários - Últimos itens cadastrados / Últimos empréstimos
+              </Text>
+            </View>
             <View style={styles.rightIcons}>
               <TouchableOpacity style={styles.button_capsule} onPress={() => router.push({ pathname: '../app/perfil' })}>
                 <MaterialCommunityIcons name="account" size={20} color="#750097" />
@@ -42,27 +47,27 @@ export default function pageEmployee() {
             </View>
           </View>
         </View>
-        <View style= {styles.ViewIcons}>
-        <View style= {styles.ViewIcon}>
-          <View style={styles.ViewLibrariePreview}>
-            <TouchableOpacity>
-              <MaterialCommunityIcons name="book-plus-multiple-outline" size={150} color="#750097" />
-              <Text style={styles.Text}>
-                Últimos itens cadastrados
-              </Text>
-            </TouchableOpacity>
+        <View style={styles.ViewIcons}>
+          <View style={styles.ViewIcon}>
+            <View style={styles.ViewLibrariePreview}>
+              <TouchableOpacity onPress={() => router.push({ pathname: 'librarie/librariePreview' })}>
+                <MaterialCommunityIcons name="book-plus-multiple-outline" size={150} color="#750097" />
+                <Text style={styles.Text}>
+                  Últimos itens cadastrados
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-        <View style= {styles.ViewIcon}>
-          <View style={styles.ViewLibrariePreview}>
-            <TouchableOpacity>
-              <MaterialCommunityIcons name="book-plus-multiple-outline" size={150} color="#750097" />
-              <Text style={styles.Text}>
-                Últimos empréstimos
-              </Text>
-            </TouchableOpacity>
+          <View style={styles.ViewIcon}>
+            <View style={styles.ViewLibrariePreview}>
+              <TouchableOpacity onPress={() => router.push({ pathname: 'librarie/loantable' })}>
+                <MaterialCommunityIcons name="book-open-page-variant-outline" size={150} color="#750097" />
+                <Text style={styles.Text}>
+                  Últimos empréstimos
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
         </View>
       </ScrollView>
     </View>
@@ -168,25 +173,35 @@ const styles = StyleSheet.create({
     backgroundColor: '#ecdef0',
     width: 450,
     height: 400,
+    borderRadius:20,
 
   },
-  ViewIcon:{
+  ViewIcon: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    marginTop:30,
+    marginTop: 30,
   },
-  ViewIcons:{
+  ViewIcons: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    marginTop:50,
-    flexDirection:"row",
-    gap:40
+    marginTop: 50,
+    flexDirection: "row",
+    gap: 40
   },
   Text: {
     color: '#750097',
     fontSize: 18,
     fontWeight: 'bold',
-  }
+  },
+  textTitle: {
+    fontFamily: 'Poppins, sans-serif',
+    fontWeight:400,
+    color: '#750097',
+    fontSize: 30,
+    marginBottom: 5,
+    justifyContent: "center",
+
+},
 })
