@@ -9,6 +9,7 @@ import { useRouter } from 'expo-router';
 
 export default function CoursesScreen() {
   const [req, setReq] = useState({
+    name:'',
     description: '',
     Courseplan: '',
     Orientationplan: '',
@@ -29,6 +30,7 @@ export default function CoursesScreen() {
     }
 
     setReq({
+      name:'',
       description: '',
       Courseplan: '',
       Orientationplan: '',
@@ -56,6 +58,14 @@ export default function CoursesScreen() {
       </View>
 
       <View style={styles.formContainer}>
+      <Myinput
+          iconName="name"
+          label="Name"
+          value={req.description}
+          onChangeText={(text) => setReq({ ...req, name: text })}
+          placeholder="Digite a descrição do curso..."
+        />
+
         <MyTextArea
           iconName="description"
           label="Descrição"

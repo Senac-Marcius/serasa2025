@@ -1,6 +1,5 @@
 import React ,{ useEffect, useState }from 'react';
-import { Text, View, StyleSheet, FlatList, TextInput, Button, TouchableOpacity} from 'react-native';
-import MyLink from '../../src/components/MyLink';
+import { Text, View, StyleSheet} from 'react-native';
 import {MyItem} from '../../src/components/MyItem';
 import MyList from '../../src/components/MyList';
 import { Myinput } from '../../src/components/MyInputs';
@@ -8,10 +7,10 @@ import MyButton from '../../src/components/MyButtons';
 import MyView from '../../src/components/MyView';
 import { useRouter } from 'expo-router';
 import {setIten,dell, edit, iIten, getItens} from '../../src/controllers/items'
-import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
+import { MyModal_mobilefullscreen } from '../../src/components/MyModal';
 
 
-export default  function itemScreen(){
+export default  function itemScreen(product_id:Number){
      const[req,setReq] = useState({ 
         id: -1,
         mark:'',
@@ -24,6 +23,9 @@ export default  function itemScreen(){
         created_at: new Date().toISOString ()        
      });
      const[itens, setItens] = useState<iIten[]>([]);
+
+     const [visible, setVisible] = useState(false);
+     
 
      useEffect(() => {
         //aqui estamos carregando os lançamentos
@@ -38,6 +40,7 @@ export default  function itemScreen(){
     
     },[])
 
+  
 
     async function handleRegister(){
        if(req.id == -1){
@@ -62,6 +65,8 @@ export default  function itemScreen(){
             description:'',
             created_at: new Date().toISOString ()        
         })
+
+        setVisible(false);
      }
 
      function editItem(id:number){
@@ -83,7 +88,8 @@ export default  function itemScreen(){
        
         <Text>Minha tela de itens</Text>
         
-        <View style={styles.row}>
+        <MyModal_mobilefullscreen visible={visible} setVisible={setVisible}>
+
             <View style={styles.form}>
             <Myinput 
                 placeholder="Descrição"
@@ -110,25 +116,21 @@ export default  function itemScreen(){
             
                 />
                 
-                
-
-
-                
-
+              
                 <Myinput 
                    placeholder= "N°"
                    value={ String(req.amount) }
                    onChangeText={(text)=>setReq({...req, amount: Number(text) })}
-                   label=" Quantidade de items"
+                   label=" Quantidade de itens"
                    iconName='Pin' 
                 />
-                
-
-                
+             
 
                 <MyButton title='Cadastrar' onPress={handleRegister}/>
             
             </View>
+
+            </MyModal_mobilefullscreen>
 
             <MyList
             data={itens}
@@ -149,7 +151,7 @@ export default  function itemScreen(){
             )}
             
             />
-        </View>
+        
     </MyView>
 
     );
@@ -223,8 +225,13 @@ const styles= StyleSheet.create({
     form: { 
         flex:1
 
-    }
+    },
+
+   
+
+     
 })
+
 
 
 

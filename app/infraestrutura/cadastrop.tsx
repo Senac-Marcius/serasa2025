@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+
 import {
   StyleSheet,
   Text,
@@ -14,14 +15,14 @@ interface Product {
   id: string;
   name: string;
   description?: string;
-  price: number | null;
+  amount: number | null;
 }
 
 const generateId = (): string => Math.random().toString(36).substring(2, 15);
 
 const currencyFormatter = (value: number | null): string => {
   if (value === null) return 'N/A';
-  return `R$ ${value.toFixed(2).replace('.', ',')}`;
+  return `${value.toFixed(2).replace('.', ',')}`;
 };
 
 const validateProduct = (name: string, price: string | null): { valid: boolean; message?: string } => {
@@ -39,26 +40,26 @@ const validateProduct = (name: string, price: string | null): { valid: boolean; 
 export default function ProductRegistration() {
   const [productName, setProductName] = useState('');
   const [productDescription, setProductDescription] = useState('');
-  const [productPrice, setProductPrice] = useState('');
+  const [productAmount, setProductAmount] = useState('');
   const [products, setProducts] = useState<Product[]>([]);
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
 
   const resetForm = useCallback(() => {
     setProductName('');
     setProductDescription('');
-    setProductPrice('');
+    setProductAmount('');
     setEditingProductId(null);
     Keyboard.dismiss();
   }, []);
 
   const handleAddOrEditProduct = useCallback(() => {
-    const validation = validateProduct(productName, productPrice);
+    const validation = validateProduct(productName, productAmount);
     if (!validation.valid) {
       Alert.alert('Erro', validation.message);
       return;
     }
 
-    const priceNumber = productPrice ? parseFloat(productPrice) : null;
+    const amountNumber = productAmount ? parseFloat(productAmount) : null;
 
     setProducts(prevProducts => {
       if (editingProductId) {
@@ -68,7 +69,7 @@ export default function ProductRegistration() {
                 ...product,
                 name: productName,
                 description: productDescription,
-                price: priceNumber,
+                amount: amountNumber,
               }
             : product
         );
@@ -77,14 +78,14 @@ export default function ProductRegistration() {
           id: generateId(),
           name: productName,
           description: productDescription,
-          price: priceNumber,
+          amount: amountNumber,
         };
         return [...prevProducts, newProduct];
       }
     });
 
     resetForm();
-  }, [productName, productDescription, productPrice, editingProductId, resetForm]);
+  }, [productName, productDescription, productAmount, editingProductId, resetForm]);
 
   const handleEditProduct = useCallback((id: string) => {
     const productToEdit = products.find(product => product.id === id);
@@ -92,7 +93,7 @@ export default function ProductRegistration() {
       setEditingProductId(id);
       setProductName(productToEdit.name);
       setProductDescription(productToEdit.description || '');
-      setProductPrice(productToEdit.price !== null ? productPrice.toString() : '');
+      setProductAmount(productToEdit.amount !== null ? productAmount.toString() : '');
     }
   }, [products]);
 
@@ -124,7 +125,7 @@ export default function ProductRegistration() {
           <Text style={styles.productDescription}>{item.description}</Text>
         )}
         <Text style={styles.productPrice}>
-          Preço: {currencyFormatter(item.price)}
+          Quantidade: {currencyFormatter(item.amount)}
         </Text>
       </View>
       <View style={styles.actions}>
@@ -166,10 +167,9 @@ export default function ProductRegistration() {
       />
       <TextInput
         style={styles.input}
-        placeholder="Preço (Opcional)"
-        value={productPrice}
-        onChangeText={setProductPrice}
-        keyboardType="decimal-pad"
+        placeholder="Quantidade"
+        value={productAmount}
+        onChangeText={setProductAmount}
         onSubmitEditing={handleAddOrEditProduct}
         returnKeyType="done"
       />

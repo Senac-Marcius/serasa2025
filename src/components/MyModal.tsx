@@ -1,11 +1,11 @@
 
 import React, { ReactNode, useState } from 'react';
-import { Modal, View, Text, TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, StyleSheet, ViewStyle,TextStyle } from 'react-native';
 import MyButton from './MyButtons';
 
 interface MyModalprops {
     children: ReactNode;
-    style?: ViewStyle;
+    style?: TextStyle | TextStyle[];
     visible: boolean;
     setVisible(visible: boolean): void
     title:string;
@@ -30,40 +30,9 @@ interface MyModalprops {
    </MyModal_mobile1> */
 
 
-//    ***Modelos dos modais:***
-
-//    ***MyModal_mobile1:***
-//    width: 327,
-//    height: 327,
-//    backgroundColor: 'white',
-//    borderColor: 'purple'
-
-//    ***MyModal_mobile2:***
-// width: 330,
-// height: 220,
-// backgroundColor: 'white',
-// borderColor: 'purple'
-
-//    ***MyModal_mobile3:***
-// width: 375,
-// height: 400,
-// backgroundColor: 'white',
-// borderColor: 'purple'
-
-//    ***MyModal_mobilefullscreen:***
-// width: 375,
-// height: '100%',
-// backgroundColor: 'white',
-// borderColor: 'purple',
-
-//    ***MyModal1_desktop:***
-// width: 900,
-// height: 500,
-// backgroundColor: 'white',
-// borderColor: 'purple',
 
 
-const MyModal_mobile1: React.FC<MyModalprops> = ({ children, style, visible, setVisible,title, closeButtonTitle }) => { //
+const MyModal: React.FC<MyModalprops> = ({ children, style, visible, setVisible,title, closeButtonTitle }) => { //
     function onClose() {
         setVisible(false)
     };
@@ -76,10 +45,10 @@ const MyModal_mobile1: React.FC<MyModalprops> = ({ children, style, visible, set
 
             {visible && (<Modal transparent={true} visible={visible} animationType="fade"   >
                 <View style={styles.background} >
-                    <View style={styles.modalContent1}  >
+                    <View style={styles.MyModal}  >
                         {children}
                         <MyButton onPress={onClose}
-                             title={closeButtonTitle || "voltar"}
+                             title ={closeButtonTitle || "voltar"}
                             style={styles.button_round}
                         />
 
@@ -90,101 +59,7 @@ const MyModal_mobile1: React.FC<MyModalprops> = ({ children, style, visible, set
     );
 
 }
-const MyModal_mobile2: React.FC<MyModalprops> = ({ children, style, visible, setVisible,title, closeButtonTitle }) => { //
-    function onClose() {
-        setVisible(false)
-    };
 
-    return (
-        <View >
-            <MyButton
-                onPress={() => { setVisible(true) }}
-                title= {title} />
-            {visible && (<Modal transparent={true} visible={visible} animationType="fade"   >
-                <View style={styles.background} >
-                    <View style={styles.modalContent2}  >
-                        {children}
-                        <MyButton onPress={onClose}
-                             title={closeButtonTitle || "voltar"}
-                        />
-                    </View>
-                </View>
-            </Modal>)}
-        </View>
-    );
-
-}
-const MyModal_mobile3: React.FC<MyModalprops> = ({ children, style, visible, setVisible,title, closeButtonTitle }) => { //
-    function onClose() {
-        setVisible(false)
-    };
-
-    return (
-        <View >
-            <MyButton
-                onPress={() => { setVisible(true) }}
-                title= {title}/>
-            {visible && (<Modal transparent={true} visible={visible} animationType="fade"   >
-                <View style={styles.background} >
-                    <View style={styles.modalContent3}  >
-                        {children}
-                        <MyButton onPress={onClose}
-                             title={closeButtonTitle || "voltar"}
-                        />
-                    </View>
-                </View>
-            </Modal>)}
-        </View>
-    );
-
-}
-const MyModal_mobilefullscreen: React.FC<MyModalprops> = ({ children, style, visible, setVisible,title, closeButtonTitle }) => { //
-    function onClose() {
-        setVisible(false)
-    };
-
-    return (
-        <View >
-            <MyButton
-                onPress={() => { setVisible(true) }}
-                title= {title}/>
-            {visible && (<Modal transparent={true} visible={visible} animationType="fade"   >
-                <View style={styles.background} >
-                    <View style={styles.modalContent4}  >
-                        {children}
-                        <MyButton onPress={onClose}
-                             title={closeButtonTitle || "voltar"}
-                        />
-                    </View>
-                </View>
-            </Modal>)}
-        </View>
-    );
-}
-const MyModal1_desktop: React.FC<MyModalprops> = ({ children, style, visible, setVisible,title, closeButtonTitle }) => { //
-    function onClose() {
-        setVisible(false)
-    };
-
-    return (
-        <View >
-            <MyButton
-                onPress={() => { setVisible(true) }}
-                title= {title} />
-            {visible && (<Modal transparent={true} visible={visible} animationType="fade"   >
-                <View style={styles.background} >
-                    <View style={styles.modalContent5}  >
-                        {children}
-                        <MyButton onPress={onClose}
-                             title={closeButtonTitle || "voltar"}
-                        />
-                    </View>
-                </View>
-            </Modal>)}
-        </View>
-    );
-
-}
 
 
 const styles = StyleSheet.create({
@@ -202,7 +77,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
-    modalContent1: {
+    MyModal: {
         display: 'flex',
         width: 327,
         height: 327,
@@ -214,58 +89,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-end',
     },
-    button: {
-    },
-    modalContent2: {
-        display: 'flex',
-        width: 330,
-        height: 220,
-        padding: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        borderWidth: 4,
-        borderColor: 'purple',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-
-
-    },
-    modalContent3: {
-        display: 'flex',
-        width: 375,
-        height: 400,
-        padding: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        borderWidth: 4,
-        borderColor: 'purple',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-    },
-    modalContent4: {
-        display: 'flex',
-        width: 375,
-        height: '100%',
-        padding: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        borderWidth: 4,
-        borderColor: 'purple',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-    },
-    modalContent5: {
-        display: 'flex',
-        width: 900,
-        height: 500,
-        padding: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        borderWidth: 4,
-        borderColor: 'purple',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-    },
+    
     background: {
         display: 'flex',
         justifyContent: 'center',
@@ -278,4 +102,4 @@ const styles = StyleSheet.create({
 
 
 
-export { MyModal_mobile1, MyModal_mobile2, MyModal_mobile3, MyModal_mobilefullscreen, MyModal1_desktop }
+export {MyModal}
