@@ -6,6 +6,7 @@ import MyView from '../../src/components/MyView';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, FlatList, Image, ScrollView, } from 'react-native';
 import { getItems, iItem, setItem } from '../../src/controllers/librarie';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import TabelaUsuarios from './loantable'
 import MyMenu from '../../src/components/MyMenu';
 import { setCollection, iCollection, deleteCollectionById, updateCollectionById, getCollections } from '../../src/controllers/collections';
 
@@ -80,11 +81,15 @@ export default function CollectionDetail() {
                 <MyModal
                   visible={visible}
                   setVisible={setVisible}
-                  style={styles.containerModal}
+                  style={styles.modal}
                   title="Empréstimo"
                   closeButtonTitle="Fechar"
                 >
-                  fdfgdfgdfgdf
+                  <TabelaUsuarios
+                 data={[]} 
+                 onEdit={(id) => console.log("Editar", id)}
+                 onDelete={(id) => console.log("Deletar", id)}
+                  />
                 </MyModal>
               </View>
             </View>
@@ -167,7 +172,10 @@ const styles = StyleSheet.create({
   containerModal: {
     justifyContent: 'center',
     alignItems: 'center',
-    width:700
+
+  },
+  modal:{
+    width:700,
   },
   buttonsContainer: {
     flexDirection: 'row',

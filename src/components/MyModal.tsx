@@ -5,7 +5,7 @@ import MyButton from './MyButtons';
 
 interface MyModalprops {
     children: ReactNode;
-    style?: TextStyle | TextStyle[];
+    style?: ViewStyle | ViewStyle[];
     visible: boolean;
     setVisible(visible: boolean): void
     title:string;
