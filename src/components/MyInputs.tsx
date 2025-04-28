@@ -31,7 +31,7 @@ const inputContainerStyle = {
   flexDirection: 'row' as const,
   alignItems: 'center' as const,
   backgroundColor: '#FFFFFF',
-  borderWidth: 1,
+  borderWidth: 1, 
   borderColor: '#D9D9D9',
   borderRadius: 8,
   paddingHorizontal: 12,

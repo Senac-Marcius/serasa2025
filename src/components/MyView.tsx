@@ -1,5 +1,5 @@
-import React, { ReactNode } from 'react';
-import { View, StyleSheet, TextStyle } from 'react-native';
+import React, { ReactNode, useState } from 'react';
+import { View, StyleSheet, TextStyle, ScrollView } from 'react-native';
 import MyTopbar from './MyTopbar';
 import MySupport from './MySupport';
 import { Router } from 'expo-router';
@@ -10,15 +10,17 @@ interface MySearchProps {
   children: ReactNode;
   style?: TextStyle | TextStyle[];
   title?: string;
-  router?: Router; // <- agora é opcional
+  router?: Router;
 }
 
-
 const MyView: React.FC<MySearchProps> = ({ children, style, title, router }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <View style={[styles.container, style]}>
       <MyTopbar router={router} title={title ?? ''} />
-      <View style={styles.scrollContainer}>
+      <View style={styles.scrollContainer}>000
+        
           <ScrollView>
         {children}
         </ScrollView>
@@ -30,13 +32,21 @@ const MyView: React.FC<MySearchProps> = ({ children, style, title, router }) => 
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
-    position: 'relative',
-    backgroundColor: '#F4F4F4',
+    flex: 1,
+    backgroundColor: '#F2F3F5', // fundo cinza claro para todas as telas
   },
+  containerButton: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 100,
+  },
+  
   scrollContainer: {
-    flex: 1, 
+    flexGrow: 1,
     paddingHorizontal: 16,
+    paddingBottom: 80,
   },
   suporteButton: {
     position: 'absolute',
@@ -47,6 +57,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  
+  
 });
 
 export default MyView;
