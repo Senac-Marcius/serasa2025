@@ -12,7 +12,8 @@ import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 import itemScreen from '../itens';
 import { ListItem } from 'native-base';
 import MyUpload from '../../src/components/MyUpload';
-
+import { Ionicons } from '@expo/vector-icons';
+import { IoIosLeaf, IoIosListBox } from "react-icons/io";
 
 
 //import dateTimepicker
@@ -113,16 +114,17 @@ export default function ParentScreen (){
     
     {/* Formulário de Cadastro */}
     <View style={styles.formSection}>
-      <Text style={styles.sectionTitle}>Cadastro de Responsável</Text>
+      <Text style={styles.sectionTitle}>Cadastro do Responsável</Text>
 
       <View style={styles.inputGroup}>
-        <Myinput label="Nome" placeholder="Nome:" value={req.name} onChangeText={(Text) => setReq({ ...req, name: Text })} iconName="badge" />
-        <Myinput label="RG" placeholder="RG:" value={req.rg} onChangeText={(Text) => setReq({ ...req, rg: Text })} iconName="badge" />
-        <Myinput label="CPF" placeholder="CPF:" value={req.cpf} onChangeText={(Text) => setReq({ ...req, cpf: Text })} iconName="badge" />
-        <Myinput label="Idade" placeholder="Idade:" value={req.age} onChangeText={(Text) => setReq({ ...req, age: Text })} iconName="badge" />
-        <Myinput label="Telefone" placeholder="Telefone:" value={req.phone} onChangeText={(Text) => setReq({ ...req, phone: Text })} iconName="badge" />
-        <Myinput label="Email" placeholder="Email:" value={req.email} onChangeText={(Text) => setReq({ ...req, email: Text })} iconName="badge" />
-        <Myinput label="Parentesco" placeholder="Parentesco:" value={req.kinship} onChangeText={(Text) => setReq({ ...req, kinship: Text })} iconName="badge" />
+        
+        <Myinput label="Nome" placeholder="Nome:" value={req.name} onChangeText={(Text) => setReq({ ...req, name: Text })} iconName="person"/>
+        <Myinput label="RG" placeholder="RG:" value={req.rg} onChangeText={(Text) => setReq({ ...req, rg: Text })} iconName="fingerprint" />
+        <Myinput label="CPF" placeholder="CPF:" value={req.cpf} onChangeText={(Text) => setReq({ ...req, cpf: Text })} iconName="assignment" />
+        <Myinput label="Idade" placeholder="Idade:" value={req.age} onChangeText={(Text) => setReq({ ...req, age: Text })} iconName="event" />
+        <Myinput label="Telefone" placeholder="Telefone:" value={req.phone} onChangeText={(Text) => setReq({ ...req, phone: Text })} iconName="phone" />
+        <Myinput label="Email" placeholder="Email:" value={req.email} onChangeText={(Text) => setReq({ ...req, email: Text })} iconName="email" />
+        <Myinput label="Parentesco" placeholder="Parentesco:" value={req.kinship} onChangeText={(Text) => setReq({ ...req, kinship: Text })} iconName="groups" />
       </View>
 
       <View style={styles.actions}>
@@ -144,16 +146,17 @@ export default function ParentScreen (){
             onDel={() => delParentL(item.id)}
             onEdit={() => editParentL(item.id)}
           >
-            <Text>{item.id}</Text>
-            <Text>{item.name}</Text>
-            <Text>{item.rg}</Text>
-            <Text>{item.cpf}</Text>
-            <Text>{item.age}</Text>
-            <Text>{item.phone}</Text>
-            <Text>{item.email}</Text>
-            <Text>{item.kinship}</Text>
-            <Text>{item.createat}</Text>
-            <Text>{item.userid}</Text>
+            <Text>    Id: {item.id}</Text>
+            <Text><IoIosListBox />Nome: {item.name}</Text>
+            <Text>    RG: {item.rg}</Text>
+            <Text>    CPF:{item.cpf}</Text>
+            <Text>    Idade: {item.age}</Text>
+            <Text>    Telefone: {item.phone}</Text>
+            <Text>    Email: {item.email}</Text>
+            <Text>    Parentesco: {item.kinship}</Text>
+            <Text>    Data: {item.createat}</Text>
+            <Text>    UserId: {item.userid}</Text>
+
           </MyItem>
         )}
       />
@@ -179,7 +182,7 @@ const styles = StyleSheet.create({
       color: '#111',
     },
     formSection: {
-      backgroundColor: '#D4D4D4',
+      backgroundColor: '#F2F3F5',
       borderRadius: 16,
       padding: 20,
       shadowColor: '#000',
@@ -191,19 +194,20 @@ const styles = StyleSheet.create({
       gap: 12,
     },
     actions: {
-      marginTop: 20,
       flexDirection: 'row',
+      marginTop: 20,
       gap: 12,
       alignItems: 'center',
     },
     listSection: {
       flex: 1,
       padding: 13,
-      backgroundColor: '#D4D4D4',
+      backgroundColor: '#F2F3F5',
       borderRadius: 16,
     },
     parentsItem: {
-      padding: 12,
+      padding:16,
+      paddingHorizontal:2,
       borderBottomWidth: 1,
       borderColor: '#eee',
     },
