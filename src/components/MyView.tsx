@@ -2,9 +2,9 @@ import React, { ReactNode, useState } from 'react';
 import { View, StyleSheet, TextStyle, ScrollView } from 'react-native';
 import MyTopbar from './MyTopbar';
 import MySupport from './MySupport';
-import { Router } from 'expo-router';
 import MyAccessibility from './MyAccessibility';
-import { ScrollView } from 'react-native-gesture-handler';
+import { Router } from 'expo-router'; // Importando o Router do expo-router
+import MyMenu from './MyMenu';
 
 interface MySearchProps {
   children: ReactNode;
@@ -18,14 +18,19 @@ const MyView: React.FC<MySearchProps> = ({ children, style, title, router }) => 
 
   return (
     <View style={[styles.container, style]}>
-      <MyTopbar router={router} title={title ?? ''} />
-      <View style={styles.scrollContainer}>000
-        
-          <ScrollView>
+      {/* Topbar recebe o controle do menu */}
+      <MyTopbar router={router} title={title ?? ''} onMenuToggle={() => setMenuOpen(!menuOpen)} />
+
+      {/* Conteúdo da tela */}
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         {children}
-        </ScrollView>
-      </View>
-      <MySupport style={styles.suporteButton} />
+      </ScrollView>
+
+      {/* Botão de suporte fixo */}
+      <MySupport />
+
+      {/* Menu lateral colado na esquerda */}
+      {menuOpen && <MyMenu closeMenu={() => setMenuOpen(false)} />}
     </View>
   );
 };

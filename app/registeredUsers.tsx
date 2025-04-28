@@ -20,7 +20,7 @@ export default function UserScreen() {
         getTodos()
     }, [])
 
-    
+
 
     function editUser(id: number) {
         router.push(`/registerUser?id=${id}`);
