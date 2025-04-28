@@ -5,8 +5,8 @@ import MyView from '../../src/components/MyView';
 import { Myinput } from '../../src/components/MyInputs'
 import { useRouter, Link } from 'expo-router';
 import { setCollection, iCollection, deleteCollectionById, updateCollectionById, getCollections } from '../../src/controllers/collections';
-import 'bootstrap/dist/css/bootstrap.css';
-import Carousel from 'react-bootstrap/Carousel';
+/*import 'bootstrap/dist/css/bootstrap.css';*/
+/*import Carousel from 'react-bootstrap/Carousel';*/
 import MyFilter from '../../src/components/MyFilter';
 import MySearch from '../../src/components/MySearch';
 import { getItems, iItem } from '../../src/controllers/librarie';
