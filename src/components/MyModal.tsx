@@ -8,7 +8,7 @@ interface MyModalprops {
     style?: ViewStyle | ViewStyle[];
     visible: boolean;
     setVisible(visible: boolean): void
-    title:string;
+    title?:string;
     closeButtonTitle?: string;
 
 }
