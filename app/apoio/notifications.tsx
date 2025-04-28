@@ -7,7 +7,6 @@ import MyButton from '../../src/components/MyButtons';
 import {MyItem} from '../../src/components/MyItem';
 import MyList from '../../src/components/MyList';
 import Mytext from '../../src/components/MyText';
-import {textStyles}  from '../../styles/textStyles';
 import { setNotification, iNotification, deleteNotification, updateNotification, getNotifications} from '../../src/controllers/notifications';
 
 export default function NotificationScreen(){
@@ -121,11 +120,11 @@ return (
                                 
                         > {/* pedro */}
 
-                           <Mytext style={textStyles.textBody} > Nome: {item.name}</Mytext> {/* alex */}
-                           <Mytext style={textStyles.textBody}> Descrição: {item.description}</Mytext>
-                           <Mytext style={textStyles.textBody}> Url: {item.url}</Mytext>
-                           <Mytext style={textStyles.textBody}> UserId: {item.user_id}</Mytext>
-                           <Mytext style={textStyles.textBody}> CreatAt: {item.created_at}</Mytext>
+                           <Mytext  > Nome: {item.name}</Mytext> {/* alex */}
+                           <Mytext > Descrição: {item.description}</Mytext>
+                           <Mytext > Url: {item.url}</Mytext>
+                           <Mytext> UserId: {item.user_id}</Mytext>
+                           <Mytext> CreatAt: {item.created_at}</Mytext>
 
 
                             {/*

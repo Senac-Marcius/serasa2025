@@ -27,7 +27,7 @@ async function setCategory(category: iCategories) {
 
 
 async function getCategories(params:any) {
-    const { data: todos, error } = await supabase.from('launchs').select();
+    const { data: todos, error } = await supabase.from('categories').select();
     if (error) 
         return {status:false,error:error}
 
@@ -69,4 +69,4 @@ async function deleteCategory(id: number) {
   
 }
 
-export { iCategories, setCategory, updateCategory, deleteCategory, getCategories };
+export { iCategories, setCategory, updateCategory, deleteCategory, getCategories, toListCategorie };
