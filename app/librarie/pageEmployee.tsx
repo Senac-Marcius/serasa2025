@@ -15,15 +15,17 @@ export default function pageEmployee() {
 
 
   return (
-
-    <View style={styles.View}>
-      <ScrollView>
+    <ScrollView>
+      <View style={styles.View}>
         <View style={styles.container}>
           {menuOpen && <MyMenu closeMenu={() => setMenuOpen(false)} />}
           <View style={styles.topbar}>
             <View style={styles.leftGroup}>
               <TouchableOpacity onPress={() => setMenuOpen(!menuOpen)} style={styles.iconButton}>
                 <Ionicons name="menu" size={20} color="#4A148C" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => router.back()} style={styles.iconButton}>
+                <Ionicons name="arrow-back-outline" size={20} color="#750097" />
               </TouchableOpacity>
             </View>
             <View>
@@ -69,8 +71,8 @@ export default function pageEmployee() {
             </View>
           </View>
         </View>
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
   )
 }
 
@@ -173,7 +175,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ecdef0',
     width: 450,
     height: 400,
-    borderRadius:20,
+    borderRadius: 20,
 
   },
   ViewIcon: {
@@ -197,11 +199,11 @@ const styles = StyleSheet.create({
   },
   textTitle: {
     fontFamily: 'Poppins, sans-serif',
-    fontWeight:400,
+    fontWeight: 400,
     color: '#750097',
     fontSize: 30,
     marginBottom: 5,
     justifyContent: "center",
 
-},
+  },
 })

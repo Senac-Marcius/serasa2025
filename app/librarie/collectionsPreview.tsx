@@ -34,6 +34,9 @@ export default function CollectionPreviewScreen() {
     const [responsible, setResponsible] = useState("Todos");
     const [edition, setEdition] = useState("Todos");
 
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
+    const [recentBooks, setRecentBooks] = useState<any[]>([]);
+
 
     useEffect(() => {
         async function getTodos2() {
@@ -98,13 +101,14 @@ export default function CollectionPreviewScreen() {
 
         return data || [];
     }
+    
 
 
     return (
         <ScrollView>
             <View style={styles.View}>
                 <View style={styles.container}>
-                {menuOpen && <MyMenu closeMenu={() => setMenuOpen(false)} />}
+                    {menuOpen && <MyMenu closeMenu={() => setMenuOpen(false)} />}
                     <View style={styles.topbar}>
                         <View style={styles.leftGroup}>
                             <TouchableOpacity onPress={() => setMenuOpen(!menuOpen)} style={styles.iconButton}>
@@ -113,16 +117,16 @@ export default function CollectionPreviewScreen() {
                         </View>
                         <View>
                             <Text style={styles.textTitle}>
-                                Biblioteca
+                                BIBLIOTECA
                             </Text>
                         </View>
                         <View style={styles.rightIcons}>
-                                <TouchableOpacity style={styles.button_capsule} onPress={()=>router.push({ pathname:''})}>
+                            <TouchableOpacity style={styles.button_capsule} onPress={() => router.push({ pathname: '' })}>
                                 <MaterialCommunityIcons name="book-open-variant" size={20} color="#750097" />
                                 <Text style={styles.buttonText}>Meus empréstimos</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={styles.button_round} onPress={()=>router.push({ pathname:'librarie/pageEmployee'})}>
+                            <TouchableOpacity style={styles.button_round} onPress={() => router.push({ pathname: 'librarie/pageEmployee' })}>
                                 <MaterialCommunityIcons name="account-hard-hat" size={20} color="#750097" />
                                 <Text style={styles.buttonText}>Funcionários</Text>
                             </TouchableOpacity>
@@ -130,7 +134,7 @@ export default function CollectionPreviewScreen() {
                                 <Image source={{ uri: 'https://i.pravatar.cc/150?img=1' }} style={styles.avatar} />
                             </TouchableOpacity>
                         </View>
-                     
+
                     </View>
 
                 </View>
@@ -242,18 +246,7 @@ export default function CollectionPreviewScreen() {
                             />
                         </View>
                     </View>
-
-                    {/* <MyFilter
-                        itens={['mais avaliados']}
-                        style={styles.containerfilter}
-                        onSend={(filtro) => {
-                            setSelectFilter(filtro);
-                            itemsSearch();
-                        }}
-                        onPress={(item) => console.log('Filtro pressionado:', item)}
-                    /> */}
                 </View>
-
                 <View style={styles.item2}>
                     <View>
                         {items.length === 0 ? (
@@ -263,16 +256,28 @@ export default function CollectionPreviewScreen() {
                         ) : (
                             <FlatList
                                 data={items}
-                                numColumns={3}
+                                numColumns={4}
                                 keyExtractor={(item) => item.id.toString()}
                                 renderItem={({ item }) => (
                                     <TouchableOpacity
-                                        onPress={() => router.push({ pathname: 'librarie/collectionDetail', params: { id: item.id.toString() }, })}
+                                        onPress={() => {
+                                            // if (item.keywords) {
+                                            //     const tagsArray = item.keywords.split(',').map(tag => tag.trim());
+                                            // }
+                                            router.push({ pathname: 'librarie/collectionDetail', params: { id: item.id.toString() } });
+                                        }}
                                     >
                                         <View style={styles.itemContainer}>
                                             <View style={styles.styleimg}><Image source={{ uri: item.image }} style={styles.image}></Image></View>
                                             <Text style={styles.itemTitlename}>{item.title}</Text>
                                             <Text style={styles.itemText}> {item.responsible}</Text>
+                                            <View style={styles.tagsContainer}>
+                                                {item.keywords?.split(',').map((tag, index) => (
+                                                    <View key={index} style={styles.tag}>
+                                                        <Text style={styles.tagText}>{tag.trim()}</Text>
+                                                    </View>
+                                                ))}
+                                            </View>
                                         </View>
 
                                     </TouchableOpacity>
@@ -346,7 +351,7 @@ const styles = StyleSheet.create({
 
     textTitle: {
         fontFamily: 'Poppins, sans-serif',
-        fontWeight:600,
+        fontWeight: 600,
         color: '#750097',
         fontSize: 30,
         marginBottom: 5,
@@ -382,21 +387,21 @@ const styles = StyleSheet.create({
         width: 150,
         padding: 10,
         borderRadius: 20,
-        flexDirection:"row"
+        flexDirection: "row"
     },
     button_capsule: {
         backgroundColor: "#EDE7F6",
         width: 200,
         padding: 10,
         borderRadius: 20,
-        flexDirection:"row"
+        flexDirection: "row"
     },
     itemContainer: {
         padding: 25,
         margin: 5,
         backgroundColor: '#ecdef0',
         borderWidth: 3,
-        borderColor:"white",
+        borderColor: "white",
         marginLeft: 50,
         marginRight: 50,
         marginTop: 50,
@@ -502,6 +507,25 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         borderRadius: 18,
+    },
+    tagsContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginTop: 10,
+        gap: 5,
+    },
+
+    tag: {
+        backgroundColor: '#E0BBE4', // lilás claro, combina com seu roxo
+        borderRadius: 15,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+    },
+
+    tagText: {
+        fontSize: 12,
+        color: '#4A148C', // seu roxinho escuro
+        fontWeight: 'bold',
     },
 })
 
