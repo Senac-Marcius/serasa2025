@@ -117,9 +117,7 @@ export default function IndexScreen() {
       {/* Sidebar */}
       <View style={styles.sidebar}>
         <View style={styles.logoContainer}>
-          <FontAwesome5 name="chalkboard-teacher" size={28} color="#3AC7A8" />
-          <Text style={styles.logoTitle}>Estudy</Text>
-          <Text style={styles.logoSubtitle}>Learn From Home</Text>
+          <Text style={styles.logoTitle}> Meus Dados</Text>
         </View>
 
         {menuItems.map((item, index) => {
@@ -144,7 +142,7 @@ export default function IndexScreen() {
       {/* Conteúdo principal */}
       <MyView style={styles.mainContent}>
         <ScrollView contentContainerStyle={styles.content}>
-          <Text style={styles.mainTitle}>Painel da Secretaria</Text>
+          <Text style={styles.mainTitle}>Painel da Administração</Text>
 
           <View style={styles.cardArea}>
             {cards.map((card, index) => (
