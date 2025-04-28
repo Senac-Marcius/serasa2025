@@ -128,18 +128,7 @@ export default function LoanScreen() {
             }
         }
     
-        // async function updateLoansById(id: number, updatedLoans: Partial<iLoans>) {
-        //     const { error } = await supabase
-        //         .from('loans')
-        //         .update(updatedLoans)
-        //         .eq('id', id);
-    
-        //     if (error) {
-        //         console.error("Erro ao atualizar empréstimo:", error.message);
-        //         return false;
-        //     }
-        //     return true;
-        // }
+       
     
     
 
@@ -147,45 +136,52 @@ export default function LoanScreen() {
 
 
         return (
-            <MyView >
+            <ScrollView >
                 <View style={styles.formConteiner}>
-                    <Text>Tela de Empréstimo</Text>
+                <Text style={styles.textStyles}>Tela de Empréstimo</Text>
+                    
                     <View style={styles.row}>
                         <View style={styles.form}>
 
                             <Myinput
                                 value={req.bookId}
                                 onChangeText={(text) => setReq({ ...req, bookId: text })}
-                                placeholder="Nome do Livro:"
-                                label="Nome do Livro:"
-                                iconName="book"
+                                placeholder="Nome usuario:"
+                                label="Nome usuario:"
+                                iconName="user"
                             />
 
+                             <MyCalendar
+                             value={req.loanDate.split('T')[0]}
+                             date={req.loanDate.split('T')[0]}
+                             setDate={(date) => setReq({...req, expectedLoanDate: date}) }
+                             placeholder=""
+                             label="Data de Empréstimo:"
+                             iconName="book"
+                             
+                             />
                         
 
 
-                            <Myinput
-                                value={req.expectedLoanDate}
-                                onChangeText={(date) => setReq({ ...req, expectedLoanDate: date })}
-                                placeholder="Data prevista de Devolução:"
-                                label="Data prevista de Devolução:"
-                                iconName="book"
-                            />
-
-                            <Myinput
-                                value={req.effectiveLoanDate}
-                                onChangeText={(date) => setReq({ ...req, effectiveLoanDate: date })}
-                                placeholder="Data Efetiva de Devolução:"
-                                label="Data Efetiva de Devolução:"
-                                iconName="book"
-
-                            />
                             <MyCalendar
-                             date={req.effectiveLoanDate} 
+                             value={req.expectedLoanDate.split('T')[0]}
+                             date={req.expectedLoanDate.split('T')[0]}
+                             setDate={(date) => setReq({...req, expectedLoanDate: date}) }
+                             placeholder=""
+                             label="Data prevista de Devolução:"
+                             iconName="book"
+                             
+                             />
+
+
+                           
+                            <MyCalendar
+                             value={req.effectiveLoanDate.split('T')[0]}
+                             date={req.effectiveLoanDate.split('T')[0]}
                              setDate={(date) => setReq({...req, effectiveLoanDate: date}) }
-                             placeholder="Data Efetiva de Devolução:" 
+                             placeholder=""
                              label="Data Efetiva de Devolução:"
-                             icon="book"
+                             iconName="book"
                              />
 
 
@@ -213,9 +209,6 @@ export default function LoanScreen() {
                                 iconName="question"
                             />
 
-                            <MyCalendar 
-                            date={req.loanDate} 
-                            setDate={(date) => setReq({...req, loanDate: date}) } icon="FaCalendarDays" />
 
                             <MyButton
                                 title='Emprestar'
@@ -239,6 +232,8 @@ export default function LoanScreen() {
                                     <Text>{item.observation}</Text>
                                     <Text>{item.creatAt}</Text>
 
+                            
+                                    
                                     <MyButton
                                         title='Editar'
                                         onPress={() => { editLoans(item.id) }}
@@ -261,7 +256,7 @@ export default function LoanScreen() {
                                         />
                     </View>
                 </View>
-            </MyView>
+            </ScrollView>
         ); //encapsulamento
     }
 
@@ -270,7 +265,9 @@ export default function LoanScreen() {
         row: {
             flexDirection: 'row',
             justifyContent: 'space-between',
-            alignItems: 'flex-start'
+            alignItems: 'flex-start',
+            marginRight: 5,
+            
         },
         form: {
             flex: 1,
@@ -302,6 +299,14 @@ export default function LoanScreen() {
             shadowRadius: 5,
             color: "pink"
         },
+        textStyles:{
+            fontSize: 24, 
+            fontWeight: 'bold', 
+            color: '#6a0dad', 
+            textAlign: 'center', 
+            marginBottom: 20 
+        },
+
         buttonContainer: {
             color: "blue"
         },

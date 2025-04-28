@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Button, TextInput, Alert, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Usuario } from './type';
-
+import { iLoans } from '../../src/controllers/loans';
 
 interface Props{
     usuarios:Usuario[];
 }
 
-const TabelaUsuarios: React.FC<Props> = ({ usuarios }) => {
+
+const TabelaUsuarios: React.FC<Props> = ({ data, onEdit, onDelete }) => {
     return (
       <ScrollView horizontal>
       <View style={styles.table}>
