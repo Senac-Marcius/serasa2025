@@ -22,7 +22,7 @@ const Sidebar = () => {
 
   return (
     <View style={styles.sidebar}>
-      <Text style={styles.sidebarTitle}>Catbridge</Text>
+      <Text style={styles.sidebarTitle}>Virtudemy</Text>
       {menuItems.map((item) => {
         const isHovered = hoveredRoute === item.route;
         return (

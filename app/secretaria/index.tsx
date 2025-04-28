@@ -126,7 +126,7 @@ export default function IndexScreen() {
       <View style={styles.sidebar}>
         <View style={styles.logoContainer}>
           <FontAwesome5 name="chalkboard-teacher" size={28} color="#3AC7A8" />
-          <Text style={styles.logoTitle}>Estudy</Text>
+          <Text style={styles.logoTitle}>Virtudemy</Text>
           <Text style={styles.logoSubtitle}>Learn From Home</Text>
         </View>
 
