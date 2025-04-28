@@ -9,15 +9,16 @@ import { useRouter } from 'expo-router';
 import { iLoans, setLoanbd,deleteLoansById,updateLoansById, getLoans } from '../src/controllers/loans'
 import { supabase } from '../src/utils/supabase';
 import TabelaUsuarios from './librarie/loantable';
-import { ScrollView } from 'react-native-gesture-handler';
-import { textStyles } from '../styles/textStyles';
 
 
 export default function LoanScreen() {
 
     const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-   
- 
+    const usuarios = [
+        { id: 1, Título: 'João', Nome: 'joao@example.com' },
+        { id: 2, Título: 'Maria', Nome: 'maria@example.com' },
+      ];
+
 
     const [req, setReq] = useState({ //useState retorna uma variavel e uma função para alteral a variavel (req e setReq)
         id: -1,
@@ -244,18 +245,15 @@ export default function LoanScreen() {
                                         button_type='round'
                                     />
 
-                                <Text>
-                                    <TabelaUsuarios 
-                                        data={loans} 
-                                        onEdit={editLoans} 
-                                        onDelete={deleteLoans} 
-                                    />
-                                </Text>
-                                  
+                                   
+
                                 </View>
 
                             )}
                         />
+                                        <TabelaUsuarios
+                                        usuarios={usuarios}
+                                        />
                     </View>
                 </View>
             </ScrollView>
