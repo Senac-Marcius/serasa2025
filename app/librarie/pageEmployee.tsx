@@ -34,7 +34,7 @@ export default function pageEmployee() {
               </Text>
             </View>
             <View style={styles.rightIcons}>
-              <TouchableOpacity style={styles.button_capsule} onPress={() => router.push({ pathname: '../app/perfil' })}>
+              <TouchableOpacity style={styles.button_capsule} onPress={() => router.push({ pathname: '../../app/perfil' })}>
                 <MaterialCommunityIcons name="account" size={20} color="#750097" />
                 <Text style={styles.buttonText}>Perfil</Text>
               </TouchableOpacity>
