@@ -12,7 +12,8 @@ import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '..
 
 import MySelect from '../../src/components/MySelect';
 import MySearch from '../../src/components/MySearch';
-
+import { getUsers,  } from '../../src/controllers/users';
+import { getCourses,  } from '../../src/controllers/courses';
 export default function RevenueScreen() {
   
   
@@ -23,43 +24,72 @@ export default function RevenueScreen() {
     name: '',
     url: '',
     created_at: new Date().toISOString(),
-    user_id: 1,
+    user_id: -1,
     value: '',
-    scholarship_status: '02- Inativo',
+    scholarship_status: '',
     discount_percentage: '',
+    tipo_mensalidade: ''
+
     
 
   });
-const [searchTerm, setSearchTerm] = useState('');
-const [visible, setVisible] = useState(false);
-const [revenues, setRevenues] = useState<iRevenue[]>([]);
 
-useEffect(()=>{
-  async function getTodos(){
-    const retorno = await getRevenues({})
+    const [searchTerm, setSearchTerm] = useState('');
+    const [visible, setVisible] = useState(false);
+    const [revenues, setRevenues] = useState<iRevenue[]>([]);
+    const [users, setUsers] = useState<any[]>([]);
+    const [courses, setCourses] = useState<any[]>([]);
+    const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
+    
 
-    if(retorno.status && retorno.data && retorno.data?.length > 0){
-      setRevenues(retorno.data);
-    }
-  }
-  getTodos();
-},[])
+useEffect(() => {
+          (async () => {
+            const retorno = await getRevenues({})
+            if(retorno.status && retorno.data && retorno.data?.length > 0){
+              setRevenues(retorno.data);
+            }
+          })();
+/*
+          (async () => {
+            const retorno = await  getUsers ({})
+            if (retorno.status && retorno.data && retorno.data.length > 0){
+                setUsers(toListUser(retorno.data));
+            }  
+        })();
+
+
+        (async () => {
+          const retorno = await  getCourses ({})
+          if (retorno.status && retorno.data && retorno.data.length > 0){
+            setCourses(toListCourses(retorno.data));
+          }  
+      })();
+      
+
+
+*/
+
+})
+
+
  
 
-  
-  
 
   // Função para cadastrar ou editar uma receita
   async function handleRegister() {
-
     if (req.id == -1) {
       // Cadastra uma nova receita
-      const newId = revenues.length ? revenues[revenues.length - 1].id + 1 : 0;
-      const newRevenue = { ...req, id: newId };
+      const newId = revenues.length ? revenues[revenues.length - 1].id + 1 : 1;
+      const newUserId = revenues.length ? Math.max(...revenues.map(r => r.user_id)) + 1 : 1;
+      
+      const newRevenue = { 
+        ...req, 
+        id: newId,
+        user_id: newUserId // Atribui o novo user_id único
+      };
+      
       setRevenues([...revenues, newRevenue]);
-      await setRevenue(newRevenue)
-      
-      
+      await setRevenue(newRevenue);
       
       } else {
         // Edita uma receita existente
@@ -84,10 +114,11 @@ useEffect(()=>{
       name: '',
       url: '',
       created_at: new Date().toISOString(),
-      user_id: 1,
+      user_id: -1,
       value: '',
-      scholarship_status: '02- Inativo',
+      scholarship_status: '',
       discount_percentage: '',
+      tipo_mensalidade: '',
     });
     setVisible(false);
   }
@@ -116,7 +147,7 @@ useEffect(()=>{
       
     }
 }
-// logica do compo
+// logica do campo de pesquisa
 const getFilteredRevenues = () => {
   if (!searchTerm) return revenues; // Retorna tudo se não houver busca
   
@@ -134,8 +165,10 @@ const getFilteredRevenues = () => {
       item.id?.toString().includes(searchTerm) ||
       item.url?.toLowerCase().includes(term) ||
       item.scholarship_status?.toLowerCase().includes(term) ||
+      item.tipo_mensalidade?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       discountStr.includes(searchTerm) || // Busca o número cru (25)
       discountPercent.includes(searchTerm) // Busca o formato com % (25%)
+      
     );
   });
 };
@@ -160,22 +193,66 @@ const getFilteredRevenues = () => {
     setVisible={setVisible}>
   
         <View style={styles.form}>
-            {/* Campo de Nome */}
+          
+        
+              <MySelect
+        label={courses.find(c => c.key == selectedCourseId)?.option || 'Selecione um curso'}
+        setLabel={() => {}}
+        setKey={(key) => {
+          setSelectedCourseId(key); // Você precisaria criar este estado
+        }}
+        list={courses}
+        caption="Cursos"
+      />
+
+
+
+        <MySelect
+          label={users.find(l => l.key == req.user_id)?.option || 'Selecione um usuário'}
+          setLabel={() => {}}
+          setKey={(key) => {
+          const selectedUser = users.find(user => user.key === key);
+          setReq({
+           ...req,
+          user_id: key,
+          name: selectedUser?.option || '' // Usamos 'option' que contém o nome exibido
+    });
+            }}
+            list={users}
+            caption="Usuários"
+          />
+
             <Myinput
               value={req.name}
               onChangeText={(text) => setReq({ ...req, name: text })}
               iconName='badge'
-              placeholder='Digite o nome'
+              placeholder='Nome será preenchido automaticamente'
               label='Nome'
+              
             />
+            
 
+
+            <MySelect 
+              label={req.tipo_mensalidade  || 'Selecione um tipo de mensalidade'} 
+              caption= "Tipo da mensalidade"
+              setLabel={(text) => setReq({...req, tipo_mensalidade: text})}
+              list={[
+                {key: 1, option: "Cobrança de Mensalidades "},
+                {key: 2, option: "Taxas escolares"},
+                {key: 3, option: "Negociação de débitos"},
+                {key: 4, option: "Bolsa de estudos e descontos"},
+                // ... outros tipos
+              ]}
+            />
             {/* Campo de Status da Bolsa */}
             <MySelect 
-              label={ req.scholarship_status } 
+              label={ req.scholarship_status || 'Selecione um Status da Bolsa'} 
+              caption= "Status da Bolsa"
               setLabel={(text) => setReq({ ...req, scholarship_status: text })}
               list={[
-                {key: 0, option: '01- Ativo'},
-                {key: 1, option: '02- Inativo'},
+                {key: 0, option: 'Ativo'},
+                {key: 1, option: 'Inativo'},
               ]}
             />
 
@@ -238,6 +315,7 @@ const getFilteredRevenues = () => {
 
             >
               <Mytext style={styles.td}>{item.name}</Mytext>
+              <Mytext style={styles.td}>{item.tipo_mensalidade}</Mytext>
               <Mytext style={styles.td}>{item.scholarship_status}</Mytext>
               <Mytext style={styles.td}>{item.created_at}</Mytext>
               <Mytext style={styles.td}>{item.description}</Mytext>    
@@ -245,16 +323,18 @@ const getFilteredRevenues = () => {
               <Mytext style={styles.td}>{item.discount_percentage}%</Mytext>
               <Mytext style={styles.td}>R${item.value}</Mytext> 
               
+              
             </MyTb>
           )}
           header={(
             <View style={styles.tableRowHeader}>
               <Mytext style={styles.th}>Nome</Mytext>
+              <Mytext style={styles.th}>Tipo da mensalidade</Mytext>
               <Mytext style={styles.th}>Status da Bolsa</Mytext>
               <Mytext style={styles.th}>Data do documento</Mytext>
               <Mytext style={styles.th}>Descrição</Mytext>
               <Mytext style={styles.th}>Id de usuario</Mytext>
-              <Mytext style={styles.th}>Valor de desconto</Mytext>
+              <Mytext style={styles.th}>Desconto</Mytext>
               <Mytext style={styles.th}>Valor</Mytext>
               <Mytext style={styles.th}>Ações</Mytext>
               
