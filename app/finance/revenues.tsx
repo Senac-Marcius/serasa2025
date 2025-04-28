@@ -12,8 +12,8 @@ import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '..
 
 import MySelect from '../../src/components/MySelect';
 import MySearch from '../../src/components/MySearch';
-import { getUsers, toListUser } from '../../src/controllers/users';
-
+import { getUsers,  } from '../../src/controllers/users';
+import { getCourses,  } from '../../src/controllers/courses';
 export default function RevenueScreen() {
   
   
@@ -38,6 +38,9 @@ export default function RevenueScreen() {
     const [visible, setVisible] = useState(false);
     const [revenues, setRevenues] = useState<iRevenue[]>([]);
     const [users, setUsers] = useState<any[]>([]);
+    const [courses, setCourses] = useState<any[]>([]);
+    const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
+    
 
 useEffect(() => {
           (async () => {
@@ -46,13 +49,25 @@ useEffect(() => {
               setRevenues(retorno.data);
             }
           })();
-
+/*
           (async () => {
             const retorno = await  getUsers ({})
             if (retorno.status && retorno.data && retorno.data.length > 0){
                 setUsers(toListUser(retorno.data));
             }  
         })();
+
+
+        (async () => {
+          const retorno = await  getCourses ({})
+          if (retorno.status && retorno.data && retorno.data.length > 0){
+            setCourses(toListCourses(retorno.data));
+          }  
+      })();
+      
+
+
+*/
 
 })
 
@@ -103,7 +118,7 @@ useEffect(() => {
       value: '',
       scholarship_status: '',
       discount_percentage: '',
-      tipo_mensalidade: ''
+      tipo_mensalidade: '',
     });
     setVisible(false);
   }
@@ -178,30 +193,43 @@ const getFilteredRevenues = () => {
     setVisible={setVisible}>
   
         <View style={styles.form}>
-            
-        <MySelect
-  label={users.find(l => l.key == req.user_id)?.option || 'Selecione um usuário'}
-  setLabel={() => {}}
-  setKey={(key) => {
-    const selectedUser = users.find(user => user.key === key);
-    setReq({
-      ...req,
-      user_id: key,
-      name: selectedUser?.option || '' // Usamos 'option' que contém o nome exibido
-    });
-  }}
-  list={users}
-  caption="Usuários"
-/>
+          
+        
+              <MySelect
+        label={courses.find(c => c.key == selectedCourseId)?.option || 'Selecione um curso'}
+        setLabel={() => {}}
+        setKey={(key) => {
+          setSelectedCourseId(key); // Você precisaria criar este estado
+        }}
+        list={courses}
+        caption="Cursos"
+      />
 
-<Myinput
-  value={req.name}
-  onChangeText={(text) => setReq({ ...req, name: text })}
-  iconName='badge'
-  placeholder='Nome será preenchido automaticamente'
-  label='Nome'
-  
-/>
+
+
+        <MySelect
+          label={users.find(l => l.key == req.user_id)?.option || 'Selecione um usuário'}
+          setLabel={() => {}}
+          setKey={(key) => {
+          const selectedUser = users.find(user => user.key === key);
+          setReq({
+           ...req,
+          user_id: key,
+          name: selectedUser?.option || '' // Usamos 'option' que contém o nome exibido
+    });
+            }}
+            list={users}
+            caption="Usuários"
+          />
+
+            <Myinput
+              value={req.name}
+              onChangeText={(text) => setReq({ ...req, name: text })}
+              iconName='badge'
+              placeholder='Nome será preenchido automaticamente'
+              label='Nome'
+              
+            />
             
 
 
