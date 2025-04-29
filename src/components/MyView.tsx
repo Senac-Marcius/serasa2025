@@ -3,14 +3,10 @@ import { View, StyleSheet, Text, TextStyle, ScrollView } from 'react-native';
 import MyTopbar from './MyTopbar';
 import MySupport from './MySupport';
 import MyAccessibility from './MyAccessibility';
+import { Button } from 'react-native-paper';
 import { Router } from 'expo-router'; // Importando o Router do expo-router
 import MyMenu from './MyMenu';
-<<<<<<< HEAD
-import MyAccessibility from './MyAccessibility';
-import { Router } from 'expo-router';
-import { Button } from 'react-native-paper';
-=======
->>>>>>> ea3cf11778f1db14c403e69203c54c19ffb4777b
+
 
 interface MySearchProps {
   children: ReactNode;
@@ -73,7 +69,7 @@ const styles = StyleSheet.create({
     right: 10,
     
   },
-<<<<<<< HEAD
+
   accessibilityButton: {
     position: 'absolute',
     right: 10,
@@ -81,9 +77,7 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     zIndex: 10,
   },
-=======
-  
->>>>>>> ea3cf11778f1db14c403e69203c54c19ffb4777b
+
   
 });
 
