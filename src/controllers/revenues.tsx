@@ -12,6 +12,7 @@ interface iRevenue{
     scholarship_status: string;
     discount_percentage: string;
     user_id: number;
+    tipo_mensalidade: string;
 }
 
 

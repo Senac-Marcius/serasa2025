@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import Mytext from '../../src/components/MyText';
+import Mytext, { textStyles } from '../../src/components/MyText';
 import MyButton from '../../src/components/MyButtons';
 import MyView from '../../src/components/MyView';
 import { MyItem } from '../../src/components/MyItem';
@@ -54,7 +54,7 @@ export default function CoursesScreen() {
   return (
     <MyView style={styles.page}>
       <View style={styles.header}>
-        <Mytext style={styles.title}>Cadastro de Cursos</Mytext>
+        <Mytext style={textStyles.title}>Cadastro de Cursos</Mytext>
       </View>
 
       <View style={styles.formContainer}>
