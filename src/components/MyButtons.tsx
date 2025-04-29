@@ -181,8 +181,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   button_text: {
-    fontWeight: "600",
-    marginLeft: 4,
+    fontWeight: "600",    
   },
 });
 
