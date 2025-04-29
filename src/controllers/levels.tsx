@@ -10,14 +10,14 @@ export interface iLevels{
 
 }
 
-function tolevels(data: iLevels[]){
- const resp: {key: number, option: string} [] = [];     
+export function tolevels(data: iLevels[]){
+    const resp: {key: number, option: string} [] = [];     
 
- data.map((l) => {
- resp.push({key: l.id, option: `${l.color} - ${l.name} - ${l.description} ` })
- } )
+    data.map((l) => {
+        resp.push({key: l.id, option: `${l.color} - ${l.name} - ${l.description} ` })
+    } )
 
-return resp; 
+    return resp; 
 
 }
 
