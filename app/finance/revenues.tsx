@@ -12,7 +12,7 @@ import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '..
 
 import MySelect from '../../src/components/MySelect';
 import MySearch from '../../src/components/MySearch';
-import { getUsers,  } from '../../src/controllers/users';
+import { getUsers, toListUser  } from '../../src/controllers/users';
 import { getCourses,  } from '../../src/controllers/courses';
 export default function RevenueScreen() {
   
@@ -41,38 +41,27 @@ export default function RevenueScreen() {
     const [courses, setCourses] = useState<any[]>([]);
     const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
     
+    useEffect(()=>{
+      async function getTodos(){
+        const retorno = await getRevenues({})
+    
+        if(retorno.status && retorno.data && retorno.data?.length > 0){
+          setRevenues(retorno.data);
+        }
+      }
+      getTodos();
 
-useEffect(() => {
-          (async () => {
-            const retorno = await getRevenues({})
-            if(retorno.status && retorno.data && retorno.data?.length > 0){
-              setRevenues(retorno.data);
-            }
-          })();
-/*
-          (async () => {
-            const retorno = await  getUsers ({})
-            if (retorno.status && retorno.data && retorno.data.length > 0){
-                setUsers(toListUser(retorno.data));
-            }  
-        })();
-
-
-        (async () => {
-          const retorno = await  getCourses ({})
-          if (retorno.status && retorno.data && retorno.data.length > 0){
-            setCourses(toListCourses(retorno.data));
-          }  
-      })();
-      
+      (async () => {
+        const retorno = await  getUsers ({})
+        if (retorno.status && retorno.data && retorno.data.length > 0){
+            setUsers(toListUser(retorno.data));
+        }  
+    })();
 
 
-*/
+    },[])
 
-})
-
-
- 
+  
 
 
   // Função para cadastrar ou editar uma receita
@@ -80,12 +69,10 @@ useEffect(() => {
     if (req.id == -1) {
       // Cadastra uma nova receita
       const newId = revenues.length ? revenues[revenues.length - 1].id + 1 : 1;
-      const newUserId = revenues.length ? Math.max(...revenues.map(r => r.user_id)) + 1 : 1;
       
       const newRevenue = { 
         ...req, 
-        id: newId,
-        user_id: newUserId // Atribui o novo user_id único
+        id: newId
       };
       
       setRevenues([...revenues, newRevenue]);
@@ -210,27 +197,11 @@ const getFilteredRevenues = () => {
         <MySelect
           label={users.find(l => l.key == req.user_id)?.option || 'Selecione um usuário'}
           setLabel={() => {}}
-          setKey={(key) => {
-          const selectedUser = users.find(user => user.key === key);
-          setReq({
-           ...req,
-          user_id: key,
-          name: selectedUser?.option || '' // Usamos 'option' que contém o nome exibido
-    });
-            }}
-            list={users}
-            caption="Usuários"
-          />
-
-            <Myinput
-              value={req.name}
-              onChangeText={(text) => setReq({ ...req, name: text })}
-              iconName='badge'
-              placeholder='Nome será preenchido automaticamente'
-              label='Nome'
-              
-            />
-            
+          setKey={(key) => {    setReq({ ...req, user_id: key })    }}
+          list={users}
+          caption="Usuários"
+        />
+  
 
 
             <MySelect 
@@ -314,12 +285,12 @@ const getFilteredRevenues = () => {
               )}
 
             >
-              <Mytext style={styles.td}>{item.name}</Mytext>
+              <Mytext style={styles.td}>{users.find(u=> u.key == item.user_id)?.option || ''}</Mytext>
               <Mytext style={styles.td}>{item.tipo_mensalidade}</Mytext>
               <Mytext style={styles.td}>{item.scholarship_status}</Mytext>
               <Mytext style={styles.td}>{item.created_at}</Mytext>
               <Mytext style={styles.td}>{item.description}</Mytext>    
-              <Mytext style={styles.td}>{item.user_id}</Mytext>
+              
               <Mytext style={styles.td}>{item.discount_percentage}%</Mytext>
               <Mytext style={styles.td}>R${item.value}</Mytext> 
               
@@ -328,12 +299,12 @@ const getFilteredRevenues = () => {
           )}
           header={(
             <View style={styles.tableRowHeader}>
-              <Mytext style={styles.th}>Nome</Mytext>
+              <Mytext style={styles.th}>nome do usuário</Mytext>
               <Mytext style={styles.th}>Tipo da mensalidade</Mytext>
               <Mytext style={styles.th}>Status da Bolsa</Mytext>
               <Mytext style={styles.th}>Data do documento</Mytext>
               <Mytext style={styles.th}>Descrição</Mytext>
-              <Mytext style={styles.th}>Id de usuario</Mytext>
+              
               <Mytext style={styles.th}>Desconto</Mytext>
               <Mytext style={styles.th}>Valor</Mytext>
               <Mytext style={styles.th}>Ações</Mytext>
