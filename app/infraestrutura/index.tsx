@@ -8,7 +8,7 @@ import Mytext from '../../src/components/MyText';
 import { Myinput } from '../../src/components/MyInputs';
 import { MyTb } from '../../src/components/MyItem';
 import MyList from '../../src/components/MyList';
-import { MyModal_mobilefullscreen } from '../../src/components/MyModal';
+import { MyModal } from '../../src/components/MyModal';
 import { getCategories, toListCategorie } from '../../src/controllers/category';
 import MySelect from '../../src/components/MySelect';
 
@@ -84,6 +84,23 @@ export default function infraScreen() {
             <View style={styles.headerContainer}>
                 <Mytext>Cadastro de Produtos</Mytext>
                 <View style={styles.buttonsWrapper}>
+                    {/* BOTÃO NOVO PRODUTO (ADICIONADO AQUI!) */}
+                    <MyButton 
+                        color='#3AC7A8'
+                        style={styles.newProduct} 
+                        onPress={() => {
+                            setReq({
+                                description: '',
+                                name: '',
+                                amount: 0,
+                                id: -1,
+                                create_at: new Date().toISOString(),
+                                category_id: -1
+                            });
+                            setVisible(true);
+                        }} 
+                        title="Novo Produto"
+                    />
                     <MyButton 
                         color='#3AC7A8'
                         style={styles.local} 
@@ -99,7 +116,8 @@ export default function infraScreen() {
                 </View>
             </View>
 
-            <MyModal_mobilefullscreen visible={visible} setVisible={setVisible}>
+            {/* MODAL (JÁ FUNCIONANDO!) */}
+            <MyModal visible={visible} setVisible={setVisible} title={req.id === -1 ? "Cadastrar Produto" : "Editar Produto"}>
                 <ScrollView contentContainerStyle={styles.modalContent}>
                     <Myinput 
                         placeholder="Digite o Nome"
@@ -146,8 +164,9 @@ export default function infraScreen() {
                         />
                     </View>
                 </ScrollView>
-            </MyModal_mobilefullscreen>
+            </MyModal>
 
+            {/* LISTA DE PRODUTOS */}
             <MyList
                 style={styles.table}
                 data={products}
@@ -253,6 +272,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
+    },
+    newProduct: {  // ESTILO DO BOTÃO "NOVO PRODUTO" (NOVO!)
+        backgroundColor: '#9C27B0',
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        borderRadius: 6,
+        marginLeft: 10,
     },
     local: {
         backgroundColor: '#2196F3',
