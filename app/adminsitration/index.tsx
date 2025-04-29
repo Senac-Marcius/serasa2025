@@ -15,12 +15,12 @@ interface Evento {
 }
 
 const menuItems = [
-  { label: 'Funcionários', icon: <Ionicons name="people-circle-outline" size={20} color="#555" />, route: 'Administracao/employees?view=table' },
-  { label: 'Cargos', icon: <Ionicons name="book-outline" size={20} color="#555" />, route: 'Administracao/positions' },
-  { label: 'Escala', icon: <Ionicons name="library-outline" size={20} color="#555" />, route: 'Administracao/scales' },
-  { label: 'Projetos', icon: <Ionicons name="calendar-outline" size={20} color="#555" />, route: 'Administracao/projects' },
-  { label: 'Banco de Taletos', icon: <Ionicons name="document-text-outline" size={20} color="#555" />, route: 'Administracao/employees?view=form' },
-  { label: 'Vagas', icon: <MaterialCommunityIcons name="clipboard-text-outline" size={20} color="#555" />, route: 'Administracao/positions' },
+  { label: 'Funcionários', icon: <Ionicons name="people-circle-outline" size={20} color="#555" />, route: 'adminsitration/employees?view=table' },
+  { label: 'Cargos', icon: <Ionicons name="book-outline" size={20} color="#555" />, route: 'adminsitration/positions' },
+  { label: 'Escala', icon: <Ionicons name="library-outline" size={20} color="#555" />, route: 'adminsitration/scales' },
+  { label: 'Projetos', icon: <Ionicons name="calendar-outline" size={20} color="#555" />, route: 'adminsitration/projects' },
+  { label: 'Banco de Taletos', icon: <Ionicons name="document-text-outline" size={20} color="#555" />, route: 'adminsitration/employees?view=form' },
+  { label: 'Vagas', icon: <MaterialCommunityIcons name="clipboard-text-outline" size={20} color="#555" />, route: 'adminsitration/positions' },
 ];
 
 const cards = [
@@ -117,7 +117,9 @@ export default function IndexScreen() {
       {/* Sidebar */}
       <View style={styles.sidebar}>
         <View style={styles.logoContainer}>
-          <Text style={styles.logoTitle}> Meus Dados</Text>
+          <FontAwesome5 name="chalkboard-teacher" size={28} color="#3AC7A8" />
+          <Text style={styles.logoTitle}>Estudy</Text>
+          <Text style={styles.logoSubtitle}>Learn From Home</Text>
         </View>
 
         {menuItems.map((item, index) => {
@@ -142,7 +144,7 @@ export default function IndexScreen() {
       {/* Conteúdo principal */}
       <MyView style={styles.mainContent}>
         <ScrollView contentContainerStyle={styles.content}>
-          <Text style={styles.mainTitle}>Painel da Administração</Text>
+          <Text style={styles.mainTitle}>Painel </Text>
 
           <View style={styles.cardArea}>
             {cards.map((card, index) => (

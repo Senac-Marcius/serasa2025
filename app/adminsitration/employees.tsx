@@ -4,7 +4,7 @@ import { Text, StyleSheet } from 'react-native';
 import MyTimePicker from '../../src/components/MyTimerPiker';
 import MyButton from '../../src/components/MyButtons';
 import MyView from '../../src/components/MyView';
-import {MyItem} from '../../src/components/MyItem';
+import {MyItem, MyTb} from '../../src/components/MyItem';
 import MyList from '../../src/components/MyList';
 import { Myinput } from '../../src/components/MyInputs';
 import { useRouter } from 'expo-router';
@@ -245,12 +245,6 @@ export default function EmployeeScreen() {
                                 iconName="link"
                             />
 
-                            <MyCalendar
-                                label="Data de Nascimento:"
-                                date={req.date_birth}
-                                setDate={(date) => setReq({...req, date_birth: date})}
-                                icon="calendar"
-                            />
 
                             <MySelect
                                 caption="Nacionalidade:"
@@ -455,7 +449,7 @@ export default function EmployeeScreen() {
                             data={employees}
                             keyItem={(item) => item.id.toString()}
                             renderItem={({item}) => (
-                                <MyItem 
+                                <MyTb 
                                     onDel={() => deleteEmployee(item.id)}
                                     onEdit={() => editEmployee(item.id)}
                                 >
@@ -470,7 +464,7 @@ export default function EmployeeScreen() {
                                             <Text style={styles.boldText}>Status:</Text> {item.is_active ? 'Ativo' : 'Inativo'}
                                         </Text>
                                     </View>
-                                </MyItem>
+                                </MyTb>
                             )}
                         />
                     </View>

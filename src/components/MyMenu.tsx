@@ -86,8 +86,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
       </Pressable>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <MenuItem label="Administração" route="Administracao/" icon="people" />
-        <MenuItem label="Administração2" route="Administracao/index2" icon="people" />
+        <MenuItem label="Administração" route="adminsitration/" icon="people" />
         <MenuItem label="Secretaria" route="secretaria" icon="add-circle" />
         <MenuItem label="Calendar" route="secretaria/calendar" icon="calendar" />
         <MenuItem label="Categories" route="categories" icon="albums" />
@@ -115,7 +114,6 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Students" route="students" icon="school" />
         <MenuItem label="Users" route="users" icon="person-circle" />
         <MenuItem label="More" route="more" icon="add-circle" />
-        <MenuItem label="Trabalhe Conosco" route='Administracao/employees?view=form'  icon="cash" />
       </ScrollView>
     </Animated.View>
   );
