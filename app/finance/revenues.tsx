@@ -14,6 +14,7 @@ import MySelect from '../../src/components/MySelect';
 import MySearch from '../../src/components/MySearch';
 import { getUsers, toListUser  } from '../../src/controllers/users';
 import { getCourses, toListCourses  } from '../../src/controllers/courses';
+
 export default function RevenueScreen() {
   
   
@@ -258,7 +259,7 @@ const getFilteredRevenues = () => {
               value={req.discount_percentage}
               onChangeText={(text) => setReq({ ...req, discount_percentage: text })}
               iconName='percent'
-              placeholder='Porcentagem de desconto'
+              placeholder='Digite o valor em %'
               label='Desconto'
             />
 
@@ -267,7 +268,7 @@ const getFilteredRevenues = () => {
               value={req.value}
               onChangeText={(text) => setReq({ ...req, value: text })}
               iconName='payments'
-              placeholder='Digite o valor'
+              placeholder='Digite o valor R$0,00'
               label='Valor'
             />
 
@@ -307,13 +308,13 @@ const getFilteredRevenues = () => {
           )}
           header={(
             <View style={styles.tableRowHeader}>
-              <Mytext style={styles.th}>nome do usuário</Mytext>
+              <Mytext style={styles.th}>Nome do usuário</Mytext>
               <Mytext style={styles.th}>Tipo da mensalidade</Mytext>
               <Mytext style={styles.th}>Status da Bolsa</Mytext>
               <Mytext style={styles.th}>Data do documento</Mytext>
               <Mytext style={styles.th}>Descrição</Mytext>
               
-              <Mytext style={styles.th}>Desconto</Mytext>
+              <Mytext style={styles.th}>Descontos</Mytext>
               <Mytext style={styles.th}>Valor</Mytext>
               <Mytext style={styles.th}>Ações</Mytext>
               
@@ -379,22 +380,22 @@ const styles = StyleSheet.create({
 
   tableRowHeader: {
     flexDirection: 'row',
-    paddingVertical: 10,
-    borderBottomWidth: 1,
+    paddingVertical: 15,
+    borderBottomWidth: 2,
     borderBottomColor: '#ddd',
   },
 
   th: {
     flex: 1,
     fontWeight: '900',
-    fontSize: 13,
+    fontSize: 14,
     color: '#333',
     textAlign: 'center',
   },
 
   td: {
     flex: 1,
-    fontSize: 13,
+    fontSize: 14,
     color: '#444',
     textAlign: 'center',
   },
