@@ -4,7 +4,8 @@ import MyLink from './MyLink';
 import MyButton from './MyButtons';
 import { Myinput } from './MyInputs';
 import MySwitch from '../components/MySwitch';
- 
+import { useRouter } from 'expo-router';
+
 interface MyLoginProps {
     children: ReactNode;
     style?: ViewStyle | ViewStyle[];
@@ -12,36 +13,46 @@ interface MyLoginProps {
     pass: string;
     changeEmail: (text: string) => void;
     changepass: (text: string) => void;
+    login: () => void;
 }
- 
-const MyLogin: React.FC<MyLoginProps> = ({ children, style, email, pass, changeEmail, changepass }) => {
+
+const router = useRouter();
+
+const MyLogin: React.FC<MyLoginProps> = ({ children, style, email, pass, changeEmail, changepass, login }) => {
     const [isEnabled, setIsEnabled] = useState(false);
- 
+
     return (
-    <View style={Array.isArray(style) ? [style] : style}>
-    <Myinput
+        <View style={Array.isArray(style) ? [style] : style}>
+            <Myinput
                 label="Email"
                 value={email}
-                onChangeText={(text) => {changeEmail(text)} }
+                onChangeText={(text) => { changeEmail(text) }}
                 iconName="person"
             />
- 
+
             <Myinput
                 label="Senha"
                 value={pass}
-                onChangeText={(text) => {changepass (text)}}
+                onChangeText={(text) => { changepass(text) }}
                 iconName="key"
+                type='password'
             />
-    <MySwitch isEnabled={isEnabled} onToggle={setIsEnabled} />
-    <MyLink url="http://google.com" label="Esqueci minha senha" />
-    <MyButton title='Login' />
-    <MyButton title='Cadastrar' />
-    </View>
+            <MySwitch isEnabled={isEnabled} onToggle={setIsEnabled} />
+            <MyLink url="http://google.com" label="Esqueci minha senha" />
+            <MyButton title='Login' onPress={login}/>
+            <MyButton
+                title='Cadastrar'
+                onPress={() =>
+                    router.push('/registerUser')
+                }
+                style={{marginTop: 10}}
+            />
+        </View>
     );
 };
- 
+
 export default MyLogin;
- 
+
 const styles = StyleSheet.create({
     container: {
         padding: 16,
