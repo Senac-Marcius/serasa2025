@@ -81,4 +81,4 @@ async function getCourses(param:any) {
 }
   
 
-export {getCourses,setCoursebd, upadateCourse, deleteCourse, iCourses}
+export {getCourses,setCoursebd, upadateCourse, deleteCourse, iCourses,toListCourses}

@@ -68,7 +68,7 @@ export default function ExpenseScreen() {
 
     async function handleRegister() {
         if (req.id == -1) {
-            const newid = expense.length ? expense[expense.length - 1].id + 1 : 0;
+            const newid = expense.length ? expense[expense.length - 1].id + 1 : 1;
             const newExpense = { ...req, id: newid };
             setExpenses([...expense, newExpense]);
             const resp = await setExpense(newExpense)
