@@ -190,7 +190,7 @@ export default function postScreen() {
                                 shadowRadius: 4,
                                 shadowOffset: { width: 0, height: 2 },
                                 alignSelf: 'center',
-                                marginBottom: 150, // para espaçamento entre posts
+                                margin: 50,
                             }}
                             showEditButton={false}
                             showDeleteButton={false}
