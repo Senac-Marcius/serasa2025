@@ -7,6 +7,7 @@ import { Button } from 'react-native-paper';
 import { Router } from 'expo-router'; // Importando o Router do expo-router
 import MyMenu from './MyMenu';
 
+
 interface MySearchProps {
   children: ReactNode;
   style?: TextStyle | TextStyle[];
@@ -68,6 +69,7 @@ const styles = StyleSheet.create({
     right: 10,
     
   },
+
   accessibilityButton: {
     position: 'absolute',
     right: 10,
@@ -75,6 +77,7 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     zIndex: 10,
   },
+
   
 });
 
