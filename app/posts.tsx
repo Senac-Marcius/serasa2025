@@ -172,7 +172,7 @@ export default function postScreen() {
 
             <MyList //
             //  é o feed
-                    style={{flexDirection:"column",alignItems:"center",justifyContent:'center', gap: 120}}
+                    style={{flexDirection:"column",alignItems:"center",justifyContent:'center', gap: 250}}
                     data={posts}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({ item }) => (
@@ -180,17 +180,17 @@ export default function postScreen() {
                         
                         <MyCorrelated
                             style={{
-                                width: '94%',
+                                width: 500,
+                                height: 500,                                
                                 backgroundColor: '#fff',
-                                borderRadius: 12,
-                                paddingBottom: 12,
+                                borderRadius: 12,                                
                                 elevation: 3,
                                 shadowColor: '#000',
                                 shadowOpacity: 0.05,
                                 shadowRadius: 4,
                                 shadowOffset: { width: 0, height: 2 },
                                 alignSelf: 'center',
-                                marginBottom: 20, // para espaçamento entre posts
+                                marginBottom: 150, // para espaçamento entre posts
                             }}
                             showEditButton={false}
                             showDeleteButton={false}
@@ -198,32 +198,34 @@ export default function postScreen() {
 
                             {/* Botão de três pontinhos */}
                             <TouchableOpacity
-                                style={{ position: 'absolute', top: -1, right: -20, zIndex: 100}}
+                                style={{ position: 'absolute', top: -1, right: -12, zIndex: 100}}
                                 onPress={() => openOptions(item.id)}
                             >
                                 <MaterialIcons name="more-vert" size={24} color="black" />
                             </TouchableOpacity>
 
                             {menuVisible && selectedPostId === item.id && (
-                                <View style={{ backgroundColor: '#c7c7c7', borderBottomLeftRadius: 8, borderBottomRightRadius: 8, borderTopLeftRadius: 8, height: 110, width: 110, alignItems: 'center', justifyContent: 'center', position: 'absolute', padding: 10, top: 10, right: -2, zIndex: 2, gap:10}}>
+                                <View style={{ backgroundColor: '#c7c7c7', borderBottomLeftRadius: 8, borderBottomRightRadius: 8, borderTopLeftRadius: 8, height: 110, width: 110, alignItems: 'center', justifyContent: 'center', position: 'absolute', padding: 10, top: 10, right: 6, zIndex: 2, gap:10}}>
                                     <MyButton  width={65} font_size={15} onPress={() => editPost(item.id)} title="Editar"  color="yellow"/>
                                     <MyButton width={65} font_size={15} onPress={() => delPost(item.id) } title="Deletar"  color="red" />
                                 </View>
                             )}
                         
-                            <Card.Cover source={{ uri: item.url }} /> {/* aqui é a imagem*/}
+                            <Card.Cover style={styles.image_post} source={{ uri: item.url }} /> {/* aqui é a imagem*/}
                             <Card.Content style={{ width: 150, height: 70, borderRadius: 10}}> 
-                                <Paragraph>{item.description}</Paragraph>
-                                <Paragraph>{item.like}</Paragraph>
+                                <Paragraph style={{fontSize:18,marginTop:25}}>{item.description}</Paragraph>
+                               
                             </Card.Content>      
 
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 12 }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10                         
+                             }}>
                                 <TouchableOpacity
                                     style={styles.actionButton}
                                     onPress={() => like(item.id, +1)}
                                 >
                                     <Text style={styles.actionText}>Like</Text>
                                 </TouchableOpacity>
+                                <Text style={styles.actionText}>{item.like}</Text>
 
                                 <TouchableOpacity
                                     style={[styles.actionButton, { backgroundColor: '#ff4d4d' }]}
@@ -319,6 +321,15 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#333',
       },
+      image_post: {
+        width:450,
+        height: 300,
+        
+
+        
+
+        
+      }
       
 });
 {/*import React, { useState, useEffect } from 'react';
