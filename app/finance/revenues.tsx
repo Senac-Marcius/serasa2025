@@ -309,7 +309,7 @@ const getFilteredRevenues = () => {
           header={(
             <View style={styles.tableRowHeader}>
               <Mytext style={styles.th}>Nome do usuário</Mytext>
-              <Mytext style={styles.th}>Tipo da mensalidade</Mytext>
+              <Mytext style={styles.th}>Tipo de receita </Mytext>
               <Mytext style={styles.th}>Status da Bolsa</Mytext>
               <Mytext style={styles.th}>Data do documento</Mytext>
               <Mytext style={styles.th}>Descrição</Mytext>
