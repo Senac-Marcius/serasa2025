@@ -7,6 +7,7 @@ import { Ionicons, FontAwesome5, Feather, MaterialCommunityIcons } from '@expo/v
 import { useRouter } from 'expo-router';
 import MyView from '../../src/components/MyView';
 import { DatePickerModal } from 'react-native-paper-dates';
+//1
 
 interface Evento {
   id: number;
