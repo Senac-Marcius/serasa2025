@@ -9,7 +9,7 @@ import MyText from '../../src/components/MyText';
 import { MyItem } from '../../src/components/MyItem';
 import { useRouter } from 'expo-router';
 import { supabase } from '../../src/utils/supabase';
-import { iCalendar, SetCalendarbd, UpdateCalendarbd, DeleteCalendarbd } from '../../src/controllers/calendar';
+import { iCalendar, SetCalendarbd, UpdateCalendarbd, DeleteCalendarbd, getCalendars } from '../../src/controllers/calendar';
 
 export default function CalendarsScreen() {
   const [req, setReq] = useState<iCalendar>({
@@ -107,7 +107,7 @@ export default function CalendarsScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 30 }}
       >
-        <MyText style={styles.pageTitle}>Cronograma de Matrículas</MyText>
+        <MyText style={styles.pageTitle}>Cronograma Escolar</MyText>
 
         {/* Formulário */}
         <View style={styles.card}>
@@ -115,10 +115,10 @@ export default function CalendarsScreen() {
 
           <Myinput
             iconName="account"
-            label="Tipo de Evento"
+            label="Categoria da Reunião"
             value={req.studentname}
             onChangeText={(text) => setReq({ ...req, studentname: text })}
-            placeholder="Digite o Tipo de Evento..."
+            placeholder="Digite a categoria da reunião..."
           />
 
           <Myinput
@@ -208,8 +208,13 @@ export default function CalendarsScreen() {
                   onEdit={() => editCalendar(item.id)}
                   onDel={() => delCalendar(item.id)}
                 >
+<<<<<<< HEAD
                   <MyText style={styles.itemText}>👤 Tipo de Evento: {item.studentname}</MyText>
                   <MyText style={styles.itemText}>📘 Motivo do Evento: {item.course}</MyText>
+=======
+                  <MyText style={styles.itemText}>👤 Categoria da Reunião: {item.studentname}</MyText>
+                  <MyText style={styles.itemText}>📘 Motivo da Reunião: {item.course}</MyText>
+>>>>>>> ea3cf11778f1db14c403e69203c54c19ffb4777b
                   <MyText style={styles.itemText}>📅 Data: {item.registrationdate}</MyText>
                   <MyText style={styles.itemText}>⏱️ Período: {item.period}</MyText>
                 </MyItem>
@@ -274,12 +279,14 @@ const styles = StyleSheet.create({
   gridContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
+    gap: 10,
+    padding: 20,
   },
+  
   cardGridItem: {
     backgroundColor: '#FFF',
     borderRadius: 10,
-    padding: 16,
+    padding: 16, //padding interno
     marginBottom: 10,
     shadowColor: '#000',
     shadowOpacity: 0.05,
@@ -287,7 +294,9 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 2,
     width: 280,
+    flexBasis: '18%', // ocupa toda a largura possível
   },
+  
   itemText: {
     fontSize: 14,
     color: '#333',
@@ -295,4 +304,8 @@ const styles = StyleSheet.create({
   },
 });
 
+<<<<<<< HEAD
 // subir 
+=======
+// CORRETO
+>>>>>>> ea3cf11778f1db14c403e69203c54c19ffb4777b
