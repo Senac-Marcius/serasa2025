@@ -38,7 +38,7 @@ async function getProjects(params:any) {
   return {status: true, data: todos}
 }
 
-async function setProject(project: iProject, ids: number[]) {
+async function setProject(project: iProject, ids: any[]) {
   const { data, error } = await supabase.from('projects').insert([project]).select();
 
   if (error) {
@@ -52,10 +52,10 @@ async function setProject(project: iProject, ids: number[]) {
     ids.forEach(async (id) => {
       const { error: insertError } = await supabase
         .from('project_user')
-        .insert([{ user_id: id, project_id: projectId }]);
+        .insert([{ user_id: id.key, project_id: projectId }]);
 
       if (insertError) {
-        console.error(`Erro ao adicionar usuario ${id} ao Projeto:`, insertError );
+        console.error(`Erro ao adicionar usuario ${id.key} ao Projeto:`, insertError );
       }
     });
   }

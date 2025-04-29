@@ -4,7 +4,7 @@ import MyView from '../../src/components/MyView';
 import MyButton from '../../src/components/MyButtons';
 import { IconButton } from 'react-native-paper';
 import { Myinput, MyCheck, MyTextArea } from '../../src/components/MyInputs';
-import { MyItem, MyCorrelated } from '../../src/components/MyItem';
+import { MyItem, } from '../../src/components/MyItem';
 import MyList from '../../src/components/MyList';
 import {setRecord, iRecord, getRecords } from '../../src/controllers/records'
 import { supabase } from '../../src/utils/supabase';

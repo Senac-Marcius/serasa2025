@@ -5,13 +5,14 @@ import { IconButton } from 'react-native-paper';
 
 interface MySearchProps {
     style: ViewStyle;
+    styleInput?: ViewStyle;
     onChangeText(busca: string): void; 
     onPress(): void;
     busca: string;
     placeholder: string;
 }
 
-const MySearch: React.FC<MySearchProps> = ({ onChangeText, style, onPress, busca, placeholder }) => {
+const MySearch: React.FC<MySearchProps> = ({ onChangeText, style, onPress, busca, placeholder, styleInput }) => {
 
     function keyPress(event: any) {
         if (event.nativeEvent.key == 'Enter') {
@@ -54,7 +55,7 @@ const MySearch: React.FC<MySearchProps> = ({ onChangeText, style, onPress, busca
                 }}
             >
                 <TextInput 
-                    style={{
+                    style={[{
                         flex: 1,
                         paddingLeft: 40, // Ajustando o padding para o ícone não cobrir o texto
                         paddingRight: 10,
@@ -64,7 +65,7 @@ const MySearch: React.FC<MySearchProps> = ({ onChangeText, style, onPress, busca
                         height: 40,
                         fontSize: 19,
                         backgroundColor: 'white',
-                    }}
+                    }, styleInput]}
                     value={busca}
                     placeholder={placeholder? placeholder : "Pesquisar..."}
                     onChangeText={(text) => onChangeText(text)}
@@ -122,4 +123,6 @@ Ai vc usa o componente assim:
   onPress={handleSearch}
 />
 
+se passar um 'styleInput' pode identar da froma que preferir 
 */
+

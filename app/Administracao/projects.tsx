@@ -11,10 +11,11 @@ import MyCalendar from '../../src/components/MyCalendar';
 import { iProject , setProject, updateProject, deleteProject, getProjects } from '../../src/controllers/projects';
 import { supabase } from '../../src/utils/supabase';
 import { MyItem } from '../../src/components/MyItem';
-import { Picker } from '@react-native-picker/picker';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
-import { MyModal1_desktop, MyModal_mobilefullscreen } from '../../src/components/MyModal';
+import { MyModal_mobilefullscreen } from '../../src/components/MyModal';
+import { getUsers, toListUser } from '../../src/controllers/users';
+import MySelect from '../../src/components/MySelect';
 
 
 // Esse é o Projeto Correto 
@@ -27,14 +28,6 @@ export default function ProjectScreen(){
 const [currency, setCurrency] = useState('BRL'); // Moeda selecionada (BRL, USD, EUR)
 const [rawRecurces, setRawRecurces] = useState(''); // Valor como string para exibir formatado
 
-// Função para formatar o número como moeda
-const formatCurrency = (value: number, currency: string = 'BRL') => {
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: currency,
-    minimumFractionDigits: 2,
-  }).format(value);
-};
 
 // Função para converter texto do input em número (ex: 1.000,50 => 1000.5)
 const parseCurrencyInput = (text: string): number => {
@@ -63,25 +56,42 @@ const parseCurrencyInput = (text: string): number => {
         
     });
 
-    const [idUs, setidUs] = useState<number[]>([])
+    const [idUs, setidUs] = useState<{key:number, option:string} []>([])
+
+    const [integrantes, setIntegrantes] = useState<{key:number, option:string} []>([{key:-1, option:''}])
+
+    function adicionarIntegrante() {
+        setIntegrantes([...integrantes, {key: -1, option:''}]);
+    }
+
+    function atulizarIntegranteKey(index:number, pkey: number){
+        const i = {...integrantes[index], key: pkey}
+        setIntegrantes( integrantes.map(jTNL => (jTNL.key == i.key ? i : jTNL)) );
+    }
+
+    function atulizarIntegranteName(index:number, pOption: string){
+        const i = {...integrantes[index], option: pOption}
+        setIntegrantes( integrantes.map(jTNL => (jTNL.key == i.key ? i : jTNL)) );
+    }
+
 
     useEffect(() => {
         (async () => {
-            async function getTodos(){
-                const retorno = await getProjects({})
-                if (retorno.status && retorno.data && retorno.data.length > 0){
-                    setProjects(retorno.data);
-                }
+            const retorno = await getProjects({})
+            if (retorno.status && retorno.data && retorno.data.length > 0){
+                setProjects(retorno.data);
             }
-            getTodos()
-
-            /* Chamar o get do users para mostrar na caixa de seleção pelo nome do usuario  */
-    
-          
+        })();
+        /* Chamar o get do users para mostrar na caixa de seleção pelo nome do usuario  */
+        (async () => {
+            const retorno = await getUsers({})
+            if (retorno.status && retorno.data && retorno.data.length > 0){
+                setidUs( toListUser(retorno.data) )
+            }
         })();
       }, [])
 
-    const [integrantes, setIntegrantes] = useState<string[]>(['']);
+
     const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredRevenues, setFilteredRevenues] = useState<iProject[]>([]);
@@ -104,7 +114,7 @@ const parseCurrencyInput = (text: string): number => {
             console.log("Cadastrando no Supabase:", newProjects);
 
             setProjects([... projects, newProjects])
-            await setProject(newProjects, idUs)
+            await setProject(newProjects, integrantes)
         
         }else{ //aqui é quando esta editando id esta maior do que -1
             const updatedProject = { ...req, recurces: recurcesValue, integrantes };
@@ -185,15 +195,7 @@ const parseCurrencyInput = (text: string): number => {
         console.log("Resultados da busca:", resultado);
     }*/
 
-    function adicionarIntegrante() {
-        setIntegrantes([...integrantes, '']);
-    }
-      
-    function atualizarIntegrante(index: number, valor: string) {
-        const novosIntegrantes = [...integrantes];
-        novosIntegrantes[index] = valor;
-        setIntegrantes(novosIntegrantes);
-    }
+
 
     const [visible, setVisible] = useState(false)
 
@@ -215,9 +217,6 @@ const parseCurrencyInput = (text: string): number => {
             
             <View style={styles.contentContainer}>
                 <Mytext style={styles.title}>PROJETOS</Mytext>
-            
-                {/* Aqui é typescript dentro do front */}
-                <Mytext> ✨ Vamos Inovar ✨ </Mytext>
 
                 <MyModal_mobilefullscreen visible={visible} setVisible={() => setVisible(true)}>
                     <ScrollView>
@@ -234,7 +233,7 @@ const parseCurrencyInput = (text: string): number => {
                             />
 
                             <Mytext style={styles.label}>Integrantes do Projeto:</Mytext>
-                            {integrantes.map((nome, index) => (
+                            {integrantes.map((uOption, index) => (
                             <View
                                 key={index}
                                 style={{ 
@@ -244,34 +243,31 @@ const parseCurrencyInput = (text: string): number => {
                                     gap: 8,
                                 }}
                             >
-                                <Myinput
-                                placeholder={`Integrante ${index + 1}`}
-                                value={nome}
-                                onChangeText={(text) => atualizarIntegrante(index, text)}
-                                iconName=""
-                                label=""
-                                style={{ 
-                                    flex: 1,
-                                    paddingHorizontal: 12,
-                                    paddingVertical: 10,
-                                }}
-                                />
+                                <MySelect 
+                                    label={uOption.option || "Selecione um usuario"}
+                                    setLabel={(option) => atulizarIntegranteName(index, option)}
+                                    list={idUs}
+                                    setKey={(key) => atulizarIntegranteKey(index, key)}
+                                    caption={`Integrante ${index + 1}`}
+                                >
+
+                                </MySelect>
 
                                 
                                 <TouchableOpacity
-                                onPress={() => {
-                                    const novos = [...integrantes];
-                                    novos.splice(index, 1);
-                                    setIntegrantes(novos);
-                                }}
-                                style={{
-                                    backgroundColor: '#ff4d4f',
-                                    borderRadius: 100,
-                                    width: 36,
-                                    height: 36,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}
+                                    onPress={() => {
+                                        const novos = [...integrantes];
+                                        novos.splice(index, 1);
+                                        setIntegrantes(novos);
+                                    }}
+                                    style={{
+                                        backgroundColor: '#ff4d4f',
+                                        borderRadius: 100,
+                                        width: 36,
+                                        height: 36,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }}
                                 >
                                 <Mytext style={{ color: '#fff', fontSize: 18 }}>–</Mytext>
                                 </TouchableOpacity>
