@@ -11,7 +11,9 @@ import MySelect from '../../src/components/MySelect';
 import { Myinput, MyTextArea, MyCheck } from '../../src/components/MyInputs';
 import { Icon , MD3Colors} from "react-native-paper";
 import { useRouter } from 'expo-router';
-import {iItem, setItem, getItems} from '../../src/controllers/librarie';
+import {iItem, setItem, getItems, updateItemById} from '../../src/controllers/librarie';
+import { supabase } from '../../src/utils/supabase';
+
 
 export default function itemScreen() { // aqui é TS
 
@@ -49,22 +51,23 @@ export default function itemScreen() { // aqui é TS
         incorporated: false,
     });
 
-    const[items, setItems] = useState<iItem[]>([])
-
+    const [items, setItems] = useState<iItem[]>([]);
+    
     useEffect(() =>{
-        async function getTodos(){
-
-            const retorno =await getItems({})
+        (async () => {
+            const retorno =await getItems({});
             
             if (retorno.status && retorno.data && retorno.data.length>0){
-                console.log('Itens retornados:', retorno.data);
-                setItems(retorno.data);
+                console.log(retorno.data);
+                const t:any[] = []
+                retorno.data.map(p => t.push(p))
+                setItems(t)
+                console.log(items)
             } else {
                 console.log('Nenhum item encontrado ou erro:', retorno.error);
             }
-        }
-    getTodos()
-    }, [])
+        })();
+    }, []);
 
     const router = useRouter();
 
@@ -72,19 +75,15 @@ export default function itemScreen() { // aqui é TS
     const [selectedFile, setSelectedFile] = useState<string | null>(null);
 
     async function handleRegister() { 
-         // Atualiza req.file com o selectedFile (se existir)
-        /*const updatedReq = {
-        ...req,
-        file: selectedFile || req.file, // Mantém o arquivo anterior se selectedFile for null
-        };*/
 
         if (req.id == -1) {
             const newId = items.length ? items[items.length - 1].id + 1 : 0;
-            const newItem = { ...req, newId };
+            const newItem = { ...req, id: newId };
 
             setItems([...items, newItem])
             await setItem(newItem)
         } else {
+            await updateItemById(req.id, req)
             setItems(items.map(i => (i.id == req.id) ? req : i));
         }
         setReq({
@@ -121,8 +120,9 @@ export default function itemScreen() { // aqui é TS
             incorporated: false,
         });
         //setSelectedFile(null); // Limpa o selectedPdf após o registro
+        console.log('Item inserido com sucesso:');
 
-        router.push('librarie/librariePreview');
+        //router.push('librarie/librariePreview');
     };
 
     // Estados para as abas

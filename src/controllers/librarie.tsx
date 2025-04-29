@@ -44,7 +44,8 @@ function toListItems(data:iItem[]){
 }
 
 async function getItems(params:any){
-    const{data:todos, error} = await supabase.from('items_librarie').select()
+    const{data:todos, error} = await supabase.from('items_librarie').select('*');
+
 
     if(error)
         return{status:false, error:error}
@@ -83,7 +84,7 @@ async function deleteItemById(id: number) {
         return false
     }
 
-    return true
+    return "Item excluído"
 }
 
 async function updateItemById(id: number, updatedItem: Partial<iItem>) {
@@ -101,5 +102,5 @@ async function updateItemById(id: number, updatedItem: Partial<iItem>) {
 
 
 
-export {iItem, setItem, deleteItemById, updateItemById, getItems}
+export {iItem, setItem, deleteItemById, updateItemById, getItems, toListItems}
         

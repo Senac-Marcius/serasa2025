@@ -10,6 +10,7 @@ import MySearch from '../../src/components/MySearch';
 import MyButton from '../../src/components/MyButtons';
 import MyList from '../../src/components/MyList';
 import { MyModal } from '../../src/components/MyModal';
+import { MyItem } from '../../src/components/MyItem';
 import { Ionicons } from '@expo/vector-icons';
 import { Icon , MD3Colors} from "react-native-paper";
 import { useRouter } from 'expo-router';
@@ -61,9 +62,10 @@ export default function CollectionViewScreen() {
     status: string,
     file: string,
     type_loan: string,
+    id: number,
   }
   // Puxa os itens do BD
-  useEffect(() => {
+  /*useEffect(() => {
     async function fetchAllItems() {
       const { data, error } = await supabase
         .from('items_librarie')
@@ -80,6 +82,23 @@ export default function CollectionViewScreen() {
 
     fetchAllItems();
 
+  }, []);*/
+
+  useEffect(() =>{
+    (async () => {
+        const retorno =await getItems({});
+        
+        if (retorno.status && retorno.data && retorno.data.length>0){
+            console.log(retorno.data);
+            const t:any[] = []
+            retorno.data.map(p => t.push(p))
+            setItems(t)
+            console.log(items)
+        } else {
+            console.log('Nenhum item encontrado ou erro:', retorno.error);
+        }
+        setLoading(false);
+    })();
   }, []);
 
   // Filtro de itens de acordo com a pesquisa e filtros selecionados
@@ -194,10 +213,16 @@ export default function CollectionViewScreen() {
           <Text style={styles.detail}>Idioma: {item.language}</Text>
           <Text style={styles.detail}>Ano: {item.year}</Text>
           <Text style={styles.detail}>CDD: {item.cdd}</Text>
+          <Text style={styles.link}>Ver mais...</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
+  function editItem(id: number) {
+    let item = items.find(i => i.id == id)
+    if (item)
+        setItems(items)
+  };
 
   return (
     <ScrollView>
@@ -260,82 +285,99 @@ export default function CollectionViewScreen() {
         <View style={styles.contentContainer}>
           {showFilters && (
             <ScrollView style={styles.filterSidebar}>
-              <Text style={styles.filterSectionTitle}>Tipo de Obra</Text>
-              {[...new Set(finalFilteredItems.map(item => item.typology))].map((type) => (
-                <TouchableOpacity //AQUI TEM QUE VIR UM MYCHECK
-                  key={type}
-                  onPress={() => toggleFilter(type, selectedTypologies, setSelectedTypologies)}
-                  >
-                  <Text style={[
-                    styles.filterOption,
-                    selectedTypologies.includes(type) && styles.filterOptionSelected
-                  ]}>
-                    {type}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+              <Text style={styles.filterHeader}>Refinar sua busca</Text>
 
-              <Text style={styles.filterSectionTitle}>Ano</Text>
-              {[...new Set(finalFilteredItems.map(item => item.year))].map((year) => (
-                <TouchableOpacity
-                  key={year}
-                  onPress={() => toggleFilter(year, selectedYears, setSelectedYears)}
-                  >
-                  <Text style={[
-                    styles.filterOption,
-                    selectedYears.includes(year) && styles.filterOptionSelected
-                  ]}>
-                    {year}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+                <Text style={styles.selectedFiltersText}>
+                  {selectedTypologies.length + selectedYears.length + selectedLanguages.length + 
+                  selectedResponsible.length + selectedSubject.length > 0
+                    ? `Filtros selecionados (${
+                        selectedTypologies.length + selectedYears.length + selectedLanguages.length + 
+                        selectedResponsible.length + selectedSubject.length
+                      })`
+                    : "Nenhum filtro selecionado ainda"}
+                </Text>
 
-              <Text style={styles.filterSectionTitle}>Autores</Text>
-              {[...new Set(finalFilteredItems.map(item => item.responsible))].map((responsible) => (
-                <TouchableOpacity
-                  key={responsible}
-                  onPress={() => toggleFilter(responsible, selectedResponsible, setSelectedResponsible)}
-                  >
-                  <Text style={[
-                    styles.filterOption,
-                    selectedResponsible.includes(responsible) && styles.filterOptionSelected
-                  ]}>
-                    {responsible}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+              {/* Tipo de Obra */}
+              <View style={styles.filterSection}>
 
-              <Text style={styles.filterSectionTitle}>Idioma</Text>
-              {[...new Set(finalFilteredItems.map(item => item.language))].map((lang) => (
-                <TouchableOpacity
-                  key={lang}
-                  onPress={() => toggleFilter(lang, selectedLanguages, setSelectedLanguages)}
-                  >
-                  <Text style={[
-                    styles.filterOption,
-                    selectedLanguages.includes(lang) && styles.filterOptionSelected
-                  ]}>
-                    {lang}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+                <Text style={styles.filterSectionTitle}>Tipo de Obra</Text>
+                {[...new Set(finalFilteredItems.map(item => item.typology))].map((type) => (
+                  <TouchableOpacity 
+                    key={type}
+                    onPress={() => toggleFilter(type, selectedTypologies, setSelectedTypologies)}
+                    >
+                    <Text style={[
+                      styles.filterOption,
+                      selectedTypologies.includes(type) && styles.filterOptionSelected
+                    ]}>
+                      {type}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
 
-              <Text style={styles.filterSectionTitle}>Assuntos</Text>
-              {[...new Set(finalFilteredItems.map(item => item.subject))].map((subject) => (
-                <TouchableOpacity
-                  key={subject}
-                  onPress={() => toggleFilter(subject, selectedSubject, setSelectedSubject)}
-                  >
-                  <Text style={[
-                    styles.filterOption,
-                    selectedSubject.includes(subject) && styles.filterOptionSelected
-                  ]}>
-                    {subject}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+                <Text style={styles.filterSectionTitle}>Ano</Text>
+                {[...new Set(finalFilteredItems.map(item => item.year))].map((year) => (
+                  <TouchableOpacity
+                    key={year}
+                    onPress={() => toggleFilter(year, selectedYears, setSelectedYears)}
+                    >
+                    <Text style={[
+                      styles.filterOption,
+                      selectedYears.includes(year) && styles.filterOptionSelected
+                    ]}>
+                      {year}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+
+                <Text style={styles.filterSectionTitle}>Autores</Text>
+                {[...new Set(finalFilteredItems.map(item => item.responsible))].map((responsible) => (
+                  <TouchableOpacity
+                    key={responsible}
+                    onPress={() => toggleFilter(responsible, selectedResponsible, setSelectedResponsible)}
+                    >
+                    <Text style={[
+                      styles.filterOption,
+                      selectedResponsible.includes(responsible) && styles.filterOptionSelected
+                    ]}>
+                      {responsible}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+
+                <Text style={styles.filterSectionTitle}>Idioma</Text>
+                {[...new Set(finalFilteredItems.map(item => item.language))].map((lang) => (
+                  <TouchableOpacity
+                    key={lang}
+                    onPress={() => toggleFilter(lang, selectedLanguages, setSelectedLanguages)}
+                    >
+                    <Text style={[
+                      styles.filterOption,
+                      selectedLanguages.includes(lang) && styles.filterOptionSelected
+                    ]}>
+                      {lang}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+
+                <Text style={styles.filterSectionTitle}>Assuntos</Text>
+                {[...new Set(finalFilteredItems.map(item => item.subject))].map((subject) => (
+                  <TouchableOpacity
+                    key={subject}
+                    onPress={() => toggleFilter(subject, selectedSubject, setSelectedSubject)}
+                    >
+                    <Text style={[
+                      styles.filterOption,
+                      selectedSubject.includes(subject) && styles.filterOptionSelected
+                    ]}>
+                      {subject}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              /</View>
             </ScrollView>
-          )}  
+          )}
+              
           
           {/* Lista */}
           <View style={styles.mainContent}>
@@ -350,15 +392,18 @@ export default function CollectionViewScreen() {
                 visible={visible}
                 setVisible={setVisible}
                 style={styles.Modal}
-                title="Ver mais" //style={styles.buttonLink}
+                title="" //style={styles.buttonLink}
                 closeButtonTitle="Fechar" //style={styles.buttonModal}
               >
                 <ScrollView>
                   <View style={styles.modalContainer}>
-                    <View style={styles.modalList}>
-                      {/* Dentro do modal, mostra os dados do item selecionado */}
-                      {selectedItem && (
-                        <>
+                    {selectedItem && (
+                      <>
+                        <View style={styles.buttonModalContainer}>
+                          <TouchableOpacity style={styles.edit} onPress={() => { editItem(selectedItem.id) }}><Text style={styles.buttonModalText}>EDITAR</Text></TouchableOpacity>
+                          <TouchableOpacity style={styles.dell} onPress={() => { deleteItemById(selectedItem.id) }}><Text style={styles.buttonModalText}>DELETAR</Text></TouchableOpacity>
+                        </View>
+                        <View style={styles.modalList}>
                           <Image source={{ uri: selectedItem.image }} style={styles.image} />
                           <Text style={styles.title}>Título: {selectedItem.title}</Text>
                           <Text style={styles.subtitle}>Subtítulo: {selectedItem.subtitle}</Text>
@@ -385,18 +430,15 @@ export default function CollectionViewScreen() {
                           <Text style={styles.detail}>Status: {selectedItem.status}</Text>
                           <Text style={styles.detail}>Arquivo: {selectedItem.file}</Text>
                           <Text style={styles.detail}>Tipo de Empréstimo: {selectedItem.type_loan}</Text> 
-                        </>
-                      )}
-                      <TouchableOpacity onPress={() => setVisible(false)} style={styles.closeButton}>
-                        <Text style={styles.closeButtonText}>Fechar</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>  
+                        </View>
+                      </>
+                    )}
+                  </View>    
                 </ScrollView>
               </MyModal>
           </View> 
         </View>
-      </View> 
+      </View>
     </ScrollView>    
   );
 }
@@ -644,6 +686,11 @@ const styles = StyleSheet.create({
     borderColor: 'purple',
     alignItems: 'center',
 },
+buttonLink: {
+  backgroundColor: "transparent",
+  alignItems: 'flex-end',
+  justifyContent: 'flex-end',
+},
 buttonModal: {
   backgroundColor: "transparent",
   alignItems: 'flex-end',
@@ -651,48 +698,67 @@ buttonModal: {
 },
 modalContainer: {
   flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-  width: 530,
+  display: 'flex',
+  width: 565,
   height: 530,
-
+  flexDirection: 'row-reverse',
+  justifyContent: 'space-between',
+  alignItems: 'flex-start',
+  padding: 5, 
 },  
 modalList: {
   backgroundColor: '#f2f2f2',
-  width: '100%',
+  width: '50%',
+  height: '100%',
+  gap: 5,
+  alignItems: 'flex-start',
   
 },
+buttonModalContainer: {
+  flexDirection: 'row',
+  justifyContent: 'flex-end',
+  gap: 12,
+  paddingHorizontal: 10,
+  marginBottom: 15
+},
+edit: {
+  backgroundColor: '#d0f1e1',
+  borderColor: '#00bf63',
+  borderWidth: 2,
+  padding: 8,
+  borderRadius: 25,
+},
+dell: {
+    backgroundColor: '#ffc1bd',
+    borderColor: '#eb4f45',
+    borderWidth: 2,
+    padding: 8,
+    borderRadius: 25,
+},
+buttonModalText: { 
+  color: '#0C1D40',
+  fontSize: 18,
+  fontFamily: 'Poppins_400Regular',  
+},
 
-
-  
-  sidebar: {
-    width: 130,
-    backgroundColor: '#f4f4f4',
-    padding: 10,
-    borderRadius: 8,
-    marginRight: 10,
-  },
-  filterBar: {
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-  },
-  filterLabel: { color: '#666' },
-  
-  containerModal:{
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-  },
-  
-  
-  
-  closeButton: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: '#007BFF',
-    borderRadius: 5,
-  },
-  closeButtonText: {
-    color: '#fff',
-  },
+filterHeader: {
+  fontSize: 18,
+  fontWeight: 'bold',
+  color: '#4A148C',
+  marginBottom: 10,
+  fontFamily: 'Poppins_400Regular',
+},
+selectedFiltersText: {
+  fontSize: 14,
+  color: '#666',
+  marginBottom: 15,
+  fontFamily: 'Poppins_400Regular',
+},
+filterSection: {
+  marginBottom: 15,
+  borderBottomWidth: 1,
+  borderBottomColor: '#eee',
+  paddingBottom: 10,
+},
   
 });
