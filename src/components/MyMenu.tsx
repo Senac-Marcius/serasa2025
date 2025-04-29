@@ -99,15 +99,17 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Employees" route="employees" icon="people" />
         <MenuItem label="Items" route="items" icon="pricetag" />
         <MenuItem label="Launchs" route="sala_de_aula/launchs" icon="rocket" />
+        <MenuItem label="Classes" route="classes" icon="school" />
+        <MenuItem label="Collections" route="collections" icon="cube" />
+        <MenuItem label="Launchs" route="launchs" icon="rocket" />
+
+        <MenuItem label="Libraie" route="libraie" icon="book" />
         <MenuItem label="Levels" route="levels" icon="stats-chart" />
-        <MenuItem label="Librarie" route="librarie" icon="book" />
         <MenuItem label="Loans" route="loans" icon="card" />
-        <MenuItem label="Locals" route="infraestrutura/locals" icon="location" />
-        <MenuItem label="Notifications" route="notifications" icon="notifications" />
-        <MenuItem label="Parents" route="parents" icon="people-circle" />
         <MenuItem label="Perfil" route="perfil" icon="person" />
         <MenuItem label="Posts" route="posts" icon="chatbox" />
         <MenuItem label="Infraestrutura" route="infraestrutura" icon="cube-outline"/>
+
         <MenuItem label="Projects" route="projects" icon="briefcase" />
         <MenuItem label="Records" route="records" icon="document-text-outline"/>
         <MenuItem label="Revenues" route="revenues" icon="cash-outline" />
@@ -115,8 +117,10 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Timelines" route="sala_de_aula/timelines" icon="calendar" />
         <MenuItem label="Students" route="sala_de_aula/students" icon="school" />
         <MenuItem label="Users" route="users" icon="person-circle" />
+
+        <MenuItem label="Users" route="registeredUsers" icon="person-circle" />
         <MenuItem label="More" route="more" icon="add-circle" />
-        <MenuItem label="Trabalhe Conosco" route='Administracao/employees?view=form'  icon="cash" />
+        <MenuItem label="Trabalhe Conosco" route='Administracao/employees'  icon="cash" />
       </ScrollView>
     </Animated.View>
   );

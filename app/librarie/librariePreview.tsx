@@ -65,7 +65,7 @@ export default function CollectionViewScreen() {
     id: number,
   }
   // Puxa os itens do BD
-  /*useEffect(() => {
+  useEffect(() => {
     async function fetchAllItems() {
       const { data, error } = await supabase
         .from('items_librarie')
@@ -82,23 +82,6 @@ export default function CollectionViewScreen() {
 
     fetchAllItems();
 
-  }, []);*/
-
-  useEffect(() =>{
-    (async () => {
-        const retorno =await getItems({});
-        
-        if (retorno.status && retorno.data && retorno.data.length>0){
-            console.log(retorno.data);
-            const t:any[] = []
-            retorno.data.map(p => t.push(p))
-            setItems(t)
-            console.log(items)
-        } else {
-            console.log('Nenhum item encontrado ou erro:', retorno.error);
-        }
-        setLoading(false);
-    })();
   }, []);
 
   // Filtro de itens de acordo com a pesquisa e filtros selecionados
@@ -259,6 +242,7 @@ export default function CollectionViewScreen() {
             textStyle={styles.tabText}
             activeTextStyle={styles.activeTabText}
             onPress={handleTabPress}
+            underline={true}
             initialActiveIndex={0}
           />
           <TouchableOpacity onPress={() => router.push('/librarie/librarie')} style={styles.addButton}>
@@ -394,6 +378,9 @@ export default function CollectionViewScreen() {
                 style={styles.Modal}
                 title="" //style={styles.buttonLink}
                 closeButtonTitle="Fechar" //style={styles.buttonModal}
+                //button_type={capsule}
+
+
               >
                 <ScrollView>
                   <View style={styles.modalContainer}>
