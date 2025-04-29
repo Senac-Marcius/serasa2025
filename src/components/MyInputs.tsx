@@ -108,7 +108,7 @@ const MyCheck: React.FC<MyCheckProps> = ({ label, checked, onToggle }) => {
         justifyContent: 'center',
         marginRight: 8
       }}>
-        <Icon name={checked ? 'check' : 'close'} size={16} color="white" />
+        <Icon name={checked ? 'check' : ''} size={16} color="white" />
       </View>
       <Text style={{ fontSize: 14, color: '#333' }}>{label}</Text>
     </Pressable>
