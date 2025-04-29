@@ -4,7 +4,6 @@ import { supabase } from '../utils/supabase'
 interface iEmployees { 
     id: number,
     urls: string,
-    date_birth: string,
     nationality: string,
     disc_personality: string,
     sex: string,

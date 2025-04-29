@@ -67,6 +67,7 @@ export default function IndexScreen() {
         console.warn("Resposta inesperada de getProjects:", result.data);
       }
     }
+    fetchScales();
     fetchPositions();
     fetchEmployes();
     fetchProjects();
@@ -75,40 +76,40 @@ export default function IndexScreen() {
     {
       title: 'Meus Dados',
       icon: <Ionicons name="reader" size={30} color="#6C63FF" />,
-      route: 'Administracao/employees',
+      route: 'adminsitration/employees',
       bgColor: '#F3F1FE',
-    },
-    {
-      title: 'Projetos',
-      icon: <Ionicons name="calendar" size={30} color="#2EC4B6" />,
-      route: 'Administracao/projects',
-      bgColor: '#E5FBF8',
-      value: projectCount,
     },
     {
       title: 'Minha Escala',
       icon: <Ionicons name="document-text" size={30} color="#FF5C8A" />,
-      route: 'Administracao/scales',
+      route: 'adminsitration/scales',
       bgColor: '#FFEAF0',
+    },
+    {
+      title: 'Projetos',
+      icon: <Ionicons name="calendar" size={30} color="#2EC4B6" />,
+      route: 'adminsitration/projects',
+      bgColor: '#E5FBF8',
+      value: projectCount,
     },
     {
       title: 'Funcionários',
       icon: <Ionicons name="reader" size={30} color="#6C63FF" />,
-      route: 'Administracao/employees',
+      route: 'adminsitration/employees',
       bgColor: '#F3F1FE',
       value: employeesCount,
     },
     {
       title: 'Cargos',
       icon: <Ionicons name="calendar" size={30} color="#2EC4B6" />,
-      route: 'Administracao/projects',
+      route: 'adminsitration/positions',
       bgColor: '#E5FBF8',
       value: positionsCount,
     },
     {
       title: 'Escalas',
       icon: <Ionicons name="document-text" size={30} color="#FF5C8A" />,
-      route: 'Administracao/scales',
+      route: 'adminsitration/scales',
       bgColor: '#FFEAF0',
       value: scalesCount,
     },

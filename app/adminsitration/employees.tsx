@@ -31,7 +31,6 @@ export default function EmployeeScreen() {
     const [req, setReq] = useState<iEmployees>({
         id: -1,
         urls: '',
-        date_birth: '',
         nationality: '',
         disc_personality: '',
         sex: '',
@@ -111,7 +110,6 @@ export default function EmployeeScreen() {
             setReq({
                 id: -1,
                 urls: '',
-                date_birth: '',
                 nationality: '',
                 disc_personality: '',
                 sex: '',
@@ -159,13 +157,6 @@ export default function EmployeeScreen() {
         }
     };
 
-    const handleUserSelect = (userId: number) => {
-        const user = users.find(u => u.id === userId);
-        if (user) {
-            setSelectedUser(user);
-            setReq({...req, user_id: userId});
-        }
-    };
 
     if (loading) {
         return (
@@ -207,7 +198,7 @@ export default function EmployeeScreen() {
                                         value={selectedUser.age}
                                         placeholder=""
                                         onChangeText={() => {}}
-                                        iconName="age"
+                                        iconName="event"
                                         
                                     />
                                     <Myinput
@@ -404,7 +395,6 @@ export default function EmployeeScreen() {
                                         setReq({
                                             id: -1,
                                             urls: '',
-                                            date_birth: '',
                                             nationality: '',
                                             disc_personality: '',
                                             sex: '',
@@ -434,7 +424,6 @@ export default function EmployeeScreen() {
                                 setReq({
                                     id: -1,
                                     urls: '',
-                                    date_birth: '',
                                     nationality: '',
                                     disc_personality: '',
                                     sex: '',
