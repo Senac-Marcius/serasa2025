@@ -112,7 +112,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Revenues" route="revenues" icon="cash-outline" />
         <MenuItem label="Timelines" route="timelines" icon="calendar" />
         <MenuItem label="Students" route="students" icon="school" />
-        <MenuItem label="Users" route="users" icon="person-circle" />
+        <MenuItem label="Users" route="registeredUsers" icon="person-circle" />
         <MenuItem label="More" route="more" icon="add-circle" />
         <MenuItem label="Trabalhe Conosco" route='Administracao/employees?view=form'  icon="cash" />
       </ScrollView>
