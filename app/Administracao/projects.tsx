@@ -175,6 +175,12 @@ const parseCurrencyInput = (text: string): number => {
         
     }
 
+    // Função para formatar como moeda brasileira
+    const formatCurrency = (value: string) => {
+        const numeric = value.replace(/\D/g, ''); // remove tudo que não é número
+        const number = parseFloat(numeric) / 100; // divide por 100 para considerar centavos
+        return number.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    };
 
     function adicionarProtocolo(url: string){
         if (!/^https?:\/\//i.test(url)) {
@@ -305,16 +311,17 @@ const parseCurrencyInput = (text: string): number => {
                                 onChangeText={(text) => setReq({ ...req, url: adicionarProtocolo(text) })}
                             />
                             
-                            <Mytext style={styles.label}> Recursos: </Mytext>
+                            <Mytext style={styles.label}>Recursos:</Mytext>
                             <Myinput
                             iconName=""
                             label=""
                             placeholder="Digite o valor..."
-                            value={`R$ ${rawRecurces}`} // Mostra valor formatado
+                            
+                            value={rawRecurces}
                             onChangeText={(text) => {
-                                const cleanText = text.replace(/[^\d,\.]/g, '');
-                                setRawRecurces(cleanText);
-                                const numericValue = parseCurrencyInput(cleanText);
+                                const formatted = formatCurrency(text);
+                                setRawRecurces(formatted);
+                                const numericValue = Number(formatted.replace(/\D/g, '')) / 100;
                                 setReq(prev => ({ ...prev, recurces: numericValue }));
                             }}
                             />
@@ -436,44 +443,44 @@ const parseCurrencyInput = (text: string): number => {
                             >
                                 {/* Agrupamento e identificação de cada campo com rótulo claro */}
                                 <View style={styles.projectGroup}>
-                                <Mytext style={styles.projectLabel}>👤 Criador:</Mytext>
+                                <Mytext style={styles.projectLabel}> Criador:</Mytext>
                                 <Mytext style={styles.projectText2}>{item.name}</Mytext>
 
                                 </View>
 
                                 <View style={styles.projectGroup}>
-                                <Mytext style={styles.projectLabel}>📌 Nome do Projeto:</Mytext>
+                                <Mytext style={styles.projectLabel}> Nome do Projeto:</Mytext>
                                 <Mytext style={styles.projectText2}>{item.namep}</Mytext>
                                 </View>
 
                                 <View style={styles.projectGroup}>
-                                <Mytext style={styles.projectLabel}>🔗 URL:</Mytext>
+                                <Mytext style={styles.projectLabel}> URL:</Mytext>
                                 <Mytext style={styles.projectText2}>{item.url}</Mytext>
                                 </View>
 
                                 <View style={styles.projectGroup}>
-                                <Mytext style={styles.projectLabel}>🧑‍💻 Usuário:</Mytext>
+                                <Mytext style={styles.projectLabel}> Usuário:</Mytext>
                                 <Mytext style={styles.projectText2}>#{item.user_id}</Mytext>
                                 </View>
 
                                 <View style={styles.projectGroup}>
-                                <Mytext style={styles.projectLabel}>💰 Recursos:</Mytext>
+                                <Mytext style={styles.projectLabel}> Recursos:</Mytext>
                                 <Mytext style={styles.projectText2}>{item.recurces}</Mytext>
                                 </View>
 
                                 <View style={styles.projectGroup}>
-                                <Mytext style={styles.projectLabel}>📝 Descrição:</Mytext>
+                                <Mytext style={styles.projectLabel}> Descrição:</Mytext>
                                 <Mytext style={styles.projectText2}>{item.description}</Mytext>
                                 </View>
 
                                 <View style={styles.projectGroup}>
-                                <Mytext style={styles.projectLabel}>🎯 Objetivo:</Mytext>
+                                <Mytext style={styles.projectLabel}> Objetivo:</Mytext>
                                 <Mytext style={styles.projectText2}>{item.objective}</Mytext>
                                 </View>
 
                                 {/* Grupo visual para campos relacionados à metodologia */}
                                 <View style={styles.projectGroup}>
-                                <Mytext style={styles.projectLabel}>🧪 Metodologia:</Mytext>
+                                <Mytext style={styles.projectLabel}> Metodologia:</Mytext>
                                 <Mytext style={styles.projectText2}> Técnicas: {item.techniques}</Mytext>
                                 <Mytext style={styles.projectText2}>Processos: {item.process}</Mytext>
                                 <Mytext style={styles.projectText2}>Estratégias: {item.strategies}</Mytext>
