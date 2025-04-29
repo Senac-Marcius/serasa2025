@@ -7,7 +7,7 @@ import MyButton from '../../src/components/MyButtons';
 import {Myinput, MyTextArea } from '../../src/components/MyInputs';
 import {MyTb} from '../../src/components/MyItem';
 import Mytext from '../../src/components/MyText';
-import {MyModal_mobilefullscreen} from '../../src/components/MyModal';
+import {MyModal} from '../../src/components/MyModal';
 import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '../../src/controllers/revenues'
 
 import MySelect from '../../src/components/MySelect';
@@ -148,6 +148,9 @@ const getFilteredRevenues = () => {
   if (!searchTerm) return revenues; // Retorna tudo se não houver busca
   
   const term = searchTerm.toLowerCase();
+
+  const u = users.find(ul => ul.option.includes(term) )
+
   
   return revenues.filter(item => {
     // Converte o desconto para string e trata o símbolo %
@@ -155,12 +158,12 @@ const getFilteredRevenues = () => {
     const discountPercent = discountStr ? `${discountStr}%` : '';
     
     return (
-      item.name?.toLowerCase().includes(term) ||
+      (u != undefined && item.user_id == u.key) ||
       item.description?.toLowerCase().includes(term) ||
       item.value?.toString().includes(searchTerm) || // Mantém sem lowercase para números
       item.id?.toString().includes(searchTerm) ||
       item.url?.toLowerCase().includes(term) ||
-      item.scholarship_status?.toLowerCase().includes(term) ||
+      item.scholarship_status.toLowerCase() == searchTerm.toLowerCase() ||
       item.tipo_mensalidade?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       discountStr.includes(searchTerm) || // Busca o número cru (25)
       discountPercent.includes(searchTerm) // Busca o formato com % (25%)
@@ -178,13 +181,15 @@ const getFilteredRevenues = () => {
       </Mytext>
 
       <MySearch
-       style={styles.searchInput}
-       onChangeText={setSearchTerm}
+        placeholder='teste'
+        style={styles.searchInput}
+        onChangeText={setSearchTerm}
         onPress={()=> {setSearchTerm(searchTerm)}}
         busca={searchTerm}
     />
 
-  <MyModal_mobilefullscreen
+  <MyModal
+    title='teste'
     visible={visible} 
     setVisible={setVisible}>
   
@@ -274,7 +279,7 @@ const getFilteredRevenues = () => {
 
             <MyButton style={{justifyContent:'center'}} onPress={() => handleRegister ()} title="cadastrar"  />
         </View>
-        </MyModal_mobilefullscreen>
+        </MyModal>
 
         {/* Lista de Receitas */}
         <MyList
