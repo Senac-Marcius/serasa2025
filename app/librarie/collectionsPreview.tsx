@@ -79,7 +79,9 @@ export default function CollectionPreviewScreen() {
         subject: string,
         year: string,
         responsible: string,
-        edition: string) {
+        edition: string
+    
+    ) {
 
 
         let query = supabase
@@ -105,8 +107,6 @@ export default function CollectionPreviewScreen() {
 
         return data || [];
     }
-    
-
 
     return (
         <ScrollView>
@@ -177,9 +177,9 @@ export default function CollectionPreviewScreen() {
                                 caption="Assunto"
                                 setLabel={(val) => { setSubject(val); itemsSearch(); }}
                                 list={[
-                                    { key: 0, option: 'Todos' },
-                                    { key: 1, option: 'Ficção Científica' },
-                                    { key: 2, option: 'Romance' },
+                                    { key: 0, option: "Todos" },
+                                    { key: 1, option: "Ficção Científica" },
+                                    { key: 2, option: "Romance" },
                                     { key: 3, option: "Terror" },
                                     { key: 4, option: "Suspense" },
                                     { key: 5, option: "Mistério" },
@@ -224,21 +224,6 @@ export default function CollectionPreviewScreen() {
                                     { key: 8, option: "Stephen King" },
                                     { key: 9, option: "H.P. Lovecraft" },
                                     { key: 10, option: "Agatha Christie" },
-                                    { key: 11, option: "Arthur Conan Doyle" },
-                                ]}
-                            />
-                        </View>
-                        <View style={styles.ViewSelect}>
-                            {/* <Text style={styles.itemTextFilter}>  Edição </Text> */}
-                            <Select
-                                label={edition}
-                                setLabel={(val) => { setEdition(val); itemsSearch(); }}
-                                caption="Edição"
-                                list={[
-                                    { key: 0, option: 'Todos' },
-                                    { key: 1, option: '1ª' },
-                                    { key: 2, option: '2ª' },
-                                    { key: 3, option: '3ª' }
                                 ]}
                             />
                         </View>
@@ -269,7 +254,7 @@ export default function CollectionPreviewScreen() {
                                             <Text style={styles.itemTitlename}>{item.title}</Text>
                                             <Text style={styles.itemText}> {item.responsible}</Text>
                                             <View style={styles.tagsContainer}>
-                                                {item.keywords?.split(',').map((tag, index) => (
+                                                {item.subject?.split(',').map((tag, index) => (
                                                     <View key={index} style={styles.tag}>
                                                         <Text style={styles.tagText}>{tag.trim()}</Text>
                                                     </View>
@@ -403,7 +388,7 @@ const styles = StyleSheet.create({
         marginRight: 50,
         marginTop: 50,
         width: 300,
-        height: 480,
+        height: 500,
         alignItems: "center",
         justifyContent: "flex-start",
 

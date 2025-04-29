@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity,ScrollView } from 'react-native';
 import { Myinput } from '../../src/components/MyInputs';
 import MyButton from '../../src/components/MyButtons';
 import MyList from '../../src/components/MyList';
+import { getItems, iItem, setItem } from '../../src/controllers/librarie';
 import { setCollection, iCollection, deleteCollectionById, updateCollectionById, getCollections } from '../../src/controllers/collections';
-import { ScrollView } from 'react-native-gesture-handler';
+import { supabase } from '../../src/utils/supabase';
+
 
 function StarRating({ rating, onChange }: { rating: number; onChange: (star: number) => void }) {
     return (
+        
         <View style={styles.starContainer}>
             {[1, 2, 3, 4, 5].map((star) => (
                 <TouchableOpacity key={star} onPress={() => onChange(star)}>
@@ -19,10 +22,29 @@ function StarRating({ rating, onChange }: { rating: number; onChange: (star: num
         </View>
     );
 }
+const [items, setItems] = useState<iItem[]>([]);
+// const [bookId, setBookId] = useState<number | null>(null);
+
+//  useEffect(() => {
+//     async function getTodos() {
+//       const retorno = await getItems({});
+
+//       if (retorno.status && retorno.data && retorno.data.length > 0) {
+//         setItems(retorno.data);
+//       }
+//     }
+
+//     getTodos();
+//   }, []);
+
+//   const selectedItem = items.find((item) => item.id === bookId);
+
+  
 
 export function StarCalculation() {
     const [req, setReq] = useState({
         id: -1,
+        bookId:0,
         name: '',
         quantity: '',
         star: 0,
@@ -31,6 +53,7 @@ export function StarCalculation() {
     });
 
     const [collections, setCollections] = useState<iCollection[]>([]);
+   
 
     useEffect(() => {
         async function getTodos() {
@@ -58,6 +81,7 @@ export function StarCalculation() {
         }
         setReq({
             id: -1,
+            bookId:0,
             name: '',
             quantity: '',
             commentary: '',
@@ -80,6 +104,9 @@ export function StarCalculation() {
             alert("Erro ao deletar.");
         }
     }
+   
+
+
 
     return (
         <View style={styles.formContainer}>
