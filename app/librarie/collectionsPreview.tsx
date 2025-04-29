@@ -86,7 +86,11 @@ export default function CollectionPreviewScreen() {
             .from('items_librarie')
             .select('*');
 
-        if (search) query = query.ilike('title', `%${search}%`);
+        if (search){
+            query = query.or(
+              `title.ilike.%${search}%,summary.ilike.%${search}%,subject.ilike.%${search}%,responsible.ilike.%${search}%`
+            );
+          }
         if (selectFilter && selectFilter !== 'Todos') query = query.eq('categoria', selectFilter);
         if (subject !== 'Todos') query = query.eq('subject', subject);
         if (year !== 'Todos') query = query.eq('typology', year);
@@ -149,13 +153,6 @@ export default function CollectionPreviewScreen() {
                         <Carousel.Item>
                             <Image
                                 source={require('./assets/slide2biblioteca.png')}
-                                style={{ width: 1200, height: 470, resizeMode: 'cover' }}
-
-                            />
-                        </Carousel.Item>
-                        <Carousel.Item>
-                            <Image
-                                source={require('./assets/slide3biblioteca.png')}
                                 style={{ width: 1200, height: 470, resizeMode: 'cover' }}
 
                             />
@@ -350,7 +347,7 @@ const styles = StyleSheet.create({
     },
 
     textTitle: {
-        fontFamily: 'Poppins, sans-serif',
+        fontFamily: 'Poppins_400Regular',
         fontWeight: 600,
         color: '#750097',
         fontSize: 30,

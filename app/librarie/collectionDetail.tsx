@@ -9,6 +9,7 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import TabelaUsuarios from './loantable';
 import { supabase } from '../../src/utils/supabase';
 import MyMenu from '../../src/components/MyMenu';
+import { StarCalculation } from './starsCalculation';
 import { setCollection, iCollection, deleteCollectionById, updateCollectionById, getCollections } from '../../src/controllers/collections';
 
 export default function CollectionDetail() {
@@ -148,10 +149,10 @@ export default function CollectionDetail() {
               <View style={styles.styleimg}><Image source={{ uri: item.image }} style={styles.image}></Image></View>
               <View style={styles.containerText}>
                 <Text style={styles.itemTitlename}>{item.title}</Text>
-                <Text style={styles.itemText}> {item.summary}</Text>
+                <Text style={styles.itemText}>{item.summary}</Text>
                 <Text style={styles.itemText}>{item.subject}</Text>
                 <Text style={styles.itemText}>{item.responsible}</Text>
-                <Text style={styles.itemText}> {item.year}</Text>
+                <Text style={styles.itemText}>{item.year}</Text>
                 <Text style={styles.itemText}>{item.edition}</Text>
                 {item.keywords && (
                   <View style={styles.tagsContainer}>
@@ -170,11 +171,7 @@ export default function CollectionDetail() {
                     title="Empréstimo"
                     closeButtonTitle="Fechar"
                   >
-                    <TabelaUsuarios
-                      data={[]}
-                      onEdit={(id) => console.log("Editar", id)}
-                      onDelete={(id) => console.log("Deletar", id)}
-                    />
+                   <StarCalculation/>
                   </MyModal>
                 </View>
               </View>
@@ -268,6 +265,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     gap: 40,
     overflow: "hidden",
+    borderRadius:20,
 
   },
   itemText: {
