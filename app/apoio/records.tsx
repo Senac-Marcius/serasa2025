@@ -81,7 +81,6 @@ export default function RecordScreen(user_id:Number) {
                 } else {
                     const { error } = await supabase.from('records')
                         .update({
-                            name: req.name,
                             description: req.description,
                             sick: req.sick,
                             health: req.health,
@@ -134,9 +133,7 @@ export default function RecordScreen(user_id:Number) {
     return (
  
         <MyView >
- 
- 
-            <View style={styles.row}>
+
  
  
                 <View style={styles.form}>
@@ -233,7 +230,6 @@ export default function RecordScreen(user_id:Number) {
                   )}  
                    
                 />
-            </View>
         </MyView>
     );
 }
