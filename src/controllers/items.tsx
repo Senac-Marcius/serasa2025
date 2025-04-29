@@ -8,7 +8,7 @@ interface iIten {
     asset_number: string,
     amount: number, 
     description: string,
-    category_id: number,
+    category_id: string,
     product_id: number,
     local_id: number,
     products_id: number;
