@@ -17,11 +17,13 @@ import { getItems } from '../src/controllers/librarie';
 export default function CollectionScreen() {
 
     const [req, setReq] = useState({
-        id: 0,
+        id: -1,
+        bookId:0,
         name: '',
         quantity: '',
-        star: '',
-        createAt: new Date().toISOString()
+        star: 0,
+        commentary: '',
+        createAt: new Date().toISOString(),
     });
 
     const [visible, setVisible] = useState(false);
@@ -30,7 +32,7 @@ export default function CollectionScreen() {
 
     useEffect(() => {
         async function getTodos() {
-            const retorno = await getItems({})
+            const retorno = await getCollections({})
 
             if (retorno.status && retorno.data && retorno.data.length > 0) {
                 setCollections(retorno.data);
@@ -61,10 +63,12 @@ export default function CollectionScreen() {
         }
         setReq({
             id: -1,
-            name: '',
-            quantity: '',
-            star: '',
-            createAt: new Date().toISOString()
+        bookId:0,
+        name: '',
+        quantity: '',
+        star: 0,
+        commentary: '',
+        createAt: new Date().toISOString(),
         })
 
     }
@@ -111,14 +115,6 @@ export default function CollectionScreen() {
                             placeholder="Quantidade"
                             label="Quantidade"
                             iconName="add"
-                        />
-
-                        <Myinput
-                            value={req.star}
-                            onChangeText={(text) => setReq({ ...req, star: text })}
-                            placeholder="Estrelas"
-                            label="Estrelas"
-                            iconName="star"
                         />
 
 

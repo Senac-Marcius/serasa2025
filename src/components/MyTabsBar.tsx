@@ -10,6 +10,7 @@ interface MyTabsbarProps {
   textStyle?: TextStyle;
   activeTextStyle?: TextStyle;
   onPress: (item: string, index: number) => void;
+  underline: boolean;
   initialActiveIndex: number;
 }
 
@@ -21,6 +22,7 @@ const MyTabsbar: React.FC<MyTabsbarProps> = ({
   textStyle,
   activeTextStyle,
   onPress,
+  underline = true,
   initialActiveIndex = 0,
 }) => {
   const [activeIndex, setActiveIndex] = useState(initialActiveIndex);
@@ -52,8 +54,8 @@ const MyTabsbar: React.FC<MyTabsbarProps> = ({
         <Text style={[styles.tabText, textStyle, isActive && [styles.activeTabText, activeTextStyle]]}>
           {item}
         </Text>
-        {isActive && <View style={[style, styles.underline]} />}
-      </TouchableOpacity>
+        {isActive && underline && <View style={[style, styles.underline]} />}
+      </TouchableOpacity> 
     );
   };
 
