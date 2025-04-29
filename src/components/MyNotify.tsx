@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3E5F5', // lilás claro
     borderRadius: 12,
     padding: 12,
-    
+    height:500,
     width: 320,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 6 },
