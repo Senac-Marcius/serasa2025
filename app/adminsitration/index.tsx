@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View, Text, StyleSheet, ScrollView,
-  TouchableOpacity, Alert, Modal, TextInput, Pressable, Dimensions,
-} from 'react-native';
-import { Ionicons, FontAwesome5, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import {View, Text, StyleSheet, ScrollView, Pressable, Dimensions,} from 'react-native';
+import { Ionicons,  MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { getProjects } from '../../src/controllers/projects';
+import { getEmployees } from '../../src/controllers/employees';
+import { getCargo} from '../../src/controllers/positions';
+import { getScale } from '../../src/controllers/scales';
 import MyView from '../../src/components/MyView';
-import { DatePickerModal } from 'react-native-paper-dates';
+
 
 interface Evento {
   id: number;
@@ -23,103 +24,104 @@ const menuItems = [
   { label: 'Vagas', icon: <MaterialCommunityIcons name="clipboard-text-outline" size={20} color="#555" />, route: 'adminsitration/positions' },
 ];
 
-const cards = [
-  {
-    title: 'Meus Dados',
-    icon: <Ionicons name="reader" size={30} color="#6C63FF" />,
-    route: 'Administracao/employees',
-    bgColor: '#F3F1FE',
-    value: 12,
-  },
-  {
-    title: 'Projetos',
-    icon: <Ionicons name="calendar" size={30} color="#2EC4B6" />,
-    route: 'Administracao/projects',
-    bgColor: '#E5FBF8',
-    value: 7,
-  },
-  {
-    title: 'Minha Escala',
-    icon: <Ionicons name="document-text" size={30} color="#FF5C8A" />,
-    route: 'Administracao/scales',
-    bgColor: '#FFEAF0',
-    value: 21,
-  },
-];
+
 
 export default function IndexScreen() {
-  const router = useRouter();
-  const [eventos, setEventos] = useState<Evento[]>([]);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [novoEvento, setNovoEvento] = useState({ nome: '', data: '' });
-  const [editandoId, setEditandoId] = useState<number | null>(null);
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-  const [dataSelecionada, setDataSelecionada] = useState<Date | undefined>();
-  const [abrirCalendario, setAbrirCalendario] = useState(false);
+  const [projectCount, setProjectCount] = useState(0);
+  const [employeesCount, setEmployeesCount] = useState(0);
+  const [positionsCount , setPositionsCount] = useState(0);
+  const [scalesCount, setScalesCount] = useState(0);
 
   useEffect(() => {
-    setEventos([
-      { id: 1, nome: 'Reunião Pedagógica', data: '2025-04-07' },
-      { id: 2, nome: 'Entrega de Notas', data: '2025-04-10' },
-      { id: 3, nome: 'Conselho de Classe', data: '2025-04-14' },
-    ]);
+    async function fetchProjects() {
+      const result = await getProjects({});
+      if (result.status && Array.isArray(result.data)) {
+        setProjectCount(result.data.length);
+      } else {
+        setProjectCount(0);
+      }
+    }
+    async function fetchEmployes() {
+      const result = await getEmployees({});
+      if (result.status && Array.isArray(result.data)) {
+        setEmployeesCount(result.data.length);
+      } else {
+        setEmployeesCount(0);
+      }  
+    }
+    async function fetchPositions() {
+      const result = await getCargo({});
+      if (result.status && Array.isArray(result.data)) {
+        setPositionsCount(result.data.length);
+      } else {
+        setPositionsCount(0);
+        console.warn("Resposta inesperada de getProjects:", result.data);
+      }
+    }
+    async function fetchScales() {
+      const result = await getScale({});
+      if (result.status && Array.isArray(result.data)) {
+        setScalesCount(result.data.length);
+      } else {
+        setScalesCount(0);
+        console.warn("Resposta inesperada de getProjects:", result.data);
+      }
+    }
+    fetchPositions();
+    fetchEmployes();
+    fetchProjects();
   }, []);
-
-  const abrirModal = (evento?: Evento) => {
-    if (evento) {
-      setEditandoId(evento.id);
-      setNovoEvento({ nome: evento.nome, data: evento.data });
-      setDataSelecionada(new Date(evento.data));
-    } else {
-      setEditandoId(null);
-      setNovoEvento({ nome: '', data: '' });
-      setDataSelecionada(undefined);
-    }
-    setModalVisible(true);
-  };
-
-  const salvarEvento = () => {
-    if (!novoEvento.nome.trim() || !novoEvento.data.trim()) return;
-
-    const regexData = /^\d{4}-\d{2}-\d{2}$/;
-    if (!regexData.test(novoEvento.data)) {
-      Alert.alert('Data inválida', 'A data deve estar no formato YYYY-MM-DD');
-      return;
-    }
-
-    if (editandoId) {
-      setEventos(prev => prev.map(ev => ev.id === editandoId ? { ...ev, ...novoEvento } : ev));
-    } else {
-      setEventos(prev => [...prev, { ...novoEvento, id: Date.now() }]);
-    }
-
-    setModalVisible(false);
-    setNovoEvento({ nome: '', data: '' });
-    setEditandoId(null);
-    setDataSelecionada(undefined);
-  };
-
-  const excluirEvento = (id: number) => {
-    Alert.alert('Confirmar Exclusão', 'Deseja realmente excluir este evento?', [
-      { text: 'Cancelar', style: 'cancel' },
-      {
-        text: 'Excluir',
-        style: 'destructive',
-        onPress: () => {
-          setEventos(prev => prev.filter(ev => ev.id !== id));
-        },
-      },
-    ]);
-  };
+  const cards = [
+    {
+      title: 'Meus Dados',
+      icon: <Ionicons name="reader" size={30} color="#6C63FF" />,
+      route: 'Administracao/employees',
+      bgColor: '#F3F1FE',
+    },
+    {
+      title: 'Projetos',
+      icon: <Ionicons name="calendar" size={30} color="#2EC4B6" />,
+      route: 'Administracao/projects',
+      bgColor: '#E5FBF8',
+      value: projectCount,
+    },
+    {
+      title: 'Minha Escala',
+      icon: <Ionicons name="document-text" size={30} color="#FF5C8A" />,
+      route: 'Administracao/scales',
+      bgColor: '#FFEAF0',
+    },
+    {
+      title: 'Funcionários',
+      icon: <Ionicons name="reader" size={30} color="#6C63FF" />,
+      route: 'Administracao/employees',
+      bgColor: '#F3F1FE',
+      value: employeesCount,
+    },
+    {
+      title: 'Cargos',
+      icon: <Ionicons name="calendar" size={30} color="#2EC4B6" />,
+      route: 'Administracao/projects',
+      bgColor: '#E5FBF8',
+      value: positionsCount,
+    },
+    {
+      title: 'Escalas',
+      icon: <Ionicons name="document-text" size={30} color="#FF5C8A" />,
+      route: 'Administracao/scales',
+      bgColor: '#FFEAF0',
+      value: scalesCount,
+    },
+  ];
+  const router = useRouter();
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   return (
     <View style={styles.container}>
       {/* Sidebar */}
       <View style={styles.sidebar}>
         <View style={styles.logoContainer}>
-          <FontAwesome5 name="chalkboard-teacher" size={28} color="#3AC7A8" />
-          <Text style={styles.logoTitle}>Estudy</Text>
-          <Text style={styles.logoSubtitle}>Learn From Home</Text>
+          <Text style={styles.logoTitle}>Administração</Text>
         </View>
 
         {menuItems.map((item, index) => {
@@ -144,7 +146,7 @@ export default function IndexScreen() {
       {/* Conteúdo principal */}
       <MyView style={styles.mainContent}>
         <ScrollView contentContainerStyle={styles.content}>
-          <Text style={styles.mainTitle}>Painel </Text>
+          <Text style={styles.mainTitle}>Painel da Administração </Text>
 
           <View style={styles.cardArea}>
             {cards.map((card, index) => (
@@ -159,73 +161,8 @@ export default function IndexScreen() {
               </Pressable>
             ))}
           </View>
-
-          <Text style={styles.eventsTitle}>Próximos Eventos</Text>
-          {eventos.map(evento => (
-            <View key={evento.id} style={styles.eventItem}>
-              <Ionicons name="calendar-outline" size={20} color="#6A1B9A" />
-              <View style={{ flex: 1, marginLeft: 10 }}>
-                <Text style={styles.eventName}>{evento.nome}</Text>
-                <Text style={styles.eventDate}>{evento.data}</Text>
-              </View>
-              <TouchableOpacity onPress={() => abrirModal(evento)} style={{ marginRight: 10 }}>
-                <Ionicons name="pencil-outline" size={18} color="#6A1B9A" />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => excluirEvento(evento.id)}>
-                <Ionicons name="close-circle-outline" size={20} color="#B00020" />
-              </TouchableOpacity>
-            </View>
-          ))}
-          <TouchableOpacity onPress={() => abrirModal()} style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center' }}>
-            <Ionicons name="add-circle-outline" size={18} color="#6A1B9A" />
-            <Text style={{ color: '#6A1B9A', marginLeft: 6 }}>Agendamento</Text>
-          </TouchableOpacity>
         </ScrollView>
       </MyView>
-
-      {/* Modal */}
-      <Modal visible={modalVisible} transparent animationType="slide">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <TextInput
-              placeholder="Nome do evento"
-              value={novoEvento.nome}
-              onChangeText={text => setNovoEvento({ ...novoEvento, nome: text })}
-              style={styles.input}
-            />
-
-            <TouchableOpacity onPress={() => setAbrirCalendario(true)} style={[styles.input, { justifyContent: 'center' }]}>
-              <Text style={{ fontSize: 16, color: novoEvento.data ? '#000' : '#888' }}>
-                {novoEvento.data || 'Selecionar data'}
-              </Text>
-            </TouchableOpacity>
-
-            <View style={styles.modalButtons}>
-              <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.cancelButton}>
-                <Text style={styles.cancelText}>Cancelar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={salvarEvento} style={styles.saveButton}>
-                <Text style={styles.saveText}>Salvar</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-
-        <DatePickerModal
-          locale="pt"
-          mode="single"
-          visible={abrirCalendario}
-          onDismiss={() => setAbrirCalendario(false)}
-          date={dataSelecionada}
-          onConfirm={({ date }) => {
-            if (date) {
-              setDataSelecionada(date);
-              setNovoEvento({ ...novoEvento, data: date.toISOString().split('T')[0] });
-            }
-            setAbrirCalendario(false);
-          }}
-        />
-      </Modal>
     </View>
   );
 }

@@ -203,6 +203,14 @@ export default function EmployeeScreen() {
                                         iconName="person"
                                     />
                                     <Myinput
+                                        label="Data de Nascimento"
+                                        value={selectedUser.age}
+                                        placeholder=""
+                                        onChangeText={() => {}}
+                                        iconName="age"
+                                        
+                                    />
+                                    <Myinput
                                         label="Email do Usuário"
                                         value={selectedUser.email}
                                         placeholder="Email"
@@ -210,6 +218,7 @@ export default function EmployeeScreen() {
                                         iconName="email"
                                         
                                     />
+                                    
                                     <Myinput
                                         label="Contato"
                                         value={selectedUser.contact || ''}
