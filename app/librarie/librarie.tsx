@@ -9,11 +9,11 @@ import MyButton from '../../src/components/MyButtons';
 import MyView from '../../src/components/MyView';
 import MySelect from '../../src/components/MySelect';
 import { Myinput, MyTextArea, MyCheck } from '../../src/components/MyInputs';
-import {textStyles} from '../../styles/textStyles';
 import { Icon , MD3Colors} from "react-native-paper";
 import { useRouter } from 'expo-router';
-import {iItem, setItem, getItems} from '../../src/controllers/librarie';
-import { supabase } from '../../src/utils/supabase'
+import {iItem, setItem, getItems, updateItemById} from '../../src/controllers/librarie';
+import { supabase } from '../../src/utils/supabase';
+
 
 export default function itemScreen() { // aqui é TS
 
@@ -48,22 +48,26 @@ export default function itemScreen() { // aqui é TS
         url: '',
         file: '',
         type_loan: '',
-        incorporated: '',
+        incorporated: false,
     });
 
-    const[items, setItems] = useState<iItem[]>([])
-
+    const [items, setItems] = useState<iItem[]>([]);
+    
     useEffect(() =>{
-        async function getTodos(){
-
-            const retorno =await getItems({})
+        (async () => {
+            const retorno =await getItems({});
             
             if (retorno.status && retorno.data && retorno.data.length>0){
-                setItems(retorno.data);
+                console.log(retorno.data);
+                const t:any[] = []
+                retorno.data.map(p => t.push(p))
+                setItems(t)
+                console.log(items)
+            } else {
+                console.log('Nenhum item encontrado ou erro:', retorno.error);
             }
-        }
-    getTodos()
-    }, [])
+        })();
+    }, []);
 
     const router = useRouter();
 
@@ -71,11 +75,6 @@ export default function itemScreen() { // aqui é TS
     const [selectedFile, setSelectedFile] = useState<string | null>(null);
 
     async function handleRegister() { 
-         // Atualiza req.file com o selectedFile (se existir)
-        /*const updatedReq = {
-        ...req,
-        file: selectedFile || req.file, // Mantém o arquivo anterior se selectedFile for null
-        };*/
 
         if (req.id == -1) {
             const newId = items.length ? items[items.length - 1].id + 1 : 0;
@@ -84,6 +83,7 @@ export default function itemScreen() { // aqui é TS
             setItems([...items, newItem])
             await setItem(newItem)
         } else {
+            await updateItemById(req.id, req)
             setItems(items.map(i => (i.id == req.id) ? req : i));
         }
         setReq({
@@ -117,11 +117,12 @@ export default function itemScreen() { // aqui é TS
             url: '',
             file: '',
             type_loan: '',
-            incorporated: '',
+            incorporated: false,
         });
         //setSelectedFile(null); // Limpa o selectedPdf após o registro
+        console.log('Item inserido com sucesso:');
 
-        router.push('/librarieRegisterList');
+        //router.push('librarie/librariePreview');
     };
 
     // Estados para as abas
@@ -205,9 +206,9 @@ export default function itemScreen() { // aqui é TS
             url: '',
             file: '',
             type_loan: '',
-            incorporated:'',
+            incorporated: false,
         });
-        router.push('/librarieHome');
+        router.push('librarie/librariePreview');
     };
 
     //Selects/Pickers
@@ -447,9 +448,7 @@ export default function itemScreen() { // aqui é TS
                                     list={            
                                         [ 
                                             {key:1, option: 'Disponível'},            
-                                            {key:2, option: 'Emprestado'},
-                                            {key:3, option: "Reservado" },
-                                            {key:4, option: "Perdido"},
+                                            {key:2, option: 'Indisponível'},
                                         ]
                                     }
                                 />
@@ -476,18 +475,25 @@ export default function itemScreen() { // aqui é TS
                                     icon=""
                                     style={styles.button_capsule2}
                                 />
-                                {/*< MyCheck
-                                    label={incorporated ? "Sim" : "Não"} 
-                                    checked={incorporated}
-                                    onToggle= {() => {
-                                    }}
-                                />*/}
+                                <View style={{ flexDirection: 'row', gap: 20, marginTop: 10 }}>
+                                    <MyText style={styles.text}>Incorporar no acervo?</MyText>
+                                    <MyCheck
+                                        label="Sim"
+                                        checked={req.incorporated === true}
+                                        onToggle={() => setReq({ ...req, incorporated: true })}
+                                    />
+                                    <MyCheck
+                                        label="Não"
+                                        checked={req.incorporated === false}
+                                        onToggle={() => setReq({ ...req, incorporated: false })}
+                                    />     
+                                </View>   
                             </>
                         )}
                         <MyButton
-                            title="INCORPORAR ITEM NO ACERVO"
+                            title="CADASTRAR"
                             onPress={ handleRegister }
-                            button_type="round"
+                            button_type="capsule"
                             icon=""
                             style={styles.buttonRegister}
                         />    
@@ -590,6 +596,11 @@ const styles = StyleSheet.create({
         marginRight: 20,
         marginVertical: 30,
         marginHorizontal: 20,
+    },
+    text: {
+        color: 'black',
+        fontSize: 16,
+        //fontFamily: 'Poppins_400Regular',
     },
     tabsContainer: {
         flex: 1,

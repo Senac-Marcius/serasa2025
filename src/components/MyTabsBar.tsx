@@ -52,7 +52,7 @@ const MyTabsbar: React.FC<MyTabsbarProps> = ({
         <Text style={[styles.tabText, textStyle, isActive && [styles.activeTabText, activeTextStyle]]}>
           {item}
         </Text>
-        {isActive && <View style={styles.underline} />}
+        {isActive && <View style={[style, styles.underline]} />}
       </TouchableOpacity>
     );
   };
