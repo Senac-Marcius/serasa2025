@@ -6,6 +6,9 @@ import  MyView from '../src/components/MyView'
 import MyLogin from '../src/components/MyLogin';
 import MyText from '../src/components/MyText';
 import { useRouter } from 'expo-router';
+import { ThemeProvider } from 'react-native-paper';
+import { GlobalStyles } from '../styles/globalStyles';
+import  theme  from '../styles/theme';
 
 export default function HomeScreen() {
     const router = useRouter();
@@ -13,7 +16,9 @@ export default function HomeScreen() {
     const [pass, setPass] = useState('')
 
     return (
-        <MyView router={router} style={{ flex: 1 }}>
+        <ThemeProvider theme={theme}>
+        
+        <MyView router={router} style={GlobalStyles.container}>
             <MyTheme chendTheme={()=>{}} fontSize={()=>{}}/>
 
             {/* Conteúdo da Página */}
@@ -25,5 +30,6 @@ export default function HomeScreen() {
             </MyLogin>
             </View>
         </MyView>
+        </ThemeProvider>
     );  
 } 
