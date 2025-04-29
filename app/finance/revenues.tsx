@@ -189,7 +189,7 @@ const getFilteredRevenues = () => {
     />
 
   <MyModal
-    title='teste'
+    title='NOVO CADASTRO'
     visible={visible} 
     setVisible={setVisible}>
   
