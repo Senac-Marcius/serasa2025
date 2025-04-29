@@ -6,7 +6,7 @@ import { setParent,iParent,delParent,editParent,getTimeParents,toListparent} fro
 import MyButton from '../../src/components/MyButtons';
 import MyList from '../../src/components/MyList';
 import { Myinput, MyCheck, MyTextArea} from '../../src/components/MyInputs';
-import { MyItem,MyCorrelated } from '../../src/components/MyItem';
+import { MyItem } from '../../src/components/MyItem';
 import { supabase } from '../../src/utils/supabase';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 import itemScreen from '../itens';
