@@ -333,6 +333,19 @@ const getFilteredRevenues = () => {
 };
 
 const styles = StyleSheet.create({
+  MyModal: {
+    display: 'flex',
+    width: 327,
+    height: 650,
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    borderWidth: 4,
+    borderColor: 'purple',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+},
+
   row:{
     flexDirection: 'row',
     justifyContent: 'space-between',
