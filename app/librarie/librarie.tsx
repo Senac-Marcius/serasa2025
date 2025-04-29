@@ -2,19 +2,18 @@ import React, { useState, useEffect } from 'react'; //função useState só reto
 import { View, StyleSheet, ScrollView, FlatList } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
-import MyTheme from '../src/components/MyTheme';
-import MyText from '../src/components/MyText';
-import MyTabsbar from '../src/components/MyTabsBar';
-import MyButton from '../src/components/MyButtons';
-import MyView from '../src/components/MyView';
-import MySelect from '../src/components/MySelect';
-import { Myinput, MyTextArea } from '../src/components/MyInputs';
-import {textStyles} from '../styles/textStyles';
+import MyTheme from '../../src/components/MyTheme';
+import MyText from '../../src/components/MyText';
+import MyTabsbar from '../../src/components/MyTabsBar';
+import MyButton from '../../src/components/MyButtons';
+import MyView from '../../src/components/MyView';
+import MySelect from '../../src/components/MySelect';
+import { Myinput, MyTextArea, MyCheck } from '../../src/components/MyInputs';
 import { Icon , MD3Colors} from "react-native-paper";
-import {tabsBarStyles} from '../styles/tabsBarStyles';
 import { useRouter } from 'expo-router';
-import {iItem, setItem, deleteItemById, updateItemById, getItems} from '../src/controllers/librarie';
-import { supabase } from '../src/utils/supabase'
+import {iItem, setItem, getItems, updateItemById} from '../../src/controllers/librarie';
+import { supabase } from '../../src/utils/supabase';
+
 
 export default function itemScreen() { // aqui é TS
 
@@ -49,21 +48,26 @@ export default function itemScreen() { // aqui é TS
         url: '',
         file: '',
         type_loan: '',
+        incorporated: false,
     });
 
-    const[items, setItems] = useState<iItem[]>([])
-
+    const [items, setItems] = useState<iItem[]>([]);
+    
     useEffect(() =>{
-        async function getTodos(){
-
-            const retorno =await getItems({})
+        (async () => {
+            const retorno =await getItems({});
             
             if (retorno.status && retorno.data && retorno.data.length>0){
-                setItems(retorno.data);
+                console.log(retorno.data);
+                const t:any[] = []
+                retorno.data.map(p => t.push(p))
+                setItems(t)
+                console.log(items)
+            } else {
+                console.log('Nenhum item encontrado ou erro:', retorno.error);
             }
-        }
-    getTodos()
-    }, [])
+        })();
+    }, []);
 
     const router = useRouter();
 
@@ -71,11 +75,6 @@ export default function itemScreen() { // aqui é TS
     const [selectedFile, setSelectedFile] = useState<string | null>(null);
 
     async function handleRegister() { 
-         // Atualiza req.file com o selectedFile (se existir)
-        /*const updatedReq = {
-        ...req,
-        file: selectedFile || req.file, // Mantém o arquivo anterior se selectedFile for null
-        };*/
 
         if (req.id == -1) {
             const newId = items.length ? items[items.length - 1].id + 1 : 0;
@@ -84,6 +83,7 @@ export default function itemScreen() { // aqui é TS
             setItems([...items, newItem])
             await setItem(newItem)
         } else {
+            await updateItemById(req.id, req)
             setItems(items.map(i => (i.id == req.id) ? req : i));
         }
         setReq({
@@ -117,10 +117,12 @@ export default function itemScreen() { // aqui é TS
             url: '',
             file: '',
             type_loan: '',
+            incorporated: false,
         });
         //setSelectedFile(null); // Limpa o selectedPdf após o registro
+        console.log('Item inserido com sucesso:');
 
-        router.push('/librarieRegisterList');
+        //router.push('librarie/librariePreview');
     };
 
     // Estados para as abas
@@ -204,8 +206,9 @@ export default function itemScreen() { // aqui é TS
             url: '',
             file: '',
             type_loan: '',
+            incorporated: false,
         });
-        router.push('/librarieHome');
+        router.push('librarie/librariePreview');
     };
 
     //Selects/Pickers
@@ -213,7 +216,7 @@ export default function itemScreen() { // aqui é TS
     const [language, setLanguage] = useState("Selecione o Idioma") 
     const [format, setFormat] = useState("Selecione o Formato") 
     const [status, setStatus] = useState("Selecione o Status")
-    const [type_loan, settype_loan] = useState("Selecione o Tipo de Empréstimo")  
+    const [type_loan, setType_loan] = useState("Selecione o Tipo de Empréstimo") 
 
     return ( //encapsulamento
         <MyView router={router} style={{ flex: 1 }}>
@@ -249,11 +252,11 @@ export default function itemScreen() { // aqui é TS
             </View>
             <MyTabsbar
                 items={tabs}
-                style={tabsBarStyles.tabsContainer}
-                itemStyle={tabsBarStyles.tabItem}
-                activeItemStyle={tabsBarStyles.activeTabItem}
-                textStyle={tabsBarStyles.tabText}
-                activeTextStyle={tabsBarStyles.activeTabText}
+                style={styles.tabsContainer}
+                itemStyle={styles.tabItem}
+                activeItemStyle={styles.activeTabItem}
+                textStyle={styles.tabText}
+                activeTextStyle={styles.activeTabText}
                 onPress={handleTabPress}
                 initialActiveIndex={0}
             />
@@ -445,14 +448,12 @@ export default function itemScreen() { // aqui é TS
                                     list={            
                                         [ 
                                             {key:1, option: 'Disponível'},            
-                                            {key:2, option: 'Emprestado'},
-                                            {key:3, option: "Reservado" },
-                                            {key:4, option: "Perdido"},
+                                            {key:2, option: 'Indisponível'},
                                         ]
                                     }
                                 />
                                 <MySelect
-                                    label={type_loan} setLabel={settype_loan} 
+                                    label={type_loan} setLabel={setType_loan} 
                                     list={            
                                         [ 
                                             {key:1, option: 'Domiciliar'},            
@@ -474,12 +475,25 @@ export default function itemScreen() { // aqui é TS
                                     icon=""
                                     style={styles.button_capsule2}
                                 />
+                                <View style={{ flexDirection: 'row', gap: 20, marginTop: 10 }}>
+                                    <MyText style={styles.text}>Incorporar no acervo?</MyText>
+                                    <MyCheck
+                                        label="Sim"
+                                        checked={req.incorporated === true}
+                                        onToggle={() => setReq({ ...req, incorporated: true })}
+                                    />
+                                    <MyCheck
+                                        label="Não"
+                                        checked={req.incorporated === false}
+                                        onToggle={() => setReq({ ...req, incorporated: false })}
+                                    />     
+                                </View>   
                             </>
                         )}
                         <MyButton
-                            title="INCORPORAR ITEM NO ACERVO"
+                            title="CADASTRAR"
                             onPress={ handleRegister }
-                            button_type="round"
+                            button_type="capsule"
                             icon=""
                             style={styles.buttonRegister}
                         />    
@@ -583,6 +597,50 @@ const styles = StyleSheet.create({
         marginVertical: 30,
         marginHorizontal: 20,
     },
+    text: {
+        color: 'black',
+        fontSize: 16,
+        //fontFamily: 'Poppins_400Regular',
+    },
+    tabsContainer: {
+        flex: 1,
+        padding: 20,
+        marginRight: 50,
+        marginLeft: 50,
+        marginVertical: 0,
+        marginHorizontal: 20,
+        borderRadius: 10,
+        minHeight: 90,
+      },
+      tabItem: { // Estilo para cada aba
+          paddingHorizontal: 10,
+          paddingVertical: 20,
+          marginRight: 15,
+          marginHorizontal: 40,
+          height: 50,
+          width: 250,
+          borderRadius: 50,
+          backgroundColor: '#F2F2F2',
+          borderWidth: 2,
+          borderColor: '#0F2259',
+          justifyContent: 'center',
+          alignItems: 'center',
+      },
+      activeTabItem: { // Estilo quando a aba está ativa
+          backgroundColor: '#AD6CD9',
+          borderBottomWidth: 5,
+          borderBottomColor: '#0F2259',
+      },
+      tabText: { // Estilo do texto normal
+          color: 'black',
+          fontSize: 16,
+          fontFamily: 'Poppins_400Regular',
+          justifyContent: 'center',
+      },
+      activeTabText: { // Estilo do texto quando a aba está ativa
+          fontWeight: 'bold',
+          color: 'white',
+      },
     card: {
         backgroundColor: '#F2F2F2',
         padding: 20,

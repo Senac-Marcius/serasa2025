@@ -16,7 +16,6 @@ interface MySelectProps {
     setKey?(key:any):void;
 }
 
-
 const MySelect: React.FC<MySelectProps> = ({ caption, label, list, setLabel, setKey }) => {  
   const [visible, setVisible] = useState(false);
 
@@ -115,6 +114,7 @@ const MySelect: React.FC<MySelectProps> = ({ caption, label, list, setLabel, set
               />
           )}
       </View>
+     
   );
 };
 
