@@ -2,9 +2,9 @@ import React, { ReactNode, useState } from 'react';
 import { View, StyleSheet, Text, TextStyle, ScrollView } from 'react-native';
 import MyTopbar from './MyTopbar';
 import MySupport from './MySupport';
-import MyMenu from './MyMenu';
 import MyAccessibility from './MyAccessibility';
-import { Router } from 'expo-router';
+import { Router } from 'expo-router'; // Importando o Router do expo-router
+import MyMenu from './MyMenu';
 import { Button } from 'react-native-paper';
 
 interface MySearchProps {
@@ -36,7 +36,7 @@ const MyView: React.FC<MySearchProps> = ({ children, style, title, router }) => 
       </MyAccessibility>
 
       {/* Botão de suporte fixo */}
-      <MySupport style={styles.suporteButton} />
+      <MySupport />
 
       {/* Menu lateral colado na esquerda */}
       {menuOpen && <MyMenu closeMenu={() => setMenuOpen(false)} />}
@@ -49,6 +49,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F2F3F5', // fundo cinza claro para todas as telas
   },
+  containerButton: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 100,
+  },
+  
   scrollContainer: {
     flexGrow: 1,
     paddingHorizontal: 16,
