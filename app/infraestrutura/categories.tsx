@@ -20,6 +20,7 @@ export default function CategoryScreen() {
 
     const [categories, setCategories] = useState<iCategories[]>([]);
     const router = useRouter();
+    const [visible, setVisible] = useState(false);
 
     // Carregar categorias do banco ao abrir a tela
     useEffect(() => {
@@ -57,13 +58,16 @@ getTodos();
             description: '',
             id: -1,
             created_at: new Date().toISOString()
+            
         });
+        setVisible(false);
     }
 
     // Editar
     function editCategorie(id: number) {
         const item = categories.find(i => i.id === id);
         if (item) setReq(item);
+        setVisible(true);
     }
 
   
