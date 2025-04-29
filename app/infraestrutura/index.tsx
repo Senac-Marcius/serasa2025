@@ -84,23 +84,7 @@ export default function infraScreen() {
             <View style={styles.headerContainer}>
                 <Mytext>Cadastro de Produtos</Mytext>
                 <View style={styles.buttonsWrapper}>
-                    {/* BOTÃO NOVO PRODUTO (ADICIONADO AQUI!) */}
-                    <MyButton 
-                        color='#3AC7A8'
-                        style={styles.newProduct} 
-                        onPress={() => {
-                            setReq({
-                                description: '',
-                                name: '',
-                                amount: 0,
-                                id: -1,
-                                create_at: new Date().toISOString(),
-                                category_id: -1
-                            });
-                            setVisible(true);
-                        }} 
-                        title="Novo Produto"
-                    />
+
                     <MyButton 
                         color='#3AC7A8'
                         style={styles.local} 
@@ -117,8 +101,7 @@ export default function infraScreen() {
             </View>
 
             {/* MODAL (JÁ FUNCIONANDO!) */}
-            <MyModal visible={visible} setVisible={setVisible} title={req.id === -1 ? "Cadastrar Produto" : "Editar Produto"}>
-                <ScrollView contentContainerStyle={styles.modalContent}>
+            <MyModal style={styles.modal} visible={visible} setVisible={setVisible} title={req.id === -1 ? "Cadastrar Produto" : "Editar Produto"}>
                     <Myinput 
                         placeholder="Digite o Nome"
                         value={req.name}
@@ -163,7 +146,7 @@ export default function infraScreen() {
                             title={req.id == -1 ? "Cadastrar" : "Atualizar"}
                         />
                     </View>
-                </ScrollView>
+                
             </MyModal>
 
             {/* LISTA DE PRODUTOS */}
@@ -218,10 +201,8 @@ export default function infraScreen() {
 }
 
 const styles = StyleSheet.create({
-    modalContent: {
-        flexGrow: 1,
-        padding: 20,
-        justifyContent: 'center',
+    modal:{
+        marginBlock: 'auto',
     },
     modalButtons: {
         flexDirection: 'row',
@@ -272,13 +253,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
-    },
-    newProduct: {  // ESTILO DO BOTÃO "NOVO PRODUTO" (NOVO!)
-        backgroundColor: '#9C27B0',
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        borderRadius: 6,
-        marginLeft: 10,
     },
     local: {
         backgroundColor: '#2196F3',
