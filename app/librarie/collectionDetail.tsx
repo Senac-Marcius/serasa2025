@@ -9,6 +9,7 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import TabelaUsuarios from './loantable';
 import { supabase } from '../../src/utils/supabase';
 import MyMenu from '../../src/components/MyMenu';
+import { StarCalculation } from './starsCalculation';
 import { setCollection, iCollection, deleteCollectionById, updateCollectionById, getCollections } from '../../src/controllers/collections';
 
 export default function CollectionDetail() {
@@ -49,7 +50,7 @@ export default function CollectionDetail() {
       }
     });
 
-    // Vamos pegar as tags que aparecem em mais de 1 livro
+   
     const commonTags = Object.entries(tagCount)
       .filter(([tag, count]) => count > 1)
       .map(([tag]) => tag);
@@ -79,11 +80,11 @@ export default function CollectionDetail() {
     }
   }
   async function fetchRelatedItems(item: iItem) {
-    if (!item.keywords) return;
+    if (!item.subject) return;
 
-    const tagsArray = item.keywords.split(',').map(tag => tag.trim().toLowerCase());
+    const tagsArray = item.subject.split(',').map(tag => tag.trim().toLowerCase());
 
-    const query = tagsArray.map(tag => `keywords.ilike.%${tag}%`).join(',');
+    const query = tagsArray.map(tag => `subject.ilike.%${tag}%`).join(',');
 
     const { data, error } = await supabase
       .from('items_librarie')
@@ -148,14 +149,14 @@ export default function CollectionDetail() {
               <View style={styles.styleimg}><Image source={{ uri: item.image }} style={styles.image}></Image></View>
               <View style={styles.containerText}>
                 <Text style={styles.itemTitlename}>{item.title}</Text>
-                <Text style={styles.itemText}> {item.summary}</Text>
+                <Text style={styles.itemText}>{item.summary}</Text>
                 <Text style={styles.itemText}>{item.subject}</Text>
                 <Text style={styles.itemText}>{item.responsible}</Text>
-                <Text style={styles.itemText}> {item.year}</Text>
+                <Text style={styles.itemText}>{item.year}</Text>
                 <Text style={styles.itemText}>{item.edition}</Text>
-                {item.keywords && (
+                {item.subject && (
                   <View style={styles.tagsContainer}>
-                    {item.keywords.split(',').map((tag, index) => (
+                    {item.subject.split(',').map((tag, index) => (
                       <View key={index} style={styles.tag}>
                         <Text style={styles.tagText}>{tag.trim()}</Text>
                       </View>
@@ -170,11 +171,7 @@ export default function CollectionDetail() {
                     title="Empréstimo"
                     closeButtonTitle="Fechar"
                   >
-                    <TabelaUsuarios
-                      data={[]}
-                      onEdit={(id) => console.log("Editar", id)}
-                      onDelete={(id) => console.log("Deletar", id)}
-                    />
+                   <StarCalculation/>
                   </MyModal>
                 </View>
               </View>
@@ -201,7 +198,7 @@ export default function CollectionDetail() {
                   <Text style={styles.itemTitlename}>{relatedItem.title}</Text>
                   <Text style={styles.itemText}>{relatedItem.responsible}</Text>
                   <View style={styles.tagsContainer}>
-                    {relatedItem.keywords?.split(',').map((tag, index) => (
+                    {relatedItem.subject?.split(',').map((tag, index) => (
                       <View key={index} style={styles.tag}>
                         <Text style={styles.tagText}>{tag.trim()}</Text>
                       </View>
@@ -268,6 +265,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     gap: 40,
     overflow: "hidden",
+    borderRadius:20,
 
   },
   itemText: {
