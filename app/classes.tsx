@@ -192,7 +192,7 @@ export default function TurmasComCadastro() {
                     <Text style={styles.td}>{item.horario}</Text>
                     <Text style={styles.td}>{item.cargaHoraria}</Text>
                     <Text style={[styles.td, styles.TabActions]}>
-                      <Text style={styles.edit} onPress={() => editarTurma(item.)}>Editar</Text>
+                      <Text style={styles.edit} onPress={() => editarTurma(item)}>Editar</Text>
                       <Text style={styles.del} onPress={() => deletarTurma(item.id)}>Excluir</Text>
                     </Text>
                   </View>
