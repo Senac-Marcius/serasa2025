@@ -172,10 +172,11 @@ const getFilteredRevenues = () => {
             {/* Campo de Status da Bolsa */}
             <MySelect 
               label={ req.scholarship_status } 
+              caption= "Status da Bolsa"
               setLabel={(text) => setReq({ ...req, scholarship_status: text })}
               list={[
-                {key: 0, option: '01- Ativo'},
-                {key: 1, option: '02- Inativo'},
+                {key: 0, option: 'Ativo'},
+                {key: 1, option: 'Inativo'},
               ]}
             />
 

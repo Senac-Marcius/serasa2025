@@ -84,7 +84,7 @@ const MySelect: React.FC<MySelectProps> = ({ caption, label, list, setLabel, set
           {visible && (
               <FlatList
                   style={{
-                  
+                      
                       marginHorizontal: 1,
                       marginTop: 5,
                       backgroundColor: '#813AB1',
