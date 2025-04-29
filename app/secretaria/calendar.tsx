@@ -300,3 +300,5 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
 });
+
+// subir 
