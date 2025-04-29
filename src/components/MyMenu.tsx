@@ -87,6 +87,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <MenuItem label="Administração" route="Administracao/" icon="people" />
+        <MenuItem label="Financeiro" route="finance" icon="people" />
         <MenuItem label="Secretaria" route="secretaria" icon="add-circle" />
         <MenuItem label="Calendar" route="secretaria/calendar" icon="calendar" />
         <MenuItem label="Categories" route="categories" icon="albums" />
