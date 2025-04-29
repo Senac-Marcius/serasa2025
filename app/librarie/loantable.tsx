@@ -9,7 +9,7 @@ interface Props{
 }
 
 
-const TabelaUsuarios: React.FC<Props> = ({ data, onEdit, onDelete }) => {
+const TabelaUsuarios: React.FC<Props> = ({usuarios}) => {
     return (
       <ScrollView horizontal>
       <View style={styles.table}>
@@ -26,7 +26,6 @@ const TabelaUsuarios: React.FC<Props> = ({ data, onEdit, onDelete }) => {
        {/* Dados */}
        {usuarios.map((usuario) => (
           <View key={usuario.id} style={styles.row}>
-            <Text style={styles.cell}>{usuario.id}</Text>
             <Text style={styles.cell}>{usuario.Titulo}</Text>
             <Text style={styles.cell}>{usuario.Autor}</Text>
             <Text style={styles.cell}>{usuario.Leitor}</Text>
@@ -65,12 +64,13 @@ const styles = StyleSheet.create({
     padding: 10,
     fontWeight: 'bold',
     color: '#fff',
-    textAlign: 'left',
+    textAlign: 'center', // Centraliza o texto no cabeçalho
   },
   cell: {
     flex: 1,
     padding: 10,
-    color: '#4c1d95', // roxo médio
+    color: '#4c1d95',
+    textAlign: 'center', // Centraliza o texto nas células
   },
 });
 
