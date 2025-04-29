@@ -7,7 +7,7 @@ import MyButton from '../../src/components/MyButtons';
 import MyView from '../../src/components/MyView';
 import { useRouter } from 'expo-router';
 import { setIten, dell, edit, iIten, getItens } from '../../src/controllers/items';
-import { MyModal_mobilefullscreen } from '../../src/components/MyModal';
+import { MyModal} from '../../src/components/MyModal';
 import Mytext from '../../src/components/MyText';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MySelect from '../../src/components/MySelect';
@@ -84,7 +84,7 @@ export default function itemScreen(product_id: Number) {
                 <Mytext style={styles.h1}>Cadastro de Itens</Mytext>
             </View>
             
-            <MyModal_mobilefullscreen visible={visible} setVisible={setVisible}> 
+            <MyModal visible={visible} setVisible={setVisible}> 
 
             
                 <View style={styles.form}>
