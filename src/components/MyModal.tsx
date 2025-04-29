@@ -10,8 +10,21 @@ interface MyModalprops {
     setVisible(visible: boolean): void
     title?:string;
     closeButtonTitle?: string;
+    tipe?:Button_type;
+    buttonStyle?:ViewStyle;
+    isButton?:boolean
 
 }
+type Button_type =
+  | "default"
+  | "round"
+  | "circle"
+  | "rect"
+  | "capsule"
+  | "loading"
+  | "edit"
+  | "delete";
+
 
 
 //Para utilizar qualquer modal deve ser declarado em seu script:
@@ -32,16 +45,20 @@ interface MyModalprops {
 
 
 
-const MyModal: React.FC<MyModalprops> = ({ children, style, visible, setVisible,title, closeButtonTitle }) => { //
+const MyModal: React.FC<MyModalprops> = ({ children, style, visible, setVisible,title, closeButtonTitle, tipe,isButton=true,buttonStyle }) => { //
     function onClose() {
         setVisible(false)
     };
+
+    console.log(isButton)
     return (
         <View >
-            <MyButton
+           {isButton && ( <MyButton 
                 onPress={() => { setVisible(true) }}
+                button_type = {tipe}
+                style={buttonStyle? buttonStyle: styles.button_capsule }
                 title= {title}
-                 />
+                 />)}
 
             {visible && (<Modal transparent={true} visible={visible} animationType="fade"   >
                 <View style={styles.background} >
