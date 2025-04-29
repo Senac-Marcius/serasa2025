@@ -214,8 +214,8 @@ export default function CalendarsScreen() {
                   onEdit={() => editCalendar(item.id)}
                   onDel={() => delCalendar(item.id)}
                 >
-                  <MyText style={styles.itemText}>👤 Aluno: {item.studentname}</MyText>
-                  <MyText style={styles.itemText}>📘 Curso: {item.course}</MyText>
+                  <MyText style={styles.itemText}>👤 Tipo de Evento: {item.studentname}</MyText>
+                  <MyText style={styles.itemText}>📘 Motivo do Evento: {item.course}</MyText>
                   <MyText style={styles.itemText}>📅 Data: {item.registrationdate}</MyText>
                   <MyText style={styles.itemText}>⏱️ Período: {item.period}</MyText>
                 </MyItem>
