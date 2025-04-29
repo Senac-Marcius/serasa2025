@@ -114,6 +114,7 @@ const MySelect: React.FC<MySelectProps> = ({ caption, label, list, setLabel, set
               />
           )}
       </View>
+     
   );
 };
 

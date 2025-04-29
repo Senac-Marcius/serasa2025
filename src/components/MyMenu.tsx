@@ -86,20 +86,33 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
       </Pressable>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <MenuItem label="Finaças" route="finance/" icon="cash" />
+        <MenuItem label="Administração" route="Administracao/" icon="people" />
+        <MenuItem label="Financeiro" route="finance" icon="people" />
         <MenuItem label="Secretaria" route="secretaria" icon="add-circle" />
         <MenuItem label="Classes" route="classes" icon="school" />
         <MenuItem label="Collections" route="collections" icon="cube" />
         <MenuItem label="Launchs" route="launchs" icon="rocket" />
+<<<<<<< HEAD
         <MenuItem label="Libraie" route="libraie" icon="book" />
+=======
+        <MenuItem label="Levels" route="levels" icon="stats-chart" />
+        <MenuItem label="Librarie" route="librarie" icon="book" />
+>>>>>>> cd3b85646dc706322b651442618cf8692330c5fb
         <MenuItem label="Loans" route="loans" icon="card" />
         <MenuItem label="Perfil" route="perfil" icon="person" />
         <MenuItem label="Posts" route="posts" icon="chatbox" />
         <MenuItem label="Infraestrutura" route="infraestrutura" icon="cube-outline"/>
+<<<<<<< HEAD
+=======
+        <MenuItem label="Projects" route="projects" icon="briefcase" />
+        <MenuItem label="Records" route="records" icon="document-text-outline"/>
+        <MenuItem label="Revenues" route="revenues" icon="cash-outline" />
+>>>>>>> cd3b85646dc706322b651442618cf8692330c5fb
         <MenuItem label="Timelines" route="timelines" icon="calendar" />
         <MenuItem label="Students" route="students" icon="school" />
-        <MenuItem label="Users" route="users" icon="person-circle" />
+        <MenuItem label="Users" route="registeredUsers" icon="person-circle" />
         <MenuItem label="More" route="more" icon="add-circle" />
+        <MenuItem label="Trabalhe Conosco" route='Administracao/employees?view=form'  icon="cash" />
       </ScrollView>
     </Animated.View>
   );

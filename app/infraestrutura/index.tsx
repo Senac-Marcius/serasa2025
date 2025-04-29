@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, ScrollView } from 'react-native';
 import MyView from '../../src/components/MyView';
 import { useRouter } from 'expo-router';
 import { iProduct, setProduct, updateProduct, deleteProduct, getProducts } from '../../src/controllers/products';
@@ -11,8 +11,6 @@ import MyList from '../../src/components/MyList';
 import { MyModal_mobilefullscreen } from '../../src/components/MyModal';
 import { getCategories, toListCategorie } from '../../src/controllers/category';
 import MySelect from '../../src/components/MySelect';
-
-
 
 export default function infraScreen() {
     const [req, setReq] = useState({
@@ -70,7 +68,10 @@ export default function infraScreen() {
 
     function editProduct(id: number) {
         const product = products.find(p => p.id == id);
-        if (product) setReq(product);
+        if (product) {
+            setReq(product);
+            setVisible(true);
+        }
     }
 
     function dellProduct(id: number) {
@@ -80,9 +81,7 @@ export default function infraScreen() {
 
     return (
         <MyView>
-
             <View style={styles.headerContainer}>
-                
                 <Mytext>Cadastro de Produtos</Mytext>
                 <View style={styles.buttonsWrapper}>
                     <MyButton 
@@ -98,42 +97,55 @@ export default function infraScreen() {
                         title="Categorias"
                     />
                 </View>
-                
             </View>
+
             <MyModal_mobilefullscreen visible={visible} setVisible={setVisible}>
-                <Myinput 
-                    placeholder="Digite o Nome"
-                    value={req.name}
-                    onChangeText={(text) => setReq({ ...req, name: text })}
-                    label="Produto"
-                    iconName='storefront' 
-                />
-        
-                <Myinput 
-                    placeholder="Descrição"
-                    value={req.description}
-                    onChangeText={(text) => setReq({ ...req, description: text })}
-                    label='Descrição'
-                    iconName='description' 
-                />
+                <ScrollView contentContainerStyle={styles.modalContent}>
+                    <Myinput 
+                        placeholder="Digite o Nome"
+                        value={req.name}
+                        onChangeText={(text) => setReq({ ...req, name: text })}
+                        label="Produto"
+                        iconName='storefront' 
+                    />
+            
+                    <Myinput 
+                        placeholder="Descrição"
+                        value={req.description}
+                        onChangeText={(text) => setReq({ ...req, description: text })}
+                        label='Descrição'
+                        iconName='description' 
+                    />
 
-                <Myinput 
-                    placeholder="Quantidade"
-                    value={String(req.amount)}
-                    onChangeText={(text) => setReq({ ...req, amount: Number(text) })}
-                    label='Quantidade'
-                    iconName='123' 
-                />
+                    <Myinput 
+                        placeholder="Quantidade"
+                        value={String(req.amount)}
+                        onChangeText={(text) => setReq({ ...req, amount: Number(text) })}
+                        label='Quantidade'
+                        iconName='123' 
+                    />
 
-                <MySelect
-                    caption="Selecione uma categoria"
-                    label={cats.find(c => c.key == req.category_id)?.option || 'Categorias'}
-                    list={cats}
-                    setLabel={() => {}}
-                    setKey={(key) => { setReq({ ...req, category_id: key }) }}
-                />
-            <MyButton style={styles.buttoncad} onPress={handleRegister} title='Cadastrar'/>
+                    <MySelect
+                        caption="Selecione uma categoria"
+                        label={cats.find(c => c.key == req.category_id)?.option || 'Categorias'}
+                        list={cats}
+                        setLabel={() => {}}
+                        setKey={(key) => { setReq({ ...req, category_id: key }) }}
+                    />
 
+                    <View style={styles.modalButtons}>
+                        <MyButton 
+                            style={styles.cancelButton} 
+                            onPress={() => setVisible(false)} 
+                            title="Cancelar"
+                        />
+                        <MyButton 
+                            style={styles.buttoncad} 
+                            onPress={() => handleRegister()} 
+                            title={req.id == -1 ? "Cadastrar" : "Atualizar"}
+                        />
+                    </View>
+                </ScrollView>
             </MyModal_mobilefullscreen>
 
             <MyList
@@ -171,7 +183,6 @@ export default function infraScreen() {
                         </View>
                     </View>
                 )}
-
                 header={(
                     <View style={styles.tabela}>
                         <Mytext style={styles.th}>Nome</Mytext>
@@ -188,7 +199,32 @@ export default function infraScreen() {
 }
 
 const styles = StyleSheet.create({
-    buttoncad:{
+    modalContent: {
+        flexGrow: 1,
+        padding: 20,
+        justifyContent: 'center',
+    },
+    modalButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
+    },
+    cancelButton: {
+        fontSize: 15,
+        padding: 10,
+        backgroundColor: '#FF5252',
+        borderRadius: 100,
+        fontFamily: 'arial',
+        marginHorizontal: 5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+        elevation: 3,
+        flex: 1,
+        marginRight: 10,
+    },
+    buttoncad: {
         fontSize: 15,
         padding: 10,
         backgroundColor: '#FFDB58',
@@ -200,6 +236,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 2,
         elevation: 3,
+        flex: 1,
     },
     headerContainer: {
         flexDirection: 'row',
@@ -211,15 +248,6 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#e0e0e0',
         fontWeight: 'bold'
-    },
-    h1: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        color: "black",
-        backgroundColor: "white",
-        padding: 10,
-        borderRadius: 5,
     },
     buttonsWrapper: {
         flexDirection: 'row',
@@ -240,7 +268,6 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         marginLeft: 10,
     },
-
     edit: {
         fontSize: 15,
         padding: 10,
@@ -279,23 +306,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 2,
         elevation: 3,
-    },
-    cadastrar: {
-        fontFamily: 'Arial',
-        fontSize: 15,
-        textAlign: 'center',
-        flex: 1,
-        color: '9400D3',
-        borderRadius: 5,
-        backgroundColor: '#ADD8E6',
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-        marginRight: 10,
-        marginTop: 80,
-        marginBottom: 10,
-        padding: 20,
     },
     table: {
         backgroundColor: '#FFF',
