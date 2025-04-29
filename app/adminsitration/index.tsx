@@ -80,17 +80,17 @@ export default function IndexScreen() {
       bgColor: '#F3F1FE',
     },
     {
+      title: 'Minha Escala',
+      icon: <Ionicons name="document-text" size={30} color="#FF5C8A" />,
+      route: 'adminsitration/scales',
+      bgColor: '#FFEAF0',
+    },
+    {
       title: 'Projetos',
       icon: <Ionicons name="calendar" size={30} color="#2EC4B6" />,
       route: 'adminsitration/projects',
       bgColor: '#E5FBF8',
       value: projectCount,
-    },
-    {
-      title: 'Minha Escala',
-      icon: <Ionicons name="document-text" size={30} color="#FF5C8A" />,
-      route: 'adminsitration/scales',
-      bgColor: '#FFEAF0',
     },
     {
       title: 'Funcionários',
