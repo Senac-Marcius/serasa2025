@@ -13,7 +13,7 @@ import { supabase } from '../../src/utils/supabase';
 import { MyItem } from '../../src/components/MyItem';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
-import { MyModal_mobilefullscreen } from '../../src/components/MyModal';
+import { MyModal } from '../../src/components/MyModal';
 import { getUsers, toListUser } from '../../src/controllers/users';
 import MySelect from '../../src/components/MySelect';
 
@@ -220,7 +220,7 @@ const parseCurrencyInput = (text: string): number => {
             <View style={styles.contentContainer}>
                 <Mytext style={styles.title}>PROJETOS</Mytext>
 
-                <MyModal_mobilefullscreen visible={visible} setVisible={() => setVisible(true)}>
+                <MyModal visible={visible} setVisible={() => setVisible(true)} title=''>
                     <ScrollView>
                     <View style={styles.row}> 
                             
@@ -430,7 +430,7 @@ const parseCurrencyInput = (text: string): number => {
 
                     </View>   
                     </ScrollView>
-                </MyModal_mobilefullscreen>
+                </MyModal>
 
                 <View style={styles.listContainer}> 
                     <MyList 
