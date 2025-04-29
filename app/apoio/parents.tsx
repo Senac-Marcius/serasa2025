@@ -6,13 +6,14 @@ import { setParent,iParent,delParent,editParent,getTimeParents,toListparent} fro
 import MyButton from '../../src/components/MyButtons';
 import MyList from '../../src/components/MyList';
 import { Myinput, MyCheck, MyTextArea} from '../../src/components/MyInputs';
-import { MyItem,MyCorrelated } from '../../src/components/MyItem';
+import { MyItem } from '../../src/components/MyItem';
 import { supabase } from '../../src/utils/supabase';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 import itemScreen from '../itens';
 import { ListItem } from 'native-base';
 import MyUpload from '../../src/components/MyUpload';
-
+import { Ionicons } from '@expo/vector-icons';
+import { IoIosLeaf, IoIosListBox } from "react-icons/io";
 
 
 //import dateTimepicker
@@ -48,7 +49,7 @@ export default function ParentScreen (){
         getTodos();
 
     })
-
+    //HandleRegister pode falhar se a idade conter mais de dois digitos, SupaBase age esta com o tipo INT2
     async function handleRegister() {
 
         if (req.id === -1) {
@@ -58,9 +59,15 @@ export default function ParentScreen (){
             const resp = await setParent(newParent);
             console.log (resp)
         } else {
-                
-            setParents(parents.map(p => (p.id == req.id ? req : p)));
-            await editParent(req)
+            const { error } = await supabase.from('parents')
+                .update(req)
+                .eq('id', req.id);
+    
+            if (!error) {
+                setParents(parents.map(p => (p.id === req.id ? req : p)));
+            } else {
+                console.error("Erro ao atualizar:", error);
+            }
         }
 
         //setParents([...parents, req])
@@ -103,164 +110,106 @@ export default function ParentScreen (){
 
     return (
         <MyView>
-        
-        {/*aqui é typeScript dentro do Front*/}
-            {/*View → esse view é diferente do HTML ele contém DIVs e outros atributos,*/}
-            <View style = {styles.row}>
-                <View style={styles.form}>{/*View no Type pode ser usado para substituir o Form */}
-                {/*<FlatList/> → atibuto para possivel criação de lista */}
-                    <Myinput 
-                        label="Nome"
-                        iconName="badge"
-                        placeholder="Nome:"
-                        value={req.name}
-                        onChangeText={(Text) => setReq({...req, name: Text})}
-                    />
-                    <Myinput 
-                        label="Rg"
-                        iconName="badge"
-                        placeholder="RG:"
-                        value={req.rg}
-                        onChangeText={(Text) => setReq({...req, rg: Text})}
-                    />
-                    <Myinput 
-                        label="cpf"
-                        iconName="badge" 
-                        placeholder="CPF:"
-                        value={req.cpf}
-                        onChangeText={(Text) => setReq({...req, cpf: Text})}
-                    />
-                    <Myinput 
-                        label="age"
-                        iconName="badge"
-                        placeholder="Idade:"
-                        value={req.age}
-                        onChangeText={(Text) => setReq({...req, age: Text})}
-                    />
-                    <Myinput 
-                        label="phone"
-                        iconName="badge"
-                        placeholder="Telefone:"
-                        value={req.phone}
-                        onChangeText={(Text) => setReq({...req, phone: Text})}
-                    />
-                    <Myinput 
-                        label="email"
-                        iconName="badge"
-                        placeholder="Email:"
-                        value={req.email}
-                        onChangeText={(Text) => setReq({...req, email: Text})}
-                    />
-                    <Myinput 
-                        label="kinship"
-                        iconName="badge"
-                        placeholder="Parentesco:"
-                        value={req.kinship}
-                        onChangeText={(Text) => setReq({...req, kinship: Text})}
-                    />
-                
-                    <MyButton
-                        title='Cadastrar'
-                        onPress={handleRegister}
-                        button_type='round'
-                        style={styles.button_round}/>
-                   {/*foi aberto uma area de codigo chamar a variavel, equivale o inder do html*/}
-                   {/*<Button 
-                        title='Editar'
-                        color='red'
-                        onPress={editParent}/>
-                    <Button
-                        title='Deletar'
-                        color='red'
-                        onPress={delParent}/>*/}
-                        <MyUpload setUrl={setDocument} url={urlDocument}/>
-                </View>
-                
+  <View style={styles.container}>
+    
+    {/* Formulário de Cadastro */}
+    <View style={styles.formSection}>
+      <Text style={styles.sectionTitle}>Cadastro do Responsável</Text>
 
-                <MyList
-                    data={parents}
-                    keyItem={(item) => item.id.toString()}
-                    renderItem={({item}) => (
-                        <MyItem 
-                            style={styles.parentsItem}
-                            onDel={()=> {delParentL(item.id)}}
-                            onEdit={()=> {editParentL(item.id)}}
-                        >
-                            <Text>{item.id}</Text>
-                            <Text>{item.name}</Text>
-                            <Text>{item.rg}</Text>
-                            <Text>{item.cpf}</Text>
-                            <Text>{item.age}</Text>
-                            <Text>{item.phone}</Text>
-                            <Text>{item.email}</Text>
-                            <Text>{item.kinship}</Text>
-                            <Text>{item.createat}</Text>
-                            <Text>{item.userid}</Text>
-                            {/*<View style={styles.tableRow} key={item.id}>
-                                <Text style={styles.td}>{item.name}</Text>
-                                <View style={[styles.td, { flexDirection: 'row', alignItems: 'center', gap: 8 }]}> 
-                                <Image source={{ uri: 'https://i.pravatar.cc/150?u=' + item.teacher }} style={styles.avatar} />
-                                <Text>{item.teacher}</Text>
-                                </View>
-                                <Text style={styles.td}>{item.url}</Text>
-                                <Text style={styles.td}>{item.workload}h</Text>
-                                <Text style={styles.td}>{new Date(item.created_at).toLocaleDateString()}</Text>
-                                <View style={styles.tdStatus}><Text style={styles.statusActive}>Ativo</Text></View>
-                                <View style={styles.actions}>
-                                
-                                </View>
-                            </View>*/}
-                        </MyItem>
-                    )}
-                />
-                {/*parâmetro FlatList é parecido com o forEach do html */}
-                
-            </View>
-
-        </MyView>
+      <View style={styles.inputGroup}>
         
+        <Myinput label="Nome" placeholder="Nome:" value={req.name} onChangeText={(Text) => setReq({ ...req, name: Text })} iconName="person"/>
+        <Myinput label="RG" placeholder="RG:" value={req.rg} onChangeText={(Text) => setReq({ ...req, rg: Text })} iconName="fingerprint" />
+        <Myinput label="CPF" placeholder="CPF:" value={req.cpf} onChangeText={(Text) => setReq({ ...req, cpf: Text })} iconName="assignment" />
+        <Myinput label="Idade" placeholder="Idade:" value={req.age} onChangeText={(Text) => setReq({ ...req, age: Text })} iconName="event" />
+        <Myinput label="Telefone" placeholder="Telefone:" value={req.phone} onChangeText={(Text) => setReq({ ...req, phone: Text })} iconName="phone" />
+        <Myinput label="Email" placeholder="Email:" value={req.email} onChangeText={(Text) => setReq({ ...req, email: Text })} iconName="email" />
+        <Myinput label="Parentesco" placeholder="Parentesco:" value={req.kinship} onChangeText={(Text) => setReq({ ...req, kinship: Text })} iconName="groups" />
+      </View>
+
+      <View style={styles.actions}>
+        <MyButton title='Cadastrar' onPress={handleRegister} button_type='round' style={styles.button_round} />
+        <MyUpload />
+      </View>
+    </View>
+
+    {/* Lista de Responsáveis */}
+    <View style={styles.listSection}>
+      <Text style={styles.sectionTitle}>Lista de Responsáveis</Text>
+
+      <MyList
+        data={parents}
+        keyItem={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <MyItem
+            style={styles.parentsItem}
+            onDel={() => delParentL(item.id)}
+            onEdit={() => editParentL(item.id)}
+          >
+            <Text>    Id: {item.id}</Text>
+            <Text><IoIosListBox />Nome: {item.name}</Text>
+            <Text>    RG: {item.rg}</Text>
+            <Text>    CPF:{item.cpf}</Text>
+            <Text>    Idade: {item.age}</Text>
+            <Text>    Telefone: {item.phone}</Text>
+            <Text>    Email: {item.email}</Text>
+            <Text>    Parentesco: {item.kinship}</Text>
+            <Text>    Data: {item.createat}</Text>
+            <Text>    UserId: {item.userid}</Text>
+
+          </MyItem>
+        )}
+      />
+    </View>
+  </View>
+</MyView>
+
     );
 }
 
 // smepre que for criado um objeto deve-se adicionar o mesmo no Import
-const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar estilos personalizados */
-    row: {
-        flexDirection: 'row', 
-        justifyContent: 'space-between', 
-        alignItems: 'flex-start', 
+const styles = StyleSheet.create({
+    container: {
+      padding: 10,
+      backgroundColor: '#fff',
+      flex: 1,
+      gap: 20,
     },
-    form: {
-        flex: 1,
-        marginRight: 100,
-        marginLeft:100,
-        padding:20 ,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-        
+    sectionTitle: {
+      fontSize: 20,
+      fontWeight: '600',
+      marginBottom: 16,
+      color: '#111',
+    },
+    formSection: {
+      backgroundColor: '#F2F3F5',
+      borderRadius: 16,
+      padding: 20,
+      shadowColor: '#000',
+      shadowOpacity: 0.05,
+      shadowRadius: 10,
+      elevation: 8,
+    },
+    inputGroup: {
+      gap: 12,
+    },
+    actions: {
+      flexDirection: 'row',
+      marginTop: 20,
+      gap: 12,
+      alignItems: 'center',
+    },
+    listSection: {
+      flex: 1,
+      padding: 13,
+      backgroundColor: '#F2F3F5',
+      borderRadius: 16,
     },
     parentsItem: {
-        flex: 10,
-        marginRight: 20,
-        marginLeft:20,
-        padding: 30,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-        
-    },
-    
-    buttonContainer: {
-        flexDirection:'row',
-        alignItems: 'center',
-        gap: 20,
-        alignContent: 'space-around'
+      padding:16,
+      paddingHorizontal:2,
+      borderBottomWidth: 1,
+      borderColor: '#eee',
     },
     button_round: {
         display:"flex",
@@ -268,40 +217,7 @@ const styles = StyleSheet.create({/*StyleSheet é um atributo que permite criar 
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "row",
-        
-      },
-      tableRow: {
-        flexDirection: 'row',
-        paddingVertical: 12,
-        
-        borderBottomWidth: 1,
-        borderBottomColor: '#eee',
-      },
-      th: { flex: 1, fontWeight: '600', fontSize: 13, color: '#333' },
-      td: { flex: 1, fontSize: 13, color: '#444' },
-      tdStatus: { flex: 1 },
-      statusActive: {
-        backgroundColor: '#D8FEEB',
-        color: '#1EB980',
-        paddingHorizontal: 50,
-        paddingVertical: 4,
-        fontSize: 12,
-        fontWeight: '600',
-        borderRadius: 12,
-        alignSelf: 'flex-start',
-      },
-      actions: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        gap: 12,
-        paddingLeft: 8,
-      },
-      avatar: {
-        width: 24,
-        height: 24,
-        borderRadius: 12,
-      },
-})
+    },
+  });
+  
 
-//versão atualiizada
