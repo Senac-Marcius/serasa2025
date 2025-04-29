@@ -2,10 +2,15 @@ import React, { ReactNode, useState } from 'react';
 import { View, StyleSheet, Text, TextStyle, ScrollView } from 'react-native';
 import MyTopbar from './MyTopbar';
 import MySupport from './MySupport';
+import MyAccessibility from './MyAccessibility';
+import { Router } from 'expo-router'; // Importando o Router do expo-router
 import MyMenu from './MyMenu';
+<<<<<<< HEAD
 import MyAccessibility from './MyAccessibility';
 import { Router } from 'expo-router';
 import { Button } from 'react-native-paper';
+=======
+>>>>>>> ea3cf11778f1db14c403e69203c54c19ffb4777b
 
 interface MySearchProps {
   children: ReactNode;
@@ -36,7 +41,7 @@ const MyView: React.FC<MySearchProps> = ({ children, style, title, router }) => 
       </MyAccessibility>
 
       {/* Botão de suporte fixo */}
-      <MySupport style={styles.suporteButton} />
+      <MySupport />
 
       {/* Menu lateral colado na esquerda */}
       {menuOpen && <MyMenu closeMenu={() => setMenuOpen(false)} />}
@@ -49,6 +54,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F2F3F5', // fundo cinza claro para todas as telas
   },
+  containerButton: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 100,
+  },
+  
   scrollContainer: {
     flexGrow: 1,
     paddingHorizontal: 16,
@@ -60,6 +73,7 @@ const styles = StyleSheet.create({
     right: 10,
     
   },
+<<<<<<< HEAD
   accessibilityButton: {
     position: 'absolute',
     right: 10,
@@ -67,6 +81,9 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     zIndex: 10,
   },
+=======
+  
+>>>>>>> ea3cf11778f1db14c403e69203c54c19ffb4777b
   
 });
 
