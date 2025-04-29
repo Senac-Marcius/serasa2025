@@ -181,4 +181,4 @@ async function getLoggedUserId() {
 
 //npx playwrite codagen http://localh
 
-export { setUser, iUser, deleteUserById, updateUserById, getUsers, getUserByEmail, isStudent, isEmployee, getUserById }
+export { setUser, iUser, deleteUserById, updateUserById, getUsers, getUserByEmail, isStudent, isEmployee, getUserById, toListUser }
