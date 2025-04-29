@@ -115,18 +115,18 @@ export default function CalendarsScreen() {
 
           <Myinput
             iconName="account"
-            label="Nome do Aluno"
+            label="Tipo de Evento"
             value={req.studentname}
             onChangeText={(text) => setReq({ ...req, studentname: text })}
-            placeholder="Digite o nome do aluno..."
+            placeholder="Digite o Tipo de Evento..."
           />
 
           <Myinput
             iconName="book"
-            label="Curso"
+            label="Motivo do Evento"
             value={req.course}
             onChangeText={(text) => setReq({ ...req, course: text })}
-            placeholder="Digite o curso..."
+            placeholder="Digite o Motivo do Evento..."
           />
 
           {Platform.OS === 'web' ? (
@@ -208,8 +208,8 @@ export default function CalendarsScreen() {
                   onEdit={() => editCalendar(item.id)}
                   onDel={() => delCalendar(item.id)}
                 >
-                  <MyText style={styles.itemText}>👤 Aluno: {item.studentname}</MyText>
-                  <MyText style={styles.itemText}>📘 Curso: {item.course}</MyText>
+                  <MyText style={styles.itemText}>👤 Tipo de Evento: {item.studentname}</MyText>
+                  <MyText style={styles.itemText}>📘 Motivo do Evento: {item.course}</MyText>
                   <MyText style={styles.itemText}>📅 Data: {item.registrationdate}</MyText>
                   <MyText style={styles.itemText}>⏱️ Período: {item.period}</MyText>
                 </MyItem>
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#FFF',
     borderRadius: 10,
-    padding: 20,
+    padding: 40,
     marginBottom: 25,
     shadowColor: '#000',
     shadowOpacity: 0.05,
@@ -294,3 +294,5 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
 });
+
+// subir 
