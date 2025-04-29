@@ -13,7 +13,7 @@ import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '..
 import MySelect from '../../src/components/MySelect';
 import MySearch from '../../src/components/MySearch';
 import { getUsers, toListUser  } from '../../src/controllers/users';
-import { getCourses,  } from '../../src/controllers/courses';
+import { getCourses, toListCourses  } from '../../src/controllers/courses';
 export default function RevenueScreen() {
   
   
@@ -57,6 +57,14 @@ export default function RevenueScreen() {
             setUsers(toListUser(retorno.data));
         }  
     })();
+
+    (async () => {
+      const retorno = await  getCourses ({})
+      if (retorno.status && retorno.data && retorno.data.length > 0){
+        setCourses(toListCourses(retorno.data));
+      }  
+  })();
+  
 
 
     },[])
@@ -182,7 +190,7 @@ const getFilteredRevenues = () => {
         <View style={styles.form}>
           
         
-              <MySelect
+        <MySelect
         label={courses.find(c => c.key == selectedCourseId)?.option || 'Selecione um curso'}
         setLabel={() => {}}
         setKey={(key) => {
