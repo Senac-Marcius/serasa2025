@@ -8,8 +8,7 @@ import {Myinput, MyTextArea } from '../../src/components/MyInputs';
 import {MyTb} from '../../src/components/MyItem';
 import Mytext from '../../src/components/MyText';
 import {MyModal} from '../../src/components/MyModal';
-import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '../../src/controllers/revenues'
-
+import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '../../src/controllers/revenues';
 import MySelect from '../../src/components/MySelect';
 import MySearch from '../../src/components/MySearch';
 import { getUsers, toListUser  } from '../../src/controllers/users';
@@ -181,14 +180,14 @@ const getFilteredRevenues = () => {
       </Mytext>
 
       <MySearch
-        placeholder='teste'
+        placeholder='Pesquise no virtudemy'
         style={styles.searchInput}
         onChangeText={setSearchTerm}
         onPress={()=> {setSearchTerm(searchTerm)}}
         busca={searchTerm}
     />
 
-  <MyModal
+  <MyModal style={styles.MyModal}
     title='NOVO CADASTRO'
     visible={visible} 
     setVisible={setVisible}>
@@ -196,27 +195,26 @@ const getFilteredRevenues = () => {
         <View style={styles.form}>
           
         
-        <MySelect
-        label={courses.find(c => c.key == selectedCourseId)?.option || 'Selecione um curso'}
-        setLabel={() => {}}
-        setKey={(key) => {
-          setSelectedCourseId(key); // Você precisaria criar este estado
-        }}
-        list={courses}
-        caption="Cursos"
-      />
+              <MySelect
+              label={courses.find(c => c.key == selectedCourseId)?.option || 'Selecione um curso'}
+              setLabel={() => {}}
+              setKey={(key) => {
+                setSelectedCourseId(key); // Você precisaria criar este estado
+              }}
+              list={courses}
+              caption="Cursos"
+            />
 
 
 
-        <MySelect
-          label={users.find(l => l.key == req.user_id)?.option || 'Selecione um usuário'}
-          setLabel={() => {}}
-          setKey={(key) => {    setReq({ ...req, user_id: key })    }}
-          list={users}
-          caption="Usuários"
-        />
+            <MySelect
+              label={users.find(l => l.key == req.user_id)?.option || 'Selecione um usuário'}
+              setLabel={() => {}}
+              setKey={(key) => {    setReq({ ...req, user_id: key })    }}
+              list={users}
+              caption="Usuários"
+            />
   
-
 
             <MySelect 
               label={req.tipo_mensalidade  || 'Selecione um tipo de mensalidade'} 
@@ -240,24 +238,6 @@ const getFilteredRevenues = () => {
                 {key: 1, option: 'Inativo'},
               ]}
             />
-
-            {/* Campo de Descrição */}
-            <MyTextArea
-              value={req.description}
-              onChangeText={(text) => setReq({ ...req, description: text })}
-              iconName='description'
-              placeholder='Digite a descrição'
-              label='Descrição'
-            />
-
-             {/* Campo de URL */}
-             <Myinput
-              value={req.url}
-              onChangeText={(text) => setReq({ ...req, url: text })}
-              iconName='link'
-              placeholder='Digite a URL'
-              label='URL'
-            />
             
             {/* Campo de Desconto */}
             <Myinput
@@ -277,7 +257,26 @@ const getFilteredRevenues = () => {
               label='Valor'
             />
 
-            <MyButton style={{justifyContent:'center'}} onPress={() => handleRegister ()} title="cadastrar"  />
+            {/* Campo de URL */}
+            <Myinput
+              value={req.url}
+              onChangeText={(text) => setReq({ ...req, url: text })}
+              iconName='link'
+              placeholder='Digite a URL'
+              label='URL'
+            />
+
+            {/* Campo de Descrição */}
+            <MyTextArea
+              value={req.description}
+              onChangeText={(text) => setReq({ ...req, description: text })}
+              iconName='description'
+              placeholder='Digite a descrição'
+              label='Descrição'
+            />
+
+            <MyButton style={{ justifyContent: 'center' }} onPress={() => handleRegister()} title={req.id == -1 ? "Cadastra" : "Atualizar"}></MyButton>
+
         </View>
         </MyModal>
 
@@ -304,7 +303,6 @@ const getFilteredRevenues = () => {
               <Mytext style={styles.td}>{item.scholarship_status}</Mytext>
               <Mytext style={styles.td}>{item.created_at}</Mytext>
               <Mytext style={styles.td}>{item.description}</Mytext>    
-              
               <Mytext style={styles.td}>{item.discount_percentage}%</Mytext>
               <Mytext style={styles.td}>R${item.value}</Mytext> 
               
@@ -333,10 +331,21 @@ const getFilteredRevenues = () => {
 };
 
 const styles = StyleSheet.create({
+  statusActive: {
+    backgroundColor: '#D8FEEB',
+    color: '#1EB980',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    fontSize: 12,
+    fontWeight: '600',
+    borderRadius: 12,
+    alignSelf: 'flex-start',
+  },
+
   MyModal: {
     display: 'flex',
-    width: 327,
-    height: 650,
+    width: 400,
+    height: 1000,
     padding: 20,
     backgroundColor: 'white',
     borderRadius: 20,
