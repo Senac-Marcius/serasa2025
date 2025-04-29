@@ -76,9 +76,9 @@ export default function LocalScreen(){
         }
     }
 
-    const [unity, setUnit] = useState("Select")           /* exemplo do código de SELECT para copiar */
+    const [unity, setUnit] = useState("Select")         
 
-    const [message, setMessage] = useState("")
+    const [message, setMessage] = useState("white")
     
     
     const router = useRouter();
@@ -86,7 +86,7 @@ export default function LocalScreen(){
     return (
 
             <MyView >
-                <Text style={styles.title}>CADASTRO DE LOCAIS</Text>
+                <Text style={styles.title}>Cadastro de Locais</Text>
                 {message.length > 1 && (  
                 <Text style={styles.title}>{message}</Text>
                 )}
