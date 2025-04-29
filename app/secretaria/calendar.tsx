@@ -123,10 +123,10 @@ export default function CalendarsScreen() {
 
           <Myinput
             iconName="book"
-            label="Motivo da Reunião"
+            label="Motivo do Evento"
             value={req.course}
             onChangeText={(text) => setReq({ ...req, course: text })}
-            placeholder="Digite o Motivo da Reunião..."
+            placeholder="Digite o Motivo do Evento..."
           />
 
           {Platform.OS === 'web' ? (
