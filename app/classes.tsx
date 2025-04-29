@@ -12,11 +12,13 @@ import MySearch from '../src/components/MySearch';
 import { Myinput } from '../src/components/MyInputs';
 import {setTimeline,iTimeline,delTimelines as delTimelinesDoController,editTimelines as editTimelinesDoController,getTimelines,} from '../src/controllers/timelines';
 import MyTimerPicker from '../src/components/MyTimerPiker';
+import { TabActions } from '@react-navigation/native';
 
 // Configuração do Supabase
 const supabaseUrl = 'https://fcjbnmhbjolybbkervgg.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjamJubWhiam9seWJia2VydmdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI5MzcyNTQsImV4cCI6MjA1ODUxMzI1NH0.mFa5W8ixlKQtaNm_EdGFg3IuooF95Xcn-ArPx_vX4mI';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
+ const [filtro, setFiltro] = useState('');
 
 type Turma = {
   id: number;
@@ -128,9 +130,9 @@ export default function TurmasComCadastro() {
       <MyView >
         <Mytext style={styles.header}>Cadastrar Nova Turma</Mytext>
         {[
-          'id', 'curso', 'turno', 'modalidade', 'horario',
+          'id', 'curso', 'nome_curso','turno', 'modalidade', 'horario',
           'cargaHoraria', 'vagas', 'inicio', 'termino', 'valor',
-          'docente', 'certificacao', 'status'
+          'docente', 'status'
         ].map((campo) => (
           <TextInput
             key={campo}
@@ -153,6 +155,12 @@ export default function TurmasComCadastro() {
   return (
     <View style={styles.container}>
       <Mytext style={styles.header}>Turmas Cadastradas</Mytext>
+               
+     
+     <MyButton
+      title='Cadastrar nova turma'
+      onPress={() => setModoCadastro(true)}
+    />  
         <View style={styles.table}>
                <View style={styles.tableRowHeader}>
                  <Text style={styles.th}>Código da turma</Text>
@@ -169,15 +177,27 @@ export default function TurmasComCadastro() {
                  <Text style={styles.th}>Docentes</Text>
                  <Text style={styles.th}>Status</Text>
                </View>
-               
     </View>
-     
-     <MyButton
-      title='Cadastrar nova turma'
-      onPress={() => setModoCadastro(true)}
+    </View>
 
-    />  
-    </View>
+  {turmas
+                .filter((item) => item.nome_curso?.toLowerCase().includes(filtro.toLowerCase()))
+                .map((item) => (
+                  <View style={styles.tableRow} key={item.id}>
+                    <Text style={styles.td}>{item.nome_curso }</Text>
+                    <Text style={styles.td}>{item.id }</Text>
+                    <Text style={styles.td}>{item.curso}</Text>
+                    <Text style={styles.td}>{item.turno}</Text>
+                    <Text style={styles.td}>{item.modalidade}</Text>
+                    <Text style={styles.td}>{item.horario}</Text>
+                    <Text style={styles.td}>{item.cargaHoraria}</Text>
+                    <Text style={[styles.td, styles.TabActions]}>
+                      <Text style={styles.edit} onPress={() => editarTurma(item.)}>Editar</Text>
+                      <Text style={styles.del} onPress={() => deletarTurma(item.id)}>Excluir</Text>
+                    </Text>
+                  </View>
+                ))}
+                
   );
 }
 
@@ -251,7 +271,7 @@ export default function TurmasComCadastro() {
     },
     th: { flex: 1, fontWeight: '600', fontSize: 13, color: '#333' },
     td: { flex: 1, fontSize: 13, color: '#444' },
-    tableActions: {
+    TabActions: {
       flexDirection: 'row',
       gap: 12,
     },
