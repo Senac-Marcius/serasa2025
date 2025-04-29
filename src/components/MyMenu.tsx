@@ -88,8 +88,6 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <MenuItem label="Apoio" route="apoio" icon='accessibility-outline' />
         <MenuItem label="Secretaria" route="secretaria" icon="add-circle" />
-        <MenuItem label="Calendar" route="secretaria/calendar" icon="calendar" />
-        <MenuItem label="Categories" route="categories" icon="albums" />
         <MenuItem label="Classes" route="classes" icon="school" />
         <MenuItem label="Collections" route="collections" icon="cube" />
         <MenuItem label="More" route="more" icon="cube" />
@@ -103,7 +101,6 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Loans" route="loans" icon="card" />
         <MenuItem label="Locals" route="infraestrutura/locals" icon="location" />
         <MenuItem label="Perfil" route="perfil" icon="person" />
-        <MenuItem label="Positions" route="positions" icon="pin" />
         <MenuItem label="Posts" route="posts" icon="chatbox" />
         <MenuItem label="Infraestrutura" route="infraestrutura" icon="cube-outline"/>
         <MenuItem label="Projects" route="projects" icon="briefcase" />
