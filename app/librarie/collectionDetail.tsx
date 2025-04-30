@@ -10,6 +10,7 @@ import TabelaUsuarios from './loantable';
 import { supabase } from '../../src/utils/supabase';
 import MyMenu from '../../src/components/MyMenu';
 import { StarCalculation } from './starsCalculation';
+import LoansTabledetail from './loanstabledetail';
 import { setCollection, iCollection, deleteCollectionById, updateCollectionById, getCollections } from '../../src/controllers/collections';
 
 export default function CollectionDetail() {
@@ -50,7 +51,7 @@ export default function CollectionDetail() {
       }
     });
 
-   
+
     const commonTags = Object.entries(tagCount)
       .filter(([tag, count]) => count > 1)
       .map(([tag]) => tag);
@@ -118,7 +119,7 @@ export default function CollectionDetail() {
               <TouchableOpacity onPress={() => setMenuOpen(!menuOpen)} style={styles.iconButton}>
                 <Ionicons name="menu" size={20} color="#750097" />
               </TouchableOpacity>
-              <TouchableOpacity onPress={()=>router.back()} style={styles.iconButton}>
+              <TouchableOpacity onPress={() => router.back()} style={styles.iconButton}>
                 <Ionicons name="arrow-back-outline" size={20} color="#750097" />
               </TouchableOpacity>
             </View>
@@ -169,9 +170,10 @@ export default function CollectionDetail() {
                     setVisible={setVisible}
                     style={styles.modal}
                     title="Empréstimo"
-                    closeButtonTitle="Fechar"
+                    closeButtonTitle="X"
+
                   >
-                    <StarCalculation BookId={item.id} />
+                   <LoansTabledetail BookId = {item.id} />
                   </MyModal>
                 </View>
               </View>
@@ -230,7 +232,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     justifyContent: "center",
 
-},
+  },
   viewFlatList: {
     display: "flex",
     justifyContent: "center",
@@ -265,7 +267,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     gap: 40,
     overflow: "hidden",
-    borderRadius:20,
+    borderRadius: 20,
 
   },
   itemText: {
@@ -273,8 +275,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 5,
   },
-  containerText:{
-    backgroundColor:""
+  containerText: {
+    backgroundColor: ""
   },
   button_capsule: {
     backgroundColor: "#EDE7F6",
@@ -291,15 +293,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   containerModal: {
-    display:"flex",
+    display: "flex",
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop:20
+    marginTop: 20
 
   },
   modal: {
     width: 700,
+    height:450,
   },
+
   buttonsContainer: {
     flexDirection: 'row',
     gap: 50,
@@ -395,7 +399,7 @@ const styles = StyleSheet.create({
   },
 
   tag: {
-    backgroundColor: '#E0BBE4', 
+    backgroundColor: '#E0BBE4',
     borderRadius: 15,
     paddingHorizontal: 10,
     paddingVertical: 5,
@@ -403,7 +407,7 @@ const styles = StyleSheet.create({
 
   tagText: {
     fontSize: 12,
-    color: '#4A148C', 
+    color: '#4A148C',
     fontWeight: 'bold',
   },
   itemTitlename: {
