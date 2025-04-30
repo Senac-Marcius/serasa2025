@@ -29,13 +29,13 @@ export default function IndexScreen() {
       ]);
 
       const sum = (arr: any[], key: string) =>
-        arr.reduce((acc, item) => acc + parseFloat((item[key] || '0').replace(',', '.')), 0);
+        arr.reduce((acc, item) => acc + item[key], 0);
 
       setTotal({
         expenses: resExp.status ? sum(resExp.data || [], 'costs') : 0,
         investments: resInv.status ? sum(resInv.data || [], 'value') : 0,
         budgets: resBud.status ? sum(resBud.data || [], 'value') : 0,
-        revenues: resRev.status ? sum(resRev.data || [], 'value') : 0,
+        revenues: resRev.status ? sum(resRev.data || [],  'value') : 0,
       });
     }
 
