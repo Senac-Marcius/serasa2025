@@ -11,13 +11,30 @@ import { supabase } from '../src/utils/supabase';
 import TabelaUsuarios from './librarie/loantable';
 import { ScrollView } from 'react-native-gesture-handler';
 import { textStyles } from '../styles/textStyles';
+import TabelaFuncionarios from './librarie/LoansTableEmployee';
+import TabelaAluno from './librarie/loansTableStundet';
 
 
 export default function LoanScreen() {
 
     const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
    
- 
+ const emprestimos = {
+    id: 'id',
+    aluno: 'string',
+    livro: "string",
+    dataEmprestimo: "string",
+    dataDevolucao: "string",
+    status: "'Em dia' | 'Atrasado'",
+  };
+
+  const Aluno = {
+    id: "number",
+    livro: "string",
+    dataEmprestimo: "string",
+    dataDevolucao: "string",
+    status: "'Em dia' | 'Atrasado'",
+  };
 
     const [req, setReq] = useState({ //useState retorna uma variavel e uma função para alteral a variavel (req e setReq)
         id: -1,
@@ -153,7 +170,7 @@ export default function LoanScreen() {
                              <MyCalendar
                              value={req.loanDate.split('T')[0]}
                              date={req.loanDate.split('T')[0]}
-                             setDate={(date) => setReq({...req, expectedLoanDate: date}) }
+                             setDate={(date) => setReq({...req, loanDate: date}) }
                              placeholder=""
                              label="Data de Empréstimo:"
                              iconName="book"
@@ -245,12 +262,20 @@ export default function LoanScreen() {
                                     />
 
                                 <Text>
-                                    <TabelaUsuarios 
-                                        data={loans} 
-                                        onEdit={editLoans} 
-                                        onDelete={deleteLoans} 
+                                <TabelaAluno
+                                    emprestimos={loans.map((loan) => ({
+                                    id: loan.id,
+                                    livro: loan.bookId, // Supondo que bookId seja o nome do livro
+                                    dataEmprestimo: loan.loanDate.split('T')[0], // Formato "YYYY-MM-DD"
+                                    dataDevolucao: loan.expectedLoanDate.split('T')[0], // Formato "YYYY-MM-DD"
+                                    status: new Date(loan.expectedLoanDate) < new Date() ? 'Atrasado' : 'Em dia', // Lógica simples de status
+                                    }))}
                                     />
                                 </Text>
+
+                                
+
+                               
                                   
                                 </View>
 
@@ -260,7 +285,9 @@ export default function LoanScreen() {
                 </View>
             </ScrollView>
         ); //encapsulamento
+        
     }
+
 
 
     const styles = StyleSheet.create({
