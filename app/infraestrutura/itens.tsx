@@ -197,7 +197,7 @@ export default function itemScreen(product_id: Number) {
 const styles = StyleSheet.create({
     buttoncad: {
         marginBottom: 10,
-        margin: 'auto',.
+        margin: 'auto',
     },
     modal:{
         display: 'flex',
