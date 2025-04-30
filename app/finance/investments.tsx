@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet  } from 'react-native';
 import MyView from '../../src/components/MyView';
-import MyAccessibility from '../../src/components/MyAccessibility';
 import { Myinput, MyTextArea } from '../../src/components/MyInputs';
 import Mylist from '../../src/components/MyList';
 import {MyTb} from '../../src/components/MyItem';
