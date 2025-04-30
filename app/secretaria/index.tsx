@@ -7,6 +7,7 @@ import { Ionicons, FontAwesome5, Feather, MaterialCommunityIcons } from '@expo/v
 import { useRouter } from 'expo-router';
 import MyView from '../../src/components/MyView';
 import { DatePickerModal } from 'react-native-paper-dates';
+//2
 
 interface Evento {
   id: number;
@@ -125,8 +126,8 @@ export default function IndexScreen() {
       {/* Sidebar */}
       <View style={styles.sidebar}>
         <View style={styles.logoContainer}>
-          <FontAwesome5 name="chalkboard-teacher" size={28} color="#3AC7A8" />
-          <Text style={styles.logoTitle}>Estudy</Text>
+          <FontAwesome5 name="chalkboard-teacher" size={28} color="#b34db2" />
+          <Text style={styles.logoTitle}>Virtudemy</Text>
           <Text style={styles.logoSubtitle}>Learn From Home</Text>
         </View>
 
@@ -251,20 +252,30 @@ const styles = StyleSheet.create({
     borderRightColor: '#eee',
   },
   mainContent: { flex: 1 },
+
   logoContainer: { alignItems: 'center', marginBottom: 24 },
-  logoTitle: { fontSize: 18, fontWeight: 'bold', color: '#3AC7A8', marginTop: 6 },
-  logoSubtitle: { fontSize: 11, color: '#aaa' },
+
+  logoTitle: { fontSize: 18, fontWeight: 'bold', color: '#b34db2', marginTop: 6 },
+
+  logoSubtitle: { fontSize: 11, color: '#b34db2' },
+
   menuItem: {
     flexDirection: 'row', alignItems: 'center', marginVertical: 8,
     paddingVertical: 6, paddingHorizontal: 8, borderRadius: 8,
   },
   icon: { marginRight: 10 },
+
   menuText: { fontSize: 13, color: '#555' },
-  activeItem: { backgroundColor: '#E6F9F5', borderLeftWidth: 4, borderLeftColor: '#3AC7A8' },
-  activeText: { color: '#3AC7A8', fontWeight: '600' },
+
+  activeItem: { backgroundColor: '#E6F9F5', borderLeftWidth: 4, borderLeftColor: '#b34db2' },
+
+  activeText: { color: '#b34db2', fontWeight: '600' },
+
   content: { flexGrow: 1, padding: 24, backgroundColor: '#F2F3F5' },
+
   mainTitle: { fontSize: 22, fontWeight: 'bold', color: '#333', marginBottom: 20 },
   cardArea: {
+
     flexDirection: 'row', gap: 20, flexWrap: 'wrap',
     justifyContent: 'flex-start', marginBottom: 20,
   },

@@ -7,11 +7,12 @@ const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
 
 
 interface MyCalendarProps {
+    value:string;
     date?: string;
     setDate(date:string): void;
-    icon: React.ReactNode;
-    label?: string;
-    placeholder?: string;
+    iconName?: React.ReactNode;
+    label: string;
+    placeholder: string;
   
 }
 
@@ -42,11 +43,11 @@ return (
             <TouchableOpacity onPress={()=> {setOpen(true)}}>
             
              <Myinput
-                value={`Data: ${date}`}
+                value={`${placeholder} ${date}`}
                 onChangeText={(newDate) => setDate(newDate)}
-                label=''
-                iconName= "square"
-                placeholder=''
+                label={label}
+                iconName= "book"
+                placeholder={placeholder}
               />
         
             </TouchableOpacity>

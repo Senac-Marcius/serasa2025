@@ -4,7 +4,7 @@ import MyView from '../../src/components/MyView';
 import MyButton from '../../src/components/MyButtons';
 import { IconButton } from 'react-native-paper';
 import { Myinput, MyCheck, MyTextArea } from '../../src/components/MyInputs';
-import { MyItem, MyCorrelated } from '../../src/components/MyItem';
+import { MyItem } from '../../src/components/MyItem';
 import MyList from '../../src/components/MyList';
 import {setRecord, iRecord, getRecords } from '../../src/controllers/records'
 import { supabase } from '../../src/utils/supabase';
@@ -62,20 +62,6 @@ export default function RecordScreen(user_id:Number) {
         create_at: new Date().toISOString(),
     });
  
-    /* Já puxei esse código no controller
-    useEffect(() => {
-        async function getTodos () {
-            const { data: todos } = await supabase.from ('records').select()
- 
-            if (todos && todos.length > 1) {
-                setRecords (todos)
-           
-            }
-        }
-       
-        getTodos()
- 
-    }, [])*/
  
    async function handleRegister() {
         if (req.id == -1) {
@@ -94,7 +80,14 @@ export default function RecordScreen(user_id:Number) {
  
                 } else {
                     const { error } = await supabase.from('records')
-                        .update(req)
+                        .update({
+                            description: req.description,
+                            sick: req.sick,
+                            health: req.health,
+                            allergy: req.allergy,
+                            medication: req.medication,
+                            user_id: req.user_id,
+                        })
                         .eq('id', req.id);
            
                     if (!error) {
@@ -140,9 +133,7 @@ export default function RecordScreen(user_id:Number) {
     return (
  
         <MyView >
- 
- 
-            <View style={styles.row}>
+
  
  
                 <View style={styles.form}>
@@ -232,39 +223,35 @@ export default function RecordScreen(user_id:Number) {
                     <Mytext style={styles.itemText}>Saúde: {item.health}</Mytext>
                     <Mytext style={styles.itemText}>Alergias: {item.allergy}</Mytext>
                     <Mytext style={styles.itemText}>Medicações: {item.medication}</Mytext>
-                    <Mytext style={styles.itemText}>Usuário: {users.find(u => u.key == item.user_id).option} </Mytext>
-                    <Mytext style={styles.itemText}>Nível: {levels.find(l => l.key == item.level_id).option}</Mytext>
+                    <Mytext style={styles.itemText}>Usuário: {users.find(u => u.key == item.user_id)?.option || 'Selecione o usuário'} </Mytext>{/*correção do código: foi atualizado o (?.) */}
+                    <Mytext style={styles.itemText}>Nível: {levels.find(l => l.key == item.level_id)?.option || 'Selecione um nível'}</Mytext>
                        
                     </MyItem>  
                   )}  
                    
                 />
-            </View>
         </MyView>
     );
 }
  
 const styles = StyleSheet.create({
+    //Troca de stylo row pelo container
     row: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        alignSelf:"center",
-       
+        padding: 10,
+        backgroundColor: '#fff',
+        flex: 1,
+        gap: 20,
     },
- 
+    //Troca de stylo form pelo FormSection
     form: {
-        flex: 20,
-        marginRight: 20,
-        marginLeft: 20,
-        padding: 30,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 10,
+        backgroundColor: '#F2F3F5',
+        borderRadius: 16,
+        padding: 20,
         shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-        alignItems: "center",
+        shadowOpacity: 0.05,
+        shadowRadius: 10,
+        elevation: 8,
+        
     },
  
     button_round: {

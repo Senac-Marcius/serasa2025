@@ -10,6 +10,7 @@ import { setIten, dell, edit, iIten, getItens } from '../../src/controllers/item
 import { MyModal_mobilefullscreen } from '../../src/components/MyModal';
 import Mytext from '../../src/components/MyText';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import MySelect from '../../src/components/MySelect';
 export default function itemScreen(product_id: Number) {
     const [req, setReq] = useState({
         id: -1,
@@ -73,7 +74,7 @@ export default function itemScreen(product_id: Number) {
         if (list)
             setItens(list)
     }
-
+     const [unity, setUnit] = useState("Categorias")  
     const router = useRouter();
 
     return (
@@ -104,20 +105,21 @@ export default function itemScreen(product_id: Number) {
                     />
 
 
-                    <MaterialIcons //Essa estrutura pertence ao input da categoria
-                        name="category" 
-                        size={18} 
-                        color="#6A1B9A" 
-                        style={{  marginLeft: 0.1,  // Indentação adicional da borda esquerda
-                        marginRight: 5}}/>
                     
-                    <Myinput
-                        placeholder="Categoria"
-                        value={String(req.category_id)}
-                        onChangeText={(text) => setReq({ ...req, category_id: Number(text) })}
-                        label="Categoria"
-                        iconName=''
-                    />
+                    <MySelect 
+                    caption="Selecione uma categoria"
+                        label={unity} setLabel={setUnit} 
+                        list={            
+                            [
+                                {key:0, option: 'Refeitório'},             /* exemplo do código de SELECT para copiar */
+                                {key:1, option: 'Energia e iluminação'},
+                                {key:2, option: 'Água e saneamento'},
+                                {key:3, option: 'Administração'},
+                                {key:4, option: 'Estoques e materiais'},
+                                
+
+                            ]
+                        } />
                     <MaterialIcons //Essa estrutura pertence ao input da item
                         name="mouse" 
                         size={18} 
@@ -140,6 +142,13 @@ export default function itemScreen(product_id: Number) {
                     style={{  marginLeft: 0.1,  // Indentação adicional da borda esquerda
                     marginRight: 5}}/>
                     
+                    <Myinput
+                        placeholder="Digite o número"
+                        value={req.mark}
+                        onChangeText={(text) => setReq({ ...req, mark: text })}
+                        label="Nº de patrimônio"
+                        iconName=''
+                    />
                     <Myinput 
                         placeholder="N°"
                         value={String(req.amount)}

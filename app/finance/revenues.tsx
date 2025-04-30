@@ -7,11 +7,13 @@ import MyButton from '../../src/components/MyButtons';
 import {Myinput, MyTextArea } from '../../src/components/MyInputs';
 import {MyTb} from '../../src/components/MyItem';
 import Mytext from '../../src/components/MyText';
-import {MyModal_mobilefullscreen} from '../../src/components/MyModal';
+import {MyModal} from '../../src/components/MyModal';
 import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '../../src/controllers/revenues'
 
 import MySelect from '../../src/components/MySelect';
 import MySearch from '../../src/components/MySearch';
+import { getUsers, toListUser  } from '../../src/controllers/users';
+import { getCourses, toListCourses  } from '../../src/controllers/courses';
 
 export default function RevenueScreen() {
   
@@ -23,43 +25,67 @@ export default function RevenueScreen() {
     name: '',
     url: '',
     created_at: new Date().toISOString(),
-    user_id: 1,
+    user_id: -1,
     value: '',
-    scholarship_status: '02- Inativo',
+    scholarship_status: '',
     discount_percentage: '',
+    tipo_mensalidade: ''
+
     
 
   });
-const [searchTerm, setSearchTerm] = useState('');
-const [visible, setVisible] = useState(false);
-const [revenues, setRevenues] = useState<iRevenue[]>([]);
 
-useEffect(()=>{
-  async function getTodos(){
-    const retorno = await getRevenues({})
+    const [searchTerm, setSearchTerm] = useState('');
+    const [visible, setVisible] = useState(false);
+    const [revenues, setRevenues] = useState<iRevenue[]>([]);
+    const [users, setUsers] = useState<any[]>([]);
+    const [courses, setCourses] = useState<any[]>([]);
+    const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
+    
+    useEffect(()=>{
+      async function getTodos(){
+        const retorno = await getRevenues({})
+    
+        if(retorno.status && retorno.data && retorno.data?.length > 0){
+          setRevenues(retorno.data);
+        }
+      }
+      getTodos();
 
-    if(retorno.status && retorno.data && retorno.data?.length > 0){
-      setRevenues(retorno.data);
-    }
-  }
-  getTodos();
-},[])
- 
+      (async () => {
+        const retorno = await  getUsers ({})
+        if (retorno.status && retorno.data && retorno.data.length > 0){
+            setUsers(toListUser(retorno.data));
+        }  
+    })();
+
+    (async () => {
+      const retorno = await  getCourses ({})
+      if (retorno.status && retorno.data && retorno.data.length > 0){
+        setCourses(toListCourses(retorno.data));
+      }  
+  })();
+  
+
+
+    },[])
 
   
-  
+
 
   // Função para cadastrar ou editar uma receita
   async function handleRegister() {
-
     if (req.id == -1) {
       // Cadastra uma nova receita
-      const newId = revenues.length ? revenues[revenues.length - 1].id + 1 : 0;
-      const newRevenue = { ...req, id: newId };
+      const newId = revenues.length ? revenues[revenues.length - 1].id + 1 : 1;
+      
+      const newRevenue = { 
+        ...req, 
+        id: newId
+      };
+      
       setRevenues([...revenues, newRevenue]);
-      await setRevenue(newRevenue)
-      
-      
+      await setRevenue(newRevenue);
       
       } else {
         // Edita uma receita existente
@@ -84,10 +110,11 @@ useEffect(()=>{
       name: '',
       url: '',
       created_at: new Date().toISOString(),
-      user_id: 1,
+      user_id: -1,
       value: '',
-      scholarship_status: '02- Inativo',
+      scholarship_status: '',
       discount_percentage: '',
+      tipo_mensalidade: '',
     });
     setVisible(false);
   }
@@ -116,11 +143,14 @@ useEffect(()=>{
       
     }
 }
-// logica do compo
+// logica do campo de pesquisa
 const getFilteredRevenues = () => {
   if (!searchTerm) return revenues; // Retorna tudo se não houver busca
   
   const term = searchTerm.toLowerCase();
+
+  const u = users.find(ul => ul.option.includes(term) )
+
   
   return revenues.filter(item => {
     // Converte o desconto para string e trata o símbolo %
@@ -128,14 +158,16 @@ const getFilteredRevenues = () => {
     const discountPercent = discountStr ? `${discountStr}%` : '';
     
     return (
-      item.name?.toLowerCase().includes(term) ||
+      (u != undefined && item.user_id == u.key) ||
       item.description?.toLowerCase().includes(term) ||
       item.value?.toString().includes(searchTerm) || // Mantém sem lowercase para números
       item.id?.toString().includes(searchTerm) ||
       item.url?.toLowerCase().includes(term) ||
-      item.scholarship_status?.toLowerCase().includes(term) ||
+      item.scholarship_status.toLowerCase() == searchTerm.toLowerCase() ||
+      item.tipo_mensalidade?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       discountStr.includes(searchTerm) || // Busca o número cru (25)
       discountPercent.includes(searchTerm) // Busca o formato com % (25%)
+      
     );
   });
 };
@@ -149,33 +181,63 @@ const getFilteredRevenues = () => {
       </Mytext>
 
       <MySearch
-       style={styles.searchInput}
-       onChangeText={setSearchTerm}
+        placeholder='teste'
+        style={styles.searchInput}
+        onChangeText={setSearchTerm}
         onPress={()=> {setSearchTerm(searchTerm)}}
         busca={searchTerm}
     />
 
-  <MyModal_mobilefullscreen
+  <MyModal
+    title='NOVO CADASTRO'
     visible={visible} 
     setVisible={setVisible}>
   
         <View style={styles.form}>
-            {/* Campo de Nome */}
-            <Myinput
-              value={req.name}
-              onChangeText={(text) => setReq({ ...req, name: text })}
-              iconName='badge'
-              placeholder='Digite o nome'
-              label='Nome'
-            />
+          
+        
+        <MySelect
+        label={courses.find(c => c.key == selectedCourseId)?.option || 'Selecione um curso'}
+        setLabel={() => {}}
+        setKey={(key) => {
+          setSelectedCourseId(key); // Você precisaria criar este estado
+        }}
+        list={courses}
+        caption="Cursos"
+      />
 
+
+
+        <MySelect
+          label={users.find(l => l.key == req.user_id)?.option || 'Selecione um usuário'}
+          setLabel={() => {}}
+          setKey={(key) => {    setReq({ ...req, user_id: key })    }}
+          list={users}
+          caption="Usuários"
+        />
+  
+
+
+            <MySelect 
+              label={req.tipo_mensalidade  || 'Selecione um tipo de mensalidade'} 
+              caption= "Tipo da mensalidade"
+              setLabel={(text) => setReq({...req, tipo_mensalidade: text})}
+              list={[
+                {key: 1, option: "Cobrança de Mensalidades "},
+                {key: 2, option: "Taxas escolares"},
+                {key: 3, option: "Negociação de débitos"},
+                {key: 4, option: "Bolsa de estudos e descontos"},
+                // ... outros tipos
+              ]}
+            />
             {/* Campo de Status da Bolsa */}
             <MySelect 
-              label={ req.scholarship_status } 
+              label={ req.scholarship_status || 'Selecione um Status da Bolsa'} 
+              caption= "Status da Bolsa"
               setLabel={(text) => setReq({ ...req, scholarship_status: text })}
               list={[
-                {key: 0, option: '01- Ativo'},
-                {key: 1, option: '02- Inativo'},
+                {key: 0, option: 'Ativo'},
+                {key: 1, option: 'Inativo'},
               ]}
             />
 
@@ -202,7 +264,7 @@ const getFilteredRevenues = () => {
               value={req.discount_percentage}
               onChangeText={(text) => setReq({ ...req, discount_percentage: text })}
               iconName='percent'
-              placeholder='Porcentagem de desconto'
+              placeholder='Digite o valor em %'
               label='Desconto'
             />
 
@@ -211,13 +273,13 @@ const getFilteredRevenues = () => {
               value={req.value}
               onChangeText={(text) => setReq({ ...req, value: text })}
               iconName='payments'
-              placeholder='Digite o valor'
+              placeholder='Digite o valor R$0,00'
               label='Valor'
             />
 
             <MyButton style={{justifyContent:'center'}} onPress={() => handleRegister ()} title="cadastrar"  />
         </View>
-        </MyModal_mobilefullscreen>
+        </MyModal>
 
         {/* Lista de Receitas */}
         <MyList
@@ -237,24 +299,27 @@ const getFilteredRevenues = () => {
               )}
 
             >
-              <Mytext style={styles.td}>{item.name}</Mytext>
+              <Mytext style={styles.td}>{users.find(u=> u.key == item.user_id)?.option || ''}</Mytext>
+              <Mytext style={styles.td}>{item.tipo_mensalidade}</Mytext>
               <Mytext style={styles.td}>{item.scholarship_status}</Mytext>
               <Mytext style={styles.td}>{item.created_at}</Mytext>
               <Mytext style={styles.td}>{item.description}</Mytext>    
-              <Mytext style={styles.td}>{item.user_id}</Mytext>
+              
               <Mytext style={styles.td}>{item.discount_percentage}%</Mytext>
               <Mytext style={styles.td}>R${item.value}</Mytext> 
+              
               
             </MyTb>
           )}
           header={(
             <View style={styles.tableRowHeader}>
-              <Mytext style={styles.th}>Nome</Mytext>
+              <Mytext style={styles.th}>Nome do usuário</Mytext>
+              <Mytext style={styles.th}>Tipo de receita </Mytext>
               <Mytext style={styles.th}>Status da Bolsa</Mytext>
               <Mytext style={styles.th}>Data do documento</Mytext>
               <Mytext style={styles.th}>Descrição</Mytext>
-              <Mytext style={styles.th}>Id de usuario</Mytext>
-              <Mytext style={styles.th}>Valor de desconto</Mytext>
+              
+              <Mytext style={styles.th}>Descontos</Mytext>
               <Mytext style={styles.th}>Valor</Mytext>
               <Mytext style={styles.th}>Ações</Mytext>
               
@@ -320,22 +385,22 @@ const styles = StyleSheet.create({
 
   tableRowHeader: {
     flexDirection: 'row',
-    paddingVertical: 10,
-    borderBottomWidth: 1,
+    paddingVertical: 15,
+    borderBottomWidth: 2,
     borderBottomColor: '#ddd',
   },
 
   th: {
     flex: 1,
     fontWeight: '900',
-    fontSize: 13,
+    fontSize: 14,
     color: '#333',
     textAlign: 'center',
   },
 
   td: {
     flex: 1,
-    fontSize: 13,
+    fontSize: 14,
     color: '#444',
     textAlign: 'center',
   },
