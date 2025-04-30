@@ -196,9 +196,18 @@ export default function ExpenseScreen() {
 
                     <MyTextArea value={req.descriptions} onChangeText={(text) => setReq({ ...req, descriptions: text })} iconName='' placeholder='Descrição' label='' />
 
+                    <Myinput
+                                value={String(req.percentege)}
+                                onChangeText={(text) => setReq({ ...req, percentege: Number(text) })}
+                                iconName='percent'
+                                placeholder='% Relacionado a área'
+                                label='Valor'
+                                />
+                        
+
                     <Myinput value={ String(req.costs)} onChangeText={(text) => setReq({ ...req, costs: Number(text)})} placeholder="R$" label="Valores:" iconName='' />
 
-                        
+
 
                     <Mytext style={{fontSize:14}}>Distribuição por areas:</Mytext>
                             {areasSelected.map((uOption, index) => (
@@ -291,6 +300,7 @@ export default function ExpenseScreen() {
                         <Mytext style={styles.td}> {item.emails}</Mytext>
                         <Mytext style={styles.td}> {item.created_at}</Mytext>
                         <Mytext style={styles.td}>{item.descriptions}</Mytext>
+                        <Mytext style={styles.td}> {item.percent}</Mytext>
                         <Mytext style={styles.td}> {item.costs}</Mytext>
                     </MyTb>
 
@@ -302,6 +312,7 @@ export default function ExpenseScreen() {
                         <Mytext style={styles.th}>Email</Mytext>
                         <Mytext style={styles.th}>Data</Mytext>
                         <Mytext style={styles.th}>Descrição</Mytext>
+                        <Mytext style={styles.th}>Porcentagem</Mytext>
                         <Mytext style={styles.th}>Valor</Mytext>
                         <Mytext style={styles.th}>Ações</Mytext>
                     </View>
