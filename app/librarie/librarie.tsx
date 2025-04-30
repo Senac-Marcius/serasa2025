@@ -19,6 +19,8 @@ import { Icon , MD3Colors} from "react-native-paper";
 import { useRouter } from 'expo-router';
 import {iItem, setItem, getItems, updateItemById} from '../../src/controllers/librarie';
 import { supabase } from '../../src/utils/supabase';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { Link } from 'expo-router';
 
 
 export default function itemScreen() { // aqui é TS
@@ -126,7 +128,7 @@ export default function itemScreen() { // aqui é TS
             incorporated: false,
         });
         
-        router.push('/Biblioteca/librariePreview');
+        router.push('/librarie/librariePreview');
           
     };
 
@@ -182,62 +184,68 @@ export default function itemScreen() { // aqui é TS
 
     const cancel = () => {
 
+        console.log('Função cancel chamada');
+        
         Alert.alert(
             "Cancelar Registro",
             "Tem certeza que deseja cancelar este registro? Todos os dados não salvos serão perdidos.",
             [
-                {
-                    text: "Não",
-                    style: "cancel"
-                },
-                { 
-                    text: "Sim", 
-                    onPress: () => {
-                        // Resetar o formulário
-                        setReq({
-                            id: -1,
-                            created_at: new Date().toISOString(),
-                            typology: '',
-                            title: '',
-                            subtitle: '',
-                            responsible: '',
-                            translation: '',
-                            language: '',
-                            image: '',
-                            year: 0,
-                            edition: '',
-                            publisher: '',
-                            location: '',
-                            number_pages: 0,
-                            serie: '',
-                            volume: 0,
-                            format: '',
-                            isbn: '',
-                            issn: '',
-                            cdd: '',
-                            call_number: '',
-                            subject: '',
-                            keywords: '',
-                            summary: '',
-                            notes: '',
-                            number_copies: 0,
-                            status: '',
-                            url: '',
-                            file: '',
-                            type_loan: '',
-                            incorporated: false,
-                        });
-                        setSelectedImage(null);
-                        setSelectedFile(null);
-                        
-                        router.push('/Biblioteca/librariePreview');
-                    }
+            {
+                text: "Não",
+                style: "cancel"
+            },
+            {
+                text: "Sim",
+                onPress: () => {
+                console.log('Confirmado. Redefinindo e redirecionando...');
+        
+                setReq({
+                    id: -1,
+                    created_at: new Date().toISOString(),
+                    typology: '',
+                    title: '',
+                    subtitle: '',
+                    responsible: '',
+                    translation: '',
+                    language: '',
+                    image: '',
+                    year: 0,
+                    edition: '',
+                    publisher: '',
+                    location: '',
+                    number_pages: 0,
+                    serie: '',
+                    volume: 0,
+                    format: '',
+                    isbn: '',
+                    issn: '',
+                    cdd: '',
+                    call_number: '',
+                    subject: '',
+                    keywords: '',
+                    summary: '',
+                    notes: '',
+                    number_copies: 0,
+                    status: '',
+                    url: '',
+                    file: '',
+                    type_loan: '',
+                    incorporated: false,
+                });
+        
+                setSelectedImage(null);
+                setSelectedFile(null);
+        
+                // Garante que o redirecionamento aconteça fora do contexto do Alert
+                setTimeout(() => {
+                    router.push('/Biblioteca/librariePreview');
+                }, 100);
                 }
+            }
             ]
         );
     };
-
-
+      
 
     //Selects/Pickers
     const [typology, setTypology] = useState("Tipologia")
@@ -248,6 +256,9 @@ export default function itemScreen() { // aqui é TS
 
     return ( //encapsulamento
         <ScrollView>
+            <Link href="/librarie/librariePreview">
+            <Text>Ir para Preview</Text>
+            </Link>
             <View style={styles.header}>
                 <View style={styles.header2}>
                     <TouchableOpacity onPress={() => setMenuOpen(!menuOpen)} style={styles.iconButton}>
@@ -291,7 +302,10 @@ export default function itemScreen() { // aqui é TS
                         style={styles.Modal}
                         title="Prévia" 
                         closeButtonTitle="Fechar"
-                        //button_type={capsule}
+                        tipe="capsule"
+                        buttonStyle={styles.button_capsule1}
+                        isButton={true}
+                        
                     >
                         <ScrollView>
                             <View style={styles.modalContainer}>
@@ -338,7 +352,10 @@ export default function itemScreen() { // aqui é TS
                         button_type="capsule"
                         icon="close-circle"
                         style={styles.button_capsule1}
-                    />   
+                    /> 
+                    <TouchableOpacity onPress={cancel} style={{ padding: 10, backgroundColor: 'red' }}>
+                    <Text style={{ color: 'white' }}>Cancelar</Text>
+                    </TouchableOpacity>  
                 </ScrollView>   
             </View> 
 
@@ -570,15 +587,23 @@ export default function itemScreen() { // aqui é TS
                                     onChangeText={(text) => setReq({ ...req, url: text })}
                                     label='' iconName=''
                                 />
-                                <MyButton
-                                    title="Upload do Material"
+                                <View style={styles.capaContainer}>
+                                    <Myinput 
+                                        placeholder="Upload do Material"
+                                        value={req.file}
+                                        onChangeText={(text) => setReq({ ...req, file: text })}
+                                        label='' iconName=''
+                                    /> 
+                                    <MyButton
+                                    title="Selecionar Arquivo"
                                     onPress={pickFile}
                                     button_type="capsule"
                                     icon=""
-                                    style={styles.button_capsule2}
-                                />
-                                <View style={{ flexDirection: 'row', gap: 20, marginTop: 10 }}>
-                                    <MyText style={styles.text}>Incorporar no acervo?</MyText>
+                                    style={styles.button_capsule1}
+                                    />
+                                </View>
+                                <View style={{ flexDirection: 'row', gap: 20, marginTop: 10, }}>
+                                    <Text style={styles.text}>Incorporar no acervo?</Text>
                                     <MyCheck
                                         label="Sim"
                                         checked={req.incorporated === true}
@@ -598,6 +623,8 @@ export default function itemScreen() { // aqui é TS
                             button_type="capsule"
                             icon=""
                             style={styles.buttonRegister}
+                            color='#0F2259'
+                            height={50}
                         />    
                     </View>
                 </View>
@@ -624,8 +651,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        },
-        header: {
+    },
+    header: {
         backgroundColor: '#fff',
         padding: 15,
         flexDirection: 'row',
@@ -711,11 +738,12 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins_400Regular',
         fontSize: 20,
         padding: 15,
-        marginVertical: 15,
+        marginVertical: 50,
         borderRadius: 50,
         display:"flex",
         alignItems: 'center',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        
     },
     buttonContainer: {
         flexDirection: 'row', // Alinha os botões horizontalmente
@@ -753,9 +781,11 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
     },
     text: {
-        color: 'black',
         fontSize: 16,
-        //fontFamily: 'Poppins_400Regular',
+        color: '#6A1B9A',
+        fontWeight: 'bold',
+    
+      
     },
     tabsContainer: {
         flex: 1,
@@ -876,6 +906,6 @@ const styles = StyleSheet.create({
       capaContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-
       },
+      
 });
