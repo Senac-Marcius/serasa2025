@@ -7,7 +7,7 @@ import { useRouter } from 'expo-router';
 import MyTimePicker from "../../src/components/MyTimerPiker";
 import { setPosition, deletePosition, updatePosition, iPosition, getCargo } from "../../src/controllers/positions";
 import Mytext from "../../src/components/MyText";
-import {MyTb } from "../../src/components/MyItem";
+import { MyTb } from "../../src/components/MyItem";
 import MyList from "../../src/components/MyList";
 
 export default function PositionScreen() {
@@ -133,29 +133,43 @@ export default function PositionScreen() {
         </TouchableOpacity>
 
         {showList && (
-          <View style={styles.listContainerFull}>
+          <View style={styles.listContainer}>
             <MyList
               data={positions}
               keyItem={(item) => item.id.toString()}
               renderItem={({ item }) => (
-                <TouchableOpacity
-                  onPress={() => toggleExpand(item.id)}
-                >
+                <TouchableOpacity onPress={() => toggleExpand(item.id)}>
                   <MyTb
                     onEdit={() => editPosition(item.id)}
                     onDel={() => delPosition(item.id)}
                   >
-                    <View style={{ flex: 1 }}>
+                    <View style={{ flex: 1, backgroundColor: '#fff', borderRadius: 8, padding: 12 }}>
                       <Mytext style={styles.titleText}>{item.name}</Mytext>
-                      <Mytext style={styles.cardText}><Text style={styles.bold}>Descrição: </Text>{item.description}</Mytext>
-                      <Mytext style={styles.cardText}><Text style={styles.bold}>Salário: </Text>R$ {item.salary}</Mytext>
-                      {expandedId === item.id && (
+                      <Mytext style={styles.cardText}>
+                        <Text style={styles.bold}>Descrição: </Text>{item.description}
+                      </Mytext>
+                      <Mytext style={styles.cardText}>
+                        <Text style={styles.bold}>Salário: </Text>R$ {item.salary}
+                      </Mytext>
+                      {expandedId === item.id ? (
                         <>
-                          <Mytext style={styles.cardText}><Text style={styles.bold}>Carga horária: </Text>{item.work_hours}</Mytext>
-                          <Mytext style={styles.cardText}><Text style={styles.bold}>Departamento: </Text>{item.departament}</Mytext>
-                          <Mytext style={styles.cardText}><Text style={styles.bold}>Supervisor: </Text>{item.supervisor}</Mytext>
-                          <Mytext style={styles.cardText}><Text style={styles.bold}>Criado em: </Text>{item.creat_at}</Mytext>
+                          <Mytext style={styles.cardText}>
+                            <Text style={styles.bold}>Carga horária: </Text>{item.work_hours}
+                          </Mytext>
+                          <Mytext style={styles.cardText}>
+                            <Text style={styles.bold}>Departamento: </Text>{item.departament}
+                          </Mytext>
+                          <Mytext style={styles.cardText}>
+                            <Text style={styles.bold}>Supervisor: </Text>{item.supervisor}
+                          </Mytext>
+                          <Mytext style={styles.cardText}>
+                            <Text style={styles.bold}>Criado em: </Text>{item.creat_at}
+                          </Mytext>
                         </>
+                      ) : (
+                        <Text style={{ fontSize: 12, color: '#0009', marginTop: 6 }}>
+                          Clique para exibir mais detalhes
+                        </Text>
                       )}
                     </View>
                   </MyTb>
@@ -201,9 +215,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 16,
   },
-  listContainerFull: {
+  listContainer: {
     width: '100%',
-    padding: 16,
+    maxWidth: 1300,
+    marginTop: 16,
   },
   titleText: {
     fontSize: 16,
@@ -215,7 +230,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
     marginBottom: 4,
-    flexWrap: 'wrap',
   },
   bold: {
     fontWeight: 'bold',
