@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { supabase } from '../utils/supabase'
+import { getUsers } from './users';
 
 interface iEmployees { 
     id: number,
@@ -17,10 +18,13 @@ interface iEmployees {
     positions_id:number,
     scale_id:number
 }
-function toListEmployees(data: iEmployees[]){
+async function toListEmployees(data: iEmployees[]){
+  const result = await getUsers({});
+
+
   const resp: {key: number, option: string}[] = [];
   data.map((l) => {
-    resp.push({ key: l.id, option: l.nationality })
+    resp.push({ key: l.id, option: result.data?.find(u => u.id == l.user_id).name })
   })
 
   return resp;

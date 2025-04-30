@@ -10,46 +10,59 @@ import { setTimeline, iTimeline, delTimelines as delTimelinesDoController, editT
 import MyButton from '../../src/components/MyButtons';
 import Mytext from '../../src/components/MyText';
 import MyTimerPicker from '../../src/components/MyTimerPiker';
+import MySelect from '../../src/components/MySelect';
+import { getEmployees, iEmployees, toListEmployees } from '../../src/controllers/employees';
 
 export default function TimelineScreen() {
   const [req, setReq] = useState({
     id: -1,
-    class_id: 2,
-    discipline_id: '',
-    local_id: 1,
+    class_id: -1,
+    discipline_id: -1,
+    local_id: -1,
     start_time: '',
     end_time: '',
     date: new Date().toISOString(),
     created_at: new Date().toISOString(),
-    teacher_id: '',
+    teacher_id: -1,
   });
 
   const [timelines, setTimelines] = useState<iTimeline[]>([]);
   const [busca, setBusca] = useState('');
   const router = useRouter();
   const [filtro, setFiltro] = useState('');
-  const [disciplines, setDisciplines] = useState<iTimeline[]>([]);
+  const [teatcher, setTeatcher] = useState<{key:number, option: string}[]>([]);
+  const [discipline, setDiscipline] = useState<{key:number, option: string}[]>([]);
+  const [local, setLocal] = useState<{key:number, option: string}[]>([]);
+  const [classes, setClasses] = useState<{key:number, option: string}[]>([]);
+
+ 
+
+
+
   const [showForm, setShowForm] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     (async () => {
-      const { data: todos, error } = await supabase.from('timelines').select();
-      if (todos && todos.length > 0) {
-        setTimelines(todos);
-      }
-
       const result = await getTimelines({});
-      if (result.status) {
-        setDisciplines(result.data as iTimeline[]);
+      if (result.status && result.data && result.data.length > 0) {
+        setTimelines(result.data);
       } else {
-        console.log('Erro ao buscar disciplinas:', result.data);
-      }
-
-      if (error) {
-        console.error('Erro ao buscar os cronogramas:', error);
+        console.log('Erro ao buscar disciplinas:', result.error);
       }
     })();
+
+
+    (async () =>{
+      const result = await getEmployees({cargo:"Teacher"});
+      if (result.status && result.data && result.data.length > 0) {
+        setTeatcher( await toListEmployees(result.data) );
+      } else {
+        console.log('Erro ao buscar disciplinas:', result.error);
+      }
+    })();
+
+
   }, []);
 
   async function handleRegister() {
@@ -65,14 +78,14 @@ export default function TimelineScreen() {
 
     setReq({
       id: -1,
-      class_id: 2,
-      discipline_id: '',
-      local_id: 1,
+      class_id: -1,
+      discipline_id: -1,
+      local_id: -1,
       start_time: '',
       end_time: '',
       date: new Date().toISOString(),
       created_at: new Date().toISOString(),
-      teacher_id: '',
+      teacher_id: -1,
     });
     setShowForm(false);
     setIsEditing(false);
@@ -123,7 +136,7 @@ export default function TimelineScreen() {
           />
         </View>
 
-        <Mytext style={styles.formTitle}>Cadastro de Cronogramas</Mytext>
+        <Mytext style={styles.formTitle}>Cronograma do Professor</Mytext>
 
         {showForm && (
           <View style={styles.card}>
@@ -142,10 +155,34 @@ export default function TimelineScreen() {
             />
 
 
-            <Myinput iconName="" label="Professor" placeholder="Digite o nome do Professor:" value={req.teacher_id} onChangeText={(text) => setReq({ ...req, teacher_id: text })} />
-            <Myinput iconName="" label="Disciplina" placeholder="Digite a disciplina:" value={req.discipline_id} onChangeText={(text) => setReq({ ...req, discipline_id: text })} />
-            <Myinput iconName="" label="Local" placeholder="Digite o Local" value={req.local_id?.toString()} onChangeText={(text) => setReq({ ...req, local_id: Number(text) })} />
-            <Myinput iconName="" label="Turma" placeholder="Digite o Turma:" value={req.class_id?.toString()} onChangeText={(text) => setReq({ ...req, class_id: Number(text) })} />
+            <MySelect
+              caption="Selecione o Docente" 
+              label={teatcher.find(t => t.key == req.teacher_id )?.option || 'Selecione um Docente'}
+              list={teatcher}
+              setLabel={() =>{}}
+              setKey={(key) => setReq({ ...req, teacher_id: key })}
+            />
+              <MySelect
+              caption="Selecione a Disciplina" 
+              label={discipline.find(t => t.key == req.discipline_id )?.option || 'Selecione a Disciplina'}
+              list={discipline}
+              setLabel={() =>{}}
+              setKey={(key) => setReq({ ...req, discipline_id: key })}
+            />
+            <MySelect
+              caption="Selecione o Local" 
+              label={local.find(t => t.key == req.local_id)?.option || 'Selecione o Local'}
+              list={local}
+              setLabel={() =>{}}
+              setKey={(key) => setReq({ ...req, local_id: key })}
+            />
+              <MySelect
+              caption="Selecione a Turma" 
+              label={classes.find(t => t.key == req.class_id )?.option || 'Selecione a Turma'}
+              list={classes}
+              setLabel={() =>{}}
+              setKey={(key) => setReq({ ...req, class_id: key })}
+            />
 
             <View style={styles.formButtons}>
               <MyButton title={isEditing ? 'Atualizar' : 'Cadastrar'} button_type="default" onPress={handleRegister} style={{ flex: 1, marginRight: 8 }} />
@@ -154,7 +191,7 @@ export default function TimelineScreen() {
           </View>
         )}
 
-        <View style={styles.table}>
+        <View style={styles.table}> {/** Pegar com o pedro a nova mylist com mytb */}
           <View style={styles.tableRowHeader}>
             <Text style={styles.th}>Professor</Text>
             <Text style={styles.th}>Disciplina</Text>
@@ -166,8 +203,7 @@ export default function TimelineScreen() {
             <Text style={styles.th}>Ações</Text>
           </View>
 
-          {timelines
-            .filter((item) => item.teacher_id?.toLowerCase().includes(filtro.toLowerCase()))
+          {timelines //pegar com o vitor o filtro dele
             .map((item) => (
               <View style={styles.tableRow} key={item.id}>
                 <Text style={styles.td}>{item.teacher_id || '-'}</Text>
