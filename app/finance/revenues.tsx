@@ -28,7 +28,9 @@ export default function RevenueScreen() {
     value: '',
     scholarship_status: '',
     discount_percentage: '',
-    tipo_mensalidade: ''
+    tipo_mensalidade: '',
+    select_course: '',
+
 
     
 
@@ -39,7 +41,7 @@ export default function RevenueScreen() {
     const [revenues, setRevenues] = useState<iRevenue[]>([]);
     const [users, setUsers] = useState<any[]>([]);
     const [courses, setCourses] = useState<any[]>([]);
-    const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
+    
     
     useEffect(()=>{
       async function getTodos(){
@@ -114,6 +116,8 @@ export default function RevenueScreen() {
       scholarship_status: '',
       discount_percentage: '',
       tipo_mensalidade: '',
+      select_course: '',
+
     });
     setVisible(false);
   }
@@ -149,7 +153,7 @@ const getFilteredRevenues = () => {
   const term = searchTerm.toLowerCase();
 
   const u = users.find(ul => ul.option.includes(term) )
-
+  const c = courses.find(cl => cl.option.includes(term) )
   
   return revenues.filter(item => {
     // Converte o desconto para string e trata o símbolo %
@@ -158,6 +162,8 @@ const getFilteredRevenues = () => {
     
     return (
       (u != undefined && item.user_id == u.key) ||
+      (c != undefined && item.select_course == c.key) ||
+      
       item.description?.toLowerCase().includes(term) ||
       item.value?.toString().includes(searchTerm) || // Mantém sem lowercase para números
       item.id?.toString().includes(searchTerm) ||
@@ -196,11 +202,10 @@ const getFilteredRevenues = () => {
           
         
               <MySelect
-              label={courses.find(c => c.key == selectedCourseId)?.option || 'Selecione um curso'}
+              label={courses.find(c => c.key == req.select_course)?.option || 'Selecione um curso'}
               setLabel={() => {}}
-              setKey={(key) => {
-                setSelectedCourseId(key); // Você precisaria criar este estado
-              }}
+              setKey={(key) => {    setReq({ ...req, select_course: key })    }}
+              
               list={courses}
               caption="Cursos"
             />
@@ -217,7 +222,7 @@ const getFilteredRevenues = () => {
   
 
             <MySelect 
-              label={req.tipo_mensalidade  || 'Selecione um tipo de mensalidade'} 
+              label={req.tipo_mensalidade  || 'Selecione um tipo de receita'} 
               caption= "Tipo da mensalidade"
               setLabel={(text) => setReq({...req, tipo_mensalidade: text})}
               list={[
@@ -244,7 +249,7 @@ const getFilteredRevenues = () => {
               value={req.discount_percentage}
               onChangeText={(text) => setReq({ ...req, discount_percentage: text })}
               iconName='percent'
-              placeholder='Digite o valor em %'
+              placeholder='Digite o desconto em %'
               label='Desconto'
             />
 
@@ -299,6 +304,7 @@ const getFilteredRevenues = () => {
 
             >
               <Mytext style={styles.td}>{users.find(u=> u.key == item.user_id)?.option || ''}</Mytext>
+              <Mytext style={styles.td}>{courses.find(c=> c.key == item.select_course)?.option || ''}</Mytext>
               <Mytext style={styles.td}>{item.tipo_mensalidade}</Mytext>
               <Mytext style={styles.td}>{item.scholarship_status}</Mytext>
               <Mytext style={styles.td}>{item.created_at}</Mytext>
@@ -312,6 +318,7 @@ const getFilteredRevenues = () => {
           header={(
             <View style={styles.tableRowHeader}>
               <Mytext style={styles.th}>Nome do usuário</Mytext>
+              <Mytext style={styles.th}>Curso </Mytext>
               <Mytext style={styles.th}>Tipo de receita </Mytext>
               <Mytext style={styles.th}>Status da Bolsa</Mytext>
               <Mytext style={styles.th}>Data do documento</Mytext>
