@@ -41,6 +41,18 @@ export default function RevenueScreen() {
     const [revenues, setRevenues] = useState<iRevenue[]>([]);
     const [users, setUsers] = useState<any[]>([]);
     const [courses, setCourses] = useState<any[]>([]);
+
+    const calculateTotal = (value: string, discount: string) => {
+      if (!value || !discount) return 'R$ 0,00';
+      
+    const numericValue = parseFloat(value);
+    const numericDiscount = parseFloat(discount);
+      
+      if (isNaN(numericValue) || isNaN(numericDiscount)) return 'R$ 0,00';
+      
+    const total = numericValue - (numericValue * (numericDiscount / 100));
+    return `R$ ${total.toFixed(2)}`;
+    };
     
     
     useEffect(()=>{
@@ -198,8 +210,10 @@ const getFilteredRevenues = () => {
     visible={visible} 
     setVisible={setVisible}>
   
+  
         <View style={styles.form}>
-          
+
+            
         
               <MySelect
               label={courses.find(c => c.key == req.select_course)?.option || 'Selecione um curso'}
@@ -244,23 +258,33 @@ const getFilteredRevenues = () => {
               ]}
             />
             
-            {/* Campo de Desconto */}
-            <Myinput
-              value={req.discount_percentage}
-              onChangeText={(text) => setReq({ ...req, discount_percentage: text })}
-              iconName='percent'
-              placeholder='Digite o desconto em %'
-              label='Desconto'
-            />
-
             {/* Campo de Valor */}
-            <Myinput
-              value={req.value}
-              onChangeText={(text) => setReq({ ...req, value: text })}
-              iconName='payments'
-              placeholder='Digite o valor R$0,00'
-              label='Valor'
-            />
+    <Myinput
+      value={req.value}
+      onChangeText={(text) => setReq({ ...req, value: text })}
+      iconName='payments'
+      placeholder='Digite o valor R$0,00'
+      label='Valor'
+    />
+
+    {/* Campo de Desconto */}
+    <Myinput
+      value={req.discount_percentage}
+      onChangeText={(text) => setReq({ ...req, discount_percentage: text })}
+      iconName='percent'
+      placeholder='Digite o desconto em %'
+      label='Desconto'
+    />
+
+    {/* Novo campo: Total com desconto (somente leitura) */}
+    <View style={styles.totalContainer}>
+      <Mytext style={styles.totalLabel}>Total com desconto:</Mytext>
+      <Mytext style={styles.totalValue}>
+        {calculateTotal(req.value, req.discount_percentage)}
+      </Mytext>
+    </View>
+
+
 
             {/* Campo de URL */}
             <Myinput
@@ -311,8 +335,7 @@ const getFilteredRevenues = () => {
               <Mytext style={styles.td}>{item.description}</Mytext>    
               <Mytext style={styles.td}>{item.discount_percentage}%</Mytext>
               <Mytext style={styles.td}>R${item.value}</Mytext> 
-              
-              
+          
             </MyTb>
           )}
           header={(
@@ -326,6 +349,7 @@ const getFilteredRevenues = () => {
               
               <Mytext style={styles.th}>Descontos</Mytext>
               <Mytext style={styles.th}>Valor</Mytext>
+              <Mytext style={styles.th}>Total</Mytext> {/* Nova coluna */}
               <Mytext style={styles.th}>Ações</Mytext>
               
             </View>
@@ -348,6 +372,34 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignSelf: 'flex-start',
   },
+
+
+  
+    totalContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginVertical: 10,
+      padding: 15,
+      backgroundColor: '#f8f9fa',
+      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: '#e9ecef',
+    },
+    totalLabel: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: '#495057',
+    },
+    totalValue: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: '#1c7ed6',
+    },
+
+
+
+
 
   MyModal: {
     display: 'flex',
