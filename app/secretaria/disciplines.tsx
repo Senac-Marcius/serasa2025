@@ -6,6 +6,7 @@ import {iDisciplines,SetDisciplinebd,UpdateDisciplinebd,DeleteDisciplinebd,getDi
 import MyView from '../../src/components/MyView';
 import MyButton from '../../src/components/MyButtons';
 import { Myinput } from '../../src/components/MyInputs';
+//1
 
 const Sidebar = () => {
   const router = useRouter();

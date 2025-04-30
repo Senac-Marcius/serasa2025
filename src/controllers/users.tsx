@@ -75,4 +75,4 @@ interface iUser {
 
 
 
- export {setUser, iUser, deleteUserById, updateUserById,getUsers}
+ export {setUser, iUser, deleteUserById, updateUserById, getUsers, toListUser}
