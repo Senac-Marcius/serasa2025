@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { Myinput } from './MyInputs';
 import MyButton from './MyButtons';
 import { insertDocument, updateDocument, iDoc } from '../../src/controllers/documents';
-import MyUpload from './MyUpload';
+import MyUploadTeste from './MyUploadTesteLorrany';
 
 interface MyDocumentProps {
   type: string;
@@ -50,7 +50,7 @@ const MyDocument: React.FC<MyDocumentProps> = ({ type, user_id }) => {
   return (
     <View style={styles.container}>
       
-      <MyUpload 
+      <MyUploadTeste 
         url={req.url} 
         setUrl={(newUrl) => setReq({ ...req, url: newUrl })} 
         setName={(newName) => setReq({ ...req, name: newName })}

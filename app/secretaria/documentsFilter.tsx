@@ -27,7 +27,13 @@ export default function documentRegister( ){
       });
 
     const [documents, setDocuments] = useState<iDoc[]>([]);
+    const [allDocuments, setAllDocuments] = useState<iDoc[]>([]);//const q mostra todos os tipos independente do que estiver selecionado
+
     const [selectedLabel, setSelectedLabel] = useState('Todos os Documentos');
+    const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);//formata os tipos mostrados no myselect para o padrõa Camelcase
+    const uniqueTypes = [...new Set(allDocuments.map((doc) => doc.type).filter(Boolean))]
+    .sort((a, b) => a.localeCompare(b));//vai puxar as rotas e passar elas como typos dos documentos cadastrados em cada página e organizar em ordem alfabética
+    
 
 
     // Função para excluir um registro
@@ -49,9 +55,10 @@ export default function documentRegister( ){
     //buscar documentos no banco e atualizar de acordo com a ação
     useEffect(() =>{
         async function getAll() {
-          const{ data:all, error } = await supabase.from('documents').select()
+          const{ data:all, error } = await supabase.from('documents').select();
           if(all){
-            setDocuments(all)
+            setDocuments(all);
+            setAllDocuments(all);//vai mostrar no myselect todos os types independente do que estiver selecionado
           }
           if (error){
             console.error('Erro ao buscar documentos: ', error.message);
@@ -64,7 +71,7 @@ export default function documentRegister( ){
 
 
     async function fetchDocumentsByType(type: string) {
-        if (type === 'Todos') {
+        if (type === 'Todos' || type === 'Todos os Documentos') {
           const { data: all, error } = await supabase.from('documents').select();
           if (all) setDocuments(all);
           if (error) console.error('Erro ao buscar todos os documentos:', error.message);
@@ -90,12 +97,12 @@ export default function documentRegister( ){
                     fetchDocumentsByType(item);
                 }}
                 list={[
-                    { key: 'todos', option: 'Todos' },
-                    { key: 'atestado', option: 'Atestado' },
-                    { key: 'declaração', option: 'Declaração' },
-                    { key: 'histórico', option: 'Histórico' },
-                    { key: 'teste', option: 'Teste' },
-                ]}  
+                  { key: 'todos', option: 'Todos os Documentos' },
+                  ...uniqueTypes.map((type) => ({
+                    key: type.toLowerCase(),
+                    option: capitalize(type),
+                  })),
+                ]} 
             />
 
 
