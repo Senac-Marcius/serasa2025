@@ -171,7 +171,7 @@ export default function CollectionDetail() {
                     title="Empréstimo"
                     closeButtonTitle="Fechar"
                   >
-                   <StarCalculation/>
+                    <StarCalculation BookId={item.id} />
                   </MyModal>
                 </View>
               </View>

@@ -6,6 +6,7 @@ import MyList from '../../src/components/MyList';
 import { getItems, iItem, setItem } from '../../src/controllers/librarie';
 import { setCollection, iCollection, deleteCollectionById, updateCollectionById, getCollections } from '../../src/controllers/collections';
 import { supabase } from '../../src/utils/supabase';
+import {getLoggedUserId} from '../../src/controllers/users'
 
 
 function StarRating({ rating, onChange }: { rating: number; onChange: (star: number) => void }) {
@@ -39,9 +40,11 @@ const [items, setItems] = useState<iItem[]>([]);
 
 //   const selectedItem = items.find((item) => item.id === bookId);
 
-  
+type StarCalculationProps = {
+    BookId: number;
+  };
 
-export function StarCalculation() {
+export function StarCalculation({ BookId }: StarCalculationProps) {
     const [req, setReq] = useState({
         id: -1,
         bookId:0,
@@ -49,6 +52,7 @@ export function StarCalculation() {
         quantity: '',
         star: 0,
         commentary: '',
+        userId: '',
         createAt: new Date().toISOString(),
     });
 
@@ -66,9 +70,10 @@ export function StarCalculation() {
     }, []);
 
     async function handleRegister() {
+        var _userId = await getLoggedUserId() 
         if (req.id == -1) {
             const newId = collections.length ? collections[collections.length - 1].id + 1 : 0;
-            const newCollection = { ...req, id: newId, star: Number(req.star) };
+            const newCollection = { ...req,bookId: BookId, id: newId, star: Number(req.star), userId: _userId! };
             setCollections([...collections, newCollection]);
             await setCollection(newCollection);
         } else {
@@ -86,6 +91,7 @@ export function StarCalculation() {
             quantity: '',
             commentary: '',
             star: 0,
+            userId: '',
             createAt: new Date().toISOString(),
         });
     }
