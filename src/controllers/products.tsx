@@ -5,9 +5,10 @@ import { supabase } from '../utils/supabase'
 interface iProduct {
     description: string,
     name: string,
+    amount: number,
     id: number,
-    user_id: number,
     create_at: string
+    category_id:number
 }
 
 function toListProduct (data: iProduct[]){
@@ -63,7 +64,6 @@ async function deleteProduct(id: number) {
 
 
 async function setProduct(products:iProduct){
-    //aqui vem os tratamentos de regex ou do modelo de negócco antes de inserir 
 
 
 const { data, error } = await supabase.from ('products')

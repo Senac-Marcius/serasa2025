@@ -20,20 +20,45 @@ interface iProject {
         process: string;
     }
 
+function toListProjects(data: iProject[]){
+  const resp: {key: number, option: string}[] = [];
+  data.map((l) => {
+    resp.push({ key: l.id, option: l.name })
+  })
 
+  return resp;
+}
 
-async function setProject(project: iProject) {
-  const { data, error } = await supabase
-    .from('projects')
-    .insert([project])
-    .select();
+async function getProjects(params:any) {
+  const { data: todos , error} = await supabase.from('projects').select()
+  if(error){
+    console.log(error)
+    return {status: false, error: error}
+  } 
+  return {status: true, data: todos}
+}
+
+async function setProject(project: iProject, ids: any[]) {
+  const { data, error } = await supabase.from('projects').insert([project]).select();
 
   if (error) {
-    console.error('Erro ao inserir projeto no Supabase:', error);
-  } else {
-    console.log('Projeto inserido com sucesso no Supabase:', data);
+    console.error(error);
+    return;
   }
 
+  if (data && data.length > 0) {
+    const projectId = data[0].id;
+
+    ids.forEach(async (id) => {
+      const { error: insertError } = await supabase
+        .from('project_user')
+        .insert([{ user_id: id.key, project_id: projectId }]);
+
+      if (insertError) {
+        console.error(`Erro ao adicionar usuario ${id.key} ao Projeto:`, insertError );
+      }
+    });
+  }
   return { data, error };
 }
     
@@ -69,5 +94,15 @@ async function deleteProject(id: number) {
 
 
 
-export {setProject, updateProject, deleteProject, iProject}
+export {setProject, updateProject, deleteProject, toListProjects, getProjects, iProject}
           
+
+/* .from('projects')
+    .insert([project])
+    .select();
+
+  if (error) {
+    console.error('Erro ao inserir projeto no Supabase:', error);
+  } else {
+    console.log('Projeto inserido com sucesso no Supabase:', data);
+  } */
