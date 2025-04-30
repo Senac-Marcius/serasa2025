@@ -23,9 +23,9 @@ export default function itemScreen(product_id: Number) {
         mark: '',
         asset_number: '',
         amount: 0,
-        local_id: 1,
-        category_id: 1,
-        product_id: 1,
+        local_id: -1,
+        category_id: -1,
+        product_id: -1,
         description: '',
         created_at: new Date().toISOString()
     });
@@ -58,9 +58,9 @@ export default function itemScreen(product_id: Number) {
             mark: '',
             asset_number: '',
             amount: 0,
-            local_id: 1,
-            category_id: 1,
-            product_id: 1,
+            local_id: -1,
+            category_id: -1,
+            product_id: -1,
             description: '',
             created_at: new Date().toISOString()
         })
