@@ -10,7 +10,7 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MyButton from '../../src/components/MyButtons';
 import { Myinput } from '../../src/components/MyInputs';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { MyModal } from '../../src/components/MyModal'; // Importe o modal
+import { MyModal } from '../../src/components/MyModal';
 
 export default function CategoryScreen() {
     const [req, setReq] = useState<iCategories>({
@@ -22,8 +22,8 @@ export default function CategoryScreen() {
 
     const [categories, setCategories] = useState<iCategories[]>([]);
     const router = useRouter();
-    const [visibleForm, setVisibleForm] = useState(false); // Modal do formulário
-    const [visibleList, setVisibleList] = useState(false); // Modal da lista
+    const [visibleForm, setVisibleForm] = useState(false);
+    const [visibleList, setVisibleList] = useState(false);
 
     // Carregar categorias
     useEffect(() => {
@@ -74,6 +74,7 @@ export default function CategoryScreen() {
                 title={req.id === -1 ? "Cadastrar Categoria" : "Editar Categoria"}
                 closeButtonTitle="Fechar"
             >
+                
                     <Myinput
                         placeholder="Nome da categoria"
                         value={req.name}
@@ -87,22 +88,18 @@ export default function CategoryScreen() {
                         onChangeText={(text) => setReq({ ...req, description: text })}
                         label="Descrição"
                         iconName=''
-
                     />
                     <MyButton 
-                        style={styles.buttonCad}
+                    style={styles.buttonCad}
                         title={req.id === -1 ? "Cadastrar" : "Atualizar"} 
                         onPress={handleRegister} 
                     />
+                
             </MyModal>
 
-            {/* Modal da Lista de Categorias */}
-            <MyModal 
-                visible={visibleList} 
-                setVisible={setVisibleList}
-                title="Categorias Cadastradas"
-                closeButtonTitle="Fechar"
-            >
+            {/* Modal da Lista */}
+           
+                
                     <MyList
                         data={categories}
                         keyItem={(item) => item.id.toString()}
@@ -111,37 +108,38 @@ export default function CategoryScreen() {
                                 onDel={() => deleteCategories(item.id)}
                                 onEdit={() => {
                                     editCategorie(item.id);
-                                    setVisibleList(false); // Fecha a lista e abre o formulário
+                                    setVisibleList(false);
                                 }}
                             >
-                                <Text style={styles.itemName}>{item.name}</Text>
-                                <Text style={styles.itemDesc}>{item.description}</Text>
+                                <View style={styles.itemContainer}>
+                                    <Text style={styles.itemName}>{item.name}</Text>
+                                    <Text style={styles.itemDesc}>{item.description}</Text>
+                                </View>
                             </MyItem>
                         )}
                     />
-            </MyModal>            
+                
+        
         </MyView>
     );
 }
 
 // Estilos
 const styles = StyleSheet.create({
-    modal:{
+    buttonCad:{
+        marginBottom: 10,
+    },
+    modal: {
         display: 'flex',
         width: 'auto',
         height: 'auto',
-        padding: 'auto',
+        padding: 20,
         backgroundColor: 'white',
         borderRadius: 20,
         borderWidth: 4,
         borderColor: 'purple',
         alignItems: 'center',
         justifyContent: 'flex-end',
-    },
-    buttonCad:{
-       margin: 'auto',
-       marginBottom: 10,
-
     },
     h1: {
         fontSize: 24,
@@ -155,14 +153,22 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         width: '100%',
-        maxHeight: 500, // Altura máxima para a lista
+        maxHeight: 500,
+    },
+    itemContainer: {
+        flexDirection: 'column',
+        gap: 4,
+        paddingVertical: 8,
     },
     itemName: {
         fontWeight: 'bold',
         fontSize: 16,
+        color: '#333',
     },
     itemDesc: {
         color: '#666',
+        fontSize: 14,
+        marginTop: 4,
     },
     addButton: {
         margin: 20,
