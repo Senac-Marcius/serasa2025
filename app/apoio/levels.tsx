@@ -3,7 +3,6 @@ import { View,Text, StyleSheet,FlatList, Button,TextInput, Touchable, TouchableO
 import {Myinput} from '../../src/components/MyInputs';
 import MyView from '../../src/components/MyView';
 import Mytext from '../../src/components/MyText';
-import {textStyles} from '../../styles/textStyles';
 import MyButton from '../../src/components/MyButtons';
 import MyList from '../../src/components/MyList';
 import {MyItem} from '../../src/components/MyItem';
@@ -121,10 +120,10 @@ function editLevels(levels: iLevels) {
                             onDel={() => {deleteLevels(item.id)}}
                         >
 
-                           <Mytext style={textStyles.textBody} > Nome: {item.name}</Mytext> {/* alex */}
-                           <Mytext style={textStyles.textBody}> Descrição: {item.description}</Mytext>
-                           <Mytext style={textStyles.textBody}> Cor: {item.color}</Mytext>
-                           <Mytext style={textStyles.textBody}> UserId: {item.userId}</Mytext>
+                           <Mytext> Nome: {item.name}</Mytext> {/* alex */}
+                           <Mytext> Descrição: {item.description}</Mytext>
+                           <Mytext> Cor: {item.color}</Mytext>
+                           <Mytext> UserId: {item.userId}</Mytext>
                            
  
                             {/*

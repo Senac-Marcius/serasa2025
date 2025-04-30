@@ -77,7 +77,8 @@ export const inputStyles = StyleSheet.create({
  label:{
   fontSize: 16,  // Aumentei para garantir alinhamento com o ícone
   color: "#666",
-  marginLeft: 5
+  marginLeft: 5,
+ 
  },
 
  labelContainer: {
