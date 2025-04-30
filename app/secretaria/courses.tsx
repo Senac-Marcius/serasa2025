@@ -133,8 +133,8 @@ export default function CoursesScreen() {
                 onEdit={() => { setReq(item); setShowForm(true); }}
                 onDel={() => deleteCourses(item.id!)}
               >
-                <Mytext style={styles.cardTitle}>📚 {item.name}</Mytext>
-                <Mytext style={styles.cardInfo}>📝 {item.description}</Mytext>
+                <Mytext style={styles.cardTitle}>📚Nome: {item.name}</Mytext>
+                <Mytext style={styles.cardInfo}>📝Descrição: {item.description}</Mytext>
                 <Mytext style={styles.cardInfo}>📘 Plano: {item.courseplan}</Mytext>
                 <Mytext style={styles.cardInfo}>🎓 Orientação: {item.orientationplan}</Mytext>
                 <Mytext style={styles.cardInfo}>⏱️ Carga Horária: {item.workload}</Mytext>
