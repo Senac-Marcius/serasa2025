@@ -13,6 +13,8 @@ interface iRevenue{
     discount_percentage: string;
     user_id: number;
     tipo_mensalidade: string;
+    select_course: string;
+
 }
 
 
