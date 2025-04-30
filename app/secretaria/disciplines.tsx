@@ -1,41 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  Pressable,
-  Image,
-} from 'react-native';
+import {View,Text,StyleSheet,TextInput,Pressable,Image,} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useRouter } from 'expo-router';
-import {
-  iDisciplines,
-  SetDisciplinebd,
-  UpdateDisciplinebd,
-  DeleteDisciplinebd,
-  getDisciplines,
-} from '../../src/controllers/disciplines';
+import {iDisciplines,SetDisciplinebd,UpdateDisciplinebd,DeleteDisciplinebd,getDisciplines,} from '../../src/controllers/disciplines';
 import MyView from '../../src/components/MyView';
 import MyButton from '../../src/components/MyButtons';
 import { Myinput } from '../../src/components/MyInputs';
+//1
 
 const Sidebar = () => {
   const router = useRouter();
   const [hoveredRoute, setHoveredRoute] = useState<string | null>(null);
 
   const menuItems = [
-    { icon: 'book-outline', label: 'Disciplinas', route: '/discipline' },
-    { icon: 'account-outline', label: 'Professores', route: '/professores' },
-    { icon: 'calendar-month-outline', label: 'Calendário', route: '/calendar' },
-    { icon: 'file-document-outline', label: 'Documentos', route: '/documentos' },
-    { icon: 'clipboard-text-outline', label: 'Matrícula', route: '/matricula' },
-    { icon: 'cog-outline', label: 'Configurações', route: '/configuracoes' },
+    { icon: 'book-outline', label: 'Disciplinas', route: 'secretaria/discipline' },
+    { icon: 'account-outline', label: 'Professores', route: 'secretaria/professores' },
+    { icon: 'calendar-month-outline', label: 'Calendário', route: 'secretaria/calendar' },
+    { icon: 'file-document-outline', label: 'Documentos', route: 'secretaria/documentos' },
+    { icon: 'clipboard-text-outline', label: 'Matrícula', route: 'secretaria/matricula' },
+    { icon: 'cog-outline', label: 'Configurações', route: 'secretaria/configuracoes' },
   ];
 
   return (
     <View style={styles.sidebar}>
-      <Text style={styles.sidebarTitle}>Catbridge</Text>
+      <Text style={styles.sidebarTitle}>Virtudemy</Text>
       {menuItems.map((item) => {
         const isHovered = hoveredRoute === item.route;
         return (
@@ -156,10 +144,10 @@ export default function DisciplineScreen() {
             {showForm && (
               <View style={styles.card}>
                 <Text style={styles.formTitle}>Cadastro de Disciplinas</Text>
-                <Myinput iconName="book" label="Nome" placeholder="Digite o nome" value={req.name} onChangeText={(text) => setReq({ ...req, name: text })} />
-                <Myinput iconName="link" label="URL" placeholder="Digite a URL" value={req.url} onChangeText={(text) => setReq({ ...req, url: text })} />
-                <Myinput iconName="account" label="Professor" placeholder="Digite o nome do professor" value={req.teacher} onChangeText={(text) => setReq({ ...req, teacher: text })} />
-                <Myinput iconName="clock-outline" label="Carga Horária" placeholder="Digite a carga horária" value={req.workload.toString()} onChangeText={(text) => setReq({ ...req, workload: parseInt(text || '0') })} />
+                <Myinput iconName="" label="Nome" placeholder="Digite o nome" value={req.name} onChangeText={(text) => setReq({ ...req, name: text })} />
+                <Myinput iconName="" label="URL" placeholder="Digite a URL" value={req.url} onChangeText={(text) => setReq({ ...req, url: text })} />
+                <Myinput iconName="" label="Professor" placeholder="Digite o nome do professor" value={req.teacher} onChangeText={(text) => setReq({ ...req, teacher: text })} />
+                <Myinput iconName="" label="Carga Horária" placeholder="Digite a carga horária" value={req.workload.toString()} onChangeText={(text) => setReq({ ...req, workload: parseInt(text || '0') })} />
                 <View style={styles.formButtons}>
                   <MyButton title={isEditing ? 'Atualizar' : 'Cadastrar'} button_type="default" onPress={handleRegister} style={{ flex: 1, marginRight: 8 }} />
                   <MyButton title="Cancelar" onPress={() => { resetForm(); setShowForm(false); }} style={{ flex: 1, marginLeft: 8, backgroundColor: '#EEE' }} />
@@ -227,14 +215,14 @@ const styles = StyleSheet.create({
   menuItemActive: {
     backgroundColor: '#E6F8F3',
     borderLeftWidth: 4,
-    borderLeftColor: '#3AC7A8',
+    borderLeftColor: '#b34db2',
   },
   menuLabel: {
     fontSize: 14,
     color: '#444',
   },
   menuLabelActive: {
-    color: '#1EB980',
+    color: '#b34db2',
     fontWeight: '600',
   },
   headerRow: {
@@ -245,7 +233,7 @@ const styles = StyleSheet.create({
   },
   title: { fontSize: 22, fontWeight: '700', color: '#333' },
   buttonNew: {
-    backgroundColor: '#3AC7A8',
+    backgroundColor: '#b34db2',
     paddingHorizontal: 14,
     paddingVertical: 6,
     borderRadius: 6,
@@ -280,7 +268,7 @@ const styles = StyleSheet.create({
   formTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#3AC7A8',
+    color: '#000',
     marginBottom: 12,
   },
   formButtons: {
