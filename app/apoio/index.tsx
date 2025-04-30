@@ -128,7 +128,7 @@ export default function HomeScreen() {
   return (
     <MyView router={router} style={{ flex: 1 }}>
       <ImageBackground
-        source={require('../../app/apoio/imagens/logo_serasa.png')} // <-- sua imagem aqui!
+        source={require('../apoio/imagens/logo_serasa.png')} // <-- sua imagem aqui!
         style={styles.backgroundImage}
         resizeMode='center'
       >
