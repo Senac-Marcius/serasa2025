@@ -6,7 +6,7 @@ import Mytext from '../src/components/MyText';
 import  MyView  from '../src/components/MyView';
 import MyList from '../src/components/MyList';
 import MyButton from '../src/components/MyButtons';
-import {Text,ScrollView,Pressable,} from 'react-native';
+import {Text, ScrollView, Pressable,} from 'react-native';
 import { useRouter } from 'expo-router';
 import MySearch from '../src/components/MySearch';
 import { Myinput } from '../src/components/MyInputs';
@@ -125,7 +125,7 @@ export default function TurmasComCadastro() {
     carregarTurmas();
   }, []);
 
-  if (modoCadastro) {
+
     return (
       <MyView >
         <Mytext style={styles.header}>Cadastrar Nova Turma</Mytext>
@@ -148,59 +148,16 @@ export default function TurmasComCadastro() {
         onPress={salvar}
        
        />
+
+        
+
+
+
       </MyView>
     );
   }
-
-  return (
-    <View style={styles.container}>
-      <Mytext style={styles.header}>Turmas Cadastradas</Mytext>
-               
-     
-     <MyButton
-      title='Cadastrar nova turma'
-      onPress={() => setModoCadastro(true)}
-    />  
-        <View style={styles.table}>
-               <View style={styles.tableRowHeader}>
-                 <Text style={styles.th}>Código da turma</Text>
-                 <Text style={styles.th}>Curso</Text>
-                 <Text style={styles.th}>Nome da turma</Text>
-                 <Text style={styles.th}>Turno</Text>
-                 <Text style={styles.th}>Modalidade</Text>
-                 <Text style={styles.th}>Horário</Text>
-                 <Text style={styles.th}>Carga Horária</Text>
-                 <Text style={styles.th}>Vagas</Text>
-                 <Text style={styles.th}>Início</Text>
-                 <Text style={styles.th}>Término</Text>
-                 <Text style={styles.th}>Valor do curso</Text>
-                 <Text style={styles.th}>Docentes</Text>
-                 <Text style={styles.th}>Status</Text>
-               </View>
-    </View>
-    </View>
-
-  {turmas
-                .filter((item) => item.nome_curso?.toLowerCase().includes(filtro.toLowerCase()))
-                .map((item) => (
-                  <View style={styles.tableRow} key={item.id}>
-                    <Text style={styles.td}>{item.nome_curso }</Text>
-                    <Text style={styles.td}>{item.id }</Text>
-                    <Text style={styles.td}>{item.curso}</Text>
-                    <Text style={styles.td}>{item.turno}</Text>
-                    <Text style={styles.td}>{item.modalidade}</Text>
-                    <Text style={styles.td}>{item.horario}</Text>
-                    <Text style={styles.td}>{item.cargaHoraria}</Text>
-                    <Text style={[styles.td, styles.TabActions]}>
-                      <Text style={styles.edit} onPress={() => editarTurma(item)}>Editar</Text>
-                      <Text style={styles.del} onPress={() => deletarTurma(item.id)}>Excluir</Text>
-                    </Text>
-                  </View>
-                ))}
-                
-  );
-}
-
+ 
+  
 
   const styles = StyleSheet.create({
     container: { flex: 1, padding: 16 },
