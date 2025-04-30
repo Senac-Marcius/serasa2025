@@ -3,7 +3,12 @@ import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from "rea
 import * as DocumentPicker from "expo-document-picker";
 import { supabase } from "../../src/utils/supabase"; // Certifique-se de que o caminho está correto
 
-const MyUpload = () => {
+interface MyUploadProps {
+  setUrl: (url: string) => void;
+  setName: (name: string) => void;
+}
+
+const MyUpload: React.FC<MyUploadProps> = ({ setUrl, setName }) => {
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState("");
 
@@ -50,6 +55,8 @@ const MyUpload = () => {
       // Verificar se a URL foi retornada corretamente
       if (urlData && urlData.publicUrl) {
         setAlert(`Upload concluído! URL: ${urlData.publicUrl}`);
+        setUrl(urlData.publicUrl); // <-- envia a URL para o componente pai
+        setName(file.name);        // <-- envia o nome do arquivo original para o pai
       } else {
         setAlert("Erro ao obter a URL.");
       }
