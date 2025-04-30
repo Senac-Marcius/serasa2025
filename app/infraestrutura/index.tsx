@@ -100,8 +100,13 @@ export default function infraScreen() {
                 </View>
             </View>
 
-            {/* MODAL (JÁ FUNCIONANDO!) */}
-            <MyModal style={styles.modal} visible={visible} setVisible={setVisible} title={req.id === -1 ? "Cadastrar Produto" : "Editar Produto"}>
+       
+            <MyModal 
+                style={styles.modal} 
+                visible={visible} 
+                setVisible={setVisible} 
+                title={req.id === -1 ? "Cadastrar Produto" : "Editar Produto"}
+                closeButtonTitle={'Fechar'}>
                     <Myinput 
                         placeholder="Digite o Nome"
                         value={req.name}
@@ -135,11 +140,7 @@ export default function infraScreen() {
                     />
 
                     <View style={styles.modalButtons}>
-                        <MyButton 
-                            style={styles.cancelButton} 
-                            onPress={() => setVisible(false)} 
-                            title="Cancelar"
-                        />
+                        
                         <MyButton 
                             style={styles.buttoncad} 
                             onPress={() => handleRegister()} 
@@ -202,29 +203,24 @@ export default function infraScreen() {
 
 const styles = StyleSheet.create({
     modal:{
-        marginBlock: 'auto',
+        display: 'flex',
+        width: 'auto',
+        height: 'auto',
+        padding: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        borderWidth: 4,
+        borderColor: 'purple',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
     },
     modalButtons: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: 20,
     },
-    cancelButton: {
-        fontSize: 15,
-        padding: 10,
-        backgroundColor: '#FF5252',
-        borderRadius: 100,
-        fontFamily: 'arial',
-        marginHorizontal: 5,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 2,
-        elevation: 3,
-        flex: 1,
-        marginRight: 10,
-    },
+    
     buttoncad: {
+        marginBottom: 10,
         fontSize: 15,
         padding: 10,
         backgroundColor: '#FFDB58',

@@ -89,7 +89,12 @@ export default function itemScreen(product_id: Number) {
                 <Mytext style={styles.h1}>Cadastro de Itens</Mytext>
             </View>
             
-            <MyModal title='Cadastrar' visible={visible} setVisible={setVisible}> 
+            <MyModal 
+            style={styles.modal}
+            title='Cadastrar' 
+            visible={visible} 
+            setVisible={setVisible}
+            > 
 
             
                 <View style={styles.form}>
@@ -187,7 +192,18 @@ export default function itemScreen(product_id: Number) {
 }
 
 const styles = StyleSheet.create({
-    
+    modal:{
+        display: 'flex',
+        width: 'auto',
+        height: 'auto',
+        padding: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        borderWidth: 4,
+        borderColor: 'purple',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+    },
     h1: {
         fontSize: 24,
         fontWeight: 'bold',
