@@ -87,6 +87,8 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <MenuItem label="Apoio" route="apoio" icon='accessibility-outline' />
+        <MenuItem label="Administração" route="Administracao/" icon="people" />
+        <MenuItem label="Financeiro" route="finance" icon="people" />
         <MenuItem label="Secretaria" route="secretaria" icon="add-circle" />
         <MenuItem label="Classes" route="classes" icon="school" />
         <MenuItem label="Collections" route="collections" icon="cube" />
@@ -97,18 +99,19 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Employees" route="employees" icon="people" />
         <MenuItem label="Items" route="items" icon="pricetag" />
         <MenuItem label="Launchs" route="launchs" icon="rocket" />
-        <MenuItem label="Libraie" route="libraie" icon="book" />
+        <MenuItem label="Librarie" route="librarie" icon="book" />
         <MenuItem label="Loans" route="loans" icon="card" />
         <MenuItem label="Locals" route="infraestrutura/locals" icon="location" />
         <MenuItem label="Perfil" route="perfil" icon="person" />
         <MenuItem label="Posts" route="posts" icon="chatbox" />
         <MenuItem label="Infraestrutura" route="infraestrutura" icon="cube-outline"/>
         <MenuItem label="Projects" route="projects" icon="briefcase" />
-        <MenuItem label="Scales" route="scales" icon="speedometer" />
+        <MenuItem label="Revenues" route="revenues" icon="cash-outline" />
         <MenuItem label="Timelines" route="timelines" icon="calendar" />
         <MenuItem label="Students" route="students" icon="school" />
-        <MenuItem label="Users" route="users" icon="person-circle" />
+        <MenuItem label="Users" route="registeredUsers" icon="person-circle" />
         <MenuItem label="More" route="more" icon="add-circle" />
+        <MenuItem label="Trabalhe Conosco" route='Administracao/employees?view=form'  icon="cash" />
       </ScrollView>
     </Animated.View>
   );

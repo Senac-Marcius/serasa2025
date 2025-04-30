@@ -125,6 +125,8 @@ export default function ParentScreen (){
         <Myinput label="Telefone" placeholder="Telefone:" value={req.phone} onChangeText={(Text) => setReq({ ...req, phone: Text })} iconName="phone" />
         <Myinput label="Email" placeholder="Email:" value={req.email} onChangeText={(Text) => setReq({ ...req, email: Text })} iconName="email" />
         <Myinput label="Parentesco" placeholder="Parentesco:" value={req.kinship} onChangeText={(Text) => setReq({ ...req, kinship: Text })} iconName="groups" />
+        {/*<Myinput label="Url" placeholder="Url:" value={req.publicUrl} onChangeText={(Text) => setReq({ ...req, kinship: Text })} iconName="groups" />*/}
+      
       </View>
 
       <View style={styles.actions}>
@@ -146,16 +148,17 @@ export default function ParentScreen (){
             onDel={() => delParentL(item.id)}
             onEdit={() => editParentL(item.id)}
           >
-            <Text>    Id: {item.id}</Text>
-            <Text><IoIosListBox />Nome: {item.name}</Text>
-            <Text>    RG: {item.rg}</Text>
-            <Text>    CPF:{item.cpf}</Text>
-            <Text>    Idade: {item.age}</Text>
-            <Text>    Telefone: {item.phone}</Text>
-            <Text>    Email: {item.email}</Text>
-            <Text>    Parentesco: {item.kinship}</Text>
-            <Text>    Data: {item.createat}</Text>
-            <Text>    UserId: {item.userid}</Text>
+            <Text style={styles.th}>Id: {item.id}</Text>
+            <Text style={styles.th}>Nome: {item.name}</Text>
+            <Text style={styles.th}>RG: {item.rg}</Text>
+            <Text style={styles.th}>CPF:{item.cpf}</Text>
+            <Text style={styles.th}>Idade: {item.age}</Text>
+            <Text style={styles.th}>Telefone: {item.phone}</Text>
+            <Text style={styles.th}>Email: {item.email}</Text>
+            <Text style={styles.th}>Parentesco: {item.kinship}</Text>
+            <Text style={styles.th}>Data: {item.createat}</Text>
+            <Text style={styles.th}>URL: {item.publicUrl}</Text>
+            <Text style={styles.th}>UserId: {item.userid}</Text>
 
           </MyItem>
         )}
@@ -217,6 +220,12 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "row",
+    },
+    th: { flex: 1, fontWeight: '600', fontSize: 13, color: '#333' 
+    },
+    td: { flex: 1, fontSize: 13, color: '#444' 
+    },
+    tdStatus: { flex: 1 
     },
   });
   

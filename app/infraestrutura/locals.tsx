@@ -78,7 +78,7 @@ export default function LocalScreen(){
 
     const [unity, setUnit] = useState("Select")         
 
-    const [message, setMessage] = useState("")
+    const [message, setMessage] = useState("white")
     
     
     const router = useRouter();
