@@ -13,7 +13,7 @@ import { supabase } from '../../src/utils/supabase';
 import { MyItem } from '../../src/components/MyItem';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
-import { MyModal_mobilefullscreen } from '../../src/components/MyModal';
+import { MyModal } from '../../src/components/MyModal';
 import { getUsers, toListUser } from '../../src/controllers/users';
 import MySelect from '../../src/components/MySelect';
 
@@ -42,7 +42,6 @@ const parseCurrencyInput = (text: string): number => {
         id: -1,
         url: '',
         created_at: new Date().toISOString(),
-        user_id: 1,
         recurces: 0,
         description: '',
         activity: '',
@@ -64,14 +63,11 @@ const parseCurrencyInput = (text: string): number => {
         setIntegrantes([...integrantes, {key: -1, option:''}]);
     }
 
-    function atulizarIntegranteKey(index:number, pkey: number){
-        const i = {...integrantes[index], key: pkey}
-        setIntegrantes( integrantes.map(jTNL => (jTNL.key == i.key ? i : jTNL)) );
-    }
-
-    function atulizarIntegranteName(index:number, pOption: string){
-        const i = {...integrantes[index], option: pOption}
-        setIntegrantes( integrantes.map(jTNL => (jTNL.key == i.key ? i : jTNL)) );
+    function atulizarIntegranteKey(pindex:number, pkey: number){
+        const name = idUs.find(u => u.key == pkey)?.option || ''
+        const i = { key: pkey, option: name}
+        setIntegrantes( integrantes.map((jTNL, index) => (index == pindex ? i : jTNL)) );
+        //console.log(integrantes)
     }
 
 
@@ -107,11 +103,11 @@ const parseCurrencyInput = (text: string): number => {
     async function handleRegister(){
         const recurcesValue = parseCurrencyInput(rawRecurces);
         
-        if(req.id == -1){ //aqui é quando esta cadastrando
+        if(req.id === -1){ //aqui é quando esta cadastrando
             const newid = projects.length ? projects[projects.length -1].id + 1 : 0;
-            const newProjects = { ...req, id: newid, integrantes };
+            const newProjects = { ...req, id: newid };
 
-            console.log("Cadastrando no Supabase:", newProjects);
+            //console.log("Cadastrando no Supabase:", newProjects);
 
             setProjects([... projects, newProjects])
             await setProject(newProjects, integrantes)
@@ -128,7 +124,6 @@ const parseCurrencyInput = (text: string): number => {
             id: -1,
             url: '',
             created_at: new Date().toISOString(),
-            user_id: 1,
             recurces: 0,
             description: '',
             activity: '',
@@ -143,6 +138,7 @@ const parseCurrencyInput = (text: string): number => {
         })
 
         setRawRecurces('');
+        setVisible(false)
     }
 
     const getFilteredProjects = () => {
@@ -168,7 +164,7 @@ const parseCurrencyInput = (text: string): number => {
             setVisible(true)
         }
 
-        console.log("Dados enviados para o Supabase:", projects);
+        //console.log("Dados enviados para o Supabase:", projects);
     }
 
     async function dellProject(id: number){
@@ -179,6 +175,12 @@ const parseCurrencyInput = (text: string): number => {
         
     }
 
+    // Função para formatar como moeda brasileira
+    const formatCurrency = (value: string) => {
+        const numeric = value.replace(/\D/g, ''); // remove tudo que não é número
+        const number = parseFloat(numeric) / 100; // divide por 100 para considerar centavos
+        return number.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    };
 
     function adicionarProtocolo(url: string){
         if (!/^https?:\/\//i.test(url)) {
@@ -218,7 +220,7 @@ const parseCurrencyInput = (text: string): number => {
             <View style={styles.contentContainer}>
                 <Mytext style={styles.title}>PROJETOS</Mytext>
 
-                <MyModal_mobilefullscreen visible={visible} setVisible={() => setVisible(true)}>
+                <MyModal visible={visible} setVisible={() => setVisible(true)} title=''>
                     <ScrollView>
                     <View style={styles.row}> 
                             
@@ -245,7 +247,7 @@ const parseCurrencyInput = (text: string): number => {
                             >
                                 <MySelect 
                                     label={uOption.option || "Selecione um usuario"}
-                                    setLabel={(option) => atulizarIntegranteName(index, option)}
+                                    setLabel={() => {}}
                                     list={idUs}
                                     setKey={(key) => atulizarIntegranteKey(index, key)}
                                     caption={`Integrante ${index + 1}`}
@@ -309,23 +311,25 @@ const parseCurrencyInput = (text: string): number => {
                                 onChangeText={(text) => setReq({ ...req, url: adicionarProtocolo(text) })}
                             />
                             
-                            <Mytext style={styles.label}> Recursos: </Mytext>
+                            <Mytext style={styles.label}>Recursos:</Mytext>
                             <Myinput
                             iconName=""
                             label=""
                             placeholder="Digite o valor..."
-                            value={`R$ ${rawRecurces}`} // Mostra valor formatado
+                            
+                            value={rawRecurces}
                             onChangeText={(text) => {
-                                const cleanText = text.replace(/[^\d,\.]/g, '');
-                                setRawRecurces(cleanText);
-                                const numericValue = parseCurrencyInput(cleanText);
+                                const formatted = formatCurrency(text);
+                                setRawRecurces(formatted);
+                                const numericValue = Number(formatted.replace(/\D/g, '')) / 100;
                                 setReq(prev => ({ ...prev, recurces: numericValue }));
                             }}
                             />
 
                             <Mytext style={styles.label}>Previsão de Início:</Mytext>
                             <MyCalendar
-                                date={date} setDate={setDate} icon="FaCalendarDays" 
+                                date={date} setDate={setDate} 
+                                label='' placeholder='' value='' 
                             />
 
                             <Mytext style={styles.label}> Periodo Esperado: </Mytext>
@@ -335,7 +339,7 @@ const parseCurrencyInput = (text: string): number => {
                                     <MyCalendar
                                     date={date} // usa o mesmo estado
                                     setDate={setDate} // mesma função
-                                    icon="FaCalendarDays"
+                                    label='' placeholder='' value=''
                                     />
                                 </View>
 
@@ -344,7 +348,7 @@ const parseCurrencyInput = (text: string): number => {
                                     <MyCalendar
                                     date={date} // mesmo estado novamente
                                     setDate={setDate} // mesma função
-                                    icon="FaCalendarDays"
+                                    label='' placeholder='' value=''
                                     />
                                 </View>
                             </View>
@@ -370,7 +374,7 @@ const parseCurrencyInput = (text: string): number => {
                             <Mytext style={styles.label}> Qual Atividade proposta: </Mytext>
                             <Myinput
                                 iconName=''
-                                placeholder="Digite aqui..."
+                                placeholder="Liste em topicos..."
                                 value={req.activity}
                                 onChangeText={(text) => setReq({ ...req, activity: text })}
                                 label=''
@@ -385,7 +389,7 @@ const parseCurrencyInput = (text: string): number => {
                                         value={req.techniques} // Passa o estado como valor
                                         onChangeText={(text) => setReq({ ...req, techniques: text })} // Atualiza o estado ao digitar
                                         placeholder="Digite aqui..."
-                                        style={{ height: 50 }}
+                                        style={{ height: 80 }}
                                     />
                                     <MyTextArea
                                         iconName='message'
@@ -393,7 +397,7 @@ const parseCurrencyInput = (text: string): number => {
                                         value={req.process} // Passa o estado como valor
                                         onChangeText={(text) => setReq({ ...req, process: text })} // Atualiza o estado ao digitar
                                         placeholder="Digite aqui..."
-                                        style={{ height: 50 }}
+                                        style={{ height: 80 }}
                                     />
                                 </View>
 
@@ -404,7 +408,7 @@ const parseCurrencyInput = (text: string): number => {
                                         value={req.strategies} // Passa o estado como valor
                                         onChangeText={(text) => setReq({ ...req, strategies: text })} // Atualiza o estado ao digitar
                                         placeholder="Digite aqui..."
-                                        style={{ height: 50 }}
+                                        style={{ height: 80 }}
                                     />
                                     <MyTextArea
                                         iconName='message'
@@ -412,7 +416,7 @@ const parseCurrencyInput = (text: string): number => {
                                         value={req.planning} // Passa o estado como valor
                                         onChangeText={(text) => setReq({ ...req, planning: text })} // Atualiza o estado ao digitar
                                         placeholder="Digite aqui..."
-                                        style={{ height: 50 }}
+                                        style={{ height: 80 }}
                                     />
 
                                     {/* <>Fazer um botão que ao clicar ele abre a caixa de seleção do usuario e quando clico no usuario ele adioca ao meu users </>*/}
@@ -426,7 +430,7 @@ const parseCurrencyInput = (text: string): number => {
 
                     </View>   
                     </ScrollView>
-                </MyModal_mobilefullscreen>
+                </MyModal>
 
                 <View style={styles.listContainer}> 
                     <MyList 
@@ -440,44 +444,44 @@ const parseCurrencyInput = (text: string): number => {
                             >
                                 {/* Agrupamento e identificação de cada campo com rótulo claro */}
                                 <View style={styles.projectGroup}>
-                                <Mytext style={styles.projectLabel}>👤 Criador:</Mytext>
+                                <Mytext style={styles.projectLabel}> Criador:</Mytext>
                                 <Mytext style={styles.projectText2}>{item.name}</Mytext>
 
                                 </View>
 
                                 <View style={styles.projectGroup}>
-                                <Mytext style={styles.projectLabel}>📌 Nome do Projeto:</Mytext>
+                                <Mytext style={styles.projectLabel}> Nome do Projeto:</Mytext>
                                 <Mytext style={styles.projectText2}>{item.namep}</Mytext>
                                 </View>
 
                                 <View style={styles.projectGroup}>
-                                <Mytext style={styles.projectLabel}>🔗 URL:</Mytext>
+                                <Mytext style={styles.projectLabel}> URL:</Mytext>
                                 <Mytext style={styles.projectText2}>{item.url}</Mytext>
                                 </View>
 
                                 <View style={styles.projectGroup}>
-                                <Mytext style={styles.projectLabel}>🧑‍💻 Usuário:</Mytext>
+                                <Mytext style={styles.projectLabel}> Usuário:</Mytext>
                                 <Mytext style={styles.projectText2}>#{item.user_id}</Mytext>
                                 </View>
 
                                 <View style={styles.projectGroup}>
-                                <Mytext style={styles.projectLabel}>💰 Recursos:</Mytext>
+                                <Mytext style={styles.projectLabel}> Recursos:</Mytext>
                                 <Mytext style={styles.projectText2}>{item.recurces}</Mytext>
                                 </View>
 
                                 <View style={styles.projectGroup}>
-                                <Mytext style={styles.projectLabel}>📝 Descrição:</Mytext>
+                                <Mytext style={styles.projectLabel}> Descrição:</Mytext>
                                 <Mytext style={styles.projectText2}>{item.description}</Mytext>
                                 </View>
 
                                 <View style={styles.projectGroup}>
-                                <Mytext style={styles.projectLabel}>🎯 Objetivo:</Mytext>
+                                <Mytext style={styles.projectLabel}> Objetivo:</Mytext>
                                 <Mytext style={styles.projectText2}>{item.objective}</Mytext>
                                 </View>
 
                                 {/* Grupo visual para campos relacionados à metodologia */}
                                 <View style={styles.projectGroup}>
-                                <Mytext style={styles.projectLabel}>🧪 Metodologia:</Mytext>
+                                <Mytext style={styles.projectLabel}> Metodologia:</Mytext>
                                 <Mytext style={styles.projectText2}> Técnicas: {item.techniques}</Mytext>
                                 <Mytext style={styles.projectText2}>Processos: {item.process}</Mytext>
                                 <Mytext style={styles.projectText2}>Estratégias: {item.strategies}</Mytext>
