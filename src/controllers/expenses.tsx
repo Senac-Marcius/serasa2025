@@ -7,10 +7,11 @@ interface iexpenses {
   name: string,
   emails: string,
   contacts: string,
-  costs: string,
+  costs: number,
   descriptions: string,
   url: string,
   user_id: number,
+  percentege:number
 }
 
 function toListExpenses (data: iexpenses[]){
@@ -25,7 +26,7 @@ function toListExpenses (data: iexpenses[]){
 }
 
 async function toListAreas (data:any[]){
-  const resp: {key: Number, option: String, percentege:number} []=[];
+  const resp: {key: number, option: string, percentege:number} []=[];
   
  const retorno = await getAreas({})
  if (retorno.status && retorno.data && retorno.data.length > 0){
@@ -35,10 +36,9 @@ async function toListAreas (data:any[]){
       resp.push()
       resp.push({key: e.area_id, option: retorno.data.find(a => a.area_id == e.area_id).sectors, percentege:e.percentege })
     })
-    return resp;
 
   }
-  return [];
+  return resp;
   
 }
 
@@ -58,7 +58,7 @@ async function getAreasSlected(id: number) {
   if(error)
     return{status:false, error: error}
 
-  return{status:true, data: await toListAreas(todos)}
+  return{status:true, data: await toListAreas(todos) as  {key: number, option: string, percentege:number} []}
 }
 
 async function getAreas(params:any) {

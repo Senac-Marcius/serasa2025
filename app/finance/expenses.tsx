@@ -11,6 +11,7 @@ import Mytext from '../../src/components/MyText';
 import Mydownload from '../../src/components/MyDownload';
 import MySearch from '../../src/components/MySearch';
 import MySelect from '../../src/components/MySelect';
+import { getBudgets } from '../../src/controllers/budgets';
 
 
 export default function ExpenseScreen() {
@@ -21,10 +22,11 @@ export default function ExpenseScreen() {
         name: '',
         emails: '',
         contacts: '',
-        costs: '',
+        costs: 0,
         descriptions: '',
         url: '',
         user_id: 1,
+        percentege:0
     });
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -38,6 +40,9 @@ export default function ExpenseScreen() {
     const [areasSelected, setAreasSelected]= useState<{key:number, percentege:number, option:string}[]>([{key: -1, percentege:0, option:''}])
 
     const [expense, setExpenses] = useState<iexpenses[]>([]);
+
+    const [budgets, setBudgets] = useState<iexpenses[]>([]);
+
 
     useEffect(() => {
         (async () => {
@@ -63,7 +68,12 @@ export default function ExpenseScreen() {
         })();
 
 
-
+        (async () => {
+            const retorno = await getBudgets({})
+            if (retorno.status && retorno.data && retorno.data.length > 0) {
+                setBudgets(retorno.data)
+            }
+        })();
 
     }, [])
 
@@ -125,10 +135,11 @@ export default function ExpenseScreen() {
             name: '',
             emails: '',
             contacts: '',
-            costs: '',
+            costs: 0,
             url: '',
             descriptions: '',
             user_id: 1,
+            percentege:0
         });
 
         setAreasSelected([{key: -1, percentege:0, option:''}])
@@ -143,7 +154,7 @@ export default function ExpenseScreen() {
 
             const a = await getAreasSlected(id);
             if(a.status && a.data && a.data.length > 0)
-                setAreasSelected(a.data)
+                setAreasSelected(a.data  as  {key: number, option: string, percentege:number} [])
         }
             
             
@@ -185,7 +196,18 @@ export default function ExpenseScreen() {
 
                     <MyTextArea value={req.descriptions} onChangeText={(text) => setReq({ ...req, descriptions: text })} iconName='' placeholder='Descrição' label='' />
 
-                    <Myinput value={req.costs} onChangeText={(text) => setReq({ ...req, costs: text })} placeholder="R$" label="Valores:" iconName='' />
+                    <Myinput
+                                value={String(req.percentege)}
+                                onChangeText={(text) => setReq({ ...req, percentege: Number(text) })}
+                                iconName='percent'
+                                placeholder='% Relacionado a área'
+                                label='Valor'
+                                />
+                        
+
+                    <Myinput value={ String(req.costs)} onChangeText={(text) => setReq({ ...req, costs: Number(text)})} placeholder="R$" label="Valores:" iconName='' />
+
+
 
                     <Mytext style={{fontSize:14}}>Distribuição por areas:</Mytext>
                             {areasSelected.map((uOption, index) => (
@@ -278,6 +300,7 @@ export default function ExpenseScreen() {
                         <Mytext style={styles.td}> {item.emails}</Mytext>
                         <Mytext style={styles.td}> {item.created_at}</Mytext>
                         <Mytext style={styles.td}>{item.descriptions}</Mytext>
+                        <Mytext style={styles.td}> {item.percent}</Mytext>
                         <Mytext style={styles.td}> {item.costs}</Mytext>
                     </MyTb>
 
@@ -289,6 +312,7 @@ export default function ExpenseScreen() {
                         <Mytext style={styles.th}>Email</Mytext>
                         <Mytext style={styles.th}>Data</Mytext>
                         <Mytext style={styles.th}>Descrição</Mytext>
+                        <Mytext style={styles.th}>Porcentagem</Mytext>
                         <Mytext style={styles.th}>Valor</Mytext>
                         <Mytext style={styles.th}>Ações</Mytext>
                     </View>
