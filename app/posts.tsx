@@ -137,10 +137,14 @@ export default function postScreen() {
         
         <MyView router={router} >
            
-            <MyModal  
-                title=''
+            <MyModal style={styles.MyModal}
+                title="Nova Publicação"
                 visible={visible}
                 setVisible={setVisible}
+                tipe='circle'
+                buttonStyle= {{width: 170, height: 50, backgroundColor: '#fcd34d', borderRadius: 30, justifyContent: 'center', alignItems: 'center'}}
+                closeButtonTitle="X"
+              
             >
                 <View style={styles.form}>
                     <Myinput
@@ -154,7 +158,7 @@ export default function postScreen() {
                     <MyButton
                         title="Selecionar Imagem"
                         onPress={pickImage}
-                        color="yellow"
+                        color="rgb(79 171 81)"
                     />
 
                     <Myinput
@@ -165,7 +169,7 @@ export default function postScreen() {
                         onChangeText={(text) => setReq({ ...req, description: text })}
                     />
 
-                    <MyButton style={{ justifyContent: 'center' }}
+                    <MyButton style={{ justifyContent: 'center', width: 70, top: 10, right: -64}}
                         title="PUBLICAR" // Passando a propriedade correta para o título do botão
                         onPress={handleRegister} // Passando a função de press
 
@@ -199,7 +203,7 @@ export default function postScreen() {
 
                                 {/* Botão de três pontinhos */}
                                 <TouchableOpacity
-                                    style={{ position: 'absolute', top: -1, right: -12, zIndex: 100}}
+                                    style={{ position: 'absolute', top: -10, right: -2, zIndex: 1000}}
                                     onPress={() => openOptions(item.id)}
                                 >
                                     <MaterialIcons name="more-vert" size={24} color="black" />
@@ -218,7 +222,7 @@ export default function postScreen() {
                                 
                                 </Card.Content>      
 
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10                         
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 75                         
                                 }}>
                                     <TouchableOpacity
                                         style={styles.actionButton}
@@ -253,7 +257,15 @@ export default function postScreen() {
 
 // Estilos
 const styles = StyleSheet.create({
+    
           
+    MyModal: {
+        display: 'flex',
+        width: 400,
+        height: 400,
+        padding: 20,
+    },
+
     container: {
         flex: 1,
         padding: 20,
@@ -325,11 +337,7 @@ const styles = StyleSheet.create({
       image_post: {
         width:450,
         height: 300,
-        
 
-        
-
-        
       }
       
 });
