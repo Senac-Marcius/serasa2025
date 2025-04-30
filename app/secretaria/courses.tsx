@@ -21,7 +21,7 @@ export default function CoursesScreen() {
     courseplan: '',
     orientationplan: '',
     workload: '',
-    id: -1,
+    id: undefined,
     userId: 0,
   };
 
@@ -46,25 +46,26 @@ export default function CoursesScreen() {
   async function handleRegister() {
     const courseToSave = {
       ...req,
-      workload: parseInt(req.workload),
+      workload: parseInt(req.workload as string) || 0,
       courseplan: req.courseplan,
       orientationplan: req.orientationplan,
     };
 
-    if (req.id === -1) {
-      const inserted = await setCoursebd(courseToSave as iCourses);
+    if (!req.id) {
+      const inserted = await setCoursebd(courseToSave);
       if (inserted.length) {
         await loadCourses();
+        setReq(initialReq);
+        setShowForm(false);
       }
     } else {
-      const updated = await upadateCourse(courseToSave as iCourses);
+      const updated = await upadateCourse(courseToSave);
       if (updated.length) {
         await loadCourses();
+        setReq(initialReq);
+        setShowForm(false);
       }
     }
-
-    setReq(initialReq);
-    setShowForm(false);
   }
 
   async function deleteCourses(id: number) {
@@ -79,7 +80,7 @@ export default function CoursesScreen() {
       <View style={{ flex: 1, backgroundColor: '#f0f2f5', padding: 20 }}>
         <View style={styles.headerRow}>
           <Mytext style={styles.title}>Cursos</Mytext>
-          <Pressable style={styles.buttonNew} onPress={() => { setReq(initialReq); setShowForm(true); }}>
+          <Pressable style={styles.buttonNew} onPress={() =>{setReq({...initialReq}); setShowForm(true);}}>
             <Mytext style={styles.buttonNewText}>+ Novo Curso</Mytext>
           </Pressable>
         </View>
@@ -130,7 +131,7 @@ export default function CoursesScreen() {
                 key={item.id}
                 style={styles.card}
                 onEdit={() => { setReq(item); setShowForm(true); }}
-                onDel={() => deleteCourses(item.id)}
+                onDel={() => deleteCourses(item.id!)}
               >
                 <Mytext style={styles.cardTitle}>📚 {item.name}</Mytext>
                 <Mytext style={styles.cardInfo}>📝 {item.description}</Mytext>
@@ -214,7 +215,6 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
     color: '#333',
     marginBottom: 6,
   },
