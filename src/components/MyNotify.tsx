@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, StyleSheet, ViewStyle, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { MyCorrelated } from './MyItem';
+import { MyItem } from './MyItem';
 import Mytext from './MyText';
 import MyList from './MyList';
 
@@ -50,13 +50,13 @@ const MyNotify: React.FC<MyNotifyProps> = ({ style }) => {
             data={notifications}
             keyItem={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <MyCorrelated showEditButton={false} showDeleteButton={false}>
+              <MyItem showEditButton={false} showDeleteButton={false}>
                 <Mytext>Nome: {item.name}</Mytext>
                 <Mytext>Descrição: {item.description}</Mytext>
                 <Mytext>Url: {item.url}</Mytext>
                 <Mytext>UserId: {item.user_id}</Mytext>
                 <Mytext>CreatAt: {item.created_at}</Mytext>
-              </MyCorrelated>
+              </MyItem>
             )}
           />
         </View>
