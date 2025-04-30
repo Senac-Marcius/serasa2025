@@ -8,7 +8,7 @@ import Mytext from '../../src/components/MyText';
 import {MyItem, MyTb} from '../../src/components/MyItem';
 import { useRouter } from 'expo-router';
 import {iBudgets , setBudget, deleteBudget, updateBudget, getBudgets} from '../../src/controllers/budgets';
-import {MyModal_mobilefullscreen} from '../../src/components/MyModal';
+import {MyModal} from '../../src/components/MyModal';
 import MySearch from '../../src/components/MySearch';
 
 
@@ -24,7 +24,7 @@ export default function BudgetScreen(){
         name:'',
         url:'',
         created_at: new Date().toISOString(),
-        value: '',
+        value: 0,
         user_id: 3,
         start_date: '',
         end_date:'',
@@ -68,7 +68,7 @@ export default function BudgetScreen(){
         name:'',
         url:'',
         created_at: new Date().toISOString(),
-        value:'',
+        value:0,
         user_id: 3,
         start_date: '',
         end_date:'',
@@ -123,7 +123,10 @@ export default function BudgetScreen(){
             Cadastre os orçamentos
             </Mytext>
             
-            <MyModal_mobilefullscreen visible={visible} setVisible={setVisible}>
+            <MyModal style={styles.MyModal}
+            title='Novo Cadastro'
+            visible={visible} 
+            setVisible={setVisible}>
                 <View style={styles.form}>
                     
                     <Myinput
@@ -143,8 +146,8 @@ export default function BudgetScreen(){
                      
                      <Myinput 
                     placeholder = "Digite o valor"
-                    value={req.value}
-                    onChangeText={(text) => setReq({...req ,value: text})} 
+                    value={String(req.value)}
+                    onChangeText={(text) => setReq({...req ,value:Number( text)})} 
                     label="valor"
                     iconName="pin"
                      />
@@ -167,9 +170,10 @@ export default function BudgetScreen(){
 
                      <MyButton style={{justifyContent:'center'}} onPress={() => handleRegister ()} title="cadastrar"  />
                 </View>
-               </MyModal_mobilefullscreen>
+               </MyModal>
 
                <MySearch
+               placeholder='Pessquise no Virtudemy'
                      style={styles.searchInput}
                      onChangeText={setSearchTerm}
                     onPress={()=> {setSearchTerm(searchTerm)}}
@@ -321,6 +325,18 @@ const styles = StyleSheet.create({
                 borderColor: '#ccc',
                 fontSize: 14,
               },
+              MyModal: {
+                display: 'flex',
+                width: 400,
+                height: 1000,
+                padding: 20,
+                backgroundColor: 'white',
+                borderRadius: 20,
+                borderWidth: 4,
+                borderColor: 'purple',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+            },
              
 
 
