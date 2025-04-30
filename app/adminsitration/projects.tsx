@@ -329,7 +329,7 @@ const parseCurrencyInput = (text: string): number => {
                             <Mytext style={styles.label}>Previsão de Início:</Mytext>
                             <MyCalendar
                                 date={date} setDate={setDate} 
-                                label='' placeholder='' value='' 
+                                label='' placeholder='' value=''
                             />
 
                             <Mytext style={styles.label}> Periodo Esperado: </Mytext>
