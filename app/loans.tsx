@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'; //react é uma biblioteca e essa função esta importando ela, puxando
-import { FlatList, View, Text, StyleSheet, TextInput, Button, TouchableOpacity } from 'react-native'; //react native é uma biblioteca dentro de react 
+import { FlatList, View, Text, StyleSheet, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native'; //react native é uma biblioteca dentro de react 
 import MyCalendar from '../src/components/MyCalendar';
 import MyView from '../src/components/MyView';
 import { Myinput, MyCheck, MyTextArea } from '../src/components/MyInputs';
@@ -9,15 +9,19 @@ import { useRouter } from 'expo-router';
 import { iLoans, setLoanbd,deleteLoansById,updateLoansById, getLoans } from '../src/controllers/loans'
 import { supabase } from '../src/utils/supabase';
 import TabelaUsuarios from './librarie/loantable';
+<<<<<<< HEAD
 import { ScrollView } from 'react-native-gesture-handler';
 import { textStyles } from '../styles/textStyles';
 import TabelaFuncionarios from './librarie/LoansTableEmployee';
 import TabelaAluno from './librarie/loansTableStundet';
+=======
+>>>>>>> df7a16e2e09808830cff85242391066615ee0c93
 
 
 export default function LoanScreen() {
 
     const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+<<<<<<< HEAD
    
  const emprestimos = {
     id: 'id',
@@ -35,6 +39,29 @@ export default function LoanScreen() {
     dataDevolucao: "string",
     status: "'Em dia' | 'Atrasado'",
   };
+=======
+    const usuarios = [
+        {
+          id: 1,
+          Titulo: 'Livro A',
+          Autor: 'Autor 1',
+          Leitor: 'João',
+          DataEmprestimo: '2024-01-01',
+          DataDevolucao: '2024-01-10',
+          Status: 'Em andamento',
+        },
+        {
+          id: 2,
+          Titulo: 'Livro B',
+          Autor: 'Autor 2',
+          Leitor: 'Maria',
+          DataEmprestimo: '2024-02-01',
+          DataDevolucao: '2024-02-10',
+          Status: 'Devolvido',
+        },
+      ];  
+
+>>>>>>> df7a16e2e09808830cff85242391066615ee0c93
 
     const [req, setReq] = useState({ //useState retorna uma variavel e uma função para alteral a variavel (req e setReq)
         id: -1,
@@ -227,7 +254,7 @@ export default function LoanScreen() {
 
 
                             <MyButton
-                                title='Emprestar'
+                                title='Proximo'
                                 onPress={() =>handleRegister()}
                                 button_type='round'
                             />
@@ -281,6 +308,7 @@ export default function LoanScreen() {
 
                             )}
                         />
+                                       
                     </View>
                 </View>
             </ScrollView>
