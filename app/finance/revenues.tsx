@@ -152,8 +152,8 @@ const getFilteredRevenues = () => {
   
   const term = searchTerm.toLowerCase();
 
-  const u = users.find(ul => ul.option.includes(term) )
-  const c = courses.find(cl => cl.option.includes(term) )
+  const u = users.find(ul => ul.option.toLowerCase().includes(term) )
+  const c = courses.find(cl => cl.option.toLowerCase().includes(term) )
   
   return revenues.filter(item => {
     // Converte o desconto para string e trata o símbolo %
@@ -163,7 +163,7 @@ const getFilteredRevenues = () => {
     return (
       (u != undefined && item.user_id == u.key) ||
       (c != undefined && item.select_course == c.key) ||
-      
+
       item.description?.toLowerCase().includes(term) ||
       item.value?.toString().includes(searchTerm) || // Mantém sem lowercase para números
       item.id?.toString().includes(searchTerm) ||
