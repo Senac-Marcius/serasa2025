@@ -132,14 +132,6 @@ export default function CoursesScreen() {
                 style={styles.card}
                 onEdit={() => { setReq(item); setShowForm(true); }}
                 onDel={() => deleteCourses(item.id!)}
-<<<<<<< HEAD
-              >
-                <Mytext style={styles.cardTitle}>📚Nome: {item.name}</Mytext>
-                <Mytext style={styles.cardInfo}>📝Descrição: {item.description}</Mytext>
-                <Mytext style={styles.cardInfo}>📘 Plano: {item.courseplan}</Mytext>
-                <Mytext style={styles.cardInfo}>🎓 Orientação: {item.orientationplan}</Mytext>
-                <Mytext style={styles.cardInfo}>⏱️ Carga Horária: {item.workload}</Mytext>
-=======
               > 
                 <View style={styles.cardView}>
                 <Mytext type='label'>📚Nome: {item.name}</Mytext>
@@ -149,7 +141,6 @@ export default function CoursesScreen() {
                 <Mytext type='label'>⏱️ Carga Horária: {item.workload}</Mytext>
                 </View>
           
->>>>>>> 1e1113eba6e521756752196a8fd748476273f703
               </MyItem>
             ))}
           </View>
