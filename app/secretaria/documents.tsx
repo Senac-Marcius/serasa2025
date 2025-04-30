@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { useRouter } from 'expo-router';
-import {insertDocument, iDoc, updateDocument, deleteDocument} from '../../src/controllers/documents'
-import { supabase } from '../../src/utils/supabase';
+import {insertDocument, iDoc, updateDocument, deleteDocument, getListDocuments} from '../../src/controllers/documents'
 import MyButton from '../../src/components/MyButtons';
 import MyView from '../../src/components/MyView';
 import  Mytext  from '../../src/components/MyText';
 import { Myinput } from '../../src/components/MyInputs';
-import MyList from '../../src/components/MyList';
-import { MyItem } from '../../src/components/MyItem';
+import { StyleSheet } from 'react-native';
+import MyDocument from '../../src/components/MyDocument';
 //import MyUpload from '../src/components/MyUpload';
 
 
-export default function RecordScreen() {
+export default function DocumentsScreen() {
 
   // Estados individuais para os s
    const [req,setReq] = useState({
@@ -30,20 +29,8 @@ export default function RecordScreen() {
 
   const router = useRouter();
 
-  //buscar documentos no banco e atualizar de acordo com a ação
-  useEffect(() =>{
-    async function getAll() {
-      const{ data:all, error } = await supabase.from('documents').select()
-      if(all){
-        setDocuments(all)
-      }
-      if (error){
-        console.error('Erro ao buscar documentos: ', error.message);
-      }   
-    }
-
-    getAll()
-  },[]);
+  
+  
 
 
   // Função para adicionar um novo registro
@@ -75,29 +62,21 @@ export default function RecordScreen() {
   };
 
 
-  // Função para excluir um registro
-  async function deleteRecord (id: number){
-    const del = await deleteDocument(id)//aqui voce vai chamda sua função de deletar do controlador
-
-    if(del){
-      setDocuments(documents.filter((d) => d.id != id));
-    }      
-  };
-
-  const editRecord = (id: number) => {
-      const doc = documents.find( (d) => d.id == id);
-      if (doc){//vai colocar as informações salvas no vetor de volta no  para editar
-          setReq(doc)
-      }
-  };
+  
   
   
   return (
       
     <MyView >
+
+      <MyDocument type='teste' user_id={5}></MyDocument>
       
-      <View>
-        <Mytext >Solicitação de Documentos</Mytext>
+      {/*<View style={styles.viewStyle}>
+        
+        <View style={styles.viewCabeçalho}>
+          <Mytext style={styles.titulo}>Solicitação de Documentos</Mytext>
+          <MyButton style={styles.botaoListar} title="Listar Documentos" color={'#813AB1'} onPress={()=> router.push('secretaria/documentsFilter')} button_type="rect" />
+        </View>
         
         <Myinput
             iconName="person" 
@@ -121,31 +100,37 @@ export default function RecordScreen() {
         />
         
         <MyButton title={req.id != -1 ? "Atualizar":"Cadastrar"} color={'#813AB1'} onPress={handleRegister} button_type="rect" />
-      </View>
+        
+      </View>*/}
       
             
 
-      <View>
-        <Mytext >Registros Cadastrados</Mytext>
-        <MyList
-          data={documents}
-          keyItem={(item) => item.id.toString()}//tratamento
-          renderItem={({ item }) => (
-            <MyItem
-              onDel={()=> deleteRecord(item.id)}
-              onEdit={()=> editRecord(item.id)}
-            >                                 
-
-
-              <Mytext>Nome: {item.name}</Mytext>
-              <Mytext >Url: {item.url}</Mytext>
-              <Mytext >Tipo Documento: {item.type}</Mytext>     
-
-            </MyItem>
-          )}
-        />
-      </View>
+      
       
     </MyView>
   );
 }
+
+const styles = StyleSheet.create({
+  viewStyle: {
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    marginBottom: 6,
+  },
+  viewCabeçalho: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between', // distribui título e botão nos extremos
+  },
+  botaoListar: {
+    marginLeft: 'auto', // empurra o botão para a direita
+  },
+  titulo: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#813AB1',
+    padding: 20,
+  },
+});
+

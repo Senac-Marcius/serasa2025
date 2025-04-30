@@ -1,5 +1,6 @@
   import React, {useState} from 'react'
   import { supabase } from '../utils/supabase'
+import { symlink } from 'fs';
  
   
   interface iParent{
@@ -148,3 +149,5 @@ export async function delParent(id: number) {
 
 
 export { iParent}
+
+//versão atualiizada
