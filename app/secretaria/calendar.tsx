@@ -209,10 +209,10 @@ export default function CalendarsScreen() {
                   onDel={() => delCalendar(item.id)}
                 >
                   <View style={styles.cardView}>
-                  <MyText >👤Tipo de Evento: {item.studentname}</MyText>
-                  <MyText >📘 Motivo do Evento: {item.course}</MyText>
-                  <MyText >📅 Data: {item.registrationdate}</MyText>
-                  <MyText >⏱️ Período: {item.period}</MyText>
+                  <MyText type='label'>👤Tipo de Evento: {item.studentname}</MyText>
+                  <MyText type='label'>📘 Motivo do Evento: {item.course}</MyText>
+                  <MyText type='label'>📅 Data: {item.registrationdate}</MyText>
+                  <MyText type='label'>⏱️ Período: {item.period}</MyText>
                   </View>
 
                 </MyItem>
@@ -309,9 +309,4 @@ const styles = StyleSheet.create({
 
 });
 
-<<<<<<< HEAD
-//correto
 
-=======
-// CORRETO
->>>>>>> origin/dev_alef_1.4
