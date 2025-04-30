@@ -25,9 +25,9 @@ export default function RevenueScreen() {
     url: '',
     created_at: new Date().toISOString(),
     user_id: -1,
-    value: '',
+    value: 0,
     scholarship_status: '',
-    discount_percentage: '',
+    discount_percentage: 0,
     tipo_mensalidade: '',
     select_course: '',
 
@@ -112,9 +112,9 @@ export default function RevenueScreen() {
       url: '',
       created_at: new Date().toISOString(),
       user_id: -1,
-      value: '',
+      value: 0,
       scholarship_status: '',
-      discount_percentage: '',
+      discount_percentage: 0,
       tipo_mensalidade: '',
       select_course: '',
 
@@ -246,8 +246,8 @@ const getFilteredRevenues = () => {
             
             {/* Campo de Desconto */}
             <Myinput
-              value={req.discount_percentage}
-              onChangeText={(text) => setReq({ ...req, discount_percentage: text })}
+              value={String(req.discount_percentage)}
+              onChangeText={(text) => setReq({ ...req, discount_percentage: Number(text) })}
               iconName='percent'
               placeholder='Digite o desconto em %'
               label='Desconto'
@@ -255,13 +255,20 @@ const getFilteredRevenues = () => {
 
             {/* Campo de Valor */}
             <Myinput
-              value={req.value}
-              onChangeText={(text) => setReq({ ...req, value: text })}
+              value={String(req.value) }
+              onChangeText={(text) => setReq({ ...req, value: Number(text) })}
               iconName='payments'
               placeholder='Digite o valor R$0,00'
               label='Valor'
             />
-
+              {/* Novo campo: Total com desconto (somente leitura) */}
+              <View style={styles.totalContainer}>
+              <Mytext style={styles.totalLabel}>Total com desconto:</Mytext>
+              <Mytext style={styles.totalValue}>
+              {req.value * (1 - req.discount_percentage/100)}
+              </Mytext>
+              </View>
+            
             {/* Campo de URL */}
             <Myinput
               value={req.url}
@@ -310,7 +317,8 @@ const getFilteredRevenues = () => {
               <Mytext style={styles.td}>{item.created_at}</Mytext>
               <Mytext style={styles.td}>{item.description}</Mytext>    
               <Mytext style={styles.td}>{item.discount_percentage}%</Mytext>
-              <Mytext style={styles.td}>R${item.value}</Mytext> 
+              <Mytext style={styles.td}>R${item.value}</Mytext>
+              <Mytext style={styles.td}>R${item.value*(1-item.discount_percentage/100)}</Mytext>
               
               
             </MyTb>
@@ -326,6 +334,7 @@ const getFilteredRevenues = () => {
               
               <Mytext style={styles.th}>Descontos</Mytext>
               <Mytext style={styles.th}>Valor</Mytext>
+              <Mytext style={styles.th}>valor final</Mytext>
               <Mytext style={styles.th}>Ações</Mytext>
               
             </View>
@@ -347,6 +356,27 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     borderRadius: 12,
     alignSelf: 'flex-start',
+  },
+  totalContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 10,
+    padding: 15,
+    backgroundColor: '#f8f9fa',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#e9ecef',
+  },
+  totalLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#495057',
+  },
+  totalValue: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#1c7ed6',
   },
 
   MyModal: {
