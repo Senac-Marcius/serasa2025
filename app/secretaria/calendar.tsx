@@ -299,4 +299,3 @@ const styles = StyleSheet.create({
   },
 });
 
-// CORRETO
