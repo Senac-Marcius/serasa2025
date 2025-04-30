@@ -301,4 +301,5 @@ const styles = StyleSheet.create({
   },
 });
 
-// subir 
+//correto
+
