@@ -10,6 +10,7 @@ import { setIten, dell, edit, iIten, getItens } from '../../src/controllers/item
 import { MyModal} from '../../src/components/MyModal';
 import Mytext from '../../src/components/MyText';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Octicons from '@expo/vector-icons/Octicons';
 import MySelect from '../../src/components/MySelect';
 
 
@@ -147,18 +148,20 @@ export default function itemScreen(product_id: Number) {
                     
                     <MaterialIcons //Essa estrutura pertence ao input da quantidade
                     name="123" 
-                    size={18} 
+                    size={23} 
                     color="#6A1B9A" 
                     style={{  marginLeft: 0.1,  // Indentação adicional da borda esquerda
                     marginRight: 5}}/>
                     
+                   
                     <Myinput
                         placeholder="Digite o número"
                         value={req.mark}
                         onChangeText={(text) => setReq({ ...req, mark: text })}
                         label="Nº de patrimônio"
-                        iconName=''
+                        iconName= ''
                     />
+                     <Octicons name="number" size={18} color= "#6A1B9A"   />
                     <Myinput 
                         placeholder="N°"
                         value={String(req.amount)}
@@ -166,7 +169,7 @@ export default function itemScreen(product_id: Number) {
                         label="Quantidade de itens"
                         iconName=''
                     />
-                    <MyButton title='Cadastrar' onPress={handleRegister} />
+                    <MyButton style={styles.buttoncad} title='Cadastrar' onPress={handleRegister} />
                     
                 </View>
             </MyModal>
@@ -192,6 +195,9 @@ export default function itemScreen(product_id: Number) {
 }
 
 const styles = StyleSheet.create({
+    buttoncad: {
+        marginBottom: 10,
+    },
     modal:{
         display: 'flex',
         width: 'auto',
