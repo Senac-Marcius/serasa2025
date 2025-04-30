@@ -25,10 +25,12 @@ export default function RevenueScreen() {
     url: '',
     created_at: new Date().toISOString(),
     user_id: -1,
-    value: '',
+    value: 0,
     scholarship_status: '',
-    discount_percentage: '',
-    tipo_mensalidade: ''
+    discount_percentage: 0,
+    tipo_mensalidade: '',
+    select_course: '',
+
 
     
 
@@ -39,7 +41,7 @@ export default function RevenueScreen() {
     const [revenues, setRevenues] = useState<iRevenue[]>([]);
     const [users, setUsers] = useState<any[]>([]);
     const [courses, setCourses] = useState<any[]>([]);
-    const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
+    
     
     useEffect(()=>{
       async function getTodos(){
@@ -110,10 +112,12 @@ export default function RevenueScreen() {
       url: '',
       created_at: new Date().toISOString(),
       user_id: -1,
-      value: '',
+      value: 0,
       scholarship_status: '',
-      discount_percentage: '',
+      discount_percentage: 0,
       tipo_mensalidade: '',
+      select_course: '',
+
     });
     setVisible(false);
   }
@@ -148,8 +152,8 @@ const getFilteredRevenues = () => {
   
   const term = searchTerm.toLowerCase();
 
-  const u = users.find(ul => ul.option.includes(term) )
-
+  const u = users.find(ul => ul.option.toLowerCase().includes(term) )
+  const c = courses.find(cl => cl.option.toLowerCase().includes(term) )
   
   return revenues.filter(item => {
     // Converte o desconto para string e trata o símbolo %
@@ -158,6 +162,8 @@ const getFilteredRevenues = () => {
     
     return (
       (u != undefined && item.user_id == u.key) ||
+      (c != undefined && item.select_course == c.key) ||
+
       item.description?.toLowerCase().includes(term) ||
       item.value?.toString().includes(searchTerm) || // Mantém sem lowercase para números
       item.id?.toString().includes(searchTerm) ||
@@ -196,11 +202,10 @@ const getFilteredRevenues = () => {
           
         
               <MySelect
-              label={courses.find(c => c.key == selectedCourseId)?.option || 'Selecione um curso'}
+              label={courses.find(c => c.key == req.select_course)?.option || 'Selecione um curso'}
               setLabel={() => {}}
-              setKey={(key) => {
-                setSelectedCourseId(key); // Você precisaria criar este estado
-              }}
+              setKey={(key) => {    setReq({ ...req, select_course: key })    }}
+              
               list={courses}
               caption="Cursos"
             />
@@ -217,7 +222,7 @@ const getFilteredRevenues = () => {
   
 
             <MySelect 
-              label={req.tipo_mensalidade  || 'Selecione um tipo de mensalidade'} 
+              label={req.tipo_mensalidade  || 'Selecione um tipo de receita'} 
               caption= "Tipo da mensalidade"
               setLabel={(text) => setReq({...req, tipo_mensalidade: text})}
               list={[
@@ -241,22 +246,29 @@ const getFilteredRevenues = () => {
             
             {/* Campo de Desconto */}
             <Myinput
-              value={req.discount_percentage}
-              onChangeText={(text) => setReq({ ...req, discount_percentage: text })}
+              value={String(req.discount_percentage)}
+              onChangeText={(text) => setReq({ ...req, discount_percentage: Number(text) })}
               iconName='percent'
-              placeholder='Digite o valor em %'
+              placeholder='Digite o desconto em %'
               label='Desconto'
             />
 
             {/* Campo de Valor */}
             <Myinput
-              value={req.value}
-              onChangeText={(text) => setReq({ ...req, value: text })}
+              value={String(req.value) }
+              onChangeText={(text) => setReq({ ...req, value: Number(text) })}
               iconName='payments'
               placeholder='Digite o valor R$0,00'
               label='Valor'
             />
-
+              {/* Novo campo: Total com desconto (somente leitura) */}
+              <View style={styles.totalContainer}>
+              <Mytext style={styles.totalLabel}>Total com desconto:</Mytext>
+              <Mytext style={styles.totalValue}>
+              {req.value * (1 - req.discount_percentage/100)}
+              </Mytext>
+              </View>
+            
             {/* Campo de URL */}
             <Myinput
               value={req.url}
@@ -299,12 +311,14 @@ const getFilteredRevenues = () => {
 
             >
               <Mytext style={styles.td}>{users.find(u=> u.key == item.user_id)?.option || ''}</Mytext>
+              <Mytext style={styles.td}>{courses.find(c=> c.key == item.select_course)?.option || ''}</Mytext>
               <Mytext style={styles.td}>{item.tipo_mensalidade}</Mytext>
               <Mytext style={styles.td}>{item.scholarship_status}</Mytext>
               <Mytext style={styles.td}>{item.created_at}</Mytext>
               <Mytext style={styles.td}>{item.description}</Mytext>    
               <Mytext style={styles.td}>{item.discount_percentage}%</Mytext>
-              <Mytext style={styles.td}>R${item.value}</Mytext> 
+              <Mytext style={styles.td}>R${item.value}</Mytext>
+              <Mytext style={styles.td}>R${item.value*(1-item.discount_percentage/100)}</Mytext>
               
               
             </MyTb>
@@ -312,6 +326,7 @@ const getFilteredRevenues = () => {
           header={(
             <View style={styles.tableRowHeader}>
               <Mytext style={styles.th}>Nome do usuário</Mytext>
+              <Mytext style={styles.th}>Curso </Mytext>
               <Mytext style={styles.th}>Tipo de receita </Mytext>
               <Mytext style={styles.th}>Status da Bolsa</Mytext>
               <Mytext style={styles.th}>Data do documento</Mytext>
@@ -319,6 +334,7 @@ const getFilteredRevenues = () => {
               
               <Mytext style={styles.th}>Descontos</Mytext>
               <Mytext style={styles.th}>Valor</Mytext>
+              <Mytext style={styles.th}>valor final</Mytext>
               <Mytext style={styles.th}>Ações</Mytext>
               
             </View>
@@ -340,6 +356,27 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     borderRadius: 12,
     alignSelf: 'flex-start',
+  },
+  totalContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 10,
+    padding: 15,
+    backgroundColor: '#f8f9fa',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#e9ecef',
+  },
+  totalLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#495057',
+  },
+  totalValue: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#1c7ed6',
   },
 
   MyModal: {
