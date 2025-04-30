@@ -1,84 +1,92 @@
 import React, { useState } from "react";
-
-import { View, Button, Alert, ActivityIndicator,Text, ViewStyle, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
-import MyButton from "../components/MyButtons";
-import { link } from "fs";
+import { supabase } from "../../src/utils/supabase"; // Certifique-se de que o caminho está correto
 
-interface MyuploadProps {
-  style?: ViewStyle | ViewStyle[]; 
-  setUrl(url: string): void;
-  setName?(name: string): void;//para atualizar de acordo com o nome do arquivo
-  url: string;
-}
-
-const MyUpload: React.FC<MyuploadProps> = ({ style, setUrl, setName, url  }) => {
+const MyUpload = () => {
   const [loading, setLoading] = useState(false);
-  const [alert, setAlert] = useState('');
+  const [alert, setAlert] = useState("");
 
-  const pickDocument = async () => {
+  const uploadFile = async () => {
     try {
       setLoading(true);
-      
-      // Seleciona o arquivo
       const result = await DocumentPicker.getDocumentAsync({});
-      
-      if (result.canceled || !result.assets) {
+      if (result.canceled) {
         setLoading(false);
         return;
       }
 
       const file = result.assets[0];
-      const formData = new FormData();
-      formData.append("file", {
-        uri: file.uri,
-        name: file.name,
-        type: file.mimeType,
-      } as any);
-      //(Erro de acesso a pagina) → erro causado pro conflito com banco de dados
-       //Faz o upload para File.io
-      const response = await fetch("https://file.io", {
-        method: "POST",
-        body: formData,
-      });
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}.${fileExt}`;
+      const fileUri = file.uri;
 
-      const data = await response.json();
+      // Verifique se o mimeType é definido e, se necessário, defina um valor padrão
+      const fileMimeType = file.mimeType ?? "application/octet-stream"; // valor padrão caso mimeType seja undefined
 
-      if (data.success) {
-        setUrl(data.link); // Atualiza a variável URL
-        setName? setName(file.name): ''; //atualiza o nome com o nome do arquivo escolhido
-        setAlert(`Upload Concluído! Arquivo enviado: ${data.link}`);
-      } else {
-        setAlert(`Erro no Upload Tente novamente..`);
+      // Fetch o arquivo da URI para obter um Blob
+      const response = await fetch(fileUri);
+      const fileBlob = await response.blob(); // Converte o arquivo URI para um Blob
+
+      // Fazendo upload para o Supabase
+      const { data, error } = await supabase.storage
+        .from("myuploads")
+        .upload(fileName, fileBlob, {
+          contentType: fileMimeType,
+        });
+
+      if (error) {
+        setAlert(`Erro no upload: ${error.message}`);
+        setLoading(false);
+        return;
       }
-        setAlert(`Upload Concluído! Arquivo enviado: `);
+
+      // Verificar a resposta para obter a URL pública
+      const { data: urlData } = supabase
+        .storage
+        .from("myuploads")
+        .getPublicUrl(fileName);
+
+      // Verificar se a URL foi retornada corretamente
+      if (urlData && urlData.publicUrl) {
+        setAlert(`Upload concluído! URL: ${urlData.publicUrl}`);
+      } else {
+        setAlert("Erro ao obter a URL.");
+      }
     } catch (error) {
-      setAlert(`Erro", "Não foi possível fazer o upload.`);
+      setAlert("Erro ao fazer o upload.");
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <View>
-      <MyButton title="Upload" onPress={pickDocument} button_type="round" style={styles.button_round} />
-      {loading && <ActivityIndicator size="large" color="#A020F0"/>}
-      {url && (<Text>Arquivo enviado: {url}</Text>)}
-      {alert && (<Text> {alert} </Text>)}
+    <View style={styles.container}>
+      <TouchableOpacity onPress={uploadFile} disabled={loading} style={styles.button}>
+        {loading ? (
+          <ActivityIndicator color="white" />
+        ) : (
+          <Text style={styles.text} >Upload File</Text>
+        )}
+      </TouchableOpacity>
+      {alert && <Text>{alert}</Text>}
     </View>
   );
 };
 
-const styles = StyleSheet.create ({
-    button_round: {
-    borderRadius: 20,
-    alignItems: "center",
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
     justifyContent: "center",
-    flexDirection: "row",
-    gap: 10,
-}
-
-})
+    alignItems: "center",
+  },
+  button: {
+    backgroundColor: "#813AB1",
+    padding: 10,
+    borderRadius: 15,
+  },
+  text :{color: "white"}
+});
 
 export default MyUpload;
-//versão atualiizada

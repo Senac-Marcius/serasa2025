@@ -8,7 +8,7 @@ import Mytext from '../../src/components/MyText';
 import { Myinput } from '../../src/components/MyInputs';
 import { MyTb } from '../../src/components/MyItem';
 import MyList from '../../src/components/MyList';
-import { MyModal_mobilefullscreen } from '../../src/components/MyModal';
+import { MyModal } from '../../src/components/MyModal';
 import { getCategories, toListCategorie } from '../../src/controllers/category';
 import MySelect from '../../src/components/MySelect';
 
@@ -84,6 +84,7 @@ export default function infraScreen() {
             <View style={styles.headerContainer}>
                 <Mytext>Cadastro de Produtos</Mytext>
                 <View style={styles.buttonsWrapper}>
+
                     <MyButton 
                         color='#3AC7A8'
                         style={styles.local} 
@@ -99,8 +100,13 @@ export default function infraScreen() {
                 </View>
             </View>
 
-            <MyModal_mobilefullscreen visible={visible} setVisible={setVisible}>
-                <ScrollView contentContainerStyle={styles.modalContent}>
+       
+            <MyModal 
+                style={styles.modal} 
+                visible={visible} 
+                setVisible={setVisible} 
+                title={req.id === -1 ? "Cadastrar Produto" : "Editar Produto"}
+                closeButtonTitle={'Fechar'}>
                     <Myinput 
                         placeholder="Digite o Nome"
                         value={req.name}
@@ -134,20 +140,17 @@ export default function infraScreen() {
                     />
 
                     <View style={styles.modalButtons}>
-                        <MyButton 
-                            style={styles.cancelButton} 
-                            onPress={() => setVisible(false)} 
-                            title="Cancelar"
-                        />
+                        
                         <MyButton 
                             style={styles.buttoncad} 
                             onPress={() => handleRegister()} 
                             title={req.id == -1 ? "Cadastrar" : "Atualizar"}
                         />
                     </View>
-                </ScrollView>
-            </MyModal_mobilefullscreen>
+                
+            </MyModal>
 
+            {/* LISTA DE PRODUTOS */}
             <MyList
                 style={styles.table}
                 data={products}
@@ -199,32 +202,25 @@ export default function infraScreen() {
 }
 
 const styles = StyleSheet.create({
-    modalContent: {
-        flexGrow: 1,
+    modal:{
+        display: 'flex',
+        width: 'auto',
+        height: 'auto',
         padding: 20,
-        justifyContent: 'center',
+        backgroundColor: 'white',
+        borderRadius: 20,
+        borderWidth: 4,
+        borderColor: 'purple',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
     },
     modalButtons: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: 20,
     },
-    cancelButton: {
-        fontSize: 15,
-        padding: 10,
-        backgroundColor: '#FF5252',
-        borderRadius: 100,
-        fontFamily: 'arial',
-        marginHorizontal: 5,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 2,
-        elevation: 3,
-        flex: 1,
-        marginRight: 10,
-    },
+    
     buttoncad: {
+        marginBottom: 10,
         fontSize: 15,
         padding: 10,
         backgroundColor: '#FFDB58',

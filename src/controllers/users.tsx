@@ -13,6 +13,7 @@ interface iUser {
     id: number,
 }
 
+
 async function getUserByEmail(email: string) {
     const { data: users, error } = await supabase.from("users").select().eq('email', email);
     if (error) {
@@ -181,4 +182,4 @@ async function getLoggedUserId() {
 
 //npx playwrite codagen http://localh
 
-export { setUser, iUser, deleteUserById, updateUserById, getUsers, getUserByEmail, isStudent, isEmployee, getUserById, toListUser }
+export { getLoggedUserId, setUser, iUser, deleteUserById, updateUserById, getUsers, getUserByEmail, isStudent, isEmployee, getUserById, toListUser }

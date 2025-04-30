@@ -1,5 +1,5 @@
 {
-  "name": "my-app-school4",
+  "name": "virtudemy",
   "version": "1.0.0",
   "main": "expo-router/entry",
   "scripts": {
@@ -21,7 +21,7 @@
     "expo-image-picker": "~16.0.6",
     "expo-router": "^4.0.19",
     "expo-status-bar": "~2.0.1",
-    "my-app-school4": "file:",
+    "virtudemy": "file:",
     "native-base": "^2.15.2",
     "normalize-css-color": "^1.0.2",
     "react": "^18.3.1",
