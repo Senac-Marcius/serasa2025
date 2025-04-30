@@ -67,6 +67,7 @@ export default function IndexScreen() {
         console.warn("Resposta inesperada de getProjects:", result.data);
       }
     }
+    fetchScales();
     fetchPositions();
     fetchEmployes();
     fetchProjects();
