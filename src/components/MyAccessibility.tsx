@@ -1,5 +1,6 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
+
 
  
 interface AccessButtonProps {
@@ -9,6 +10,8 @@ interface AccessButtonProps {
   textColor?: string;
   onPress: () => void;
 }
+
+const [visible, setVisible] = useState(false);
  
 const AccessButton: React.FC<AccessButtonProps> = ({
   onPress,
@@ -42,7 +45,7 @@ const MyAccess: React.FC<MyAccessProps> = ({ children, style }) => {
       {children}
      
       {/* Botão de acessibilidade com ícone */}
-      <TouchableOpacity
+      <TouchableOpacity 
         style={styles.suporteButton}
         onPress={handleSuporte}
         accessible={true}
@@ -52,6 +55,7 @@ const MyAccess: React.FC<MyAccessProps> = ({ children, style }) => {
       >
         <Text style={styles.suporteText}>Acessibilidade</Text>
       </TouchableOpacity>
+      <Text style={styles.suporteText}>Em desenvolvimento</Text>
     </View>
   );
 };

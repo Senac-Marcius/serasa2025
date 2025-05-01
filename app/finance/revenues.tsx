@@ -25,9 +25,9 @@ export default function RevenueScreen() {
     url: '',
     created_at: new Date().toISOString(),
     user_id: -1,
-    value: '',
+    value: 0,
     scholarship_status: '',
-    discount_percentage: '',
+    discount_percentage: 0,
     tipo_mensalidade: '',
     select_course: '',
 
@@ -124,9 +124,9 @@ export default function RevenueScreen() {
       url: '',
       created_at: new Date().toISOString(),
       user_id: -1,
-      value: '',
+      value: 0,
       scholarship_status: '',
-      discount_percentage: '',
+      discount_percentage: 0,
       tipo_mensalidade: '',
       select_course: '',
 
@@ -198,7 +198,7 @@ const getFilteredRevenues = () => {
       </Mytext>
 
       <MySearch
-        placeholder='Pesquise no virtudemy'
+        placeholder='Pesquise no Virtudemy'
         style={styles.searchInput}
         onChangeText={setSearchTerm}
         onPress={()=> {setSearchTerm(searchTerm)}}
@@ -212,8 +212,7 @@ const getFilteredRevenues = () => {
   
   
         <View style={styles.form}>
-
-            
+          
         
               <MySelect
               label={courses.find(c => c.key == req.select_course)?.option || 'Selecione um curso'}
@@ -224,29 +223,32 @@ const getFilteredRevenues = () => {
               caption="Cursos"
             />
 
-
-
-            <MySelect
-              label={users.find(l => l.key == req.user_id)?.option || 'Selecione um usuário'}
-              setLabel={() => {}}
-              setKey={(key) => {    setReq({ ...req, user_id: key })    }}
-              list={users}
-              caption="Usuários"
-            />
-  
-
-            <MySelect 
-              label={req.tipo_mensalidade  || 'Selecione um tipo de receita'} 
-              caption= "Tipo da mensalidade"
-              setLabel={(text) => setReq({...req, tipo_mensalidade: text})}
-              list={[
-                {key: 1, option: "Cobrança de Mensalidades "},
-                {key: 2, option: "Taxas escolares"},
-                {key: 3, option: "Negociação de débitos"},
-                {key: 4, option: "Bolsa de estudos e descontos"},
-                // ... outros tipos
-              ]}
-            />
+                <View style={styles.formGroup}>
+                  <MySelect
+                    label={users.find(l => l.key == req.user_id)?.option || 'Selecione um usuário'}
+                    setLabel={() => {}}
+                    setKey={(key) => {    setReq({ ...req, user_id: key })    }}
+                    list={users}
+                    caption="Usuários"
+                    />
+                </View>
+                
+                <View style={styles.formGroup}>
+                  <MySelect 
+                    label={req.tipo_mensalidade  || 'Selecione um tipo de receita'} 
+                    caption= "Tipo da mensalidade"
+                    setLabel={(text) => setReq({...req, tipo_mensalidade: text})}
+                    list={[
+                      {key: 1, option: "Cobrança de Mensalidades "},
+                      {key: 2, option: "Taxas escolares"},
+                      {key: 3, option: "Negociação de débitos"},
+                      {key: 4, option: "Bolsa de estudos e descontos"},
+                      // ... outros tipos
+                    ]}
+                      />
+                </View>
+            </View>
+            {/* Linha 2: Status da Bolsa, Desconto, Valor */}
             {/* Campo de Status da Bolsa */}
             <MySelect 
               label={ req.scholarship_status || 'Selecione um Status da Bolsa'} 
@@ -258,33 +260,23 @@ const getFilteredRevenues = () => {
               ]}
             />
             
+            {/* Campo de Desconto */}
+            <Myinput
+              value={req.discount_percentage}
+              onChangeText={(text) => setReq({ ...req, discount_percentage: text })}
+              iconName='percent'
+              placeholder='Digite o desconto em %'
+              label='Desconto'
+            />
+
             {/* Campo de Valor */}
-    <Myinput
-      value={req.value}
-      onChangeText={(text) => setReq({ ...req, value: text })}
-      iconName='payments'
-      placeholder='Digite o valor R$0,00'
-      label='Valor'
-    />
-
-    {/* Campo de Desconto */}
-    <Myinput
-      value={req.discount_percentage}
-      onChangeText={(text) => setReq({ ...req, discount_percentage: text })}
-      iconName='percent'
-      placeholder='Digite o desconto em %'
-      label='Desconto'
-    />
-
-    {/* Novo campo: Total com desconto (somente leitura) */}
-    <View style={styles.totalContainer}>
-      <Mytext style={styles.totalLabel}>Total com desconto:</Mytext>
-      <Mytext style={styles.totalValue}>
-        {calculateTotal(req.value, req.discount_percentage)}
-      </Mytext>
-    </View>
-
-
+            <Myinput
+              value={req.value}
+              onChangeText={(text) => setReq({ ...req, value: text })}
+              iconName='payments'
+              placeholder='Digite o valor R$0,00'
+              label='Valor'
+            />
 
             {/* Campo de URL */}
             <Myinput
@@ -335,7 +327,8 @@ const getFilteredRevenues = () => {
               <Mytext style={styles.td}>{item.description}</Mytext>    
               <Mytext style={styles.td}>{item.discount_percentage}%</Mytext>
               <Mytext style={styles.td}>R${item.value}</Mytext> 
-          
+              
+              
             </MyTb>
           )}
           header={(
@@ -349,7 +342,6 @@ const getFilteredRevenues = () => {
               
               <Mytext style={styles.th}>Descontos</Mytext>
               <Mytext style={styles.th}>Valor</Mytext>
-              <Mytext style={styles.th}>Total</Mytext> {/* Nova coluna */}
               <Mytext style={styles.th}>Ações</Mytext>
               
             </View>
@@ -373,37 +365,9 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
 
-
-  
-    totalContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginVertical: 10,
-      padding: 15,
-      backgroundColor: '#f8f9fa',
-      borderRadius: 8,
-      borderWidth: 1,
-      borderColor: '#e9ecef',
-    },
-    totalLabel: {
-      fontSize: 16,
-      fontWeight: '600',
-      color: '#495057',
-    },
-    totalValue: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      color: '#1c7ed6',
-    },
-
-
-
-
-
   MyModal: {
     display: 'flex',
-    width: 400,
+    width: 800,
     height: 1000,
     padding: 20,
     backgroundColor: 'white',
@@ -412,6 +376,7 @@ const styles = StyleSheet.create({
     borderColor: 'purple',
     alignItems: 'center',
     justifyContent: 'flex-end',
+  
 },
 
   row:{
@@ -485,7 +450,15 @@ const styles = StyleSheet.create({
     color: '#444',
     textAlign: 'center',
   },
+  formRow: {
+    flexDirection: 'row', // Alinha os itens horizontalmente
+    gap: 10, // Espaçamento entre os campos (React Native >= 0.71)
+    marginBottom: 10, // Espaçamento entre as linhas
+  },
 
+  formGroup: {
+    flex: 1, // Cada campo ocupa espaço igual na linha
+  },
 
   
 });

@@ -8,10 +8,24 @@ interface MyModalprops {
     style?: ViewStyle | ViewStyle[];
     visible: boolean;
     setVisible(visible: boolean): void
-    title:string;
+    title?:string;
     closeButtonTitle?: string;
+    tipe?:Button_type;
+    buttonStyle?:ViewStyle;
+    isButton?:boolean
+    handleClosedButton?: () => void
 
 }
+type Button_type =
+  | "default"
+  | "round"
+  | "circle"
+  | "rect"
+  | "capsule"
+  | "loading"
+  | "edit"
+  | "delete";
+
 
 
 //Para utilizar qualquer modal deve ser declarado em seu script:
@@ -32,24 +46,33 @@ interface MyModalprops {
 
 
 
-const MyModal: React.FC<MyModalprops> = ({ children, style, visible, setVisible,title, closeButtonTitle }) => { //
+const MyModal: React.FC<MyModalprops> = ({ children, style, visible, setVisible,title, closeButtonTitle, tipe,isButton=true,buttonStyle,handleClosedButton }) => { //
     function onClose() {
         setVisible(false)
+
     };
+
+    console.log(isButton)
     return (
         <View >
-            <MyButton
+           {isButton && ( <MyButton 
                 onPress={() => { setVisible(true) }}
+                button_type = {tipe}
+                style={buttonStyle? buttonStyle: styles.button_capsule }
                 title= {title}
-                 />
+                 />)}
 
             {visible && (<Modal transparent={true} visible={visible} animationType="fade"   >
                 <View style={styles.background} >
                     <View style={[styles.MyModal, style]}  >
                         {children}
-                        <MyButton onPress={onClose}
-                             title ={closeButtonTitle || "voltar"}
+                        <MyButton onPress={() =>{ 
+                            onClose(); 
+                            handleClosedButton && handleClosedButton()
+                        }}
+                            title ={closeButtonTitle || "voltar"}
                             style={styles.button_round}
+
                         />
 
                     </View>
@@ -65,6 +88,7 @@ const styles = StyleSheet.create({
     button_capsule: {
         borderRadius: 50,
         backgroundColor: "#813AB1",
+        margin:"auto",
         alignItems: "center",
         justifyContent: "center",
       },
@@ -72,6 +96,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#813AB1",
         width: 100,
         padding: 10,
+        margin:"auto",
         borderRadius: 20,
         alignItems: "center",
         justifyContent: "center",
