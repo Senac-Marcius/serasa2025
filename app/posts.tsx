@@ -136,7 +136,7 @@ export default function postScreen() {
 
     return (
 
-        <MyView router={router} childrenTeste={  <MyButton title='Teste estou flutuando' width={150} style={{position:'absolute', bottom:0}}/>} >
+        <MyView router={router}  >
           
 
             <MyModal style={styles.MyModal}
