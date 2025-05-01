@@ -1,77 +1,61 @@
 import React, { useEffect, useState } from 'react';
-import {View, Text, StyleSheet, ScrollView, Pressable, Dimensions,} from 'react-native';
-import { Ionicons,  MaterialCommunityIcons } from '@expo/vector-icons';
+import {
+  View, Text, StyleSheet, ScrollView, Pressable,
+  Dimensions, Modal
+} from 'react-native';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { getProjects } from '../../src/controllers/projects';
 import { getEmployees } from '../../src/controllers/employees';
-import { getCargo} from '../../src/controllers/positions';
+import { getCargo } from '../../src/controllers/positions';
 import { getScale } from '../../src/controllers/scales';
 import MyView from '../../src/components/MyView';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getUserById } from '../../src/controllers/users';
 
-
-interface Evento {
-  id: number;
-  nome: string;
-  data: string;
-}
-
-const menuItems = [
-  { label: 'Funcionários', icon: <Ionicons name="people-circle-outline" size={20} color="#555" />, route: 'adminsitration/employees?view=table' },
-  { label: 'Cargos', icon: <Ionicons name="book-outline" size={20} color="#555" />, route: 'adminsitration/positions' },
-  { label: 'Escala', icon: <Ionicons name="library-outline" size={20} color="#555" />, route: 'adminsitration/scales' },
-  { label: 'Projetos', icon: <Ionicons name="calendar-outline" size={20} color="#555" />, route: 'adminsitration/projects' },
-  { label: 'Banco de Taletos', icon: <Ionicons name="document-text-outline" size={20} color="#555" />, route: 'adminsitration/employees?view=form' },
-  { label: 'Vagas', icon: <MaterialCommunityIcons name="clipboard-text-outline" size={20} color="#555" />, route: 'adminsitration/positions' },
-];
-
-
-
-export default function IndexScreen() {
+export default function AdminDashboard() {
   const [projectCount, setProjectCount] = useState(0);
   const [employeesCount, setEmployeesCount] = useState(0);
-  const [positionsCount , setPositionsCount] = useState(0);
+  const [positionsCount, setPositionsCount] = useState(0);
   const [scalesCount, setScalesCount] = useState(0);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [selectedDepartment, setSelectedDepartment] = useState("Todos");
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+
+  const departments = ['Todos', 'RH', 'TI', 'Financeiro', 'Operações'];
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
-    async function fetchProjects() {
-      const result = await getProjects({});
-      if (result.status && Array.isArray(result.data)) {
-        setProjectCount(result.data.length);
-      } else {
-        setProjectCount(0);
+    async function fetchData() {
+      const [projects, employees, cargos, escalas] = await Promise.all([
+        getProjects({}),
+        getEmployees({}),
+        getCargo({}),
+        getScale({}),
+      ]);
+  
+      setProjectCount(Array.isArray(projects.data) ? projects.data.length : 0);
+      setEmployeesCount(Array.isArray(employees.data) ? employees.data.length : 0);
+      setPositionsCount(Array.isArray(cargos.data) ? cargos.data.length : 0);
+      setScalesCount(Array.isArray(escalas.data) ? escalas.data.length : 0);
+  
+      // Pega o userId salvo
+      const userId = await AsyncStorage.getItem('userId');
+      if (userId) {
+        const userResponse = await getUserById(Number(userId));
+        if (userResponse.status && userResponse.data) {
+          setUserName(userResponse.data.name);
+          setUserEmail(userResponse.data.email);
+        }
       }
     }
-    async function fetchEmployes() {
-      const result = await getEmployees({});
-      if (result.status && Array.isArray(result.data)) {
-        setEmployeesCount(result.data.length);
-      } else {
-        setEmployeesCount(0);
-      }  
-    }
-    async function fetchPositions() {
-      const result = await getCargo({});
-      if (result.status && Array.isArray(result.data)) {
-        setPositionsCount(result.data.length);
-      } else {
-        setPositionsCount(0);
-        console.warn("Resposta inesperada de getProjects:", result.data);
-      }
-    }
-    async function fetchScales() {
-      const result = await getScale({});
-      if (result.status && Array.isArray(result.data)) {
-        setScalesCount(result.data.length);
-      } else {
-        setScalesCount(0);
-        console.warn("Resposta inesperada de getProjects:", result.data);
-      }
-    }
-    fetchScales();
-    fetchPositions();
-    fetchEmployes();
-    fetchProjects();
+  
+    fetchData();
   }, []);
+  
   const cards = [
     {
       title: 'Meus Dados',
@@ -94,61 +78,77 @@ export default function IndexScreen() {
     },
     {
       title: 'Funcionários',
-      icon: <Ionicons name="reader" size={30} color="#6C63FF" />,
+      icon: <Ionicons name="people" size={30} color="#6C63FF" />,
       route: 'adminsitration/employees',
       bgColor: '#F3F1FE',
       value: employeesCount,
     },
     {
       title: 'Cargos',
-      icon: <Ionicons name="calendar" size={30} color="#2EC4B6" />,
+      icon: <Ionicons name="briefcase" size={30} color="#2EC4B6" />,
       route: 'adminsitration/positions',
       bgColor: '#E5FBF8',
       value: positionsCount,
     },
     {
       title: 'Escalas',
-      icon: <Ionicons name="document-text" size={30} color="#FF5C8A" />,
+      icon: <MaterialCommunityIcons name="timetable" size={30} color="#FF5C8A" />,
       route: 'adminsitration/scales',
       bgColor: '#FFEAF0',
       value: scalesCount,
     },
   ];
-  const router = useRouter();
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   return (
     <View style={styles.container}>
-      {/* Sidebar */}
-      <View style={styles.sidebar}>
-        <View style={styles.logoContainer}>
-          <Text style={styles.logoTitle}>Administração</Text>
-        </View>
-
-        {menuItems.map((item, index) => {
-          const isHovered = hoveredItem === item.route;
-          return (
-            <Pressable
-              key={index}
-              onHoverIn={() => setHoveredItem(item.route)}
-              onHoverOut={() => setHoveredItem(null)}
-              onPress={() => router.push(item.route)}
-              style={[styles.menuItem, isHovered && styles.activeItem]}
-            >
-              <View style={styles.icon}>{item.icon}</View>
-              <Text style={[styles.menuText, isHovered && styles.activeText]}>
-                {item.label}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </View>
-
-      {/* Conteúdo principal */}
       <MyView style={styles.mainContent}>
         <ScrollView contentContainerStyle={styles.content}>
-          <Text style={styles.mainTitle}>Painel da Administração </Text>
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.userInfo}>
+              <Ionicons name="person-circle-outline" size={40} color="#3AC7A8" />
+              <View style={{ marginLeft: 10 }}>
+              <Text style={styles.userName}>Olá, {userName}</Text>
+              <Text style={styles.userRole}>{userEmail}</Text>
+              </View>
+            </View>
+            <Pressable
+              style={styles.logoutButton}
+              onPress={() => setShowLogoutModal(true)}
+            >
+              <Ionicons name="log-out-outline" size={24} color="#fff" />
+              <Text style={styles.logoutText}>Sair</Text>
+            </Pressable>
+          </View>
 
+          {/* Dropdown Filtro */}
+          <View style={styles.dropdownContainer}>
+            <Pressable
+              onPress={() => setDropdownVisible(!dropdownVisible)}
+              style={styles.dropdownButton}
+            >
+              <Text style={styles.dropdownText}>{selectedDepartment}</Text>
+              <Ionicons name={dropdownVisible ? 'chevron-up' : 'chevron-down'} size={20} color="#555" />
+            </Pressable>
+            {dropdownVisible && (
+              <View style={styles.dropdownOptions}>
+                {departments.map((dept, index) => (
+                  <Pressable
+                    key={index}
+                    onPress={() => {
+                      setSelectedDepartment(dept);
+                      setDropdownVisible(false);
+                    }}
+                    style={styles.dropdownOption}
+                  >
+                    <Text style={styles.dropdownOptionText}>{dept}</Text>
+                  </Pressable>
+                ))}
+              </View>
+            )}
+          </View>
+
+          <Text style={styles.mainTitle}>Painel de Administração</Text>
           <View style={styles.cardArea}>
             {cards.map((card, index) => (
               <Pressable
@@ -158,12 +158,37 @@ export default function IndexScreen() {
               >
                 {card.icon}
                 <Text style={styles.cardTitle}>{card.title}</Text>
-                <Text style={styles.cardNumber}>{card.value}</Text>
+                {card.value !== undefined && (
+                  <Text style={styles.cardNumber}>{card.value}</Text>
+                )}
               </Pressable>
             ))}
           </View>
         </ScrollView>
       </MyView>
+
+      {/* Modal de Confirmação de Logout */}
+      <Modal visible={showLogoutModal} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={{ fontSize: 16, marginBottom: 20 }}>Deseja realmente sair?</Text>
+            <View style={styles.modalButtons}>
+              <Pressable onPress={() => setShowLogoutModal(false)} style={styles.cancelButton}>
+                <Text style={styles.cancelText}>Cancelar</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  setShowLogoutModal(false);
+                  router.push('/');
+                }}
+                style={styles.saveButton}
+              >
+                <Text style={styles.saveText}>Sair</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -171,47 +196,45 @@ export default function IndexScreen() {
 const isLarge = Dimensions.get('window').width > 600;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, flexDirection: 'row', backgroundColor: '#F2F3F5' },
-  sidebar: {
-    width: 180,
-    backgroundColor: '#fff',
-    paddingTop: 12,
-    paddingHorizontal: 12,
-    borderRightWidth: 1,
-    borderRightColor: '#eee',
-  },
+  container: { flex: 1, backgroundColor: '#F2F3F5' },
   mainContent: { flex: 1 },
-  logoContainer: { alignItems: 'center', marginBottom: 24 },
-  logoTitle: { fontSize: 18, fontWeight: 'bold', color: '#3AC7A8', marginTop: 6 },
-  logoSubtitle: { fontSize: 11, color: '#aaa' },
-  menuItem: {
-    flexDirection: 'row', alignItems: 'center', marginVertical: 8,
-    paddingVertical: 6, paddingHorizontal: 8, borderRadius: 8,
+  content: { flexGrow: 1, padding: 24, backgroundColor: '#F2F3F5', alignItems: 'center' },
+  header: {
+    width: '100%', flexDirection: 'row', justifyContent: 'space-between',
+    alignItems: 'center', marginBottom: 24,
   },
-  icon: { marginRight: 10 },
-  menuText: { fontSize: 13, color: '#555' },
-  activeItem: { backgroundColor: '#E6F9F5', borderLeftWidth: 4, borderLeftColor: '#3AC7A8' },
-  activeText: { color: '#3AC7A8', fontWeight: '600' },
-  content: { flexGrow: 1, padding: 24, backgroundColor: '#F2F3F5' },
-  mainTitle: { fontSize: 22, fontWeight: 'bold', color: '#333', marginBottom: 20 },
+  userInfo: { flexDirection: 'row', alignItems: 'center' },
+  userName: { fontSize: 16, fontWeight: 'bold', color: '#333' },
+  userRole: { fontSize: 12, color: '#888' },
+  logoutButton: {
+    flexDirection: 'row', alignItems: 'center', backgroundColor: '#3AC7A8',
+    paddingVertical: 6, paddingHorizontal: 12, borderRadius: 8,
+  },
+  logoutText: { color: '#fff', marginLeft: 6, fontWeight: 'bold' },
+  dropdownContainer: { width: '100%', marginBottom: 20 },
+  dropdownButton: {
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    padding: 12, backgroundColor: '#fff', borderRadius: 8, borderWidth: 1,
+    borderColor: '#ddd',
+  },
+  dropdownText: { fontSize: 14, color: '#333' },
+  dropdownOptions: {
+    marginTop: 4, backgroundColor: '#fff', borderRadius: 8, borderWidth: 1,
+    borderColor: '#ddd',
+  },
+  dropdownOption: { padding: 12 },
+  dropdownOptionText: { fontSize: 14, color: '#333' },
+  mainTitle: { fontSize: 26, fontWeight: 'bold', color: '#333', marginBottom: 30 },
   cardArea: {
-    flexDirection: 'row', gap: 20, flexWrap: 'wrap',
-    justifyContent: 'flex-start', marginBottom: 20,
+    flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 20,
   },
   card: {
-    padding: 24, borderRadius: 12, elevation: 2, width: isLarge ? 250 : '100%',
-    shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 10,
+    padding: 24, borderRadius: 12, elevation: 2, width: isLarge ? 220 : '100%',
+    maxWidth: 240, shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 10,
     alignItems: 'center', justifyContent: 'center', gap: 8,
   },
-  cardTitle: { fontSize: 16, fontWeight: '600', color: '#333' },
+  cardTitle: { fontSize: 16, fontWeight: '600', color: '#333', textAlign: 'center' },
   cardNumber: { fontSize: 22, fontWeight: 'bold', color: '#222' },
-  eventsTitle: { fontSize: 17, fontWeight: 'bold', color: '#3AC7A8', marginBottom: 12 },
-  eventItem: {
-    backgroundColor: '#fff', padding: 16, borderRadius: 10, marginBottom: 10,
-    flexDirection: 'row', alignItems: 'center', elevation: 1,
-  },
-  eventName: { fontSize: 14, fontWeight: 'bold', color: '#333' },
-  eventDate: { fontSize: 12, color: '#666' },
   modalOverlay: {
     flex: 1, backgroundColor: 'rgba(0,0,0,0.3)', justifyContent: 'center', alignItems: 'center',
   },
@@ -219,13 +242,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff', borderRadius: 10, padding: 20,
     width: '80%', elevation: 5,
   },
-  input: {
-    borderBottomWidth: 1, borderBottomColor: '#ccc', marginBottom: 16,
-    paddingVertical: 6, fontSize: 16,
-  },
   modalButtons: { flexDirection: 'row', justifyContent: 'flex-end', gap: 12 },
   cancelButton: { paddingVertical: 8, paddingHorizontal: 16 },
-  saveButton: { paddingVertical: 8, paddingHorizontal: 16, backgroundColor: '#6A1B9A', borderRadius: 6 },
+  saveButton: {
+    paddingVertical: 8, paddingHorizontal: 16,
+    backgroundColor: '#6A1B9A', borderRadius: 6,
+  },
   cancelText: { color: '#777' },
   saveText: { color: '#fff', fontWeight: 'bold' },
 });

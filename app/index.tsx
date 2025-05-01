@@ -25,7 +25,11 @@ export default function HomeScreen() {
             try {
                 await AsyncStorage.setItem('userId', result.data.id.toString());
                 alert('Login bem-sucedido!');
-                router.push('/home');
+                var isE = isEmployee()
+                if(await isE == true){
+                    router.push('/adminsitration')
+                }
+                //router.push('/home');
             } catch (error) {
                 console.error('Erro ao armazenar o id do usuário:', error);
                 alert('Erro ao salvar o id do usuário.');
