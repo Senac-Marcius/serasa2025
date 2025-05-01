@@ -25,6 +25,11 @@ export default function HomeScreen() {
             try {
                 await AsyncStorage.setItem('userId', result.data.id.toString());
                 alert('Login bem-sucedido!');
+
+                //buscar todos os students verificar pelo user_id se ele exite na tabela estudante se existir da permisão de estudante
+
+
+                //buscar todo employes se tiver user_id na emploes vai ter que puxar o cargo e de acordo com o cargo vai mandar para a tela certa
                 router.push('/home');
             } catch (error) {
                 console.error('Erro ao armazenar o id do usuário:', error);

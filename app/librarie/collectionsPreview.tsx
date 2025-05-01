@@ -2,17 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native';
 import { useRouter, Link } from 'expo-router';
 import { iCollection } from '../../src/controllers/collections';
-import 'bootstrap/dist/css/bootstrap.css';
 import Carousel from 'react-bootstrap/Carousel';
 import MySearch from '../../src/components/MySearch';
 import { getItems, iItem } from '../../src/controllers/librarie';
 import { supabase } from '../../src/utils/supabase';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import MyMenu from '../../src/components/MyMenu';
-import MySelect from '../../src/components/MySelect';
-import MyFilter from '../../src/components/MyFilter';
 import Select from './select';
-import MyTopbar from '../../src/components/MyTopbar';
+import { isStudent, isEmployee } from '../../src/controllers/users'
+
 
 
 
@@ -80,7 +78,7 @@ export default function CollectionPreviewScreen() {
         year: string,
         responsible: string,
         edition: string
-    
+
     ) {
 
 
@@ -88,11 +86,11 @@ export default function CollectionPreviewScreen() {
             .from('items_librarie')
             .select('*');
 
-        if (search){
+        if (search) {
             query = query.or(
-              `title.ilike.%${search}%,summary.ilike.%${search}%,subject.ilike.%${search}%,responsible.ilike.%${search}%`
+                `title.ilike.%${search}%,summary.ilike.%${search}%,subject.ilike.%${search}%,responsible.ilike.%${search}%`
             );
-          }
+        }
         if (selectFilter && selectFilter !== 'Todos') query = query.eq('categoria', selectFilter);
         if (subject !== 'Todos') query = query.eq('subject', subject);
         if (year !== 'Todos') query = query.eq('typology', year);
@@ -107,6 +105,15 @@ export default function CollectionPreviewScreen() {
 
         return data || [];
     }
+    const [isEmployeeUser, setIsEmployeeUser] = useState(false);
+
+    useEffect(() => {
+        const checkRoles = async () => {
+            const employeeResult = await isEmployee();
+            setIsEmployeeUser(employeeResult ?? false); 
+        };
+        checkRoles();
+    }, []);
 
     return (
         <ScrollView>
@@ -129,11 +136,14 @@ export default function CollectionPreviewScreen() {
                                 <MaterialCommunityIcons name="book-open-variant" size={20} color="#750097" />
                                 <Text style={styles.buttonText}>Meus empréstimos</Text>
                             </TouchableOpacity>
-
+                          
+                            {isEmployeeUser && (//exibe apenas para funcionarios
                             <TouchableOpacity style={styles.button_round} onPress={() => router.push({ pathname: 'librarie/pageEmployee' })}>
                                 <MaterialCommunityIcons name="account-hard-hat" size={20} color="#750097" />
                                 <Text style={styles.buttonText}>Funcionários</Text>
                             </TouchableOpacity>
+                        )}
+
                             <TouchableOpacity style={styles.avatarButton}>
                                 <Image source={{ uri: 'https://i.pravatar.cc/150?img=1' }} style={styles.avatar} />
                             </TouchableOpacity>

@@ -114,6 +114,7 @@ function editLevels(levels: iLevels) {
 
                 <MyList
                     data={levels}
+                    style={styles.listContainer}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) =>(
                        <MyItem
@@ -121,10 +122,10 @@ function editLevels(levels: iLevels) {
                             onDel={() => {deleteLevels(item.id)}}
                         >
 
-                           <Mytext> Nome: {item.name}</Mytext> {/* alex */}
-                           <Mytext> Descrição: {item.description}</Mytext>
-                           <Mytext> Cor: {item.color}</Mytext>
-                           <Mytext> UserId: {item.userId}</Mytext>
+                           <Text > Nome: {item.name}</Text> {/* alex */}
+                           <Text > Descrição: {item.description}</Text>
+                           <Text > Cor: {item.color}</Text>
+                           <Text > UserId: {item.userId}</Text>
                            
     {/*
     <View style={styles.buttonsContainer}>
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
     form: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#F2F2F2',
+        backgroundColor: '#F5EFFB',
         borderRadius: 10,
         shadowColor: '#000',
         shadowOpacity: 0.1,
@@ -178,13 +179,13 @@ const styles = StyleSheet.create({
         minWidth: '45%',
 
 },
-
+//muda as cores de fundo no backgroundColor e shadowColor
     listContainer: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#E8F5E9',
+        backgroundColor: '#D8CEF6',
         borderRadius: 10,
-        shadowColor: '#000',
+        shadowColor: '#F5EFFB',
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
 
     input: {
         borderWidth: 1,
-        borderColor: '#ccc',
+        borderColor: '#E2A9F3',
         borderRadius: 5,
         padding: 10,
         marginBottom: 10,
@@ -219,26 +220,26 @@ const styles = StyleSheet.create({
     postItem: {
         padding: 10,
         marginVertical: 5,
-        backgroundColor: '#f8f8f8',
+        backgroundColor: '#E2A9F3',
         borderRadius: 5,
 
 },
 
     postText: {
-        fontSize: 16,
+        fontSize: 12,
         fontWeight: 'bold',
 
 },
 
     postUrl: {
         fontSize: 14,
-        color: '#007BFF',
+        color: '#E2A9F3',
         marginBottom: 5,
 
 },
 
     buttonText:{
-        color:'#000000',
+        color:'#E2A9F3',
         fontWeight: 'bold'
 
 },
@@ -251,7 +252,7 @@ const styles = StyleSheet.create({
 
 },
 
-    editButton:{ backgroundColor:'#FFFF00',
+    editButton:{ backgroundColor:'#E2A9F3',
         padding: 10,
         borderRadius: 5,
         alignItems: 'center',
@@ -259,7 +260,7 @@ const styles = StyleSheet.create({
 
 },
 
-    delButton:{ backgroundColor:'#f44336',
+    delButton:{ backgroundColor:'#E2A9F3',
         padding: 10,
         borderRadius: 5,
         alignItems:'center',
@@ -268,13 +269,13 @@ const styles = StyleSheet.create({
 },
 
     card: {
-        backgroundColor: '#FFF',
+        backgroundColor: '#E2A9F3',
         padding: 10,
         borderRadius: 5,
         marginBottom: 10,
         borderLeftWidth: 5,
-        borderLeftColor: '#DF01A5',
-        shadowColor: '#000',
+        borderLeftColor: '#E2A9F3',
+        shadowColor: '#E2A9F3',
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 2 },
         shadowRadius: 3,
@@ -283,13 +284,14 @@ const styles = StyleSheet.create({
 
       fundo: {
         height: 40,
-        borderColor: '#CCC',
+        borderColor: '#E2A9F3',
         borderWidth: 1,
         borderRadius: 5,
         paddingHorizontal: 10,
         marginBottom: 10,
-        backgroundColor: '#FFF',
+        backgroundColor: '#E2A9F3',
 
 },
+
 
 });
