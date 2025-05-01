@@ -1,10 +1,10 @@
 /*Como Usar:
-            <MyFilter
-                style={styles.container}
-                itens={['filtro1', 'filtro2']}
-                onSend={(filter) => console.log('Filtro aplicado:', filter)}
-                onPress={(item) => console.log('Filtro pressionado:', item)}
-                />
+    <MyFilter
+        style={styles.container}
+        itens={['filtro1', 'filtro2']}
+        onSend={(filter) => console.log('Filtro aplicado:', filter)}
+        onPress={(item) => console.log('Filtro pressionado:', item)}
+        />
 */
 
 import React, { useState } from "react";

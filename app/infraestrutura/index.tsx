@@ -8,7 +8,7 @@ import Mytext from '../../src/components/MyText';
 import { Myinput } from '../../src/components/MyInputs';
 import { MyTb } from '../../src/components/MyItem';
 import MyList from '../../src/components/MyList';
-import { MyModal_mobilefullscreen } from '../../src/components/MyModal';
+import { MyModal } from '../../src/components/MyModal';
 import { getCategories, toListCategorie } from '../../src/controllers/category';
 import MySelect from '../../src/components/MySelect';
 
@@ -21,10 +21,11 @@ export default function infraScreen() {
         create_at: new Date().toISOString(),
         category_id: -1
     });
-    
+
     const [products, setProducts] = useState<iProduct[]>([]);
     const [cats, setCats] = useState<any[]>([]);
     const [visible, setVisible] = useState(false);
+    
     const router = useRouter();
 
     useEffect(() => {
@@ -42,7 +43,7 @@ export default function infraScreen() {
             }
         })();
     }, []);
-       
+
     async function handleRegister() {
         if (req.id == -1) {
             const newid = products.length ? products[products.length - 1].id + 1 : 0;
@@ -84,70 +85,92 @@ export default function infraScreen() {
             <View style={styles.headerContainer}>
                 <Mytext>Cadastro de Produtos</Mytext>
                 <View style={styles.buttonsWrapper}>
-                    <MyButton 
+
+                    <MyButton
                         color='#3AC7A8'
-                        style={styles.local} 
-                        onPress={() => router.push('../infraestrutura/locals')} 
+                        style={styles.local}
+                        onPress={() => router.push('../infraestrutura/locals')}
                         title="Locais"
                     />
-                    <MyButton 
+                    <MyButton
                         color='#3AC7A8'
-                        style={styles.category} 
-                        onPress={() => router.push('../infraestrutura/categories')} 
+                        style={styles.category}
+                        onPress={() => router.push('../infraestrutura/categories')}
                         title="Categorias"
                     />
                 </View>
             </View>
 
-            <MyModal_mobilefullscreen visible={visible} setVisible={setVisible}>
-                <ScrollView contentContainerStyle={styles.modalContent}>
-                    <Myinput 
-                        placeholder="Digite o Nome"
-                        value={req.name}
-                        onChangeText={(text) => setReq({ ...req, name: text })}
-                        label="Produto"
-                        iconName='storefront' 
-                    />
-            
-                    <Myinput 
-                        placeholder="Descrição"
-                        value={req.description}
-                        onChangeText={(text) => setReq({ ...req, description: text })}
-                        label='Descrição'
-                        iconName='description' 
-                    />
 
-                    <Myinput 
-                        placeholder="Quantidade"
-                        value={String(req.amount)}
-                        onChangeText={(text) => setReq({ ...req, amount: Number(text) })}
-                        label='Quantidade'
-                        iconName='123' 
+            <MyModal
+                style={styles.modal}
+                visible={visible}
+                setVisible={setVisible}
+                closeButtonTitle={'Fechar'}
+                handleClosedButton={() => {
+                    
+                    setReq({
+                        description: '',
+                        name: '',
+                        amount: 0,
+                        id: -1,
+                        create_at: new Date().toISOString(),
+                        category_id: -1
+                    })
+                }}
+
+                title={req.id === -1 ? "Cadastrar Produto" : "Editar Produto"}
+                
+                buttonStyle={{
+                    width:150,
+                    marginTop: 10,
+                    marginBottom: 10,
+                }}
+            >
+                <Myinput
+                    placeholder="Digite o Nome"
+                    value={req.name}
+                    onChangeText={(text) => setReq({ ...req, name: text })}
+                    label="Produto"
+                    iconName='storefront'
+                />
+
+                <Myinput
+                    placeholder="Descrição"
+                    value={req.description}
+                    onChangeText={(text) => setReq({ ...req, description: text })}
+                    label='Descrição'
+                    iconName='description'
+                />
+
+                <Myinput
+                    placeholder="Quantidade"
+                    value={String(req.amount)}
+                    onChangeText={(text) => setReq({ ...req, amount: Number(text) })}
+                    label='Quantidade'
+                    iconName='123'
+                />
+
+                <MySelect
+                    caption="Selecione uma categoria"
+                    label={cats.find(c => c.key == req.category_id)?.option || 'Categorias'}
+                    list={cats}
+                    setLabel={() => { }}
+                    setKey={(key) => { setReq({ ...req, category_id: key }) }}
+                />
+
+                <View style={styles.modalButtons}>
+
+                    <MyButton
+                        style={styles.buttoncad}
+                        onPress={() => handleRegister()}
+                        title={req.id == -1 ? "Cadastrar" : "Atualizar"}
                     />
+                </View>
 
-                    <MySelect
-                        caption="Selecione uma categoria"
-                        label={cats.find(c => c.key == req.category_id)?.option || 'Categorias'}
-                        list={cats}
-                        setLabel={() => {}}
-                        setKey={(key) => { setReq({ ...req, category_id: key }) }}
-                    />
+            </MyModal>
 
-                    <View style={styles.modalButtons}>
-                        <MyButton 
-                            style={styles.cancelButton} 
-                            onPress={() => setVisible(false)} 
-                            title="Cancelar"
-                        />
-                        <MyButton 
-                            style={styles.buttoncad} 
-                            onPress={() => handleRegister()} 
-                            title={req.id == -1 ? "Cadastrar" : "Atualizar"}
-                        />
-                    </View>
-                </ScrollView>
-            </MyModal_mobilefullscreen>
-
+            {/* LISTA DE PRODUTOS */}
             <MyList
                 style={styles.table}
                 data={products}
@@ -160,24 +183,24 @@ export default function infraScreen() {
                         <Mytext style={styles.td}>{cats.find(c => c.key == item.category_id)?.option || 'Indefinido'}</Mytext>
                         <Mytext style={styles.td}>{new Date(item.create_at).toLocaleString()}</Mytext>
                         <View style={styles.actionsContainer}>
-                            <MyButton 
+                            <MyButton
                                 color='#3AC7A8'
-                                style={styles.edit} 
-                                onPress={() => editProduct(item.id)} 
+                                style={styles.edit}
+                                onPress={() => editProduct(item.id)}
                                 title="Editar"
                             />
-                            <MyButton  
+                            <MyButton
                                 color='#BC544B'
-                                style={styles.delete} 
+                                style={styles.delete}
                                 onPress={async () => {
                                     await deleteProduct(item.id);
                                     dellProduct(item.id);
-                                }} 
+                                }}
                                 title="Excluir"
                             />
-                            <MyButton 
-                                style={styles.add} 
-                                onPress={() => router.push('../infraestrutura/itens')} 
+                            <MyButton
+                                style={styles.add}
+                                onPress={() => router.push('../infraestrutura/itens')}
                                 title="Cadastrar Item"
                             />
                         </View>
@@ -199,32 +222,26 @@ export default function infraScreen() {
 }
 
 const styles = StyleSheet.create({
-    modalContent: {
-        flexGrow: 1,
+    modal: {
+        margin: 'auto',
+        display: 'flex',
+        width: 'auto',
+        height: 'auto',
         padding: 20,
-        justifyContent: 'center',
+        backgroundColor: 'white',
+        borderRadius: 20,
+        borderWidth: 4,
+        borderColor: 'purple',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
     },
     modalButtons: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: 20,
     },
-    cancelButton: {
-        fontSize: 15,
-        padding: 10,
-        backgroundColor: '#FF5252',
-        borderRadius: 100,
-        fontFamily: 'arial',
-        marginHorizontal: 5,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 2,
-        elevation: 3,
-        flex: 1,
-        marginRight: 10,
-    },
+
     buttoncad: {
+        marginBottom: 10,
         fontSize: 15,
         padding: 10,
         backgroundColor: '#FFDB58',
