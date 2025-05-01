@@ -24,9 +24,9 @@ const MyView: React.FC<MySearchProps> = ({ children, style, title, router }) => 
 
       {/* Conteúdo da tela */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {children}
+        
       </ScrollView>
-
+      {children}
       {/* Botão de Acessibilidade */}
       <MyAccessibility style={styles.accessibilityButton}>
         <Text style={{ fontSize: 16, marginBottom: 8 }}>Acessibilidade ativada!</Text>
