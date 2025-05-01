@@ -8,129 +8,115 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 
 
 interface MySelectProps {
+  
+    caption?: string;
     label: string;
     list: {key:any, option:string}[]
     setLabel(item:string):void;
     setKey?(key:any):void;
 }
 
-interface MyTextAreaProps {
-  value: string;
-  onChangeText: (text: string) => void;
-  placeholder?: string;
-  style?: TextStyle | TextStyle[];
-  label: string;
-  iconName: string;
-}
+const MySelect: React.FC<MySelectProps> = ({ caption, label, list, setLabel, setKey }) => {  
+  const [visible, setVisible] = useState(false);
 
-
-const MySelect: React.FC<MySelectProps> = ({label, list, setLabel, setKey}) => {  
-    const [visible, setVisible] = useState(false) 
-
-    return (      //'#6200ea'
-        <View>
-            <TouchableOpacity 
-                style={{ 
-                  height: 50, //
-                  margin: 11,  //
-                  width: 300,   //
-                  borderRadius: 25, //
-                  paddingHorizontal: 15,  //
-                  backgroundColor: 'white',  
-                  borderWidth: 2,  //
-                  borderColor: 'purple', 
-                  shadowColor: 'purple', 
-                  shadowOffset: { width: 2, height: 1 }, 
-                  shadowOpacity: 0.6,  //
-                  shadowRadius: 4,   //
-                }} 
-                onPress={() => setVisible(!visible)}
-            >
-                <Text style={{ color: '#666666', fontSize: 16, textAlign: 'left', fontWeight: '400'}}>{label} </Text>  
-                <AntDesign style={{ color:'purple', position: 'absolute', right: 14}} name="down" size={18} color="purple" />
-            </TouchableOpacity>
-
-            {
-                visible &&
-                (<FlatList                                                          //estilos
-                    style = {{ borderColor:'white', paddingHorizontal: 18, paddingVertical: 9, backgroundColor: '#813AB1',  shadowOffset: { width: 0.5, height: 0.5 }, shadowOpacity: 0.4, shadowRadius: 7,  }}
-                    data={list}
-                    keyExtractor={(item) => item.key}
-                    renderItem={(i) => (
-                        <TouchableOpacity style = {{ borderRadius: 90, width: 315}}onPress={()=>{
-                            setLabel(i.item.option);
-
-                            if(setKey){
-                                setKey(i.item.option)
-                            }
-                            
-                            setVisible(false)
-                        }}>
-                        
-                        <Text>{i.item.option}</Text>
-                    </TouchableOpacity>
-                    )}
-                />)
-                
-            }
-        </View>
-    );
-}
-
-const MyTextArea: React.FC<MyTextAreaProps> = ({ value, onChangeText, placeholder, style, label, iconName }) => {
   return (
-    <View style={inputStyles.container}>
-      
-      <View style={inputStyles.labelContainer}>
-        {/*<Icon style={inputStyles.icon} name="message" size={18} /> */}
-        <Text style={inputStyles.label}>{label}</Text>
+      <View style={{ marginVertical: 10 }}>
+          <View style={{ 
+              flexDirection: 'row', 
+              alignItems: 'center', 
+              marginBottom: 5,
+              marginLeft: 11,  
+          }}>
+               
+               <AntDesign 
+                    name="select1"  //importação de ícones: para ter acesso à eles, IMPORTE: " import AntDesign from '@expo/vector-icons/AntDesign'; " e busque no site:  @expo/vector-icons/AntDesign
+                    size={18} 
+                    color="#6A1B9A" 
+                    style={{  marginLeft: 0.1,  // Indentação adicional da borda esquerda
+                    marginRight: 5}}
+                />  
+
+                <Text 
+                
+                style={{ 
+                    color: '#6A1B9A', 
+                    fontSize: 14, 
+                    fontWeight: '600' 
+                }}>
+                    {caption? caption : 'Selecione abaixo:' }
+                </Text>
+          </View>
+
+          <TouchableOpacity 
+              style={{ 
+                  height: 44,  //tudo ok
+                  marginHorizontal: 1, //
+                  width: '100%', //
+                  borderRadius: 9,
+                  paddingHorizontal: 15, //
+                  backgroundColor: 'white',
+                  borderWidth: 0.1, //
+                  borderColor: '#D9D9D9', //
+                  //shadowColor: 'red',
+                  shadowOffset: { width: 0, height: 0 }, ///
+                  shadowOpacity: 0.6,
+                  shadowRadius: 0, //
+                  flexDirection: 'row',
+                  alignItems: 'center',
+              }} 
+              onPress={() => setVisible(!visible)}
+          >
+              <Text style={{ 
+                  color: '#666', 
+                  fontSize: 15,
+                  fontWeight: '400',
+                  flex: 1,
+              }}>
+                  {label || 'Selecione...'}
+              </Text>
+              <AntDesign 
+                  name="down" 
+                  size={18} 
+                  color="purple" 
+              />
+          </TouchableOpacity>
+
+          {visible && (
+              <FlatList
+                  style={{
+                      
+                      marginHorizontal: 1,
+                      marginTop: 5,
+                      backgroundColor: '#813AB1',
+                      borderRadius: 10,
+                      elevation: 4,
+                      maxHeight: 200,
+                  }}
+                  data={list}
+                  keyExtractor={(item) => item.key}
+                  renderItem={({ item }) => (
+                      <TouchableOpacity 
+                          style={{ 
+                              paddingVertical: 12,
+                              paddingHorizontal: 15,
+                          }}
+                          onPress={() => {
+                              setLabel(item.option);
+                              if (setKey) setKey(item.key);
+                              setVisible(false);
+                          }}
+                      >
+                          <Text style={{ color: 'white', fontSize: 15 }}>
+                              {item.option}
+                          </Text>
+                      </TouchableOpacity>
+                  )}
+              />
+          )}
       </View>
-      <TextInput
-        style={[inputStyles.textArea, style]}
-        value={value}
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        multiline={true}
-      />
-    </View>
+     
   );
 };
 
 
 export default MySelect
-
-const styles = StyleSheet.create({
-    container: {
-      /*  padding: ,
-        backgroundColor: '#f8f8f8',
-        borderRadius: 8, */ 
-      },
-      button: {
-        backgroundColor: "purple",
-        padding: 10,
-        borderRadius: 5,
-      },
-      buttonText: {
-        color: 'white',
-        textAlign: 'center',
-        fontWeight: 'bold',
-      },
-      listContainer: {
-        marginTop: 5,
-        backgroundColor: 'white',
-        borderRadius: 8,
-        elevation: 3, // Sombras no Android
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      listItem: {
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ddd',
-      },
-      listItemText: {
-        fontSize: 16,
-      },
-
-}); 

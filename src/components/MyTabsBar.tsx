@@ -1,96 +1,105 @@
-import React, { ReactNode, useState } from 'react';
-import { Text, TouchableOpacity, TextStyle, ViewStyle, StyleSheet } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Text, TouchableOpacity, TextStyle, ViewStyle, StyleSheet, View, AccessibilityState } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 
-
-
-interface MyTabsbarProps {  
-  items: string[]; // Lista de nomes das abas (ex: ["Identificação", "Publicação"]
-  style: ViewStyle; // Estilo personalizado para o container principal
-  itemStyle: ViewStyle;   // Estilo para cada item/aba normal
-  activeItemStyle: ViewStyle; // Estilo para o item/aba selecionado
-  textStyle?: TextStyle;  // Estilo para cada texto/aba normal
-  activeTextStyle?: TextStyle; // Estilo para o texto/aba selecionado
-  onPress: (item:string, index: number) => void; // Função quando clica numa aba
-  initialActiveIndex: number; // Qual aba começa selecionada (padrão: 0 = primeira)
+interface MyTabsbarProps {
+  items: string[];
+  style?: ViewStyle;
+  itemStyle?: ViewStyle;
+  activeItemStyle?: ViewStyle;
+  textStyle?: TextStyle;
+  activeTextStyle?: TextStyle;
+  onPress: (item: string, index: number) => void;
+  underline: boolean;
+  initialActiveIndex: number;
 }
 
-const MyTabsbar: React.FC<MyTabsbarProps> = ({ items, style, itemStyle, activeItemStyle, textStyle, activeTextStyle, onPress, initialActiveIndex = 0 }) => {
+const MyTabsbar: React.FC<MyTabsbarProps> = ({
+  items,
+  style,
+  itemStyle,
+  activeItemStyle,
+  textStyle,
+  activeTextStyle,
+  onPress,
+  underline = true,
+  initialActiveIndex = 0,
+}) => {
+  const [activeIndex, setActiveIndex] = useState(initialActiveIndex);
+  const flatListRef = useRef<FlatList>(null);
 
-  const [activeIndex, setActiveIndex] = useState(initialActiveIndex); //(começa com a primeira ou outra que a pessoa definir) 
-  
-  // copia isso aqui tbm
   const handlePress = (item: string, index: number) => {
-    setActiveIndex(index); // Atualiza a aba ativa
-    onPress(item, index);   // Chama a função onPress passada (avisa que houve clique)
+    setActiveIndex(index);
+    onPress(item, index);
+
+    flatListRef.current?.scrollToIndex({
+      index,
+      animated: true,
+      viewPosition: 0.5, 
+    });
   };
-  
+
+  const renderItem = ({ item, index }: { item: string; index: number }) => {
+    const isActive = activeIndex === index;
+    const accessibilityState: AccessibilityState = { selected: isActive };
+
+    return (
+      <TouchableOpacity
+        style={[styles.tabItem, itemStyle, isActive && [styles.activeTabItem, activeItemStyle]]}
+        onPress={() => handlePress(item, index)}
+        accessibilityRole="tab"
+        accessibilityState={accessibilityState}
+        accessibilityLabel={`Aba ${item}`}
+      >
+        <Text style={[styles.tabText, textStyle, isActive && [styles.activeTabText, activeTextStyle]]}>
+          {item}
+        </Text>
+        {isActive && underline && <View style={[style, styles.underline]} />}
+      </TouchableOpacity> 
+    );
+  };
+
   return (
-      <FlatList horizontal // rolar para os lados
-        showsHorizontalScrollIndicator ={false} // para não mostrar um indicador de rolagem
-        style={style}
-        data={items}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item, index}) => (
-          <TouchableOpacity 
-            style={[
-            styles.tabItem,
-            itemStyle,
-            activeIndex == index && [styles.activeTabItem, activeItemStyle] // Estilos diferentes se for a aba ativa
-            ]}
-            onPress={() => handlePress(item, index)} // Chamando a função
-            >
-            <Text
-            style={[
-              styles.tabText,
-              textStyle,
-              activeIndex == index && [styles.activeTabText, activeTextStyle] // Estilos diferentes se for a aba ativa
-            ]}
-          >
-            {item}
-          </Text>
-          </TouchableOpacity>
-      )}
+    <FlatList
+      ref={flatListRef}
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={[styles.tabsContainer, style]}
+      data={items}
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={renderItem}
+      extraData={activeIndex}
     />
-  ); 
-}
+  );         
+};
 
 const styles = StyleSheet.create({
   tabsContainer: {
-    flex: 1,
-    padding: 15,
-    backgroundColor: '#F2F2F2',
-    height: 50,
-    marginBottom: 10,
-    borderRadius: 10,
-    marginVertical: 20,
+    paddingHorizontal: 16,
   },
-  tabItem: { // Estilo para cada aba
-      paddingHorizontal: 15,
-      paddingVertical: 10,
-      marginRight: 20,
-      height: 50,
-      width: 300,
-      borderRadius: 50,
-      backgroundColor: '#F2F2F2',
-      borderWidth: 2,
-      borderColor: '#0F2259',
-      justifyContent: 'center',
-      alignItems: 'center',
+  tabItem: {
+    paddingVertical: 10,
+    marginRight: 20,
+    alignItems: 'center',
   },
-  activeTabItem: { // Estilo quando a aba está ativa
-      backgroundColor: '#AD6CD9',
-      borderBottomWidth: 5,
-      borderBottomColor: '#0F2259',
+  activeTabItem: {
+    // sem background, só o underline vai aparecer
   },
-  tabText: { // Estilo do texto normal
-      fontSize: 18,
-      color: 'black',
+  tabText: {
+    fontSize: 14,
+    color: '#0C1D40',
+    fontFamily: 'Poppins_400Regular',
   },
-  activeTabText: { // Estilo do texto quando a aba está ativa
-      fontWeight: 'bold',
-      color: 'white',
+  activeTabText: {
+    fontWeight: 'bold',
+    color: '#5A2D82',
+  },
+  underline: {
+    marginTop: 4,
+    height: 2,
+    width: '100%',
+    backgroundColor: '#5A2D82',
   },
 });
 
-export default MyTabsbar  
+export default MyTabsbar;

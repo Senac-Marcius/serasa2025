@@ -4,14 +4,8 @@ import { supabase } from '../utils/supabase'
 interface iEmployees { 
     id: number,
     urls: string,
-    name: string,
-    date_birth: string,
-    tell: string,
-    email: string,
-    address: string,
     nationality: string,
     disc_personality: string,
-    cpf: string,
     sex: string,
     martinal_status: string,
     ethnicity: string,
@@ -19,7 +13,25 @@ interface iEmployees {
     created_at: string,
     is_active: string,
     user_id:number,
-    positions_id:number
+    positions_id:number,
+    scale_id:number
+}
+function toListEmployees(data: iEmployees[]){
+  const resp: {key: number, option: string}[] = [];
+  data.map((l) => {
+    resp.push({ key: l.id, option: l.nationality })
+  })
+
+  return resp;
+}
+async function getEmployees(params:any) { 
+  const { data: todos , error} = await supabase.from('employees').select()
+  if(error){
+    console.log(error)
+    return {status: false, error: error}
+  } 
+  return {status: true, data: todos}
+  
 }
 
 async function  setEmployee(employee:iEmployees){
@@ -74,6 +86,6 @@ async function  dellEmployee(id:number) {
   return 'Usuario Deletado'
 }
 
-export {setEmployee,updateEmployee,dellEmployee, iEmployees}
+export {setEmployee,updateEmployee,dellEmployee,getEmployees,toListEmployees, iEmployees}
 
         

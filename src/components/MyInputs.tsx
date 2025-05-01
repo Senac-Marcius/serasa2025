@@ -9,6 +9,7 @@ interface MyinputProps {
   style?: TextStyle | TextStyle[];
   label: string;
   iconName: string;
+  type?: string; 
 }
 
 interface MyCheckProps {
@@ -30,7 +31,7 @@ const inputContainerStyle = {
   flexDirection: 'row' as const,
   alignItems: 'center' as const,
   backgroundColor: '#FFFFFF',
-  borderWidth: 1,
+  borderWidth: 1, 
   borderColor: '#D9D9D9',
   borderRadius: 8,
   paddingHorizontal: 12,
@@ -42,6 +43,7 @@ const inputTextStyle = {
   fontSize: 14,
   color: '#000',
   paddingVertical: 0,
+  outlineWidth: 0,
 };
 
 const labelStyle = {
@@ -51,7 +53,7 @@ const labelStyle = {
   fontSize: 14,
 };
 
-const Myinput: React.FC<MyinputProps> = ({ value, onChangeText, placeholder, style, label, iconName }) => {
+const Myinput: React.FC<MyinputProps> = ({ value, onChangeText, placeholder, style, label, iconName, type }) => {
   return (
     <View style={{ marginBottom: 14 }}>
       <Text style={labelStyle}>{label}</Text>
@@ -63,6 +65,7 @@ const Myinput: React.FC<MyinputProps> = ({ value, onChangeText, placeholder, sty
           placeholder={placeholder}
           placeholderTextColor="#999"
           style={[inputTextStyle, style]}
+          secureTextEntry={type == 'password' ? true : false}
         />
       </View>
     </View>

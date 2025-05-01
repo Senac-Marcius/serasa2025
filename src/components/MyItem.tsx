@@ -1,76 +1,124 @@
 import React, { ReactNode } from 'react';
-import { Text, View, TextStyle,TouchableOpacity, ViewStyle, StyleSheet } from 'react-native';
+import {  View, ViewStyle, StyleSheet } from 'react-native';
 import MyButton from './MyButtons';
 
-type RelatedItem = {
-  id: number;
-  name: string;
-};
 
-interface MytextProps {
-  children?: ReactNode;
-  style?: ViewStyle | ViewStyle[];
-  onEdit?(): void;
-  onDel?(): void
-}
 
-interface MyCorrelatedprops{
+interface MyItemProps {
   children?: ReactNode;
   style?: ViewStyle | ViewStyle[];
   onEdit?(): void;
   onDel?(): void;
-  relatedItems?: RelatedItem[];
-  showEditButton?: boolean;
-  showDeleteButton?: boolean;
+  button?: ReactNode;
 }
 
-const MyItem: React.FC<MytextProps> = ({ children, style, onEdit, onDel, }) => {
+const MyItem: React.FC<MyItemProps> = ({ children, style, onEdit, onDel}) => {
   return (
-          <TouchableOpacity style={[style? style:'', styles.card]}>
-            {children}
-            <View>
-              <MyButton onPress={onEdit} title='Editar' color='yellow'></MyButton>
-              <MyButton  style={{marginTop: 20 }} onPress={onDel} title='Deletar' color='red'></MyButton> 
-
-            </View>
-        </TouchableOpacity>
-        );
-}
-
-const MyCorrelated: React.FC<MyCorrelatedprops> = ({ children, style, onEdit, onDel, relatedItems, showEditButton = true, showDeleteButton = true }) => {
-  return(
-    <TouchableOpacity style={[style? style:'',  styles.card]}>
-      {children}
-      <View >
-      {showEditButton &&
-        <MyButton style={{ justifyContent:'center'}} onPress={onEdit} title="Editar" />}
-        {showDeleteButton &&
-        <MyButton style={{ justifyContent:'center'}} onPress={onDel} title="Deletar" />}
+    <View style={[styles.card, style]}>
+      <View style={styles.content}>{children}</View>
+      <View style={styles.buttonGroupShiftSlightLeft}>
+        {onEdit && (<MyButton
+          onPress={onEdit}
+          title="EDITAR"
+          button_type="edit"
+        />)}
+        {onDel && (<MyButton
+          onPress={onDel}
+          title="EXCLUIR"
+          button_type="delete"
+          color="#E74C3C"
+          style={{ marginLeft: 10 }}
+        />)}
       </View>
-    </TouchableOpacity>
-);
-}
-        
+    </View>
+  );
+};
 
-export  {MyItem, MyCorrelated}
+const MyTb : React.FC<MyItemProps> = ({children, onEdit, onDel, button }) =>{
+    return(
+      <View style={[styles.tableRow]}>
+        {children}
+        <View style={styles.actions}>
+        {onEdit && ( <MyButton
+            onPress={onEdit}
+            title="EDITAR"
+            button_type="edit"
+          />)}
+        {onDel && (<MyButton
+            onPress={onDel}
+            title="EXCLUIR"
+            button_type="delete"
+            color="#E74C3C"
+            
+          />)}{button}
+        </View>
+      </View>
+    );
 
+};
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#f8f9fa",
+    backgroundColor: '#f8f9fa',
     padding: 16,
-    marginBottom: 8,
+    marginBottom: 12,
     marginHorizontal: 12,
     borderRadius: 8,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 3, 
-   
+    shadowColor: '#000',
+    shadowOpacity: 0.06,
+    shadowOffset: { width: 0, height: 1 },
+    shadowRadius: 3,
+    elevation: 2,
   },
-  row : {
+  
+  content: {
+    width:'100%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',}
-})
+    marginBottom: 12,
+    alignItems:'center',
+    
+  },
+
+  buttonGroupShiftSlightLeft: {
+    justifyContent: 'flex-start',
+    paddingLeft: 8,
+    gap: 10,
+    marginRight: 20,
+  },
+
+  th: {
+    flex: 1,
+     fontWeight: '600',
+      fontSize: 13,
+       color: '#333'
+    },
+    
+    td: {
+      flex: 1,
+      fontSize: 13,
+      color: '#444' 
+     },
+    
+    tableRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingVertical: 12,
+      paddingHorizontal: 8,
+      borderBottomWidth: 1,
+      borderBottomColor: '#eee',
+      backgroundColor: '#fff',
+      borderRadius: 8,
+      marginHorizontal: 12,
+      marginBottom: 8,
+      elevation: 1,
+    },
+    
+    actions: {
+      flexDirection: 'row',
+      marginLeft: 'auto', // move os botões pro final da linha
+      gap: 10,
+    },
+        
+});
+
+export { MyItem, MyTb };

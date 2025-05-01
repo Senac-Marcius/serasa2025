@@ -64,13 +64,13 @@ const MyButton: React.FC<MyButtonProps> = ({
   color = "#813AB1",
   icon,
   style,
-  font_size = 16,
+  font_size = 14,
   text_color = "white",
-  iconSize = 30,
-  gap = 10,
+  iconSize = 20,
+  gap = 6,
   iconColor = "white",
-  height = button_type == "circle" ? 50 : 50,
-  width = button_type == "circle" ? 50 : 190,
+  height,
+  width,
 }) => {
   const [loading, setLoading] = useState(false);
 
@@ -94,8 +94,8 @@ const MyButton: React.FC<MyButtonProps> = ({
           style,
           {
             backgroundColor: color,
-            height: height,
-            width: width,
+            height: height ?? undefined,
+            width: width ?? undefined,
             gap: gap,
           },
         ]}
@@ -163,26 +163,25 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   button_edit: {
-    backgroundColor: "#813AB1",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
+    backgroundColor: "#A569BD",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 6,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
   },
   button_delete: {
-    backgroundColor: "#FF4C4C",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
+    backgroundColor: "#FF6B6B",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 6,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
   },
   button_text: {
-    fontWeight: "600",
-    marginLeft: 5,
+    fontWeight: "600",    
   },
 });
 
