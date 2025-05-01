@@ -217,10 +217,11 @@ const parseCurrencyInput = (text: string): number => {
 
             {/** Fazer um campo de imput para integrantes do projeto com campo de adicionar integrante com a quantidade necessaria, para listar na tabela employess_projects */}    
             
-            <View style={styles.contentContainer}>
+            <View style={styles.contentContainer}  >
                 <Mytext style={styles.title}>PROJETOS</Mytext>
 
                 <MyModal visible={visible} setVisible={() => setVisible(true)} title=''>
+                    <MyModal visible={visible} setVisible={() => setVisible(false)} title=''>   
                     <ScrollView>
                     <View style={styles.row}> 
                             
@@ -424,12 +425,16 @@ const parseCurrencyInput = (text: string): number => {
                                 </View>
 
                             <View style={styles.buttonContainer}> 
-                                <MyButton title={req.id == -1? "Cadastrar" : "Atualizar"} onPress={handleRegister} />
+                                <MyButton 
+                                    title={req.id == -1? "Cadastrar" : "Atualizar"} 
+                                    onPress={handleRegister}
+                                     />
                             </View>
                         </View> 
 
                     </View>   
                     </ScrollView>
+                </MyModal>
                 </MyModal>
 
                 <View style={styles.listContainer}> 
@@ -487,6 +492,9 @@ const parseCurrencyInput = (text: string): number => {
                                 <Mytext style={styles.projectText2}>Estratégias: {item.strategies}</Mytext>
                                 <Mytext style={styles.projectText2}>Planejamento: {item.planning}</Mytext>
                                 </View>
+                            keyExtractor={(item) => item.id.toString()}
+                            numColumns={2}
+                            columnWrapperStyle={styles.columnWrapper} 
                             </MyItem>
                         )}
                     />
@@ -500,131 +508,157 @@ const parseCurrencyInput = (text: string): number => {
 /** <Button title='EDIT' />
     <Button title='DELETE' /> - Esse botão não permite modificar a forma de vizualizar o botão*/ 
 
-const styles = StyleSheet.create({
-    
-    projectLabel: {
-        fontSize: 14,
-        fontWeight: '600',      // Deixa o rótulo com destaque
-        color: '#555',          // Cor neutra para contraste
-    },
-    
-    projectGroup: {
-        marginBottom: 10,       // Espaço entre grupos de informações
-    },
-    
-    projectText: {
-        fontSize: 14,
-        color: '#333',
-    },
-      
-    contentContainer: {
-        padding: 20,
-        alignItems: 'flex-start',
-    },
-
-    buttonContainer: {
-        alignItems: 'center', // Alinha o botão horizontalmente no centro
-        marginTop: 20,        // Dá um espaço acima do botão
-    },
-
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-    },
-
-    title: {
-        textAlign: 'center',
-        fontSize: 25,
-        fontWeight: 'bold',
-        marginBottom: 10,
-        alignItems: 'center',
-    },
-
-    label: {
-        fontSize: 18,
-        fontFamily: 'Poppins_400Regular',
+    const styles = StyleSheet.create({
+        projectLabel: {
+            fontSize: 14,
+            fontWeight: '600',
+            color: '#555',
+            marginBottom: 5,
+        },
         
-      },
+        projectGroup: {
+            marginBottom: 15,
+        },
+        
+        projectText: {
+            fontSize: 14,
+            color: '#333',
+            marginBottom: 8,
+        },
+        
+        contentContainer: {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: 20,
+        },
+    
+        buttonContainer: {
+            width: '100%',
+            paddingHorizontal: 16,
+            marginTop: 20,
+            marginBottom: 20,
+        },
+    
+        row: {
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            marginBottom: 10,
+        },
+    
+        title: {
+            fontSize: 24,
+            fontWeight: 'bold',
+            textAlign: 'center',
+            marginBottom: 20,
+        },
+    
+        label: {
+            fontSize: 18,
+            fontFamily: 'Poppins_400Regular',
+            marginBottom: 5,
+        },
+    
+        input: {
+            height: 45,
+            borderColor: '#ddd',
+            borderWidth: 1,
+            borderRadius: 8,
+            paddingLeft: 12,
+            marginBottom: 18,
+        },
+    
+        headerText: {
+            textAlign: 'center',
+            fontSize: 22,
+            fontWeight: 'bold',
+            marginBottom: 30,
+        },
+    
+        form: {
+            width: '100%',
+            padding: 25,
+            backgroundColor: '#F9F9F9',
+            borderRadius: 12,
+            shadowColor: '#000',
+            shadowOpacity: 0.15,
+            shadowOffset: { width: 0, height: 4 },
+            shadowRadius: 8,
+            alignSelf: 'center',
+            marginBottom: 20,
+        },
+    
+        // Ajustado para garantir que o conteúdo fique dentro dos campos
+        projectContainer: {
+            flex: 1,
+            margin: 8,
+            backgroundColor: '#fff',
+            padding: 12,
+            borderRadius: 8,
+            borderColor: '#ddd',
+            borderWidth: 1,
+            minWidth: '45%',       // Largura mínima para 2 colunas
+            maxWidth: '48%',       // Evita ultrapassar
+            flexGrow: 1,           // Preenche o espaço disponível
+          },
+    
+        projectText2: {
+            fontSize: 14,
+            color: '#333',
+            marginBottom: 8,
+            flexWrap: 'wrap',
+            paddingRight: 10,        // Garante que o texto não ultrapasse os limites
+        },
+    
+        buttonsContainer: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingHorizontal: 15,
+            marginTop: 10,
+        },
+    
+        buttonEdit: {
+            backgroundColor: '#FFEB3B',
+            paddingVertical: 12,
+            paddingHorizontal: 25,
+            borderRadius: 10,
+            color: '#ffffff',
+            shadowColor: '#000',
+            shadowOpacity: 0.1,
+            shadowOffset: { width: 0, height: 2 },
+            shadowRadius: 5,
+        },
+    
+        buttonDelete: {
+            backgroundColor: '#F44336',
+            paddingVertical: 12,
+            paddingHorizontal: 25,
+            borderRadius: 10,
+            color: '#ffffff',
+            shadowColor: '#000',
+            shadowOpacity: 0.1,
+            shadowOffset: { width: 0, height: 2 },
+            shadowRadius: 5,
+        },
+    
+        buttonText: {
+            color: '#fff',
+            fontWeight: 'bold',
+        },
+    
+        listContainer: {
+            flex: 1,
+            width: '100%',
+            flexDirection: 'row',         // Usando flexDirection para grade
+            flexWrap: 'wrap',             // Permite a quebra de linha
+            justifyContent: 'space-between', // Distribui os itens de forma espaçada
+            marginTop: 15,
+        },
 
-    input: {
-        height: 40,
-        borderColor: '#ddd', 
-        borderWidth: 1,
-        borderRadius: 5,
-        paddingLeft: 10,
-        marginBottom: 15,
-    },
-
-    headerText: {
-        textAlign: 'center',
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 20,
-    },
-
-    form: {
-        width: '100%',
-        padding: 20,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-        alignSelf: 'center',
-    },
-
-    projectContainer: {
-        marginBottom: 40,        // Espaço entre os projetos
-        padding: 10,             // Espaçamento interno
-        backgroundColor: '#FFF', // Fundo branco para cada projeto
-        borderRadius: 8,         // Bordas arredondadas
-        borderWidth: 1,          // Borda ao redor de cada projeto
-        borderColor: '#ddd',     // Cor da borda
-        width: '100%',           // Garante que ocupe toda a largura
-        flexDirection: 'column', // Coloca os itens de um projeto em uma coluna
-    },
-
-    projectText2: {
-        fontSize: 14,
-        color: '#333',           // Cor do texto
-        marginBottom: 5,         // Espaço entre os textos
-        flexWrap: 'wrap',        // Permite quebra de linha se necessário
-    },
-
-    buttonsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 3,
-        elevation: 3,
-    },
-
-    buttonEdit: {
-        backgroundColor: '#ffff00', 
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderRadius: 10,
-        color: '#ffffff',
-    },
-    buttonDelete: {
-        backgroundColor: '#F44336', 
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderRadius: 10,
-        color: '#ffffff',
-    },
-    buttonText: {
-        color: '#fff',
-        fontWeight: 'bold',
-    },
-
-    listContainer: {
-        flex: 1, // Faz a lista ocupar todo o espaço restante abaixo do formulário
-        width: '100%',
-      },
-});
+        columnWrapper: {
+            justifyContent: 'space-between', // Distribui as colunas com espaço
+          },
+    });
+    
