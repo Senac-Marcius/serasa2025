@@ -8,7 +8,7 @@ interface iInvestment {
     id: number,
     created_at: string,
     user_id: number,
-    value: number,
+    value: string,
 }
 
 

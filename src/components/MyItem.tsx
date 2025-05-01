@@ -27,7 +27,7 @@ const MyItem: React.FC<MyItemProps> = ({ children, style, onEdit, onDel}) => {
           title="EXCLUIR"
           button_type="delete"
           color="#E74C3C"
-          
+          style={{ marginLeft: 10 }}
         />)}
       </View>
     </View>
@@ -99,24 +99,19 @@ const styles = StyleSheet.create({
       color: '#444' 
      },
 
-     tableRow: {
+     actions: {
+      flex: 1,
       flexDirection: 'row',
-      alignItems: 'center',
-      paddingVertical: 12,
-      paddingHorizontal: 8,
-      borderBottomWidth: 1,
-      borderBottomColor: '#eee',
-      backgroundColor: '#fff',
-      borderRadius: 8,
-      marginHorizontal: 12,
-      marginBottom: 8,
-      elevation: 1,
+      justifyContent: 'flex-start',
+      gap: 12,
+      paddingLeft: 8,
     },
     
-    actions: {
+    tableRow: {
       flexDirection: 'row',
-      marginLeft: 'auto', // move os botões pro final da linha
-      gap: 10,
+      paddingVertical: 12,
+      borderBottomWidth: 1,
+      borderBottomColor: '#eee',
     },
     
 });

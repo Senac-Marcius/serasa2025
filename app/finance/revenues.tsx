@@ -8,7 +8,8 @@ import {Myinput, MyTextArea } from '../../src/components/MyInputs';
 import {MyTb} from '../../src/components/MyItem';
 import Mytext from '../../src/components/MyText';
 import {MyModal} from '../../src/components/MyModal';
-import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '../../src/controllers/revenues';
+import {iRevenue,setRevenue, deleteRevenue, updateRevenue, getRevenues} from '../../src/controllers/revenues'
+
 import MySelect from '../../src/components/MySelect';
 import MySearch from '../../src/components/MySearch';
 import { getUsers, toListUser  } from '../../src/controllers/users';
@@ -25,12 +26,10 @@ export default function RevenueScreen() {
     url: '',
     created_at: new Date().toISOString(),
     user_id: -1,
-    value: 0,
+    value: '',
     scholarship_status: '',
-    discount_percentage: 0,
-    tipo_mensalidade: '',
-    select_course: '',
-
+    discount_percentage: '',
+    tipo_mensalidade: ''
 
     
 
@@ -41,7 +40,7 @@ export default function RevenueScreen() {
     const [revenues, setRevenues] = useState<iRevenue[]>([]);
     const [users, setUsers] = useState<any[]>([]);
     const [courses, setCourses] = useState<any[]>([]);
-    
+    const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
     
     useEffect(()=>{
       async function getTodos(){
@@ -112,12 +111,10 @@ export default function RevenueScreen() {
       url: '',
       created_at: new Date().toISOString(),
       user_id: -1,
-      value: 0,
+      value: '',
       scholarship_status: '',
-      discount_percentage: 0,
+      discount_percentage: '',
       tipo_mensalidade: '',
-      select_course: '',
-
     });
     setVisible(false);
   }
@@ -152,8 +149,8 @@ const getFilteredRevenues = () => {
   
   const term = searchTerm.toLowerCase();
 
-  const u = users.find(ul => ul.option.toLowerCase().includes(term) )
-  const c = courses.find(cl => cl.option.toLowerCase().includes(term) )
+  const u = users.find(ul => ul.option.includes(term) )
+
   
   return revenues.filter(item => {
     // Converte o desconto para string e trata o símbolo %
@@ -162,8 +159,6 @@ const getFilteredRevenues = () => {
     
     return (
       (u != undefined && item.user_id == u.key) ||
-      (c != undefined && item.select_course == c.key) ||
-
       item.description?.toLowerCase().includes(term) ||
       item.value?.toString().includes(searchTerm) || // Mantém sem lowercase para números
       item.id?.toString().includes(searchTerm) ||
@@ -186,14 +181,14 @@ const getFilteredRevenues = () => {
       </Mytext>
 
       <MySearch
-        placeholder='Pesquise no virtudemy'
+        placeholder='teste'
         style={styles.searchInput}
         onChangeText={setSearchTerm}
         onPress={()=> {setSearchTerm(searchTerm)}}
         busca={searchTerm}
     />
 
-  <MyModal style={styles.MyModal}
+  <MyModal
     title='NOVO CADASTRO'
     visible={visible} 
     setVisible={setVisible}>
@@ -201,28 +196,30 @@ const getFilteredRevenues = () => {
         <View style={styles.form}>
           
         
-              <MySelect
-              label={courses.find(c => c.key == req.select_course)?.option || 'Selecione um curso'}
-              setLabel={() => {}}
-              setKey={(key) => {    setReq({ ...req, select_course: key })    }}
-              
-              list={courses}
-              caption="Cursos"
-            />
+        <MySelect
+        label={courses.find(c => c.key == selectedCourseId)?.option || 'Selecione um curso'}
+        setLabel={() => {}}
+        setKey={(key) => {
+          setSelectedCourseId(key); // Você precisaria criar este estado
+        }}
+        list={courses}
+        caption="Cursos"
+      />
 
 
 
-            <MySelect
-              label={users.find(l => l.key == req.user_id)?.option || 'Selecione um usuário'}
-              setLabel={() => {}}
-              setKey={(key) => {    setReq({ ...req, user_id: key })    }}
-              list={users}
-              caption="Usuários"
-            />
+        <MySelect
+          label={users.find(l => l.key == req.user_id)?.option || 'Selecione um usuário'}
+          setLabel={() => {}}
+          setKey={(key) => {    setReq({ ...req, user_id: key })    }}
+          list={users}
+          caption="Usuários"
+        />
   
 
+
             <MySelect 
-              label={req.tipo_mensalidade  || 'Selecione um tipo de receita'} 
+              label={req.tipo_mensalidade  || 'Selecione um tipo de mensalidade'} 
               caption= "Tipo da mensalidade"
               setLabel={(text) => setReq({...req, tipo_mensalidade: text})}
               list={[
@@ -243,40 +240,6 @@ const getFilteredRevenues = () => {
                 {key: 1, option: 'Inativo'},
               ]}
             />
-            
-            {/* Campo de Desconto */}
-            <Myinput
-              value={String(req.discount_percentage)}
-              onChangeText={(text) => setReq({ ...req, discount_percentage: Number(text) })}
-              iconName='percent'
-              placeholder='Digite o desconto em %'
-              label='Desconto'
-            />
-
-            {/* Campo de Valor */}
-            <Myinput
-              value={String(req.value) }
-              onChangeText={(text) => setReq({ ...req, value: Number(text) })}
-              iconName='payments'
-              placeholder='Digite o valor R$0,00'
-              label='Valor'
-            />
-              {/* Novo campo: Total com desconto (somente leitura) */}
-              <View style={styles.totalContainer}>
-              <Mytext style={styles.totalLabel}>Total com desconto:</Mytext>
-              <Mytext style={styles.totalValue}>
-              {req.value * (1 - req.discount_percentage/100)}
-              </Mytext>
-              </View>
-            
-            {/* Campo de URL */}
-            <Myinput
-              value={req.url}
-              onChangeText={(text) => setReq({ ...req, url: text })}
-              iconName='link'
-              placeholder='Digite a URL'
-              label='URL'
-            />
 
             {/* Campo de Descrição */}
             <MyTextArea
@@ -287,8 +250,34 @@ const getFilteredRevenues = () => {
               label='Descrição'
             />
 
-            <MyButton style={{ justifyContent: 'center' }} onPress={() => handleRegister()} title={req.id == -1 ? "Cadastra" : "Atualizar"}></MyButton>
+             {/* Campo de URL */}
+             <Myinput
+              value={req.url}
+              onChangeText={(text) => setReq({ ...req, url: text })}
+              iconName='link'
+              placeholder='Digite a URL'
+              label='URL'
+            />
+            
+            {/* Campo de Desconto */}
+            <Myinput
+              value={req.discount_percentage}
+              onChangeText={(text) => setReq({ ...req, discount_percentage: text })}
+              iconName='percent'
+              placeholder='Digite o valor em %'
+              label='Desconto'
+            />
 
+            {/* Campo de Valor */}
+            <Myinput
+              value={req.value}
+              onChangeText={(text) => setReq({ ...req, value: text })}
+              iconName='payments'
+              placeholder='Digite o valor R$0,00'
+              label='Valor'
+            />
+
+            <MyButton style={{justifyContent:'center'}} onPress={() => handleRegister ()} title="cadastrar"  />
         </View>
         </MyModal>
 
@@ -311,14 +300,13 @@ const getFilteredRevenues = () => {
 
             >
               <Mytext style={styles.td}>{users.find(u=> u.key == item.user_id)?.option || ''}</Mytext>
-              <Mytext style={styles.td}>{courses.find(c=> c.key == item.select_course)?.option || ''}</Mytext>
               <Mytext style={styles.td}>{item.tipo_mensalidade}</Mytext>
               <Mytext style={styles.td}>{item.scholarship_status}</Mytext>
               <Mytext style={styles.td}>{item.created_at}</Mytext>
               <Mytext style={styles.td}>{item.description}</Mytext>    
+              
               <Mytext style={styles.td}>{item.discount_percentage}%</Mytext>
-              <Mytext style={styles.td}>R${item.value}</Mytext>
-              <Mytext style={styles.td}>R${item.value*(1-item.discount_percentage/100)}</Mytext>
+              <Mytext style={styles.td}>R${item.value}</Mytext> 
               
               
             </MyTb>
@@ -326,7 +314,6 @@ const getFilteredRevenues = () => {
           header={(
             <View style={styles.tableRowHeader}>
               <Mytext style={styles.th}>Nome do usuário</Mytext>
-              <Mytext style={styles.th}>Curso </Mytext>
               <Mytext style={styles.th}>Tipo de receita </Mytext>
               <Mytext style={styles.th}>Status da Bolsa</Mytext>
               <Mytext style={styles.th}>Data do documento</Mytext>
@@ -334,7 +321,6 @@ const getFilteredRevenues = () => {
               
               <Mytext style={styles.th}>Descontos</Mytext>
               <Mytext style={styles.th}>Valor</Mytext>
-              <Mytext style={styles.th}>valor final</Mytext>
               <Mytext style={styles.th}>Ações</Mytext>
               
             </View>
@@ -347,51 +333,6 @@ const getFilteredRevenues = () => {
 };
 
 const styles = StyleSheet.create({
-  statusActive: {
-    backgroundColor: '#D8FEEB',
-    color: '#1EB980',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    fontSize: 12,
-    fontWeight: '600',
-    borderRadius: 12,
-    alignSelf: 'flex-start',
-  },
-  totalContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginVertical: 10,
-    padding: 15,
-    backgroundColor: '#f8f9fa',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#e9ecef',
-  },
-  totalLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#495057',
-  },
-  totalValue: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#1c7ed6',
-  },
-
-  MyModal: {
-    display: 'flex',
-    width: 400,
-    height: 1000,
-    padding: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    borderWidth: 4,
-    borderColor: 'purple',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-},
-
   row:{
     flexDirection: 'row',
     justifyContent: 'space-between',

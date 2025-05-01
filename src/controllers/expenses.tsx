@@ -7,11 +7,10 @@ interface iexpenses {
   name: string,
   emails: string,
   contacts: string,
-  costs: number,
+  costs: string,
   descriptions: string,
   url: string,
   user_id: number,
-  percentege:number
 }
 
 function toListExpenses (data: iexpenses[]){
@@ -25,23 +24,6 @@ function toListExpenses (data: iexpenses[]){
   return resp;
 }
 
-async function toListAreas (data:any[]){
-  const resp: {key: number, option: string, percentege:number} []=[];
-  
- const retorno = await getAreas({})
- if (retorno.status && retorno.data && retorno.data.length > 0){
-
-    data.map((e) =>{
-
-      resp.push()
-      resp.push({key: e.area_id, option: retorno.data.find(a => a.area_id == e.area_id).sectors, percentege:e.percentege })
-    })
-
-  }
-  return resp;
-  
-}
-
 async function getExpense(params:any) {
   const {data: todos, error }= await supabase.from('expenses').select()
 
@@ -50,28 +32,9 @@ async function getExpense(params:any) {
 
   return{status:true, data: todos}
 }
-
-
-async function getAreasSlected(id: number) {
-  const {data: todos, error }= await supabase.from('expenses_areas').select().eq('area_id', id)
-
-  if(error)
-    return{status:false, error: error}
-
-  return{status:true, data: await toListAreas(todos) as  {key: number, option: string, percentege:number} []}
-}
-
-async function getAreas(params:any) {
-  const {data: todos, error }= await supabase.from('areas').select()
-
-  if(error)
-    return{status:false, error: error}
-
-  return{status:true, data: todos}
-}
   
 
-async function setExpense (expense:iexpenses, areas:any[]){
+async function setExpense (expense:iexpenses){
     //nessa area é regex
 
     const { data: todos, error } = await supabase.from('expenses')
@@ -80,21 +43,6 @@ async function setExpense (expense:iexpenses, areas:any[]){
     ])
     .select();
 
-     
-    if (todos && todos.length > 0) {
-      const expense_id = todos[0].id;
-  
-      areas.forEach(async (a) => {
-        const { error: insertError } = await supabase
-          .from('project_user')
-          .insert([{ area_id: a.key, expense_id: expense_id, percentege:a.percentege }]);
-  
-        if (insertError) {
-          console.error(`Erro ao adicionar usuario ${a.key} ao Projeto:`, insertError );
-        }
-      });
-    }
-
     if(error)
         //tratamento do codigo do erro 
       return{status:false, error: error}
@@ -102,8 +50,6 @@ async function setExpense (expense:iexpenses, areas:any[]){
     return{status:true, data: todos}
    
 }
-
-
 
 async function delRegister(id: number) {
 
@@ -135,4 +81,4 @@ async function updateExpense(expense: iexpenses) {
 }
 
 
-    export{setExpense, delRegister, updateExpense, iexpenses, getExpense, toListExpenses, getAreas, getAreasSlected}
+    export{setExpense, delRegister, updateExpense, iexpenses, getExpense, toListExpenses}
