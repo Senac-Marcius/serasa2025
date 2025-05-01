@@ -7,7 +7,6 @@ import { Button } from 'react-native-paper';
 import { Router } from 'expo-router'; // Importando o Router do expo-router
 import MyMenu from './MyMenu';
 
-
 interface MySearchProps {
   children: ReactNode;
   style?: TextStyle | TextStyle[];
@@ -25,9 +24,9 @@ const MyView: React.FC<MySearchProps> = ({ children, style, title, router }) => 
 
       {/* Conteúdo da tela */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {children}
+        
       </ScrollView>
-
+      {children}
       {/* Botão de Acessibilidade */}
       <MyAccessibility style={styles.accessibilityButton}>
         <Text style={{ fontSize: 16, marginBottom: 8 }}>Acessibilidade ativada!</Text>
@@ -69,7 +68,6 @@ const styles = StyleSheet.create({
     right: 10,
     
   },
-
   accessibilityButton: {
     position: 'absolute',
     right: 10,
@@ -77,7 +75,6 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     zIndex: 10,
   },
-
   
 });
 

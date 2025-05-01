@@ -6,6 +6,9 @@ import MyButton from "../../src/components/MyButtons";
 import { useRouter } from 'expo-router';
 import MyTimePicker from "../../src/components/MyTimerPiker";
 import { setPosition, deletePosition, updatePosition, iPosition, getCargo } from "../../src/controllers/positions";
+import Mytext from "../../src/components/MyText";
+import { MyTb } from "../../src/components/MyItem";
+import MyList from "../../src/components/MyList";
 
 export default function PositionScreen() {
   const [positions, setPositions] = useState<iPosition[]>([]);
@@ -131,34 +134,48 @@ export default function PositionScreen() {
 
         {showList && (
           <View style={styles.listContainer}>
-            {positions.map((item) => (
-              <TouchableOpacity
-                key={item.id}
-                style={styles.listItem}
-                onPress={() => toggleExpand(item.id)}
-              >
-                <Text style={styles.hoverHint}>Clique para obter todas as informações</Text>
-                <Text style={styles.titleText}>{item.name}</Text>
-                <Text style={styles.cardText}><Text style={styles.bold}>Descrição: </Text>{item.description}</Text>
-                <Text style={styles.cardText}><Text style={styles.bold}>Salário: </Text>R$ {item.salary}</Text>
-                {expandedId === item.id && (
-                  <>
-                    <Text style={styles.cardText}><Text style={styles.bold}>Carga horária: </Text>{item.work_hours}</Text>
-                    <Text style={styles.cardText}><Text style={styles.bold}>Departamento: </Text>{item.departament}</Text>
-                    <Text style={styles.cardText}><Text style={styles.bold}>Supervisor: </Text>{item.supervisor}</Text>
-                    <Text style={styles.cardText}><Text style={styles.bold}>Criado em: </Text>{item.creat_at}</Text>
-                    <View style={styles.actionButtons}>
-                      <TouchableOpacity onPress={() => editPosition(item.id)}>
-                        <Text style={styles.edit}>Editar</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity onPress={() => delPosition(item.id)}>
-                        <Text style={styles.del}>Excluir</Text>
-                      </TouchableOpacity>
+            <MyList
+              data={positions}
+              keyItem={(item) => item.id.toString()}
+              renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => toggleExpand(item.id)}>
+                  <MyTb
+                    onEdit={() => editPosition(item.id)}
+                    onDel={() => delPosition(item.id)}
+                  >
+                    <View style={{ flex: 1, backgroundColor: '#fff', borderRadius: 8, padding: 12 }}>
+                      <Mytext style={styles.titleText}>{item.name}</Mytext>
+                      <Mytext style={styles.cardText}>
+                        <Text style={styles.bold}>Descrição: </Text>{item.description}
+                      </Mytext>
+                      <Mytext style={styles.cardText}>
+                        <Text style={styles.bold}>Salário: </Text>R$ {item.salary}
+                      </Mytext>
+                      {expandedId === item.id ? (
+                        <>
+                          <Mytext style={styles.cardText}>
+                            <Text style={styles.bold}>Carga horária: </Text>{item.work_hours}
+                          </Mytext>
+                          <Mytext style={styles.cardText}>
+                            <Text style={styles.bold}>Departamento: </Text>{item.departament}
+                          </Mytext>
+                          <Mytext style={styles.cardText}>
+                            <Text style={styles.bold}>Supervisor: </Text>{item.supervisor}
+                          </Mytext>
+                          <Mytext style={styles.cardText}>
+                            <Text style={styles.bold}>Criado em: </Text>{item.creat_at}
+                          </Mytext>
+                        </>
+                      ) : (
+                        <Text style={{ fontSize: 12, color: '#0009', marginTop: 6 }}>
+                          Clique para exibir mais detalhes
+                        </Text>
+                      )}
                     </View>
-                  </>
-                )}
-              </TouchableOpacity>
-            ))}
+                  </MyTb>
+                </TouchableOpacity>
+              )}
+            />
           </View>
         )}
       </ScrollView>
@@ -203,24 +220,6 @@ const styles = StyleSheet.create({
     maxWidth: 1300,
     marginTop: 16,
   },
-  listItem: {
-    padding: 18,
-    backgroundColor: '#fff',
-    marginBottom: 14,
-    borderRadius: 14,
-    shadowColor: '#00000010',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  hoverHint: {
-    fontSize: 12,
-    fontStyle: 'italic',
-    color: '#555',
-    opacity: 0.5,
-    marginBottom: 6,
-  },
   titleText: {
     fontSize: 16,
     fontWeight: '600',
@@ -235,19 +234,5 @@ const styles = StyleSheet.create({
   bold: {
     fontWeight: 'bold',
     color: '#000',
-  },
-  actionButtons: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    gap: 20,
-    marginTop: 10,
-  },
-  edit: {
-    color: '#2a9d8f',
-    fontWeight: 'bold',
-  },
-  del: {
-    color: '#e63946',
-    fontWeight: 'bold',
   },
 });
