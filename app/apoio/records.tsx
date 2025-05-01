@@ -211,6 +211,7 @@ export default function RecordScreen(user_id:Number) {
                 <MyList
                     data={records}
                     keyItem={(item) => item.id.toString()}
+                    //style= {styles.posicao}
                     renderItem={({ item }) => (
  
                  <MyItem
@@ -291,6 +292,8 @@ const styles = StyleSheet.create({
         shadowRadius: 6,
         elevation: 2,
         width:500, 
+        display: "flex"
+
       },
 
       listitens: {
@@ -298,6 +301,16 @@ const styles = StyleSheet.create({
         fontWeight: '600', 
         fontSize: 13, 
         color: '#333',
+      
+      },
+
+      posicao: {
+        flex: 1, 
+        fontWeight: '600', 
+        fontSize: 13, 
+        color: '#333',
+        display: "flex",
+        flexDirection: "row",
       
       },
  

@@ -1,183 +1,212 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Button, TextInput, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import MyList from '../../src/components/MyList';
 import { MyItem } from '../../src/components/MyItem';
 import MyView from '../../src/components/MyView';
 import Mytext from '../../src/components/MyText';
 import { useRouter } from 'expo-router';
-import {iCategories, setCategory, updateCategory, deleteCategory, getCategories } from '../../src/controllers/category';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';import MyButton from '../../src/components/MyButtons';
-import {Myinput} from '../../src/components/MyInputs';
+import { iCategories, setCategory, updateCategory, deleteCategory, getCategories } from '../../src/controllers/category';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import MyButton from '../../src/components/MyButtons';
+import { Myinput } from '../../src/components/MyInputs';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { MyModal } from '../../src/components/MyModal';
 
 export default function CategoryScreen() {
     const [req, setReq] = useState<iCategories>({
         name: '',
         description: '',
-        id: -1, // -1 quer dizer: novo cadastro
+        id: -1,
         created_at: new Date().toISOString()
     });
 
     const [categories, setCategories] = useState<iCategories[]>([]);
     const router = useRouter();
-    const [visible, setVisible] = useState(false);
+    const [visibleForm, setVisibleForm] = useState(false);
+    const [visibleList, setVisibleList] = useState(false);
 
-    // Carregar categorias do banco ao abrir a tela
+    // Carregar categorias
     useEffect(() => {
-        async function getTodos() {
-       
-            const retorno = await getCategories({})
-
-            if (retorno.status && retorno.data && retorno.data.length > 0){
-                getCategories(retorno.data);
+        async function loadCategories() {
+            const retorno = await getCategories({});
+            if (retorno.status && retorno.data) {
+                setCategories(retorno.data);
             }
-getTodos();
-            }
-      
+        }
+        loadCategories();
+    }, []);
 
-        getTodos();
-    },[])
-
-    // Cadastrar ou atualizar
+    // Cadastrar/Atualizar
     async function handleRegister() {
         if (req.id === -1) {
-            const newid = categories.length ? categories[categories.length - 1].id + 1 : 0;
-            const newCategory = { ...req, id: newid };
-
+            const newCategory = { ...req, id: categories.length + 1 };
             setCategories([...categories, newCategory]);
             await setCategory(newCategory);
         } else {
-            const updated = await updateCategory(req);
-            if (updated) {
-                setCategories(categories.map(i => i.id === req.id ? req : i));
-            }
+            await updateCategory(req);
+            setCategories(categories.map(cat => cat.id === req.id ? req : cat));
         }
-
-        setReq({
-            name: '',
-            description: '',
-            id: -1,
-            created_at: new Date().toISOString()
-            
-        });
-        setVisible(false);
+        setReq({ name: '', description: '', id: -1, created_at: new Date().toISOString() });
+        setVisibleForm(false);
     }
 
     // Editar
     function editCategorie(id: number) {
         const item = categories.find(i => i.id === id);
         if (item) setReq(item);
-        setVisible(true);
+        setVisibleForm(true);
     }
 
-  
-    async function deleteCategories(id:number){
-        const list = categories.filter(c=> c.id != id)
-        if(list){
-            setCategories(list);
-            await deleteCategory(id)
-        } 
-        
-
+    // Deletar
+    async function deleteCategories(id: number) {
+        await deleteCategory(id);
+        setCategories(categories.filter(cat => cat.id !== id));
     }
 
     return (
-        <MyView >
+        <MyView style={styles.container}>
             <Mytext style={styles.h1}>Cadastro de Categorias</Mytext>
-            <View style={styles.row}>
-                <View style={styles.form}>
 
-                    <FontAwesome5
-                        name="user-edit" //adicionei os icones de acordo com o MySelect e estão estruturados de acordo com cada input. Essa estrutura pertence ao input da descrição
-                        size={15} 
-                        color="#6A1B9A" 
-                        style={{  marginLeft: 0.1,  // Indentação adicional da borda esquerda
-                        marginRight: 5}}/>
-                    
-                    <Myinput
-                        placeholder="Digite o nome da categoria"
-                        value={req.name}
-                        onChangeText={(text) => setReq({ ...req, name: text })}
-                        style={styles.input}
-                        iconName=''
-                        label= 'Nome'
-                    />
-
-                    <MaterialIcons
-                        name="description" //adicionei os icones de acordo com o MySelect e estão estruturados de acordo com cada input. Essa estrutura pertence ao input da descrição
-                        size={15} 
-                        color="#6A1B9A" 
-                        style={{  marginLeft: 0.1,  // Indentação adicional da borda esquerda
-                        marginRight: 5}}/>
-                   
-                    <Myinput
-                        placeholder=" Digite o nome da Descrição"
-                        value={req.description}
-                        onChangeText={(text) => setReq({ ...req, description: text })}
-                        style={styles.input}
-                        iconName=''
-                        label= 'Descrição'
-                        
-                    />
-                      
-                    <MyButton title={req.id === -1 ? "Cadastrar" : "Atualizar"} onPress={handleRegister} />
-                </View>
-
-                <MyList
-                    data={categories}
-                    keyItem={(item) => item.id.toString()}
-                    renderItem={({ item }) => (
-                        
-                        <MyItem
-                            onDel={() => deleteCategories(item.id)}
-                            onEdit={() => editCategorie(item.id)}
-                        >
-                            <Text style={styles.postText}>{item.name}</Text>
-                            <Text>{item.description}</Text>
-                        </MyItem>
-                    )}
+            <MyModal
+                style={styles.modal}
+                visible={visibleForm}
+                setVisible={setVisibleForm}
+                closeButtonTitle={'Fechar'}
+                handleClosedButton={() => {
+                    setReq({
+                        description: '',
+                        name: '',
+                        id: -1,
+                        created_at: new Date().toISOString(),
+                    })
+                }}
+                title={req.id === -1 ? "Cadastrar Produto" : "Editar Produto"}
+                buttonStyle={{
+                    width: 150,
+                    marginTop: 10,
+                    marginBottom: 10,
+                }}
+            >
+                <Myinput
+                    placeholder="Nome da categoria"
+                    value={req.name}
+                    onChangeText={(text) => setReq({ ...req, name: text })}
+                    label="Nome"
+                    iconName=''
                 />
-            </View>
+                <Myinput
+                    placeholder="Descrição"
+                    value={req.description}
+                    onChangeText={(text) => setReq({ ...req, description: text })}
+                    label="Descrição"
+                    iconName=''
+                />
+                <MyButton
+                    style={styles.buttonCad}
+                    title={req.id === -1 ? "Cadastrar" : "Atualizar"}
+                    onPress={handleRegister}
+                />
+            </MyModal>
+
+            <MyList
+                data={categories}
+                keyItem={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                    <View style={styles.listItem}>
+                        <View style={styles.itemContent}>
+                            <Text style={styles.itemName}>{item.name}</Text>
+                            <Text style={styles.itemDesc}>{item.description}</Text>
+                        </View>
+                        <View style={styles.actionsContainer}>
+                            <TouchableOpacity 
+                                style={styles.actionButton} 
+                                onPress={() => editCategorie(item.id)}
+                            >
+                                <MaterialIcons name="edit" size={20} color="#4A148C" />
+                            </TouchableOpacity>
+                            <TouchableOpacity 
+                                style={[styles.actionButton, styles.deleteButton]} 
+                                onPress={() => deleteCategories(item.id)}
+                            >
+                                <MaterialIcons name="delete" size={20} color="#e74c3c" />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                )}
+            />
         </MyView>
     );
 }
 
 // Estilos
 const styles = StyleSheet.create({
-    h1:{
+    container: {
+        flex: 1,
+        padding: 16,
+    },
+    h1: {
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
-        color: "black",
-        backgroundColor: "white",
-        padding: 10,
-        borderRadius: 5,
+        marginVertical: 20,
+        color: '#4A148C',
     },
-    row: {
+    modal: {
+        margin: 'auto',
+        padding: 20,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        borderWidth: 2,
+        borderColor: '#6A1B9A',
+    },
+    buttonCad: {
+        width: '100%',
+        marginTop: 20,
+        marginBottom: 20,
+        backgroundColor: '#6A1B9A',
+    },
+    listItem: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'flex-start',
+        alignItems: 'center',
+        backgroundColor: '#FFF',
+        borderRadius: 8,
+        padding: 16,
+        marginBottom: 12,
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
     },
-    form: {
+    itemContent: {
         flex: 1,
         marginRight: 10,
-        padding: 20,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
     },
-    input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
-        padding: 10,
-        marginBottom: 10,
-    },
-    postText: {
+    itemName: {
         fontSize: 16,
         fontWeight: 'bold',
+        color: '#333',
+        marginBottom: 4,
+    },
+    itemDesc: {
+        fontSize: 14,
+        color: '#666',
+    },
+    actionsContainer: {
+        flexDirection: 'row',
+    },
+    actionButton: {
+        padding: 8,
+        borderRadius: 20,
+        marginLeft: 10,
+        backgroundColor: '#f0e6ff',
+        margin: 'auto',
+
+    },
+    deleteButton: {
+        backgroundColor: '#ffebee',
+        margin: 'auto',
+
     },
 });

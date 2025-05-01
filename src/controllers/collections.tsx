@@ -8,7 +8,8 @@ interface iCollection {
         createAt:string,
         name: string,
         quantity: string,
-        star: number,     
+        star: number,    
+        userId:string, 
         commentary:string,
 }
 function toListCollections(data:iCollection[]){

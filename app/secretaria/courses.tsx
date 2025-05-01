@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import Mytext from '../../src/components/MyText';
 import MyButton from '../../src/components/MyButtons';
@@ -6,15 +6,22 @@ import MyView from '../../src/components/MyView';
 import { MyItem } from '../../src/components/MyItem';
 import { Myinput, MyTextArea } from '../../src/components/MyInputs';
 import { useRouter } from 'expo-router';
+import {
+  getCourses,
+  setCoursebd,
+  upadateCourse,
+  deleteCourse as deleteCourseDb,
+  iCourses
+} from '../../src/controllers/courses';
 
 export default function CoursesScreen() {
   const initialReq = {
     name: '',
     description: '',
-    Courseplan: '',
-    Orientationplan: '',
-    Workload: '',
-    id: -1,
+    courseplan: '',
+    orientationplan: '',
+    workload: '',
+    id: undefined,
     userId: 0,
   };
 
@@ -23,21 +30,49 @@ export default function CoursesScreen() {
   const [CoursesPosts, setCourses] = useState<typeof req[]>([]);
   const router = useRouter();
 
-  function handleRegister() {
-    if (req.id === -1) {
-      const newId = CoursesPosts.length ? CoursesPosts[CoursesPosts.length - 1].id + 1 : 0;
-      const newCourses = { ...req, id: newId };
-      setCourses([...CoursesPosts, newCourses]);
-    } else {
-      setCourses(CoursesPosts.map(c => (c.id === req.id ? req : c)));
-    }
+  useEffect(() => {
+    loadCourses();
+  }, []);
 
-    setReq(initialReq);
-    setShowForm(false);
+  async function loadCourses() {
+    const result = await getCourses({});
+    if (result.status && result.data) {
+      setCourses(result.data);
+    } else {
+      console.error("Erro ao buscar cursos:", result.error);
+    }
   }
 
-  function deleteCourses(id: number) {
-    setCourses(CoursesPosts.filter(course => course.id !== id));
+  async function handleRegister() {
+    const courseToSave = {
+      ...req,
+      workload: parseInt(req.workload as string) || 0,
+      courseplan: req.courseplan,
+      orientationplan: req.orientationplan,
+    };
+
+    if (!req.id) {
+      const inserted = await setCoursebd(courseToSave);
+      if (inserted.length) {
+        await loadCourses();
+        setReq(initialReq);
+        setShowForm(false);
+      }
+    } else {
+      const updated = await upadateCourse(courseToSave);
+      if (updated.length) {
+        await loadCourses();
+        setReq(initialReq);
+        setShowForm(false);
+      }
+    }
+  }
+
+  async function deleteCourses(id: number) {
+    const deleted = await deleteCourseDb(id);
+    if (deleted.length) {
+      await loadCourses();
+    }
   }
 
   return (
@@ -45,7 +80,7 @@ export default function CoursesScreen() {
       <View style={{ flex: 1, backgroundColor: '#f0f2f5', padding: 20 }}>
         <View style={styles.headerRow}>
           <Mytext style={styles.title}>Cursos</Mytext>
-          <Pressable style={styles.buttonNew} onPress={() => { setReq(initialReq); setShowForm(true); }}>
+          <Pressable style={styles.buttonNew} onPress={() =>{setReq({...initialReq}); setShowForm(true);}}>
             <Mytext style={styles.buttonNewText}>+ Novo Curso</Mytext>
           </Pressable>
         </View>
@@ -68,20 +103,20 @@ export default function CoursesScreen() {
             <Myinput
               iconName="book"
               label="Plano de Curso"
-              value={req.Courseplan}
-              onChangeText={(text) => setReq({ ...req, Courseplan: text })}
+              value={req.courseplan}
+              onChangeText={(text) => setReq({ ...req, courseplan: text })}
             />
             <Myinput
               iconName="school"
               label="Plano de Orientação"
-              value={req.Orientationplan}
-              onChangeText={(text) => setReq({ ...req, Orientationplan: text })}
+              value={req.orientationplan}
+              onChangeText={(text) => setReq({ ...req, orientationplan: text })}
             />
             <Myinput
               iconName="schedule"
               label="Carga Horária"
-              value={req.Workload}
-              onChangeText={(text) => setReq({ ...req, Workload: text })}
+              value={req.workload}
+              onChangeText={(text) => setReq({ ...req, workload: text })}
             />
 
             <MyButton title="Salvar" onPress={handleRegister} button_type="rect" style={styles.button} />
@@ -92,17 +127,20 @@ export default function CoursesScreen() {
           <Mytext style={styles.subTitle}>Cursos Cadastrados</Mytext>
           <View style={styles.cardGrid}>
             {CoursesPosts.map((item) => (
-              <MyItem
+              <MyItem 
                 key={item.id}
                 style={styles.card}
                 onEdit={() => { setReq(item); setShowForm(true); }}
-                onDel={() => deleteCourses(item.id)}
-              >
-                <Mytext style={styles.cardTitle}>📚 {item.name}</Mytext>
-                <Mytext style={styles.cardInfo}>📝 {item.description}</Mytext>
-                <Mytext style={styles.cardInfo}>📘 Plano: {item.Courseplan}</Mytext>
-                <Mytext style={styles.cardInfo}>🎓 Orientação: {item.Orientationplan}</Mytext>
-                <Mytext style={styles.cardInfo}>⏱️ Carga Horária: {item.Workload}</Mytext>
+                onDel={() => deleteCourses(item.id!)}
+              > 
+                <View style={styles.cardView}>
+                <Mytext type='label'>📚Nome: {item.name}</Mytext>
+                <Mytext type='label'>📝Descrição: {item.description}</Mytext>
+                <Mytext type='label'>📘 Plano: {item.courseplan}</Mytext>
+                <Mytext type='label'>🎓 Orientação: {item.orientationplan}</Mytext>
+                <Mytext type='label'>⏱️ Carga Horária: {item.workload}</Mytext>
+                </View>
+          
               </MyItem>
             ))}
           </View>
@@ -115,7 +153,6 @@ export default function CoursesScreen() {
 const styles = StyleSheet.create({
   title: {
     fontSize: 22,
-    fontWeight: 'bold',
     color: '#4B0082',
   },
   button: {
@@ -155,7 +192,6 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
     color: '#4B0082',
     marginBottom: 10,
     marginLeft: 6,
@@ -178,15 +214,9 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
+  cardView: {
+
     color: '#333',
     marginBottom: 6,
-  },
-  cardInfo: {
-    fontSize: 14,
-    color: '#555',
-    marginBottom: 4,
   },
 });
