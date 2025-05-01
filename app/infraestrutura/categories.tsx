@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import MyList from '../../src/components/MyList';
 import { MyItem } from '../../src/components/MyItem';
 import MyView from '../../src/components/MyView';
@@ -64,118 +64,155 @@ export default function CategoryScreen() {
     }
 
     return (
-        <MyView>
-            <Mytext style={styles.h1}>Cadastro de Categorias</Mytext>
-
-            <MyModal 
+        <MyView style={styles.container}>
+            <View>
+            <Mytext>Cadastro de Categorias</Mytext>
+            </View>
+            <MyModal
                 style={styles.modal}
-                visible={visibleForm} 
+                visible={visibleForm}
                 setVisible={setVisibleForm}
-                title={req.id === -1 ? "Cadastrar Categoria" : "Editar Categoria"}
-                closeButtonTitle="Fechar"
+                closeButtonTitle={'Fechar'}
+                handleClosedButton={() => {
+                    setReq({
+                        description: '',
+                        name: '',
+                        id: -1,
+                        created_at: new Date().toISOString(),
+                    })
+                }}
+                title={req.id === -1 ? "Cadastrar Produto" : "Editar Produto"}
+                buttonStyle={{
+                    width: 150,
+                    marginTop: 10,
+                    marginBottom: 10,
+                }}
             >
-                
-                    <Myinput
-                        placeholder="Nome da categoria"
-                        value={req.name}
-                        onChangeText={(text) => setReq({ ...req, name: text })}
-                        label="Nome"
-                        iconName=''
-                    />
-                    <Myinput
-                        placeholder="Descrição"
-                        value={req.description}
-                        onChangeText={(text) => setReq({ ...req, description: text })}
-                        label="Descrição"
-                        iconName=''
-                    />
-                    <MyButton 
+                <Myinput
+                    placeholder="Nome da categoria"
+                    value={req.name}
+                    onChangeText={(text) => setReq({ ...req, name: text })}
+                    label="Nome"
+                    iconName=''
+                />
+                <Myinput
+                    placeholder="Descrição"
+                    value={req.description}
+                    onChangeText={(text) => setReq({ ...req, description: text })}
+                    label="Descrição"
+                    iconName=''
+                />
+                <MyButton
                     style={styles.buttonCad}
-                        title={req.id === -1 ? "Cadastrar" : "Atualizar"} 
-                        onPress={handleRegister} 
-                    />
-                
+                    title={req.id === -1 ? "Cadastrar" : "Atualizar"}
+                    onPress={handleRegister}
+                />
             </MyModal>
 
-            {/* Modal da Lista */}
-           
-                
-                    <MyList
-                        data={categories}
-                        keyItem={(item) => item.id.toString()}
-                        renderItem={({ item }) => (
-                            <MyItem
-                                onDel={() => deleteCategories(item.id)}
-                                onEdit={() => {
-                                    editCategorie(item.id);
-                                    setVisibleList(false);
-                                }}
+            <MyList
+                data={categories}
+                keyItem={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                    <View style={styles.listItem}>
+                        <View style={styles.itemContent}>
+                            <Text style={styles.itemName}>{item.name}</Text>
+                            <Text style={styles.itemDesc}>{item.description}</Text>
+                        </View>
+                        <View style={styles.actionsContainer}>
+                            <TouchableOpacity 
+                                style={styles.actionButton} 
+                                onPress={() => editCategorie(item.id)}
                             >
-                                <View style={styles.itemContainer}>
-                                    <Text style={styles.itemName}>{item.name}</Text>
-                                    <Text style={styles.itemDesc}>{item.description}</Text>
-                                </View>
-                            </MyItem>
-                        )}
-                    />
-                
-        
+                                <MaterialIcons name="edit" size={20} color="#4A148C" />
+                            </TouchableOpacity>
+                            <TouchableOpacity 
+                                style={[styles.actionButton, styles.deleteButton]} 
+                                onPress={() => deleteCategories(item.id)}
+                            >
+                                <MaterialIcons name="delete" size={20} color="#e74c3c" />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                )}
+            />
         </MyView>
     );
 }
 
 // Estilos
 const styles = StyleSheet.create({
-    buttonCad:{
-        marginBottom: 10,
-    },
-    modal: {
-        display: 'flex',
-        width: 'auto',
-        height: 'auto',
-        padding: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        borderWidth: 4,
-        borderColor: 'purple',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
+    container: {
+        flex: 1,
+        padding: 16,
     },
     h1: {
         fontSize: 24,
-        fontWeight: 'bold',
         textAlign: 'center',
-        marginVertical: 20,
-    },
-    modalContent: {
-        padding: 20,
-        width: '100%',
-    },
-    listContainer: {
-        width: '100%',
-        maxHeight: 500,
-    },
-    itemContainer: {
-        flexDirection: 'column',
-        gap: 4,
-        paddingVertical: 8,
-    },
-    itemName: {
+        color: '#4A148C',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        backgroundColor: '#ffffff',
+        borderBottomWidth: 1,
+        borderBottomColor: '#e0e0e0',
         fontWeight: 'bold',
-        fontSize: 16,
-        color: '#333',
     },
-    itemDesc: {
-        color: '#666',
-        fontSize: 14,
-        marginTop: 4,
+    modal: {
+        margin: 'auto',
+        padding: 20,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        borderWidth: 2,
+        borderColor: '#6A1B9A',
     },
-    addButton: {
-        margin: 20,
+    buttonCad: {
+        marginBottom: 20,
         backgroundColor: '#6A1B9A',
     },
-    listButton: {
-        margin: 10,
-        backgroundColor: '#4A148C',
+    listItem: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#FFF',
+        borderRadius: 8,
+        padding: 16,
+        marginBottom: 12,
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+    },
+    itemContent: {
+        flex: 1,
+        marginRight: 10,
+    },
+    itemName: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#333',
+        marginBottom: 4,
+    },
+    itemDesc: {
+        fontSize: 14,
+        color: '#666',
+    },
+    actionsContainer: {
+        flexDirection: 'row',
+    },
+    actionButton: {
+        padding: 8,
+        borderRadius: 20,
+        marginLeft: 10,
+        backgroundColor: '#f0e6ff',
+        margin: 'auto',
+
+    },
+    deleteButton: {
+        backgroundColor: '#ffebee',
+        margin: 'auto',
+
     },
 });
