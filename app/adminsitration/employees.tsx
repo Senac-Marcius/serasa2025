@@ -14,6 +14,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { getCargo, iPosition } from '../../src/controllers/positions';
 import MySelect from '../../src/components/MySelect';
 import { getUsers, iUser } from '../../src/controllers/users';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function EmployeeScreen() {
     const [employees, setEmployees] = useState<iEmployees[]>([]);
@@ -88,8 +89,8 @@ export default function EmployeeScreen() {
     const handleRegister = async () => {
         try {
             if (req.user_id === -1) {
-                console.error("Nenhum usuário selecionado");
-                return;
+                setReq({...req, user_id: await AsyncStorage.getItem('userId')});
+
             }
 
             if (req.id === -1) {
