@@ -87,3 +87,4 @@ async function DeleteCalendarbd(id: number): Promise<boolean> {
 }
 
 export {iCalendar,toListCalendar,getCalendars,SetCalendarbd,UpdateCalendarbd,DeleteCalendarbd,};
+//OK
