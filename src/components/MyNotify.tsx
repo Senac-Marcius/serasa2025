@@ -50,7 +50,7 @@ const MyNotify: React.FC<MyNotifyProps> = ({ style }) => {
             data={notifications}
             keyItem={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <MyItem showEditButton={false} showDeleteButton={false}>
+              <MyItem>
                 <Mytext>Nome: {item.name}</Mytext>
                 <Mytext>Descrição: {item.description}</Mytext>
                 <Mytext>Url: {item.url}</Mytext>
