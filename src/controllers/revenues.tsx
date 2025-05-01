@@ -8,13 +8,11 @@ interface iRevenue{
     name: string;
     description: string;
     url: string;
-    value: number;
+    value: string;
     scholarship_status: string;
-    discount_percentage: number;
+    discount_percentage: string;
     user_id: number;
     tipo_mensalidade: string;
-    select_course: string;
-
 }
 
 
@@ -101,13 +99,17 @@ async function  setRevenue(revenue:iRevenue ){
           return "Data deve estar no formato ISO 8601 (ex: 2023-12-31T23:59:59)";
         }
       
-       
+        if (!validations.value.test(revenue.value)) {
+          return "Valor monetário inválido (ex: 1.000,00 ou R$ 1.234,56)";
+        }
       
         if (!validations.scholarship_status.test(revenue.scholarship_status)) {
           return "Status inválido (formatos aceitos: 'Ativo', '01-Inativo' ou '12 - Pendente')";
         }
       
-        
+        if (!validations.discount_percentage.test(revenue.discount_percentage)) {
+          return "Porcentagem inválida (0-100%, com ou sem símbolo %)";
+        }
       
         return null; // Retorna null se todas as validações passarem
       }
