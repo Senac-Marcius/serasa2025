@@ -6,8 +6,6 @@ import { iLaunch } from './launchs';
 
 export interface iRecord {
     id: number,
-    cpf: number,
-    name: string,
     description: string,
     sick: string,
     health: string,
@@ -23,7 +21,7 @@ export function toListRecord (data: iRecord[]) {
     const resp: {key:number, option: string} [] = [];
 
     data.map ((r) => {
-        resp.push({key: r.id, option: r.name})
+        resp.push({key: r.id, option: String(r.id) })
      })
 
 return resp;
@@ -64,8 +62,6 @@ export async function updateRecord(record: iRecord) {
     const { error } = await supabase
         .from('records')
         .update({
-            name: record.name,
-            cpf: record.cpf,
             description: record.description,
             sick: record.sick,
             health: record.health,

@@ -2,17 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native';
 import { useRouter, Link } from 'expo-router';
 import { iCollection } from '../../src/controllers/collections';
-import 'bootstrap/dist/css/bootstrap.css';
 import Carousel from 'react-bootstrap/Carousel';
 import MySearch from '../../src/components/MySearch';
 import { getItems, iItem } from '../../src/controllers/librarie';
 import { supabase } from '../../src/utils/supabase';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import MyMenu from '../../src/components/MyMenu';
-import MySelect from '../../src/components/MySelect';
-import MyFilter from '../../src/components/MyFilter';
 import Select from './select';
-import MyTopbar from '../../src/components/MyTopbar';
+import { isStudent, isEmployee } from '../../src/controllers/users'
+
 
 
 
@@ -33,6 +31,9 @@ export default function CollectionPreviewScreen() {
     const [year, setYear] = useState("Todos");
     const [responsible, setResponsible] = useState("Todos");
     const [edition, setEdition] = useState("Todos");
+
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
+    const [recentBooks, setRecentBooks] = useState<any[]>([]);
 
 
     useEffect(() => {
@@ -76,14 +77,20 @@ export default function CollectionPreviewScreen() {
         subject: string,
         year: string,
         responsible: string,
-        edition: string) {
+        edition: string
+
+    ) {
 
 
         let query = supabase
             .from('items_librarie')
             .select('*');
 
-        if (search) query = query.ilike('title', `%${search}%`);
+        if (search) {
+            query = query.or(
+                `title.ilike.%${search}%,summary.ilike.%${search}%,subject.ilike.%${search}%,responsible.ilike.%${search}%`
+            );
+        }
         if (selectFilter && selectFilter !== 'Todos') query = query.eq('categoria', selectFilter);
         if (subject !== 'Todos') query = query.eq('subject', subject);
         if (year !== 'Todos') query = query.eq('typology', year);
@@ -98,13 +105,21 @@ export default function CollectionPreviewScreen() {
 
         return data || [];
     }
+    const [isEmployeeUser, setIsEmployeeUser] = useState(false);
 
+    useEffect(() => {
+        const checkRoles = async () => {
+            const employeeResult = await isEmployee();
+            setIsEmployeeUser(employeeResult ?? false); 
+        };
+        checkRoles();
+    }, []);
 
     return (
         <ScrollView>
             <View style={styles.View}>
                 <View style={styles.container}>
-                {menuOpen && <MyMenu closeMenu={() => setMenuOpen(false)} />}
+                    {menuOpen && <MyMenu closeMenu={() => setMenuOpen(false)} />}
                     <View style={styles.topbar}>
                         <View style={styles.leftGroup}>
                             <TouchableOpacity onPress={() => setMenuOpen(!menuOpen)} style={styles.iconButton}>
@@ -113,24 +128,27 @@ export default function CollectionPreviewScreen() {
                         </View>
                         <View>
                             <Text style={styles.textTitle}>
-                                Biblioteca
+                                BIBLIOTECA
                             </Text>
                         </View>
                         <View style={styles.rightIcons}>
-                                <TouchableOpacity style={styles.button_capsule} onPress={()=>router.push({ pathname:''})}>
+                            <TouchableOpacity style={styles.button_capsule} onPress={() => router.push({ pathname: '' })}>
                                 <MaterialCommunityIcons name="book-open-variant" size={20} color="#750097" />
                                 <Text style={styles.buttonText}>Meus empréstimos</Text>
                             </TouchableOpacity>
-
-                            <TouchableOpacity style={styles.button_round} onPress={()=>router.push({ pathname:'librarie/pageEmployee'})}>
+                          
+                            {isEmployeeUser && (//exibe apenas para funcionarios
+                            <TouchableOpacity style={styles.button_round} onPress={() => router.push({ pathname: 'librarie/pageEmployee' })}>
                                 <MaterialCommunityIcons name="account-hard-hat" size={20} color="#750097" />
                                 <Text style={styles.buttonText}>Funcionários</Text>
                             </TouchableOpacity>
+                        )}
+
                             <TouchableOpacity style={styles.avatarButton}>
                                 <Image source={{ uri: 'https://i.pravatar.cc/150?img=1' }} style={styles.avatar} />
                             </TouchableOpacity>
                         </View>
-                     
+
                     </View>
 
                 </View>
@@ -145,13 +163,6 @@ export default function CollectionPreviewScreen() {
                         <Carousel.Item>
                             <Image
                                 source={require('./assets/slide2biblioteca.png')}
-                                style={{ width: 1200, height: 470, resizeMode: 'cover' }}
-
-                            />
-                        </Carousel.Item>
-                        <Carousel.Item>
-                            <Image
-                                source={require('./assets/slide3biblioteca.png')}
                                 style={{ width: 1200, height: 470, resizeMode: 'cover' }}
 
                             />
@@ -176,9 +187,9 @@ export default function CollectionPreviewScreen() {
                                 caption="Assunto"
                                 setLabel={(val) => { setSubject(val); itemsSearch(); }}
                                 list={[
-                                    { key: 0, option: 'Todos' },
-                                    { key: 1, option: 'Ficção Científica' },
-                                    { key: 2, option: 'Romance' },
+                                    { key: 0, option: "Todos" },
+                                    { key: 1, option: "Ficção Científica" },
+                                    { key: 2, option: "Romance" },
                                     { key: 3, option: "Terror" },
                                     { key: 4, option: "Suspense" },
                                     { key: 5, option: "Mistério" },
@@ -223,37 +234,11 @@ export default function CollectionPreviewScreen() {
                                     { key: 8, option: "Stephen King" },
                                     { key: 9, option: "H.P. Lovecraft" },
                                     { key: 10, option: "Agatha Christie" },
-                                    { key: 11, option: "Arthur Conan Doyle" },
-                                ]}
-                            />
-                        </View>
-                        <View style={styles.ViewSelect}>
-                            {/* <Text style={styles.itemTextFilter}>  Edição </Text> */}
-                            <Select
-                                label={edition}
-                                setLabel={(val) => { setEdition(val); itemsSearch(); }}
-                                caption="Edição"
-                                list={[
-                                    { key: 0, option: 'Todos' },
-                                    { key: 1, option: '1ª' },
-                                    { key: 2, option: '2ª' },
-                                    { key: 3, option: '3ª' }
                                 ]}
                             />
                         </View>
                     </View>
-
-                    {/* <MyFilter
-                        itens={['mais avaliados']}
-                        style={styles.containerfilter}
-                        onSend={(filtro) => {
-                            setSelectFilter(filtro);
-                            itemsSearch();
-                        }}
-                        onPress={(item) => console.log('Filtro pressionado:', item)}
-                    /> */}
                 </View>
-
                 <View style={styles.item2}>
                     <View>
                         {items.length === 0 ? (
@@ -263,16 +248,28 @@ export default function CollectionPreviewScreen() {
                         ) : (
                             <FlatList
                                 data={items}
-                                numColumns={3}
+                                numColumns={4}
                                 keyExtractor={(item) => item.id.toString()}
                                 renderItem={({ item }) => (
                                     <TouchableOpacity
-                                        onPress={() => router.push({ pathname: 'librarie/collectionDetail', params: { id: item.id.toString() }, })}
+                                        onPress={() => {
+                                            // if (item.keywords) {
+                                            //     const tagsArray = item.keywords.split(',').map(tag => tag.trim());
+                                            // }
+                                            router.push({ pathname: 'librarie/collectionDetail', params: { id: item.id.toString() } });
+                                        }}
                                     >
                                         <View style={styles.itemContainer}>
                                             <View style={styles.styleimg}><Image source={{ uri: item.image }} style={styles.image}></Image></View>
                                             <Text style={styles.itemTitlename}>{item.title}</Text>
                                             <Text style={styles.itemText}> {item.responsible}</Text>
+                                            <View style={styles.tagsContainer}>
+                                                {item.subject?.split(',').map((tag, index) => (
+                                                    <View key={index} style={styles.tag}>
+                                                        <Text style={styles.tagText}>{tag.trim()}</Text>
+                                                    </View>
+                                                ))}
+                                            </View>
                                         </View>
 
                                     </TouchableOpacity>
@@ -345,8 +342,8 @@ const styles = StyleSheet.create({
     },
 
     textTitle: {
-        fontFamily: 'Poppins, sans-serif',
-        fontWeight:600,
+        fontFamily: 'Poppins_400Regular',
+        fontWeight: 600,
         color: '#750097',
         fontSize: 30,
         marginBottom: 5,
@@ -382,26 +379,26 @@ const styles = StyleSheet.create({
         width: 150,
         padding: 10,
         borderRadius: 20,
-        flexDirection:"row"
+        flexDirection: "row"
     },
     button_capsule: {
         backgroundColor: "#EDE7F6",
         width: 200,
         padding: 10,
         borderRadius: 20,
-        flexDirection:"row"
+        flexDirection: "row"
     },
     itemContainer: {
         padding: 25,
         margin: 5,
         backgroundColor: '#ecdef0',
         borderWidth: 3,
-        borderColor:"white",
+        borderColor: "white",
         marginLeft: 50,
         marginRight: 50,
         marginTop: 50,
         width: 300,
-        height: 480,
+        height: 500,
         alignItems: "center",
         justifyContent: "flex-start",
 
@@ -502,6 +499,25 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         borderRadius: 18,
+    },
+    tagsContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginTop: 10,
+        gap: 5,
+    },
+
+    tag: {
+        backgroundColor: '#E0BBE4', // lilás claro, combina com seu roxo
+        borderRadius: 15,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+    },
+
+    tagText: {
+        fontSize: 12,
+        color: '#4A148C', // seu roxinho escuro
+        fontWeight: 'bold',
     },
 })
 

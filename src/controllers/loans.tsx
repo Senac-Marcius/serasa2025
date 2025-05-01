@@ -5,7 +5,8 @@ import { error } from 'console';
 
 interface iLoans {
     id: number,
-    bookId: string,
+    bookId: number,
+    userId:string,
     loanDate: string,
     expectedLoanDate: string,
     effectiveLoanDate: string,
