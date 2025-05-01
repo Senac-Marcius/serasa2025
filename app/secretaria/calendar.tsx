@@ -208,7 +208,6 @@ export default function CalendarsScreen() {
                   onEdit={() => editCalendar(item.id)}
                   onDel={() => delCalendar(item.id)}
                 >
-<<<<<<< HEAD
                   <View style={styles.cardView}>
                   <MyText type='label'>👤Tipo de Evento: {item.studentname}</MyText>
                   <MyText type='label'>📘 Motivo do Evento: {item.course}</MyText>
@@ -216,12 +215,6 @@ export default function CalendarsScreen() {
                   <MyText type='label'>⏱️ Período: {item.period}</MyText>
                   </View>
 
-=======
-                  <MyText style={styles.itemText}>👤 Categoria da Reunião: {item.studentname}</MyText>
-                  <MyText style={styles.itemText}>📘 Motivo da Reunião: {item.course}</MyText>
-                  <MyText style={styles.itemText}>📅 Data: {item.registrationdate}</MyText>
-                  <MyText style={styles.itemText}>⏱️ Período: {item.period}</MyText>
->>>>>>> 729bfac91065d596abf865a8ffc625897dc5dcc7
                 </MyItem>
               ))}
             </View>
@@ -316,13 +309,3 @@ const styles = StyleSheet.create({
 
 });
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
-
-//CERTO
->>>>>>> Teste_calendar
-=======
-// CORRETO
->>>>>>> 729bfac91065d596abf865a8ffc625897dc5dcc7
