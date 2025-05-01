@@ -51,9 +51,7 @@ const MyNotify: React.FC<MyNotifyProps> = ({ style }) => {
             keyItem={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <MyItem>
-                <Mytext>Nome: {item.name}</Mytext>
                 <Mytext>Descrição: {item.description}</Mytext>
-                <Mytext>Url: {item.url}</Mytext>
                 <Mytext>UserId: {item.user_id}</Mytext>
                 <Mytext>CreatAt: {item.created_at}</Mytext>
               </MyItem>
