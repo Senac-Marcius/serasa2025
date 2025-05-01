@@ -86,7 +86,9 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
       </Pressable>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <MenuItem label="Administração" route="Administracao/" icon="people" />
+        <MenuItem label="Apoio" route="apoio" icon='accessibility-outline' />
+        <MenuItem label="Administração" route="adminsitration/" icon="people" />
+        <MenuItem label="Financeiro" route="finance" icon="people" />
         <MenuItem label="Financeiro" route="finance" icon="people" />
         <MenuItem label="Secretaria" route="secretaria" icon="add-circle" />
         <MenuItem label="Calendar" route="secretaria/calendar" icon="calendar" />
@@ -101,26 +103,28 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Launchs" route="sala_de_aula/launchs" icon="rocket" />
         <MenuItem label="Classes" route="classes" icon="school" />
         <MenuItem label="Collections" route="collections" icon="cube" />
+        <MenuItem label="More" route="more" icon="cube" />
+        <MenuItem label="Courses" route="courses" icon="book" />
+        <MenuItem label="Disciplines" route="secretaria/disciplines" icon="document-text" />
+        <MenuItem label="Documents" route="secretaria/documents" icon="document" />
+        <MenuItem label="Employees" route="employees" icon="people" />
+        <MenuItem label="Items" route="items" icon="pricetag" />
         <MenuItem label="Launchs" route="launchs" icon="rocket" />
-
         <MenuItem label="Libraie" route="libraie" icon="book" />
         <MenuItem label="Levels" route="levels" icon="stats-chart" />
+        <MenuItem label="Librarie" route="librarie" icon="book" />
         <MenuItem label="Loans" route="loans" icon="card" />
+        <MenuItem label="Locals" route="infraestrutura/locals" icon="location" />
         <MenuItem label="Perfil" route="perfil" icon="person" />
         <MenuItem label="Posts" route="posts" icon="chatbox" />
         <MenuItem label="Infraestrutura" route="infraestrutura" icon="cube-outline"/>
-
         <MenuItem label="Projects" route="projects" icon="briefcase" />
         <MenuItem label="Records" route="records" icon="document-text-outline"/>
         <MenuItem label="Revenues" route="revenues" icon="cash-outline" />
-        <MenuItem label="Scales" route="scales" icon="speedometer" />
-        <MenuItem label="Timelines" route="sala_de_aula/timelines" icon="calendar" />
-        <MenuItem label="Students" route="sala_de_aula/students" icon="school" />
-        <MenuItem label="Users" route="users" icon="person-circle" />
-
+        <MenuItem label="Timelines" route="timelines" icon="calendar" />
+        <MenuItem label="Students" route="students" icon="school" />
         <MenuItem label="Users" route="registeredUsers" icon="person-circle" />
         <MenuItem label="More" route="more" icon="add-circle" />
-        <MenuItem label="Trabalhe Conosco" route='Administracao/employees'  icon="cash" />
       </ScrollView>
     </Animated.View>
   );
