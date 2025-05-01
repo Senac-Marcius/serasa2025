@@ -190,7 +190,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 50,
     flexDirection: "row",
-    gap: 40
+    gap: 40,
+    height:"100%"
   },
   Text: {
     color: '#750097',

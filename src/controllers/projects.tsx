@@ -2,23 +2,22 @@ import React, { useState } from "react";
 import { supabase } from '../utils/supabase'
 
 interface iProject {
-        name: string;
-        namep: string;
-        id: number;
-        url: string;
-        created_at: string;
-        user_id: number;
-        recurces: number;
-        description: string;
-        activity: string;
-        time_line: string;
-        objective: string;
-        methodology: string;
-        techniques: string;
-        strategies: string;
-        planning: string;
-        process: string;
-    }
+  id: number;
+  name: string;
+  namep: string;
+  url: string;
+  created_at: string;
+  time_line: string;
+  description: string;
+  objective: string;
+  activity: string;
+  methodology: string;
+  techniques: string;
+  strategies: string;
+  planning: string;
+  process: string;
+  recurces: number;        
+}
 
 function toListProjects(data: iProject[]){
   const resp: {key: number, option: string}[] = [];
@@ -51,7 +50,7 @@ async function setProject(project: iProject, ids: any[]) {
 
     ids.forEach(async (id) => {
       const { error: insertError } = await supabase
-        .from('project_user')
+        .from('projects_user')
         .insert([{ user_id: id.key, project_id: projectId }]);
 
       if (insertError) {
@@ -74,7 +73,7 @@ async function updateProject(project: iProject) {
   if (error) {
     console.error("Erro ao atualizar projeto:", error);
   } else {
-    console.log("Projeto atualizado:", data);
+    //console.log("Projeto atualizado:", data);
   }
 }
 
@@ -87,7 +86,7 @@ async function deleteProject(id: number) {
   if (error) {
     console.error("Erro ao deletar projeto:", error);
   } else {
-    console.log("Projeto deletado com sucesso:", data);
+    //console.log("Projeto deletado com sucesso:", data);
   }
 }
 
