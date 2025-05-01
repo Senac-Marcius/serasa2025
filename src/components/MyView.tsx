@@ -12,9 +12,10 @@ interface MySearchProps {
   style?: TextStyle | TextStyle[];
   title?: string;
   router?: Router;
+  childrenm?: ReactNode;
 }
 
-const MyView: React.FC<MySearchProps> = ({ children, style, title, router }) => {
+const MyView: React.FC<MySearchProps> = ({ children, style, title, router, childrenm }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -25,8 +26,9 @@ const MyView: React.FC<MySearchProps> = ({ children, style, title, router }) => 
       {/* Conteúdo da tela */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         
+        {children}
       </ScrollView>
-      {children}
+        {childrenm}
       {/* Botão de Acessibilidade */}
       <MyAccessibility style={styles.accessibilityButton}>
         <Text style={{ fontSize: 16, marginBottom: 8 }}>Acessibilidade ativada!</Text>
