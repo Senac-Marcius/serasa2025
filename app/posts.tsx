@@ -4,38 +4,39 @@ import MyList from '../src/components/MyList'
 import { MyItem } from '../src/components/MyItem'
 import MyView from '../src/components/MyView'
 import { useRouter } from 'expo-router';
-import { setPost, iPost, delPosts, editPosts, getPosts} from '../src/controllers/posts'
+import { setPost, iPost, delPosts, editPosts, getPosts } from '../src/controllers/posts'
 import MyButton from '../src/components/MyButtons'
 import { Myinput } from '../src/components/MyInputs';
-import {MyModal} from '../src/components/MyModal'
+import { MyModal } from '../src/components/MyModal'
 import { Card, Paragraph, Title } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'react-native';
+import { relative } from 'path';
 
 
 export default function postScreen() {
 
     async function pickImage() {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    
+
         if (permissionResult.granted === false) {
             alert("Permissão para acessar a galeria é necessária!");
             return;
         }
-    
+
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             quality: 1,
         });
-    
+
         if (!result.canceled) {
             const uri = result.assets[0].uri;
             setReq({ ...req, url: uri });
         }
-    }    
+    }
 
     const [req, setReq] = useState({
         id: -1,
@@ -50,7 +51,7 @@ export default function postScreen() {
     const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
 
     useEffect(() => {
-        
+
         (async () => {
             const retorno = await getPosts({});
             if (retorno.status && retorno.data && retorno.data.length > 0) {
@@ -73,7 +74,7 @@ export default function postScreen() {
                 setPosts(posts.map(i => (i.id == req.id ? req : i)));
             }
         }
-    
+
 
         setReq({
             id: -1,
@@ -104,7 +105,7 @@ export default function postScreen() {
         }
     }
 
- 
+
     function openOptions(id: number) {
         if (selectedPostId === id && menuVisible) {
             setMenuVisible(false);
@@ -118,10 +119,10 @@ export default function postScreen() {
 
     const router = useRouter();
 
-    const[visible, setVisible] = useState (false);
+    const [visible, setVisible] = useState(false);
 
-        {/*esse é o like e também o deslike*/}
-    async function like(id: number, like: number){
+    {/*esse é o like e também o deslike*/ }
+    async function like(id: number, like: number) {
         const post = posts.find((i) => i.id == id);
         if (post) {
             post.like += like;
@@ -134,17 +135,20 @@ export default function postScreen() {
     }
 
     return (
-        
-        <MyView router={router} >
-           
+
+        <MyView router={router} childrenTeste={  <MyButton title='Teste estou flutuando' width={150} style={{position:'absolute', bottom:0}}/>} >
+          
+
             <MyModal style={styles.MyModal}
                 title="Nova Publicação"
                 visible={visible}
                 setVisible={setVisible}
                 tipe='circle'
-                buttonStyle= {{width: 170, height: 50, backgroundColor: '#fcd34d', borderRadius: 30, justifyContent: 'center', alignItems: 'center'}}
+                buttonStyle={{ width: 170, height: 50, backgroundColor: '#fcd34d', borderRadius: 30, justifyContent: 'center', alignItems: 'center' }}
                 closeButtonTitle="X"
-              
+
+
+
             >
                 <View style={styles.form}>
                     <Myinput
@@ -154,7 +158,7 @@ export default function postScreen() {
                         value={req.url}
                         onChangeText={(text) => setReq({ ...req, url: text })}
                     />
-                    
+
                     <MyButton
                         title="Selecionar Imagem"
                         onPress={pickImage}
@@ -169,7 +173,7 @@ export default function postScreen() {
                         onChangeText={(text) => setReq({ ...req, description: text })}
                     />
 
-                    <MyButton style={{ justifyContent: 'center', width: 70, top: 10, right: -64}}
+                    <MyButton style={{ justifyContent: 'center', width: 70, top: 10, right: -64 }}
                         title="PUBLICAR" // Passando a propriedade correta para o título do botão
                         onPress={handleRegister} // Passando a função de press
 
@@ -179,73 +183,74 @@ export default function postScreen() {
 
 
             <MyList //
-            //  é o feed
-                    style={{flexDirection:"column",alignItems:"center",justifyContent:'center', gap: 250}}
-                    data={posts}
-                    keyItem={(item) => item.id.toString()}
-                    renderItem={({ item }) => (
-                        
-                        
-                        <MyItem
-                            style={{
-                                elevation: 3,
-                                shadowColor: '#000',
-                                shadowOpacity: 0.05,
-                                shadowRadius: 4,
-                                shadowOffset: { width: 0, height: 2 },
-                            }}
-                        >
-                            <View style={{
-                                width: 500,
-                                height: 500,                                     
-                                alignSelf: 'center',
-                            }}>
+                //  é o feed
+                style={{ flexDirection: "column", alignItems: "center", justifyContent: 'center', gap: 250 }}
+                data={posts}
+                keyItem={(item) => item.id.toString()}
+                renderItem={({ item }) => (
 
-                                {/* Botão de três pontinhos */}
-                                <TouchableOpacity
-                                    style={{ position: 'absolute', top: -10, right: -2, zIndex: 1000}}
-                                    onPress={() => openOptions(item.id)}
-                                >
-                                    <MaterialIcons name="more-vert" size={24} color="black" />
-                                </TouchableOpacity>
 
-                                {menuVisible && selectedPostId === item.id && (
-                                    <View style={{ backgroundColor: '#c7c7c7', borderBottomLeftRadius: 8, borderBottomRightRadius: 8, borderTopLeftRadius: 8, height: 110, width: 110, alignItems: 'center', justifyContent: 'center', position: 'absolute', padding: 10, top: 10, right: 6, zIndex: 2, gap:10}}>
-                                        <MyButton  width={65} font_size={15} onPress={() => editPost(item.id)} title="Editar"  color="yellow"/>
-                                        <MyButton width={65} font_size={15} onPress={() => delPost(item.id) } title="Deletar"  color="red" />
-                                    </View>
-                                )}
-                            
-                                <Card.Cover style={styles.image_post} source={{ uri: item.url }} /> {/* aqui é a imagem*/}
-                                <Card.Content style={{ width: 150, height: 70, borderRadius: 10}}> 
-                                    <Paragraph style={{fontSize:18,marginTop:25}}>{item.description}</Paragraph>
-                                
-                                </Card.Content>      
+                    <MyItem
+                        style={{
+                            elevation: 3,
+                            shadowColor: '#000',
+                            shadowOpacity: 0.05,
+                            shadowRadius: 4,
+                            shadowOffset: { width: 0, height: 2 },
+                        }}
+                    >
+                        <View style={{
+                            width: 500,
+                            height: 500,
+                            alignSelf: 'center',
+                        }}>
 
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 75                         
-                                }}>
-                                    <TouchableOpacity
-                                        style={styles.actionButton}
-                                        onPress={() => like(item.id, +1)}
-                                    >
-                                        <Text style={styles.actionText}>Like</Text>
-                                    </TouchableOpacity>
-                                    <Text style={styles.actionText}>{item.like}</Text>
+                            {/* Botão de três pontinhos */}
+                            <TouchableOpacity
+                                style={{ position: 'absolute', top: -10, right: -2, zIndex: 1000 }}
+                                onPress={() => openOptions(item.id)}
+                            >
+                                <MaterialIcons name="more-vert" size={24} color="black" />
+                            </TouchableOpacity>
 
-                                    <TouchableOpacity
-                                        style={[styles.actionButton, { backgroundColor: '#ff4d4d' }]}
-                                        onPress={() => like(item.id, -1)}
-                                    >
-                                        <Text style={styles.actionText}>Deslike</Text>
-                                    </TouchableOpacity>
+                            {menuVisible && selectedPostId === item.id && (
+                                <View style={{ backgroundColor: '#c7c7c7', borderBottomLeftRadius: 8, borderBottomRightRadius: 8, borderTopLeftRadius: 8, height: 110, width: 110, alignItems: 'center', justifyContent: 'center', position: 'absolute', padding: 10, top: 10, right: 6, zIndex: 2, gap: 10 }}>
+                                    <MyButton width={65} font_size={15} onPress={() => editPost(item.id)} title="Editar" color="yellow" />
+                                    <MyButton width={65} font_size={15} onPress={() => delPost(item.id)} title="Deletar" color="red" />
                                 </View>
+                            )}
 
+                            <Card.Cover style={styles.image_post} source={{ uri: item.url }} /> {/* aqui é a imagem*/}
+                            <Card.Content style={{ width: 150, height: 70, borderRadius: 10 }}>
+                                <Paragraph style={{ fontSize: 18, marginTop: 25 }}>{item.description}</Paragraph>
+
+                            </Card.Content>
+
+                            <View style={{
+                                flexDirection: 'row', justifyContent: 'space-around', marginTop: 75
+                            }}>
+                                <TouchableOpacity
+                                    style={styles.actionButton}
+                                    onPress={() => like(item.id, +1)}
+                                >
+                                    <Text style={styles.actionText}>Like</Text>
+                                </TouchableOpacity>
+                                <Text style={styles.actionText}>{item.like}</Text>
+
+                                <TouchableOpacity
+                                    style={[styles.actionButton, { backgroundColor: '#ff4d4d' }]}
+                                    onPress={() => like(item.id, -1)}
+                                >
+                                    <Text style={styles.actionText}>Deslike</Text>
+                                </TouchableOpacity>
                             </View>
-                      </MyItem>
-                      
-                        /*final do feed*/
-                    )}
-                />
+
+                        </View>
+                    </MyItem>
+
+                    /*final do feed*/
+                )}
+            />
         </MyView>
 
 
@@ -257,13 +262,14 @@ export default function postScreen() {
 
 // Estilos
 const styles = StyleSheet.create({
-    
-          
+
+
     MyModal: {
-        display: 'flex',
+
         width: 400,
         height: 400,
         padding: 20,
+
     },
 
     container: {
@@ -327,19 +333,19 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 3,
         elevation: 3,
-      },
-      
-      actionText: {
+    },
+
+    actionText: {
         fontSize: 12,
         fontWeight: 'bold',
         color: '#333',
-      },
-      image_post: {
-        width:450,
+    },
+    image_post: {
+        width: 450,
         height: 300,
 
-      }
-      
+    }
+
 });
 {/*import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, Dimensions } from 'react-native';
