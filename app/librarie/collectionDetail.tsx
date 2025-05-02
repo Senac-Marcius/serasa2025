@@ -9,8 +9,8 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import TabelaUsuarios from './loantable';
 import { supabase } from '../../src/utils/supabase';
 import MyMenu from '../../src/components/MyMenu';
-import { StarCalculation } from './starsCalculation';
 import LoansTabledetail from './loanstabledetail';
+import StarComponent from './starComponent';
 import { setCollection, iCollection, deleteCollectionById, updateCollectionById, getCollections } from '../../src/controllers/collections';
 
 export default function CollectionDetail() {
@@ -43,8 +43,8 @@ export default function CollectionDetail() {
     const tagCount: Record<string, number> = {};
 
     books.forEach(book => {
-      if (book.keywords) {
-        const tags = book.keywords.split(',').map((tag: string) => tag.trim().toLowerCase())
+      if (book.subject) {
+        const tags = book.subject.split(',').map((tag: string) => tag.trim().toLowerCase())
         tags.forEach((tag: string) => {
           tagCount[tag] = (tagCount[tag] || 0) + 1;
         });
@@ -59,27 +59,6 @@ export default function CollectionDetail() {
     return commonTags;
   }
 
-  async function filterBooksByRecentTags() {
-    const commonTags = getCommonTags(recentBooks);
-
-    if (commonTags.length === 0) return;
-
-    const { data, error } = await supabase
-      .from('items_librarie')
-      .select('*')
-      .or(
-        commonTags.map(tag => `keywords.ilike.%${tag}%`).join(',')
-      );
-
-    if (error) {
-      console.error("Erro ao filtrar livros:", error);
-      return;
-    }
-
-    if (data) {
-      setItems(data);
-    }
-  }
   async function fetchRelatedItems(item: iItem) {
     if (!item.subject) return;
 
@@ -107,6 +86,7 @@ export default function CollectionDetail() {
       fetchRelatedItems(item);
     }
   }, [item]);
+  
 
 
   return (
@@ -171,10 +151,13 @@ export default function CollectionDetail() {
                     style={styles.modal}
                     title="Empréstimo"
                     closeButtonTitle="X"
-
                   >
-                   <LoansTabledetail BookId = {item.id} />
+                    <LoansTabledetail BookId={item.id} />
                   </MyModal>
+                  <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                    <StarComponent
+                      rating={item.star} />
+                  </View>
                 </View>
               </View>
             </View>
@@ -276,7 +259,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   containerText: {
-    backgroundColor: ""
+    width: "70%"
   },
   button_capsule: {
     backgroundColor: "#EDE7F6",
@@ -301,7 +284,7 @@ const styles = StyleSheet.create({
   },
   modal: {
     width: 700,
-    height:450,
+    height: 450,
   },
 
   buttonsContainer: {

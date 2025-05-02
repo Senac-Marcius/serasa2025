@@ -33,6 +33,7 @@ interface iItem {
     incorporated: boolean,
     created_at: string,
     id: number,
+    star: number,
 }
 
 function toListItems(data:iItem[]){

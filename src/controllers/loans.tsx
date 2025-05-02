@@ -7,12 +7,14 @@ interface iLoans {
     id: number,
     bookId: number,
     userId:string,
+    renewed:boolean,
     loanDate: string,
     expectedLoanDate: string,
     effectiveLoanDate: string,
     renewal: string,
     creatAt: string,
     statusLoan: string,
+    totalQuantity:number,
     observation: string,
 }
 
