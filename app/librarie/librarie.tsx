@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'; //função useState só retorna para uma variavel const
-import { View, Text, Image, StyleSheet, ScrollView, FlatList, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
 import MyTheme from '../../src/components/MyTheme';
@@ -9,21 +9,16 @@ import MyNotify from '../../src/components/MyNotify';
 import MyTabsbar from '../../src/components/MyTabsBar';
 import MyButton from '../../src/components/MyButtons';
 import { MyModal } from '../../src/components/MyModal';
-import MyView from '../../src/components/MyView';
 import MySelect from '../../src/components/MySelect';
 import MyUpload from '../../src/components/MyUpload';
+import MyAccessibility from '../../src/components/MyAccessibility';
 import { Myinput, MyTextArea, MyCheck } from '../../src/components/MyInputs';
 import { Ionicons } from '@expo/vector-icons';
-import Select from './select';
-import { Icon , MD3Colors} from "react-native-paper";
 import { useRouter } from 'expo-router';
-import {iItem, setItem, getItems, updateItemById} from '../../src/controllers/librarie';
+import { useLocalSearchParams } from 'expo-router';
 import { supabase } from '../../src/utils/supabase';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { Link } from 'expo-router';
 
-
-export default function itemScreen() { // aqui é TS
+export default function itemScreen() { 
 
     const [req, setReq] = useState({
         id: -1,
@@ -35,13 +30,13 @@ export default function itemScreen() { // aqui é TS
         translation: '',
         language: '',
         image: '',
-        year: 0,
+        year: '',
         edition: '',
         publisher: '',
         location: '',
-        number_pages: 0,
+        number_pages: '',
         serie: '',
-        volume: 0,
+        volume: '',
         format: '',
         isbn: '',
         issn: '',
@@ -51,7 +46,7 @@ export default function itemScreen() { // aqui é TS
         keywords: '',
         summary: '',
         notes: '',
-        number_copies: 0,
+        number_copies: '',
         status: '',
         url: '',
         file: '',
@@ -64,73 +59,204 @@ export default function itemScreen() { // aqui é TS
     const [menuOpen, setMenuOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [selectedFile, setSelectedFile] = useState<string | null>(null);
-    const [activeTab, setActiveTab] = useState(0); // Estados para as abas
+    const [activeTab, setActiveTab] = useState(0);
     const [visible, setVisible] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [editMode, setEditMode] = useState(false); // Novo estado para controlar o modo
+    const { id } = useLocalSearchParams(); // ID da URL (se existir)
+    //Selects/Pickers
+    const [typology, setTypology] = useState("Tipologia")
+    const [language, setLanguage] = useState("Idioma") 
+    const [format, setFormat] = useState("Formato") 
+    const [status, setStatus] = useState("Status")
+    const [type_loan, setType_loan] = useState("Tipo de Empréstimo")
+
+    interface iItem {
+        typology: string,
+        title: string,
+        subtitle: string,
+        responsible: string,
+        translation: string,
+        language: string,
+        image: string,
+        year: string,
+        edition: string,
+        publisher: string,
+        location: string,
+        number_pages: string,
+        serie: string,
+        volume: string,
+        format: string,
+        isbn: string,
+        issn: string,
+        cdd: string,
+        call_number: string,
+        subject: string,
+        keywords: string,
+        summary: string,
+        notes: string,
+        number_copies: string,
+        status: string,
+        url: string,
+        file: string,
+        type_loan: string,
+        incorporated: boolean,
+        created_at: string,
+        id: number,
+    }
     
-    useEffect(() =>{
-        (async () => {
-            const retorno =await getItems({});
-            
-            if (retorno.status && retorno.data && retorno.data.length>0){
-                console.log(retorno.data);
-                const t:any[] = []
-                retorno.data.map(p => t.push(p))
-                setItems(t)
-                console.log(items)
-            } else {
-                console.log('Nenhum item encontrado ou erro:', retorno.error);
-            }
-        })();
+    async function setItem(item:iItem){
+     
+        const { data, error } = await supabase.from('librarie_items')
+        .insert([
+            item
+        ])
+        .select()
+        
+        if(error){
+            console.error('Erro',error);
+            return null;
+        }
+        console.log('Item inserido com sucesso!', data);
+    
+        return data
+    }
+
+    // Verifica se é edição ao carregar a tela
+    useEffect(() => {
+        if (id) {
+            setEditMode(true);
+            loadItemForEdit(id);
+        }
+    }, [id]);
+
+    // Puxa os itens do BD cadastrar
+    useEffect(() => {
+        async function fetchAllItems() {
+        const { data, error } = await supabase
+            .from('librarie_items')
+            .select('*');
+    
+        if (error) {
+            console.error("Erro ao carregar itens:", error);
+        } else {
+            setItems(data || []);
+        }
+
+        setLoading(false);
+        }
+
+        fetchAllItems();
+
     }, []);
 
-    async function handleRegister() { 
-        if (req.id == -1) {
-            const newId = items.length ? items[items.length - 1].id + 1 : 0;
-            const newItem = { ...req, id: newId };
+    // Carrega dados do item para edição (banco de edição)
+    async function loadItemForEdit(id: string | string[]) {
+        const { data, error } = await supabase
+            .from('items_librarie') // Banco de edição
+            .select('*')
+            .eq('id', id)
+            .single();
 
-            setItems([...items, newItem])
-            await setItem(newItem)
-        } else {
-            await updateItemById(req.id, req)
-            setItems(items.map(i => (i.id == req.id) ? req : i));
+        if (data) {
+            setReq(data); // Preenche o formulário com os dados existentes
         }
-        setReq({
-            id: -1,
-            created_at: new Date().toISOString(),
-            typology: '',
-            title: '',
-            subtitle: '',
-            responsible: '',
-            translation: '',
-            language: '',
-            image: "",
-            year: 0,
-            edition: '',
-            publisher: '',
-            location: '',
-            number_pages: 0,
-            serie: '',
-            volume: 0,
-            format: '',
-            isbn: '',
-            issn: '',
-            cdd: '',
-            call_number: '',
-            subject: '',
-            keywords: '',
-            summary: '',
-            notes: '',
-            number_copies: 0,
-            status: '',
-            url: '',
-            file: '',
-            type_loan: '',
-            incorporated: false,
-        });
+    }
+
+    async function updateItemById(id: number, updatedItem: Partial<iItem>) {
+        const { error } = await supabase
+            .from('librarie_items')
+            .update(updatedItem)
+            .eq('id', id);
+    
+        if (error) {
+            console.error("Erro ao atualizar item:", error.message);
+            return false;
+        }
+        return true;
+    }
+
+    // Função unificada para salvar (cadastro ou edição)
+    async function handleSubmit() {
+        try {
+            // Validação básica
+            if (!req.title || !req.subject || !req.keywords) {
+              window.alert("Preencha título, assunto e palavras-chave!");
+              return;
+            }
         
-        router.push('/librarie/librariePreview');
-          
-    };
+            if (editMode) {
+                // Atualiza no banco de edição
+                const success = await updateItemById(req.id, req);
+                if (success) {
+                    window.alert("Item atualizado com sucesso!");
+                    router.push('/librarie/librariePreview');
+                } else {
+                    window.alert("Erro ao atualizar!");
+                }
+
+            } else {
+                // Cadastra no banco principal (CADASTRO NOVO)
+                const newId = items.length ? items[items.length - 1].id + 1 : 1;
+                const newItem = { ...req, id: newId };
+
+                // Insere no banco principal
+                const { error } = await supabase
+                    .from('librarie_items')
+                    .insert([newItem]);
+
+                if (error) throw error;
+        
+                // Atualiza o estado local
+                setItems([...items, newItem]);
+                window.alert(`Item cadastrado com ID: ${newId}`);
+                
+                // Limpa o formulário
+                setReq({
+                    id: -1,
+                    created_at: new Date().toISOString(),
+                    typology: '',
+                    title: '',
+                    subtitle: '',
+                    responsible: '',
+                    translation: '',
+                    language: '',
+                    image: "",
+                    year: '',
+                    edition: '',
+                    publisher: '',
+                    location: '',
+                    number_pages: '',
+                    serie: '',
+                    volume: '',
+                    format: '',
+                    isbn: '',
+                    issn: '',
+                    cdd: '',
+                    call_number: '',
+                    subject: '',
+                    keywords: '',
+                    summary: '',
+                    notes: '',
+                    number_copies: '',
+                    status: '',
+                    url: '',
+                    file: '',
+                    type_loan: '',
+                    incorporated: false,
+                });
+                router.push('/librarie/librariePreview');
+            }
+        }   catch (error) {
+            console.error("Erro detalhado:", error);
+            
+            if (error instanceof Error) {
+              alert(`Erro: ${error.message}`);
+            } else {
+              alert("Ocorreu um erro desconhecido");
+            }
+        }
+    }
 
     const tabs = ["Identificação da Obra", "Publicação e Edição", "Descrição e Classificação", "Conteúdo e Acesso"];
     // Função para lidar com o clique nas abas
@@ -138,11 +264,100 @@ export default function itemScreen() { // aqui é TS
         setActiveTab(index);
     };
 
+    const save = async () => {
+        const { data, error } = await supabase
+            .from('librarie_items')
+            .insert([
+                {
+                    typology: req.typology,
+                    title: req.title,
+                    subtitle: req.subtitle,
+                    responsible: req.responsible,
+                    translation: req.translation,
+                    language: req.language,
+                    image: req.image,
+                    year: req.year,
+                    edition: req.edition,
+                    publisher: req.publisher,
+                    location: req.location,
+                    number_pages: req.number_pages,
+                    serie: req.serie,
+                    volume: req.volume,
+                    format: req.format,
+                    isbn: req.isbn,
+                    issn: req.issn,
+                    cdd: req.cdd,
+                    call_number: req.call_number,
+                    subject: req.subject,
+                    keywords: req.keywords,
+                    summary: req.summary,
+                    notes: req.notes,
+                    number_copies: req.number_copies,
+                    status: req.status,
+                    url: req.url,
+                    file: req.file,
+                    type_loan: req.type_loan,
+                    incorporated: req.incorporated || false, // Se não estiver marcado, será "false"
+                }
+            ]);
+    
+        if (error) {
+            console.error('Erro ao salvar dados:', error);
+            window.alert('Erro ao salvar os dados!');
+        } else {
+            console.log('Dados salvos com sucesso:', data);
+            window.alert('Registro salvo com sucesso!');
+        }
+    };
+
+    const cancel = () => {
+        const confirmed = window.confirm("Tem certeza que deseja cancelar este registro? Todos os dados não salvos serão perdidos.");
+      
+            if (confirmed) {
+            setReq({
+                id: -1,
+                created_at: new Date().toISOString(),
+                typology: '',
+                title: '',
+                subtitle: '',
+                responsible: '',
+                translation: '',
+                language: '',
+                image: '',
+                year: '',
+                edition: '',
+                publisher: '',
+                location: '',
+                number_pages: '',
+                serie: '',
+                volume: '',
+                format: '',
+                isbn: '',
+                issn: '',
+                cdd: '',
+                call_number: '',
+                subject: '',
+                keywords: '',
+                summary: '',
+                notes: '',
+                number_copies: '',
+                status: '',
+                url: '',
+                file: '',
+                type_loan: '',
+                incorporated: false,
+            });
+            setSelectedImage(null);
+            setSelectedFile(null);
+            router.push("/librarie/librariePreview");
+        }
+    };
+      
     async function pickImage() {
     // Solicita permissão para acessar a galeria
         let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (permissionResult.granted === false) {
-            alert('Permissão para acessar a galeria é necessária!');
+            window.alert('Permissão para acessar a galeria é necessária!');
             return;
         }
         // Abre a galeria para selecionar um arquivo
@@ -155,10 +370,10 @@ export default function itemScreen() { // aqui é TS
 
         if (!result.canceled) {
             const uri = result.assets[0].uri;
-            const fileName = uri.split('/').pop() || 'imagem_sem_nome.jpg';
+            const imageName = uri.split('/').pop() || 'imagem_sem_nome.jpg';
              // extrai o nome do arquivo
-            setSelectedImage(uri); // você pode manter isso para exibir preview se quiser
-            setReq({ ...req, image: fileName }); // atualiza o input com o nome do arquivo
+            setSelectedImage(uri);
+            setReq({ ...req, image: imageName }); // atualiza o input capa com o nome do arquivo
         } 
     }
 
@@ -174,91 +389,17 @@ export default function itemScreen() { // aqui é TS
         });
 
         if (!result.canceled && result.assets[0]) {
-            setSelectedFile(result.assets[0].uri);
+            const uri = result.assets[0].uri; 
+            const fileName = uri.split('/').pop() || 'arquivo_sem_nome.pdf';
+            
+            // extrai o nome do arquivo
+           setSelectedFile(uri);
+           setReq({ ...req, file: fileName }); // atualiza o input material com o nome do arquivo
         }
     };
 
-    const save = () => {
-        console.log("Item salvo:",);
-    };
-
-    const cancel = () => {
-
-        console.log('Função cancel chamada');
-        
-        Alert.alert(
-            "Cancelar Registro",
-            "Tem certeza que deseja cancelar este registro? Todos os dados não salvos serão perdidos.",
-            [
-            {
-                text: "Não",
-                style: "cancel"
-            },
-            {
-                text: "Sim",
-                onPress: () => {
-                console.log('Confirmado. Redefinindo e redirecionando...');
-        
-                setReq({
-                    id: -1,
-                    created_at: new Date().toISOString(),
-                    typology: '',
-                    title: '',
-                    subtitle: '',
-                    responsible: '',
-                    translation: '',
-                    language: '',
-                    image: '',
-                    year: 0,
-                    edition: '',
-                    publisher: '',
-                    location: '',
-                    number_pages: 0,
-                    serie: '',
-                    volume: 0,
-                    format: '',
-                    isbn: '',
-                    issn: '',
-                    cdd: '',
-                    call_number: '',
-                    subject: '',
-                    keywords: '',
-                    summary: '',
-                    notes: '',
-                    number_copies: 0,
-                    status: '',
-                    url: '',
-                    file: '',
-                    type_loan: '',
-                    incorporated: false,
-                });
-        
-                setSelectedImage(null);
-                setSelectedFile(null);
-        
-                // Garante que o redirecionamento aconteça fora do contexto do Alert
-                setTimeout(() => {
-                    router.push('/Biblioteca/librariePreview');
-                }, 100);
-                }
-            }
-            ]
-        );
-    };
-      
-
-    //Selects/Pickers
-    const [typology, setTypology] = useState("Tipologia")
-    const [language, setLanguage] = useState("Idioma") 
-    const [format, setFormat] = useState("Formato") 
-    const [status, setStatus] = useState("Status")
-    const [type_loan, setType_loan] = useState("Tipo de Empréstimo") 
-
     return ( //encapsulamento
         <ScrollView>
-            <Link href="/librarie/librariePreview">
-            <Text>Ir para Preview</Text>
-            </Link>
             <View style={styles.header}>
                 <View style={styles.header2}>
                     <TouchableOpacity onPress={() => setMenuOpen(!menuOpen)} style={styles.iconButton}>
@@ -280,82 +421,91 @@ export default function itemScreen() { // aqui é TS
             </View>
             {menuOpen && <MyMenu closeMenu={() => setMenuOpen(false)} />}
             
-            <MyTheme chendTheme={()=>{}} fontSize={()=>{}}/>
-            
-            <MyText style={styles.h1}>Cadastro de Itens no Acervo</MyText>
+            <View>
+                {/*<MyAccessibility style={styles.accessibilityButton}>
+                    <Text style={{ fontSize: 16, marginBottom: 8 }}>Acessibilidade ativada!</Text>
+                    <Button mode="contained" onPress={() => console.log('Ativando recurso')}>
+                    Modo Alto Contraste
+                    </Button>
+                </MyAccessibility>*/}
+                <MyTheme chendTheme={()=>{}} fontSize={()=>{}}/>
+            </View>
+
+            <MyText style={styles.h1}>{editMode ? "Editar Recurso Informacional" : "Cadastrar Novo Recurso Informacional"}</MyText>
             
             <View style={styles.buttonContainer}>
                 <ScrollView 
                     horizontal 
                     showsHorizontalScrollIndicator={false}
                     style={styles.scrollRow}>
-                    <MyButton
-                        title="Salvar"
-                        onPress={save}
-                        button_type="capsule"
-                        icon="content-save"
-                        style={styles.button_capsule1}
-                    />
-                    <MyModal
-                        visible={visible}
-                        setVisible={setVisible}
-                        style={styles.Modal}
-                        title="Prévia" 
-                        closeButtonTitle="Fechar"
-                        tipe="capsule"
-                        buttonStyle={styles.button_capsule1}
-                        isButton={true}
-                        
-                    >
-                        <ScrollView>
-                            <View style={styles.modalContainer}>
-                                <View style={styles.modalList}>
-                                    {selectedImage && (
-                                        <Image source={{ uri: selectedImage }} style={styles.image} />
-                                    )}
-                                    <MyText style={styles.detail}>Tipologia: {req.typology || 'Não informado'}</MyText>
-                                    <MyText style={styles.title}>Título: {req.title || 'Não informado'}</MyText>
-                                    <MyText style={styles.subtitle}>Subtítulo: {req.subtitle || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>Responsáveis: {req.responsible || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>Tradução: {req.translation || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>Idioma: {req.language || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>Ano: {req.year || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>Edição: {req.edition || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>Editora: {req.publisher || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>Local: {req.location || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>Número de Páginas: {req.number_pages || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>Série: {req.serie || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>Volume: {req.volume || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>Formato: {req.format || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>ISBN: {req.isbn || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>ISSN: {req.issn || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>CDD: {req.cdd || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>Número de Chamada: {req.call_number || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>Assunto: {req.subject || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>Palavras-chave: {req.keywords || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>Resumo: {req.summary || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>Notas: {req.notes || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>Número de Exemplares: {req.number_copies || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>Status: {req.status || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>URL: {req.url || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>Arquivo: {req.file || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>Tipo de Empréstimo: {req.type_loan || 'Não informado'}</MyText>
-                                    <MyText style={styles.detail}>Incorporado?: {req.incorporated || 'Não informado'}</MyText>
+                    <View style={styles.buttonWrapper}>
+                        <MyButton
+                            title="Salvar"
+                            onPress={save}
+                            button_type="capsule"
+                            icon="content-save"
+                            style={styles.button_capsule1}
+                        />
+                    </View>
+                    <View style={styles.buttonWrapper}>
+                        <MyModal
+                            visible={visible}
+                            setVisible={setVisible}
+                            style={styles.Modal}
+                            title="Prévia" 
+                            closeButtonTitle="Fechar"
+                            tipe="capsule"
+                            buttonStyle={styles.button_capsule1}
+                            isButton={true}   
+                        >
+                            <ScrollView>
+                                <View style={styles.modalContainer}>
+                                    <View style={styles.modalList}>
+                                        {selectedImage && (
+                                            <Image source={{ uri: selectedImage }} style={styles.image} />
+                                        )}
+                                        <MyText style={styles.detail}>Tipologia: {req.typology || 'Não informado'}</MyText>
+                                        <MyText style={styles.title}>Título: {req.title || 'Não informado'}</MyText>
+                                        <MyText style={styles.subtitle}>Subtítulo: {req.subtitle || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>Responsáveis: {req.responsible || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>Tradução: {req.translation || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>Idioma: {req.language || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>Ano: {req.year || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>Edição: {req.edition || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>Editora: {req.publisher || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>Local: {req.location || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>Número de Páginas: {req.number_pages || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>Série: {req.serie || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>Volume: {req.volume || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>Formato: {req.format || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>ISBN: {req.isbn || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>ISSN: {req.issn || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>CDD: {req.cdd || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>Número de Chamada: {req.call_number || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>Assunto: {req.subject || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>Palavras-chave: {req.keywords || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>Resumo: {req.summary || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>Notas: {req.notes || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>Número de Exemplares: {req.number_copies || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>Status: {req.status || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>URL: {req.url || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>Arquivo: {req.file || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>Tipo de Empréstimo: {req.type_loan || 'Não informado'}</MyText>
+                                        <MyText style={styles.detail}>Incorporado?: {req.incorporated || 'Não informado'}</MyText>
+                                    </View>
                                 </View>
-                            </View>
-                        </ScrollView>
-                    </MyModal>
-
-                    <MyButton
-                        title="Cancelar"
-                        onPress={cancel}
-                        button_type="capsule"
-                        icon="close-circle"
-                        style={styles.button_capsule1}
-                    /> 
-                    <TouchableOpacity onPress={cancel} style={{ padding: 10, backgroundColor: 'red' }}>
-                    <Text style={{ color: 'white' }}>Cancelar</Text>
-                    </TouchableOpacity>  
+                            </ScrollView>
+                        </MyModal>
+                    </View>
+                    <View style={styles.buttonWrapper}>
+                        <MyButton
+                            title="Cancelar"
+                            onPress={cancel}
+                            button_type="capsule"
+                            icon="close-circle"
+                            style={styles.button_capsule1}
+                        /> 
+                    </View> 
                 </ScrollView>   
             </View> 
 
@@ -378,7 +528,7 @@ export default function itemScreen() { // aqui é TS
                         {activeTab === 0 && (
                             <>
                                 <MySelect
-                                label={typology} setLabel={setTypology} 
+                                label={typology} setLabel={setTypology}
                                 list={[
                                     {key:0, option: 'Livro' },
                                     {key:1, option: "Artigo" },
@@ -390,9 +540,9 @@ export default function itemScreen() { // aqui é TS
                                     {key:7, option: "Mapa" },
                                     {key:8, option: "Outros" },
                                 ]}
-                                />              
+                                />                   
                                 <Myinput
-                                    placeholder="Título"
+                                    placeholder="Título*"
                                     value={req.title}
                                     onChangeText={(text) => setReq({ ...req, title: text })}
                                     label='' iconName=''
@@ -439,8 +589,9 @@ export default function itemScreen() { // aqui é TS
                                     onPress={pickImage}
                                     button_type="capsule"
                                     icon=""
-                                    style={styles.button_capsule1}
+                                    style={styles.button_capsule2}
                                     />
+                                   {/* <MyUpload />*/}
                                 </View>
                             </>
                         )}
@@ -449,8 +600,8 @@ export default function itemScreen() { // aqui é TS
                             <>
                                 <Myinput 
                                     placeholder="Ano"
-                                    value={req.year?.toString()}
-                                    onChangeText={(text) => setReq({ ...req, year: Number(text) })}
+                                    value={req.year}
+                                    onChangeText={(text) => setReq({ ...req, year: text })}
                                     label='' iconName=''
                                 />
                                 <Myinput 
@@ -479,8 +630,8 @@ export default function itemScreen() { // aqui é TS
                                 />
                                 <Myinput 
                                     placeholder="Volume"
-                                    value={req.volume?.toString()}
-                                    onChangeText={(text) => setReq({ ...req, volume: Number(text) })}
+                                    value={req.volume}
+                                    onChangeText={(text) => setReq({ ...req, volume: text })}
                                     label='' iconName=''
                                 />
                             </>
@@ -499,8 +650,8 @@ export default function itemScreen() { // aqui é TS
                                 />
                                 <Myinput
                                     placeholder="Número de Páginas"
-                                    value={req.number_pages?.toString()}
-                                    onChangeText={(text) => setReq({ ...req, number_pages: Number(text) })}
+                                    value={req.number_pages}
+                                    onChangeText={(text) => setReq({ ...req, number_pages: text })}
                                     label='' iconName=''
                                 />
                                 <Myinput
@@ -533,13 +684,13 @@ export default function itemScreen() { // aqui é TS
                         {activeTab === 3 && (
                             <>
                                 <MyTextArea 
-                                    placeholder="Assunto"
+                                    placeholder="Assunto*"
                                     value={req.subject}
                                     onChangeText={(text) => setReq({ ...req, subject: text })}
                                     label='' iconName=''
                                 />
                                 <MyTextArea 
-                                    placeholder="Palavras-chave"
+                                    placeholder="Palavras-chave*"
                                     value={req.keywords}
                                     onChangeText={(text) => setReq({ ...req, keywords: text })}
                                     label='' iconName=''
@@ -558,8 +709,8 @@ export default function itemScreen() { // aqui é TS
                                 />
                                 <Myinput
                                     placeholder="Número de exemplares"
-                                    value={req.number_copies?.toString()}
-                                    onChangeText={(text) => setReq({ ...req, number_copies: Number(text) })}
+                                    value={req.number_copies}
+                                    onChangeText={(text) => setReq({ ...req, number_copies: text })}
                                     label='' iconName=''
                                 />
                                 <MySelect
@@ -599,7 +750,7 @@ export default function itemScreen() { // aqui é TS
                                     onPress={pickFile}
                                     button_type="capsule"
                                     icon=""
-                                    style={styles.button_capsule1}
+                                    style={styles.button_capsule2}
                                     />
                                 </View>
                                 <View style={{ flexDirection: 'row', gap: 20, marginTop: 10, }}>
@@ -618,28 +769,20 @@ export default function itemScreen() { // aqui é TS
                             </>
                         )}
                         <MyButton
-                            title="CADASTRAR"
-                            onPress={ handleRegister }
+                            title={editMode ? "ATUALIZAR" : "CADASTRAR"}
+                            onPress={ handleSubmit }
                             button_type="capsule"
                             icon=""
-                            style={styles.buttonRegister}
-                            color='#0F2259'
+                            style={editMode ? styles.buttonEdit : styles.buttonRegister} 
+                            color={editMode ? '#4A148C' : '#0F2259'}
                             height={50}
                         />    
                     </View>
                 </View>
             </View> 
-          
-            
-
-
         </ScrollView>
     )
-}
-
-                  
-            
-    
+}   
 
 const styles = StyleSheet.create({
 
@@ -662,45 +805,55 @@ const styles = StyleSheet.create({
         height: 70,
         width: '100%',
         borderBottomColor:"#d9d9d9",
-        },
-        headerTitle: {
-        color: '#4A148C', 
-        fontSize: 20, 
-        fontWeight: 'bold',
+    },
+    headerTitle: {
+    color: '#4A148C', 
+    fontSize: 20, 
+    fontWeight: 'bold',
+    fontFamily: 'Poppins_400Regular',
+    },
+    header2:{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    },
+    avatarButton: {
+    width: 36,
+    height: 36,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    },
+    avatar: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 18,
+    },
+    h1: {
+        textAlign: 'center',
         fontFamily: 'Poppins_400Regular',
-        },
-        header2:{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        fontSize: 36,
+        fontStyle: 'italic',
+        fontWeight: 'bold',
+        color: '#0F2259',
+        marginVertical: 5,
+        padding: 5,
         alignItems: 'center',
-        },
-        avatarButton: {
-        width: 36,
-        height: 36,
-        overflow: 'hidden',
-        justifyContent: 'center',
-        alignItems: 'center',
+        marginTop: 4,
+    },
+    accessibilityButton: {
+        position: 'absolute',
+        bottom: 20,
+        left: 20,
+        backgroundColor: 'white',
+        padding: 10,
+        borderRadius: 30,
         flexDirection: 'row',
-        },
-        avatar: {
-            width: '100%',
-            height: '100%',
-            borderRadius: 18,
-        },
-        h1: {
-            textAlign: 'center',
-            fontFamily: 'Poppins_400Regular',
-            fontSize: 36,
-            fontStyle: 'italic',
-            fontWeight: 'bold',
-            color: '#0F2259',
-            marginVertical: 5,
-            padding: 5,
-            alignItems: 'center',
-            marginTop: 4,
-        },
-
-
+        alignItems: 'center',
+        elevation: 5,
+        zIndex: 10,
+    },
     container: {
         flex: 1,
         padding: 20,
@@ -714,10 +867,8 @@ const styles = StyleSheet.create({
     scrollRow: {
         flexDirection: 'row',
         paddingHorizontal: 5,
-        flexGrow: 1,
-
+        flexWrap: 'wrap',
     },
-    
     form: {
         flex: 1,
         marginRight: 50,
@@ -743,42 +894,57 @@ const styles = StyleSheet.create({
         display:"flex",
         alignItems: 'center',
         cursor: 'pointer',
-        
+    },
+    buttonEdit: {
+        backgroundColor: '#4A148C',
+        color: '#FFF',
+        fontWeight: 'bold',
+        fontFamily: 'Poppins_400Regular',
+        fontSize: 20,
+        padding: 15,
+        marginVertical: 50,
+        borderRadius: 50,
+        display:"flex",
+        alignItems: 'center',
+        cursor: 'pointer',
     },
     buttonContainer: {
         flexDirection: 'row', // Alinha os botões horizontalmente
-        justifyContent: 'center', // Mantém no centro
-        alignItems: 'center', // Alinha na vertical
-        paddingHorizontal: 80, // Ajuste de espaçamento interno
-        marginVertical: 10,
-        marginRight: 50,
-        marginLeft: 50,
-        width: '100%', // Garante que ocupe a largura máxima
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        paddingHorizontal: 50, 
+        marginVertical: 30,
+        marginLeft: 30,
+        alignSelf: 'center',
     },
-    
+    buttonWrapper: {
+        width: '33%',  // Faz com que cada botão ocupe um terço da largura do container
+        minWidth: 100, // Garante que os botões não fiquem menores que esse tamanho
+        paddingHorizontal: 5,
+        flexWrap: 'wrap',         // Permite quebra de linha em telas pequenas
+        justifyContent: 'center', // Centraliza os botões
+        alignItems: 'center',
+    },
     button_capsule1: {
         borderRadius: 50,
         backgroundColor: "#813AB1",
         alignItems: "center",
         justifyContent: "center",
         height: 40,
-        paddingVertical: 10,
-        marginRight: 20,
-        width: 200,
+        marginRight: 15,
         fontSize: 14,
         fontFamily: 'Poppins_400Regular',
-        marginHorizontal: 100, // Adiciona espaço entre os botões
+        marginHorizontal: 15,
+        marginVertical: 5, 
     },
     button_capsule2: {
         borderRadius: 50,
         backgroundColor: "#813AB1",
         alignItems: "center",
         justifyContent: "center",
-        height: 30,
-        paddingVertical: 10,
-        marginRight: 20,
+        height: 40,
         marginVertical: 30,
-        marginHorizontal: 20,
+        marginHorizontal: 15,
     },
     text: {
         fontSize: 16,
@@ -796,116 +962,92 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         borderRadius: 10,
         minHeight: 90,
-      },
-      tabItem: { // Estilo para cada aba
-          paddingHorizontal: 10,
-          paddingVertical: 20,
-          marginRight: 15,
-          marginHorizontal: 40,
-          height: 50,
-          width: 250,
-          borderRadius: 50,
-          backgroundColor: '#F2F2F2',
-          borderWidth: 2,
-          borderColor: '#0F2259',
-          justifyContent: 'center',
-          alignItems: 'center',
-      },
-      activeTabItem: { // Estilo quando a aba está ativa
-          backgroundColor: '#AD6CD9',
-          borderBottomWidth: 5,
-          borderBottomColor: '#0F2259',
-      },
-      tabText: { // Estilo do texto normal
-          color: 'black',
-          fontSize: 16,
-          fontFamily: 'Poppins_400Regular',
-          justifyContent: 'center',
-      },
-      activeTabText: { // Estilo do texto quando a aba está ativa
-          fontWeight: 'bold',
-          color: 'white',
-      },
-    card: {
+    },
+    tabItem: { // Estilo para cada aba
+        paddingHorizontal: 10,
+        paddingVertical: 20,
+        marginRight: 15,
+        marginHorizontal: 40,
+        height: 50,
+        width: 250,
+        borderRadius: 50,
         backgroundColor: '#F2F2F2',
-        padding: 20,
-        marginVertical: 10,
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.2,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
+        borderWidth: 2,
+        borderColor: '#0F2259',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    activeTabItem: { // Estilo quando a aba está ativa
+        backgroundColor: '#AD6CD9',
+        borderBottomWidth: 5,
+        borderBottomColor: '#0F2259',
+    },
+    tabText: { // Estilo do texto normal
+        color: 'black',
+        fontSize: 16,
+        fontFamily: 'Poppins_400Regular',
+        justifyContent: 'center',
+    },
+    activeTabText: { // Estilo do texto quando a aba está ativa
+        fontWeight: 'bold',
+        color: 'white',
     },
     image: {
         width: 120,
         height: 180,
         borderRadius: 6,
         margin: 3,
-      },
-      cardText:{
-        flex: 1,
-        justifyContent: 'center',
-        padding: 12,
-      },
-      title: {
-        fontWeight: 'bold',
-        fontSize: 18,
-        textAlignVertical:'top',
-      },
-      subtitle: {
-        fontStyle: 'italic',
-        fontSize: 16,
-      },
-      detail: {
-        fontSize: 16,
-        color: '#444',
-      },
-      link: {
-        color: '#6200ea',
-        marginTop: 10,
-        fontWeight: 'bold',
-        textAlign:"right",
-      },
-      Modal: {
-        display: 'flex',
-        width: 630,
-        height: 530,
-        backgroundColor: '#f2f2f2',
-        borderRadius: 20,
-        borderWidth: 4,
-        borderColor: 'purple',
-        alignItems: 'center',
     },
-    modalContainer: {
-        flex: 1,
-        display: 'flex',
-        maxWidth: 600,
-        height: 550,
-        alignItems: 'flex-start',
-        padding: 5, 
-      },  
-      modalList: {
-        backgroundColor: '#f2f2f2',
-        width: '100%',
-        gap: 5,
-        alignItems: 'flex-start',
-        display: 'flex',
-        
-        
-      },
-      buttonModalContainer: {
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        gap: 12,
-        paddingHorizontal: 10,
-        marginBottom: 15
-      },
-      ViewSelect: {
-        width: '100%',
-      },
-      capaContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-      },
-      
+    title: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    textAlignVertical:'top',
+    },
+    subtitle: {
+    fontStyle: 'italic',
+    fontSize: 16,
+    },
+    detail: {
+    fontSize: 16,
+    color: '#444',
+    },
+    link: {
+    color: '#6200ea',
+    marginTop: 10,
+    fontWeight: 'bold',
+    textAlign:"right",
+    },
+    Modal: {
+    display: 'flex',
+    width: 400,
+    height: 530,
+    backgroundColor: '#f2f2f2',
+    borderRadius: 20,
+    borderWidth: 4,
+    borderColor: 'purple',
+    alignItems: 'center',
+},
+modalContainer: {
+    flex: 1,
+    display: 'flex',
+    maxWidth: 600,
+    height: 550,
+    alignItems: 'flex-start',
+    padding: 5,
+    width: '280%', 
+},  
+modalList: {
+backgroundColor: '#f2f2f2',
+width: 300,
+gap: 5,
+alignItems: 'flex-start',
+display: 'flex',
+//height: '100%',
+
+
+},
+capaContainer: {
+flexDirection: 'row',
+alignItems: 'center',
+},    
 });
