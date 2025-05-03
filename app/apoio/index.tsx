@@ -126,9 +126,9 @@ export default function HomeScreen() {
   }, [messages.length]);
 
   return (
-    <MyView router={router} style={{ flex: 1 }}>
+    <MyView>
       <ImageBackground
-        source={require('../app/apoio/imagens/download.png')} // <-- sua imagem aqui!
+        source={require('./imagens/download.png')} // <-- sua imagem aqui!
         style={styles.backgroundImage}
         resizeMode='center'
       >
