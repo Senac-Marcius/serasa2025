@@ -6,6 +6,7 @@ interface iCollection {
         id: number,
         bookId:number,
         createAt:string,
+        totalStar:number;
         name: string,
         quantity: string,
         star: number,    
@@ -75,35 +76,5 @@ async function updateCollectionById(id: number,  updatedCollection: Partial<iCol
     }
     return true;
 }
-const getAverageStarsByBookId = async () => {
-    const { data, error } = await supabase
-      .from("collections")
-      .select("bookId, stars");
-  
-    if (error) {
-      console.error("Erro ao buscar avaliações:", error);
-      return {};
-    }
-  
-    const starMap: Record<string, { total: number; count: number }> = {};
-  
-    data.forEach(({ bookId, stars }) => {
-      if (!bookId || stars == null) return;
-  
-      if (!starMap[bookId]) {
-        starMap[bookId] = { total: stars, count: 1 };
-      } else {
-        starMap[bookId].total += stars;
-        starMap[bookId].count += 1;
-      }
-    });
-  
-    const averageMap: Record<string, number> = {};
-    for (const id in starMap) {
-      const { total, count } = starMap[id];
-      averageMap[id] = total / count;
-    }
-  
-    return averageMap;
-  };
-export {setCollection, iCollection,deleteCollectionById,updateCollectionById,getCollections,getAverageStarsByBookId} 
+
+export {setCollection, iCollection,deleteCollectionById,updateCollectionById,getCollections} 

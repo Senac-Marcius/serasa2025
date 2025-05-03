@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from 'react'; //react é uma biblioteca e essa função esta importando ela, puxando
-import { FlatList, View, Text, StyleSheet, ViewStyle, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native'; //react native é uma biblioteca dentro de react 
+import React, { useEffect, useState } from 'react';
+import { FlatList, View, Text, StyleSheet, ViewStyle, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
 import MyCalendar from '../../src/components/MyCalendar';
 import MyView from '../../src/components/MyView';
 import { Myinput, MyCheck, MyTextArea } from '../../src/components/MyInputs';
 import MyButton from '../../src/components/MyButtons';
 import MyList from '../../src/components/MyList';
 import { useRouter } from 'expo-router';
-import { iLoans, setLoanbd, deleteLoansById, updateLoansById, getLoans } from '../../src/controllers/loans'
+import { iLoans, setLoanbd, deleteLoansById, updateLoansById, getLoans } from '../../src/controllers/loans';
 import { supabase } from '../../src/utils/supabase';
 import { getItems, iItem, setItem } from '../../src/controllers/librarie';
 import { useLocalSearchParams } from 'expo-router';
-import {getLoggedUserId} from '../../src/controllers/users'
-
-
+import { getLoggedUserId } from '../../src/controllers/users';
 
 type LoansProps = {
     BookId: number;
@@ -23,19 +21,19 @@ export default function LoansTabledetail({ BookId }: LoansProps) {
     const [items, setItems] = useState<iItem[]>([]);
     const { id } = useLocalSearchParams();
     const [successMessage, setSuccessMessage] = useState('');
-
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function getTodos() {
             const retorno = await getItems({});
-
             if (retorno.status && retorno.data && retorno.data.length > 0) {
                 setItems(retorno.data);
             }
+            setLoading(false);
         }
-
         getTodos();
     }, []);
+
     const bookId = Number(id);
     const item = items.find((item) => item.id === BookId);
 
@@ -62,103 +60,98 @@ export default function LoansTabledetail({ BookId }: LoansProps) {
         },
     ];
 
-
-    const [req, setReq] = useState({ //useState retorna uma variavel e uma função para alteral a variavel (req e setReq)
+    const [req, setReq] = useState({
         id: -1,
         bookId: 0,
         userId: '',
+        renewed: false,
         loanDate: new Date().toISOString(),
         expectedLoanDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
         effectiveLoanDate: new Date().toISOString(),
         renewal: '',
         creatAt: new Date().toISOString(),
         statusLoan: '',
-        observation: ''
-
+        observation: '',
+        totalQuantity:0,
     });
-
-    /* const [setLoans] = useState<{
-         id: number,
-         bookId: string,
-         loanDate: string,
-         expectedLoanDate: string,
-         effectiveLoanDate: string,
-         renewal: string,
-         creatAt: string,
-         statusLoan: string,
-         observation: string,
- 
-     }[]>([])*/
 
     const [loans, setLoans] = useState<iLoans[]>([]);
 
     useEffect(() => {
         async function getTodos() {
-            const retorno = await getLoans({})
+            const retorno = await getLoans({});
             if (retorno.status && retorno.data && retorno.data.length > 0) {
-                setLoans(retorno.data)
+                setLoans(retorno.data);
             }
         }
-        getTodos()
-
-
-
-
-    }, [])
-
-
-
-
+        getTodos();
+    }, []);
 
     async function handleRegister() {
-        var _userId = await getLoggedUserId() 
+        var _userId = await getLoggedUserId(); 
+    
         if (req.id == -1) {
-            const newId = loans.length ? loans[loans.length - 1].id + 1 : 0;
-            const newLoans = { ...req, id: newId, bookId: BookId, userId: _userId! }
-            setLoans([...loans, newLoans]);
-            await setLoanbd(newLoans)
-            setSuccessMessage('Reservado com sucesso! ✅');
+            const newLoans = {
+                bookId: BookId,
+                userId: _userId!, 
+                loanDate: new Date().toISOString(),
+                expectedLoanDate: req.expectedLoanDate,
+                effectiveLoanDate: new Date().toISOString(),
+                renewal: '',
+                creatAt: new Date().toISOString(),
+                statusLoan: '',
+                observation: req.observation,
+                renewed: false,
+                totalQuantity:0,
 
+            };
+    
+            // O id será gerado automaticamente pelo banco de dados
+            const { data, error } = await supabase
+                .from('loans')
+                .insert([newLoans]);
+    
+            if (error) {
+                console.error('Erro ao registrar empréstimo:', error);
+                alert('Erro ao registrar empréstimo');
+                return;
+            }
+    
+            setSuccessMessage('Reservado com sucesso! ✅');
         } else {
             setLoans(loans.map(p => (p.id == req.id ? req : p)));
-
-            const sucesso = await updateLoansById(req.id, req)
+    
+            const sucesso = await updateLoansById(req.id, req);
             if (!sucesso) {
-                alert("Erro ao atualizar usuário.")
-                return
+                alert("Erro ao atualizar empréstimo.");
+                return;
             }
-
-
         }
-
+    
         setReq({
             id: -1,
             bookId: 0,
             userId: '',
+            renewed: false,
             loanDate: new Date().toISOString(),
             expectedLoanDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
             effectiveLoanDate: new Date().toISOString(),
             renewal: '',
             creatAt: new Date().toISOString(),
             statusLoan: '',
-            observation: ''
-
-        })
-
+            observation: '',
+            totalQuantity:0,
+        });
     }
+    
 
-
-    //aqui é typescript
     function editLoans(id: number) {
-        let loan = loans.find(l => l.id == id)
-        if (loan)
-            setReq(loan)
+        let loan = loans.find(l => l.id == id);
+        if (loan) setReq(loan);
     }
-
 
     async function deleteLoans(id: number) {
         try {
-            // Remover do banco de dados
             const { error } = await supabase
                 .from('loans')
                 .delete()
@@ -166,7 +159,6 @@ export default function LoansTabledetail({ BookId }: LoansProps) {
 
             if (error) throw error;
 
-            // Remover da lista local
             setLoans(loans.filter(item => item.id !== id));
 
         } catch (error) {
@@ -175,12 +167,11 @@ export default function LoansTabledetail({ BookId }: LoansProps) {
         }
     }
 
-
-
-
-
     const router = useRouter();
 
+    if (loading) {
+        return <Text>Carregando...</Text>;
+    }
 
     return (
         <ScrollView >
@@ -188,7 +179,6 @@ export default function LoansTabledetail({ BookId }: LoansProps) {
                 <Text style={styles.textStyles}>Empréstimo</Text>
                 <View style={styles.row}>
                     <View style={styles.form}>
-
                         {item && (
                             <View style={{ padding: 10, backgroundColor: '#ecdef0', borderRadius: 10, marginBottom: 10 }}>
                                 <Text style={styles.textTitle}>Livro Selecionado:</Text>
@@ -203,7 +193,6 @@ export default function LoansTabledetail({ BookId }: LoansProps) {
                             placeholder=""
                             label="Data prevista de Devolução:"
                             iconName="book"
-
                         />
                         {successMessage !== '' && (
                             <Text style={{ color: 'green', fontWeight: 'bold', marginBottom: 10 }}>
@@ -218,16 +207,12 @@ export default function LoansTabledetail({ BookId }: LoansProps) {
                         <Text style={styles.textForm}> Realize a retirada em Senac São Carlos</Text>
                         <Text style={styles.textForm}> Aberto de SEGUNDA a SEXTA das 08:00 as 21:00</Text>
                         <Text style={styles.textForm}> SABÁDOS das 08:00 ao 12:00</Text>
-
                     </View>
-
-
                 </View>
             </View>
         </ScrollView>
-    ); //encapsulamento
+    );
 }
-
 
 const styles = StyleSheet.create({
     row: {
@@ -235,7 +220,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'flex-start',
         marginRight: 5,
-
     },
     form: {
         flex: 1,
@@ -246,31 +230,27 @@ const styles = StyleSheet.create({
         width: 650,
         height: 215,
         zIndex: 999
-
     },
-    textForm:{
+    textForm: {
         fontSize: 15,
         fontWeight: 'bold',
         color: '#6a0dad',
         textAlign: 'center',
     },
-    textTitle:{
+    textTitle: {
         fontSize: 18,
-        fontWeight: 'bold' 
+        fontWeight: 'bold'
     },
-    text:{
+    text: {
         fontSize: 15,
         fontWeight: 'bold',
         color: '#6a0dad',
-        },
+    },
     formConteiner: {
         display: "flex",
         justifyContent: 'center',
         alignItems: 'center',
-
-
     },
-
     textStyles: {
         fontSize: 24,
         fontWeight: 'bold',
@@ -278,7 +258,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 20
     },
-
     buttonContainer: {
         color: "blue"
     },
@@ -294,26 +273,22 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "row",
-
     },
     button_round: {
         borderRadius: 20,
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "row",
-
     },
     button_rect: {
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "row",
         borderRadius: 0,
-
     },
     button_default: {
         borderRadius: 15,
         alignItems: "center",
         flexDirection: "row",
-
     },
 });
