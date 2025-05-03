@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native';
 import { useRouter, Link } from 'expo-router';
-import { iCollection } from '../../src/controllers/collections';
+import { iCollection, getCollections } from '../../src/controllers/collections';
 import 'bootstrap/dist/css/bootstrap.css';
 import Carousel from 'react-bootstrap/Carousel';
 import MySearch from '../../src/components/MySearch';
@@ -9,10 +9,10 @@ import { getItems, iItem } from '../../src/controllers/librarie';
 import { supabase } from '../../src/utils/supabase';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import MyMenu from '../../src/components/MyMenu';
-import MySelect from '../../src/components/MySelect';
-import MyFilter from '../../src/components/MyFilter';
 import Select from './select';
-import MyTopbar from '../../src/components/MyTopbar';
+import { isStudent, isEmployee } from '../../src/controllers/users'
+import StarComponent from './starComponent';
+
 
 
 
@@ -38,6 +38,7 @@ export default function CollectionPreviewScreen() {
     const [recentBooks, setRecentBooks] = useState<any[]>([]);
 
 
+
     useEffect(() => {
         async function getTodos2() {
 
@@ -52,7 +53,7 @@ export default function CollectionPreviewScreen() {
 
     useEffect(() => {
         async function getTodos() {
-            const retorno = await getItems({})
+            const retorno = await getCollections({})
 
             if (retorno.status && retorno.data && retorno.data.length > 0) {
                 setCollections(retorno.data);
@@ -63,32 +64,47 @@ export default function CollectionPreviewScreen() {
 
     useEffect(() => {
         itemsSearch();
-    }, [search, subject, year, responsible, edition]);
+    }, [search, subject, year, responsible, edition, selectedTags]);
 
     async function itemsSearch() {
         const result = await getItemsWithFilter(search, selectFilter, subject, year, responsible, edition);
         setItems(result);
     }
-    const filtered = items.filter((item) =>
-        item.title?.toLowerCase().includes(search.toLowerCase())
-    );
 
+    const filtered = items.filter((item) => {
+        const matchSearch = item.title?.toLowerCase().includes(search.toLowerCase());
+        const matchTags = selectedTags.length === 0 || selectedTags.every(tag => item.subject?.includes(tag));
+
+        return matchSearch && matchTags;
+    });
+
+
+    const itemsWithTags = items.map(item => ({
+        ...item,
+        tags: item.subject?.split(',').map(tag => tag.trim()) || []
+    }));
     async function getItemsWithFilter(
         search: string,
         selectFilter: string,
         subject: string,
         year: string,
         responsible: string,
-        edition: string) {
+        edition: string
+
+    ) {
 
 
         let query = supabase
             .from('items_librarie')
             .select('*');
 
-        if (search) query = query.ilike('title', `%${search}%`);
+        if (search) {
+            query = query.or(
+                `title.ilike.%${search}%,summary.ilike.%${search}%,subject.ilike.%${search}%,responsible.ilike.%${search}%`
+            );
+        }
         if (selectFilter && selectFilter !== 'Todos') query = query.eq('categoria', selectFilter);
-        if (subject !== 'Todos') query = query.eq('subject', subject);
+        if (subject !== 'Todos') query = query.ilike('subject', `%${subject}%`);
         if (year !== 'Todos') query = query.eq('typology', year);
         if (responsible !== 'Todos') query = query.eq('responsible', responsible);
         if (edition !== 'Todos') query = query.eq('edition', edition);
@@ -101,9 +117,43 @@ export default function CollectionPreviewScreen() {
 
         return data || [];
     }
-    
+    const [isEmployeeUser, setIsEmployeeUser] = useState(false);
 
+    useEffect(() => {
+        const checkRoles = async () => {
+            const employeeResult = await isEmployee();
+            setIsEmployeeUser(employeeResult ?? false);
+        };
+        checkRoles();
+    }, []);
+    const [subjectOptions, setSubjectOptions] = useState<{ key: number; option: string }[]>([]);
 
+    useEffect(() => {
+        const fetchSubjects = async () => {
+            const { data, error } = await supabase.from('items_librarie').select('subject');
+
+            if (error) {
+                console.error("Erro ao buscar assuntos:", error);
+                return;
+            }
+
+            const tags = data
+                .flatMap(item => item.subject?.split(',') || [])
+                .map(tag => tag.trim())
+                .filter(tag => tag);
+
+            const uniqueTags = Array.from(new Set(tags));
+
+            const options = [{ key: 0, option: "Todos" }, ...uniqueTags.map((tag, idx) => ({
+                key: idx + 1,
+                option: tag
+            }))];
+
+            setSubjectOptions(options);
+        };
+
+        fetchSubjects();
+    }, []);
     return (
         <ScrollView>
             <View style={styles.View}>
@@ -121,15 +171,18 @@ export default function CollectionPreviewScreen() {
                             </Text>
                         </View>
                         <View style={styles.rightIcons}>
-                            <TouchableOpacity style={styles.button_capsule} onPress={() => router.push({ pathname: '' })}>
+                            <TouchableOpacity style={styles.button_capsule} onPress={() => router.push({ pathname: 'librarie/loansTableUsers' })}>
                                 <MaterialCommunityIcons name="book-open-variant" size={20} color="#750097" />
                                 <Text style={styles.buttonText}>Meus empréstimos</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={styles.button_round} onPress={() => router.push({ pathname: 'librarie/pageEmployee' })}>
-                                <MaterialCommunityIcons name="account-hard-hat" size={20} color="#750097" />
-                                <Text style={styles.buttonText}>Funcionários</Text>
-                            </TouchableOpacity>
+                            {isEmployeeUser && (//exibe apenas para funcionarios
+                                <TouchableOpacity style={styles.button_round} onPress={() => router.push({ pathname: 'librarie/pageEmployee' })}>
+                                    <MaterialCommunityIcons name="account-hard-hat" size={20} color="#750097" />
+                                    <Text style={styles.buttonText}>Funcionários</Text>
+                                </TouchableOpacity>
+                            )}
+
                             <TouchableOpacity style={styles.avatarButton}>
                                 <Image source={{ uri: 'https://i.pravatar.cc/150?img=1' }} style={styles.avatar} />
                             </TouchableOpacity>
@@ -153,13 +206,6 @@ export default function CollectionPreviewScreen() {
 
                             />
                         </Carousel.Item>
-                        <Carousel.Item>
-                            <Image
-                                source={require('./assets/slide3biblioteca.png')}
-                                style={{ width: 1200, height: 470, resizeMode: 'cover' }}
-
-                            />
-                        </Carousel.Item>
                     </Carousel>
                 </View>
                 <View style={styles.containerfilter}>
@@ -179,16 +225,7 @@ export default function CollectionPreviewScreen() {
                                 label={subject}
                                 caption="Assunto"
                                 setLabel={(val) => { setSubject(val); itemsSearch(); }}
-                                list={[
-                                    { key: 0, option: 'Todos' },
-                                    { key: 1, option: 'Ficção Científica' },
-                                    { key: 2, option: 'Romance' },
-                                    { key: 3, option: "Terror" },
-                                    { key: 4, option: "Suspense" },
-                                    { key: 5, option: "Mistério" },
-                                    { key: 6, option: "Fantasia" },
-                                    { key: 7, option: "Outros" },
-                                ]}
+                                list={subjectOptions}
                             />
                         </View>
                         <View style={styles.ViewSelect}>
@@ -227,21 +264,6 @@ export default function CollectionPreviewScreen() {
                                     { key: 8, option: "Stephen King" },
                                     { key: 9, option: "H.P. Lovecraft" },
                                     { key: 10, option: "Agatha Christie" },
-                                    { key: 11, option: "Arthur Conan Doyle" },
-                                ]}
-                            />
-                        </View>
-                        <View style={styles.ViewSelect}>
-                            {/* <Text style={styles.itemTextFilter}>  Edição </Text> */}
-                            <Select
-                                label={edition}
-                                setLabel={(val) => { setEdition(val); itemsSearch(); }}
-                                caption="Edição"
-                                list={[
-                                    { key: 0, option: 'Todos' },
-                                    { key: 1, option: '1ª' },
-                                    { key: 2, option: '2ª' },
-                                    { key: 3, option: '3ª' }
                                 ]}
                             />
                         </View>
@@ -255,7 +277,7 @@ export default function CollectionPreviewScreen() {
                             </Text>
                         ) : (
                             <FlatList
-                                data={items}
+                                data={filtered}
                                 numColumns={4}
                                 keyExtractor={(item) => item.id.toString()}
                                 renderItem={({ item }) => (
@@ -272,11 +294,18 @@ export default function CollectionPreviewScreen() {
                                             <Text style={styles.itemTitlename}>{item.title}</Text>
                                             <Text style={styles.itemText}> {item.responsible}</Text>
                                             <View style={styles.tagsContainer}>
-                                                {item.keywords?.split(',').map((tag, index) => (
+                                                {item.subject?.split(',').map((tag, index) => (
                                                     <View key={index} style={styles.tag}>
                                                         <Text style={styles.tagText}>{tag.trim()}</Text>
                                                     </View>
                                                 ))}
+                                            </View>
+                                            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                                                <StarComponent
+                                                rating = {item.star}/>
+                                            </View>
+                                            <View>
+
                                             </View>
                                         </View>
 
@@ -350,7 +379,7 @@ const styles = StyleSheet.create({
     },
 
     textTitle: {
-        fontFamily: 'Poppins, sans-serif',
+        fontFamily: 'Poppins_400Regular',
         fontWeight: 600,
         color: '#750097',
         fontSize: 30,
@@ -359,11 +388,12 @@ const styles = StyleSheet.create({
 
     },
     itemTitlename: {
-        color: 'grey',
+        color: 'black',
         fontSize: 18,
         fontWeight: "bold",
         marginBottom: 5,
         justifyContent: "center",
+        fontFamily: 'Poppins_400Regular',
     },
     titleView: {
         display: "flex",
@@ -406,7 +436,7 @@ const styles = StyleSheet.create({
         marginRight: 50,
         marginTop: 50,
         width: 300,
-        height: 480,
+        height: 530,
         alignItems: "center",
         justifyContent: "flex-start",
 

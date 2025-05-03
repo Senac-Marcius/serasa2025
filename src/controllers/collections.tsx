@@ -4,15 +4,19 @@ import { supabase } from '../utils/supabase';
 
 interface iCollection {
         id: number,
+        bookId:number,
         createAt:string,
+        totalStar:number;
         name: string,
         quantity: string,
-        star: string,     
+        star: number,    
+        userId:string, 
+        commentary:string,
 }
 function toListCollections(data:iCollection[]){
     const resp = [];
     data.map((c)=>{
-        resp.push({key:c.id, option: `$(c.name) - $(c.quantity) -  $(c.star)`})
+        resp.push({key:c.id, option: `$(c.name) - $(c.commentary) -  $(c.star)`})
 
     })
 }
@@ -60,7 +64,7 @@ async function deleteCollectionById(id: number) {
 }
 
 
-async function updateCollectionById(id: number, updatedCollection: Partial<iCollection>) {
+async function updateCollectionById(id: number,  updatedCollection: Partial<iCollection>) {
     const { error } = await supabase
         .from('collections')
         .update(updatedCollection)

@@ -1,152 +1,181 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Button, TextInput, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import MyList from '../../src/components/MyList';
 import { MyItem } from '../../src/components/MyItem';
 import MyView from '../../src/components/MyView';
+import Mytext from '../../src/components/MyText';
 import { useRouter } from 'expo-router';
-import {  iCategories, setCategory, updateCategory, deleteCategory, getCategories } from '../../src/controllers/category';
-
+import { iCategories, setCategory, updateCategory, deleteCategory, getCategories } from '../../src/controllers/category';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MyButton from '../../src/components/MyButtons';
-import {Myinput} from '../../src/components/MyInputs';
+import { Myinput } from '../../src/components/MyInputs';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { MyModal } from '../../src/components/MyModal';
 
 export default function CategoryScreen() {
     const [req, setReq] = useState<iCategories>({
         name: '',
         description: '',
-        id: -1, // -1 quer dizer: novo cadastro
+        id: -1,
         created_at: new Date().toISOString()
     });
 
     const [categories, setCategories] = useState<iCategories[]>([]);
     const router = useRouter();
+    const [visibleForm, setVisibleForm] = useState(false);
+    const [visibleList, setVisibleList] = useState(false);
 
-    // Carregar categorias do banco ao abrir a tela
+    // Carregar categorias
     useEffect(() => {
-        async function getTodos() {
-       
-            const retorno = await getCategories({})
-
-            if (retorno.status && retorno.data && retorno.data.length > 0){
-                getCategories(retorno.data);
+        async function loadCategories() {
+            const retorno = await getCategories({});
+            if (retorno.status && retorno.data) {
+                setCategories(retorno.data);
             }
-getTodos();
-            }
-      
+        }
+        loadCategories();
+    }, []);
 
-        getTodos();
-    },[])
-
-    // Cadastrar ou atualizar
+    // Cadastrar/Atualizar
     async function handleRegister() {
         if (req.id === -1) {
-            const newid = categories.length ? categories[categories.length - 1].id + 1 : 0;
-            const newCategory = { ...req, id: newid };
-
+            const newCategory = { ...req, id: categories.length + 1 };
             setCategories([...categories, newCategory]);
             await setCategory(newCategory);
         } else {
-            const updated = await updateCategory(req);
-            if (updated) {
-                setCategories(categories.map(i => i.id === req.id ? req : i));
-            }
+            await updateCategory(req);
+            setCategories(categories.map(cat => cat.id === req.id ? req : cat));
         }
-
-        setReq({
-            name: '',
-            description: '',
-            id: -1,
-            created_at: new Date().toISOString()
-        });
+        setReq({ name: '', description: '', id: -1, created_at: new Date().toISOString() });
+        setVisibleForm(false);
     }
 
     // Editar
     function editCategorie(id: number) {
         const item = categories.find(i => i.id === id);
         if (item) setReq(item);
+        setVisibleForm(true);
     }
 
-  
-    async function deleteCategories(id:number){
-        const list = categories.filter(c=> c.id != id)
-        if(list){
-            setCategories(list);
-            await deleteCategory(id)
-        } 
-        
-
+    // Deletar
+    async function deleteCategories(id: number) {
+        await deleteCategory(id);
+        setCategories(categories.filter(cat => cat.id !== id));
     }
 
     return (
-        <MyView >
-            <View style={styles.row}>
-                <View style={styles.form}>
+        <MyView>
+            <Mytext style={styles.h1}>Cadastro de Categorias</Mytext>
+
+            <MyModal 
+                style={styles.modal}
+                visible={visibleForm} 
+                setVisible={setVisibleForm}
+                title={req.id === -1 ? "Cadastrar Categoria" : "Editar Categoria"}
+                closeButtonTitle="Fechar"
+            >
+                
                     <Myinput
-                        placeholder="Nome"
+                        placeholder="Nome da categoria"
                         value={req.name}
                         onChangeText={(text) => setReq({ ...req, name: text })}
-                        style={styles.input}
+                        label="Nome"
                         iconName=''
-                        label= 'Digite o nome da categoria'
                     />
                     <Myinput
                         placeholder="Descrição"
                         value={req.description}
                         onChangeText={(text) => setReq({ ...req, description: text })}
-                        style={styles.input}
+                        label="Descrição"
                         iconName=''
-                        label= 'Descrição'
-                        
                     />
-                      
-                    <MyButton title={req.id === -1 ? "Cadastrar" : "Atualizar"} onPress={handleRegister} />
-                </View>
+                    <MyButton 
+                    style={styles.buttonCad}
+                        title={req.id === -1 ? "Cadastrar" : "Atualizar"} 
+                        onPress={handleRegister} 
+                    />
+                
+            </MyModal>
 
-                <MyList
-                    data={categories}
-                    keyItem={(item) => item.id.toString()}
-                    renderItem={({ item }) => (
-                        
-                        <MyItem
-                            onDel={() => deleteCategories(item.id)}
-                            onEdit={() => editCategorie(item.id)}
-                        >
-                            <Text style={styles.postText}>{item.name}</Text>
-                            <Text>{item.description}</Text>
-                        </MyItem>
-                    )}
-                />
-            </View>
+            {/* Modal da Lista */}
+           
+                
+                    <MyList
+                        data={categories}
+                        keyItem={(item) => item.id.toString()}
+                        renderItem={({ item }) => (
+                            <MyItem
+                                onDel={() => deleteCategories(item.id)}
+                                onEdit={() => {
+                                    editCategorie(item.id);
+                                    setVisibleList(false);
+                                }}
+                            >
+                                <View style={styles.itemContainer}>
+                                    <Text style={styles.itemName}>{item.name}</Text>
+                                    <Text style={styles.itemDesc}>{item.description}</Text>
+                                </View>
+                            </MyItem>
+                        )}
+                    />
+                
+        
         </MyView>
     );
 }
 
 // Estilos
 const styles = StyleSheet.create({
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-    },
-    form: {
-        flex: 1,
-        marginRight: 10,
-        padding: 20,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
-        padding: 10,
+    buttonCad:{
         marginBottom: 10,
     },
-    postText: {
-        fontSize: 16,
+    modal: {
+        display: 'flex',
+        width: 'auto',
+        height: 'auto',
+        padding: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        borderWidth: 4,
+        borderColor: 'purple',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+    },
+    h1: {
+        fontSize: 24,
         fontWeight: 'bold',
+        textAlign: 'center',
+        marginVertical: 20,
+    },
+    modalContent: {
+        padding: 20,
+        width: '100%',
+    },
+    listContainer: {
+        width: '100%',
+        maxHeight: 500,
+    },
+    itemContainer: {
+        flexDirection: 'column',
+        gap: 4,
+        paddingVertical: 8,
+    },
+    itemName: {
+        fontWeight: 'bold',
+        fontSize: 16,
+        color: '#333',
+    },
+    itemDesc: {
+        color: '#666',
+        fontSize: 14,
+        marginTop: 4,
+    },
+    addButton: {
+        margin: 20,
+        backgroundColor: '#6A1B9A',
+    },
+    listButton: {
+        margin: 10,
+        backgroundColor: '#4A148C',
     },
 });

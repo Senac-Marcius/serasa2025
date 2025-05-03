@@ -1,69 +1,57 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text} from 'react-native';
+import { View, StyleSheet, Text, ScrollView } from 'react-native';
 import MyView from '../../src/components/MyView';
 import { useRouter } from 'expo-router';
-import {iProduct, setProduct, updateProduct, deleteProduct, getProducts} from '../../src/controllers/products';
+import { iProduct, setProduct, updateProduct, deleteProduct, getProducts } from '../../src/controllers/products';
 import MyButton from '../../src/components/MyButtons';
 import Mytext from '../../src/components/MyText';
-import {Myinput} from '../../src/components/MyInputs';
-import { MyItem, MyTb } from '../../src/components/MyItem';
+import { Myinput } from '../../src/components/MyInputs';
+import { MyTb } from '../../src/components/MyItem';
 import MyList from '../../src/components/MyList';
-import { MyModal_mobilefullscreen } from '../../src/components/MyModal';
+import { MyModal } from '../../src/components/MyModal';
 import { getCategories, toListCategorie } from '../../src/controllers/category';
 import MySelect from '../../src/components/MySelect';
 
-
-
-export default function infraScreen(){
-//aqui é typescript
-
+export default function infraScreen() {
     const [req, setReq] = useState({
-        description:'',
-        name:'',
+        description: '',
+        name: '',
         amount: 0,
         id: -1,
-        create_at:  new Date().toISOString(),
-        category_id:-1
+        create_at: new Date().toISOString(),
+        category_id: -1
     });
     
     const [products, setProducts] = useState<iProduct[]>([]);
-
     const [cats, setCats] = useState<any[]>([]);
+    const [visible, setVisible] = useState(false);
+    const router = useRouter();
 
-    const [visible, setVisible] = useState(false)
-
-    useEffect(()=> {
-        (async ()=> {
-            const retorno = await getProducts({})
-            if (retorno.status && retorno.data && retorno.data.length > 0){
+    useEffect(() => {
+        (async () => {
+            const retorno = await getProducts({});
+            if (retorno.status && retorno.data && retorno.data.length > 0) {
                 setProducts(retorno.data);
             }
         })();
 
-        (async ()=> {
-            const retorno = await getCategories({})
-            if (retorno.status && retorno.data && retorno.data.length > 0){
-                setCats( toListCategorie( retorno.data) );
+        (async () => {
+            const retorno = await getCategories({});
+            if (retorno.status && retorno.data && retorno.data.length > 0) {
+                setCats(toListCategorie(retorno.data));
             }
         })();
     }, []);
        
-
-    
     async function handleRegister() {
-        console.log('passou 1');
-        //se for um item editado, ele deve chamar o registro existente
         if (req.id == -1) {
-            console.log('passou 2');
-            const newid = products.length? products[products.length - 1].id + 1 : 0;
-            const newProduct = {...req, id: newid};
-            console.log(newProduct);
-    
+            const newid = products.length ? products[products.length - 1].id + 1 : 0;
+            const newProduct = { ...req, id: newid };
             setProducts([...products, newProduct]);
             await setProduct(newProduct);
-        } else{ //senão, ele deve criar um novo registro
-            setProducts(products.map((p) => (p.id == req.id)? req: p));
-            await updateProduct(req);//aqui vc vai chamada sua função de editar do controlador
+        } else {
+            setProducts(products.map((p) => (p.id == req.id) ? req : p));
+            await updateProduct(req);
         }
 
         setReq({
@@ -72,95 +60,134 @@ export default function infraScreen(){
             amount: 0,
             id: -1,
             create_at: new Date().toISOString(),
-            category_id:-1
+            category_id: -1
         });
 
         setVisible(false);
     }
 
-    function editProduct(id:number){
-        const product = products.find(p => p.id == id)
-        if(product)
-            setReq(product)
+    function editProduct(id: number) {
+        const product = products.find(p => p.id == id);
+        if (product) {
+            setReq(product);
+            setVisible(true);
+        }
     }
 
-    function dellProduct(id:number){
-        const list = products.filter(p => p.id != id)
-        if(list)
-            setProducts(list)
+    function dellProduct(id: number) {
+        const list = products.filter(p => p.id != id);
+        if (list) setProducts(list);
     }
-
-    const router = useRouter();
 
     return (
         <MyView>
+            <View style={styles.headerContainer}>
+                <Mytext>Cadastro de Produtos</Mytext>
+                <View style={styles.buttonsWrapper}>
+
+                    <MyButton 
+                        color='#3AC7A8'
+                        style={styles.local} 
+                        onPress={() => router.push('../infraestrutura/locals')} 
+                        title="Locais"
+                    />
+                    <MyButton 
+                        color='#3AC7A8'
+                        style={styles.category} 
+                        onPress={() => router.push('../infraestrutura/categories')} 
+                        title="Categorias"
+                    />
+                </View>
+            </View>
+
        
-            <Mytext style={styles.h2}>Cadastro de Produtos</Mytext>
-        
-            <MyModal_mobilefullscreen
-                visible={visible}
-                setVisible={setVisible}
-            >
+            <MyModal 
+                style={styles.modal} 
+                visible={visible} 
+                setVisible={setVisible} 
+                title={req.id === -1 ? "Cadastrar Produto" : "Editar Produto"}
+                closeButtonTitle={'Fechar'}>
+                    <Myinput 
+                        placeholder="Digite o Nome"
+                        value={req.name}
+                        onChangeText={(text) => setReq({ ...req, name: text })}
+                        label="Produto"
+                        iconName='storefront' 
+                    />
+            
+                    <Myinput 
+                        placeholder="Descrição"
+                        value={req.description}
+                        onChangeText={(text) => setReq({ ...req, description: text })}
+                        label='Descrição'
+                        iconName='description' 
+                    />
 
-                <Myinput 
-                    placeholder="Digite o Nome"
-                    value={req.name}
-                    onChangeText={(text) => setReq({ ...req, name:text })}
-                    label="Produto"
-                    iconName='storefront' 
-                />
-        
-                <Myinput 
-                    placeholder= "Descrição"
-                    value={req.description}
-                    onChangeText={(text)=>setReq({...req, description:text})}
-                    label= 'Descrição'
-                    iconName='description' 
-                />
+                    <Myinput 
+                        placeholder="Quantidade"
+                        value={String(req.amount)}
+                        onChangeText={(text) => setReq({ ...req, amount: Number(text) })}
+                        label='Quantidade'
+                        iconName='123' 
+                    />
 
-                <Myinput 
-                    placeholder= "Quantidade"
-                    value={ String(req.amount) }
-                    onChangeText={(text)=>setReq({...req, amount: Number(text) })}
-                    label= 'Quantidade'
-                    iconName='123' 
-                />
+                    <MySelect
+                        caption="Selecione uma categoria"
+                        label={cats.find(c => c.key == req.category_id)?.option || 'Categorias'}
+                        list={cats}
+                        setLabel={() => {}}
+                        setKey={(key) => { setReq({ ...req, category_id: key }) }}
+                    />
 
+                    <View style={styles.modalButtons}>
+                        
+                        <MyButton 
+                            style={styles.buttoncad} 
+                            onPress={() => handleRegister()} 
+                            title={req.id == -1 ? "Cadastrar" : "Atualizar"}
+                        />
+                    </View>
+                
+            </MyModal>
 
-                <MySelect
-                    caption="Selecione uma categoria"
-                    label={cats.find(c => c.key == req.category_id)?.option || 'Categorias'}
-                    list={cats}
-                    setLabel={()=>{}}
-                    setKey={(key) => { setReq({...req, category_id: key }) }}
-                />
-
-                <MyButton style={styles.cadastrar} onPress={() => { handleRegister()} } title='Cadastrar'/>
-            </MyModal_mobilefullscreen>
-
+            {/* LISTA DE PRODUTOS */}
             <MyList
                 style={styles.table}
                 data={products}
                 keyItem={(item) => item.id.toString()}
-                renderItem={({item})=>(
-                    <MyTb
-                        onEdit={() => editProduct(item.id)}
-                        onDel={async () => {
-                            await deleteProduct(item.id);
-                            dellProduct(item.id);
-                        }}
-                    >
-                        <Mytext  style={styles.td}>{item.name}</Mytext>
-                        <Mytext  style={styles.td}>{item.description}</Mytext>
-                        <Mytext  style={styles.td}>{item.amount}</Mytext>
-                        <Mytext  style={styles.td}>{cats.find(c => c.key == item.category_id)?.option || 'Indefinido'}</Mytext>
-                        <Mytext  style={styles.td}>{new Date(item.create_at).toLocaleString()}</Mytext>
-                    </MyTb>
-
+                renderItem={({ item }) => (
+                    <View style={styles.tableRow}>
+                        <Mytext style={styles.td}>{item.name}</Mytext>
+                        <Mytext style={styles.td}>{item.description}</Mytext>
+                        <Mytext style={styles.td}>{item.amount}</Mytext>
+                        <Mytext style={styles.td}>{cats.find(c => c.key == item.category_id)?.option || 'Indefinido'}</Mytext>
+                        <Mytext style={styles.td}>{new Date(item.create_at).toLocaleString()}</Mytext>
+                        <View style={styles.actionsContainer}>
+                            <MyButton 
+                                color='#3AC7A8'
+                                style={styles.edit} 
+                                onPress={() => editProduct(item.id)} 
+                                title="Editar"
+                            />
+                            <MyButton  
+                                color='#BC544B'
+                                style={styles.delete} 
+                                onPress={async () => {
+                                    await deleteProduct(item.id);
+                                    dellProduct(item.id);
+                                }} 
+                                title="Excluir"
+                            />
+                            <MyButton 
+                                style={styles.add} 
+                                onPress={() => router.push('../infraestrutura/itens')} 
+                                title="Cadastrar Item"
+                            />
+                        </View>
+                    </View>
                 )}
-
                 header={(
-                    <View style={styles.tableRowHeader}>
+                    <View style={styles.tabela}>
                         <Mytext style={styles.th}>Nome</Mytext>
                         <Mytext style={styles.th}>Descrição</Mytext>
                         <Mytext style={styles.th}>Quantidade</Mytext>
@@ -168,107 +195,113 @@ export default function infraScreen(){
                         <Mytext style={styles.th}>Data</Mytext>
                         <Mytext style={styles.th}>Ações</Mytext>
                     </View>
-
                 )}
-            
             />
         </MyView>
     );
-    
 }
 
-
 const styles = StyleSheet.create({
+    modal:{
+        display: 'flex',
+        width: 'auto',
+        height: 'auto',
+        padding: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        borderWidth: 4,
+        borderColor: 'purple',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+    },
+    modalButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    
+    buttoncad: {
+        marginBottom: 10,
+        fontSize: 15,
+        padding: 10,
+        backgroundColor: '#FFDB58',
+        borderRadius: 100,
+        fontFamily: 'arial',
+        marginHorizontal: 5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+        elevation: 3,
+        flex: 1,
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        backgroundColor: '#ffffff',
+        borderBottomWidth: 1,
+        borderBottomColor: '#e0e0e0',
+        fontWeight: 'bold'
+    },
+    buttonsWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
+    local: {
+        backgroundColor: '#2196F3',
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        borderRadius: 6,
+        marginLeft: 10,
+    },
+    category: {
+        backgroundColor: '#4CAF50',
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        borderRadius: 6,
+        marginLeft: 10,
+    },
     edit: {
         fontSize: 15,
         padding: 10,
         backgroundColor: '#FFDB58',
         borderRadius: 100,
-        fontFamily: 'arial'
+        fontFamily: 'arial',
+        marginHorizontal: 5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+        elevation: 3,
     },
     delete: {
         fontSize: 15,
         padding: 10,
-        backgroundColor: '#BC544B',
+        backgroundColor: '#FF5252',
         borderRadius: 100,
         fontFamily: 'arial',
-    },
-    row: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start'
-    },
-    form: {
-        flex: 1,
-        marginRight: 10,
-        padding: 20,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 10,
+        marginHorizontal: 5,
         shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-        
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+        elevation: 3,
     },
-    h2: {
-        fontSize: 40,
-        textAlign: 'center',
-        marginRight: 10,
-        padding: 20,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 10,
-        
-        
-        
-    },
-    cadastroForm: {
-        flex: 1,
-        marginRight: 10,
-        marginBottom: 20,
-        padding: 20,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-        
-    },
-    buttonsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
+    add: {
         fontSize: 15,
-        padding: 40,
-      },
-    input: {
-        fontSize: 15,
-        textAlign: 'left',
-        marginRight: 10,
         padding: 10,
-        borderRadius: 10,  
-        margin: 10,
-        borderStyle: 'solid' ,
-        borderWidth: 2,
-        borderColor:'#ADD8E6',
-        
-    },
-    cadastrar:{
-        fontFamily: 'Arial',
-        fontSize: 15,
-        textAlign: 'center',
-        flex: 1,
-        color:'9400D3',
-        borderRadius: 5,
-        backgroundColor: '#ADD8E6',
+        backgroundColor: '#90EE90',
+        borderRadius: 100,
+        fontFamily: 'arial',
+        marginHorizontal: 5,
         shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-        marginRight: 10,
-        marginTop: 80,
-        marginBottom: 10,
-        padding: 20,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+        elevation: 3,
     },
     table: {
         backgroundColor: '#FFF',
@@ -281,26 +314,30 @@ const styles = StyleSheet.create({
         fontSize: 13,
         color: '#333',
         textAlign: 'center',
-        
     },
-
     td: {
         flex: 1,
         fontSize: 13,
         color: '#444',
         textAlign: 'center'
     },
-    tableRowHeader: {
+    tabela: {
         flexDirection: 'row',
         paddingVertical: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#ddd',
     },
-
-})
-    
-
-
-
-
- 
+    tableRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee',
+    },
+    actionsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1,
+    },
+});

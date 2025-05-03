@@ -26,10 +26,11 @@ const MyNotify: React.FC<MyNotifyProps> = ({ style }) => {
       const retorno = await getNotifications({});
       if (retorno.status && retorno.data && retorno.data.length > 0) {
         setNotifications(retorno.data);
+
       }
     }
     getTodos();
-  }, []);
+  }, [notifications]);
 
   return (
     <View>
@@ -73,7 +74,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
     justifyContent: 'center',
     alignItems: 'center',
+    
   },
+
   notificationContainer: {
     position: 'absolute',
     top: 60,
@@ -81,7 +84,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3E5F5', // lilás claro
     borderRadius: 12,
     padding: 12,
-    maxHeight: 300,
+    height:500,
     width: 320,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 6 },
@@ -89,9 +92,12 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 10,
     zIndex: 1000,
+
   },
+
   notificationList: {
     flexGrow: 0,
+
   },
 });
 
