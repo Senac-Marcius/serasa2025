@@ -13,17 +13,17 @@ RUN npm install -g npm@11.3.0
 # Cria diretório da app
 WORKDIR /app
 
-# Copia apenas o package.json para cache do Docker
-COPY package.json ./
+# Copia dependências
+COPY package.json package-lock.json* ./
 
-# Instala dependências via NPM
+# Instala dependências
 RUN npm install
 
-# Copia o restante dos arquivos do projeto
+# Copia código restante
 COPY . .
 
-# Expo Web + Metro + DevTools
+# Expõe as portas necessárias
 EXPOSE 19000 19001 19002
 
-# Inicia projeto com Expo (modo túnel, ideal para acesso externo)
+# Inicia o projeto com CLI local via npx
 CMD ["npx", "expo", "start", "--tunnel"]
