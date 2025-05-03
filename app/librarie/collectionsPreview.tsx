@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native';
 import { useRouter, Link } from 'expo-router';
-import { iCollection } from '../../src/controllers/collections';
+import { iCollection, getCollections } from '../../src/controllers/collections';
 import Carousel from 'react-bootstrap/Carousel';
 import MySearch from '../../src/components/MySearch';
 import { getItems, iItem } from '../../src/controllers/librarie';
@@ -11,6 +11,7 @@ import MyMenu from '../../src/components/MyMenu';
 import Select from './select';
 import { isStudent, isEmployee } from '../../src/controllers/users'
 import StarComponent from './starComponent';
+
 
 
 

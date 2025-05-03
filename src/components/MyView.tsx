@@ -2,7 +2,7 @@ import React, { ReactNode, useState } from 'react';
 import { View, StyleSheet, Text, TextStyle, ScrollView } from 'react-native';
 import MyTopbar from './MyTopbar';
 import MySupport from './MySupport';
-import MyAccessibility from './MyAccessibility';
+// import {MyAccess} from './components/MyAccessibility';
 import { Button } from 'react-native-paper';
 import { Router } from 'expo-router'; // Importando o Router do expo-router
 import MyMenu from './MyMenu';
@@ -29,12 +29,12 @@ const MyView: React.FC<MySearchProps> = ({ children, style, title, router, child
       </ScrollView>
         {childrenm}
       {/* Botão de Acessibilidade */}
-      <MyAccessibility style={styles.accessibilityButton}>
+      {/* <MyAccessibility style={styles.accessibilityButton}>
         <Text style={{ fontSize: 16, marginBottom: 8 }}>Acessibilidade ativada!</Text>
         <Button mode="contained" onPress={() => console.log('Ativando recurso')}>
           Modo Alto Contraste
         </Button>
-      </MyAccessibility>
+      </MyAccessibility> */}
 
       {/* Botão de suporte fixo */}
       <MySupport />
