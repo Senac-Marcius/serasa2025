@@ -102,7 +102,6 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Items" route="items" icon="pricetag" />
         <MenuItem label="Launchs" route="sala_de_aula/launchs" icon="rocket" />
         <MenuItem label="Classes" route="classes" icon="school" />
-        <MenuItem label="Collections" route="collections" icon="cube" />
         <MenuItem label="More" route="more" icon="cube" />
         <MenuItem label="Courses" route="courses" icon="book" />
         <MenuItem label="Disciplines" route="secretaria/disciplines" icon="document-text" />

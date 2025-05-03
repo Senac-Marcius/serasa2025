@@ -4,6 +4,7 @@ import { FlatList, TextInput } from 'react-native-gesture-handler';
 import { Button, List } from 'react-native-paper';
 import { inputStyles } from '../../styles/inputStyles';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { GenericNonUpdatableView } from '@supabase/supabase-js/dist/module/lib/types';
 
 
 interface MySelectProps {
@@ -13,7 +14,7 @@ interface MySelectProps {
     list: { key: any, option: string }[]
     setLabel(item: string): void;
     setKey?(key: any): void;
-    style?: TextStyle | TextStyle[];
+    style?: ViewStyle|ViewStyle[];
 }
 
 
