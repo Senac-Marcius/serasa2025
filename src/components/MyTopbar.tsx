@@ -22,14 +22,6 @@ const MyTopbar: React.FC<MyTopbarProps> = ({ router, title }) => {
           <TouchableOpacity onPress={() => setMenuOpen(!menuOpen)} style={styles.iconButton}>
             <Ionicons name="menu" size={20} color="#4A148C" />
           </TouchableOpacity>
-          <View style={styles.searchWrapper}>
-            <Ionicons name="search" size={16} color="#888" style={styles.searchIcon} />
-            <TextInput
-              placeholder="Pesquisar..."
-              placeholderTextColor="#888"
-              style={styles.searchInput}
-            />
-          </View>
         </View>
 
         <View style={styles.rightIcons}>
@@ -121,3 +113,4 @@ const styles = StyleSheet.create({
 });
 
 export default MyTopbar;
+//OK

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, ScrollView } from 'react-native';
 import MyView from '../../src/components/MyView';
 import { useRouter } from 'expo-router';
 import { iProduct, setProduct, updateProduct, deleteProduct, getProducts } from '../../src/controllers/products';
@@ -8,11 +8,9 @@ import Mytext from '../../src/components/MyText';
 import { Myinput } from '../../src/components/MyInputs';
 import { MyTb } from '../../src/components/MyItem';
 import MyList from '../../src/components/MyList';
-import { MyModal_mobilefullscreen } from '../../src/components/MyModal';
+import { MyModal } from '../../src/components/MyModal';
 import { getCategories, toListCategorie } from '../../src/controllers/category';
 import MySelect from '../../src/components/MySelect';
-
-
 
 export default function infraScreen() {
     const [req, setReq] = useState({
@@ -23,10 +21,11 @@ export default function infraScreen() {
         create_at: new Date().toISOString(),
         category_id: -1
     });
-    
+
     const [products, setProducts] = useState<iProduct[]>([]);
     const [cats, setCats] = useState<any[]>([]);
     const [visible, setVisible] = useState(false);
+    
     const router = useRouter();
 
     useEffect(() => {
@@ -44,7 +43,7 @@ export default function infraScreen() {
             }
         })();
     }, []);
-       
+
     async function handleRegister() {
         if (req.id == -1) {
             const newid = products.length ? products[products.length - 1].id + 1 : 0;
@@ -70,7 +69,10 @@ export default function infraScreen() {
 
     function editProduct(id: number) {
         const product = products.find(p => p.id == id);
-        if (product) setReq(product);
+        if (product) {
+            setReq(product);
+            setVisible(true);
+        }
     }
 
     function dellProduct(id: number) {
@@ -80,62 +82,95 @@ export default function infraScreen() {
 
     return (
         <MyView>
-
             <View style={styles.headerContainer}>
-                
                 <Mytext>Cadastro de Produtos</Mytext>
                 <View style={styles.buttonsWrapper}>
-                    <MyButton 
+
+                    <MyButton
                         color='#3AC7A8'
-                        style={styles.local} 
-                        onPress={() => router.push('../infraestrutura/locals')} 
+                        style={styles.local}
+                        onPress={() => router.push('../infraestrutura/locals')}
                         title="Locais"
                     />
-                    <MyButton 
+                    <MyButton
                         color='#3AC7A8'
-                        style={styles.category} 
-                        onPress={() => router.push('../infraestrutura/categories')} 
+                        style={styles.category}
+                        onPress={() => router.push('../infraestrutura/categories')}
                         title="Categorias"
                     />
                 </View>
-                
             </View>
-            <MyModal_mobilefullscreen visible={visible} setVisible={setVisible}>
-                <Myinput 
+
+
+            <MyModal
+                style={styles.modal}
+                visible={visible}
+                setVisible={setVisible}
+                closeButtonTitle={'Fechar'}
+                handleClosedButton={() => {
+                    
+                    setReq({
+                        description: '',
+                        name: '',
+                        amount: 0,
+                        id: -1,
+                        create_at: new Date().toISOString(),
+                        category_id: -1
+                    })
+                }}
+
+                title={req.id === -1 ? "Cadastrar Produto" : "Editar Produto"}
+                
+                buttonStyle={{
+                    width:150,
+                    marginTop: 10,
+                    marginBottom: 10,
+                }}
+            >
+                <Myinput
                     placeholder="Digite o Nome"
                     value={req.name}
                     onChangeText={(text) => setReq({ ...req, name: text })}
                     label="Produto"
-                    iconName='storefront' 
+                    iconName='storefront'
                 />
-        
-                <Myinput 
+
+                <Myinput
                     placeholder="Descrição"
                     value={req.description}
                     onChangeText={(text) => setReq({ ...req, description: text })}
                     label='Descrição'
-                    iconName='description' 
+                    iconName='description'
                 />
 
-                <Myinput 
+                <Myinput
                     placeholder="Quantidade"
                     value={String(req.amount)}
                     onChangeText={(text) => setReq({ ...req, amount: Number(text) })}
                     label='Quantidade'
-                    iconName='123' 
+                    iconName='123'
                 />
 
                 <MySelect
                     caption="Selecione uma categoria"
                     label={cats.find(c => c.key == req.category_id)?.option || 'Categorias'}
                     list={cats}
-                    setLabel={() => {}}
+                    setLabel={() => { }}
                     setKey={(key) => { setReq({ ...req, category_id: key }) }}
                 />
-            <MyButton style={styles.buttoncad} onPress={handleRegister} title='Cadastrar'/>
 
-            </MyModal_mobilefullscreen>
+                <View style={styles.modalButtons}>
 
+                    <MyButton
+                        style={styles.buttoncad}
+                        onPress={() => handleRegister()}
+                        title={req.id == -1 ? "Cadastrar" : "Atualizar"}
+                    />
+                </View>
+
+            </MyModal>
+
+            {/* LISTA DE PRODUTOS */}
             <MyList
                 style={styles.table}
                 data={products}
@@ -148,30 +183,29 @@ export default function infraScreen() {
                         <Mytext style={styles.td}>{cats.find(c => c.key == item.category_id)?.option || 'Indefinido'}</Mytext>
                         <Mytext style={styles.td}>{new Date(item.create_at).toLocaleString()}</Mytext>
                         <View style={styles.actionsContainer}>
-                            <MyButton 
+                            <MyButton
                                 color='#3AC7A8'
-                                style={styles.edit} 
-                                onPress={() => editProduct(item.id)} 
+                                style={styles.edit}
+                                onPress={() => editProduct(item.id)}
                                 title="Editar"
                             />
-                            <MyButton  
+                            <MyButton
                                 color='#BC544B'
-                                style={styles.delete} 
+                                style={styles.delete}
                                 onPress={async () => {
                                     await deleteProduct(item.id);
                                     dellProduct(item.id);
-                                }} 
+                                }}
                                 title="Excluir"
                             />
-                            <MyButton 
-                                style={styles.add} 
-                                onPress={() => router.push('../infraestrutura/itens')} 
+                            <MyButton
+                                style={styles.add}
+                                onPress={() => router.push('../infraestrutura/itens')}
                                 title="Cadastrar Item"
                             />
                         </View>
                     </View>
                 )}
-
                 header={(
                     <View style={styles.tabela}>
                         <Mytext style={styles.th}>Nome</Mytext>
@@ -188,7 +222,26 @@ export default function infraScreen() {
 }
 
 const styles = StyleSheet.create({
-    buttoncad:{
+    modal: {
+        margin: 'auto',
+        display: 'flex',
+        width: 'auto',
+        height: 'auto',
+        padding: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        borderWidth: 4,
+        borderColor: 'purple',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+    },
+    modalButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+
+    buttoncad: {
+        marginBottom: 10,
         fontSize: 15,
         padding: 10,
         backgroundColor: '#FFDB58',
@@ -200,6 +253,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 2,
         elevation: 3,
+        flex: 1,
     },
     headerContainer: {
         flexDirection: 'row',
@@ -211,15 +265,6 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#e0e0e0',
         fontWeight: 'bold'
-    },
-    h1: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        color: "black",
-        backgroundColor: "white",
-        padding: 10,
-        borderRadius: 5,
     },
     buttonsWrapper: {
         flexDirection: 'row',
@@ -240,7 +285,6 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         marginLeft: 10,
     },
-
     edit: {
         fontSize: 15,
         padding: 10,
@@ -279,23 +323,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 2,
         elevation: 3,
-    },
-    cadastrar: {
-        fontFamily: 'Arial',
-        fontSize: 15,
-        textAlign: 'center',
-        flex: 1,
-        color: '9400D3',
-        borderRadius: 5,
-        backgroundColor: '#ADD8E6',
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-        marginRight: 10,
-        marginTop: 80,
-        marginBottom: 10,
-        padding: 20,
     },
     table: {
         backgroundColor: '#FFF',

@@ -5,7 +5,6 @@ import { getUsers } from './users';
 interface iEmployees { 
     id: number,
     urls: string,
-    date_birth: string,
     nationality: string,
     disc_personality: string,
     sex: string,

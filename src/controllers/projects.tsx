@@ -2,23 +2,22 @@ import React, { useState } from "react";
 import { supabase } from '../utils/supabase'
 
 interface iProject {
-        name: string;
-        namep: string;
-        id: number;
-        url: string;
-        created_at: string;
-        user_id: number;
-        recurces: number;
-        description: string;
-        activity: string;
-        time_line: string;
-        objective: string;
-        methodology: string;
-        techniques: string;
-        strategies: string;
-        planning: string;
-        process: string;
-    }
+  id: number;
+  name: string;
+  namep: string;
+  url: string;
+  created_at: string;
+  time_line: string;
+  description: string;
+  objective: string;
+  activity: string;
+  methodology: string;
+  techniques: string;
+  strategies: string;
+  planning: string;
+  process: string;
+  recurces: number;        
+}
 
 function toListProjects(data: iProject[]){
   const resp: {key: number, option: string}[] = [];
@@ -38,18 +37,27 @@ async function getProjects(params:any) {
   return {status: true, data: todos}
 }
 
-async function setProject(project: iProject) {
-  const { data, error } = await supabase
-    .from('projects')
-    .insert([project])
-    .select();
+async function setProject(project: iProject, ids: any[]) {
+  const { data, error } = await supabase.from('projects').insert([project]).select();
 
   if (error) {
-    console.error('Erro ao inserir projeto no Supabase:', error);
-  } else {
-    console.log('Projeto inserido com sucesso no Supabase:', data);
+    console.error(error);
+    return;
   }
 
+  if (data && data.length > 0) {
+    const projectId = data[0].id;
+
+    ids.forEach(async (id) => {
+      const { error: insertError } = await supabase
+        .from('projects_user')
+        .insert([{ user_id: id.key, project_id: projectId }]);
+
+      if (insertError) {
+        console.error(`Erro ao adicionar usuario ${id.key} ao Projeto:`, insertError );
+      }
+    });
+  }
   return { data, error };
 }
     
@@ -65,7 +73,7 @@ async function updateProject(project: iProject) {
   if (error) {
     console.error("Erro ao atualizar projeto:", error);
   } else {
-    console.log("Projeto atualizado:", data);
+    //console.log("Projeto atualizado:", data);
   }
 }
 
@@ -78,7 +86,7 @@ async function deleteProject(id: number) {
   if (error) {
     console.error("Erro ao deletar projeto:", error);
   } else {
-    console.log("Projeto deletado com sucesso:", data);
+    //console.log("Projeto deletado com sucesso:", data);
   }
 }
 
@@ -87,3 +95,13 @@ async function deleteProject(id: number) {
 
 export {setProject, updateProject, deleteProject, toListProjects, getProjects, iProject}
           
+
+/* .from('projects')
+    .insert([project])
+    .select();
+
+  if (error) {
+    console.error('Erro ao inserir projeto no Supabase:', error);
+  } else {
+    console.log('Projeto inserido com sucesso no Supabase:', data);
+  } */

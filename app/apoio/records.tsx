@@ -4,129 +4,114 @@ import MyView from '../../src/components/MyView';
 import MyButton from '../../src/components/MyButtons';
 import { IconButton } from 'react-native-paper';
 import { Myinput, MyCheck, MyTextArea } from '../../src/components/MyInputs';
-import { MyItem, MyCorrelated } from '../../src/components/MyItem';
+import { MyItem } from '../../src/components/MyItem';
 import MyList from '../../src/components/MyList';
 import {setRecord, iRecord, getRecords } from '../../src/controllers/records'
 import { supabase } from '../../src/utils/supabase';
 import Mytext from '../../src/components/MyText';
-import { getLevels } from '../../src/controllers/levels';
+import { getLevels, tolevels } from '../../src/controllers/levels';
 import MySelect from '../../src/components/MySelect';
-import { getUsers } from '../../src/controllers/users';
+import { getUsers, toListUser } from '../../src/controllers/users';
 
-export default function RecordScreen() {
+ 
+export default function RecordScreen(user_id:Number) {
     const [isChecked, setIsChecked] = useState(true);
-
+ 
     const [levels, setLevels] = useState<any[]>([]);
-
+ 
     const [users, setUsers] = useState<any[]>([]);
-
+ 
     const [records, setRecords] = useState<iRecord[]>([]);
-    
+   
     useEffect (() => {
         (async () => {
             const retorno = await  getRecords ({})
             if (retorno.status && retorno.data && retorno.data.length > 0){
                 setRecords(retorno.data);
-
-            }   
+ 
+            }  
         })();
-
+ 
         (async () => {
             const retorno = await  getLevels ({})
             if (retorno.status && retorno.data && retorno.data.length > 0){
-                const ls: any[] = []
-
-                retorno.data.map((l) => {
-                    ls.push({key: l.id, option: l.name})
-                })
-
-                setLevels(ls);
-            }   
+                setLevels(tolevels(retorno.data));
+            }  
         })();
-
+ 
         (async () => {
             const retorno = await  getUsers ({})
             if (retorno.status && retorno.data && retorno.data.length > 0){
-                const ls: any[] = []
-
-                retorno.data.map((l) => {
-                    ls.push({key: l.id, option: l.name})
-                })
-
-                setUsers(ls);
-            }   
+                setUsers(toListUser(retorno.data));
+            }  
         })();
-
-
+ 
+ 
     })
-
-
+ 
+ 
     const [req, setReq] = useState({
+        user_id: 0,
         id: -1,
-        name: '',
-        cpf: 0,
         description: '',
         sick: '',
         health: '',
         allergy: '',
         medication: '',
-        user_id: 0,
         level_id: 0,
         create_at: new Date().toISOString(),
     });
-
-    /* Já puxei esse código no controller
-    useEffect(() => {
-        async function getTodos () {
-            const { data: todos } = await supabase.from ('records').select()
-
-            if (todos && todos.length > 1) {
-                setRecords (todos)
-            
-            }
-        }
-        
-        getTodos()
-
-    }, [])*/
-
+ 
+ 
    async function handleRegister() {
         if (req.id == -1) {
+
+            if(req.user_id == -1){
+                //CHAMAR O TOAST
+                return
+            }
+
             const newId = records.length ? records[records.length - 1].id + 1 : 0;
+
             const newRecord = { ...req, id: newId };
             setRecords([...records,newRecord]);
             const resp = await setRecord(newRecord)
             console.log (resp)
-
+ 
                 } else {
                     const { error } = await supabase.from('records')
-                        .update(req)
+                        .update({
+                            description: req.description,
+                            sick: req.sick,
+                            health: req.health,
+                            allergy: req.allergy,
+                            medication: req.medication,
+                            user_id: req.user_id,
+                        })
                         .eq('id', req.id);
-            
+           
                     if (!error) {
                         setRecords(records.map(r => (r.id === req.id ? req : r)));
                     } else {
                         console.error("Erro ao atualizar:", error);
                     }
                 }
-            
+           
                 // Limpa o formulário após salvar ou atualizar
                 setReq({
+                    user_id: 0,
                     id: -1,
-                    name: '',
-                    cpf: 0,
                     description: '',
                     sick: '',
                     health: '',
                     allergy: '',
                     medication: '',
-                    user_id: 0,
                     level_id: 0,
                     create_at: new Date().toISOString(),
                 })
             }
-        
-
+       
+ 
    async function delRecord(id: number) {
         const { error } = await supabase.from('records').delete().eq('id', id);
         if (!error) {
@@ -136,7 +121,7 @@ export default function RecordScreen() {
             console.error('Erro ao deletar:', error);
         }
     }
-
+ 
     function editRecord(id: number) {
         const record = records.find(r => r.id === id);
         if (record) {
@@ -144,36 +129,22 @@ export default function RecordScreen() {
         }
     }
      
-    const [unity, setUnit] = useState("Selecione a cor")  
-
+ 
     return (
-
+ 
         <MyView >
 
-
-            <View style={styles.row}>
-
-
+ 
+ 
                 <View style={styles.form}>
-
-
-
-                    <Myinput
-                        placeholder="Digite"
-                        value={req.name}
-                        onChangeText={(text) => setReq({ ...req, name: text })}
-                        label='Nome do Aluno:'
-                        iconName='person'
+ 
+                <MySelect
+                        label={ users.find(l => l.key == req.user_id)?.option || 'Selecione um usuario'}
+                        setLabel={ () => {}}
+                        setKey={ (key)=> setReq ({...req, user_id: key }) }  
+                        list={users}
                     />
-                    
-                    <Myinput
-                        placeholder="Digite"
-                        value={req.cpf.toString()}
-                        onChangeText={(text) => setReq({ ...req, cpf: Number(text)})}
-                        label='CPF do Aluno:'
-                        iconName='person'
-                    />
-
+ 
                     < MyTextArea
                         value={req.description}
                         onChangeText={(text) => setReq({ ...req, description: text })}
@@ -181,7 +152,7 @@ export default function RecordScreen() {
                         label='Descreva a situação:'
                         iconName='book'
                     />
-
+ 
                     < Myinput
                         value={req.sick}
                         onChangeText={(text) => setReq({ ...req, sick: text })}
@@ -189,7 +160,7 @@ export default function RecordScreen() {
                         label='Coloque a doença:'
                         iconName='sick'
                     />
-
+ 
                     <MyTextArea
                         value={req.health}
                         onChangeText={(text) => setReq({ ...req, health: text })}
@@ -197,7 +168,7 @@ export default function RecordScreen() {
                         label='Descreva o estado da saúde do aluno:'
                         iconName='book'
                     />
-
+ 
                     < Myinput
                         value={req.allergy}
                         onChangeText={(text) => setReq({ ...req, allergy: text })}
@@ -205,7 +176,7 @@ export default function RecordScreen() {
                         label='Coloque as alergias do aluno:'
                         iconName='biotech'
                     />
-
+ 
                     < Myinput
                         value={req.medication}
                         onChangeText={(text) => setReq({ ...req, medication: text })}
@@ -213,109 +184,102 @@ export default function RecordScreen() {
                         label='Coloque as medicações de uso do aluno:'
                         iconName='medication'
                     />
-
+ 
+ 
                     <MySelect
-                        label={ levels.find(l => l.id == req.level_id) }
+                        label={ levels.find(l => l.key == req.level_id)?.option || 'Selecione um nível'}
                         setLabel={ () => {}}
                         setKey={ (key)=> setReq ({...req, level_id: key }) }  
-                        list={levels} 
-                    />   
-
-                    <MySelect
-                        label={ users.find(l => l.id == req.user_id) }
-                        setLabel={ () => {}}
-                        setKey={ (key)=> setReq ({...req, user_id: key }) }  
-                        list={users} 
-                    />   
-                        
-
+                        list={levels}
+                    />  
+ 
+ 
                     <MyButton
                         title="CADASTRAR"
                         onPress={handleRegister}
                         button_type="round"
                         style={styles.button_round}
                     />
-
-
-                    
-                
-
+ 
+ 
+                   
+               
+ 
                 </View>
-
-
+ 
+ 
                 <MyList
                     data={records}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({ item }) => (
-
+ 
                  <MyItem
                     style={styles.cardGridItem}
                     onEdit={() => editRecord(item.id)}
                     onDel={() => delRecord(item.id)}
-                    >      
-                    <Mytext style={styles.itemText}>Nome: {item.name}</Mytext>
-                    <Mytext style={styles.itemText}>CPF: {item.cpf}</Mytext>
+                    >  
+                    <View 
+                    style={styles.listitens}
+                    >
                     <Mytext style={styles.itemText}>Descrição: {item.description}</Mytext>
                     <Mytext style={styles.itemText}>Doença: {item.sick}</Mytext>
                     <Mytext style={styles.itemText}>Saúde: {item.health}</Mytext>
                     <Mytext style={styles.itemText}>Alergias: {item.allergy}</Mytext>
                     <Mytext style={styles.itemText}>Medicações: {item.medication}</Mytext>
-                    <Mytext style={styles.itemText}>Usuário Id: {item.user_id}</Mytext>
-                        
+                    <Mytext style={styles.itemText}>Usuário: {users.find(u => u.key == item.user_id)?.option || 'Selecione o usuário'} </Mytext>{/*correção do código: foi atualizado o (?.) */}
+                    <Mytext style={styles.itemText}>Nível: {levels.find(l => l.key == item.level_id)?.option || 'Selecione um nível'}</Mytext>
+
+                     </View>      
                     </MyItem>  
-                  )}   
-                    
+                  )}  
+                   
                 />
-            </View>
         </MyView>
     );
 }
-
+ 
 const styles = StyleSheet.create({
+    //Troca de stylo row pelo container
     row: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        alignSelf:"center",
+        padding: 10,
+        backgroundColor: '#fff',
+        flex: 1,
+        gap: 20,
+    },
+    //Troca de stylo form pelo FormSection
+    form: {
+        backgroundColor: '#F2F3F5',
+        borderRadius: 16,
+        padding: 20,
+        shadowColor: '#000',
+        shadowOpacity: 0.05,
+        shadowRadius: 10,
+        elevation: 8,
         
     },
-
-    form: {
-        flex: 20,
-        marginRight: 20,
-        marginLeft: 20,
-        padding: 30,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-        alignItems: "center",
-    },
-
+ 
     button_round: {
         borderRadius: 20,
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "row",
         flex: 20,
-
+ 
     },
-
+ 
     itemText: {
         color: 'black',
         fontSize: 16,
         marginBottom: 5,
-        
+       
     },
-
+ 
     buttonText: {
         color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
     },
-
+ 
     cardGridItem: {
         backgroundColor: '#FFF',
         borderRadius: 10,
@@ -326,6 +290,16 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowRadius: 6,
         elevation: 2,
+        width:500, 
       },
 
+      listitens: {
+        flex: 1, 
+        fontWeight: '600', 
+        fontSize: 13, 
+        color: '#333',
+      
+      },
+ 
 })
+ 

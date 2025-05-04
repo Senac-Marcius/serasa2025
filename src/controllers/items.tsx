@@ -11,7 +11,6 @@ interface iIten {
     category_id: number,
     product_id: number,
     local_id: number,
-    products_id: number;
     created_at:string
 }
 function toListItens(data:iIten[]){
