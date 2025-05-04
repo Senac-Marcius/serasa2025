@@ -1,10 +1,9 @@
-import { TouchableOpacity, View, ViewStyle, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
 import React, { ReactNode, useState } from 'react';
-import MyLink from './MyLink';
+import { StyleSheet, Text, View, ViewStyle } from 'react-native';
 import MyButton from './MyButtons';
 import { Myinput } from './MyInputs';
-import MySwitch from '../components/MySwitch';
-import { useRouter } from 'expo-router';
+import MyLink from './MyLink';
 
 interface MyLoginProps {
     children: ReactNode;
@@ -22,7 +21,8 @@ const MyLogin: React.FC<MyLoginProps> = ({ children, style, email, pass, changeE
     const [isEnabled, setIsEnabled] = useState(false);
 
     return (
-        <View style={Array.isArray(style) ? [style] : style}>
+        <View style={styles.container}>
+            <Text style={{ fontWeight: 'bold', fontSize: 30, color: '#c4c4c4' }}>Bem vindo ao <span style={{ color: '#813AB1', fontSize: 40 }}>Virtudemy</span></Text>
             <Myinput
                 label="Email"
                 value={email}
@@ -37,15 +37,14 @@ const MyLogin: React.FC<MyLoginProps> = ({ children, style, email, pass, changeE
                 iconName="key"
                 type='password'
             />
-            <MySwitch isEnabled={isEnabled} onToggle={setIsEnabled} />
             <MyLink url="http://google.com" label="Esqueci minha senha" />
-            <MyButton title='Login' onPress={login}/>
+            <MyButton title='Login' onPress={login} />
             <MyButton
                 title='Cadastrar'
                 onPress={() =>
                     router.push('/registerUser')
                 }
-                style={{marginTop: 10}}
+                style={{ marginTop: 10 }}
             />
         </View>
     );
@@ -62,30 +61,12 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         borderRadius: 8,
         gap: 16,
-    },
-    LoginContainer: {
-        backgroundColor: '#2563EB',
-        padding: 12,
-        borderRadius: 5,
-        alignItems: 'center',
-    },
-    CadastrarContainer: {
-        backgroundColor: '#3B82F6',
-        padding: 12,
-        borderRadius: 5,
-        alignItems: 'center',
-    },
+
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        elevation: 5,
+    }
 });
-
-
-/**
-   const [email, setEmail] = useState('')
-   const [pass, setPass] = useState('')
-
-    <MyLogin email={email} pass={pass} changeEmail={setEmail} changepass={setPass}>
-
-        <Mytext>text </Mytext>
-
-    </MyLogin>
-     
- */
