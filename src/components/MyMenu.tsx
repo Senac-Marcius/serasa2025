@@ -122,7 +122,6 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Revenues" route="revenues" icon="cash-outline" />
         <MenuItem label="Timelines" route="timelines" icon="calendar" />
         <MenuItem label="Students" route="students" icon="school" />
-        <MenuItem label="Users" route="registeredUsers" icon="person-circle" />
         <MenuItem label="More" route="more" icon="add-circle" />
       </ScrollView>
     </Animated.View>

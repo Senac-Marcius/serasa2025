@@ -63,34 +63,6 @@ export default function HomeScreen() {
                     color="#f97316"
                 />
             </View>
-
-            <View style={styles.containerGrades}>
-                <MyCard
-                    icon="school"
-                    title="Biblioteca"
-                    description="Acesse livros, artigos e materiais didáticos de forma rápida e intuitiva."
-                    color="#8b5cf6"
-                />
-                <MyCard
-                    icon="book-open-page-variant"
-                    title="Matérias"
-                    description="Visualize os conteúdos das disciplinas de forma organizada"
-                    color="#10b981"
-                />
-                <MyCard
-                    icon="heart"
-                    title="Apoio"
-                    description="Conte com recursos de suporte pedagógico e emocional para garantir seu bem-estar."
-                    color="#8b5cf6"
-                />
-
-                <MyCard
-                    icon="presentation"
-                    title="Infra"
-                    description="Registre os equipamentos relacionados ao ambiente escolar."
-                    color="#f97316"
-                />
-            </View>
         </MyView>
     );
 }
