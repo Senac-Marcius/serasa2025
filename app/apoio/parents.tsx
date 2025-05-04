@@ -140,6 +140,7 @@ export default function ParentScreen (){
       <Text style={styles.sectionTitle}>Lista de Responsáveis</Text>
 
       <MyList
+        
         data={parents}
         keyItem={(item) => item.id.toString()}
         renderItem={({ item }) => (
@@ -148,18 +149,19 @@ export default function ParentScreen (){
             onDel={() => delParentL(item.id)}
             onEdit={() => editParentL(item.id)}
           >
-            <Text style={styles.th}>Id: {item.id}</Text>
-            <Text style={styles.th}>Nome: {item.name}</Text>
-            <Text style={styles.th}>RG: {item.rg}</Text>
-            <Text style={styles.th}>CPF:{item.cpf}</Text>
-            <Text style={styles.th}>Idade: {item.age}</Text>
-            <Text style={styles.th}>Telefone: {item.phone}</Text>
-            <Text style={styles.th}>Email: {item.email}</Text>
-            <Text style={styles.th}>Parentesco: {item.kinship}</Text>
-            <Text style={styles.th}>Data: {item.createat}</Text>
-            <Text style={styles.th}>URL: {item.publicUrl}</Text>
-            <Text style={styles.th}>UserId: {item.userid}</Text>
-
+            <View style={styles.listitens}>
+            <Text>Id: {item.id}</Text>
+            <Text>Nome: {item.name}</Text>
+            <Text>RG: {item.rg}</Text>
+            <Text >CPF:{item.cpf}</Text>
+            <Text >Idade: {item.age}</Text>
+            <Text >Telefone: {item.phone}</Text>
+            <Text >Email: {item.email}</Text>
+            <Text >Parentesco: {item.kinship}</Text>
+            <Text >Data: {item.createat}</Text>
+            <Text >URL: {item.publicUrl}</Text>
+            <Text >UserId: {item.userid}</Text>
+            </View>
           </MyItem>
         )}
       />
@@ -209,6 +211,7 @@ const styles = StyleSheet.create({
       borderRadius: 16,
     },
     parentsItem: {
+  
       padding:16,
       paddingHorizontal:2,
       borderBottomWidth: 1,
@@ -221,12 +224,13 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         flexDirection: "row",
     },
-    th: { flex: 1, fontWeight: '600', fontSize: 13, color: '#333' 
+    listitens: { flex: 1, fontWeight: '600', fontSize: 13, color: '#333' 
     },
     td: { flex: 1, fontSize: 13, color: '#444' 
     },
     tdStatus: { flex: 1 
     },
+  
   });
   
 

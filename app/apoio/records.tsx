@@ -211,13 +211,17 @@ export default function RecordScreen(user_id:Number) {
                 <MyList
                     data={records}
                     keyItem={(item) => item.id.toString()}
+                    //style= {styles.posicao}
                     renderItem={({ item }) => (
  
                  <MyItem
                     style={styles.cardGridItem}
                     onEdit={() => editRecord(item.id)}
                     onDel={() => delRecord(item.id)}
-                    >      
+                    >  
+                    <View 
+                    style={styles.listitens}
+                    >
                     <Mytext style={styles.itemText}>Descrição: {item.description}</Mytext>
                     <Mytext style={styles.itemText}>Doença: {item.sick}</Mytext>
                     <Mytext style={styles.itemText}>Saúde: {item.health}</Mytext>
@@ -225,7 +229,8 @@ export default function RecordScreen(user_id:Number) {
                     <Mytext style={styles.itemText}>Medicações: {item.medication}</Mytext>
                     <Mytext style={styles.itemText}>Usuário: {users.find(u => u.key == item.user_id)?.option || 'Selecione o usuário'} </Mytext>{/*correção do código: foi atualizado o (?.) */}
                     <Mytext style={styles.itemText}>Nível: {levels.find(l => l.key == item.level_id)?.option || 'Selecione um nível'}</Mytext>
-                       
+
+                     </View>      
                     </MyItem>  
                   )}  
                    
@@ -286,6 +291,27 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowRadius: 6,
         elevation: 2,
+        width:500, 
+        display: "flex"
+
+      },
+
+      listitens: {
+        flex: 1, 
+        fontWeight: '600', 
+        fontSize: 13, 
+        color: '#333',
+      
+      },
+
+      posicao: {
+        flex: 1, 
+        fontWeight: '600', 
+        fontSize: 13, 
+        color: '#333',
+        display: "flex",
+        flexDirection: "row",
+      
       },
  
 })

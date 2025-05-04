@@ -13,6 +13,7 @@ interface MyModalprops {
     tipe?:Button_type;
     buttonStyle?:ViewStyle;
     isButton?:boolean
+    handleClosedButton?: () => void
 
 }
 type Button_type =
@@ -45,9 +46,10 @@ type Button_type =
 
 
 
-const MyModal: React.FC<MyModalprops> = ({ children, style, visible, setVisible,title, closeButtonTitle, tipe,isButton=true,buttonStyle }) => { //
+const MyModal: React.FC<MyModalprops> = ({ children, style, visible, setVisible,title, closeButtonTitle, tipe,isButton=true,buttonStyle,handleClosedButton }) => { //
     function onClose() {
         setVisible(false)
+
     };
 
     console.log(isButton)
@@ -64,9 +66,13 @@ const MyModal: React.FC<MyModalprops> = ({ children, style, visible, setVisible,
                 <View style={styles.background} >
                     <View style={[styles.MyModal, style]}  >
                         {children}
-                        <MyButton onPress={onClose}
-                             title ={closeButtonTitle || "voltar"}
+                        <MyButton onPress={() =>{ 
+                            onClose(); 
+                            handleClosedButton && handleClosedButton()
+                        }}
+                            title ={closeButtonTitle || "voltar"}
                             style={styles.button_round}
+
                         />
 
                     </View>
@@ -82,6 +88,7 @@ const styles = StyleSheet.create({
     button_capsule: {
         borderRadius: 50,
         backgroundColor: "#813AB1",
+        margin:"auto",
         alignItems: "center",
         justifyContent: "center",
       },
@@ -89,6 +96,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#813AB1",
         width: 100,
         padding: 10,
+        margin:"auto",
         borderRadius: 20,
         alignItems: "center",
         justifyContent: "center",

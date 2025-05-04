@@ -8,6 +8,7 @@ import {MyItem} from '../../src/components/MyItem';
 import MyList from '../../src/components/MyList';
 import Mytext from '../../src/components/MyText';
 import { setNotification, iNotification, deleteNotification, updateNotification, getNotifications} from '../../src/controllers/notifications';
+import MySelect from '../../src/components/MySelect';
 
 export default function NotificationScreen(){
 // aqui é typNotificationScreenescript
@@ -96,7 +97,7 @@ return (
                     
                 />
 
-                <Myinput
+                <MySelect
                         style={styles.input}
                         placeholder = "Digite o Url:" 
                          value={req.url}
@@ -108,7 +109,7 @@ return (
                 <MyButton title="cadastrar:" onPress={handleRegister}/>
 
             </View>
-
+{/*
            <MyList 
                     data={notifications}
                     keyItem={(item) => item.id.toString()}
@@ -118,9 +119,9 @@ return (
                                 onEdit={() => {editNotification(item.id)}}
                                 onDel={() => {delNotification(item.id)}}
                                 
-                        > {/* pedro */}
+                        > {/* pedro /}
 
-                           <Mytext  > Nome: {item.name}</Mytext> {/* alex */}
+                           <Mytext  > Nome: {item.name}</Mytext> {/* alex}
                            <Mytext > Descrição: {item.description}</Mytext>
                            <Mytext > Url: {item.url}</Mytext>
                            <Mytext> UserId: {item.user_id}</Mytext>
@@ -141,11 +142,11 @@ return (
                                 </TouchableOpacity>
                            
                             </View>
-                            */}
+                           }
 
                         </MyItem>
                     )}
-           />
+           />*/}
            
         </View>
 
