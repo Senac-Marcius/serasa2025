@@ -1,8 +1,9 @@
 import React, { ReactNode, useState } from 'react';
-import { View, StyleSheet, TextStyle, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, TextStyle, ScrollView } from 'react-native';
 import MyTopbar from './MyTopbar';
 import MySupport from './MySupport';
-import MyAccessibility from './MyAccessibility';
+// import {MyAccess} from './components/MyAccessibility';
+import { Button } from 'react-native-paper';
 import { Router } from 'expo-router'; // Importando o Router do expo-router
 import MyMenu from './MyMenu';
 
@@ -11,9 +12,10 @@ interface MySearchProps {
   style?: TextStyle | TextStyle[];
   title?: string;
   router?: Router;
+  childrenm?: ReactNode;
 }
 
-const MyView: React.FC<MySearchProps> = ({ children, style, title, router }) => {
+const MyView: React.FC<MySearchProps> = ({ children, style, title, router, childrenm }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -23,8 +25,16 @@ const MyView: React.FC<MySearchProps> = ({ children, style, title, router }) => 
 
       {/* Conteúdo da tela */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {children}
+      
       </ScrollView>
+        {childrenm}
+      {/* Botão de Acessibilidade */}
+      {/* <MyAccessibility style={styles.accessibilityButton}>
+        <Text style={{ fontSize: 16, marginBottom: 8 }}>Acessibilidade ativada!</Text>
+        <Button mode="contained" onPress={() => console.log('Ativando recurso')}>
+          Modo Alto Contraste
+        </Button>
+      </MyAccessibility> */}
 
       {/* Botão de suporte fixo */}
       <MySupport />
@@ -56,13 +66,16 @@ const styles = StyleSheet.create({
   suporteButton: {
     position: 'absolute',
     bottom: 20,
-    right: 20,
-    width: 60,
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
+    right: 10,
+    
   },
-  
+  accessibilityButton: {
+    position: 'absolute',
+    right: 10,
+    top: '40%',
+    opacity: 0.7,
+    zIndex: 10,
+  },
   
 });
 

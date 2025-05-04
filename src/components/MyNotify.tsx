@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, StyleSheet, ViewStyle, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { MyCorrelated } from './MyItem';
+import { MyItem } from './MyItem';
 import Mytext from './MyText';
 import MyList from './MyList';
 
@@ -26,10 +26,11 @@ const MyNotify: React.FC<MyNotifyProps> = ({ style }) => {
       const retorno = await getNotifications({});
       if (retorno.status && retorno.data && retorno.data.length > 0) {
         setNotifications(retorno.data);
+
       }
     }
     getTodos();
-  }, []);
+  }, [notifications]);
 
   return (
     <View>
@@ -49,13 +50,11 @@ const MyNotify: React.FC<MyNotifyProps> = ({ style }) => {
             data={notifications}
             keyItem={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <MyCorrelated showEditButton={false} showDeleteButton={false}>
-                <Mytext>Nome: {item.name}</Mytext>
+              <MyItem>
                 <Mytext>Descrição: {item.description}</Mytext>
-                <Mytext>Url: {item.url}</Mytext>
                 <Mytext>UserId: {item.user_id}</Mytext>
                 <Mytext>CreatAt: {item.created_at}</Mytext>
-              </MyCorrelated>
+              </MyItem>
             )}
           />
         </View>
@@ -73,7 +72,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
     justifyContent: 'center',
     alignItems: 'center',
+    
   },
+
   notificationContainer: {
     position: 'absolute',
     top: 60,
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3E5F5', // lilás claro
     borderRadius: 12,
     padding: 12,
-    maxHeight: 300,
+    height:500,
     width: 320,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 6 },
@@ -89,9 +90,12 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 10,
     zIndex: 1000,
+
   },
+
   notificationList: {
     flexGrow: 0,
+
   },
 });
 

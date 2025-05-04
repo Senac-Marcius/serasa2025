@@ -9,7 +9,6 @@ import {MyItem} from '../../src/components/MyItem';
 import { useRouter } from 'expo-router';
 import {deleteLevel, updateLevels, getLevels, setLevel, iLevels } from '../../src/controllers/levels';
 
-
 export default function LevelsScreen() {
   const router = useRouter();
   const [isChecked, setIsChecked] = useState(true);
@@ -22,6 +21,7 @@ export default function LevelsScreen() {
     description: '',
     color: '',
     created_at: new Date().toISOString(),
+
   });
 
   useEffect(() => {
@@ -30,11 +30,11 @@ export default function LevelsScreen() {
         const retorno = await getLevels({})
         if (retorno.status && retorno.data && retorno.data.length > 0 ) {
             setLevels(retorno.data); 
+
         }
 
       }
   
-
       fetchLevels();
   }, []);
 
@@ -57,11 +57,13 @@ export default function LevelsScreen() {
         color: '',
         created_at:  new Date().toISOString(),
      });
+
   }
 
 async function deleteLevels(id: number) {
     setLevels(levels.filter(item => item.id !== id));
     await deleteLevel(id)
+
   }
 
 function editLevels(levels: iLevels) {
@@ -76,7 +78,6 @@ function editLevels(levels: iLevels) {
 
             <View style={styles.row}>
                 <View style={styles.form}>
-                
                         
                         <Myinput 
                             style={styles.input}
@@ -113,6 +114,7 @@ function editLevels(levels: iLevels) {
 
                 <MyList
                     data={levels}
+                    style={styles.listContainer}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) =>(
                        <MyItem
@@ -120,33 +122,25 @@ function editLevels(levels: iLevels) {
                             onDel={() => {deleteLevels(item.id)}}
                         >
 
-                           <Mytext> Nome: {item.name}</Mytext> {/* alex */}
-                           <Mytext> Descrição: {item.description}</Mytext>
-                           <Mytext> Cor: {item.color}</Mytext>
-                           <Mytext> UserId: {item.userId}</Mytext>
+                           <Text > Nome: {item.name}</Text> {/* alex */}
+                           <Text > Descrição: {item.description}</Text>
+                           <Text > Cor: {item.color}</Text>
+                           <Text > UserId: {item.userId}</Text>
                            
- 
-                            {/*
-                            <View style={styles.buttonsContainer}>
-                                <TouchableOpacity 
-                                style={styles.editButton}
-                                onPress={() => {editLevels(item.id)}}>
-
-                                    <Text style={styles.buttonText}>EDIT</Text>
-
-                                </TouchableOpacity>
-
-                                <TouchableOpacity 
-                                style={styles.delButton}
-                                onPress={() => {deleteLevels(item.id)}}>
-
-                                    <Text style={styles.buttonText}>DELETE</Text>
-
-                                </TouchableOpacity>
-                               
-                            </View>
-                            */}
-
+    {/*
+    <View style={styles.buttonsContainer}>
+    <TouchableOpacity 
+    style={styles.editButton}
+    onPress={() => {editLevels(item.id)}}>
+    <Text style={styles.buttonText}>EDIT</Text>
+    </TouchableOpacity>
+    <TouchableOpacity 
+    style={styles.delButton}
+    onPress={() => {deleteLevels(item.id)}}>
+    <Text style={styles.buttonText}>DELETE</Text>
+    </TouchableOpacity>             
+    </View>
+    */}
                         </MyItem>
 
                     )}
@@ -163,16 +157,19 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
         backgroundColor: '#FFF'
-    },
+        
+},
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
-    },
+
+},
+
     form: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#F2F2F2',
+        backgroundColor: '#F5EFFB',
         borderRadius: 10,
         shadowColor: '#000',
         shadowOpacity: 0.1,
@@ -180,97 +177,121 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         marginRight: 10,
         minWidth: '45%',
-    },
+
+},
+//muda as cores de fundo no backgroundColor e shadowColor
     listContainer: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#E8F5E9',
+        backgroundColor: '#D8CEF6',
         borderRadius: 10,
-        shadowColor: '#000',
+        shadowColor: '#F5EFFB',
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
         minWidth: '45%',
-    },
+
+},
+
     title: {
         fontSize: 22,
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 20,
-    },
+
+},
+
     subtitle: {
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 10,
-    },
+
+},
+
     input: {
         borderWidth: 1,
-        borderColor: '#ccc',
+        borderColor: '#E2A9F3',
         borderRadius: 5,
         padding: 10,
         marginBottom: 10,
-    },
+
+},
+
     postItem: {
         padding: 10,
         marginVertical: 5,
-        backgroundColor: '#f8f8f8',
+        backgroundColor: '#E2A9F3',
         borderRadius: 5,
-    },
+
+},
+
     postText: {
-        fontSize: 16,
+        fontSize: 12,
         fontWeight: 'bold',
-    },
+
+},
+
     postUrl: {
         fontSize: 14,
-        color: '#007BFF',
+        color: '#E2A9F3',
         marginBottom: 5,
-    },
+
+},
+
     buttonText:{
-        color:'#000000',
+        color:'#E2A9F3',
         fontWeight: 'bold'
-    },
+
+},
+
     buttonsContainer:{
         flexDirection: 'row',
         alignItems: 'center',
         gap: 20,
         alignContent:'space-around',
-    },
-    editButton:{ backgroundColor:'#FFFF00',
+
+},
+
+    editButton:{ backgroundColor:'#E2A9F3',
         padding: 10,
         borderRadius: 5,
         alignItems: 'center',
         justifyContent:'center',
 
-    },
-    delButton:{ backgroundColor:'#f44336',
+},
+
+    delButton:{ backgroundColor:'#E2A9F3',
         padding: 10,
         borderRadius: 5,
         alignItems:'center',
         justifyContent:'center',
 
-    },
+},
 
     card: {
-        backgroundColor: '#FFF',
+        backgroundColor: '#E2A9F3',
         padding: 10,
         borderRadius: 5,
         marginBottom: 10,
         borderLeftWidth: 5,
-        borderLeftColor: '#DF01A5',
-        shadowColor: '#000',
+        borderLeftColor: '#E2A9F3',
+        shadowColor: '#E2A9F3',
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 2 },
         shadowRadius: 3,
-      },
+
+},
 
       fundo: {
         height: 40,
-        borderColor: '#CCC',
+        borderColor: '#E2A9F3',
         borderWidth: 1,
         borderRadius: 5,
         paddingHorizontal: 10,
         marginBottom: 10,
-        backgroundColor: '#FFF',
-      },
+        backgroundColor: '#E2A9F3',
+
+},
+
 
 });
