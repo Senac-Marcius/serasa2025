@@ -70,13 +70,21 @@ async function deleteScale(id: number) {
     return true;
 }
 
-async function getScale (params:any){
-    const { data: todos,error } = await supabase.from('scales').select();
-
-        if (error)
-            return{status: false, error:error}
-        
-        return{status: true, data:todos}
-}
+async function getScale(params: any) {
+    let query = supabase.from('scales').select('*');
+    
+    if (params?.employ_id) {
+      query = query.eq('employ_id', params.employ_id);
+    }
+  
+    const { data, error } = await query;
+  
+    if (error) {
+      console.error('Error fetching scales:', error);
+      return { status: false, error };
+    }
+  
+    return { status: true, data };
+  }
 
 export { getScale, setScale, updateScale, deleteScale, iScale, toListScale }

@@ -60,13 +60,13 @@ export default function AdminDashboard() {
     {
       title: 'Meus Dados',
       icon: <Ionicons name="reader" size={30} color="#6C63FF" />,
-      route: 'adminsitration/employees',
+      route: 'adminsitration/myProfile',
       bgColor: '#F3F1FE',
     },
     {
       title: 'Minha Escala',
       icon: <Ionicons name="document-text" size={30} color="#FF5C8A" />,
-      route: 'adminsitration/scales',
+      route: 'adminsitration/my-schedule',
       bgColor: '#FFEAF0',
     },
     {

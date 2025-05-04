@@ -24,14 +24,20 @@ function toListEmployees(data: iEmployees[]){
 
   return resp;
 }
-async function getEmployees(params:any) { 
-  const { data: todos , error} = await supabase.from('employees').select()
-  if(error){
-    console.log(error)
-    return {status: false, error: error}
-  } 
-  return {status: true, data: todos}
+async function getEmployees(params: any) { 
+  let query = supabase.from('employees').select('*');
   
+  if (params?.user_id) {
+    query = query.eq('user_id', params.user_id);
+  }
+
+  const { data, error } = await query;
+  
+  if(error){
+    console.log(error);
+    return {status: false, error: error};
+  } 
+  return {status: true, data: data};
 }
 
 async function  setEmployee(employee:iEmployees){
