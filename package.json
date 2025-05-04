@@ -14,6 +14,7 @@
     "@heroui/date-input": "^2.3.15",
     "@react-native-async-storage/async-storage": "^2.1.2",
     "@react-native-picker/picker": "^2.11.0",
+    "@react-navigation/native": "^6.1.9",
     "@supabase/supabase-js": "^2.49.4",
     "@types/react-native-vector-icons": "^6.4.18",
     "expo": "~52.0.38",
