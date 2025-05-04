@@ -55,6 +55,8 @@ export default function itemScreen() { // aqui é TS
         file: '',
         type_loan: '',
         incorporated: false,
+        star:0,
+        borrowedAmount:0,
     });
 
     const [items, setItems] = useState<iItem[]>([]);
@@ -124,6 +126,8 @@ export default function itemScreen() { // aqui é TS
             file: '',
             type_loan: '',
             incorporated: false,
+            star:0,
+            borrowedAmount:0,
         });
         
         router.push('/Biblioteca/librariePreview');
@@ -226,6 +230,8 @@ export default function itemScreen() { // aqui é TS
                             file: '',
                             type_loan: '',
                             incorporated: false,
+                            star:0,
+                            borrowedAmount:0,
                         });
                         setSelectedImage(null);
                         setSelectedFile(null);

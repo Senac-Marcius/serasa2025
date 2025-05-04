@@ -34,6 +34,7 @@ interface iItem {
     created_at: string,
     id: number,
     star: number,
+    borrowedAmount:number,
 }
 
 function toListItems(data:iItem[]){

@@ -4,7 +4,7 @@ import { supabase } from '../../src/utils/supabase';
 import React, { useEffect, useState } from 'react';
 import { getLoggedUserId, iUser } from '../../src/controllers/users';
 import { FlatList, View, Text, StyleSheet, Button } from 'react-native';
-import  {StarCalculation}  from './starsCalculation';
+import  StarCalculation  from './starsCalculation';
 import { MyModal } from '../../src/components/MyModal';
 import { ScrollView } from 'react-native-gesture-handler';
 
