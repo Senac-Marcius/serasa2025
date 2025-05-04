@@ -121,33 +121,6 @@ export default function AdminDashboard() {
             </Pressable>
           </View>
 
-          {/* Dropdown Filtro */}
-          <View style={styles.dropdownContainer}>
-            <Pressable
-              onPress={() => setDropdownVisible(!dropdownVisible)}
-              style={styles.dropdownButton}
-            >
-              <Text style={styles.dropdownText}>{selectedDepartment}</Text>
-              <Ionicons name={dropdownVisible ? 'chevron-up' : 'chevron-down'} size={20} color="#555" />
-            </Pressable>
-            {dropdownVisible && (
-              <View style={styles.dropdownOptions}>
-                {departments.map((dept, index) => (
-                  <Pressable
-                    key={index}
-                    onPress={() => {
-                      setSelectedDepartment(dept);
-                      setDropdownVisible(false);
-                    }}
-                    style={styles.dropdownOption}
-                  >
-                    <Text style={styles.dropdownOptionText}>{dept}</Text>
-                  </Pressable>
-                ))}
-              </View>
-            )}
-          </View>
-
           <Text style={styles.mainTitle}>Painel de Administração</Text>
           <View style={styles.cardArea}>
             {cards.map((card, index) => (
