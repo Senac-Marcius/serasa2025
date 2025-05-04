@@ -1,20 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Animated, Dimensions, StyleSheet, Text, Pressable, ImageBackground, FlatList } from 'react-native';
+import {View,Animated,Dimensions,StyleSheet,Text,Pressable,ImageBackground,
+} from 'react-native';
 import MyView from '../../src/components/MyView';
 import { useRouter } from 'expo-router';
-import { useNavigation } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
 
 const menuItems = [
-  { label: 'Prontuário', route: 'apoio/records' },
-  { label: 'Responsável', route: 'apoio/parents' },
-  { label: 'Notificações', route: 'apoio/notifications' },
-  { label: 'Níveis', route: 'apoio/levels' },
+  { label: 'Prontuário', route: '/apoio/records' },
+  { label: 'Responsável', route: '/apoio/parents' },
+  { label: 'Notificações', route: '/apoio/notifications' },
+  { label: 'Níveis', route: '/apoio/levels' },
 ];
 
-
-//inicio do código do menu
 function MenuItem({ label, onPress }: { label: string; onPress: () => void }) {
   const scale = useRef(new Animated.Value(1)).current;
   const bgColor = useRef(new Animated.Value(0)).current;
@@ -54,17 +52,18 @@ function MenuItem({ label, onPress }: { label: string; onPress: () => void }) {
   return (
     <Pressable onPressIn={handlePressIn} onPressOut={handlePressOut} onPress={onPress}>
       <Animated.View style={[styles.menuItem, { transform: [{ scale }], backgroundColor }]}>
-        <Animated.Text style={[styles.menuText, { color: textColor }]}>{label}</Animated.Text>
+        <Animated.Text style={[styles.menuText, { color: textColor }]}>
+          {label}
+        </Animated.Text>
       </Animated.View>
     </Pressable>
   );
 }
 
 function HorizontalMenu() {
-  const navigation = useNavigation();
+  const router = useRouter();
   const handlePress = (item: { label: string; route: string }) => {
-    console.log('Clicou em:', item);
-    navigation.navigate(item.route as never);  // reajuste necessário para o TypeScript evitando falha de tipagem no item e route
+    router.push(item.route);
   };
 
   return (
@@ -75,28 +74,28 @@ function HorizontalMenu() {
     </View>
   );
 }
-  const generateParticles = (count = 15) => {
-    return Array.from({ length: count }).map((_, i) => ({
-      key: `particle-${i}`,
-      left: Math.random() * width,
-      size: 6 + Math.random() * 10,
-      duration: 3000 + Math.random() * 4000,
-      delay: Math.random() * 4000,
-    }))
-  }
-  
-  const schoolMessages = [
-    { id: '1', institution: 'SENAC', message: 'Inscrições abertas para cursos técnicos 2025!' },
-    { id: '2', institution: 'SENAC', message: 'Aulas presenciais retornam dia 5 de maio.' },
-    { id: '3', institution: 'Serasa Experian', message: 'Campanha de capacitação profissional iniciada.' },
-    { id: '4', institution: 'Serasa Experian', message: 'Workshop gratuito sobre educação financeira - inscrições abertas.' },
-  ];
-  
+
+const generateParticles = (count = 15) => {
+  return Array.from({ length: count }).map((_, i) => ({
+    key: `particle-${i}`,
+    left: Math.random() * width,
+    size: 6 + Math.random() * 10,
+    duration: 3000 + Math.random() * 4000,
+    delay: Math.random() * 4000,
+  }));
+};
+
+const schoolMessages = [
+  { id: '1', institution: 'SENAC', message: 'Inscrições abertas para cursos técnicos 2025!' },
+  { id: '2', institution: 'SENAC', message: 'Aulas presenciais retornam dia 5 de maio.' },
+  { id: '3', institution: 'Serasa Experian', message: 'Campanha de capacitação profissional iniciada.' },
+  { id: '4', institution: 'Serasa Experian', message: 'Workshop gratuito sobre educação financeira - inscrições abertas.' },
+];
 
 export default function HomeScreen() {
   const router = useRouter();
-  const particles = useRef(generateParticles()).current
-  const animations = useRef(particles.map(() => new Animated.Value(0))).current
+  const particles = useRef(generateParticles()).current;
+  const animations = useRef(particles.map(() => new Animated.Value(0))).current;
 
   const [messages, setMessages] = useState(schoolMessages);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -110,13 +109,11 @@ export default function HomeScreen() {
           duration: particles[i].duration,
           delay: particles[i].delay,
           useNativeDriver: true,
-        }).start(loop)
-      }
-      loop()
-
-      
-    })
-  },[]);
+        }).start(loop);
+      };
+      loop();
+    });
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -129,8 +126,9 @@ export default function HomeScreen() {
     <MyView router={router} style={{ flex: 1 }}>
       <ImageBackground
         source={require('./imagens/download.png')} // <-- sua imagem aqui!
+       
         style={styles.backgroundImage}
-        resizeMode='center'
+        resizeMode="center"
       >
         <View style={StyleSheet.absoluteFill}>
           {particles.map((p, i) => (
@@ -152,26 +150,25 @@ export default function HomeScreen() {
             />
           ))}
         </View>
-          <HorizontalMenu />
-        
-        <ImageBackground>
-          {/*Recados escolares aqui */}
+
+        <HorizontalMenu />
+
+        <View>
           <View style={styles.messageContainer}>
             <Text style={styles.messageTitle}>Recados Escolares</Text>
             <Text style={styles.messageText}>
               [{messages[currentIndex].institution}] {messages[currentIndex].message}
             </Text>
           </View>
-          {/* Conteúdo adicional */}
+
           <View style={styles.content}>
-            <Animated.Text style={styles.title}>Teste de conteúdos adicionais</Animated.Text>
+            <Text style={styles.title}>Teste de conteúdos adicionais</Text>
           </View>
-        </ImageBackground>
+        </View>
       </ImageBackground>
     </MyView>
   );
 }
-
 
 const styles = StyleSheet.create({
   content: {
@@ -201,23 +198,21 @@ const styles = StyleSheet.create({
   menuText: {
     fontSize: 16,
     fontWeight: '600',
-    
   },
   backgroundImage: {
     width: width,
     height: height,
-    position:'static', // Para que a imagem ocupe toda a tela
   },
-    messageContainer: {
-    flex:1,
+  messageContainer: {
+    flex: 1,
     padding: 16,
     backgroundColor: '#fff',
     margin: 10,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 3, // Sombra para Android
-    shadowColor: '#000', // Sombra para iOS
+    elevation: 3,
+    shadowColor: '#000',
     shadowOpacity: 0.2,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 8,
