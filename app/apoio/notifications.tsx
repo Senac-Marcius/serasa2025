@@ -73,7 +73,7 @@ return (
     <MyView>
           
            
-
+        
         {/* aqui é typescriot dentro do front*/}
         <Text>Minha tela de notificações</Text>
         <View style={styles.row}>
