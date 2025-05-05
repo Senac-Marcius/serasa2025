@@ -10,8 +10,6 @@ import MyTabsbar from '../../src/components/MyTabsBar';
 import MyButton from '../../src/components/MyButtons';
 import { MyModal } from '../../src/components/MyModal';
 import MySelect from '../../src/components/MySelect';
-import MyUpload from '../../src/components/MyUpload';
-import MyAccessibility from '../../src/components/MyAccessibility';
 import { Myinput, MyTextArea, MyCheck } from '../../src/components/MyInputs';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -52,6 +50,8 @@ export default function itemScreen() {
         file: '',
         type_loan: '',
         incorporated: false,
+        star:0,
+        borrowedAmount:0,
     });
 
     const [items, setItems] = useState<iItem[]>([]);
@@ -103,6 +103,8 @@ export default function itemScreen() {
         incorporated: boolean,
         created_at: string,
         id: number,
+        star: number,
+        borrowedAmount:number,
     }
     
     async function setItem(item:iItem){
@@ -244,6 +246,8 @@ export default function itemScreen() {
                     file: '',
                     type_loan: '',
                     incorporated: false,
+                    star: 0,
+                    borrowedAmount:0,
                 });
                 router.push('/librarie/librariePreview');
             }
@@ -346,6 +350,8 @@ export default function itemScreen() {
                 file: '',
                 type_loan: '',
                 incorporated: false,
+                star: 0,
+                borrowedAmount:0,
             });
             setSelectedImage(null);
             setSelectedFile(null);

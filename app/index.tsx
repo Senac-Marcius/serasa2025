@@ -1,13 +1,13 @@
-import React from 'react';
-import { View } from 'react-native';
-import { useState } from 'react';
-import MyTheme from '../src/components/MyTheme'
-import MyView from '../src/components/MyView'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { Image, StyleSheet, View } from 'react-native';
 import MyLogin from '../src/components/MyLogin';
 import MyText from '../src/components/MyText';
-import { useRouter } from 'expo-router';
-import { getUserByEmail, isEmployee, isStudent } from '../src/controllers/users';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import MyTheme from '../src/components/MyTheme';
+import MyView from '../src/components/MyView';
+import { getUserByEmail } from '../src/controllers/users';
+import Toast from 'react-native-toast-message';
 
 export default function HomeScreen() {
     const router = useRouter();
@@ -15,23 +15,36 @@ export default function HomeScreen() {
     const [pass, setPass] = useState('')
 
     async function handleLogin() {
-        /* console.log(await isStudent())
-        console.log(await isEmployee()) */
         const result = await getUserByEmail(email);
         if (!result.status) {
-            return alert("E-mail não encontrado!")
+            return Toast.show({
+                type: 'error',
+                text1: 'Erro!',
+                text2: 'E-mail incorreto ❌'
+              });
         }
         if (result.data?.password === pass) {
             try {
                 await AsyncStorage.setItem('userId', result.data.id.toString());
                 alert('Login bem-sucedido!');
+
+                //buscar todos os students verificar pelo user_id se ele exite na tabela estudante se existir da permisão de estudante
+
+
+                //buscar todo employes se tiver user_id na emploes vai ter que puxar o cargo e de acordo com o cargo vai mandar para a tela certa
                 router.push('/home');
             } catch (error) {
-                console.error('Erro ao armazenar o id do usuário:', error);
-                alert('Erro ao salvar o id do usuário.');
+                Toast.show({
+                    type: 'error',
+                    text1: 'Erro ao realizar login!',
+                  });
             }
         } else {
-            return alert("Senha incorreta!");
+            return Toast.show({
+                type: 'error',
+                text2: 'Senha incorreta! ❌',
+                text1: 'Erro!'
+              });
         }
         return;
     }
@@ -41,17 +54,49 @@ export default function HomeScreen() {
             <MyTheme chendTheme={() => { }} fontSize={() => { }} />
 
             {/* Conteúdo da Página */}
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <MyLogin
-                    email={email}
-                    pass={pass}
-                    changeEmail={setEmail}
-                    changepass={setPass}
-                    login={handleLogin}
-                >
-                    <MyText>Bem vind@ </MyText>
-                </MyLogin>
+            <View style={styles.container}>
+                <View style={styles.containerIcons}>
+                    <Image source={require('../assets/image-login.svg')} style={styles.image} />
+                </View>
+
+                <View style={styles.containerLogin}>
+                    <MyLogin
+                        email={email}
+                        pass={pass}
+                        changeEmail={setEmail}
+                        changepass={setPass}
+                        login={handleLogin}
+                    >
+                        <MyText>Bem vind@ </MyText>
+                    </MyLogin>
+                </View>
             </View>
         </MyView>
     );
-} 
+}
+
+const styles = StyleSheet.create({
+    container: {
+        width: '100%',
+        height: '100%',
+        flexDirection: 'row',
+    },
+    containerLogin: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    containerIcons: {
+        flex: 1,
+        justifyContent: 'center',
+        textAlign: 'center',
+        paddingLeft: 30
+    },
+    image: {
+        width: '100%',
+        height: 500,
+        resizeMode: 'contain',
+        marginBottom: 20,
+    }
+});

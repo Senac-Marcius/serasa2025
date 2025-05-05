@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TextInput, Button } from 'react-native';
-import MyView from '../src/components/MyView'
+import MyView from '../../src/components/MyView'
 import { useRouter } from 'expo-router';
 
 

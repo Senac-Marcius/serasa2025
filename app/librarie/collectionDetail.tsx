@@ -9,21 +9,42 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import TabelaUsuarios from './loantable';
 import { supabase } from '../../src/utils/supabase';
 import MyMenu from '../../src/components/MyMenu';
-import { StarCalculation } from './starsCalculation';
 import LoansTabledetail from './loanstabledetail';
-import { setCollection, iCollection, deleteCollectionById, updateCollectionById, getCollections } from '../../src/controllers/collections';
+import StarComponent from './starComponent';
+import { getLoggedUserId, iUser } from '../../src/controllers/users';
 
 export default function CollectionDetail() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
-
   const [items, setItems] = useState<iItem[]>([]);
   const [visible, setVisible] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
   const [relatedItems, setRelatedItems] = useState<iItem[]>([]);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [recentBooks, setRecentBooks] = useState<any[]>([]);
+  const [avaliacoes, setAvaliacoes] = useState<any[]>([]);
+  const [userDetails, setUserDetails] = useState<iUser | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [showAvaliacoes, setShowAvaliacoes] = useState(false);
+
+  useEffect(() => {
+    if (userId) {
+      async function getUserData() {
+        const { data, error } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', userId)
+          .single();
+
+        if (error) {
+          console.error("Erro ao buscar os detalhes do usuário:", error);
+          return;
+        }
+
+        setUserDetails(data);
+      }
+
+      getUserData();
+    }
+  }, [userId]);
 
   useEffect(() => {
     async function getTodos() {
@@ -43,8 +64,8 @@ export default function CollectionDetail() {
     const tagCount: Record<string, number> = {};
 
     books.forEach(book => {
-      if (book.keywords) {
-        const tags = book.keywords.split(',').map((tag: string) => tag.trim().toLowerCase())
+      if (book.subject) {
+        const tags = book.subject.split(',').map((tag: string) => tag.trim().toLowerCase())
         tags.forEach((tag: string) => {
           tagCount[tag] = (tagCount[tag] || 0) + 1;
         });
@@ -59,27 +80,6 @@ export default function CollectionDetail() {
     return commonTags;
   }
 
-  async function filterBooksByRecentTags() {
-    const commonTags = getCommonTags(recentBooks);
-
-    if (commonTags.length === 0) return;
-
-    const { data, error } = await supabase
-      .from('items_librarie')
-      .select('*')
-      .or(
-        commonTags.map(tag => `keywords.ilike.%${tag}%`).join(',')
-      );
-
-    if (error) {
-      console.error("Erro ao filtrar livros:", error);
-      return;
-    }
-
-    if (data) {
-      setItems(data);
-    }
-  }
   async function fetchRelatedItems(item: iItem) {
     if (!item.subject) return;
 
@@ -105,9 +105,42 @@ export default function CollectionDetail() {
   useEffect(() => {
     if (item) {
       fetchRelatedItems(item);
+      fetchAvaliacoes(item.id);
     }
   }, [item]);
+  async function fetchAvaliacoes(bookId: number) {
+    const { data, error } = await supabase
+      .from('collections') // Tabela correta
+      .select('star, commentary, userId') // Apenas as colunas necessárias
+      .eq('bookId', bookId); // Filtro para pegar avaliações específicas para esse BookId
 
+    if (error) {
+      console.error("Erro ao buscar avaliações:", error);
+      return;
+    }
+
+    if (data) {
+      setAvaliacoes(data); // Atualiza o estado com as avaliações recebidas
+    }
+  }
+  const [userNames, setUserNames] = useState<{ [key: string]: string }>({});
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const { data, error } = await supabase.from('users').select('id, name');
+      if (error) {
+        console.error('Erro ao buscar usuários:', error);
+      } else {
+        const nameMap: { [key: string]: string } = {};
+        data.forEach(user => {
+          nameMap[user.id] = user.name;
+        });
+        setUserNames(nameMap);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   return (
     <ScrollView>
@@ -129,9 +162,9 @@ export default function CollectionDetail() {
               </Text>
             </View>
             <View style={styles.rightIcons}>
-              <TouchableOpacity style={styles.button_capsule} onPress={() => router.push({ pathname: '../app/perfil' })}>
-                <MaterialCommunityIcons name="account" size={20} color="#750097" />
-                <Text style={styles.buttonText}>Perfil</Text>
+              <TouchableOpacity style={styles.button_capsule} onPress={() => router.push({ pathname: 'librarie/loansTableUsers' })}>
+                <MaterialCommunityIcons name="book-open-variant" size={20} color="#750097" />
+                <Text style={styles.buttonText}>Meus empréstimos</Text>
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.button_round} onPress={() => router.push({ pathname: 'librarie/collectionsPreview' })}>
@@ -171,10 +204,38 @@ export default function CollectionDetail() {
                     style={styles.modal}
                     title="Empréstimo"
                     closeButtonTitle="X"
-
                   >
-                   <LoansTabledetail BookId = {item.id} />
+                    <LoansTabledetail BookId={item.id} />
                   </MyModal>
+                  <TouchableOpacity onPress={() => setShowAvaliacoes(!showAvaliacoes)} style={{ marginVertical: 10 }}>
+                    <View style={{ flexDirection: 'row', alignItems: "flex-end", gap:20 }}>
+                      <StarComponent rating={item.star} />
+                      <Text style={{ marginLeft: 10, color: 'blue', }}>
+                        {showAvaliacoes ? 'Ocultar avaliações' : 'Ver avaliações'}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                  {showAvaliacoes && (
+                    avaliacoes.length > 0 ? (
+                      <View style={{ marginTop: 10 }}>
+                        <Text style={{ fontWeight: 'bold', fontSize: 25, marginLeft: 10 }}>Avaliações:</Text>
+                        {avaliacoes.map((avaliacoes, index) => (
+                          <View key={index} style={styles.commentaryArea}>
+                            <Text style={{ fontSize: 17, color: 'gray', fontWeight: 'bold' }}>
+                              {userNames[avaliacoes.userId] || 'Anônimo'}
+                            </Text>
+                            <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                              <StarComponent rating={avaliacoes.star} />
+                            </View>
+                            <Text>Comentário: {avaliacoes.commentary}</Text>
+                          </View>
+                        ))}
+                      </View>
+                    ) : (
+                      <Text style={{ fontStyle: 'italic', color: 'gray' }}>Nenhuma avaliação ainda.</Text>
+                    )
+                  )}
+
                 </View>
               </View>
             </View>
@@ -186,7 +247,8 @@ export default function CollectionDetail() {
           <View style={styles.viewFlatList}>
             <Text style={styles.textTitleFlatList}>Itens com tags relacionadas:</Text>
             <FlatList
-              data={relatedItems}
+             scrollEnabled={false}
+             data={relatedItems.slice(0, 4)}
               numColumns={4}
               keyExtractor={(item) => item.id.toString()}
               renderItem={({ item: relatedItem }) => (
@@ -205,6 +267,8 @@ export default function CollectionDetail() {
                         <Text style={styles.tagText}>{tag.trim()}</Text>
                       </View>
                     ))}
+                    <StarComponent
+                      rating={relatedItem.star} />
                   </View>
                 </TouchableOpacity>
               )}
@@ -258,11 +322,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#ecdef0',
     marginLeft: 50,
     marginRight: 50,
-    marginTop: 50,
+    marginTop: 20,
+    paddingTop:50,
     width: "80%",
-    height: 400,
+    height: "auto",
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     textAlign: "left",
     justifyContent: "flex-start",
     gap: 40,
@@ -270,21 +335,36 @@ const styles = StyleSheet.create({
     borderRadius: 20,
 
   },
+  commentaryArea: {
+    width: 800,
+    borderRadius: 20,
+    padding: 20,
+    backgroundColor: "white",
+    gap: 5,
+
+  },
+  commentaryText: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: 'bold',
+    fontFamily: 'Poppins_400Regular',
+  },
   itemText: {
     color: 'black',
     fontSize: 16,
     marginBottom: 5,
   },
   containerText: {
-    backgroundColor: ""
+    width: "70%"
   },
   button_capsule: {
     backgroundColor: "#EDE7F6",
-    width: 100,
+    width: 180,
     padding: 10,
     borderRadius: 20,
+    justifyContent:"center",
     flexDirection: "row"
-  },
+},
   iconButton: {
     backgroundColor: '#EDE7F6',
     padding: 10,
@@ -301,7 +381,7 @@ const styles = StyleSheet.create({
   },
   modal: {
     width: 700,
-    height:450,
+    height: 450,
   },
 
   buttonsContainer: {
@@ -312,9 +392,9 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#750097',
-    fontSize: 16,
+    fontSize: 13,
     fontWeight: 'bold',
-  },
+},
   image: {
     width: 200,
     height: 270,
@@ -375,9 +455,10 @@ const styles = StyleSheet.create({
   },
   button_round: {
     backgroundColor: "#EDE7F6",
-    width: 120,
+    width: 110,
     padding: 10,
     borderRadius: 20,
+    justifyContent:"center",
     flexDirection: "row"
   },
   ViewLibrariePreview: {
@@ -424,8 +505,8 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     marginRight: 50,
     marginTop: 50,
-    width: 270,
-    height: 480,
+    width: 280,
+    height: 550,
     alignItems: "center",
     justifyContent: "flex-start",
 

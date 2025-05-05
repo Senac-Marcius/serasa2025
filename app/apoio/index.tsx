@@ -128,7 +128,7 @@ export default function HomeScreen() {
   return (
     <MyView router={router} style={{ flex: 1 }}>
       <ImageBackground
-        source={require('../apoio/imagens/logo_serasa.png')} // <-- sua imagem aqui!
+        source={require('./imagens/download.png')} // <-- sua imagem aqui!
         style={styles.backgroundImage}
         resizeMode='center'
       >
@@ -141,7 +141,7 @@ export default function HomeScreen() {
                 width: p.size,
                 height: p.size,
                 borderRadius: p.size / 2,
-                backgroundColor: 'rgba(155, 34, 241, 0.90)',
+                backgroundColor: 'rgba(34, 152, 191, 0.9)',
                 left: p.left,
                 bottom: animations[i].interpolate({
                   inputRange: [0, 1],
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
   messageTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#7020E5',
+    color: 'rgba(34, 152, 191, 0.9)',
     marginBottom: 8,
   },
   messageText: {
