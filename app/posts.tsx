@@ -14,6 +14,7 @@ import { TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'react-native';
 import { relative } from 'path';
+import { FontAwesome } from '@expo/vector-icons';
 
 
 export default function postScreen() {
@@ -233,16 +234,16 @@ export default function postScreen() {
                                     style={styles.actionButton}
                                     onPress={() => like(item.id, +1)}
                                 >
-                                    <Text style={styles.actionText}>Like</Text>
+                                    <FontAwesome name="thumbs-up" size={20} color="#333" />
                                 </TouchableOpacity>
                                 <Text style={styles.actionText}>{item.like}</Text>
-
                                 <TouchableOpacity
                                     style={[styles.actionButton, { backgroundColor: '#ff4d4d' }]}
                                     onPress={() => like(item.id, -1)}
                                 >
-                                    <Text style={styles.actionText}>Deslike</Text>
+                                    <FontAwesome name="thumbs-down" size={20} color="#fff" />
                                 </TouchableOpacity>
+
                             </View>
 
                         </View>
