@@ -6,22 +6,86 @@ import { getScale } from '../../src/controllers/scales';
 import { getEmployees } from '../../src/controllers/employees';
 import MyView from '../../src/components/MyView';
 import { Ionicons } from '@expo/vector-icons';
+import { Calendar, LocaleConfig, DateData } from 'react-native-calendars';
+import { format, parseISO, isSameDay } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
-const DIAS_SEMANA = [
-  { key: '1', nome: 'Segunda-feira' },
-  { key: '2', nome: 'Terça-feira' },
-  { key: '3', nome: 'Quarta-feira' },
-  { key: '4', nome: 'Quinta-feira' },
-  { key: '5', nome: 'Sexta-feira' },
-  { key: '6', nome: 'Sábado' },
-  { key: '7', nome: 'Domingo' }
-];
+// Definindo tipos
+type MarkedDates = {
+  [date: string]: {
+    marked?: boolean;
+    selected?: boolean;
+    selectedColor?: string;
+    dotColor?: string;
+  };
+};
+
+interface Schedule {
+  id: number;
+  day: string;
+  start_time: string;
+  end_time: string;
+  created_at: string;
+  employ_id: number;
+  date: string;
+}
+
+interface Employee {
+  id: number;
+  user_id: number;
+  // Adicione outras propriedades conforme necessário
+}
+
+// Configuração do calendário em português
+LocaleConfig.locales['pt'] = {
+  monthNames: [
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro'
+  ],
+  monthNamesShort: [
+    'Jan',
+    'Fev',
+    'Mar',
+    'Abr',
+    'Mai',
+    'Jun',
+    'Jul',
+    'Ago',
+    'Set',
+    'Out',
+    'Nov',
+    'Dez'
+  ],
+  dayNames: [
+    'Domingo',
+    'Segunda-feira',
+    'Terça-feira',
+    'Quarta-feira',
+    'Quinta-feira',
+    'Sexta-feira',
+    'Sábado'
+  ],
+  dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+  today: 'Hoje'
+};
+LocaleConfig.defaultLocale = 'pt';
 
 export default function MySchedule() {
-  const [schedules, setSchedules] = useState<any[]>([]);
-  const [selectedDay, setSelectedDay] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [employeeData, setEmployeeData] = useState<any>(null);
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [employeeData, setEmployeeData] = useState<Employee | null>(null);
+  const [markedDates, setMarkedDates] = useState<MarkedDates>({});
   const router = useRouter();
 
   useEffect(() => {
@@ -35,15 +99,9 @@ export default function MySchedule() {
           return;
         }
 
-        // DEBUG: Mostrar o userId
-        console.log('User ID from storage:', userId);
-
         // 1. Buscar os dados do funcionário vinculado ao usuário
         const employeesResponse = await getEmployees({ user_id: Number(userId) });
         
-        // DEBUG: Mostrar resposta dos funcionários
-        console.log('Employees response:', employeesResponse);
-
         if (!employeesResponse.status || !employeesResponse.data?.length) {
           Alert.alert('Aviso', 'Nenhum funcionário vinculado a este usuário');
           return;
@@ -51,30 +109,30 @@ export default function MySchedule() {
 
         setEmployeeData(employeesResponse.data[0]);
         
-        // DEBUG: Mostrar dados do funcionário
-        console.log('Employee data:', employeesResponse.data[0]);
-
         // 2. Buscar as escalas do funcionário
         const scalesResponse = await getScale({ employ_id: employeesResponse.data[0].id });
         
-        // DEBUG: Mostrar resposta das escalas
-        console.log('Scales response:', scalesResponse);
-
         if (scalesResponse.status && scalesResponse.data) {
-          // Converter os dias numéricos para nomes
-          const formattedSchedules = scalesResponse.data.map(schedule => ({
-            ...schedule,
-            day: DIAS_SEMANA.find(dia => dia.key === schedule.day.toString())?.nome || schedule.day
-          }));
+          setSchedules(scalesResponse.data);
           
-          setSchedules(formattedSchedules);
+          // Preparar datas marcadas para o calendário
+          const marked: MarkedDates = {};
+          scalesResponse.data.forEach((schedule: Schedule) => {
+            if (schedule.date) {
+              marked[schedule.date] = { 
+                marked: true,
+                selected: false,
+                selectedColor: '#3AC7A8',
+                dotColor: '#3AC7A8'
+              };
+            }
+          });
           
-          // DEBUG: Mostrar escalas formatadas
-          console.log('Formatted schedules:', formattedSchedules);
-
-          if (formattedSchedules.length > 0) {
-            setSelectedDay(formattedSchedules[0].day);
-          }
+          setMarkedDates(marked);
+          
+          // Selecionar a data atual por padrão
+          const today = format(new Date(), 'yyyy-MM-dd');
+          setSelectedDate(today);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -87,8 +145,23 @@ export default function MySchedule() {
     fetchData();
   }, []);
 
-  const getScheduleForDay = (day: string) => {
-    return schedules.find((s) => s.day === day);
+  const getScheduleForDate = (date: string): Schedule | undefined => {
+    return schedules.find((s: Schedule) => isSameDay(parseISO(s.date), parseISO(date)));
+  };
+
+  const handleDayPress = (day: DateData) => {
+    setSelectedDate(day.dateString);
+    
+    // Atualizar as marcações para mostrar a data selecionada
+    const updatedMarkedDates: MarkedDates = { ...markedDates };
+    Object.keys(updatedMarkedDates).forEach((date: string) => {
+      updatedMarkedDates[date] = {
+        ...updatedMarkedDates[date],
+        selected: date === day.dateString
+      };
+    });
+    
+    setMarkedDates(updatedMarkedDates);
   };
 
   if (loading) {
@@ -122,53 +195,53 @@ export default function MySchedule() {
           <Text style={styles.backButtonText}>Voltar</Text>
         </Pressable>
 
-        <Text style={styles.title}>Minha Escala Semanal</Text>
+        <Text style={styles.title}>Minha Escala</Text>
         
+        {/* Calendário */}
+        <View style={styles.calendarContainer}>
+          <Calendar
+            current={selectedDate || undefined}
+            minDate={'2020-01-01'}
+            maxDate={'2030-12-31'}
+            onDayPress={handleDayPress}
+            markedDates={markedDates}
+            theme={{
+              calendarBackground: '#fff',
+              textSectionTitleColor: '#333',
+              selectedDayBackgroundColor: '#3AC7A8',
+              selectedDayTextColor: '#fff',
+              todayTextColor: '#3AC7A8',
+              dayTextColor: '#333',
+              textDisabledColor: '#d9d9d9',
+              dotColor: '#3AC7A8',
+              selectedDotColor: '#fff',
+              arrowColor: '#3AC7A8',
+              monthTextColor: '#333',
+              indicatorColor: '#3AC7A8',
+              textDayFontWeight: '500',
+              textMonthFontWeight: 'bold',
+              textDayHeaderFontWeight: '500',
+              textDayFontSize: 14,
+              textMonthFontSize: 16,
+              textDayHeaderFontSize: 14
+            }}
+          />
+        </View>
 
-        {/* Seletor de dias */}
-        <ScrollView 
-          horizontal 
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.daySelector}
-        >
-          {DIAS_SEMANA.map((dia) => {
-            const hasSchedule = schedules.some(s => s.day === dia.nome);
-            return (
-              <Pressable
-                key={dia.key}
-                onPress={() => setSelectedDay(dia.nome)}
-                style={[
-                  styles.dayButton,
-                  selectedDay === dia.nome && styles.dayButtonSelected,
-                  !hasSchedule && styles.dayWithoutSchedule
-                ]}
-              >
-                <Text style={[
-                  styles.dayButtonText,
-                  selectedDay === dia.nome && styles.dayButtonTextSelected,
-                  !hasSchedule && styles.dayWithoutScheduleText
-                ]}>
-                  {dia.nome.substring(0, 3)}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </ScrollView>
-
-        {/* Detalhes da escala */}
+        {/* Detalhes da escala para o dia selecionado */}
         <View style={styles.scheduleContainer}>
-          {selectedDay ? (
+          {selectedDate ? (
             <>
               <Text style={styles.scheduleTitle}>
-                {selectedDay}
+                {format(parseISO(selectedDate), "EEEE, d 'de' MMMM 'de' yyyy", { locale: ptBR })}
               </Text>
               
-              {getScheduleForDay(selectedDay) ? (
+              {getScheduleForDate(selectedDate) ? (
                 <View style={styles.scheduleItem}>
                   <View style={styles.timeContainer}>
                     <Ionicons name="time-outline" size={20} color="#3AC7A8" />
                     <Text style={styles.scheduleTime}>
-                      {getScheduleForDay(selectedDay).start_time} - {getScheduleForDay(selectedDay).end_time}
+                      {getScheduleForDate(selectedDate)?.start_time} - {getScheduleForDate(selectedDate)?.end_time}
                     </Text>
                   </View>
                 </View>
@@ -213,33 +286,16 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
-  daySelector: {
-    paddingBottom: 10,
+  calendarContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 10,
     marginBottom: 20,
-  },
-  dayButton: {
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    marginRight: 10,
-    borderRadius: 8,
-    backgroundColor: '#E5FBF8',
-  },
-  dayButtonSelected: {
-    backgroundColor: '#3AC7A8',
-  },
-  dayWithoutSchedule: {
-    backgroundColor: '#F5F5F5',
-  },
-  dayWithoutScheduleText: {
-    color: '#999',
-  },
-  dayButtonText: {
-    color: '#3AC7A8',
-    fontWeight: '500',
-  },
-  dayButtonTextSelected: {
-    color: '#fff',
-    fontWeight: '600',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 6,
   },
   scheduleContainer: {
     backgroundColor: '#fff',
@@ -253,6 +309,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#333',
     marginBottom: 16,
+    textTransform: 'capitalize',
   },
   scheduleItem: {
     backgroundColor: '#F3F1FE',
@@ -273,30 +330,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#888',
     textAlign: 'center',
-  },
-  debugContainer: {
-    backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    marginTop: 20,
-  },
-  debugInfo: {
-    backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    marginBottom: 20,
-  },
-  debugTitle: {
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#666',
-  },
-  debugText: {
-    marginBottom: 5,
-    color: '#333',
   },
 });

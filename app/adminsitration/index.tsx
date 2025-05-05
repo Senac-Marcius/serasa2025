@@ -47,111 +47,12 @@ export default function AdminDashboard() {
   const [events, setEvents] = useState<Event[]>([]);
   const [userSchedule, setUserSchedule] = useState<UserSchedule[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
+  const [userProjects, setUserProjects] = useState<any[]>([]);
 
   const departments = ['Todos', 'RH', 'TI', 'Financeiro', 'Operações'];
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
   const router = useRouter();
-
-  useEffect(() => {
-    async function fetchData() {
-      const [projects, employees, cargos, escalas] = await Promise.all([
-        getProjects({}),
-        getEmployees({}),
-        getCargo({}),
-        getScale({}),
-      ]);
-  
-      setProjectCount(Array.isArray(projects.data) ? projects.data.length : 0);
-      setEmployeesCount(Array.isArray(employees.data) ? employees.data.length : 0);
-      setPositionsCount(Array.isArray(cargos.data) ? cargos.data.length : 0);
-      setScalesCount(Array.isArray(escalas.data) ? escalas.data.length : 0);
-  
-      // Pega o userId salvo
-      const userId = await AsyncStorage.getItem('userId');
-      if (userId) {
-        const userResponse = await getUserById(Number(userId));
-        if (userResponse.status && userResponse.data) {
-          setUserName(userResponse.data.name);
-          setUserEmail(userResponse.data.email);
-        }
-      }
-    }
-  
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    async function loadUserEvents() {
-      try {
-        setLoadingEvents(true);
-        const userId = await AsyncStorage.getItem('userId');
-        
-        if (!userId) return;
-        
-        // 1. Buscar a escala do usuário
-        const scaleResponse = await getScale({ employ_id: Number(userId) });
-        if (!scaleResponse.status || !scaleResponse.data) return;
-        
-        // 2. Buscar projetos vinculados ao usuário
-        const projectsResponse = await getProjects({});
-        if (!projectsResponse.status || !projectsResponse.data) return;
-        
-        // 3. Filtrar projetos onde o usuário está vinculado
-        const userProjects = await Promise.all(
-          projectsResponse.data.map(async (project) => {
-            const userIds = await getProjectUsers(project.id);
-            return userIds.includes(Number(userId)) ? project : null;
-          })
-        );
-        
-        // 4. Criar array com eventos (timeline dos projetos)
-        const userEvents: Event[] = [];
-        const scheduleWithProjects: UserSchedule[] = [];
-        
-        scaleResponse.data.forEach((scaleItem) => {
-          const projectForDay = userProjects.find((project) => {
-            if (!project) return false;
-            const timeline = JSON.parse(project.time_line || '[]') as TimelineItem[];
-            return timeline.some(item => item.date === scaleItem.day);
-          });
-          
-          if (projectForDay) {
-            const timeline = JSON.parse(projectForDay.time_line || '[]') as TimelineItem[];
-            timeline
-              .filter(item => item.date === scaleItem.day)
-              .forEach(item => {
-                userEvents.push({
-                  id: Math.random(),
-                  projectName: projectForDay.name,
-                  date: item.date,
-                  description: item.description
-                });
-              });
-          }
-          
-          scheduleWithProjects.push({
-            day: scaleItem.day,
-            start_time: scaleItem.start_time,
-            end_time: scaleItem.end_time,
-            project: projectForDay ? {
-              name: projectForDay.name,
-              timeline: JSON.parse(projectForDay.time_line || '[]')
-            } : undefined
-          });
-        });
-        
-        setEvents(userEvents);
-        setUserSchedule(scheduleWithProjects);
-      } catch (error) {
-        console.error('Error loading user events:', error);
-      } finally {
-        setLoadingEvents(false);
-      }
-    }
-    
-    loadUserEvents();
-  }, []);
 
   const cards = [
     {
@@ -196,6 +97,118 @@ export default function AdminDashboard() {
     },
   ];
 
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [projects, employees, cargos, escalas] = await Promise.all([
+          getProjects({}),
+          getEmployees({}),
+          getCargo({}),
+          getScale({}),
+        ]);
+    
+        setProjectCount(Array.isArray(projects.data) ? projects.data.length : 0);
+        setEmployeesCount(Array.isArray(employees.data) ? employees.data.length : 0);
+        setPositionsCount(Array.isArray(cargos.data) ? cargos.data.length : 0);
+        setScalesCount(Array.isArray(escalas.data) ? escalas.data.length : 0);
+    
+        const userId = await AsyncStorage.getItem('userId');
+        if (userId) {
+          const userResponse = await getUserById(Number(userId));
+          if (userResponse.status && userResponse.data) {
+            setUserName(userResponse.data.name);
+            setUserEmail(userResponse.data.email);
+            
+            // Load user's projects
+            const projectsResponse = await getProjects({});
+            if (projectsResponse.status && projectsResponse.data) {
+              const projectsWithUsers = await Promise.all(
+                projectsResponse.data.map(async (project) => {
+                  const userIds = await getProjectUsers(project.id);
+                  return userIds.includes(Number(userId)) ? project : null;
+                })
+              );
+              setUserProjects(projectsWithUsers.filter(project => project !== null));
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+      }
+    }
+  
+    fetchData();
+  }, []);
+
+  async function loadUserEvents() {
+    try {
+      setLoadingEvents(true);
+      const userId = await AsyncStorage.getItem('userId');
+      
+      if (!userId) return;
+      
+      const scaleResponse = await getScale({ employ_id: Number(userId) });
+      if (!scaleResponse.status || !scaleResponse.data) return;
+      
+      const userEvents: Event[] = [];
+      const scheduleWithProjects: UserSchedule[] = [];
+      
+      scaleResponse.data.forEach((scaleItem) => {
+        const relevantProjects = userProjects.filter(project => {
+          try {
+            const timeline = JSON.parse(project.time_line || '[]') as TimelineItem[];
+            return timeline.some(item => item.date === scaleItem.day);
+          } catch (e) {
+            console.error('Error parsing timeline:', e);
+            return false;
+          }
+        });
+        
+        relevantProjects.forEach(project => {
+          try {
+            const timeline = JSON.parse(project.time_line || '[]') as TimelineItem[];
+            timeline
+              .filter(item => item.date === scaleItem.day)
+              .forEach(item => {
+                userEvents.push({
+                  id: Math.random(),
+                  projectName: project.name,
+                  date: item.date,
+                  description: item.description
+                });
+              });
+          } catch (e) {
+            console.error('Error processing project timeline:', e);
+          }
+        });
+        
+        const firstProject = relevantProjects[0];
+        scheduleWithProjects.push({
+          day: scaleItem.day,
+          start_time: scaleItem.start_time,
+          end_time: scaleItem.end_time,
+          project: firstProject ? {
+            name: firstProject.name,
+            timeline: JSON.parse(firstProject.time_line || '[]')
+          } : undefined
+        });
+      });
+      
+      setEvents(userEvents);
+      setUserSchedule(scheduleWithProjects);
+    } catch (error) {
+      console.error('Error loading user events:', error);
+    } finally {
+      setLoadingEvents(false);
+    }
+  }
+
+  useEffect(() => {
+    if (userProjects.length > 0) {
+      loadUserEvents();
+    }
+  }, [userProjects]);
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('pt-BR');
@@ -214,13 +227,12 @@ export default function AdminDashboard() {
     <View style={styles.container}>
       <MyView style={styles.mainContent}>
         <ScrollView contentContainerStyle={styles.content}>
-          {/* Header */}
           <View style={styles.header}>
             <View style={styles.userInfo}>
               <Ionicons name="person-circle-outline" size={40} color="#3AC7A8" />
               <View style={{ marginLeft: 10 }}>
-              <Text style={styles.userName}>Olá, {userName}</Text>
-              <Text style={styles.userRole}>{userEmail}</Text>
+                <Text style={styles.userName}>Olá, {userName}</Text>
+                <Text style={styles.userRole}>{userEmail}</Text>
               </View>
             </View>
             <Pressable
@@ -249,7 +261,6 @@ export default function AdminDashboard() {
             ))}
           </View>
 
-          {/* Seção de Agenda */}
           <View style={styles.eventsContainer}>
             <Text style={styles.sectionTitle}>Minha Agenda</Text>
             
@@ -293,7 +304,6 @@ export default function AdminDashboard() {
         </ScrollView>
       </MyView>
 
-      {/* Modal de Confirmação de Logout */}
       <Modal visible={showLogoutModal} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>

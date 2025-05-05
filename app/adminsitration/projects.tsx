@@ -279,7 +279,10 @@ export default function ProjectScreen() {
   };
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
+    if (!dateString) return 'Data não selecionada';
+    
+    // Corrige o problema de fuso horário criando a data com meio-dia
+    const date = new Date(dateString + 'T12:00:00');
     return date.toLocaleDateString('pt-BR');
   };
 
@@ -517,26 +520,28 @@ export default function ProjectScreen() {
                     {showCalendar && (
                       <View style={styles.calendarContainer}>
                         <Calendar
-                          onDayPress={(day: { dateString: any; }) => {
-                            setCurrentTimelineItem({
-                              ...currentTimelineItem,
-                              date: day.dateString
-                            });
-                            setShowCalendar(false);
-                          }}
-                          markedDates={{
-                            [currentTimelineItem.date]: {selected: true, selectedColor: '#3498db'}
-                          }}
-                          theme={{
-                            calendarBackground: '#fff',
-                            todayTextColor: '#3498db',
-                            arrowColor: '#3498db',
-                            monthTextColor: '#2c3e50',
-                            textDayFontWeight: '300',
-                            textMonthFontWeight: 'bold',
-                            textDayHeaderFontWeight: '300',
-                          }}
-                        />
+  onDayPress={(day: { dateString: string; }) => {
+    // Corrige o problema da data selecionada sendo um dia anterior
+    const selectedDate = new Date(day.dateString + 'T12:00:00'); // Adiciona meio-dia para evitar problemas de fuso horário
+    setCurrentTimelineItem({
+      ...currentTimelineItem,
+      date: selectedDate.toISOString().split('T')[0] // Formata para YYYY-MM-DD
+    });
+    setShowCalendar(false);
+  }}
+  markedDates={{
+    [currentTimelineItem.date]: {selected: true, selectedColor: '#3498db'}
+  }}
+  theme={{
+    calendarBackground: '#fff',
+    todayTextColor: '#3498db',
+    arrowColor: '#3498db',
+    monthTextColor: '#2c3e50',
+    textDayFontWeight: '300',
+    textMonthFontWeight: 'bold',
+    textDayHeaderFontWeight: '300',
+  }}
+/>
                       </View>
                     )}
 
