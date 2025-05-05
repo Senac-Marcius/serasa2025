@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
   messageTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: 'rgba(34, 152, 191, 0.9)',
+    color: 'rgba(158, 43, 211, 0.9)',
     marginBottom: 8,
   },
   messageText: {
