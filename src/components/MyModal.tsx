@@ -46,7 +46,7 @@ type Button_type =
 
 
 
-const MyModal: React.FC<MyModalprops> = ({ children, style, visible, setVisible,title, closeButtonTitle, tipe,isButton=true,buttonStyle,handleClosedButton }) => { //
+const MyModal: React.FC<MyModalprops> = ({ children, style, visible, setVisible,title, closeButtonTitle, tipe, isButton=true, buttonStyle, handleClosedButton }) => { //
     function onClose() {
         setVisible(false)
 
@@ -93,9 +93,11 @@ const styles = StyleSheet.create({
         justifyContent: "center",
       },
       button_round: {
+//Nicole, eu (Gustavo) retirei o widht: 100% pois o botão que fecha o modal estava ocupando um espaço desproporcional ao texto ou ao conteúdo que o usuário deste componente, fosse inserir. 
+//Fico à disposição para falar sobre, caso haja algum problema ou você não tenha gostado do resultado.
+
         backgroundColor: "#813AB1",
-        width: 100,
-        padding: 10,
+        padding: 10, 
         margin:"auto",
         borderRadius: 20,
         alignItems: "center",

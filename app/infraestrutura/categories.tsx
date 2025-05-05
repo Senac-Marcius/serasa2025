@@ -5,7 +5,7 @@ import { MyItem } from '../../src/components/MyItem';
 import MyView from '../../src/components/MyView';
 import Mytext from '../../src/components/MyText';
 import { useRouter } from 'expo-router';
-import { iCategories, setCategory, updateCategory, deleteCategory, getCategories } from '../../src/controllers/category';
+import { iCategory, setCategory, updateCategory, deleteCategory, getCategories } from '../../src/controllers/category';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MyButton from '../../src/components/MyButtons';
 import { Myinput } from '../../src/components/MyInputs';
@@ -13,14 +13,14 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { MyModal } from '../../src/components/MyModal';
 
 export default function CategoryScreen() {
-    const [req, setReq] = useState<iCategories>({
+    const [req, setReq] = useState<iCategory>({
         name: '',
         description: '',
         id: -1,
         created_at: new Date().toISOString()
     });
 
-    const [categories, setCategories] = useState<iCategories[]>([]);
+    const [categories, setCategories] = useState<iCategory[]>([]);
     const router = useRouter();
     const [visibleForm, setVisibleForm] = useState(false);
     const [visibleList, setVisibleList] = useState(false);
@@ -51,8 +51,8 @@ export default function CategoryScreen() {
     }
 
     // Editar
-    function editCategorie(id: number) {
-        const item = categories.find(i => i.id === id);
+    function editCategorie(id: string) {
+        const item = categories.find(i => i.id === Number(id));
         if (item) setReq(item);
         setVisibleForm(true);
     }
@@ -81,11 +81,14 @@ export default function CategoryScreen() {
                         created_at: new Date().toISOString(),
                     })
                 }}
-                title={req.id === -1 ? "Cadastrar Produto" : "Editar Produto"}
+                title={req.id === -1 ? "Cadastrar categoria" : "Editar categoria"}
                 buttonStyle={{
-                    width: 150,
+                    
+                    backgroundColor: '#6A1B9A',
+                    margin:'auto',
                     marginTop: 10,
                     marginBottom: 10,
+                    marginLeft: 0,
                 }}
             >
                 <Myinput
