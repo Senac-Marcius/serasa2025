@@ -159,7 +159,7 @@ export default function librarieEmployeeScreen () {
                         onPress={() => router.push(item.route)}
                         style={[styles.menuItem, isHovered && styles.activeItem]}
                         >
-                        <View style={styles.icon}>{item.icon}</View>
+                        <View style={styles.icon}>{item.iconName}</View>
                         <Text style={[styles.menuText, isHovered && styles.activeText]}>
                             {item.label}
                         </Text>
