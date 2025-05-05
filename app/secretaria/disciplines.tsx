@@ -13,12 +13,9 @@ const Sidebar = () => {
   const [hoveredRoute, setHoveredRoute] = useState<string | null>(null);
 
   const menuItems = [
-    { icon: 'book-outline', label: 'Disciplinas', route: 'secretaria/discipline' },
-    { icon: 'account-outline', label: 'Professores', route: 'secretaria/professores' },
     { icon: 'calendar-month-outline', label: 'Calendário', route: 'secretaria/calendar' },
-    { icon: 'file-document-outline', label: 'Documentos', route: 'secretaria/documentos' },
-    { icon: 'clipboard-text-outline', label: 'Matrícula', route: 'secretaria/matricula' },
-    { icon: 'cog-outline', label: 'Configurações', route: 'secretaria/configuracoes' },
+    { icon: 'file-document-outline', label: 'Documentos', route: 'secretaria/documents' },
+    { icon: 'cog-outline', label: 'Configurações', route: 'perfil' },
   ];
 
   return (

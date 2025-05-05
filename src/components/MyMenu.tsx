@@ -89,25 +89,16 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Apoio" route="apoio" icon='accessibility-outline' />
         <MenuItem label="Administração" route="adminsitration/" icon="people" />
         <MenuItem label="Financeiro" route="finance" icon="people" />
-        <MenuItem label="Financeiro" route="finance" icon="people" />
         <MenuItem label="Secretaria" route="secretaria" icon="add-circle" />
-        <MenuItem label="Calendar" route="secretaria/calendar" icon="calendar" />
         <MenuItem label="Categories" route="categories" icon="albums" />
         <MenuItem label="Classes" route="sala_de_aula/classes" icon="school" />
         <MenuItem label="Collections" route="collections" icon="cube" />
-        <MenuItem label="Courses" route="courses" icon="book" />
-        <MenuItem label="Disciplines" route="secretaria/disciplines" icon="document-text" />
-        <MenuItem label="Documents" route="secretaria/documents" icon="document" />
         <MenuItem label="Employees" route="employees" icon="people" />
         <MenuItem label="Items" route="items" icon="pricetag" />
         <MenuItem label="Launchs" route="sala_de_aula/launchs" icon="rocket" />
         <MenuItem label="Classes" route="classes" icon="school" />
         <MenuItem label="More" route="more" icon="cube" />
-        <MenuItem label="Courses" route="courses" icon="book" />
-        <MenuItem label="Disciplines" route="secretaria/disciplines" icon="document-text" />
-        <MenuItem label="Documents" route="secretaria/documents" icon="document" />
         <MenuItem label="Employees" route="employees" icon="people" />
-        <MenuItem label="Items" route="items" icon="pricetag" />
         <MenuItem label="Launchs" route="launchs" icon="rocket" />
         <MenuItem label="Libraie" route="libraie" icon="book" />
         <MenuItem label="Levels" route="levels" icon="stats-chart" />

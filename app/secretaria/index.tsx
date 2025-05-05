@@ -18,11 +18,8 @@ interface Evento {
 const menuItems = [
   { label: 'Cursos', icon: <Ionicons name="school-outline" size={20} color="#555" />, route: 'secretaria/courses' },
   { label: 'Disciplinas', icon: <Ionicons name="book-outline" size={20} color="#555" />, route: 'secretaria/disciplines' },
-  { label: 'Biblioteca', icon: <Ionicons name="library-outline" size={20} color="#555" />, route: 'secretaria/library' },
   { label: 'Calendário', icon: <Ionicons name="calendar-outline" size={20} color="#555" />, route: 'secretaria/calendar' },
   { label: 'Documentos', icon: <Ionicons name="document-text-outline" size={20} color="#555" />, route: 'secretaria/documents' },
-  { label: 'Matrícula', icon: <MaterialCommunityIcons name="clipboard-text-outline" size={20} color="#555" />, route: 'secretaria/registration' },
-  { label: 'Configurações', icon: <Feather name="settings" size={20} color="#555" />, route: 'secretaria/settings' },
 ];
 
 const cards = [
