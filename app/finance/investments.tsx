@@ -1,13 +1,14 @@
 import React, { Children, useEffect, useState, } from 'react';
 import { View, Text, StyleSheet  } from 'react-native';
 import MyView from '../../src/components/MyView';
+import MyAccessibility from '../../src/components/MyAccessibility';
 import { Myinput, MyTextArea } from '../../src/components/MyInputs';
 import Mylist from '../../src/components/MyList';
 import {MyTb} from '../../src/components/MyItem';
 import MyButton from '../../src/components/MyButtons';
 import Mytext from '../../src/components/MyText';
 import { iInvestment, setInvestment, getInvestment, deleteInvestment, updateInvestment } from '../../src/controllers/investments';
-import {MyModal} from '../../src/components/MyModal';
+import {MyModal_mobilefullscreen} from '../../src/components/MyModal';
 import MySearch from '../../src/components/MySearch';
 
 
@@ -20,7 +21,7 @@ export default function investmentScreen(){
         id: -1,
         created_at: new Date().toISOString(),
         user_id: 1,
-        value: 0,
+        value: '',
     });
 
     const [visible, setVisible] = useState(false);
@@ -89,7 +90,7 @@ export default function investmentScreen(){
             id: -1,
             created_at: new Date().toISOString(),
             user_id: 1,
-            value: 0,
+            value: '',
         });
         setVisible(false);
     }
@@ -116,17 +117,12 @@ export default function investmentScreen(){
     
     return (
       <MyView style={{ flex: 1, backgroundColor: '#f0f2f5'}} >
-
-            
           
               {/* Aqui é typescript dentro do front */}
 
         <Mytext style={styles.title}>Investimentos</Mytext>
 
-            <MyModal style={styles.MyModal}
-            title='Novo Cadastro'
-            visible={visible} 
-            setVisible={setVisible}>
+            <MyModal_mobilefullscreen visible={visible} setVisible={setVisible}>
 
             <View style={styles.form}>
 
@@ -147,8 +143,8 @@ export default function investmentScreen(){
                 <Myinput
                     label='Valor'
                     placeholder='Valor'
-                    value ={String(req.value)}
-                    onChangeText={(text) => setReq({...req, value: Number(text) })}
+                    value ={req.value}
+                    onChangeText={(text) => setReq({...req, value: text })}
                     iconName=''
                 />
                 <MyTextArea
@@ -162,10 +158,9 @@ export default function investmentScreen(){
                 <MyButton style={{justifyContent:'center'}} onPress={ handleRegister } title={req.id == -1 ? "cadastrar" : "Atualizar"} /> 
             </View>
 
-            </MyModal>
+            </MyModal_mobilefullscreen>
 
             <MySearch
-                placeholder='Buscar no Virtudemy'
                 style={styles.searchInput}
                 onChangeText={setSearchTerm}
                  onPress={()=> {setSearchTerm(searchTerm)}}
@@ -250,19 +245,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
-    },
-
-    MyModal: {
-        display: 'flex',
-        width: 400,
-        height: 1000,
-        padding: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        borderWidth: 4,
-        borderColor: 'purple',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
     },
 
     formInput: {

@@ -51,16 +51,12 @@ const MyNotify: React.FC<MyNotifyProps> = ({ style }) => {
             keyExtractor={(item) => item.id.toString()}
             contentContainerStyle={styles.notificationList}
             renderItem={({ item }) => (
-              <View style={styles.card}>
-                <Mytext style={styles.label}>Descrição:</Mytext>
-                <Mytext style={styles.value}>{item.description}</Mytext>
-
-                <Mytext style={styles.label}>Usuário:</Mytext>
-                <Mytext style={styles.value}>{item.user_id}</Mytext>
-
-                <Mytext style={styles.label}>Data:</Mytext>
-                <Mytext style={styles.value}>{formatDate(item.created_at)}</Mytext>
-              </View>
+              <MyItem showEditButton={false} showDeleteButton={false}>
+                <Mytext>Nome: {item.name}</Mytext>
+                <Mytext>Descrição: {item.description}</Mytext>
+                <Mytext>UserId: {item.user_id}</Mytext>
+                <Mytext>CreatAt: {item.created_at}</Mytext>
+              </MyItem>
             )}
           />
         </View>
