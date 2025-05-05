@@ -3,11 +3,7 @@ import { Text,  TouchableOpacity, Image, View, ViewStyle, StyleSheet, ScrollView
 import MyView from "./MyView";
 import MyButton from "./MyButtons";
 import Mytext from "./MyText";
-
-
-
-
-
+import { router } from "expo-router";
 
 interface MyPerfilProps {
     style?: ViewStyle | ViewStyle []
@@ -27,10 +23,10 @@ interface MyPerfilProps {
             <View>
               <Mytext>"Foto do cadastro"</Mytext>
             </View>
-            <Mytext>Nome do cadastro</Mytext>
-            <Mytext>Nome</Mytext>
+           
+          
             <View>
-              <Mytext>Dados Pessoais</Mytext>
+              <Mytext>Dados Pessoais:</Mytext>
               <Mytext>E-mail: nome@exemplo.com.br</Mytext>
               <Mytext>Telefone: (16) 988443750</Mytext>
               <Mytext>Data de Nascimento: dd/mm/aaaa</Mytext>

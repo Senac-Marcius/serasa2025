@@ -32,7 +32,7 @@ interface MyAccessProps {
   style?: ViewStyle | ViewStyle[];
 }
  
-const MyAccess: React.FC<MyAccessProps> = ({ children, style }) => {
+const MyAccessibility: React.FC<MyAccessProps> = ({ children, style }) => {
   const handleSuporte = () => {
     console.log('Botão de suporte clicado!');
   };
@@ -97,4 +97,4 @@ const styles = StyleSheet.create({
 });
  
  
-export { MyAccess, AccessButton };
+export { MyAccessibility, AccessButton };

@@ -6,6 +6,7 @@ import MyButton from '../src/components/MyButtons';
 import { Myinput } from '../src/components/MyInputs';
 import MyView from '../src/components/MyView';
 import { getUserById, getUsers, iUser, setUser, updateUserById } from '../src/controllers/users';
+import Toast from 'react-native-toast-message';
 
 export default function UserScreen() {
     const { id } = useLocalSearchParams();
@@ -44,43 +45,57 @@ export default function UserScreen() {
             if (retorno?.status && retorno.data) {
                 setReq(retorno.data);
             } else {
-                alert("Usuário não encontrado.");
+                return Toast.show({
+                    type: 'error',
+                    text1: 'Usuário não encontrado.',
+
+                });
             }
         }
         fetchUser();
     }, [id]);
 
-  
+
 
     async function handleRegister() {
         const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$|^\d{11}$/;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const phoneRegex = /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/;
 
-        // if (!req.name || !req.address || !req.password || !req.email || !req.age || req.contact) {
-        //     alert("Preencha todos os campos obrigatórios.");
-        //     return;
-        // }
+        if (!req.name || !req.address || !req.password || !req.email || !req.age || !req.contact) {
+            return Toast.show({
+                type: 'error',
+                text1: 'Erro!',
+                text2: 'Preencha todos os campos! ❌'
+            });
+
+        }
 
         // if (!cpfRegex.test(req.cpf)) {
         //     alert("CPF inválido. Use formato XXX.XXX.XXX-XX ou apenas 11 dígitos.");
         //     return;
         // }
 
-        // if (!emailRegex.test(req.email)) {
-        //     alert("E-mail inválido. Use username@domain.com");
-        //     return;
-        // }
+        if (!emailRegex.test(req.email)) {
+            return Toast.show({
+                type: 'error',
+                text1: 'Preencha o e-mail correto.',
+                text2: 'user@domain.com ',
+
+            });
+        }
 
         // if (!phoneRegex.test(req.contact)) {
         //     alert("Contato inválido. Ex: (XX) XXXXX-XXXX");
         //     return;
         // }
 
-        // if (isNaN(Number(req.age)) || Number(req.age) < 0) {
-        //     alert("Idade inválida.");
-        //     return;
-        // }
+        if (isNaN(Number(req.age)) || Number(req.age) < 0) {
+            return Toast.show({
+                type: 'error',
+                text1: 'Idade inválida.',
+            });
+        }
         if (req.id == -1) {
             const newId = users.length ? users[users.length - 1].id + 1 : 0
             const newUser = { ...req, id: newId }
@@ -94,8 +109,11 @@ export default function UserScreen() {
 
             const sucesso = await updateUserById(req.id, req)
             if (!sucesso) {
-                alert("Erro ao atualizar usuário.")
-                return
+                return Toast.show({
+                    type: 'error',
+                    text1: 'Erro ao atualizar usuário',
+
+                });
             }
 
         }
@@ -113,7 +131,7 @@ export default function UserScreen() {
             id: -1,
         })
     }
-    
+
     return (
         <MyView style={{ backgroundColor: '#7B28BB' }} >
             <ScrollView>
@@ -121,13 +139,58 @@ export default function UserScreen() {
                     <Text style={styles.TextIntroducao}>Cadastro de usuário</Text>
                     <View style={styles.container}>
                         <View style={styles.formContainer}>
-                            <Myinput value={req.name} onChangeText={(text) => setReq({ ...req, name: text })} placeholder="Digite seu nome..." label="Login" iconName='person' />
-                            <Myinput value={req.password} onChangeText={(text) => setReq({ ...req, password: text })} placeholder="Digite a sua senha..." label="Password" iconName='password' />
-                            <Myinput value={req.cpf} onChangeText={(text) => setReq({ ...req, cpf: text })} placeholder="Digite o seu CPF" label="CPF:" iconName='article' />
-                            <Myinput value={req.age} onChangeText={(text) => setReq({ ...req, age: text })} placeholder="Digite a sua idade" label="Idade:" iconName='celebration' />
-                            <Myinput value={req.contact} onChangeText={(text) => setReq({ ...req, contact: text })} placeholder="(XX) XXXXX-XXXX" label="Contato:" iconName='phone' />
-                            <Myinput value={req.email} onChangeText={(text) => setReq({ ...req, email: text })} placeholder="domain@domain.com" label="Email:" iconName='mail' />
-                            <Myinput value={req.address} onChangeText={(text) => setReq({ ...req, address: text })} placeholder="Digite o seu endereço" label="Endereço" iconName='house' />
+                            <Myinput
+                                value={req.name}
+                                onChangeText={(text) => setReq({ ...req, name: text })}
+                                placeholder="Digite seu nome..."
+                                label="Login"
+                                iconName='person'
+                            />
+                            <Myinput 
+                                value={req.password} 
+                                onChangeText={(text) => setReq({ ...req, password: text })} 
+                                placeholder="Digite a sua senha..." 
+                                label="Password" 
+                                iconName='password'
+                                type='password'
+                            />
+                            <Myinput 
+                                value={req.cpf} 
+                                onChangeText={(text) => setReq({ ...req, cpf: text })} 
+                                placeholder="Digite o seu CPF" 
+                                label="CPF:" 
+                                iconName='article'
+                                type="cpf"
+                            />
+                            <Myinput 
+                                value={req.age} 
+                                onChangeText={(text) => setReq({ ...req, age: text })} 
+                                placeholder="Digite a sua idade" 
+                                label="Idade:" 
+                                iconName='celebration' 
+                            />
+                            <Myinput 
+                                value={req.contact} 
+                                onChangeText={(text) => setReq({ ...req, contact: text })} 
+                                placeholder="(XX) XXXXX-XXXX" 
+                                label="Contato:" 
+                                iconName='phone'
+                                type="phone"
+                            />
+                            <Myinput 
+                                value={req.email} 
+                                onChangeText={(text) => setReq({ ...req, email: text })} 
+                                placeholder="domain@domain.com" 
+                                label="Email:" 
+                                iconName='mail' 
+                            />
+                            <Myinput 
+                                value={req.address} 
+                                onChangeText={(text) => setReq({ ...req, address: text })} 
+                                placeholder="Digite o seu endereço" 
+                                label="Endereço" 
+                                iconName='house' 
+                            />
 
                             <View style={{ display: 'flex', alignItems: 'center' }}>
                                 <MyButton
@@ -135,10 +198,7 @@ export default function UserScreen() {
                                     onPress={handleRegister}
                                     button_type="round"
                                     style={styles.button_round}
-
-
                                 />
-
                             </View>
                         </View>
                         <Image source={require('../assets/imageUserLogin.svg')} style={styles.image} />

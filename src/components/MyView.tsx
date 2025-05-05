@@ -2,10 +2,10 @@ import React, { ReactNode, useState } from 'react';
 import { View, StyleSheet, Text, TextStyle, ScrollView } from 'react-native';
 import MyTopbar from './MyTopbar';
 import MySupport from './MySupport';
-import { MyAccess,AccessButton } from './MyAccessibility';
 import { Button } from 'react-native-paper';
 import { Router } from 'expo-router'; // Importando o Router do expo-router
 import MyMenu from './MyMenu';
+import { MyAccessibility } from './MyAccessibility';
 
 interface MySearchProps {
   children: ReactNode;
@@ -25,16 +25,15 @@ const MyView: React.FC<MySearchProps> = ({ children, style, title, router, child
 
       {/* Conteúdo da tela */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-      
+        {children}
       </ScrollView>
-        {childrenm}
       {/* Botão de Acessibilidade */}
-      <MyAccess style={styles.accessibilityButton}>
+      {/* <MyAccessibility style={styles.accessibilityButton}>
         <Text style={{ fontSize: 16, marginBottom: 8 }}>Acessibilidade ativada!</Text>
         <Button mode="contained" onPress={() => console.log('Ativando recurso')}>
           Modo Alto Contraste
         </Button>
-      </MyAccess>
+      </MyAccessibility> */}
 
       {/* Botão de suporte fixo */}
       <MySupport />
