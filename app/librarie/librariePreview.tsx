@@ -66,7 +66,10 @@ export default function CollectionViewScreen() {
     // Filtro de acordo com a aba selecionada
       let filtered = items;
       switch (activeTab) {
-        case 0: // "Últimas adições"
+        case 0: // "Acervo completo"
+          break;
+        
+        case 1: // "Últimas adições"
           return items.filter(item => {
             const currentDate = new Date();
             const itemDate = new Date(item.created_at);
@@ -75,11 +78,8 @@ export default function CollectionViewScreen() {
           });
           break;
   
-        case 1: // "Itens não incorporados"
+        case 2: // "Itens não incorporados"
           filtered = items.filter(item => item.incorporated === false); // Filtra os não incorporados
-          break;
-  
-        case 2: // "Acervo completo"
           break;
   
         case 3: // "catalogo online"
@@ -112,7 +112,7 @@ export default function CollectionViewScreen() {
     );
   }
   
-  const tabs = ["Últimas adições", "Itens não incorporados", "Acervo completo", "Catálogo Online"]; //Nomes p/ as abas da tabsBar
+  const tabs = ["Acervo Completo", "Últimas adições", "Itens não incorporados", "Catálogo Online"]; //Nomes p/ as abas da tabsBar
   const handleTabPress = (item: string, index: number) => { // lida com o click na tabsBar
     setActiveTab(index);
   };
@@ -144,7 +144,7 @@ export default function CollectionViewScreen() {
         <TouchableOpacity onPress={() => handleItemPress(item)}>
           <Text style={styles.title}>{item.title}</Text>
           <Text style={styles.subtitle}>{item.subtitle}</Text>
-          <Text style={styles.detail}>Autor: {item.responsible}</Text>
+          <Text style={styles.detail}>Autor(es): {item.responsible}</Text>
           <Text style={styles.detail}>Idioma: {item.language}</Text>
           <Text style={styles.detail}>Ano: {item.year}</Text>
           <Text style={styles.detail}>CDD: {item.cdd}</Text>
@@ -164,22 +164,27 @@ export default function CollectionViewScreen() {
       
     if (confirmed) {
       try {
-        // 1. Deleta o item
+        // Deleta o item
         await deleteItemById(id);
         
-        // 2. Fecha o modal
+        // Fecha o modal
         setVisible(false);
         
-        // 3. Atualiza a lista (3 opções):
-        
-        // Opção 1: Recarrega todos os itens do banco
-        const retorno = await getItems({});
-        if (retorno.data) setItems(retorno.data);
+        setItems(prevItems => prevItems.filter(item => item.id !== id));
       } catch (error) {
         console.error("Erro ao deletar item:", error);
         window.alert("Erro ao excluir o item");
       }
     }
+  };
+
+  const cleanFilters = () => {
+    setSelectedTypologies([]);
+    setSelectedYears([]);
+    setSelectedLanguages([]);
+    setSelectedResponsible([]);
+    setSelectedSubject([]);
+    //setSearch('');
   };
 
   return (
@@ -244,8 +249,13 @@ export default function CollectionViewScreen() {
         <View style={styles.contentContainer}>
           {showFilters && (
             <ScrollView style={styles.filterSidebar}>
-              <Text style={styles.filterHeader}>Refinar sua busca</Text>
+              <View style={styles.filterHeaderContainer}>
+                <Text style={styles.filterHeader}>Refinar sua busca</Text>
 
+                <TouchableOpacity 
+                  onPress={cleanFilters} style={styles.cleanFiltersButton}><Text style={styles.cleanFiltersText}>Limpar tudo</Text>
+                </TouchableOpacity>
+              </View>
                 <Text style={styles.selectedFiltersText}>
                   {selectedTypologies.length + selectedYears.length + selectedLanguages.length + 
                   selectedResponsible.length + selectedSubject.length > 0
@@ -543,6 +553,8 @@ const styles = StyleSheet.create({
     margin: 22,
     backgroundColor: '#af87ca',
     borderRadius: 10,
+    flexShrink: 1,
+    flexWrap: 'wrap',
   },
   filterSectionTitle: {
     fontWeight: 'bold',
@@ -559,6 +571,25 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontFamily: 'Poppins_400Regular',
   },
+  filterHeaderContainer: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  cleanFiltersButton: {
+    backgroundColor: '#5A2D82',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: '#ddd',
+  },
+  cleanFiltersText: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
   selectedFiltersText: {
     fontSize: 14,
     color: '#0C1D40',
@@ -570,11 +601,16 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#0C1D40',
     paddingBottom: 10,
+    flexShrink: 1,
+    flexWrap: 'wrap',
   },
   filterItem: {
     marginVertical: 5,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    flexWrap: 'wrap',
+    width: '100%',
+    flexShrink: 1,
   },
   mainContent: {
     flex: 1,
@@ -596,7 +632,7 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 8,
     maxWidth: 340,
-    height: 200,
+    maxHeight: 300,
     justifyContent: 'center',
     alignItems: 'center',
   },

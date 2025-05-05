@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native';
 import { useRouter, Link } from 'expo-router';
 import { iCollection } from '../../src/controllers/collections';
-import 'bootstrap/dist/css/bootstrap.css';
-import Carousel from 'react-bootstrap/Carousel';
+//import 'bootstrap/dist/css/bootstrap.css';
+//import Carousel from 'react-bootstrap/Carousel';
 import MySearch from '../../src/components/MySearch';
 import { getItems, iItem } from '../../src/controllers/librarie';
 import { supabase } from '../../src/utils/supabase';
@@ -154,7 +154,7 @@ export default function CollectionPreviewScreen() {
 
                 </View>
                 <View style={styles.containerCarousel}>
-                    <Carousel>
+                   {/* <Carousel>
                         <Carousel.Item>
                             <Image
                                 source={require('./assets/slide1biblioteca.png')}
@@ -168,7 +168,7 @@ export default function CollectionPreviewScreen() {
 
                             />
                         </Carousel.Item>
-                    </Carousel>
+                    </Carousel> */}
                 </View>
                 <View style={styles.containerfilter}>
                     <MySearch
