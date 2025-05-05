@@ -66,13 +66,13 @@ export default function HomeScreen() {
 
   const Card = ({ icon, title, description }: { icon: string; title: string; description: string }) => {
     return (
-      <View className="bg-white  rounded-2xl p-4   w-[256] h-[134] flex flex-row gap-3 items-center" >
-        <View className="flex items-center justify-center bg-primary-20 w-10 h-10 rounded-lg">
-        <Icon source={icon} size={22} color="#9128E2" />
+      <View className="bg-white  rounded-2xl p-10   w-[350] h-[175] flex flex-row gap-3 items-center" >
+        <View className="flex items-center justify-center bg-primary-20 w-20 h-20 rounded-lg">
+        <Icon source={icon} size={44} color="#9128E2" />
         </View>
         <View className="flex flex-col  justify-start">
-          <Text  className="text-sm font-medium  text-left color-secondary-400">{description}</Text>
-          <Text className="text-xl font-bold text-gray-900 ">{title}</Text>
+          <Text  className="text-xl font-medium  text-left color-secondary-400">{description}</Text>
+          <Text className="text-2xl font-bold text-gray-900 ">{title}</Text>
         </View>
       </View>
     );
@@ -122,34 +122,34 @@ export default function HomeScreen() {
       
       <View className="flex flex-col  h-full gap-14 w-[350] bg-white  items-center p-6 rounded-md">
   {menuItems.map((item, index) => {
-    if (index === 0) {
-      return (
-        <Pressable
-          className="flex flex-row gap-3 items-center p-1 justify-start w-[200] bg-purple-100 rounded-lg hover:bg-purple-200"
-          key={index}
-          onPress={() => router.push(item.route)}
-        >
-          <View className="flex items-center justify-center w-10 h-10 rounded-lg">
-            {item.icon}
-          </View>
-          <Text className="font-medium color-primary-100">{item.label}</Text>
-        </Pressable>
-      );
-    } else {
-      return (
-        <Pressable
-          className="flex flex-row gap-3 items-center p-1 justify-start w-[200] bg-white rounded-lg hover:bg-gray-100"
-          key={index}
-          onPress={() => router.push(item.route)}
-        >
-          <View className="flex items-center justify-center w-10 h-10 rounded-lg">
-            {item.icon}
-          </View>
-          <Text className="font-medium color-secondary-400">{item.label}</Text>
-        </Pressable>
-      );
-    }
-  })}
+      if (index === 0) {
+        return (
+          <Pressable
+            className="flex flex-row gap-3 items-center p-1 justify-start w-[250] h-[70] bg-purple-100 rounded-lg hover:bg-purple-200"
+            key={index}
+            onPress={() => router.push(item.route)}
+          >
+            <View className="flex items-center justify-center w-10 h-10 rounded-lg">
+              {item.icon}
+            </View>
+            <Text className="font-medium text-xl color-primary-100">{item.label}</Text>
+          </Pressable>
+        );
+      } else {
+        return (
+          <Pressable
+            className="flex flex-row gap-3 items-center p-1 justify-start w-[250] h-[70] bg-white rounded-lg hover:bg-gray-100"
+            key={index}
+            onPress={() => router.push(item.route)}
+          >
+            <View className="flex items-center justify-center w-10 h-10 rounded-lg">
+              {item.icon}
+            </View>
+            <Text className="font-medium text-xl color-secondary-400">{item.label}</Text>
+          </Pressable>
+        );
+      }
+    })}
  </View>
 
 
@@ -162,6 +162,7 @@ export default function HomeScreen() {
             <Card icon="school" title={classroomData?.numberStudents?.toString() || "0"} description="Total de Alunos"/>
             <Card icon="star" title={ "0"} description="Pendencias"/>
           </View>
+          
           <CalendarComponent></CalendarComponent>
 
 

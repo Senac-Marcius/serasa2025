@@ -26,7 +26,7 @@ interface Student {
   }
 export default function Students() {
 const userId = 6;
-const isAdmin = false;
+
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [students, setStudents] = useState<Student[]>([]);
@@ -96,46 +96,48 @@ const isAdmin = false;
 
 
 
-  const renderHeader = () => (
-    <View className="flex-row bg-gray-100 px-4 py-3 border-b border-gray-300">
-      <Text className="w-[30%] font-semibold text-gray-700">Name</Text>
-      <Text className="w-[20%] font-semibold text-gray-700">Registration</Text>
-      <Text className="w-[20%] font-semibold text-gray-700">Class</Text>
-      <Text className="w-[10%] font-semibold text-gray-700">Age</Text>
-      <Text className="w-[20%] font-semibold text-gray-700 text-right">Actions</Text>
+const renderHeader = () => (
+    <View className="flex-row bg-gray-100 px-8 py-6 border-b border-gray-400 mt-10 rounded-t-lg">
+        <Text className="w-[600] font-bold text-gray-800 text-lg">Nome</Text>
+        <Text className="w-[150] font-bold text-gray-800 text-lg">ID</Text>
+        <Text className="w-[200] font-bold text-gray-800 text-lg">Turma</Text>
+        <Text className="w-[150] font-bold text-gray-800 text-lg">Idade</Text>
+        <Text className="w-[150] font-bold text-gray-800 text-lg text-right">Ações</Text>
     </View>
-  );
+);
 
-  const renderItem = ({ item }: { item: Student }) => {
+const renderItem = ({ item, index }: { item: Student; index: number }) => {
     const turma = item.classroom_students?.[0]?.class?.nome_turma || "Sem turma";
-  
+    const isLastItem = index === students.length - 1;
+
     return (
-      <View className="flex-row items-center px-4 py-3 border-b border-gray-200">
-        <View className="w-[30%]">
-          <Text className="text-gray-800 font-medium">{item.users?.name || "Sem nome"}</Text>
-          <Text className="text-gray-500 text-sm">{item.users?.email || "Sem e-mail"}</Text>
+        <View
+            className={`flex-row items-center px-8 py-8 border-b bg-white border-gray-300 ${
+                isLastItem ? "rounded-b-lg" : ""
+            }`}
+        >
+            <View className="w-[50%]">
+                <Text className="text-gray-900 font-bold text-xl">{item.users?.name || "Sem nome"}</Text>
+                <Text className="text-gray-600 text-lg">{item.users?.email || "Sem e-mail"}</Text>
+            </View>
+            <Text className="w-[20%] text-gray-700 text-lg">#{item.id.toString()}</Text>
+            <Text className="w-[25%] text-gray-700 text-lg">{turma}</Text>
+            <Text className="w-[15%] text-gray-700 text-lg">{item.users?.age || "--"}</Text>
+            {(role?.isEmployee && (role.positionId === 5 || role.positionId === 6)) && (
+                <View className="w-[15%] flex-row justify-end space-x-8">
+                    <>
+                        <Pressable>
+                            <Feather name="edit" size={32} color="blue" />
+                        </Pressable>
+                        <Pressable>
+                            <Feather name="trash-2" size={32} color="red" />
+                        </Pressable>
+                    </>
+                </View>
+            )}
         </View>
-        <Text className="w-[20%] text-gray-600">#{item.id.toString().padStart(7, "0")}</Text>
-        <Text className="w-[20%] text-gray-600">{turma}</Text>
-        <Text className="w-[10%] text-gray-600">{item.users?.age || "--"}</Text>
-        <View className="w-[20%] flex-row justify-end space-x-4">
-          <Pressable>
-            <Ionicons name="eye-outline" size={20} color="gray" />
-          </Pressable>
-          {isAdmin && (
-            <>
-              <Pressable>
-                <Feather name="edit" size={20} color="blue" />
-              </Pressable>
-              <Pressable>
-                <Feather name="trash-2" size={20} color="red" />
-              </Pressable>
-            </>
-          )}
-        </View>
-      </View>
     );
-  };
+};
 
 
 
@@ -178,27 +180,27 @@ const isAdmin = false;
     if (index === 3) {
       return (
         <Pressable
-          className="flex flex-row gap-3 items-center p-1 justify-start w-[200] bg-purple-100 rounded-lg hover:bg-purple-200"
+          className="flex flex-row gap-3 items-center p-1 justify-start w-[250] h-[70] bg-purple-100 rounded-lg hover:bg-purple-200"
           key={index}
           onPress={() => router.push(item.route)}
         >
           <View className="flex items-center justify-center w-10 h-10 rounded-lg">
             {item.icon}
           </View>
-          <Text className="font-medium color-primary-100">{item.label}</Text>
+          <Text className="font-medium text-xl color-primary-100">{item.label}</Text>
         </Pressable>
       );
     } else {
       return (
         <Pressable
-          className="flex flex-row gap-3 items-center p-1 justify-start w-[200] bg-white rounded-lg hover:bg-gray-100"
+          className="flex flex-row gap-3 items-center p-1 justify-start w-[250] h-[70] bg-white rounded-lg hover:bg-gray-100"
           key={index}
           onPress={() => router.push(item.route)}
         >
           <View className="flex items-center justify-center w-10 h-10 rounded-lg">
             {item.icon}
           </View>
-          <Text className="font-medium color-secondary-400">{item.label}</Text>
+          <Text className="font-medium text-xl color-secondary-400">{item.label}</Text>
         </Pressable>
       );
     }
@@ -211,13 +213,13 @@ const isAdmin = false;
       
 
       {(role?.isEmployee ) && (
-       <ScrollView className="h-full flex-1 bg-secondary-100 items-center ">
+       <ScrollView className="h-full flex-1 bg-secondary-100 items-center mt-[250] ">
         {renderHeader()}
             <FlatList
       data={students}
       keyExtractor={(item) => item.id.toString()}
       renderItem={renderItem}
-      contentContainerStyle={{ paddingBottom: 16 }}
+      contentContainerStyle={{ paddingBottom: 16 }} 
     />
 
      </ScrollView>

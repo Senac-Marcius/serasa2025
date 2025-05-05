@@ -15,7 +15,7 @@ const CalendarComponent: React.FC = () => {
   return (
     <View style={[styles.container, width > 768 ? styles.containerDesktop : {}]}>
       <Calendar
-        style={{height:400, width:900}}
+        style={{height:800, width:1800, fonteSize:20}}
         current={today}
         onDayPress={handleDayPress}
         markedDates={{
