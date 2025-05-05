@@ -23,7 +23,6 @@
     "expo-image-picker": "~16.0.6",
     "expo-router": "^4.0.19",
     "expo-status-bar": "~2.0.1",
-    "virtudemy": "file:",
     "native-base": "^2.15.2",
     "normalize-css-color": "^1.0.2",
     "react": "^18.3.1",
@@ -43,7 +42,8 @@
     "react-native-screens": "~4.4.0",
     "react-native-vector-icons": "^10.2.0",
     "react-native-web": "^0.19.13",
-    "react-router-dom": "^7.5.0"
+    "react-router-dom": "^7.5.0",
+    "virtudemy": "file:"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

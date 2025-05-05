@@ -7,6 +7,18 @@ import { useRouter } from 'expo-router';
 import MyTimePicker from "../../src/components/MyTimerPiker";
 import { setPosition, deletePosition, updatePosition, iPosition, getCargo } from "../../src/controllers/positions";
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { supabase } from "../../src/utils/supabase";
+import { iEmployees } from "../../src/controllers/employees";
+import MySelect from "../../src/components/MySelect";
+import { getUserById, iUser } from "../../src/controllers/users";
+
+interface iEmployeeWithDetails extends iEmployees {
+  user_details?: iUser; // Dados do usuário que serão carregados separadamente
+  position?: {
+    name: string;
+    departament: string;
+  };
+}
 
 export default function PositionScreen() {
   const router = useRouter();
@@ -16,6 +28,29 @@ export default function PositionScreen() {
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [potentialSupervisors, setPotentialSupervisors] = useState<iEmployeeWithDetails[]>([]);
+  
+  const schoolDepartments = [
+    {key: "Diretoria", option: "Diretoria"},
+    {key: "Coordenação Pedagógica", option: "Coordenação Pedagógica"},
+    {key: "Pedagógico", option: "Pedagógico"},
+    {key: "Secretaria", option: "Secretaria"},
+    {key: "Administração", option: "Administração"},
+    {key: "Financeiro", option: "Financeiro"},
+    {key: "Limpeza", option: "Limpeza"},
+    {key: "Cozinha", option: "Cozinha"},
+    {key: "Biblioteca", option: "Biblioteca"},
+    {key: "TI", option: "TI (Tecnologia da Informação)"},
+    {key: "RH", option: "Recursos Humanos"},
+    {key: "Serviços Gerais", option: "Serviços Gerais"},
+    {key: "Supervisão Escolar", option: "Supervisão Escolar"}
+  ];
+
+  const supervisorOptions = potentialSupervisors.map(emp => ({
+    key: emp.id,
+    option: `${emp.user_details?.name || 'Nome não encontrado'} (${emp.position?.name || 'Cargo não encontrado'})`
+  }));
+
   const [req, setReq] = useState({
     id: -1,
     name: "",
@@ -29,6 +64,7 @@ export default function PositionScreen() {
 
   useEffect(() => {
     fetchPositions();
+    fetchPotentialSupervisors();
   }, []);
 
   useEffect(() => {
@@ -41,6 +77,46 @@ export default function PositionScreen() {
       setPositions(retorno.data);
     }
   };
+
+  const fetchPotentialSupervisors = async () => {
+    try {
+      // Busca os cargos de supervisão
+      const { data: positions } = await supabase
+        .from('positions')
+        .select('*')
+        .or('departament.eq.Diretoria,departament.eq.Coordenação Pedagógica,departament.eq.Supervisão Escolar');
+      
+      if (positions && positions.length > 0) {
+        const positionIds = positions.map(p => p.id);
+        
+        // Busca os funcionários
+        const { data: employees, error } = await supabase
+          .from('employees')
+          .select('*, position:positions(name, departament)')
+          .in('positions_id', positionIds);
+        
+        if (error) throw error;
+        
+        if (employees) {
+          // Carrega os dados de cada usuário
+          const employeesWithDetails = await Promise.all(
+            employees.map(async (emp) => {
+              const userResponse = await getUserById(emp.user_id);
+              return {
+                ...emp,
+                user_details: userResponse.status ? userResponse.data : null
+              };
+            })
+          );
+          
+          setPotentialSupervisors(employeesWithDetails as iEmployeeWithDetails[]);
+        }
+      }
+    } catch (error) {
+      console.error("Erro ao buscar supervisores:", error);
+    }
+  };
+  
 
   const filterPositions = () => {
     if (searchTerm === "") {
@@ -227,7 +303,6 @@ export default function PositionScreen() {
           </View>
         )}
 
-        {/* Modal de Cadastro/Edição */}
         <Modal
           animationType="slide"
           transparent={true}
@@ -257,6 +332,7 @@ export default function PositionScreen() {
                   value={req.name}
                   onChangeText={(text) => setReq({ ...req, name: text })}
                 />
+                
                 <Myinput
                   label="Descrição"
                   placeholder="Descrição das responsabilidades"
@@ -264,31 +340,41 @@ export default function PositionScreen() {
                   value={req.description}
                   onChangeText={(text) => setReq({ ...req, description: text })}
                 />
+                
                 <Myinput
                   label="Salário"
                   placeholder="Valor do salário"
                   iconName="attach-money"
                   value={req.salary.toString()}
-                  onChangeText={(text) => setReq({ ...req, salary: Number(text) })}
+                  onChangeText={(text) => setReq({ ...req, salary: Number(text) || 0 })}
                 />
+                
                 <MyTimePicker
                   labelText="Carga Horária"
                   onTimeSelected={(time) => setReq({ ...req, work_hours: time })}
                   initialTime={req.work_hours}
                 />
-                <Myinput
-                  label="Departamento"
-                  placeholder="Departamento relacionado"
-                  iconName="business"
-                  value={req.departament}
-                  onChangeText={(text) => setReq({ ...req, departament: text })}
+                
+                <MySelect
+                  caption="Departamento"
+                  label={req.departament}
+                  list={schoolDepartments}
+                  setLabel={(item) => setReq({ ...req, departament: item })}
                 />
-                <Myinput
-                  label="Supervisor"
-                  placeholder="Nome do supervisor"
-                  iconName="person-outline"
-                  value={req.supervisor}
-                  onChangeText={(text) => setReq({ ...req, supervisor: text })}
+                
+                <MySelect
+                  caption="Supervisor"
+                  label={req.supervisor}
+                  list={supervisorOptions}
+                  setLabel={(item) => {
+                    const selected = potentialSupervisors.find(
+                      emp => emp.id === supervisorOptions.find(opt => opt.option === item)?.key
+                    );
+                    setReq({ 
+                      ...req, 
+                      supervisor: item,
+                    });
+                  }}
                 />
               </ScrollView>
 
@@ -320,6 +406,7 @@ const styles = StyleSheet.create({
   backButton: {
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: '#6c757d',
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 8,
@@ -490,7 +577,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 20,
   },
-  // Modal Styles
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
@@ -543,8 +629,5 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#6c757d',
     minWidth: 120,
-  },
-  cancelButtonText: {
-    color: '#6c757d',
-  },
+  }
 });
