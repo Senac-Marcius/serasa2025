@@ -133,6 +133,7 @@ export default function TimelineScreen() {
             onChangeText={setFiltro}
             onPress={buscar}
             style={styles.searchWrapper}
+            placeholder='Filtrar'
           />
         </View>
 
