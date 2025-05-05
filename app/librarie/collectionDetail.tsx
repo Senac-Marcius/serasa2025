@@ -9,7 +9,8 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import TabelaUsuarios from './loantable';
 import { supabase } from '../../src/utils/supabase';
 import MyMenu from '../../src/components/MyMenu';
-import { StarCalculation } from './starsCalculation';
+import LoansTabledetail from './loanstabledetail';
+import StarComponent from './starComponent';
 import { setCollection, iCollection, deleteCollectionById, updateCollectionById, getCollections } from '../../src/controllers/collections';
 
 export default function CollectionDetail() {
@@ -42,15 +43,15 @@ export default function CollectionDetail() {
     const tagCount: Record<string, number> = {};
 
     books.forEach(book => {
-      if (book.keywords) {
-        const tags = book.keywords.split(',').map((tag: string) => tag.trim().toLowerCase())
+      if (book.subject) {
+        const tags = book.subject.split(',').map((tag: string) => tag.trim().toLowerCase())
         tags.forEach((tag: string) => {
           tagCount[tag] = (tagCount[tag] || 0) + 1;
         });
       }
     });
 
-   
+
     const commonTags = Object.entries(tagCount)
       .filter(([tag, count]) => count > 1)
       .map(([tag]) => tag);
@@ -58,27 +59,6 @@ export default function CollectionDetail() {
     return commonTags;
   }
 
-  async function filterBooksByRecentTags() {
-    const commonTags = getCommonTags(recentBooks);
-
-    if (commonTags.length === 0) return;
-
-    const { data, error } = await supabase
-      .from('items_librarie')
-      .select('*')
-      .or(
-        commonTags.map(tag => `keywords.ilike.%${tag}%`).join(',')
-      );
-
-    if (error) {
-      console.error("Erro ao filtrar livros:", error);
-      return;
-    }
-
-    if (data) {
-      setItems(data);
-    }
-  }
   async function fetchRelatedItems(item: iItem) {
     if (!item.subject) return;
 
@@ -106,6 +86,7 @@ export default function CollectionDetail() {
       fetchRelatedItems(item);
     }
   }, [item]);
+  
 
 
   return (
@@ -118,7 +99,7 @@ export default function CollectionDetail() {
               <TouchableOpacity onPress={() => setMenuOpen(!menuOpen)} style={styles.iconButton}>
                 <Ionicons name="menu" size={20} color="#750097" />
               </TouchableOpacity>
-              <TouchableOpacity onPress={()=>router.back()} style={styles.iconButton}>
+              <TouchableOpacity onPress={() => router.back()} style={styles.iconButton}>
                 <Ionicons name="arrow-back-outline" size={20} color="#750097" />
               </TouchableOpacity>
             </View>
@@ -169,10 +150,14 @@ export default function CollectionDetail() {
                     setVisible={setVisible}
                     style={styles.modal}
                     title="Empréstimo"
-                    closeButtonTitle="Fechar"
+                    closeButtonTitle="X"
                   >
-                   <StarCalculation/>
+                    <LoansTabledetail BookId={item.id} />
                   </MyModal>
+                  <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                    <StarComponent
+                      rating={item.star} />
+                  </View>
                 </View>
               </View>
             </View>
@@ -230,7 +215,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     justifyContent: "center",
 
-},
+  },
   viewFlatList: {
     display: "flex",
     justifyContent: "center",
@@ -265,7 +250,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     gap: 40,
     overflow: "hidden",
-    borderRadius:20,
+    borderRadius: 20,
 
   },
   itemText: {
@@ -273,8 +258,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 5,
   },
-  containerText:{
-    backgroundColor:""
+  containerText: {
+    width: "70%"
   },
   button_capsule: {
     backgroundColor: "#EDE7F6",
@@ -291,15 +276,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   containerModal: {
-    display:"flex",
+    display: "flex",
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop:20
+    marginTop: 20
 
   },
   modal: {
     width: 700,
+    height: 450,
   },
+
   buttonsContainer: {
     flexDirection: 'row',
     gap: 50,
@@ -395,7 +382,7 @@ const styles = StyleSheet.create({
   },
 
   tag: {
-    backgroundColor: '#E0BBE4', 
+    backgroundColor: '#E0BBE4',
     borderRadius: 15,
     paddingHorizontal: 10,
     paddingVertical: 5,
@@ -403,7 +390,7 @@ const styles = StyleSheet.create({
 
   tagText: {
     fontSize: 12,
-    color: '#4A148C', 
+    color: '#4A148C',
     fontWeight: 'bold',
   },
   itemTitlename: {
@@ -420,7 +407,7 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     marginRight: 50,
     marginTop: 50,
-    width: 300,
+    width: 270,
     height: 480,
     alignItems: "center",
     justifyContent: "flex-start",

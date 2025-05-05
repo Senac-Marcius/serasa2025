@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { MyTb } from '../../src/components/MyItem';
 import MyList from '../../src/components/MyList';
 import MyView from '../../src/components/MyView';
 import MyButton from '../../src/components/MyButtons';
-import { MyModal_mobilefullscreen } from '../../src/components/MyModal'
+import { MyModal } from '../../src/components/MyModal'
 import { Myinput, MyTextArea } from '../../src/components/MyInputs';
-import { setExpense, delRegister, updateExpense, iexpenses, getExpense } from '../../src/controllers/expenses';
+import { setExpense, delRegister, updateExpense, iexpenses, getExpense, getAreas, getAreasSlected } from '../../src/controllers/expenses';
 import Mytext from '../../src/components/MyText';
 import Mydownload from '../../src/components/MyDownload';
 import MySearch from '../../src/components/MySearch';
+import MySelect from '../../src/components/MySelect';
+import { getBudgets } from '../../src/controllers/budgets';
 
 
 export default function ExpenseScreen() {
@@ -20,10 +22,11 @@ export default function ExpenseScreen() {
         name: '',
         emails: '',
         contacts: '',
-        costs: '',
+        costs: 0,
         descriptions: '',
         url: '',
         user_id: 1,
+        percentege:0
     });
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -32,19 +35,65 @@ export default function ExpenseScreen() {
 
     const [message, setMessage] = useState("")
 
+    const [areas, setAreas]= useState<{key:number, option:string}[]>([])
+
+    const [areasSelected, setAreasSelected]= useState<{key:number, percentege:number, option:string}[]>([{key: -1, percentege:0, option:''}])
+
     const [expense, setExpenses] = useState<iexpenses[]>([]);
 
+    const [budgets, setBudgets] = useState<iexpenses[]>([]);
+
+
     useEffect(() => {
-        async function getAll() {
+        (async () => {
             const retorno = await getExpense({})
             if (retorno.status && retorno.data && retorno.data.length > 0) {
                 setExpenses(retorno.data)
             }
-        }
+        })();
 
-        getAll();
+        (async () => {
+            const retorno = await getAreas({})
+            if (retorno.status && retorno.data && retorno.data.length > 0) {
+                let tempArea: any[] = []
+
+                retorno.data.map(a=>{
+                    tempArea.push({
+                        key: a.id, percentage:0, option:a.sectors
+                    })
+                })
+
+                setAreas(tempArea)
+            }
+        })();
+
+
+        (async () => {
+            const retorno = await getBudgets({})
+            if (retorno.status && retorno.data && retorno.data.length > 0) {
+                setBudgets(retorno.data)
+            }
+        })();
 
     }, [])
+
+   
+    
+    function addArea() {
+        setAreasSelected([...areasSelected, {key: -1, percentege:0, option:''}]);
+    }
+
+    function addAreaKey(index: number, pkey: number) {
+        const area = areas.find(a => a.key === pkey); // ← ALTERADO: busca o nome da área
+        if (!area) return;
+
+        const novos = [...areasSelected];
+        novos[index] = {...novos[index], key: pkey,
+            option: area.option, // ← ALTERADO: atualiza o nome visível
+        };
+
+        setAreasSelected(novos); // ← ALTERADO
+    }
 
     const getFilteredExpenses = () => {
         if (!searchTerm) return expense; // Retorna tudo se não houver busca
@@ -71,7 +120,7 @@ export default function ExpenseScreen() {
             const newid = expense.length ? expense[expense.length - 1].id + 1 : 1;
             const newExpense = { ...req, id: newid };
             setExpenses([...expense, newExpense]);
-            const resp = await setExpense(newExpense)
+            const resp = await setExpense(newExpense, areasSelected)
             if (!resp.status && resp.error)
                 setMessage(resp.error.message)
         } else {
@@ -86,19 +135,29 @@ export default function ExpenseScreen() {
             name: '',
             emails: '',
             contacts: '',
-            costs: '',
+            costs: 0,
             url: '',
             descriptions: '',
             user_id: 1,
+            percentege:0
         });
+
+        setAreasSelected([{key: -1, percentege:0, option:''}])
 
         setVisible(false);
     }
 
-    function editExpense(id: number) {
+   async function editExpense(id: number) {
         const expenses = expense.find(e => e.id == id)
-        if (expenses)
+        if (expenses){
             setReq(expenses)
+
+            const a = await getAreasSlected(id);
+            if(a.status && a.data && a.data.length > 0)
+                setAreasSelected(a.data  as  {key: number, option: string, percentege:number} [])
+        }
+            
+            
         setVisible(true);
     };
 
@@ -115,7 +174,11 @@ export default function ExpenseScreen() {
         <MyView style={{ flex: 1, backgroundColor: '#f0f2f5' }}>
             {/* aqui é typecript dentro do front */}
             <Mytext style={styles.title}>tela de despesas</Mytext>
-            <MyModal_mobilefullscreen visible={visible} setVisible={setVisible}>
+            <MyModal
+                style={styles.MyModal} 
+                title='Cadastrar'
+                visible={visible}
+                setVisible={setVisible}>
 
                 <View style={styles.form}>
 
@@ -133,14 +196,85 @@ export default function ExpenseScreen() {
 
                     <MyTextArea value={req.descriptions} onChangeText={(text) => setReq({ ...req, descriptions: text })} iconName='' placeholder='Descrição' label='' />
 
-                    <Myinput value={req.costs} onChangeText={(text) => setReq({ ...req, costs: text })} placeholder="R$" label="Valores:" iconName='' />
+                    <Myinput
+                                value={String(req.percentege)}
+                                onChangeText={(text) => setReq({ ...req, percentege: Number(text) })}
+                                iconName='percent'
+                                placeholder='% Relacionado a área'
+                                label='Valor'
+                                />
+                        
+
+                    <Myinput value={ String(req.costs)} onChangeText={(text) => setReq({ ...req, costs: Number(text)})} placeholder="R$" label="Valores:" iconName='' />
 
 
+
+                    <Mytext style={{fontSize:14}}>Distribuição por areas:</Mytext>
+                            {areasSelected.map((uOption, index) => (
+                            <View
+                                key={index}
+                                style={{ 
+                                    flexDirection: 'row', 
+                                    alignItems: 'center', 
+                                    marginBottom: 12,
+                                    gap: 8,
+                                }}
+                            >
+                                <MySelect 
+                                    label={uOption.option|| "Selecione uma area"}
+                                    setLabel={() => {}}
+                                    list={areas}
+                                    setKey={(key) => addAreaKey(index, key)}
+                                    caption={`Integrante ${index + 1}`}
+                                />
+
+
+
+                                
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        const novos = [...areasSelected];
+                                        novos.splice(index, 1);
+                                        setAreasSelected(novos);
+                                    }}
+                                    style={{
+                                        backgroundColor: '#ff4d4f',
+                                        borderRadius: 100,
+                                        width: 36,
+                                        height: 36,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                <Mytext style={{ color: '#fff', fontSize: 18 }}>–</Mytext>
+                                </TouchableOpacity>
+                                
+                                
+                                {index === areasSelected.length - 1 && (
+                                <TouchableOpacity
+                                    onPress={addArea}
+                                    style={{
+                                        backgroundColor: '#28a745',
+                                        borderRadius: 100,
+                                        width: 36,
+                                        height: 36,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <Mytext style={{ color: '#fff', fontSize: 20 }}>+</Mytext>
+                                </TouchableOpacity>
+                                )}
+                            </View>
+                            ))}
+
+                              
                     <MyButton style={{ justifyContent: 'center' }} onPress={() => handleRegister()} title={req.id == -1 ? "Cadastra" : "Atualizar"}></MyButton>
 
                 </View>
-            </MyModal_mobilefullscreen>
+            </MyModal>
             <MySearch
+                placeholder='Pesquise aqui'
                 style={styles.searchInput}
                 onChangeText={setSearchTerm}
                 onPress={() => { setSearchTerm(searchTerm) }}
@@ -166,6 +300,7 @@ export default function ExpenseScreen() {
                         <Mytext style={styles.td}> {item.emails}</Mytext>
                         <Mytext style={styles.td}> {item.created_at}</Mytext>
                         <Mytext style={styles.td}>{item.descriptions}</Mytext>
+                        <Mytext style={styles.td}> {item.percent}</Mytext>
                         <Mytext style={styles.td}> {item.costs}</Mytext>
                     </MyTb>
 
@@ -177,6 +312,7 @@ export default function ExpenseScreen() {
                         <Mytext style={styles.th}>Email</Mytext>
                         <Mytext style={styles.th}>Data</Mytext>
                         <Mytext style={styles.th}>Descrição</Mytext>
+                        <Mytext style={styles.th}>Porcentagem</Mytext>
                         <Mytext style={styles.th}>Valor</Mytext>
                         <Mytext style={styles.th}>Ações</Mytext>
                     </View>
@@ -188,6 +324,21 @@ export default function ExpenseScreen() {
 }
 
 const styles = StyleSheet.create({
+
+    buttonNewText: { color: '#fff', fontWeight: '600' },
+
+    MyModal: {
+        display: 'flex',
+        width: 327,
+        height: 900,
+        padding: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        borderWidth: 4,
+        borderColor: 'purple',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+    },
 
     searchInput: {
         backgroundColor: '#fff',

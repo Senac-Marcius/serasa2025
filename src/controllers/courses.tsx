@@ -1,84 +1,79 @@
+import { supabase } from '../utils/supabase';
 
-import { supabase } from '../utils/supabase'
-
-
-interface iCourses{
-    name: string,
-    id: number,
-    created_at: string,
-    description: string,
-    courseplan: string,
-    orientationplan: string,
-    workload: number,
-    userId: number
+interface iCourses {
+  name: string;
+  id?: number;
+  created_at?: string;
+  description: string;
+  courseplan: string;
+  orientationplan: string;
+  workload: number;
+  userId: number;
 }
 
-function toListCourses(data:iCourses[]){
-  const resp: {key: number, option: string} [] = [];
-    data.map((c) =>{
-      resp.push({key: c.id, option: c.name})
-    })
-  return resp;
+function toListCourses(data: iCourses[]) {
+  return data.map((c) => ({ key: c.id!, option: c.name }));
 }
 
+async function setCoursebd(courses: iCourses) {
+  // Remove id e created_at para o Supabase gerar automaticamente
+  const { id, created_at, ...courseData } = courses;
 
-async function setCoursebd(courses:iCourses ){
-    //aqui vem os tratamenos de regez ou model ode negocio antes de inseir
-    const { data, error } = await supabase
-    .from
-    ('courses')
-    .insert
-      ([courses])
+  const { data, error } = await supabase
+    .from('courses')
+    .insert([courseData])
     .select();
-    
-    
-    if(error){
-      console.log(error);
-    // aqui vm os tratamentos da variavel error 
-    return[]   
-    }
 
-    return data
-
-}     
-
-async function upadateCourse(courses:iCourses) {
-  const{id, ...fieldsToUpdate} = courses;
-  const {data, error} = await supabase
-  .from ('courses')
-  .update(fieldsToUpdate)
-  .eq('id', courses.id)
-  .select();
-
-  if (error){
-    console.log("Erro ao atualizar curso:", error);
-    return[];
+  if (error) {
+    console.log('Erro ao inserir curso:', error);
+    return [];
   }
-  console.log("Curso atualizado com sucesso:", data)
+
   return data;
 }
 
-async function deleteCourse(id: number){
-  const {data, error} = await supabase
-  .from('courses')
-  .delete()
-  .eq('id',id)
-  .select();
+async function upadateCourse(courses: iCourses) {
+  const { id, ...fieldsToUpdate } = courses;
+  const { data, error } = await supabase
+    .from('courses')
+    .update(fieldsToUpdate)
+    .eq('id', id!)
+    .select();
 
-  if (error){
-    console.log("Erro ao deletar curso:", error)
-    return[];
+  if (error) {
+    console.log('Erro ao atualizar curso:', error);
+    return [];
   }
+
   return data;
-
 }
 
-async function getCourses(param:any) {
-  const {data: todos, error} = await supabase.from('courses').select()
-  if(error){
-    return {status: false, error: error}}
-  return{status:true, data: todos}
-}
-  
+async function deleteCourse(id: number) {
+  const { data, error } = await supabase
+    .from('courses')
+    .delete()
+    .eq('id', id)
+    .select();
 
-export {getCourses,setCoursebd, upadateCourse, deleteCourse, iCourses,toListCourses}
+  if (error) {
+    console.log('Erro ao deletar curso:', error);
+    return [];
+  }
+
+  return data;
+}
+
+async function getCourses(param: any) {
+  const { data: todos, error } = await supabase.from('courses').select();
+  if (error) return { status: false, error };
+  return { status: true, data: todos };
+}
+
+export {
+  getCourses,
+  setCoursebd,
+  upadateCourse,
+  deleteCourse,
+  iCourses,
+  toListCourses,
+};
