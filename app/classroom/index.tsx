@@ -7,6 +7,7 @@ import { Ionicons, FontAwesome5, Feather, MaterialIcons } from '@expo/vector-ico
 import { useRouter } from "expo-router";
 import { getUserById ,iUser} from "@/src/controllers/users";
 import { ScrollView } from "react-native-gesture-handler";
+import CalendarComponent from "./CalendarComponent";
 export default function HomeScreen() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -117,7 +118,7 @@ export default function HomeScreen() {
       <View className="flex flex-row h-full w-full bg-secondary-100">
 
       
- <View className="flex flex-col  h-full gap-14 w-[350] bg-white  items-center p-6 rounded-md">
+      <View className="flex flex-col  h-full gap-14 w-[350] bg-white  items-center p-6 rounded-md">
   {menuItems.map((item, index) => {
     if (index === 0) {
       return (
@@ -159,6 +160,7 @@ export default function HomeScreen() {
             <Card icon="school" title={classroomData?.numberStudents?.toString() || "0"} description="Total de Alunos"/>
             <Card icon="star" title={ "0"} description="Pendencias"/>
           </View>
+          <CalendarComponent></CalendarComponent>
 
 
         </ScrollView>
@@ -174,10 +176,18 @@ export default function HomeScreen() {
       )}
 
       {(role?.isEmployee && (role.positionId === 5 || role.positionId === 6)  ) && (
-        <View className="mb-6">
-          <Text className="text-xl font-bold text-gray-800 mb-2">Bem-vindo ao sistema</Text>
-          <Text className="text-gray-600">Admin.</Text>
-        </View>
+       <ScrollView className="h-full flex-1 bg-secondary-100 items-center ">
+       <WelcomeMensage/>
+       <View className="flex flex-row gap-3  p-4">
+         <Card icon="account-group" title={classroomData?.numberClasses?.toString() || "0"} description="Total de Turmas"/>
+         <Card icon="book" title={classroomData?.numberDiciplines?.toString() || "0"} description="Total de diciplinas"/>
+         <Card icon="school" title={classroomData?.numberStudents?.toString() || "0"} description="Total de Alunos"/>
+         <Card icon="star" title={ "0"} description="Pendencias"/>
+       </View>
+       <CalendarComponent></CalendarComponent>
+
+
+     </ScrollView>
       )}
 
       {(role?.isEmployee && (role.positionId !== 5 && role.positionId !== 6 && role.positionId !== 4)  )&& (
