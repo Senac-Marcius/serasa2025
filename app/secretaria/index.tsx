@@ -7,8 +7,7 @@ import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import MyView from '../../src/components/MyView';
 import { DatePickerModal } from 'react-native-paper-dates';
-import MyTopbar from '../../src/components/MyTopbar'; // Usa a topbar existente
-import { Label } from 'native-base';
+import { supabase } from '../../src/utils/supabase';
 
 interface Evento {
   id: number;
@@ -17,46 +16,14 @@ interface Evento {
 }
 
 const menuItems = [
-  { label: 'Calendário',  icon:  <Ionicons name="calendar-outline" size={20} color="#555" />, route: 'secretaria/calendar' },
-  { label: 'Documentos',  icon:  <Ionicons name="document-text-outline" size={20} color="#555" />, route: 'secretaria/documents' },
-  { label: 'Cursos',      icon:  <Ionicons name="document-text-outline" size={20} color="#555" />, route: 'secretaria/courses' }
-  
-
-];
-
-const cards = [
-  {
-    title: 'Disciplinas',
-    icon: <Ionicons name="book" size={30} color="#6C63FF" />,
-    route: 'secretaria/disciplines',
-    bgColor: '#F3F1FE',
-    value: 12,
-  },
-  {
-    title: 'Cursos',
-    icon: <Ionicons name="school" size={30} color="#FFB703" />,
-    route: 'secretaria/courses',
-    bgColor: '#FFF6E5',
-    value: 5,
-  },
-  {
-    title: 'Calendário',
-    icon: <Ionicons name="calendar" size={30} color="#2EC4B6" />,
-    route: 'secretaria/calendar',
-    bgColor: '#E5FBF8',
-    value: 7,
-  },
-  {
-    title: 'Documentos',
-    icon: <Ionicons name="document-text" size={30} color="#FF5C8A" />,
-    route: 'secretaria/documents',
-    bgColor: '#FFEAF0',
-    value: 21,
-  },
+  { label: 'Calendário', icon: <Ionicons name="calendar-outline" size={20} color="#555" />, route: 'secretaria/calendar' },
+  { label: 'Documentos', icon: <Ionicons name="document-text-outline" size={20} color="#555" />, route: 'secretaria/documents' },
+  { label: 'Cursos', icon: <Ionicons name="document-text-outline" size={20} color="#555" />, route: 'secretaria/courses' }
 ];
 
 export default function IndexScreen() {
   const router = useRouter();
+
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [novoEvento, setNovoEvento] = useState({ nome: '', data: '' });
@@ -65,6 +32,10 @@ export default function IndexScreen() {
   const [dataSelecionada, setDataSelecionada] = useState<Date | undefined>();
   const [abrirCalendario, setAbrirCalendario] = useState(false);
 
+  const [totalDisciplinas, setTotalDisciplinas] = useState(0);
+  const [totalCursos, setTotalCursos] = useState(0);
+  const [totalDocumentos, setTotalDocumentos] = useState(0);
+
   useEffect(() => {
     setEventos([
       { id: 1, nome: 'Reunião Pedagógica', data: '2025-04-07' },
@@ -72,6 +43,51 @@ export default function IndexScreen() {
       { id: 3, nome: 'Conselho de Classe', data: '2025-04-14' },
     ]);
   }, []);
+
+  useEffect(() => {
+    async function fetchCounts() {
+      const { data: disciplinas } = await supabase.from('disciplines').select();
+      const { data: cursos } = await supabase.from('courses').select();
+      const { data: documentos } = await supabase.from('documents').select();
+
+      if (disciplinas) setTotalDisciplinas(disciplinas.length);
+      if (cursos) setTotalCursos(cursos.length);
+      if (documentos) setTotalDocumentos(documentos.length);
+    }
+
+    fetchCounts();
+  }, []);
+
+  const dynamicCards = [
+    {
+      title: 'Disciplinas',
+      icon: <Ionicons name="book" size={30} color="#6C63FF" />,
+      route: 'secretaria/disciplines',
+      bgColor: '#F3F1FE',
+      value: totalDisciplinas,
+    },
+    {
+      title: 'Cursos',
+      icon: <Ionicons name="school" size={30} color="#FFB703" />,
+      route: 'secretaria/courses',
+      bgColor: '#FFF6E5',
+      value: totalCursos,
+    },
+    {
+      title: 'Calendário',
+      icon: <Ionicons name="calendar" size={30} color="#2EC4B6" />,
+      route: 'secretaria/calendar',
+      bgColor: '#E5FBF8',
+      value: eventos.length,
+    },
+    {
+      title: 'Documentos',
+      icon: <Ionicons name="document-text" size={30} color="#FF5C8A" />,
+      route: 'secretaria/documents',
+      bgColor: '#FFEAF0',
+      value: totalDocumentos,
+    },
+  ];
 
   const abrirModal = (evento?: Evento) => {
     if (evento) {
@@ -122,10 +138,7 @@ export default function IndexScreen() {
 
   return (
     <MyView style={{ flex: 1 }}>
-
-
       <View style={styles.wrapper}>
-        {/* Sidebar */}
         <View style={styles.sidebar}>
           <View style={styles.logoContainer}>
             <FontAwesome5 name="chalkboard-teacher" size={28} color="#b34db2" />
@@ -152,14 +165,13 @@ export default function IndexScreen() {
           })}
         </View>
 
-        {/* Conteúdo */}
         <View style={styles.mainContent}>
           <ScrollView contentContainerStyle={styles.content}>
             <View>
               <Text style={styles.mainTitle}>Painel da Secretaria</Text>
 
               <View style={styles.cardArea}>
-                {cards.map((card, index) => (
+                {dynamicCards.map((card, index) => (
                   <Pressable
                     key={index}
                     style={[styles.card, { backgroundColor: card.bgColor }]}
@@ -201,7 +213,6 @@ export default function IndexScreen() {
         </View>
       </View>
 
-      {/* Modal */}
       <Modal visible={modalVisible} transparent animationType="slide">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
