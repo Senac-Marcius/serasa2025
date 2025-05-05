@@ -93,7 +93,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Secretaria" route="secretaria" icon="add-circle" />
         <MenuItem label="Calendar" route="secretaria/calendar" icon="calendar" />
         <MenuItem label="Categories" route="categories" icon="albums" />
-        <MenuItem label="Classes" route="sala_de_aula/classes" icon="school" />
+        <MenuItem label="Classes" route="classroom/classes" icon="school" />
         <MenuItem label="Classroom" route="classroom" icon="school" />
         <MenuItem label="Collections" route="collections" icon="cube" />
         <MenuItem label="Courses" route="courses" icon="book" />
@@ -101,7 +101,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Documents" route="secretaria/documents" icon="document" />
         <MenuItem label="Employees" route="employees" icon="people" />
         <MenuItem label="Items" route="items" icon="pricetag" />
-        <MenuItem label="Launchs" route="sala_de_aula/launchs" icon="rocket" />
+        <MenuItem label="Launchs" route="classroom/launchs" icon="rocket" />
         <MenuItem label="Classes" route="classroom/classes" icon="school" />
         <MenuItem label="More" route="more" icon="cube" />
         <MenuItem label="Courses" route="courses" icon="book" />
@@ -116,7 +116,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Loans" route="loans" icon="card" />
         <MenuItem label="Locals" route="infraestrutura/locals" icon="location" />
         <MenuItem label="Perfil" route="perfil" icon="person" />
-        <MenuItem label="Posts" route="classroom/posts" icon="chatbox" />
+        <MenuItem label="Posts" route="posts" icon="chatbox" />
         <MenuItem label="Infraestrutura" route="infraestrutura" icon="cube-outline"/>
         <MenuItem label="Projects" route="projects" icon="briefcase" />
         <MenuItem label="Records" route="records" icon="document-text-outline"/>
