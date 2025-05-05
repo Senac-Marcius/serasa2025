@@ -1,13 +1,13 @@
 import { supabase } from '../utils/supabase';
 
-interface iCategories {
+interface iCategory {
     name: string,
     description: string,
     id: number,
     created_at: string
 }
 
-function toListCategorie(data:iCategories[]){
+function toListCategorie(data:iCategory[]){
    const resp : {key:number,option: string}[] = [];
 
    data.map((c) => {
@@ -18,7 +18,7 @@ function toListCategorie(data:iCategories[]){
 
 }
 // Criar categoria
-async function setCategory(category: iCategories) {
+async function setCategory(category: iCategory) {
     const { data, error } = await supabase
         .from('categories')
         .insert([category])
@@ -40,7 +40,7 @@ async function getCategories(params:any) {
 
 
 // Atualizar categoria
-async function updateCategory(category: iCategories) {
+async function updateCategory(category: iCategory) {
     const { data, error } = await supabase
         .from('categories')
         .update({
@@ -69,4 +69,4 @@ async function deleteCategory(id: number) {
   
 }
 
-export { iCategories, setCategory, updateCategory, deleteCategory, getCategories, toListCategorie };
+export { iCategory, setCategory, updateCategory, deleteCategory, getCategories, toListCategorie, };
