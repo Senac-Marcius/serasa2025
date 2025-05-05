@@ -6,7 +6,7 @@ import MyLogin from '../src/components/MyLogin';
 import MyText from '../src/components/MyText';
 import MyTheme from '../src/components/MyTheme';
 import MyView from '../src/components/MyView';
-import { getUserByEmail } from '../src/controllers/users';
+import { getUserByEmail, isEmployee } from '../src/controllers/users';
 import Toast from 'react-native-toast-message';
 
 export default function HomeScreen() {
@@ -26,12 +26,17 @@ export default function HomeScreen() {
         if (result.data?.password === pass) {
             try {
                 await AsyncStorage.setItem('userId', result.data.id.toString());
-                alert('Login bem-sucedido!');
+                Toast.show({
+                    type: 'success',
+                    text1: 'Sucesso!',
+                    text2: 'E-mail e senha corretos'
+                  });
                 var isE = isEmployee()
                 if(await isE == true){
                     router.push('/adminsitration')
+                }else{
+                    router.push('/home')
                 }
-                //router.push('/home');
             } catch (error) {
                 Toast.show({
                     type: 'error',
