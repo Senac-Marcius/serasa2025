@@ -218,24 +218,6 @@ export default function CollectionPreviewScreen() {
                             />
                         </View>
                         <View style={styles.ViewSelect}>
-                            {/* <Text style={styles.itemTextFilter}>  Ano </Text> */}
-                            <Select
-                                label={year}
-                                setLabel={(val) => { setYear(val); itemsSearch(); }}
-                                caption="Avaliação"
-                                list={[
-                                    { key: 0, option: 'Todos' },
-                                    { key: 1, option: 'Livro' },
-                                    { key: 2, option: 'Publicação Seriada' },
-                                    { key: 3, option: "Artigo" },
-                                    { key: 4, option: "Audiolivro" },
-                                    { key: 5, option: "Ebook" },
-                                    { key: 6, option: "Mapa" },
-                                    { key: 7, option: "Outros" },
-                                ]}
-                            />
-                        </View>
-                        <View style={styles.ViewSelect}>
                             {/* <Text style={styles.itemTextFilter}>  Autores </Text> */}
                             <Select
                                 label={responsible}
