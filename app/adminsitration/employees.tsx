@@ -11,13 +11,10 @@ import { setEmployee, iEmployees, updateEmployee, dellEmployee, getEmployees } f
 import { getCargo, iPosition } from '../../src/controllers/positions';
 import MySelect from '../../src/components/MySelect';
 import { getUsers, iUser } from '../../src/controllers/users';
-<<<<<<< HEAD
 import AsyncStorage from '@react-native-async-storage/async-storage';
-=======
 import { Icon } from "react-native-paper";
 import { MaterialIcons } from '@expo/vector-icons';
 
->>>>>>> 1a7d9d14e7734a9c7f233b98af38a26b40d02c55
 
 export default function EmployeeScreen() {
     const [employees, setEmployees] = useState<iEmployees[]>([]);
