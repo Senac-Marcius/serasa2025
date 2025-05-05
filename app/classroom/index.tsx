@@ -30,7 +30,9 @@ export default function HomeScreen() {
 
 
 
-  const userId = localStorage.getItem("userId");
+  // const userId = localStorage.getItem("userId");
+  const userId = 3;
+  
   
 
   useEffect(() => {
@@ -168,11 +170,16 @@ export default function HomeScreen() {
       }
 
       {role?.isStudent && (
-        <View className="mb-6">
-          <Text className="text-xl font-bold text-green-700 mb-2">Área do Estudante</Text>
-          <Text className="text-gray-700">• Ver disciplinas</Text>
-          <Text className="text-gray-700">• Ver notas</Text>
-        </View>
+          <ScrollView className="h-full flex-1 bg-secondary-100 items-center ">
+          <WelcomeMensage/>
+          <View className="flex flex-row gap-3  p-4">
+            <Card icon="account-group" title={classroomData?.numberClasses?.toString() || "0"} description="Total de Turmas"/>
+            <Card icon="book" title={classroomData?.numberDiciplines?.toString() || "0"} description="Total de diciplinas"/>
+            <Card icon="school" title={classroomData?.numberStudents?.toString() || "0"} description="Total de Alunos"/>
+            <Card icon="star" title={ "0"} description="Pendencias"/>
+          </View>
+          <CalendarComponent></CalendarComponent>
+        </ScrollView>
       )}
 
       {(role?.isEmployee && (role.positionId === 5 || role.positionId === 6)  ) && (
