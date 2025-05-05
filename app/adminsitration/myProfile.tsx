@@ -6,7 +6,7 @@ import { getUserById } from '../../src/controllers/users';
 import { getEmployees } from '../../src/controllers/employees';
 import MyView from '../../src/components/MyView';
 import { Myinput } from '../../src/components/MyInputs';
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default function MyProfile() {
   const [userData, setUserData] = useState<any>(null);
@@ -61,68 +61,76 @@ export default function MyProfile() {
 
   return (
     <MyView>
-      {/* Botão de Voltar estilizado com fundo e sombra */}
-      <Pressable 
-        onPress={() => router.push('adminsitration/')}
-        style={styles.backButton}
-      >
-        <Ionicons name="arrow-back" size={24} color="#3AC7A8" />
-        <Text style={styles.backButtonText}>Voltar</Text>
-      </Pressable>
+      {/* Header com botão de voltar e título */}
+      <View style={styles.header}>
+        <Pressable 
+          onPress={() => router.push('adminsitration/')}
+          style={styles.backButton}
+        >
+          <MaterialIcons name="arrow-back" size={24} color="#3AC7A8" />
+        </Pressable>
+        <Text style={styles.title}>Meu Perfil</Text>
+        <View style={{ width: 24 }} /> {/* Espaçamento para alinhamento */}
+      </View>
 
-      <ScrollView contentContainerStyle={styles.container}>
-        {/* Dados básicos do usuário */}
-        <Myinput
-          label="Nome Completo"
-          value={userData.name || 'Não informado'}
-          placeholder=""
-          onChangeText={() => {}}
-          iconName="person"
-        />
-        
-        <Myinput
-          label="Email"
-          value={userData.email || 'Não informado'}
-          placeholder=""
-          onChangeText={() => {}}
-          iconName="mail"
-        />
-        
-        <Myinput
-          label="CPF"
-          value={userData.cpf || 'Não informado'}
-          placeholder=""
-          onChangeText={() => {}}
-          iconName="id-card"
-        />
-        
-        <Myinput
-          label="Idade"
-          value={userData.age || 'Não informado'}
-          placeholder=""
-          onChangeText={() => {}}
-          iconName="time"
-        />
-        
-        <Myinput
-          label="Contato"
-          value={userData.contact || 'Não informado'}
-          placeholder=""
-          onChangeText={() => {}}
-          iconName="call"
-        />
-        
-        <Myinput
-          label="Endereço"
-          value={userData.address || 'Não informado'}
-          placeholder=""
-          onChangeText={() => {}}
-          iconName="home"
-        />
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>Dados Pessoais</Text>
+          
+          <Myinput
+            label="Nome Completo"
+            value={userData.name || 'Não informado'}
+            placeholder=""
+            onChangeText={() => {}}
+            iconName="person-outline"
+          />
+          
+          <Myinput
+            label="Email"
+            value={userData.email || 'Não informado'}
+            placeholder=""
+            onChangeText={() => {}}
+            iconName="email"
+          />
+          
+          <Myinput
+            label="CPF"
+            value={userData.cpf || 'Não informado'}
+            placeholder=""
+            onChangeText={() => {}}
+            iconName="assignment-ind"
+          />
+          
+          <Myinput
+            label="Idade"
+            value={userData.age || 'Não informado'}
+            placeholder=""
+            onChangeText={() => {}}
+            iconName="cake"
+          />
+          
+          <Myinput
+            label="Contato"
+            value={userData.contact || 'Não informado'}
+            placeholder=""
+            onChangeText={() => {}}
+            iconName="phone"
+          />
+          
+          <Myinput
+            label="Endereço"
+            value={userData.address || 'Não informado'}
+            placeholder=""
+            onChangeText={() => {}}
+            iconName="home"
+          />
+        </View>
 
         {/* Dados específicos do funcionário */}
         {employeeData && (
-          <>
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>Dados Profissionais</Text>
+            
             <Myinput
               label="URLs"
               value={employeeData.urls || 'Não informado'}
@@ -136,7 +144,7 @@ export default function MyProfile() {
               value={employeeData.nationality || 'Não informada'}
               placeholder=""
               onChangeText={() => {}}
-              iconName="globe"
+              iconName="public"
             />
 
             <Myinput
@@ -144,7 +152,7 @@ export default function MyProfile() {
               value={getGenderLabel(employeeData.sex) || 'Não informado'}
               placeholder=""
               onChangeText={() => {}}
-              iconName="person"
+              iconName="accessibility"
             />
 
             <Myinput
@@ -152,7 +160,7 @@ export default function MyProfile() {
               value={getMaritalStatusLabel(employeeData.martinal_status) || 'Não informado'}
               placeholder=""
               onChangeText={() => {}}
-              iconName="heart"
+              iconName="favorite-border"
             />
 
             <Myinput
@@ -160,7 +168,7 @@ export default function MyProfile() {
               value={getEthnicityLabel(employeeData.ethnicity) || 'Não informado'}
               placeholder=""
               onChangeText={() => {}}
-              iconName="people"
+              iconName="people-outline"
             />
 
             <Myinput
@@ -168,7 +176,7 @@ export default function MyProfile() {
               value={getDeficiencyLabel(employeeData.deficiency) || 'Nenhuma'}
               placeholder=""
               onChangeText={() => {}}
-              iconName="accessibility"
+              iconName="accessible"
             />
 
             <Myinput
@@ -176,16 +184,16 @@ export default function MyProfile() {
               value={employeeData.is_active === 'true' ? 'Ativo' : 'Inativo'}
               placeholder=""
               onChangeText={() => {}}
-              iconName="checkmark-circle"
+              iconName="verified-user"
             />
-          </>
+          </View>
         )}
       </ScrollView>
     </MyView>
   );
 }
 
-// Funções auxiliares (sem a getDiscLabel)
+// Funções auxiliares (mantidas as mesmas)
 const getGenderLabel = (genderKey: string) => {
   const genders: Record<string, string> = {
     'masculino': 'Masculino',
@@ -233,28 +241,48 @@ const getDeficiencyLabel = (deficiencyKey: string) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
     padding: 20,
     backgroundColor: '#F2F3F5',
-    paddingTop: 10, // Ajuste para o botão de voltar
   },
-  backButton: {
+  scrollContainer: {
+    paddingBottom: 30,
+  },
+  header: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
     padding: 15,
-    margin: 10,
-    backgroundColor: '#F8F8F8',
-    borderRadius: 8,
+    backgroundColor: '#FFF',
+    borderBottomWidth: 1,
+    borderBottomColor: '#EEE',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#333',
+  },
+  backButton: {
+    padding: 5,
+  },
+  card: {
+    backgroundColor: '#FFF',
+    borderRadius: 12,
+    padding: 20,
+    marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
   },
-  backButtonText: {
-    marginLeft: 5,
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
     color: '#3AC7A8',
-    fontSize: 16,
-    fontWeight: '500',
+    marginBottom: 15,
+    paddingBottom: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: '#EEE',
   },
 });
