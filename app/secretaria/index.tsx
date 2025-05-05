@@ -3,11 +3,11 @@ import {
   View, Text, StyleSheet, ScrollView,
   TouchableOpacity, Alert, Modal, TextInput, Pressable, Dimensions,
 } from 'react-native';
-import { Ionicons, FontAwesome5, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import MyView from '../../src/components/MyView';
 import { DatePickerModal } from 'react-native-paper-dates';
-//2
+import MyTopbar from '../../src/components/MyTopbar'; // Usa a topbar existente
 
 interface Evento {
   id: number;
@@ -16,10 +16,10 @@ interface Evento {
 }
 
 const menuItems = [
-  { label: 'Cursos', icon: <Ionicons name="school-outline" size={20} color="#555" />, route: 'secretaria/courses' },
-  { label: 'Disciplinas', icon: <Ionicons name="book-outline" size={20} color="#555" />, route: 'secretaria/disciplines' },
   { label: 'Calendário', icon: <Ionicons name="calendar-outline" size={20} color="#555" />, route: 'secretaria/calendar' },
   { label: 'Documentos', icon: <Ionicons name="document-text-outline" size={20} color="#555" />, route: 'secretaria/documents' },
+  { label: 'Cursos', icon: <Ionicons name="document-text-outline" size={20} color="#555" />, route: 'secretaria/courses' }
+
 ];
 
 const cards = [
@@ -119,75 +119,85 @@ export default function IndexScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Sidebar */}
-      <View style={styles.sidebar}>
-        <View style={styles.logoContainer}>
-          <FontAwesome5 name="chalkboard-teacher" size={28} color="#b34db2" />
-          <Text style={styles.logoTitle}>Virtudemy</Text>
-          <Text style={styles.logoSubtitle}>Learn From Home</Text>
-        </View>
+    <MyView style={{ flex: 1 }}>
 
-        {menuItems.map((item, index) => {
-          const isHovered = hoveredItem === item.route;
-          return (
-            <Pressable
-              key={index}
-              onHoverIn={() => setHoveredItem(item.route)}
-              onHoverOut={() => setHoveredItem(null)}
-              onPress={() => router.push(item.route)}
-              style={[styles.menuItem, isHovered && styles.activeItem]}
-            >
-              <View style={styles.icon}>{item.icon}</View>
-              <Text style={[styles.menuText, isHovered && styles.activeText]}>
-                {item.label}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </View>
 
-      {/* Conteúdo principal */}
-      <MyView style={styles.mainContent}>
-        <ScrollView contentContainerStyle={styles.content}>
-          <Text style={styles.mainTitle}>Painel da Secretaria</Text>
-
-          <View style={styles.cardArea}>
-            {cards.map((card, index) => (
-              <Pressable
-                key={index}
-                style={[styles.card, { backgroundColor: card.bgColor }]}
-                onPress={() => router.push(card.route)}
-              >
-                {card.icon}
-                <Text style={styles.cardTitle}>{card.title}</Text>
-                <Text style={styles.cardNumber}>{card.value}</Text>
-              </Pressable>
-            ))}
+      <View style={styles.wrapper}>
+        {/* Sidebar */}
+        <View style={styles.sidebar}>
+          <View style={styles.logoContainer}>
+            <FontAwesome5 name="chalkboard-teacher" size={28} color="#b34db2" />
+            <Text style={styles.logoTitle}>Virtudemy</Text>
+            <Text style={styles.logoSubtitle}>Learn From Home</Text>
           </View>
 
-          <Text style={styles.eventsTitle}>Próximos Eventos</Text>
-          {eventos.map(evento => (
-            <View key={evento.id} style={styles.eventItem}>
-              <Ionicons name="calendar-outline" size={20} color="#6A1B9A" />
-              <View style={{ flex: 1, marginLeft: 10 }}>
-                <Text style={styles.eventName}>{evento.nome}</Text>
-                <Text style={styles.eventDate}>{evento.data}</Text>
+          {menuItems.map((item, index) => {
+            const isHovered = hoveredItem === item.route;
+            return (
+              <Pressable
+                key={index}
+                onHoverIn={() => setHoveredItem(item.route)}
+                onHoverOut={() => setHoveredItem(null)}
+                onPress={() => router.push(item.route)}
+                style={[styles.menuItem, isHovered && styles.activeItem]}
+              >
+                <View style={styles.icon}>{item.icon}</View>
+                <Text style={[styles.menuText, isHovered && styles.activeText]}>
+                  {item.label}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+
+        {/* Conteúdo */}
+        <View style={styles.mainContent}>
+          <ScrollView contentContainerStyle={styles.content}>
+            <View>
+              <Text style={styles.mainTitle}>Painel da Secretaria</Text>
+
+              <View style={styles.cardArea}>
+                {cards.map((card, index) => (
+                  <Pressable
+                    key={index}
+                    style={[styles.card, { backgroundColor: card.bgColor }]}
+                    onPress={() => router.push(card.route)}
+                  >
+                    {card.icon}
+                    <Text style={styles.cardTitle}>{card.title}</Text>
+                    <Text style={styles.cardNumber}>{card.value}</Text>
+                  </Pressable>
+                ))}
               </View>
-              <TouchableOpacity onPress={() => abrirModal(evento)} style={{ marginRight: 10 }}>
-                <Ionicons name="pencil-outline" size={18} color="#6A1B9A" />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => excluirEvento(evento.id)}>
-                <Ionicons name="close-circle-outline" size={20} color="#B00020" />
+
+              <Text style={styles.eventsTitle}>Próximos Eventos</Text>
+              {eventos.map(evento => (
+                <View key={evento.id} style={styles.eventItem}>
+                  <Ionicons name="calendar-outline" size={20} color="#6A1B9A" />
+                  <View style={{ flex: 1, marginLeft: 10 }}>
+                    <Text style={styles.eventName}>{evento.nome}</Text>
+                    <Text style={styles.eventDate}>{evento.data}</Text>
+                  </View>
+                  <TouchableOpacity onPress={() => abrirModal(evento)} style={{ marginRight: 10 }}>
+                    <Ionicons name="pencil-outline" size={18} color="#6A1B9A" />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => excluirEvento(evento.id)}>
+                    <Ionicons name="close-circle-outline" size={20} color="#B00020" />
+                  </TouchableOpacity>
+                </View>
+              ))}
+
+              <TouchableOpacity
+                onPress={() => abrirModal()}
+                style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center' }}
+              >
+                <Ionicons name="add-circle-outline" size={18} color="#6A1B9A" />
+                <Text style={{ color: '#6A1B9A', marginLeft: 6 }}>Agendamento</Text>
               </TouchableOpacity>
             </View>
-          ))}
-          <TouchableOpacity onPress={() => abrirModal()} style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center' }}>
-            <Ionicons name="add-circle-outline" size={18} color="#6A1B9A" />
-            <Text style={{ color: '#6A1B9A', marginLeft: 6 }}>Agendamento</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </MyView>
+          </ScrollView>
+        </View>
+      </View>
 
       {/* Modal */}
       <Modal visible={modalVisible} transparent animationType="slide">
@@ -232,47 +242,37 @@ export default function IndexScreen() {
           }}
         />
       </Modal>
-    </View>
+    </MyView>
   );
 }
 
 const isLarge = Dimensions.get('window').width > 600;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, flexDirection: 'row', backgroundColor: '#F2F3F5' },
+  wrapper: { flex: 1, flexDirection: 'row', backgroundColor: '#F2F3F5' },
   sidebar: {
-    width: 180,
+    width: 200,
     backgroundColor: '#fff',
-    paddingTop: 12,
+    paddingTop: 16,
     paddingHorizontal: 12,
     borderRightWidth: 1,
     borderRightColor: '#eee',
   },
-  mainContent: { flex: 1 },
-
   logoContainer: { alignItems: 'center', marginBottom: 24 },
-
   logoTitle: { fontSize: 18, fontWeight: 'bold', color: '#b34db2', marginTop: 6 },
-
   logoSubtitle: { fontSize: 11, color: '#b34db2' },
-
   menuItem: {
     flexDirection: 'row', alignItems: 'center', marginVertical: 8,
     paddingVertical: 6, paddingHorizontal: 8, borderRadius: 8,
   },
   icon: { marginRight: 10 },
-
   menuText: { fontSize: 13, color: '#555' },
-
   activeItem: { backgroundColor: '#E6F9F5', borderLeftWidth: 4, borderLeftColor: '#b34db2' },
-
   activeText: { color: '#b34db2', fontWeight: '600' },
-
-  content: { flexGrow: 1, padding: 24, backgroundColor: '#F2F3F5' },
-
+  mainContent: { flex: 1 },
+  content: { flexGrow: 1, padding: 24 },
   mainTitle: { fontSize: 22, fontWeight: 'bold', color: '#333', marginBottom: 20 },
   cardArea: {
-
     flexDirection: 'row', gap: 20, flexWrap: 'wrap',
     justifyContent: 'flex-start', marginBottom: 20,
   },
