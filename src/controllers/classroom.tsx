@@ -1,40 +1,46 @@
 import { supabase } from "../utils/supabase";
 
-interface UserRoles {
-    isStudent: boolean;
-    isProfessor: boolean;
-    isAdmin: boolean;
+export type UserRole = {
+  isStudent: boolean;
+  isEmployee: boolean;
+  employeePosition?: string; 
+};
+
+export async function getUserRoles(userId: number): Promise<UserRole> {
+  let isStudent = false;
+  let isEmployee = false;
+  let employeePosition: string | undefined = undefined;
+
+  const { data: studentData, error:studentError } = await supabase.from("students")
+    .select("id,user_id")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (studentData) {
+    isStudent = true;
   }
+
+  console.log("error",studentError)
   
-  export async function getUserRoles(userId: string): Promise<UserRoles> {
-    const roles: UserRoles = {
-      isStudent: false,
-      isProfessor: false,
-      isAdmin: false,
-    };
-  
-    // Verifica se é estudante
-    const { data: studentData } = await supabase
-      .from("students")
-      .select("id")
-      .eq("user_id", userId)
+
+  const { data: employeeData } = await supabase
+    .from("employees")
+    .select("id, positions_id")
+    .eq("user_id", userId)
+    .single();
+
+  if (employeeData) {
+    isEmployee = true;
+
+
+    const { data: positionsData } = await supabase
+      .from("positions")
+      .select("name")
+      .eq("id", employeeData.positions_id)
       .single();
-  
-    if (studentData) roles.isStudent = true;
-  
-    // Verifica se é funcionário
-    const { data: funcionarioData } = await supabase
-      .from("funcionarios")
-      .select("cargo")
-      .eq("user_id", userId)
-      .single();
-  
-    if (funcionarioData) {
-      const cargo = funcionarioData.cargo.toLowerCase();
-      if (cargo === "professor") roles.isProfessor = true;
-      if (cargo === "diretor" || cargo === "admin") roles.isAdmin = true;
-    }
-  
-    return roles;
+
+    employeePosition = positionsData?.name;
   }
-  
+
+  return { isStudent, isEmployee, employeePosition };
+}
