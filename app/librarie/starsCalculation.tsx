@@ -31,7 +31,7 @@ type StarCalculationProps = {
     BookId: number;
 };
 
-export function StarCalculation({ BookId }: StarCalculationProps) {
+export default function StarCalculation({ BookId }: StarCalculationProps) {
     const [items, setItems] = useState<iItem[]>([]);
     const [successMessage, setSuccessMessage] = useState('');
 

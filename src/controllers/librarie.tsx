@@ -9,13 +9,13 @@ interface iItem {
     translation: string,
     language: string,
     image: string,
-    year: number,
+    year: string,
     edition: string,
     publisher: string,
     location: string,
-    number_pages: number,
+    number_pages: string,
     serie: string,
-    volume: number,
+    volume: string,
     format: string,
     isbn: string,
     issn: string,
@@ -25,7 +25,7 @@ interface iItem {
     keywords: string,
     summary: string,
     notes: string,
-    number_copies: number,
+    number_copies: string,
     status: string,
     url: string,
     file: string,
@@ -34,6 +34,7 @@ interface iItem {
     created_at: string,
     id: number,
     star: number,
+    borrowedAmount:number,
 }
 
 function toListItems(data:iItem[]){
@@ -52,7 +53,8 @@ async function getItems(params:any){
         return{status:false, error:error}
 
 
-    return{status:true, data:todos}    
+    return{status:true, data:todos} 
+     
 }
 
 async function setItem(item:iItem){

@@ -26,12 +26,22 @@ export default function HomeScreen() {
         if (result.data?.password === pass) {
             try {
                 await AsyncStorage.setItem('userId', result.data.id.toString());
+<<<<<<< HEAD
                 Toast.show({
                     type: 'success',
                     text1: 'Login realizado com sucesso!',
                     text2: 'Bem-vindo 👋',
                   });
                 router.push('/homeLogin');
+=======
+                alert('Login bem-sucedido!');
+
+                //buscar todos os students verificar pelo user_id se ele exite na tabela estudante se existir da permisão de estudante
+
+
+                //buscar todo employes se tiver user_id na emploes vai ter que puxar o cargo e de acordo com o cargo vai mandar para a tela certa
+                router.push('/home');
+>>>>>>> 440a92d3f16e18a9b869a21ce8647721e2b6bb01
             } catch (error) {
                 Toast.show({
                     type: 'error',
