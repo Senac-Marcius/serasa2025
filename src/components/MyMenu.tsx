@@ -94,6 +94,8 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Calendar" route="secretaria/calendar" icon="calendar" />
         <MenuItem label="Categories" route="categories" icon="albums" />
         <MenuItem label="Classes" route="sala_de_aula/classes" icon="school" />
+        <MenuItem label="Classroom" route="classroom" icon="school" />
+
         <MenuItem label="Collections" route="collections" icon="cube" />
         <MenuItem label="Courses" route="courses" icon="book" />
         <MenuItem label="Disciplines" route="secretaria/disciplines" icon="document-text" />
