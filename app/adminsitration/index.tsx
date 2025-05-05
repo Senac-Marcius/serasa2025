@@ -1,17 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, Pressable,
-  Dimensions, Modal
+  Dimensions, Modal, ActivityIndicator
 } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { getProjects } from '../../src/controllers/projects';
+import { getProjects, getProjectUsers } from '../../src/controllers/projects';
 import { getEmployees } from '../../src/controllers/employees';
 import { getCargo } from '../../src/controllers/positions';
 import { getScale } from '../../src/controllers/scales';
 import MyView from '../../src/components/MyView';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUserById } from '../../src/controllers/users';
+
+interface TimelineItem {
+  date: string;
+  description: string;
+}
+
+interface Event {
+  id: number;
+  projectName: string;
+  date: string;
+  description: string;
+}
+
+interface UserSchedule {
+  day: string;
+  start_time: string;
+  end_time: string;
+  project?: {
+    name: string;
+    timeline: TimelineItem[];
+  };
+}
 
 export default function AdminDashboard() {
   const [projectCount, setProjectCount] = useState(0);
@@ -22,6 +44,9 @@ export default function AdminDashboard() {
   const [selectedDepartment, setSelectedDepartment] = useState("Todos");
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
+  const [events, setEvents] = useState<Event[]>([]);
+  const [userSchedule, setUserSchedule] = useState<UserSchedule[]>([]);
+  const [loadingEvents, setLoadingEvents] = useState(true);
 
   const departments = ['Todos', 'RH', 'TI', 'Financeiro', 'Operações'];
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -55,7 +80,79 @@ export default function AdminDashboard() {
   
     fetchData();
   }, []);
-  
+
+  useEffect(() => {
+    async function loadUserEvents() {
+      try {
+        setLoadingEvents(true);
+        const userId = await AsyncStorage.getItem('userId');
+        
+        if (!userId) return;
+        
+        // 1. Buscar a escala do usuário
+        const scaleResponse = await getScale({ employ_id: Number(userId) });
+        if (!scaleResponse.status || !scaleResponse.data) return;
+        
+        // 2. Buscar projetos vinculados ao usuário
+        const projectsResponse = await getProjects({});
+        if (!projectsResponse.status || !projectsResponse.data) return;
+        
+        // 3. Filtrar projetos onde o usuário está vinculado
+        const userProjects = await Promise.all(
+          projectsResponse.data.map(async (project) => {
+            const userIds = await getProjectUsers(project.id);
+            return userIds.includes(Number(userId)) ? project : null;
+          })
+        );
+        
+        // 4. Criar array com eventos (timeline dos projetos)
+        const userEvents: Event[] = [];
+        const scheduleWithProjects: UserSchedule[] = [];
+        
+        scaleResponse.data.forEach((scaleItem) => {
+          const projectForDay = userProjects.find((project) => {
+            if (!project) return false;
+            const timeline = JSON.parse(project.time_line || '[]') as TimelineItem[];
+            return timeline.some(item => item.date === scaleItem.day);
+          });
+          
+          if (projectForDay) {
+            const timeline = JSON.parse(projectForDay.time_line || '[]') as TimelineItem[];
+            timeline
+              .filter(item => item.date === scaleItem.day)
+              .forEach(item => {
+                userEvents.push({
+                  id: Math.random(),
+                  projectName: projectForDay.name,
+                  date: item.date,
+                  description: item.description
+                });
+              });
+          }
+          
+          scheduleWithProjects.push({
+            day: scaleItem.day,
+            start_time: scaleItem.start_time,
+            end_time: scaleItem.end_time,
+            project: projectForDay ? {
+              name: projectForDay.name,
+              timeline: JSON.parse(projectForDay.time_line || '[]')
+            } : undefined
+          });
+        });
+        
+        setEvents(userEvents);
+        setUserSchedule(scheduleWithProjects);
+      } catch (error) {
+        console.error('Error loading user events:', error);
+      } finally {
+        setLoadingEvents(false);
+      }
+    }
+    
+    loadUserEvents();
+  }, []);
+
   const cards = [
     {
       title: 'Meus Dados',
@@ -99,6 +196,20 @@ export default function AdminDashboard() {
     },
   ];
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('pt-BR');
+  };
+
+  const formatDateTime = (dateString: string, timeString?: string) => {
+    const date = new Date(dateString);
+    const formattedDate = date.toLocaleDateString('pt-BR');
+    
+    if (!timeString) return formattedDate;
+    
+    return `${formattedDate} às ${timeString}`;
+  };
+
   return (
     <View style={styles.container}>
       <MyView style={styles.mainContent}>
@@ -136,6 +247,48 @@ export default function AdminDashboard() {
                 )}
               </Pressable>
             ))}
+          </View>
+
+          {/* Seção de Agenda */}
+          <View style={styles.eventsContainer}>
+            <Text style={styles.sectionTitle}>Minha Agenda</Text>
+            
+            {loadingEvents ? (
+              <ActivityIndicator size="large" color="#3AC7A8" />
+            ) : userSchedule.length === 0 ? (
+              <Text style={styles.noEventsText}>Nenhum evento agendado</Text>
+            ) : (
+              <ScrollView style={styles.eventsScrollView}>
+                {userSchedule.map((schedule, index) => (
+                  <View key={index} style={[
+                    styles.scheduleItem,
+                    !schedule.project && styles.scheduleItemWithoutProject
+                  ]}>
+                    <View style={styles.scheduleTime}>
+                      <Text style={styles.scheduleDay}>{formatDate(schedule.day)}</Text>
+                      <Text style={styles.scheduleHours}>
+                        {schedule.start_time} - {schedule.end_time}
+                      </Text>
+                    </View>
+                    
+                    {schedule.project ? (
+                      <View style={styles.projectInfo}>
+                        <Text style={styles.projectName}>{schedule.project.name}</Text>
+                        {schedule.project.timeline
+                          .filter(item => item.date === schedule.day)
+                          .map((item, idx) => (
+                            <Text key={idx} style={styles.eventDescription}>
+                              {item.description}
+                            </Text>
+                          ))}
+                      </View>
+                    ) : (
+                      <Text style={styles.noProjectText}>Sem projeto alocado</Text>
+                    )}
+                  </View>
+                ))}
+              </ScrollView>
+            )}
           </View>
         </ScrollView>
       </MyView>
@@ -223,4 +376,73 @@ const styles = StyleSheet.create({
   },
   cancelText: { color: '#777' },
   saveText: { color: '#fff', fontWeight: 'bold' },
+  eventsContainer: {
+    width: '100%',
+    marginTop: 30,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 16,
+  },
+  noEventsText: {
+    textAlign: 'center',
+    color: '#888',
+    paddingVertical: 20,
+  },
+  eventsScrollView: {
+    maxHeight: 300,
+  },
+  scheduleItem: {
+    flexDirection: 'row',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  scheduleItemWithoutProject: {
+    opacity: 0.6,
+  },
+  scheduleTime: {
+    width: 100,
+    marginRight: 16,
+  },
+  scheduleDay: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  scheduleHours: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 4,
+  },
+  projectInfo: {
+    flex: 1,
+  },
+  projectName: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#3AC7A8',
+    marginBottom: 4,
+  },
+  eventDescription: {
+    fontSize: 13,
+    color: '#555',
+    marginBottom: 4,
+  },
+  noProjectText: {
+    fontSize: 13,
+    color: '#888',
+    fontStyle: 'italic',
+    flex: 1,
+    textAlignVertical: 'center',
+  },
 });

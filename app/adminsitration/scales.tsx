@@ -11,6 +11,7 @@ import Mytext from '../../src/components/MyText';
 import { getEmployees, iEmployees } from '../../src/controllers/employees';
 import { getUserById, getUsers, iUser } from '../../src/controllers/users';
 import { MaterialIcons } from '@expo/vector-icons';
+import { DatePickerModal } from 'react-native-paper-dates';
 
 export default function ScaleScreen() {
   const [scales, setScales] = useState<iScale[]>([]);
@@ -20,6 +21,7 @@ export default function ScaleScreen() {
   const [userSearch, setUserSearch] = useState('');
   const [selectedUser, setSelectedUser] = useState<iUser | null>(null);
   const [userModalVisible, setUserModalVisible] = useState(false);
+  const [calendarModalVisible, setCalendarModalVisible] = useState(false);
   const [req, setReq] = useState({
     id: -1,
     day: '',
@@ -27,6 +29,7 @@ export default function ScaleScreen() {
     end_time: '',
     created_at: new Date().toISOString(),
     employ_id: 1,
+    date: new Date().toISOString().split('T')[0]
   });
   const [selectedDay, setSelectedDay] = useState<string>('');
   const [modalVisible, setModalVisible] = useState(false);
@@ -34,32 +37,56 @@ export default function ScaleScreen() {
   const router = useRouter();
 
   const daysOfWeek = [
-    { key: '1', option: 'Segunda-feira' },
-    { key: '2', option: 'Terça-feira' },
-    { key: '3', option: 'Quarta-feira' },
-    { key: '4', option: 'Quinta-feira' },
-    { key: '5', option: 'Sexta-feira' },
-    { key: '6', option: 'Sábado' },
-    { key: '7', option: 'Domingo' },
+    { key: 'domingo', option: 'Domingo' },       // 0
+    { key: 'segunda', option: 'Segunda-feira' }, // 1
+    { key: 'terca', option: 'Terça-feira' },     // 2
+    { key: 'quarta', option: 'Quarta-feira' },   // 3
+    { key: 'quinta', option: 'Quinta-feira' },   // 4
+    { key: 'sexta', option: 'Sexta-feira' },     // 5
+    { key: 'sabado', option: 'Sábado' },         // 6
   ];
+
+  const getDayOfWeekFromDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    // Ajuste para o fuso horário local
+    const adjustedDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+    const dayOfWeek = adjustedDate.getDay(); // 0 (Domingo) até 6 (Sábado)
+    
+    const dayMap = ['domingo', 'segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
+    const dayKey = dayMap[dayOfWeek];
+    
+    // Encontra a opção correspondente no daysOfWeek
+    const dayOption = daysOfWeek.find(day => day.key === dayKey)?.option || '';
+    return dayOption;
+  };
+
+  const handleDateChange = (date: Date | undefined) => {
+    if (!date) return;
+    
+    const dateString = date.toISOString().split('T')[0];
+    const dayOfWeek = getDayOfWeekFromDate(dateString);
+    
+    setReq({
+      ...req,
+      date: dateString,
+      day: dayOfWeek
+    });
+    setSelectedDay(dayOfWeek);
+    setCalendarModalVisible(false);
+  };
 
   useEffect(() => {
     async function fetchData() {
-      // Load scales
       const scalesResult = await getScale({});
       if (scalesResult.status && scalesResult.data) {
         setScales(scalesResult.data);
       }
 
-      // Load employees and their associated users
       const employeesResult = await getEmployees({});
       if (employeesResult.status && employeesResult.data) {
         setEmployees(employeesResult.data);
         
-        // Get unique user IDs from employees
         const userIds = [...new Set(employeesResult.data.map(emp => emp.user_id))];
-        
-        // Fetch user details for each employee
         const usersPromises = userIds.map(id => getUserById(id));
         const usersResults = await Promise.all(usersPromises);
         
@@ -87,9 +114,9 @@ export default function ScaleScreen() {
     }
   }, [userSearch, users]);
 
-  const handleSetDay = (day: string) => {
-    setSelectedDay(day);
-    setReq(prevReq => ({ ...prevReq, day }));
+  const handleSetDay = (option: string) => {
+    setSelectedDay(option);
+    setReq(prevReq => ({ ...prevReq, day: option }));
   };
 
   const selectUser = (user: iUser) => {
@@ -97,7 +124,6 @@ export default function ScaleScreen() {
     setUserModalVisible(false);
     setUserSearch('');
     
-    // Find employee associated with this user
     const employee = employees.find(emp => emp.user_id === user.id);
     if (employee) {
       setReq(prevReq => ({ ...prevReq, employ_id: employee.id }));
@@ -105,7 +131,7 @@ export default function ScaleScreen() {
   };
 
   async function handleRegister() {
-    if (!req.day || !req.start_time || !req.end_time || !req.employ_id) {
+    if (!req.day || !req.start_time || !req.end_time || !req.employ_id || !req.date) {
       alert('Por favor, preencha todos os campos');
       return;
     }
@@ -134,6 +160,7 @@ export default function ScaleScreen() {
       end_time: '',
       created_at: new Date().toISOString(),
       employ_id: 1,
+      date: new Date().toISOString().split('T')[0]
     });
     setSelectedDay('');
     setSelectedUser(null);
@@ -152,7 +179,6 @@ export default function ScaleScreen() {
       setReq(scale);
       setSelectedDay(scale.day);
       
-      // Find employee and user for this scale
       const employee = employees.find(e => e.id === scale.employ_id);
       if (employee) {
         const user = users.find(u => u.id === employee.user_id);
@@ -164,7 +190,7 @@ export default function ScaleScreen() {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView >
       <MyView>
         <View style={styles.header}>
           <MyButton 
@@ -188,6 +214,7 @@ export default function ScaleScreen() {
         <View style={styles.listContainer}>
           <View style={styles.tableHeader}>
             <Text style={styles.tableHeaderText}>Funcionário</Text>
+            <Text style={styles.tableHeaderText}>Data</Text>
             <Text style={styles.tableHeaderText}>Dia</Text>
             <Text style={styles.tableHeaderText}>Início</Text>
             <Text style={styles.tableHeaderText}>Término</Text>
@@ -200,6 +227,7 @@ export default function ScaleScreen() {
             return (
               <View key={item.id.toString()} style={styles.tableRow}>
                 <Text style={styles.tableCell}>{user?.name || 'N/A'}</Text>
+                <Text style={styles.tableCell}>{item.date}</Text>
                 <Text style={styles.tableCell}>{item.day}</Text>
                 <Text style={styles.tableCell}>{item.start_time}</Text>
                 <Text style={styles.tableCell}>{item.end_time}</Text>
@@ -257,11 +285,21 @@ export default function ScaleScreen() {
                 )}
               </View>
 
+              <View style={styles.dateSelectionContainer}>
+                <Text style={styles.label}>Data selecionada: {req.date}</Text>
+                <MyButton
+                  title="SELECIONAR DATA"
+                  onPress={() => setCalendarModalVisible(true)}
+                  icon="calendar"
+                  style={styles.calendarButton}
+                />
+              </View>
+
               <MySelect
                 caption="Dia da semana"
-                label={selectedDay || 'Selecione um dia da semana'}
-                list={daysOfWeek}
-                setLabel={handleSetDay}
+                label={selectedDay || 'Selecione um dia'}
+                list={daysOfWeek}  // Passa o array completo de objetos
+                setLabel={(option: string) => handleSetDay(option)}
               />
 
               <Mytext style={styles.label}>Horário de início:</Mytext>
@@ -293,6 +331,40 @@ export default function ScaleScreen() {
                   icon="check"
                 />
               </View>
+            </View>
+          </View>
+        </Modal>
+
+        {/* Date Picker Modal */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={calendarModalVisible}
+          onRequestClose={() => setCalendarModalVisible(false)}
+        >
+          <View style={styles.calendarModalContainer}>
+            <View style={styles.calendarModalContent}>
+              <Text style={styles.calendarModalTitle}>Selecionar Data</Text>
+              
+              <DatePickerModal
+                locale="pt-BR"
+                mode="single"
+                visible={calendarModalVisible}
+                onDismiss={() => setCalendarModalVisible(false)}
+                date={new Date(req.date)}
+                onConfirm={({ date }) => handleDateChange(date)}
+                label="Selecione uma data"
+                saveLabel="Confirmar"
+                uppercase={false}
+                animationType="slide"
+              />
+              
+              <MyButton
+                title="Fechar"
+                onPress={() => setCalendarModalVisible(false)}
+                style={styles.modalCancelButton}
+                icon="close"
+              />
             </View>
           </View>
         </Modal>
@@ -377,6 +449,30 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
     marginRight: 120,
+  },
+  calendarModalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  calendarModalContent: {
+    width: '90%',
+    backgroundColor: 'white',
+    borderRadius: 12,
+    padding: 20,
+  },
+  calendarModalTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#343a40',
+    textAlign: 'center',
+    marginBottom: 15,
+  },
+  modalCancelButton: {
+    backgroundColor: '#6c757d',
+    width: '100%',
+    marginTop: 10,
   },
   buttonGroup: {
     marginVertical: 20,
@@ -602,8 +698,13 @@ const styles = StyleSheet.create({
     color: '#6c757d',
     fontFamily: 'monospace',
   },
-  modalCancelButton: {
-    backgroundColor: '#6c757d',
+  // Date selection styles
+  dateSelectionContainer: {
+    marginBottom: 15,
+  },
+  calendarButton: {
+    backgroundColor: '#3AC7A8',
     width: '100%',
+    marginBottom: 15,
   },
 });
