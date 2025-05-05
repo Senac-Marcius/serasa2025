@@ -12,6 +12,8 @@ import Mytext from '../../src/components/MyText';
 import MyTimerPicker from '../../src/components/MyTimerPiker';
 import MySelect from '../../src/components/MySelect';
 import { getEmployees, iEmployees, toListEmployees } from '../../src/controllers/employees';
+import { getDisciplines, iDisciplines, toListDisciplines } from '../../src/controllers/disciplines';
+import { getLocals } from '@/src/controllers/locals';
 
 export default function TimelineScreen() {
   const [req, setReq] = useState({
@@ -62,6 +64,33 @@ export default function TimelineScreen() {
       }
     })();
 
+
+    (async () =>{
+      const result = await getDisciplines({discipline:""});
+      if (result.status && result.data && result.data.length > 0) {
+        setDiscipline( await toListDisciplines(result.data) );
+      } else {
+        console.log('Erro ao buscar :', result.error);
+      }
+    })();
+
+    (async () =>{
+      const result = await getLocals({discipline:""});
+      if (result.status && result.data && result.data.length > 0) {
+        setDiscipline( await toListDisciplines(result.data) );
+      } else {
+        console.log('Erro ao buscar :', result.error);
+      }
+    })();
+
+    (async () =>{
+      const result = await getTurma({discipline:""});
+      if (result.status && result.data && result.data.length > 0) {
+        setDiscipline( await toListDisciplines(result.data) );
+      } else {
+        console.log('Erro ao buscar :', result.error);
+      }
+    })();
 
   }, []);
 
