@@ -26,12 +26,21 @@ export default function HomeScreen() {
         if (result.data?.password === pass) {
             try {
                 await AsyncStorage.setItem('userId', result.data.id.toString());
+<<<<<<< HEAD
                 Toast.show({
                     type: 'success',
                     text1: 'Login realizado com sucesso!',
                     text2: 'Bem-vindo 👋',
                   });
                 router.push('/homeLogin');
+=======
+                alert('Login bem-sucedido!');
+                var isE = isEmployee()
+                if(await isE == true){
+                    router.push('/adminsitration')
+                }
+                //router.push('/home');
+>>>>>>> 1a7d9d14e7734a9c7f233b98af38a26b40d02c55
             } catch (error) {
                 Toast.show({
                     type: 'error',
