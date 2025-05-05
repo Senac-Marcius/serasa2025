@@ -1,44 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { TextInput, FlatList, TouchableOpacity, StyleSheet, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { createClient } from '@supabase/supabase-js';
-import Mytext from '../src/components/MyText';
-import  MyView  from '../src/components/MyView';
+import React, { useEffect, useState } from 'react';
+import { TextInput, StyleSheet, View } from 'react-native';
+import MyView from '../src/components/MyView';
+import MyText from '../src/components/MyText';
 import MyList from '../src/components/MyList';
 import MyButton from '../src/components/MyButtons';
-import {Text, ScrollView, Pressable,} from 'react-native';
-import { useRouter } from 'expo-router';
-import MySearch from '../src/components/MySearch';
-import { Myinput } from '../src/components/MyInputs';
-import {setTimeline,iTimeline,delTimelines as delTimelinesDoController,editTimelines as editTimelinesDoController,getTimelines,} from '../src/controllers/timelines';
-import MyTimerPicker from '../src/components/MyTimerPiker';
-import { TabActions } from '@react-navigation/native';
+import { MyTb } from '../src/components/MyItem';
 
-// Configuração do Supabase
-const supabaseUrl = 'https://fcjbnmhbjolybbkervgg.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjamJubWhiam9seWJia2VydmdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI5MzcyNTQsImV4cCI6MjA1ODUxMzI1NH0.mFa5W8ixlKQtaNm_EdGFg3IuooF95Xcn-ArPx_vX4mI';
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
- const [filtro, setFiltro] = useState('');
+import {
+  Turma,
+  buscarTurmas,
+  salvarTurma,
+  deletarTurma,
+} from '../src/controllers/classes';
 
-type Turma = {
-  id: number;
-  curso: string;
-  nome_curso: string;
-  turno: string;
-  modalidade: string;
-  horario: string;
-  cargaHoraria: string;
-  vagas: string;
-  inicio: string;
-  termino: string;
-  valor: string;
-  docente: string;
-  status: string;
-};
+const camposForm = [
+  'id', 'curso', 'nome_curso', 'turno', 'modalidade', 'horario',
+  'cargaHoraria', 'vagas', 'inicio', 'termino', 'valor',
+  'docente', 'status',
+];
 
 export default function TurmasComCadastro() {
   const [turmas, setTurmas] = useState<Turma[]>([]);
   const [modoCadastro, setModoCadastro] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const [form, setForm] = useState<Turma>({
     id: 0,
     curso: '',
@@ -55,68 +40,58 @@ export default function TurmasComCadastro() {
     status: '',
   });
 
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
   const carregarTurmas = async () => {
-    const { data, error } = await supabase.from('class').select('*');
-    if (error) {
-      console.error('Erro ao buscar turmas:', error.message);
-      return;
+    try {
+      const lista = await buscarTurmas();
+      setTurmas(lista);
+    } catch (err: any) {
+      console.error('Erro ao carregar turmas:', err.message);
     }
-    setTurmas(data as Turma[]);
   };
 
   const salvar = async () => {
-    console.log("iniciando processo de salvamento")
-    const requiredFields = [
-      'id', 'curso','nome_curso', 'turno', 'modalidade', 'horario', 
-      'cargaHoraria', 'vagas', 'inicio', 'termino', 'valor', 
-      'docente', 'status'
-    ];
-    for (const field of requiredFields) {
-      if (!form[field as keyof Turma]) {
-        console.log(field)
-        setErrorMessage(`O campo "${field}" é obrigatório.`);
+    for (const campo of camposForm) {
+      if (!form[campo as keyof Turma]) {
+        setErrorMessage(`Campo obrigatório: ${campo}`);
         return;
       }
     }
+    setErrorMessage(null);
 
-    setErrorMessage(null);  
-
-    const { data, error } = await supabase.from('class').insert([form]);
-    if (error) {
-      console.error('Erro ao salvar turma:', error.message);
-      return;
+    try {
+      await salvarTurma(form);
+      carregarTurmas();
+      setForm({
+        id: 0,
+        curso: '',
+        nome_curso: '',
+        turno: '',
+        modalidade: '',
+        horario: '',
+        cargaHoraria: '',
+        vagas: '',
+        inicio: '',
+        termino: '',
+        valor: '',
+        docente: '',
+        status: '',
+      });
+      setModoCadastro(false);
+    } catch (err: any) {
+      setErrorMessage(err.message);
     }
-    carregarTurmas();
-    setForm({
-      id: 0,
-      curso: '',
-      nome_curso: '',
-      turno: '',
-      modalidade: '',
-      horario: '',
-      cargaHoraria: '',
-      vagas: '',
-      inicio: '',
-      termino: '',
-      valor: '',
-      docente: '',
-      status: '',
-    });
-    setModoCadastro(false);
   };
 
-  const deletarTurma = async (id: number) => {
-    const { error } = await supabase.from('class').delete().eq('id', id);
-    if (error) {
-      console.error('Erro ao deletar turma:', error.message);
-      return;
+  const excluir = async (id: number) => {
+    try {
+      await deletarTurma(id);
+      carregarTurmas();
+    } catch (err: any) {
+      console.error('Erro ao excluir turma:', err.message);
     }
-    carregarTurmas();
   };
 
-  const editarTurma = (turma: Turma) => {
+  const editar = (turma: Turma) => {
     setForm(turma);
     setModoCadastro(true);
   };
@@ -125,114 +100,99 @@ export default function TurmasComCadastro() {
     carregarTurmas();
   }, []);
 
+  return (
+    <MyView style={styles.container}>
+      {/* TABELA */}
+      <MyList
+        style={styles.table}
+        data={turmas}
+        keyItem={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <MyTb onEdit={() => editar(item)} onDel={() => excluir(item.id)}>
+            <MyText style={styles.td}>{item.id}</MyText>
+            <MyText style={styles.td}>{item.curso}</MyText>
+            <MyText style={styles.td}>{item.nome_curso}</MyText>
+            <MyText style={styles.td}>{item.turno}</MyText>
+            <MyText style={styles.td}>{item.modalidade}</MyText>
+            <MyText style={styles.td}>{item.horario}</MyText>
+            <MyText style={styles.td}>{item.cargaHoraria}</MyText>
+            <MyText style={styles.td}>{item.vagas}</MyText>
+            <MyText style={styles.td}>{item.inicio}</MyText>
+            <MyText style={styles.td}>{item.termino}</MyText>
+            <MyText style={styles.td}>{item.valor}</MyText>
+            <MyText style={styles.td}>{item.docente}</MyText>
+            <MyText style={styles.td}>{item.status}</MyText>
+          </MyTb>
+        )}
+        header={(
+          <View style={styles.tableRowHeader}>
+            {camposForm.map((campo) => (
+              <MyText style={styles.th} key={campo}>
+                {campo.toUpperCase()}
+              </MyText>
+            ))}
+          </View>
+        )}
+      />
 
-    return (
-      <MyView >
-        <Mytext style={styles.header}>Cadastrar Nova Turma</Mytext>
-        {[
-          'id', 'curso', 'nome_curso','turno', 'modalidade', 'horario',
-          'cargaHoraria', 'vagas', 'inicio', 'termino', 'valor',
-          'docente', 'status'
-        ].map((campo) => (
-          <TextInput
-            key={campo}
-            style={styles.input}
-            placeholder={campo.charAt(0).toUpperCase() + campo.slice(1)}
-            value={(form as any)[campo]}
-            onChangeText={(text) => setForm({ ...form, [campo]: text })}
-          />
-        ))}
+      {/* BOTÃO */}
+      {!modoCadastro && (
+        <MyButton title="Cadastrar nova turma" onPress={() => setModoCadastro(true)} />
+      )}
 
-       <MyButton 
-       title='Salvar'
-        onPress={salvar}
-       
-       />
+      {/* FORMULÁRIO */}
+      {modoCadastro && (
+        <>
+          <MyText style={styles.header}>Cadastro de Turma</MyText>
+          {errorMessage && <MyText style={styles.errorText}>{errorMessage}</MyText>}
+          {camposForm.map((campo) => (
+            <TextInput
+              key={campo}
+              style={styles.input}
+              placeholder={campo}
+              value={(form as any)[campo]}
+              onChangeText={(text) => setForm({ ...form, [campo]: text })}
+            />
+          ))}
+          <MyButton title="Salvar" onPress={salvar} />
+          <MyButton title="Cancelar" onPress={() => setModoCadastro(false)} />
+        </>
+      )}
+    </MyView>
+  );
+}
 
-        
-
-
-
-      </MyView>
-    );
-  }
- 
-  
-
-  const styles = StyleSheet.create({
-    container: { flex: 1, padding: 16 },
-    header: {
-      fontSize: 22,
-      fontWeight: 'bold',
-      marginBottom: 16,
-      textAlign: 'center',
-    },
-    card: {
-      backgroundColor: '#f0f0f0',
-      padding: 16,
-      marginVertical: 8,
-      borderRadius: 12,
-      shadowColor: '#000',
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
-      elevation: 3,
-    },
-    title: { fontWeight: 'bold', fontSize: 16 },
-    formActions: { flexDirection: 'row', gap: 16, marginTop: 8 },
-    formContainer: {
-      padding: 16,
-      gap: 12,
-    },
-    input: {
-      padding: 12,
-      borderWidth: 1,
-      borderColor: '#993399',
-      borderRadius: 10,
-      backgroundColor: '#fff',
-      marginBottom: 8,
-    },
-    button: {
-      backgroundColor: '#4CAF50',
-      padding: 12,
-      borderRadius: 8,
-      marginVertical: 10,
-    },
-    buttonText: {
-      color: '#fff',
-      textAlign: 'center',
-      fontWeight: 'bold',
-    },
-    errorText: {
-      color: 'red',
-      marginVertical: 8,
-      fontWeight: 'bold',
-      textAlign: 'center',
-    },
-    table: {
-      backgroundColor: '#FFF',
-      borderRadius: 10,
-      padding: 8,
-      marginHorizontal: 16,
-    },
-    tableRowHeader: {
-      flexDirection: 'row',
-      paddingVertical: 10,
-      borderBottomWidth: 1,
-      borderBottomColor: '#ddd',
-    },
-    tableRow: {
-      flexDirection: 'row',
-      paddingVertical: 12,
-      borderBottomWidth: 1,
-      borderBottomColor: '#eee',
-    },
-    th: { flex: 1, fontWeight: '600', fontSize: 13, color: '#333' },
-    td: { flex: 1, fontSize: 13, color: '#444' },
-    TabActions: {
-      flexDirection: 'row',
-      gap: 12,
-    },
-    edit: { color: '#3AC7A8', fontWeight: '600', fontSize: 13 },
-    del: { color: '#D63031', fontWeight: '600', fontSize: 13 },
-  });
-  
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 16 },
+  input: {
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#999',
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  header: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginVertical: 10,
+    textAlign: 'center',
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  table: {
+    backgroundColor: '#fdfdfd',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 20,
+  },
+  tableRowHeader: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingBottom: 8,
+  },
+  th: { flex: 1, fontWeight: 'bold', fontSize: 12 },
+  td: { flex: 1, fontSize: 12 },
+});
