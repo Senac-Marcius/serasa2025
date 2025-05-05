@@ -8,6 +8,7 @@ import { useRouter } from 'expo-router';
 import MyView from '../../src/components/MyView';
 import { DatePickerModal } from 'react-native-paper-dates';
 import MyTopbar from '../../src/components/MyTopbar'; // Usa a topbar existente
+import { Label } from 'native-base';
 
 interface Evento {
   id: number;
@@ -16,9 +17,10 @@ interface Evento {
 }
 
 const menuItems = [
-  { label: 'Calendário', icon: <Ionicons name="calendar-outline" size={20} color="#555" />, route: 'secretaria/calendar' },
-  { label: 'Documentos', icon: <Ionicons name="document-text-outline" size={20} color="#555" />, route: 'secretaria/documents' },
-  { label: 'Cursos', icon: <Ionicons name="document-text-outline" size={20} color="#555" />, route: 'secretaria/courses' }
+  { label: 'Calendário',  icon:  <Ionicons name="calendar-outline" size={20} color="#555" />, route: 'secretaria/calendar' },
+  { label: 'Documentos',  icon:  <Ionicons name="document-text-outline" size={20} color="#555" />, route: 'secretaria/documents' },
+  { label: 'Cursos',      icon:  <Ionicons name="document-text-outline" size={20} color="#555" />, route: 'secretaria/courses' }
+  
 
 ];
 
