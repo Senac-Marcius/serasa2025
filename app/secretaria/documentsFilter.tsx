@@ -45,13 +45,7 @@ export default function documentRegister( ){
         }      
     };
 
-    const editRecord = (id: number) => {
-        const doc = documents.find( (d) => d.id == id);
-        if (doc){//vai colocar as informações salvas no vetor de volta no  para editar
-            setReq(doc)
-        }
-    };
-
+  
     //buscar documentos no banco e atualizar de acordo com a ação
     useEffect(() =>{
         async function getAll() {
@@ -106,7 +100,22 @@ export default function documentRegister( ){
             />
 
 
-            <MyList
+            <View style={styles.listWrapper}>
+              <View style={styles.cardGrid}>
+                {documents.map((item) => (
+                  <MyItem key={item.id} onDel={() => deleteRecord(item.id)}>
+                    <View style={styles.itemContent}>
+                      <Mytext style={styles.textoCorpo}>Nome:</Mytext> <Mytext style={styles.textoCorpoFilho}> {item.name}</Mytext>
+                      <Mytext style={styles.textoCorpo}>Url:</Mytext> <Mytext style={styles.textoCorpoFilho}> {item.url}</Mytext>
+                      <Mytext style={styles.textoCorpo}>Tipo Documento:</Mytext> <Mytext style={styles.textoCorpoFilho}>{item.type}</Mytext>
+                    </View>
+                  </MyItem>
+                ))}
+              </View>
+            </View>
+
+
+            {/*<MyList
               data={documents}
               keyItem={(item) => item.id.toString()}//tratamento
               renderItem={({ item }) => (
@@ -120,7 +129,10 @@ export default function documentRegister( ){
     
                 </MyItem>
               )}
-            />
+            />*/}
+
+            
+        
           </MyView>
     )
 
@@ -149,8 +161,57 @@ const styles = StyleSheet.create({
   },
   textoCorpo: {
     fontSize: 18,
-    //fontWeight: 'bold',
+    fontWeight: 'bold',
     padding: 20,
+  },
+  textoCorpoFilho: {
+    fontSize: 18,
+    padding: 20,
+  },
+
+  listWrapper: {
+    flex: 1,
+    marginTop: 20,
+  },
+  subTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#4B0082',
+    marginBottom: 10,
+    marginLeft: 6,
+  },
+  cardGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+    paddingHorizontal: 6,
+  },
+  card: {
+    backgroundColor: '#fff',
+    padding: 16,
+    borderRadius: 12,
+    width: 280,
+    marginBottom: 12,
+    marginRight: 12,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 2,
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 6,
+  },
+  cardInfo: {
+    fontSize: 14,
+    color: '#555',
+    marginBottom: 4,
+  },
+  itemContent: {
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
   },
 
 });

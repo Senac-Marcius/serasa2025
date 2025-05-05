@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Myinput } from './MyInputs';
 import MyButton from './MyButtons';
 import { insertDocument, updateDocument, iDoc } from '../../src/controllers/documents';
-import MyUploadTeste from './MyUploadTesteLorrany';
+import MyUpload from './MyUpload';
 
 interface MyDocumentProps {
   type: string;
@@ -50,10 +49,9 @@ const MyDocument: React.FC<MyDocumentProps> = ({ type, user_id }) => {
   return (
     <View style={styles.container}>
       
-      <MyUploadTeste 
-        url={req.url} 
-        setUrl={(newUrl) => setReq({ ...req, url: newUrl })} 
-        setName={(newName) => setReq({ ...req, name: newName })}
+      <MyUpload 
+        setUrl={(url) => setReq({ ...req, url })} 
+        setName={(name) => setReq({ ...req, name })}
       />
 
       <MyButton
