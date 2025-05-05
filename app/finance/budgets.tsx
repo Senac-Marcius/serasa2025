@@ -189,18 +189,14 @@ export default function BudgetScreen(){
                         <MyTb
                        onEdit ={()=> editBudget(item.id)}
                        onDel ={()=> delBudget(item.id)}
-                       button={(
-                        <Mydownload  url={item.url} />
-                      )}
 
                         >
                             <Text style={styles.td}> {item.name}</Text>
                             <Text style={styles.td}> {item.id}</Text>
                             <Text style={styles.td}> {item.url}</Text>
-                            <Text style={styles.td}> {item.created_at}</Text>
                             <Text style={styles.td}> {item.value}</Text>
-                            <Text style={styles.td}> {item.start_date}</Text>
-                            <Text style={styles.td}> {item.end_date}</Text>
+                            <Text style={styles.td}> {new Date(item.start_date).toLocaleDateString('pt-BR')}</Text>
+                            <Text style={styles.td}> {new Date(item.end_date).toLocaleDateString('pt-BR')}</Text>
                         </MyTb>
                     )}
                     header={(
@@ -208,7 +204,6 @@ export default function BudgetScreen(){
                         <Text style={styles.th}>Nome</Text>
                         <Text style={styles.th}>Id</Text>
                         <Text style={styles.th}>url </Text>
-                        <Text style={styles.th}>created_at </Text>
                         <Text style={styles.th}>Valor</Text>
                         <Text style={styles.th}>Data Inicial</Text>
                         <Text style={styles.th}>Data Final</Text>

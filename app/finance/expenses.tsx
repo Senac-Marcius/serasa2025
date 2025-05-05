@@ -298,9 +298,9 @@ export default function ExpenseScreen() {
                         <Mytext style={styles.td}> {item.name}</Mytext>
                         <Mytext style={styles.td}> {item.contacts}</Mytext>
                         <Mytext style={styles.td}> {item.emails}</Mytext>
-                        <Mytext style={styles.td}> {item.created_at}</Mytext>
+                        <Mytext style={styles.td}> {new Date(item.created_at).toLocaleDateString('pt-BR')}</Mytext>
                         <Mytext style={styles.td}>{item.descriptions}</Mytext>
-                        <Mytext style={styles.td}> {item.percent}</Mytext>
+                        <Mytext style={styles.td}> {item.percentege}</Mytext>
                         <Mytext style={styles.td}> {item.costs}</Mytext>
                     </MyTb>
 

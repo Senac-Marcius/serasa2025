@@ -9,7 +9,6 @@ import Mytext from '../../src/components/MyText';
 import { iInvestment, setInvestment, getInvestment, deleteInvestment, updateInvestment } from '../../src/controllers/investments';
 import {MyModal} from '../../src/components/MyModal';
 import MySearch from '../../src/components/MySearch';
-import { MyAccess } from '../../src/components/MyAccessibility';
 
 
 export default function investmentScreen(){
@@ -159,7 +158,6 @@ export default function investmentScreen(){
                     onChangeText={(text) => setReq({...req, description: text })}
                     iconName=''
                   />
-                <MyAccess style={{ flex: 1, justifyContent: 'center', alignItems: 'center', position: 'relative',}} children></MyAccess>
 
                 <MyButton style={{justifyContent:'center'}} onPress={ handleRegister } title={req.id == -1 ? "cadastrar" : "Atualizar"} /> 
             </View>
@@ -185,7 +183,7 @@ export default function investmentScreen(){
                        <Mytext style={styles.td}> {item.name}</Mytext>
                        <Mytext style={styles.td}> {item.description}</Mytext>
                        <Mytext style={styles.td}> {item.url}</Mytext>
-                       <Mytext style={styles.td}> {item.created_at}</Mytext>
+                       <Mytext style={styles.td}> {new Date(item.created_at).toLocaleDateString('pt-BR')}</Mytext>
                        <Mytext style={styles.td}> {item.value}</Mytext>
                        </MyTb> 
                 )}
