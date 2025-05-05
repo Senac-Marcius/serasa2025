@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, TextInput, Text, Image } from 'react-native';
-import { Link, Router } from 'expo-router';
+import { Link, Router, useRouter } from 'expo-router';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import MyNotify from './MyNotify';
 import MyMenu from './MyMenu';
@@ -14,6 +14,7 @@ interface MyTopbarProps {
 
 const MyTopbar: React.FC<MyTopbarProps> = ({ router, title }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const rout = useRouter();
 
   return (
     <View style={styles.container}>
@@ -22,14 +23,14 @@ const MyTopbar: React.FC<MyTopbarProps> = ({ router, title }) => {
           <TouchableOpacity onPress={() => setMenuOpen(!menuOpen)} style={styles.iconButton}>
             <Ionicons name="menu" size={20} color="#4A148C" />
           </TouchableOpacity>
-          <View style={styles.searchWrapper}>
+          {/*        <View style={styles.searchWrapper}>
             <Ionicons name="search" size={16} color="#888" style={styles.searchIcon} />
             <TextInput
               placeholder="Pesquisar..."
               placeholderTextColor="#888"
               style={styles.searchInput}
             />
-          </View>
+          </View> */}
         </View>
 
         <View style={styles.rightIcons}>
@@ -37,13 +38,15 @@ const MyTopbar: React.FC<MyTopbarProps> = ({ router, title }) => {
             <MaterialCommunityIcons name="lightning-bolt-outline" size={20} color="#4A148C" />
           </TouchableOpacity>
 
-          <MyNotify style={styles.iconButton}/>
-          
+          <MyNotify style={styles.iconButton} />
+
           <TouchableOpacity style={styles.iconButton}>
             <MaterialCommunityIcons name="cog-outline" size={20} color="#4A148C" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.avatarButton}>
-            <Image source={{ uri: 'https://i.pravatar.cc/150?img=1' }} style={styles.avatar} />
+          <TouchableOpacity style={styles.avatarButton} onPress={() => {
+            rout.push('/perfil');
+          }}>
+            <Image source={ require("../../assets/perfilIcon.png")} style={styles.avatar} />
           </TouchableOpacity>
         </View>
       </View>
@@ -115,9 +118,11 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: '100%',
+    
     height: '100%',
     borderRadius: 18,
   },
 });
 
 export default MyTopbar;
+//OK

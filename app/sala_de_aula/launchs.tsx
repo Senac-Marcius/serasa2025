@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import MyView from '../src/components/MyView';
-import { MyCorrelated} from '../src/components/MyItem';
-import MyList from '../src/components/MyList';
-import { Myinput, MyCheck } from '../src/components/MyInputs';
-import MyButton from '../src/components/MyButtons';
-import MyCalendar from '../src/components/MyCalendar';
+import MyView from '../../src/components/MyView';
+import { MyCorrelated} from '../../src/components/MyItem';
+import MyList from '../../src/components/MyList';
+import { Myinput, MyCheck } from '../../src/components/MyInputs';
+import MyButton from '../../src/components/MyButtons';
+import MyCalendar from '../../src/components/MyCalendar';
 import { useRouter } from 'expo-router';
-import {setLaunch, iLaunch, getLaunchs} from '../src/controllers/launchs';
-import MySelect from '../src/components/MySelect';
+import {setLaunch, iLaunch, getLaunchs} from '../../src/controllers/launchs';
+import MySelect from '../../src/components/MySelect';
 
 
 export default function LaunchScreen() {
@@ -85,7 +85,7 @@ export default function LaunchScreen() {
                 data={launchs}
                 keyItem={(item) => item.id.toString()}
                 renderItem={({ item }) => (
-                    <MyCorrelated style={styles.card} showEditButton={false} showDeleteButton={false} style={styles.card}>
+                    <MyCorrelated style={styles.card} showEditButton={false} showDeleteButton={false}>
                         <Text style={{marginTop: 20}}>{alunos.find(a => a.key === item.students_id)?.option || item.students_id}</Text>
 
                         <MyCheck

@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
   _View,
 } from "react-native";
-import MyButton from "../src/components/MyButtons";
-import MyView from "../src/components/MyView";
+import MyButton from "../../src/components/MyButtons";
+import MyView from "../../src/components/MyView";
 import { useRouter } from "expo-router";
 import {
   delStudent,
@@ -17,7 +17,7 @@ import {
   getStudent,
   setStudent,
   eStudent,
-} from "../src/controllers/students";
+} from "../../src/controllers/students";
 
 export default function StudentsScreen() {
   const [students, setStudents] = useState<eStudent[] | null>([]);
