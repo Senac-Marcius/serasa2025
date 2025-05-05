@@ -313,6 +313,7 @@ export default function ProjectScreen() {
               style={styles.backButton}
             >
               <Icon source="arrow-left" size={24} color="#2c3e50" />
+              <Text style={styles.backButton}>Voltar</Text>
             </TouchableOpacity>
             <Text style={styles.title}>Gerenciamento de Projetos</Text>
           </View>

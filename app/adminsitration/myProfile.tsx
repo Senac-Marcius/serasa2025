@@ -68,6 +68,7 @@ export default function MyProfile() {
           style={styles.backButton}
         >
           <MaterialIcons name="arrow-back" size={24} color="#3AC7A8" />
+          <Text style={styles.backButton}>Voltar</Text>
         </Pressable>
         <Text style={styles.title}>Meu Perfil</Text>
         <View style={{ width: 24 }} /> {/* Espaçamento para alinhamento */}
