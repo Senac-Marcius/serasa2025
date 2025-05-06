@@ -115,7 +115,7 @@ export default function itemScreen(product_id: Number) {
                         iconName=''
                     />
 
-
+ 
                     
                     <MySelect 
                     caption="Selecione uma categoria"

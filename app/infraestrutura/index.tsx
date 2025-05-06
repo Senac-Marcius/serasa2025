@@ -12,6 +12,10 @@ import { MyModal } from '../../src/components/MyModal';
 import { getCategories, toListCategorie } from '../../src/controllers/category';
 import MySelect from '../../src/components/MySelect';
 
+
+
+//projeto funcionando
+
 export default function infraScreen() {
     const [req, setReq] = useState({
         description: '',
