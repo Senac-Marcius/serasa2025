@@ -1,14 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
-import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
 import {insertDocument, iDoc, updateDocument, deleteDocument, getListDocuments} from '../../src/controllers/documents'
-import MyButton from '../../src/components/MyButtons';
 import MyView from '../../src/components/MyView';
-import  Mytext  from '../../src/components/MyText';
-import { Myinput } from '../../src/components/MyInputs';
-import { StyleSheet } from 'react-native';
 import MyDocument from '../../src/components/MyDocument';
-//import MyUpload from '../src/components/MyUpload';
 
 
 export default function DocumentsScreen() {
@@ -26,12 +19,6 @@ export default function DocumentsScreen() {
 
   //documents, setdocuments
   const [documents, setDocuments] = useState<iDoc[]>([]);
-
-  const router = useRouter();
-
-  
-  
-
 
   // Função para adicionar um novo registro
   async function handleRegister() {
@@ -60,77 +47,26 @@ export default function DocumentsScreen() {
       created_at: new Date().toISOString(),
     })
   };
-
-
   
   
   
   return (
       
-    <MyView >
+    <MyView>
 
-      <MyDocument type='teste' user_id={5}></MyDocument>
-      
-      {/*<View style={styles.viewStyle}>
-        
-        <View style={styles.viewCabeçalho}>
-          <Mytext style={styles.titulo}>Solicitação de Documentos</Mytext>
-          <MyButton style={styles.botaoListar} title="Listar Documentos" color={'#813AB1'} onPress={()=> router.push('secretaria/documentsFilter')} button_type="rect" />
-        </View>
-        
-        <Myinput
-            iconName="person" 
-            label='Nome'
-            value={req.name} 
-            onChangeText={(text) => {setReq({...req, name: text})}}
-        />
+    <MyDocument
+      type='Documentos'
+      user_id={5}
+      req={req}
+      setReq={setReq}
+      documents={documents}
+      setDocuments={setDocuments}
+      handleRegister={handleRegister}
+    />
 
-        <Myinput 
-            iconName="link" 
-            label='Url'
-            value={req.url} 
-            onChangeText={(text) => {setReq({...req, url: text})}}
-        />
-
-        <Myinput 
-            iconName="description" 
-            label='Tipo do Documento'
-            value={req.type} 
-            onChangeText={(text) => {setReq({...req, type: text})}}
-        />
-        
-        <MyButton title={req.id != -1 ? "Atualizar":"Cadastrar"} color={'#813AB1'} onPress={handleRegister} button_type="rect" />
-        
-      </View>*/}
-      
-            
-
-      
       
     </MyView>
   );
 }
 
-const styles = StyleSheet.create({
-  viewStyle: {
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    borderRadius: 8,
-    marginBottom: 6,
-  },
-  viewCabeçalho: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between', // distribui título e botão nos extremos
-  },
-  botaoListar: {
-    marginLeft: 'auto', // empurra o botão para a direita
-  },
-  titulo: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: '#813AB1',
-    padding: 20,
-  },
-});
 

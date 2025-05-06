@@ -1,9 +1,15 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet, ViewStyle } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
 import { supabase } from "../../src/utils/supabase"; // Certifique-se de que o caminho está correto
 
-const MyUpload = () => {
+interface MyUploadProps {
+  setUrl: (url: string) => void;
+  setName: (name: string) => void;
+  style?: ViewStyle;
+}
+
+const MyUpload: React.FC<MyUploadProps> = ({ setUrl, setName }) => {
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState("");
 
@@ -47,9 +53,14 @@ const MyUpload = () => {
         .from("myuploads")
         .getPublicUrl(fileName);
 
+        console.log("URL retornada do Supabase:", urlData); // Log para depuração
+
+
       // Verificar se a URL foi retornada corretamente
       if (urlData && urlData.publicUrl) {
         setAlert(`Upload concluído! URL: ${urlData.publicUrl}`);
+        setUrl(urlData.publicUrl); // <-- envia a URL para o componente pai
+        setName(file.name);        // <-- envia o nome do arquivo original para o pai
       } else {
         setAlert("Erro ao obter a URL.");
       }
@@ -81,12 +92,22 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  
   button: {
     backgroundColor: "#813AB1",
     padding: 10,
     borderRadius: 15,
+    width: '80%', // Limita a largura a 80% da tela, pode ajustar
+    maxWidth: 250, // Largura máxima para garantir que não fique grande demais
+    alignSelf: 'center', // Centraliza o botão
+    marginVertical: 10,
   },
-  text :{color: "white"}
+  text: {
+    color: "white",
+    textAlign: 'center',
+    fontWeight: 'bold', // Texto em negrito
+  },
+  
 });
 
 export default MyUpload;

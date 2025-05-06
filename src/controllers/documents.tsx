@@ -15,7 +15,7 @@ async function getListDocuments(params: { type: string }) {
     const { data, error } = await supabase
       .from('documents')
       .select()
-      .eq('type', params.type);
+      .ilike('type', params.type);
 
     if (error) {
       console.error('Erro ao listar documentos por tipo: ', error.message);
