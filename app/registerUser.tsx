@@ -5,7 +5,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import MyButton from '../src/components/MyButtons';
 import { Myinput } from '../src/components/MyInputs';
 import MyView from '../src/components/MyView';
-import { getUserById, getUsers, iUser, setUser, updateUserById } from '../src/controllers/users';
+import { getUserByEmail, getUserById, getUsers, iUser, setUser, updateUserById } from '../src/controllers/users';
 import Toast from 'react-native-toast-message';
 
 export default function UserScreen() {
@@ -96,12 +96,21 @@ export default function UserScreen() {
                 text1: 'Idade inválida.',
             });
         }
+
+        const emailAlreadyExists = await getUserByEmail(req.email);
+        if(emailAlreadyExists.status){
+            return Toast.show({
+                type: 'error',
+                text1: 'Duplicidade!',
+                text2: 'Esse endereço de e-mail já existe!',
+            });
+        }
+
         if (req.id == -1) {
             const newId = users.length ? users[users.length - 1].id + 1 : 0
             const newUser = { ...req, id: newId }
             setUsers([...users, newUser])
             const result = await setUser(newUser)
-            console.log(users)
             router.push("/homeLogin")
 
         } else {
