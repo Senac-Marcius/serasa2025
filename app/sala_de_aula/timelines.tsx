@@ -12,6 +12,9 @@ import Mytext from '../../src/components/MyText';
 import MyTimerPicker from '../../src/components/MyTimerPiker';
 import MySelect from '../../src/components/MySelect';
 import { getEmployees, iEmployees, toListEmployees } from '../../src/controllers/employees';
+import { getDisciplines,iDisciplines, toListDisciplines,  } from '../../src/controllers/disciplines';
+// import { getClasses, iClasses, toListClasses } from '../../src/controllers/classes'; // não tem controlador 
+import { getCourses, toListCourses,  } from '../../src/controllers/courses'; 
 
 export default function TimelineScreen() {
   const [req, setReq] = useState({
@@ -24,6 +27,8 @@ export default function TimelineScreen() {
     date: new Date().toISOString(),
     created_at: new Date().toISOString(),
     teacher_id: -1,
+    turma: '',
+    
   });
 
   const [timelines, setTimelines] = useState<iTimeline[]>([]);
@@ -31,11 +36,11 @@ export default function TimelineScreen() {
   const router = useRouter();
   const [filtro, setFiltro] = useState('');
   const [teatcher, setTeatcher] = useState<{key:number, option: string}[]>([]);
-  const [discipline, setDiscipline] = useState<{key:number, option: string}[]>([]);
+  const [discipline, setDisciplines, ] = useState<{key:number, option: string}[]>([]);
   const [local, setLocal] = useState<{key:number, option: string}[]>([]);
   const [classes, setClasses] = useState<{key:number, option: string}[]>([]);
-
- 
+  const [courses, setCourses] = useState<any[]>([]);
+  
 
 
 
@@ -58,10 +63,27 @@ export default function TimelineScreen() {
       if (result.status && result.data && result.data.length > 0) {
         setTeatcher( await toListEmployees(result.data) );
       } else {
-        console.log('Erro ao buscar disciplinas:', result.error);
+        console.log('Erro ao buscar Docente:', result.error);
       }
     })();
 
+   //disciplinas
+   
+    // (async () =>{
+    //   const result = await getClasses({local:"local"});
+    //   if (result.status && result.data && result.data.length > 0) {
+    //     setClasses( await toListClasses(result.data) );
+    //   } else {
+    //     console.log('Erro ao buscar o Local/classes:', result.error);
+    //   }
+    // })();
+
+    (async () => {
+      const retorno = await  getCourses ({})
+      if (retorno.status && retorno.data && retorno.data.length > 0){
+        setCourses(toListCourses(retorno.data));
+      }  
+  })();
 
   }, []);
 
@@ -86,6 +108,7 @@ export default function TimelineScreen() {
       date: new Date().toISOString(),
       created_at: new Date().toISOString(),
       teacher_id: -1,
+      turma: '',
     });
     setShowForm(false);
     setIsEditing(false);
@@ -162,13 +185,7 @@ export default function TimelineScreen() {
               setLabel={() =>{}}
               setKey={(key) => setReq({ ...req, teacher_id: key })}
             />
-              <MySelect
-              caption="Selecione a Disciplina" 
-              label={discipline.find(t => t.key == req.discipline_id )?.option || 'Selecione a Disciplina'}
-              list={discipline}
-              setLabel={() =>{}}
-              setKey={(key) => setReq({ ...req, discipline_id: key })}
-            />
+
             <MySelect
               caption="Selecione o Local" 
               label={local.find(t => t.key == req.local_id)?.option || 'Selecione o Local'}
@@ -178,11 +195,12 @@ export default function TimelineScreen() {
             />
               <MySelect
               caption="Selecione a Turma" 
-              label={classes.find(t => t.key == req.class_id )?.option || 'Selecione a Turma'}
-              list={classes}
+              label={courses.find(c => c.key == req.turma )?.option || 'Selecione a Turma'}
+              list={courses}
               setLabel={() =>{}}
-              setKey={(key) => setReq({ ...req, class_id: key })}
+              setKey={(key) => {    setReq({ ...req, turma: key })    }}
             />
+
 
             <View style={styles.formButtons}>
               <MyButton title={isEditing ? 'Atualizar' : 'Cadastrar'} button_type="default" onPress={handleRegister} style={{ flex: 1, marginRight: 8 }} />
@@ -200,15 +218,17 @@ export default function TimelineScreen() {
             <Text style={styles.th}>Horário de Início</Text>
             <Text style={styles.th}>Horário do fim</Text>
             <Text style={styles.th}>Data</Text>
+            
             <Text style={styles.th}>Ações</Text>
           </View>
 
           {timelines //pegar com o vitor o filtro dele
             .map((item) => (
               <View style={styles.tableRow} key={item.id}>
-                <Text style={styles.td}>{item.teacher_id || '-'}</Text>
-                <Text style={styles.td}>{item.discipline_id || '-'}</Text>
-                <Text style={styles.td}>{item.local_id}</Text>
+                <Text style={styles.td}>{teatcher.find(c=> c.key == item.teacher_id)?.option || ''}</Text>
+                <Text style={styles.td}>{discipline.find(c=> c.key == item.discipline_id)?.option || ''}</Text>
+                <Text style={styles.td}>{local.find(c=> c.key == item.local_id)?.option || '' }</Text>
+                <Text style={styles.td}>{courses.find(c=> c.key == item.turma)?.option || ''}</Text>
                 <Text style={styles.td}>{item.class_id}</Text>
                 <Text style={styles.td}>{item.start_time ? item.start_time + 'h' : '-'}</Text>
                 <Text style={styles.td}>{item.end_time ? item.end_time + 'h' : '-'}</Text>
