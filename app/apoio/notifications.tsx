@@ -9,29 +9,46 @@ import MyList from '../../src/components/MyList';
 import Mytext from '../../src/components/MyText';
 import { setNotification, iNotification, deleteNotification, updateNotification, getNotifications} from '../../src/controllers/notifications';
 import MySelect from '../../src/components/MySelect';
+import { getUsers, toListUser } from '../../src/controllers/users';
+import { getLevels, tolevels } from '../../src/controllers/levels';
 
 export default function NotificationScreen(){
 // aqui é typNotificationScreenescript
     const [req, setReq] = useState({
-        name:'',
-        url:'',
         description:'',
         id: -1,
         created_at: new Date().toISOString(),
-        user_id: 1,
+        user_id: -1,
+        level_id: -1
     });
 
     const [notifications, setNotifications]= useState<iNotification[]>([])
+    const [users, setUsers] = useState<{key: number, option: string}[]>([]);
+    const [levels, setLevels] = useState<any[]>([]);
     
 
     useEffect(() => {
-        async function getTodos(){
+        (async () => {
             const retorno = await getNotifications({})
             if (retorno.status && retorno.data && retorno.data.length > 0){
                 setNotifications(retorno.data);
             }
-        }
-            getTodos();
+        })();
+
+        (async () => {
+            const retorno = await getUsers({})
+            if (retorno.status && retorno.data && retorno.data.length > 0){
+                setUsers(toListUser(retorno.data));
+            }
+        })();
+
+        (async () => {
+            const retorno = await getLevels({});
+            if (retorno.status && retorno.data && retorno.data.length > 0) {
+            setLevels(tolevels(retorno.data));
+            }
+        })();
+
     },[])
     
     
@@ -49,12 +66,11 @@ export default function NotificationScreen(){
         }
         
         setReq({
-            name:'',
-            url:'',
             description:'',
             id: -1,
             created_at: new Date().toISOString(),
-            user_id: 1,
+            user_id: -1,
+            level_id: -1
         })
     }
 
@@ -74,19 +90,36 @@ return (
     <MyView>
           
            
-
+        
         {/* aqui é typescriot dentro do front*/}
         <Text>Minha tela de notificações</Text>
         <View style={styles.row}>
             <View style={styles.form}>
-                <Myinput
+                {/*<Myinput
                         style={styles.input}
                         placeholder = "Digite o nome:"
                         value={req.name}
                         onChangeText={(text) => setReq({...req ,name: text  })}
                         label="Nome"
                         iconName='person'
-                 />
+                 />*/}
+                 
+                <MySelect
+                    label={users.find(u => u.key == req.user_id)?.option || 'Selecione um usuário' }
+                    setKey={(key) => setReq({...req ,user_id: key  })}
+                    caption="Selecione o usuario"
+                    setLabel={()=>{}}
+                    list={users}
+                />
+
+                
+                <MySelect
+                    label={ levels.find(l => l.key == req.level_id)?.option || 'Selecione um nível'}
+                    setLabel={ () => {}}
+                    setKey={ (key)=> setReq ({...req, level_id: key }) }  
+                    list={levels}
+                />  
+
                 <Myinput
                         style={styles.input}
                         placeholder = "Digite a descrição:"  
@@ -97,14 +130,6 @@ return (
                     
                 />
 
-                <MySelect
-                        style={styles.input}
-                        placeholder = "Digite o Url:" 
-                         value={req.url}
-                         onChangeText={(text) => setReq({...req ,url: text  })}
-                         label="Url"
-                         iconName='pending'
-                />
 
                 <MyButton title="cadastrar:" onPress={handleRegister}/>
 

@@ -131,7 +131,7 @@ export default function ParentScreen (){
 
       <View style={styles.actions}>
         <MyButton title='Cadastrar' onPress={handleRegister} button_type='round' style={styles.button_round} />
-        <MyUpload />
+        {/*<MyUpload /*/}
       </View>
     </View>
 

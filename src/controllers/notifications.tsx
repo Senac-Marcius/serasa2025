@@ -2,12 +2,11 @@ import { supabase } from '../utils/supabase'
 
 
 interface iNotification{
-        name: string,
-        url: string,
         description: string,
         id: number,
         created_at: string,
         user_id: number,
+        level_id: number
     };
 
 
@@ -15,7 +14,7 @@ function toListNotification(data: iNotification[]){
     const resp:{key: number, option: string}[] = [];
 
     data.map((n) => {
-        resp.push({key: n.id, option: n.name})
+        resp.push({key: n.id, option: n.description})
     })
 
     return resp;
@@ -69,12 +68,10 @@ async function updateNotification(notification: iNotification) {
     const { error } = await supabase
         .from('notifications')
         .update({
-            name: notification.name,
             description: notification.description,
             user_id: notification.user_id,
             created_at: notification.created_at,
-            url: notification.url,
-
+            level_id: notification.level_id,
         })
         .eq('id', notification.id);
  
