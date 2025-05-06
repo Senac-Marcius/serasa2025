@@ -167,7 +167,7 @@ export default function TimelineScreen() {
           />
         </View>
 
-        <Mytext style={styles.formTitle}>Cronograma do D</Mytext>
+        <Mytext style={styles.formTitle}>Cronograma do Docente</Mytext>
 
         {showForm && (
           <View style={styles.card}>
