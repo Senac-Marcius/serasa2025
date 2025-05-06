@@ -198,6 +198,7 @@ export default function itemScreen(product_id: Number) {
                 title="Excluir"
                 onPress={() => delItem(item.id)}
                 style={styles.deleteButton}
+                color="#FF5252" // Define a cor correta
               />
             </View>
           </View>
@@ -284,6 +285,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   actionContainer: {
+    
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",
