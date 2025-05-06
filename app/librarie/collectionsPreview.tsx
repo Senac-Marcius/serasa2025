@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native';
 import { useRouter, Link } from 'expo-router';
-import { iCollection } from '../../src/controllers/collections';
-import Carousel from 'react-bootstrap/Carousel';
+import { iCollection, getCollections } from '../../src/controllers/collections';
 import MySearch from '../../src/components/MySearch';
 import { getItems, iItem } from '../../src/controllers/librarie';
 import { supabase } from '../../src/utils/supabase';
@@ -11,6 +10,7 @@ import MyMenu from '../../src/components/MyMenu';
 import Select from './select';
 import { isStudent, isEmployee } from '../../src/controllers/users'
 import StarComponent from './starComponent';
+
 
 
 
@@ -176,7 +176,7 @@ export default function CollectionPreviewScreen() {
                             </TouchableOpacity>
 
                             {isEmployeeUser && (//exibe apenas para funcionarios
-                                <TouchableOpacity style={styles.button_round} onPress={() => router.push({ pathname: 'librarie/pageEmployee' })}>
+                                <TouchableOpacity style={styles.button_round} onPress={() => router.push({ pathname: 'librarie/librarieEmployee' })}>
                                     <MaterialCommunityIcons name="account-hard-hat" size={20} color="#750097" />
                                     <Text style={styles.buttonText}>Funcionários</Text>
                                 </TouchableOpacity>
@@ -191,21 +191,10 @@ export default function CollectionPreviewScreen() {
 
                 </View>
                 <View style={styles.containerCarousel}>
-                    <Carousel>
-                        <Carousel.Item>
                             <Image
                                 source={require('./assets/slide1biblioteca.png')}
-                                style={{ width: 1300, height: 470, resizeMode: 'cover' }}
+                                style={{ width:"100%", height: 485, resizeMode: 'cover' }}
                             />
-                        </Carousel.Item>
-                        <Carousel.Item>
-                            <Image
-                                source={require('./assets/slide2biblioteca.png')}
-                                style={{ width: 1200, height: 470, resizeMode: 'cover' }}
-
-                            />
-                        </Carousel.Item>
-                    </Carousel>
                 </View>
                 <View style={styles.containerfilter}>
                     <MySearch
@@ -225,24 +214,6 @@ export default function CollectionPreviewScreen() {
                                 caption="Assunto"
                                 setLabel={(val) => { setSubject(val); itemsSearch(); }}
                                 list={subjectOptions}
-                            />
-                        </View>
-                        <View style={styles.ViewSelect}>
-                            {/* <Text style={styles.itemTextFilter}>  Ano </Text> */}
-                            <Select
-                                label={year}
-                                setLabel={(val) => { setYear(val); itemsSearch(); }}
-                                caption="Avaliação"
-                                list={[
-                                    { key: 0, option: 'Todos' },
-                                    { key: 1, option: 'Livro' },
-                                    { key: 2, option: 'Publicação Seriada' },
-                                    { key: 3, option: "Artigo" },
-                                    { key: 4, option: "Audiolivro" },
-                                    { key: 5, option: "Ebook" },
-                                    { key: 6, option: "Mapa" },
-                                    { key: 7, option: "Outros" },
-                                ]}
                             />
                         </View>
                         <View style={styles.ViewSelect}>
@@ -277,14 +248,11 @@ export default function CollectionPreviewScreen() {
                         ) : (
                             <FlatList
                                 data={filtered}
-                                numColumns={4}
+                                numColumns={3}
                                 keyExtractor={(item) => item.id.toString()}
                                 renderItem={({ item }) => (
                                     <TouchableOpacity
                                         onPress={() => {
-                                            // if (item.keywords) {
-                                            //     const tagsArray = item.keywords.split(',').map(tag => tag.trim());
-                                            // }
                                             router.push({ pathname: 'librarie/collectionDetail', params: { id: item.id.toString() } });
                                         }}
                                     >
@@ -337,7 +305,6 @@ const styles = StyleSheet.create({
         padding: 30,
         backgroundColor: "#750097",
         borderRadius: 10,
-
     },
     ViewSelect: {
 
@@ -413,21 +380,24 @@ const styles = StyleSheet.create({
     },
     button_round: {
         backgroundColor: "#EDE7F6",
-        width: 150,
+        width: 130,
         padding: 10,
         borderRadius: 20,
+        justifyContent:"center",
         flexDirection: "row"
     },
     button_capsule: {
         backgroundColor: "#EDE7F6",
-        width: 200,
+        width: 180,
         padding: 10,
         borderRadius: 20,
+        justifyContent:"center",
         flexDirection: "row"
     },
     itemContainer: {
         padding: 25,
         margin: 5,
+        flexGrow: 1,
         backgroundColor: '#ecdef0',
         borderWidth: 3,
         borderColor: "white",
@@ -437,7 +407,8 @@ const styles = StyleSheet.create({
         width: 300,
         height: 530,
         alignItems: "center",
-        justifyContent: "flex-start",
+        overflow: 'hidden',
+        justifyContent:"space-between",
 
     },
     image: {

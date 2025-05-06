@@ -23,6 +23,7 @@ const MyTopbar: React.FC<MyTopbarProps> = ({ router, title }) => {
           <TouchableOpacity onPress={() => setMenuOpen(!menuOpen)} style={styles.iconButton}>
             <Ionicons name="menu" size={20} color="#4A148C" />
           </TouchableOpacity>
+<<<<<<< HEAD
           {/*        <View style={styles.searchWrapper}>
             <Ionicons name="search" size={16} color="#888" style={styles.searchIcon} />
             <TextInput
@@ -31,6 +32,8 @@ const MyTopbar: React.FC<MyTopbarProps> = ({ router, title }) => {
               style={styles.searchInput}
             />
           </View> */}
+=======
+>>>>>>> 8873c8185ad4c4c45346b3b73ff0beaf95bda6ad
         </View>
 
         <View style={styles.rightIcons}>

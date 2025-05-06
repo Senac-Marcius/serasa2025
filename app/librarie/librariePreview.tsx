@@ -3,19 +3,12 @@ import { View, Text, FlatList, Image, StyleSheet, ActivityIndicator, TouchableOp
 import { getItems, iItem, setItem, deleteItemById, updateItemById, } from '../../src/controllers/librarie';
 import MyMenu from '../../src/components/MyMenu';
 import MyNotify from '../../src/components/MyNotify';
-import MyPerfil from '../../src/components/MyPerfil';
 import MyTabsbar from '../../src/components/MyTabsBar';
-import { Myinput, MyTextArea, MyCheck } from '../../src/components/MyInputs';
+import { MyCheck } from '../../src/components/MyInputs';
 import MySearch from '../../src/components/MySearch';
-import MyButton from '../../src/components/MyButtons';
-import MyList from '../../src/components/MyList';
 import { MyModal } from '../../src/components/MyModal';
-import { MyItem } from '../../src/components/MyItem';
 import { Ionicons } from '@expo/vector-icons';
-import { Icon , MD3Colors} from "react-native-paper";
 import { useRouter } from 'expo-router';
-import { supabase } from '../../src/utils/supabase';
-
 
 export default function CollectionViewScreen() {
 
@@ -23,67 +16,38 @@ export default function CollectionViewScreen() {
   const [items, setItems] = useState<iItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [filteredItems, setFilteredItems] = useState<ItemType[]>([]); 
+  //const [filteredItems, setFilteredItems] = useState<iItem[]>([]); 
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [selectedTypologies, setSelectedTypologies] = useState<string[]>([]);
-  const [selectedYears, setSelectedYears] = useState<number[]>([]);
+  const [selectedYears, setSelectedYears] = useState<string[]>([]);
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [selectedResponsible, setSelectedResponsible] = useState<string[]>([]);
   const [selectedSubject, setSelectedSubject] = useState<string[]>([]);
   const [visible, setVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<ItemType | null>(null); 
-
-  interface ItemType { //Atributos que vão aparecer no card dos itens
-    typology: string,
-    title: string,
-    subtitle: string,
-    responsible: string,
-    translation: string,
-    language: string,
-    image: string,
-    year: number,
-    edition: string,
-    publisher: string,
-    location: string,
-    number_pages: number,
-    serie: string,
-    volume: number,
-    format: string,
-    isbn: string,
-    issn: string,
-    cdd: string,
-    call_number: string,
-    subject: string,
-    keywords: string,
-    summary: string,
-    notes: string,
-    number_copies: number,
-    status: string,
-    file: string,
-    type_loan: string,
-    id: number,
-  }
-  // Puxa os itens do BD
-  useEffect(() => {
-    async function fetchAllItems() {
-      const { data, error } = await supabase
-        .from('items_librarie')
-        .select('*');
+  const [selectedItem, setSelectedItem] = useState<iItem | null>(null); 
   
-      if (error) {
-        console.error("Erro ao carregar itens:", error);
-      } else {
-        setItems(data || []);
-      }
+  type ItemType = iItem;
 
-      setLoading(false);
-    }
+  // Puxa os itens do BD
+  useEffect(() =>{
+    (async () => {
+        const retorno =await getItems({});
+        
+        if (retorno.status && retorno.data && retorno.data.length>0){
+            console.log(retorno.data);
+            const t:any[] = []
+            retorno.data.map(p => t.push(p))
+            setItems(t)
+            console.log(items)
+        } else {
+            console.log('Erro ao carregar itens:', retorno.error);
+        }
 
-    fetchAllItems();
-
+        setLoading(false);
+    })();
   }, []);
-
+  
   // Filtro de itens de acordo com a pesquisa e filtros selecionados
   const filteredItemsMemo = useMemo(() => {
     return items.filter(item => {
@@ -102,7 +66,10 @@ export default function CollectionViewScreen() {
     // Filtro de acordo com a aba selecionada
       let filtered = items;
       switch (activeTab) {
-        case 0: // "Últimas adições"
+        case 0: // "Acervo completo"
+          break;
+        
+        case 1: // "Últimas adições"
           return items.filter(item => {
             const currentDate = new Date();
             const itemDate = new Date(item.created_at);
@@ -111,11 +78,8 @@ export default function CollectionViewScreen() {
           });
           break;
   
-        case 1: // "Itens não incorporados"
+        case 2: // "Itens não incorporados"
           filtered = items.filter(item => item.incorporated === false); // Filtra os não incorporados
-          break;
-  
-        case 2: // "Acervo completo"
           break;
   
         case 3: // "catalogo online"
@@ -148,7 +112,7 @@ export default function CollectionViewScreen() {
     );
   }
   
-  const tabs = ["Últimas adições", "Itens não incorporados", "Acervo completo", "Catálogo Online"]; //Nomes p/ as abas da tabsBar
+  const tabs = ["Acervo Completo", "Últimas adições", "Itens não incorporados", "Catálogo Online"]; //Nomes p/ as abas da tabsBar
   const handleTabPress = (item: string, index: number) => { // lida com o click na tabsBar
     setActiveTab(index);
   };
@@ -165,18 +129,6 @@ export default function CollectionViewScreen() {
       setSelected([...selected, value]); //adiciona
     }
   }
-  //Listas Únicas para Filtros
-  const uniqueTypologies = Array.from(new Set(filteredItems.map(item => item.typology)));
-  const uniqueYears = Array.from(new Set(filteredItems.map(item => item.year)));
-  const uniqueLanguages = Array.from(new Set(filteredItems.map(item => item.language)));
-  const uniqueResponsible = Array.from(new Set(filteredItems.map(item => item.responsible)));
-  const uniqueSubject = Array.from(new Set(filteredItems.map(item => item.subject)));
-
-  const FilteredItems = [
-    { id: 1, title: 'Item 1', subtitle: 'Subtítulo 1', responsible: 'Autor 1', language: 'Português', year: '2020', cdd: '123', image: 'image_url', typology: 'Typo 1', translation: 'Tradutor 1', edition: '1ª Edição', publisher: 'Editora A' },
-    { id: 2, title: 'Item 2', subtitle: 'Subtítulo 2', responsible: 'Autor 2', language: 'Inglês', year: '2021', cdd: '456', image: 'image_url', typology: 'Typo 2', translation: 'Tradutor 2', edition: '2ª Edição', publisher: 'Editora B' },
-    // outros itens
-  ];
 
   const handleItemPress = (item : ItemType) => {
     setSelectedItem(item); // Armazena o item selecionado
@@ -192,7 +144,7 @@ export default function CollectionViewScreen() {
         <TouchableOpacity onPress={() => handleItemPress(item)}>
           <Text style={styles.title}>{item.title}</Text>
           <Text style={styles.subtitle}>{item.subtitle}</Text>
-          <Text style={styles.detail}>Autor: {item.responsible}</Text>
+          <Text style={styles.detail}>Autor(es): {item.responsible}</Text>
           <Text style={styles.detail}>Idioma: {item.language}</Text>
           <Text style={styles.detail}>Ano: {item.year}</Text>
           <Text style={styles.detail}>CDD: {item.cdd}</Text>
@@ -201,10 +153,38 @@ export default function CollectionViewScreen() {
       </View>
     </View>
   );
-  function editItem(id: number) {
-    let item = items.find(i => i.id == id)
-    if (item)
-        setItems(items)
+
+  const editItem = (item: ItemType) => {
+    setVisible(false);
+    router.push({ pathname: '/librarie/librarie', params: { id: item.id.toString() } });
+  };
+
+  const deleteItem = async (id: number) => {
+    const confirmed = window.confirm("Tem certeza que deseja excluir este item permanentemente?");
+      
+    if (confirmed) {
+      try {
+        // Deleta o item
+        await deleteItemById(id);
+        
+        // Fecha o modal
+        setVisible(false);
+        
+        setItems(prevItems => prevItems.filter(item => item.id !== id));
+      } catch (error) {
+        console.error("Erro ao deletar item:", error);
+        window.alert("Erro ao excluir o item");
+      }
+    }
+  };
+
+  const cleanFilters = () => {
+    setSelectedTypologies([]);
+    setSelectedYears([]);
+    setSelectedLanguages([]);
+    setSelectedResponsible([]);
+    setSelectedSubject([]);
+    //setSearch('');
   };
 
   return (
@@ -232,7 +212,7 @@ export default function CollectionViewScreen() {
         </View>
         {menuOpen && <MyMenu closeMenu={() => setMenuOpen(false)} />}
         
-        {/* Abas Selecionavéis */}
+        {/* Abas Selecionavéis | Botão add*/}
         <View style={styles.tabsbar}>
           <MyTabsbar
             items={tabs}
@@ -269,8 +249,13 @@ export default function CollectionViewScreen() {
         <View style={styles.contentContainer}>
           {showFilters && (
             <ScrollView style={styles.filterSidebar}>
-              <Text style={styles.filterHeader}>Refinar sua busca</Text>
+              <View style={styles.filterHeaderContainer}>
+                <Text style={styles.filterHeader}>Refinar sua busca</Text>
 
+                <TouchableOpacity 
+                  onPress={cleanFilters} style={styles.cleanFiltersButton}><Text style={styles.cleanFiltersText}>Limpar tudo</Text>
+                </TouchableOpacity>
+              </View>
                 <Text style={styles.selectedFiltersText}>
                   {selectedTypologies.length + selectedYears.length + selectedLanguages.length + 
                   selectedResponsible.length + selectedSubject.length > 0
@@ -281,148 +266,124 @@ export default function CollectionViewScreen() {
                     : "Nenhum filtro selecionado ainda"}
                 </Text>
 
-              {/* Tipo de Obra */}
               <View style={styles.filterSection}>
-
+                {/* Tipo de Obra */}
                 <Text style={styles.filterSectionTitle}>Tipo de Obra</Text>
-                {[...new Set(finalFilteredItems.map(item => item.typology))].map((type) => (
-                  <TouchableOpacity 
-                    key={type}
-                    onPress={() => toggleFilter(type, selectedTypologies, setSelectedTypologies)}
-                    >
-                    <Text style={[
-                      styles.filterOption,
-                      selectedTypologies.includes(type) && styles.filterOptionSelected
-                    ]}>
-                      {type}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-
+                  {[...new Set(finalFilteredItems.map(item => item.typology))].map((type) => (
+                    <View key={type} style={styles.filterItem}>
+                        <MyCheck
+                          label={type}
+                          checked={selectedTypologies.includes(type)}
+                          onToggle={() => toggleFilter(type, selectedTypologies, setSelectedTypologies)}
+                        />
+                      </View>
+                  ))}
+                {/* Ano */}
                 <Text style={styles.filterSectionTitle}>Ano</Text>
-                {[...new Set(finalFilteredItems.map(item => item.year))].map((year) => (
-                  <TouchableOpacity
-                    key={year}
-                    onPress={() => toggleFilter(year, selectedYears, setSelectedYears)}
-                    >
-                    <Text style={[
-                      styles.filterOption,
-                      selectedYears.includes(year) && styles.filterOptionSelected
-                    ]}>
-                      {year}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-
+                  {[...new Set(finalFilteredItems.map(item => item.year))].map((year) => (
+                    <View key={year} style={styles.filterItem}>
+                      <MyCheck
+                        label={year.toString()}
+                        checked={selectedYears.includes(year)}
+                        onToggle={() => toggleFilter(year, selectedYears, setSelectedYears)}
+                      />
+                    </View>
+                  ))}
+                {/* Autores */}
                 <Text style={styles.filterSectionTitle}>Autores</Text>
-                {[...new Set(finalFilteredItems.map(item => item.responsible))].map((responsible) => (
-                  <TouchableOpacity
-                    key={responsible}
-                    onPress={() => toggleFilter(responsible, selectedResponsible, setSelectedResponsible)}
-                    >
-                    <Text style={[
-                      styles.filterOption,
-                      selectedResponsible.includes(responsible) && styles.filterOptionSelected
-                    ]}>
-                      {responsible}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-
+                  {[...new Set(finalFilteredItems.map(item => item.responsible))].map((responsible) => (
+                    <View key={responsible} style={styles.filterItem}>
+                      <MyCheck
+                        label={responsible}
+                        checked={selectedResponsible.includes(responsible)}
+                        onToggle={() => toggleFilter(responsible, selectedResponsible, setSelectedResponsible)}
+                      />
+                    </View>
+                  ))}
+                {/* Idioma */}
                 <Text style={styles.filterSectionTitle}>Idioma</Text>
-                {[...new Set(finalFilteredItems.map(item => item.language))].map((lang) => (
-                  <TouchableOpacity
-                    key={lang}
-                    onPress={() => toggleFilter(lang, selectedLanguages, setSelectedLanguages)}
-                    >
-                    <Text style={[
-                      styles.filterOption,
-                      selectedLanguages.includes(lang) && styles.filterOptionSelected
-                    ]}>
-                      {lang}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-
+                  {[...new Set(finalFilteredItems.map(item => item.language))].map((lang) => (
+                    <View key={lang} style={styles.filterItem}>
+                      <MyCheck
+                        label={lang}
+                        checked={selectedLanguages.includes(lang)}
+                        onToggle={() => toggleFilter(lang, selectedLanguages, setSelectedLanguages)}
+                      />
+                    </View>
+                  ))}
+                {/* Assuntos */}
                 <Text style={styles.filterSectionTitle}>Assuntos</Text>
-                {[...new Set(finalFilteredItems.map(item => item.subject))].map((subject) => (
-                  <TouchableOpacity
-                    key={subject}
-                    onPress={() => toggleFilter(subject, selectedSubject, setSelectedSubject)}
-                    >
-                    <Text style={[
-                      styles.filterOption,
-                      selectedSubject.includes(subject) && styles.filterOptionSelected
-                    ]}>
-                      {subject}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              /</View>
+                  {[...new Set(finalFilteredItems.map(item => item.subject))].map((subject) => (
+                    <View key={subject} style={styles.filterItem}>
+                      <MyCheck
+                        label={subject}
+                        checked={selectedSubject.includes(subject)}
+                        onToggle={() => toggleFilter(subject, selectedSubject, setSelectedSubject)}
+                      />
+                    </View>
+                  ))}
+              </View>
             </ScrollView>
-          )}
-              
-          
+          )} 
           {/* Lista */}
           <View style={styles.mainContent}>
             <FlatList
               data={finalFilteredItems}
-              keyExtractor={(item) => item.id.toString()}
+              keyExtractor={(item: iItem) => item.id.toString()}
               contentContainerStyle={styles.grid}
               numColumns={3}
-              renderItem={ renderItem }
+              renderItem={renderItem}
             />       
-              <MyModal
-                visible={visible}
-                setVisible={setVisible}
-                style={styles.Modal}
-                title="" //style={styles.buttonLink}
-                closeButtonTitle="Fechar" //style={styles.buttonModal}
-                //button_type={capsule}
-
-
-              >
-                <ScrollView>
-                  <View style={styles.modalContainer}>
-                    {selectedItem && (
-                      <>
-                        <View style={styles.buttonModalContainer}>
-                          <TouchableOpacity style={styles.edit} onPress={() => { editItem(selectedItem.id) }}><Text style={styles.buttonModalText}>EDITAR</Text></TouchableOpacity>
-                          <TouchableOpacity style={styles.dell} onPress={() => { deleteItemById(selectedItem.id) }}><Text style={styles.buttonModalText}>DELETAR</Text></TouchableOpacity>
-                        </View>
-                        <View style={styles.modalList}>
-                          <Image source={{ uri: selectedItem.image }} style={styles.image} />
-                          <Text style={styles.title}>Título: {selectedItem.title}</Text>
-                          <Text style={styles.subtitle}>Subtítulo: {selectedItem.subtitle}</Text>
-                          <Text style={styles.detail}>Autor: {selectedItem.responsible}</Text>
-                          <Text style={styles.detail}>Tradutor: {selectedItem.translation}</Text>
-                          <Text style={styles.detail}>Idioma: {selectedItem.language}</Text>
-                          <Text style={styles.detail}>Ano: {selectedItem.year}</Text>
-                          <Text style={styles.detail}>Edição: {selectedItem.edition}</Text>
-                          <Text style={styles.detail}>Editora: {selectedItem.publisher}</Text>
-                          <Text style={styles.detail}>Local: {selectedItem.location}</Text>
-                          <Text style={styles.detail}>Nº de Páginas: {selectedItem.number_pages}</Text>
-                          <Text style={styles.detail}>Série: {selectedItem.serie}</Text>
-                          <Text style={styles.detail}>Volume: {selectedItem.volume}</Text>
-                          <Text style={styles.detail}>Formato: {selectedItem.format}</Text>
-                          <Text style={styles.detail}>ISBN: {selectedItem.isbn}</Text>
-                          <Text style={styles.detail}>ISSN: {selectedItem.issn}</Text>
-                          <Text style={styles.detail}>CDD: {selectedItem.cdd}</Text>
-                          <Text style={styles.detail}>Nº de Chamada: {selectedItem.call_number}</Text>
-                          <Text style={styles.detail}>Assuntos: {selectedItem.subject}</Text>
-                          <Text style={styles.detail}>Palavras-Chave: {selectedItem.keywords}</Text>
-                          <Text style={styles.detail}>Resumo: {selectedItem.keywords}</Text>
-                          <Text style={styles.detail}>Notas: {selectedItem.notes}</Text>
-                          <Text style={styles.detail}>Nº de Exemplares: {selectedItem.number_copies}</Text>
-                          <Text style={styles.detail}>Status: {selectedItem.status}</Text>
-                          <Text style={styles.detail}>Arquivo: {selectedItem.file}</Text>
-                          <Text style={styles.detail}>Tipo de Empréstimo: {selectedItem.type_loan}</Text> 
-                        </View>
-                      </>
-                    )}
-                  </View>    
-                </ScrollView>
-              </MyModal>
+                <MyModal
+                  visible={visible}
+                  setVisible={setVisible}
+                  style={styles.Modal}
+                  title=""
+                  closeButtonTitle="Fechar"
+                  isButton={false}
+                >
+                  <ScrollView>
+                    <View style={styles.modalContainer}>
+                      {selectedItem && (
+                        <>
+                          <View style={styles.buttonModalContainer}>
+                            <TouchableOpacity style={styles.edit} onPress={() => editItem (selectedItem) }><Text style={styles.buttonModalText}>EDITAR</Text></TouchableOpacity>
+                            <TouchableOpacity style={styles.dell} onPress={() => { deleteItem(selectedItem.id) }}><Text style={styles.buttonModalText}>DELETAR</Text></TouchableOpacity>
+                          </View>
+                          <View style={styles.modalList}>
+                            <Image source={{ uri: selectedItem.image }} style={styles.image} />
+                            <Text style={styles.detail}>Tipologia: {selectedItem.typology}</Text>
+                            <Text style={styles.title}>Título: {selectedItem.title}</Text>
+                            <Text style={styles.subtitle}>Subtítulo: {selectedItem.subtitle}</Text>
+                            <Text style={styles.detail}>Autor: {selectedItem.responsible}</Text>
+                            <Text style={styles.detail}>Tradutor: {selectedItem.translation}</Text>
+                            <Text style={styles.detail}>Idioma: {selectedItem.language}</Text>
+                            <Text style={styles.detail}>Ano: {selectedItem.year}</Text>
+                            <Text style={styles.detail}>Edição: {selectedItem.edition}</Text>
+                            <Text style={styles.detail}>Editora: {selectedItem.publisher}</Text>
+                            <Text style={styles.detail}>Local: {selectedItem.location}</Text>
+                            <Text style={styles.detail}>Nº de Páginas: {selectedItem.number_pages}</Text>
+                            <Text style={styles.detail}>Série: {selectedItem.serie}</Text>
+                            <Text style={styles.detail}>Volume: {selectedItem.volume}</Text>
+                            <Text style={styles.detail}>Formato: {selectedItem.format}</Text>
+                            <Text style={styles.detail}>ISBN: {selectedItem.isbn}</Text>
+                            <Text style={styles.detail}>ISSN: {selectedItem.issn}</Text>
+                            <Text style={styles.detail}>CDD: {selectedItem.cdd}</Text>
+                            <Text style={styles.detail}>Nº de Chamada: {selectedItem.call_number}</Text>
+                            <Text style={styles.detail}>Assuntos: {selectedItem.subject}</Text>
+                            <Text style={styles.detail}>Palavras-Chave: {selectedItem.keywords}</Text>
+                            <Text style={styles.detail}>Resumo: {selectedItem.keywords}</Text>
+                            <Text style={styles.detail}>Notas: {selectedItem.notes}</Text>
+                            <Text style={styles.detail}>Nº de Exemplares: {selectedItem.number_copies}</Text>
+                            <Text style={styles.detail}>Status: {selectedItem.status}</Text>
+                            <Text style={styles.detail}>Disponível em: {selectedItem.file || selectedItem.url }</Text>
+                            <Text style={styles.detail}>Tipo de Empréstimo: {selectedItem.type_loan}</Text>
+                          </View>
+                        </>
+                      )}
+                    </View>    
+                  </ScrollView>
+                </MyModal>
           </View> 
         </View>
       </View>
@@ -587,11 +548,13 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   filterSidebar: {
-    maxWidth: 200,
+    maxWidth: 180,
     padding: 10,
-    margin: 23,
-    backgroundColor: '#ad6cd9',
+    margin: 22,
+    backgroundColor: '#af87ca',
     borderRadius: 10,
+    flexShrink: 1,
+    flexWrap: 'wrap',
   },
   filterSectionTitle: {
     fontWeight: 'bold',
@@ -601,16 +564,53 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontFamily: 'Poppins_400Regular',
   },
-  filterOption: {
-    backgroundColor: '#ad6cd9',
-    paddingVertical: 6,
-    paddingHorizontal: 8,
-    borderWidth: 1,
-    width: 180,
-  },
-  filterOptionSelected: {
-    color: '#6200ea',
+  filterHeader: {
+    fontSize: 17,
     fontWeight: 'bold',
+    color: '#4A148C',
+    marginBottom: 10,
+    fontFamily: 'Poppins_400Regular',
+  },
+  filterHeaderContainer: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  cleanFiltersButton: {
+    backgroundColor: '#5A2D82',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: '#ddd',
+  },
+  cleanFiltersText: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  selectedFiltersText: {
+    fontSize: 14,
+    color: '#0C1D40',
+    marginBottom: 15,
+    fontFamily: 'Poppins_400Regular',
+  },
+  filterSection: {
+    marginBottom: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#0C1D40',
+    paddingBottom: 10,
+    flexShrink: 1,
+    flexWrap: 'wrap',
+  },
+  filterItem: {
+    marginVertical: 5,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    flexWrap: 'wrap',
+    width: '100%',
+    flexShrink: 1,
   },
   mainContent: {
     flex: 1,
@@ -618,6 +618,8 @@ const styles = StyleSheet.create({
     margin: 5,
     backgroundColor:"transparent",
     borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   grid: {
     padding: 0,
@@ -629,9 +631,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#ecdef0',
     padding: 8,
     borderRadius: 8,
-    elevation: 2,
-    width: 170,
-    height: 200,
+    maxWidth: 340,
+    maxHeight: 300,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
     width: 120,
@@ -646,15 +649,15 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: 16,
     textAlignVertical:'top',
   },
   subtitle: {
     fontStyle: 'italic',
-    fontSize: 16,
+    fontSize: 14,
   },
   detail: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#444',
   },
   link: {
@@ -665,87 +668,56 @@ const styles = StyleSheet.create({
   },
   Modal: {
     display: 'flex',
-    width: 630,
+    width: 530,
     height: 530,
     backgroundColor: '#f2f2f2',
     borderRadius: 20,
     borderWidth: 4,
     borderColor: 'purple',
     alignItems: 'center',
-},
-buttonLink: {
-  backgroundColor: "transparent",
-  alignItems: 'flex-end',
-  justifyContent: 'flex-end',
-},
-buttonModal: {
-  backgroundColor: "transparent",
-  alignItems: 'flex-end',
-  justifyContent: 'flex-end',
-},
-modalContainer: {
-  flex: 1,
-  display: 'flex',
-  width: 565,
-  height: 530,
-  flexDirection: 'row-reverse',
-  justifyContent: 'space-between',
-  alignItems: 'flex-start',
-  padding: 5, 
-},  
-modalList: {
-  backgroundColor: '#f2f2f2',
-  width: '50%',
-  height: '100%',
-  gap: 5,
-  alignItems: 'flex-start',
-  
-},
-buttonModalContainer: {
-  flexDirection: 'row',
-  justifyContent: 'flex-end',
-  gap: 12,
-  paddingHorizontal: 10,
-  marginBottom: 15
-},
-edit: {
-  backgroundColor: '#d0f1e1',
-  borderColor: '#00bf63',
-  borderWidth: 2,
-  padding: 8,
-  borderRadius: 25,
-},
-dell: {
-    backgroundColor: '#ffc1bd',
-    borderColor: '#eb4f45',
+  },
+  modalContainer: {
+    flex: 1,
+    display: 'flex',
+    width: 465,
+    height: 530,
+    flexDirection: 'row-reverse',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    padding: 5, 
+  },  
+  modalList: {
+    backgroundColor: '#f2f2f2',
+    width: '50%',
+    height: '100%',
+    gap: 5,
+    alignItems: 'flex-start',
+    
+  },
+  buttonModalContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    gap: 12,
+    paddingHorizontal: 10,
+    marginBottom: 15
+  },
+  edit: {
+    backgroundColor: '#d0f1e1',
+    borderColor: '#00bf63',
     borderWidth: 2,
     padding: 8,
     borderRadius: 25,
-},
-buttonModalText: { 
-  color: '#0C1D40',
-  fontSize: 18,
-  fontFamily: 'Poppins_400Regular',  
-},
-
-filterHeader: {
-  fontSize: 18,
-  fontWeight: 'bold',
-  color: '#4A148C',
-  marginBottom: 10,
-  fontFamily: 'Poppins_400Regular',
-},
-selectedFiltersText: {
-  fontSize: 14,
-  color: '#666',
-  marginBottom: 15,
-  fontFamily: 'Poppins_400Regular',
-},
-filterSection: {
-  marginBottom: 15,
-  borderBottomWidth: 1,
-  borderBottomColor: '#eee',
-  paddingBottom: 10,
-},
-  
+  },
+  dell: {
+      backgroundColor: '#ffc1bd',
+      borderColor: '#eb4f45',
+      borderWidth: 2,
+      padding: 8,
+      borderRadius: 25,
+  },
+  buttonModalText: { 
+    color: '#0C1D40',
+    fontSize: 18,
+    fontFamily: 'Poppins_400Regular',  
+  },
 });
