@@ -41,12 +41,12 @@ const styles=StyleSheet.create({
     
     filledStar: {
         color: '#FFD700',
-        fontSize: 35,
+        fontSize: 25,
         marginHorizontal: 5,
     },
     emptyStar: {
         color: 'grey',
-        fontSize: 35,
+        fontSize: 25,
         marginHorizontal: 5,
     }
 })

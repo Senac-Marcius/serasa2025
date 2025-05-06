@@ -3,6 +3,7 @@ import { TouchableOpacity, StyleSheet, ViewStyle, View, FlatList } from 'react-n
 import { Ionicons } from '@expo/vector-icons';
 import { MyItem } from './MyItem';
 import Mytext from './MyText';
+import { getUserById, getLoggedUserId, iUser } from '../controllers/users';
 
 import {
   setNotification,
@@ -11,6 +12,7 @@ import {
   updateNotification,
   getNotifications,
 } from '../controllers/notifications';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface MyNotifyProps {
   style?: ViewStyle;
@@ -22,13 +24,15 @@ const MyNotify: React.FC<MyNotifyProps> = ({ style }) => {
 
   useEffect(() => {
     async function getTodos() {
-      const retorno = await getNotifications({});
+      const id = await getLoggedUserId();
+
+      const retorno = await getNotifications({user_id:id});
       if (retorno.status && retorno.data) {
         setNotifications(retorno.data);
       }
     }
     getTodos();
-  }, []);
+  }, notifications);
 
   function formatDate(iso: string) {
     const date = new Date(iso);
@@ -46,23 +50,19 @@ const MyNotify: React.FC<MyNotifyProps> = ({ style }) => {
 
       {visible && (
         <View style={styles.notificationContainer}>
-          <FlatList
-            data={notifications}
-            keyExtractor={(item) => item.id.toString()}
-            contentContainerStyle={styles.notificationList}
-            renderItem={({ item }) => (
-              <View style={styles.card}>
-                <Mytext style={styles.label}>Descrição:</Mytext>
-                <Mytext style={styles.value}>{item.description}</Mytext>
-
-                <Mytext style={styles.label}>Usuário:</Mytext>
-                <Mytext style={styles.value}>{item.user_id}</Mytext>
-
-                <Mytext style={styles.label}>Data:</Mytext>
-                <Mytext style={styles.value}>{formatDate(item.created_at)}</Mytext>
-              </View>
-            )}
-          />
+          <ScrollView>
+            <FlatList
+              data={notifications}
+              keyExtractor={(item) => item.id.toString()}
+              contentContainerStyle={styles.notificationList}
+              renderItem={({ item }) => (
+                <View style={styles.card}>
+                  <Mytext style={styles.value}>{item.description}</Mytext>
+                  <Mytext style={styles.value}>{formatDate(item.created_at)}</Mytext>
+                </View>
+              )}
+            />
+          </ScrollView>
         </View>
       )}
     </View>

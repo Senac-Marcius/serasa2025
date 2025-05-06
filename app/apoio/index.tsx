@@ -125,8 +125,7 @@ export default function HomeScreen() {
   return (
     <MyView router={router} style={{ flex: 1 }}>
       <ImageBackground
-        source={require('./imagens/download.png')} // <-- sua imagem aqui!
-       
+        source={require('./imagens/design.png')} // <-- sua imagem aqui!
         style={styles.backgroundImage}
         resizeMode="center"
       >
@@ -139,7 +138,7 @@ export default function HomeScreen() {
                 width: p.size,
                 height: p.size,
                 borderRadius: p.size / 2,
-                backgroundColor: 'rgba(34, 152, 191, 0.9)',
+                backgroundColor: 'rgba(158, 43, 211, 0.9)',
                 left: p.left,
                 bottom: animations[i].interpolate({
                   inputRange: [0, 1],
@@ -159,10 +158,6 @@ export default function HomeScreen() {
             <Text style={styles.messageText}>
               [{messages[currentIndex].institution}] {messages[currentIndex].message}
             </Text>
-          </View>
-
-          <View style={styles.content}>
-            <Text style={styles.title}>Teste de conteúdos adicionais</Text>
           </View>
         </View>
       </ImageBackground>
@@ -220,7 +215,7 @@ const styles = StyleSheet.create({
   messageTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: 'rgba(34, 152, 191, 0.9)',
+    color: 'rgba(158, 43, 211, 0.9)',
     marginBottom: 8,
   },
   messageText: {

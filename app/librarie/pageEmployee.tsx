@@ -15,8 +15,8 @@ export default function pageEmployee() {
 
 
   return (
-    <ScrollView>
-      <View style={styles.View}>
+    <View style={styles.View}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
           {menuOpen && <MyMenu closeMenu={() => setMenuOpen(false)} />}
           <View style={styles.topbar}>
@@ -34,12 +34,7 @@ export default function pageEmployee() {
               </Text>
             </View>
             <View style={styles.rightIcons}>
-              <TouchableOpacity style={styles.button_capsule} onPress={() => router.push({ pathname: '../../app/perfil' })}>
-                <MaterialCommunityIcons name="account" size={20} color="#750097" />
-                <Text style={styles.buttonText}>Perfil</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.button_round} onPress={() => router.push({ pathname: 'librarie/collectionsPreview' })}>
+              <TouchableOpacity style={styles.button_round} onPress={() => router.push({ pathname: 'librarie' })}>
                 <MaterialCommunityIcons name="book-open-page-variant" size={20} color="#750097" />
                 <Text style={styles.buttonText}>Catálogo</Text>
               </TouchableOpacity>
@@ -62,7 +57,7 @@ export default function pageEmployee() {
           </View>
           <View style={styles.ViewIcon}>
             <View style={styles.ViewLibrariePreview}>
-              <TouchableOpacity onPress={() => router.push({ pathname: 'librarie/loantable' })}>
+              <TouchableOpacity onPress={() => router.push({ pathname: 'librarie/loansTableEmployees' })}>
                 <MaterialCommunityIcons name="book-open-page-variant-outline" size={150} color="#750097" />
                 <Text style={styles.Text}>
                   Últimos empréstimos
@@ -71,8 +66,8 @@ export default function pageEmployee() {
             </View>
           </View>
         </View>
-      </View>
     </ScrollView>
+    </View>
   )
 }
 
@@ -81,8 +76,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     margin: 0,
     padding: 0,
-    zIndex: 2,
-    height: "100%"
+    height: "100%",
+    flex: 1
   },
   container: {
     backgroundColor: "white",
@@ -182,25 +177,25 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 30,
   },
   ViewIcons: {
     display: "flex",
     justifyContent: "center",
-    alignItems: "center",
-    marginTop: 50,
+    alignItems: "flex-start",
     flexDirection: "row",
+    marginTop:60,
     gap: 40,
     height:"100%"
   },
   Text: {
+    fontFamily: 'Poppins_400Regular',
     color: '#750097',
     fontSize: 18,
     fontWeight: 'bold',
   },
   textTitle: {
-    fontFamily: 'Poppins, sans-serif',
-    fontWeight: 400,
+    fontFamily: 'Poppins_400Regular',
+    fontWeight: 700,
     color: '#750097',
     fontSize: 30,
     marginBottom: 5,
