@@ -35,7 +35,7 @@ export async function getClassroomData(userId: number): Promise<ClassRoomData>{
           return 0;
         }
       
-        console.log('Total de cursos:', count);
+      
         return count;
       };
       const contarClasses = async () => {
@@ -48,7 +48,7 @@ export async function getClassroomData(userId: number): Promise<ClassRoomData>{
           return 0;
         }
       
-        console.log('Total de turmas:', count);
+       
         return count;
       };
 
@@ -64,7 +64,7 @@ export async function getClassroomData(userId: number): Promise<ClassRoomData>{
           return 0;
         }
       
-        console.log('Total de alunos:', count);
+      
         return count;
       };
 
@@ -79,7 +79,7 @@ export async function getClassroomData(userId: number): Promise<ClassRoomData>{
           return 0;
         }
       
-        console.log('Total de professores:', count);
+       
         return count;
       };
 
@@ -94,7 +94,7 @@ export async function getClassroomData(userId: number): Promise<ClassRoomData>{
           return 0;
         }
       
-        console.log('Total de disciplinas:', count);
+      
         return count;
       };
 

@@ -51,9 +51,11 @@ async function getUserById(id: number) {
         return { status: true, data };
     } catch (error) {
         alert('Erro ao buscar usuário por ID.');
+        console.log("Erro ao buscar usuario:",error)
         return { status: false, data: null };
     }
 }
+
 
 
 function toListUser(data: iUser[]) {
