@@ -11,6 +11,7 @@ interface iTimeline {
   date: string,
   created_at: string;
   teacher_id: number;
+  turma: string;
 }
 
 // funçoes que chama o selec e lista
