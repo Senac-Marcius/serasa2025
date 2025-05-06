@@ -52,12 +52,11 @@ interface Student {
   }[];
 }
 export default function Students() {
- 
-    const userId = 3;
-  
-    const pathname = usePathname();
-  
-    const { user, role, classroomData, loading } = useUserData(userId);
+  const userId = 3;
+
+  const pathname = usePathname();
+
+  const { user, role, classroomData, loading } = useUserData(userId);
 
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
@@ -66,7 +65,7 @@ export default function Students() {
   const [isEditing, setEditing] = useState(false);
   const [students, setStudents] = useState<Student[]>([]);
   const [req, setReq] = useState<iUser>();
- 
+
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
   const [userToDelete, setUserToDelete] = useState<number | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -82,17 +81,11 @@ export default function Students() {
     cpf: "",
   });
 
- 
   // const userId = localStorage.getItem("userId");
-
- 
 
   useEffect(() => {
     setFilteredStudents(students);
   }, [students]);
-
- 
-   
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -103,7 +96,6 @@ export default function Students() {
       } else {
         console.error("Erro ao carregar estudantes");
       }
-      
     };
 
     fetchStudents();
@@ -401,188 +393,186 @@ export default function Students() {
   return (
     <MyView>
       <View className="flex flex-row h-full w-full bg-secondary-100">
-      {role && <SideMenu role={role} activeRoute={pathname.replace("/", "")} />}
+        {role && (
+          <SideMenu role={role} activeRoute={pathname.replace("/", "")} />
+        )}
 
-        
-          <ScrollView className="h-full flex-1 bg-secondary-100 items-center mt-[100] ">
-            {!showForm && (
+        <ScrollView className="h-full flex-1 bg-secondary-100 items-center mt-[100] ">
+          {!showForm && (
+            <View className="flex flex-row items-center w-[100%] justify-between">
+              <MySearch
+                style={{ marginVertical: 10, width: "30%" }}
+                busca={searchTerm}
+                placeholder="Buscar aluno por nome, email ou idade..."
+                onChangeText={(text) => {
+                  setSearchTerm(text);
+                  filterStudents(text); // 🔄 usa o texto atualizado
+                }}
+                onPress={() => filterStudents()} // usa o valor atual do estado
+              />
 
-              <View className="flex flex-row items-center w-[100%] justify-between">
-                <MySearch
-              style={{ marginVertical: 10 , width: "30%"}}
-              busca={searchTerm}
-              placeholder="Buscar aluno por nome, email ou idade..."
-              onChangeText={(text) => {
-                setSearchTerm(text);
-                filterStudents(text); // 🔄 usa o texto atualizado
-              }}
-              onPress={() => filterStudents()} // usa o valor atual do estado
-            />
+              <MyButton
+                icon="plus"
+                title="Novo Aluno"
+                onPress={() => {
+                  setForm({
+                    name: "",
+                    email: "",
+                    age: "",
+                    password: "",
+                    cpf: "",
+                    phone: "",
+                    address: "",
+                  });
+                  setEditing(false);
+                  setShowForm(true);
+                  animation.setValue(1);
+                }}
+                width={150}
+              />
+            </View>
+          )}
 
-                <MyButton
-                  icon="plus"
-                  title="Novo Aluno"
-                  onPress={() => {
-                    setForm({
-                      name: "",
-                      email: "",
-                      age: "",
-                      password: "",
-                      cpf: "",
-                      phone: "",
-                      address: "",
-                    });
-                    setEditing(false);
-                    setShowForm(true);
-                    animation.setValue(1);
-                  }}
-                  width={150}
+          <Animated.View
+            style={{ height: formHeight, overflow: "hidden" }}
+            className="w-[90%] mt-2 bg-white p-4 rounded-lg"
+          >
+            {showForm && (
+              <View className="gap-4 mt-4">
+                <Myinput
+                  iconName="short-text"
+                  label="Nome"
+                  type="text"
+                  value={form.name}
+                  onChangeText={(t) => setForm({ ...form, name: t })}
                 />
+                <Myinput
+                  iconName="email"
+                  label="Email"
+                  type="text"
+                  value={form.email}
+                  onChangeText={(t) => setForm({ ...form, email: t })}
+                />
+                <Myinput
+                  iconName="calendar-month"
+                  label="Idade"
+                  type="text"
+                  value={form.age}
+                  onChangeText={(t) => setForm({ ...form, age: t })}
+                />
+                <Myinput
+                  iconName="key"
+                  label="Senha"
+                  type="password"
+                  value={form.password}
+                  onChangeText={(t) => setForm({ ...form, password: t })}
+                />
+                <Myinput
+                  iconName="123"
+                  label="CPF"
+                  type="cpf"
+                  value={form.cpf}
+                  onChangeText={(t) => setForm({ ...form, cpf: t })}
+                />
+                <Myinput
+                  iconName="phone"
+                  label="Contato"
+                  type="phone"
+                  value={form.phone}
+                  onChangeText={(t) => setForm({ ...form, phone: t })}
+                />
+                <Myinput
+                  iconName="house"
+                  label="Endereço"
+                  value={form.address}
+                  onChangeText={(t) => setForm({ ...form, address: t })}
+                />
+                <View className="flex-row justify-center gap-4">
+                  <MyButton
+                    title="Cancelar"
+                    width={150}
+                    onPress={handleCancel}
+                    color="#e5e7eb"
+                    text_color="#374151"
+                    height={50}
+                    font_size={16}
+                  />
+                  <MyButton
+                    title={isEditing ? "Salvar" : "Cadastrar"}
+                    width={150}
+                    onPress={isEditing ? handleUpdate : handleRegister}
+                    height={50}
+                    font_size={16}
+                  />
+                </View>
               </View>
             )}
+          </Animated.View>
 
-            <Animated.View
-              style={{ height: formHeight, overflow: "hidden" }}
-              className="w-[90%] mt-2 bg-white p-4 rounded-lg"
-            >
-              {showForm && (
-                <View className="gap-4 mt-4">
-                  <Myinput
-                    iconName="short-text"
-                    label="Nome"
-                    type="text"
-                    value={form.name}
-                    onChangeText={(t) => setForm({ ...form, name: t })}
-                  />
-                  <Myinput
-                    iconName="email"
-                    label="Email"
-                    type="text"
-                    value={form.email}
-                    onChangeText={(t) => setForm({ ...form, email: t })}
-                  />
-                  <Myinput
-                    iconName="calendar-month"
-                    label="Idade"
-                    type="text"
-                    value={form.age}
-                    onChangeText={(t) => setForm({ ...form, age: t })}
-                  />
-                  <Myinput
-                    iconName="key"
-                    label="Senha"
-                    type="password"
-                    value={form.password}
-                    onChangeText={(t) => setForm({ ...form, password: t })}
-                  />
-                  <Myinput
-                    iconName="123"
-                    label="CPF"
-                    type="cpf"
-                    value={form.cpf}
-                    onChangeText={(t) => setForm({ ...form, cpf: t })}
-                  />
-                  <Myinput
-                    iconName="phone"
-                    label="Contato"
-                    type="phone"
-                    value={form.phone}
-                    onChangeText={(t) => setForm({ ...form, phone: t })}
-                  />
-                  <Myinput
-                    iconName="house"
-                    label="Endereço"
-                    value={form.address}
-                    onChangeText={(t) => setForm({ ...form, address: t })}
-                  />
-                  <View className="flex-row justify-center gap-4">
-                    <MyButton
-                      title="Cancelar"
-                      width={150}
-                      onPress={handleCancel}
-                      color="#e5e7eb"
-                      text_color="#374151"
-                      height={50}
-                      font_size={16}
-                    />
-                    <MyButton
-                      title={isEditing ? "Salvar" : "Cadastrar"}
-                      width={150}
-                      onPress={isEditing ? handleUpdate : handleRegister}
-                      height={50}
-                      font_size={16}
-                    />
-                  </View>
-                </View>
-              )}
-            </Animated.View>
-          
+          {renderHeader()}
+          <FlatList
+            data={filteredStudents}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={renderItem}
+            contentContainerStyle={{ paddingBottom: 16 }}
+          />
 
-            {renderHeader()}
-            <FlatList
-              data={filteredStudents}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={renderItem}
-              contentContainerStyle={{ paddingBottom: 16 }}
-            />
+          {confirmDeleteVisible && (
+            <View className="absolute top-0 left-0 right-0 bottom-0 bg-black/50 justify-center width-full items-center z-50">
+              <View className="bg-white p-6 rounded-lg w-[80%]">
+                <Text className="text-lg font-bold text-center mb-4">
+                  Confirmar exclusão
+                </Text>
+                <Text className="text-center text-gray-600 mb-6">
+                  Tem certeza que deseja excluir este usuário? Essa ação não
+                  poderá ser desfeita.
+                </Text>
 
-            {confirmDeleteVisible && (
-              <View className="absolute top-0 left-0 right-0 bottom-0 bg-black/50 justify-center width-full items-center z-50">
-                <View className="bg-white p-6 rounded-lg w-[80%]">
-                  <Text className="text-lg font-bold text-center mb-4">
-                    Confirmar exclusão
-                  </Text>
-                  <Text className="text-center text-gray-600 mb-6">
-                    Tem certeza que deseja excluir este usuário? Essa ação não
-                    poderá ser desfeita.
-                  </Text>
-
-                  <View className="flex-row justify-center gap-4">
-                    <MyButton
-                      title="Cancelar"
-                      width={120}
-                      onPress={() => {
+                <View className="flex-row justify-center gap-4">
+                  <MyButton
+                    title="Cancelar"
+                    width={120}
+                    onPress={() => {
+                      setConfirmDeleteVisible(false);
+                      setUserToDelete(null);
+                    }}
+                    color="#e5e7eb"
+                    text_color="#111827"
+                    height={40}
+                    font_size={14}
+                  />
+                  <MyButton
+                    title="Excluir"
+                    width={120}
+                    onPress={async () => {
+                      if (userToDelete != null) {
+                        const success = await deleteUserById(userToDelete);
+                        if (success) {
+                          Toast.show({
+                            type: "success",
+                            text1: "Usuário excluído com sucesso!",
+                          });
+                        } else {
+                          Toast.show({
+                            type: "error",
+                            text1: "Erro ao excluir",
+                            text2: "Tente novamente mais tarde.",
+                          });
+                        }
                         setConfirmDeleteVisible(false);
                         setUserToDelete(null);
-                      }}
-                      color="#e5e7eb"
-                      text_color="#111827"
-                      height={40}
-                      font_size={14}
-                    />
-                    <MyButton
-                      title="Excluir"
-                      width={120}
-                      onPress={async () => {
-                        if (userToDelete != null) {
-                          const success = await deleteUserById(userToDelete);
-                          if (success) {
-                            Toast.show({
-                              type: "success",
-                              text1: "Usuário excluído com sucesso!",
-                            });
-                          } else {
-                            Toast.show({
-                              type: "error",
-                              text1: "Erro ao excluir",
-                              text2: "Tente novamente mais tarde.",
-                            });
-                          }
-                          setConfirmDeleteVisible(false);
-                          setUserToDelete(null);
-                        }
-                      }}
-                      color="#ef4444"
-                      text_color="#ffffff"
-                      height={40}
-                      font_size={14}
-                    />
-                  </View>
+                      }
+                    }}
+                    color="#ef4444"
+                    text_color="#ffffff"
+                    height={40}
+                    font_size={14}
+                  />
                 </View>
               </View>
-            )}
-          </ScrollView>
-        
+            </View>
+          )}
+        </ScrollView>
       </View>
     </MyView>
   );

@@ -13,7 +13,7 @@ import MyTimerPicker from '../../src/components/MyTimerPiker';
 import MySelect from '../../src/components/MySelect';
 import { getEmployees, iEmployees, toListEmployees } from '../../src/controllers/employees';
 import { getDisciplines, iDisciplines, toListDisciplines, getDisciplinesSelectList  } from '../../src/controllers/disciplines';
-import { getLocals, toListLocal, setLocal, iLocal } from '@/src/controllers/locals';
+import { getLocals, toListLocal, iLocal } from '@/src/controllers/locals';
 import { getCourses, toListCourses } from '@/src/controllers/courses';
 import { useUserData } from "@/hooks/useUserData";
 import { usePathname } from "expo-router";
@@ -48,7 +48,7 @@ export default function TimelineScreen() {
   const [filtro, setFiltro] = useState('');
   const [teatcher, setTeatcher] = useState<{key:number, option: string}[]>([]);
   const [discipline, setDisciplines, ] = useState<{key:number, option: string}[]>([]);
-  const [local, setLocal] = useState<any[]>([]);
+  const [local, setLocal] = useState<{ key: number; option: string }[]>([]);
   const [classes, setClasses] = useState<{key:number, option: string}[]>([]);
   const [courses, setCourses] = useState<any[]>([]);
   const [date, setDate] = useState('');
@@ -85,22 +85,23 @@ export default function TimelineScreen() {
       }  
   })();
 
-    // (async () =>{
-    //   const result = await getDisciplines({discipline:"disciplines"});
-    //   if (result.status && result.data && result.data.length > 0) {
-    //     setDisciplines( await toListDisciplines(result.data) );
-    //   } else {
-    //     console.log('Erro ao buscar :', result.error);
-    //   }
-    // })();
+    (async () =>{
+      const result = await getDisciplines({discipline:"disciplines"});
+      if (result.status && result.data && result.data.length > 0) {
+        setDisciplines( await toListDisciplines(result.data) );
+      } else {
+        console.log('Erro ao buscar :', result.error);
+      }
+    })();
 
     (async () =>{
-      const result = await getLocals({local:"locals"});
+      const result = await getLocals({});
       if (result.status && result.data && result.data.length > 0) {
         setLocal( await toListLocal(result.data) );
       } else {
         console.log('Erro ao buscar :', result.error);
       }
+     
     })();
       // local não esta funcionado 
   
@@ -199,7 +200,7 @@ export default function TimelineScreen() {
                 <MyCalendar
                   date={req.date}
                   setDate={(date) => setReq({ ...req, date })}
-                  icon=""
+                  icon="calendar-outline"
                 />
 
                 <Mytext style={styles.titlee}>Horário de Início</Mytext>
@@ -243,8 +244,8 @@ export default function TimelineScreen() {
                 <MySelect
                   caption="Selecione o Local"
                   label={
-                    local.find((t) => t.key == req.local)?.option ||
-                    "Selecione o Local"
+                    local.find((t) => t.key == req.local_id?.option ||
+                    "Selecione o Local")
                   }
                   list={local}
                   setLabel={() => {}}
