@@ -4,7 +4,7 @@ import { MyTb } from '../../src/components/MyItem';
 import MyList from '../../src/components/MyList';
 import MyView from '../../src/components/MyView';
 import MyButton from '../../src/components/MyButtons';
-import { MyModal_mobilefullscreen } from '../../src/components/MyModal'
+import { MyModal } from '../../src/components/MyModal'
 import { Myinput, MyTextArea } from '../../src/components/MyInputs';
 import { setExpense, delRegister, updateExpense, iexpenses, getExpense } from '../../src/controllers/expenses';
 import Mytext from '../../src/components/MyText';
@@ -115,7 +115,7 @@ export default function ExpenseScreen() {
         <MyView style={{ flex: 1, backgroundColor: '#f0f2f5' }}>
             {/* aqui é typecript dentro do front */}
             <Mytext style={styles.title}>tela de despesas</Mytext>
-            <MyModal_mobilefullscreen visible={visible} setVisible={setVisible}>
+            <MyModal visible={visible} setVisible={setVisible}>
 
                 <View style={styles.form}>
 
@@ -139,8 +139,9 @@ export default function ExpenseScreen() {
                     <MyButton style={{ justifyContent: 'center' }} onPress={() => handleRegister()} title={req.id == -1 ? "Cadastra" : "Atualizar"}></MyButton>
 
                 </View>
-            </MyModal_mobilefullscreen>
+            </MyModal>
             <MySearch
+                placeholder='Busque por uma receita'
                 style={styles.searchInput}
                 onChangeText={setSearchTerm}
                 onPress={() => { setSearchTerm(searchTerm) }}

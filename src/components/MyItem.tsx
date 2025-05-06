@@ -27,7 +27,6 @@ const MyItem: React.FC<MyItemProps> = ({ children, style, onEdit, onDel}) => {
           title="EXCLUIR"
           button_type="delete"
           color="#E74C3C"
-          style={{ marginLeft: 10 }}
         />)}
       </View>
     </View>

@@ -9,6 +9,7 @@ import MyList from '../../src/components/MyList';
 import Mytext from '../../src/components/MyText';
 import { setNotification, iNotification, deleteNotification, updateNotification, getNotifications} from '../../src/controllers/notifications';
 import MySelect from '../../src/components/MySelect';
+import { getUsers } from '../../src/controllers/users';
 
 export default function NotificationScreen(){
 // aqui é typNotificationScreenescript
@@ -22,16 +23,23 @@ export default function NotificationScreen(){
     });
 
     const [notifications, setNotifications]= useState<iNotification[]>([])
+    const [notifications, setNotifications]= useState<iNotification[]>([])
     
 
     useEffect(() => {
-        async function getTodos(){
+        (async () => {
             const retorno = await getNotifications({})
             if (retorno.status && retorno.data && retorno.data.length > 0){
                 setNotifications(retorno.data);
             }
-        }
-            getTodos();
+        })();
+
+        (async () => {
+            const retorno = await getUsers({})
+            if (retorno.status && retorno.data && retorno.data.length > 0){
+                setNotifications(retorno.data);
+            }
+        })();
     },[])
     
     
@@ -87,6 +95,7 @@ return (
                         label="Nome"
                         iconName='person'
                  />
+
                 <Myinput
                         style={styles.input}
                         placeholder = "Digite a descrição:"  
