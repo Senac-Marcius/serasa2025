@@ -1,30 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { useRouter } from 'expo-router';
-import {insertDocument, iDoc, updateDocument, deleteDocument, getListDocuments} from '../../src/controllers/documents'
+import {iDoc, deleteDocument, getListDocuments} from '../../src/controllers/documents'
 import { supabase } from '../../src/utils/supabase';
-import MyButton from '../../src/components/MyButtons';
 import MyView from '../../src/components/MyView';
 import  Mytext  from '../../src/components/MyText';
 import { StyleSheet } from 'react-native';
-import MyList from '../../src/components/MyList';
 import { MyItem } from '../../src/components/MyItem';
 import MySelect from '../../src/components/MySelect';
-//import MyUpload from '../src/components/MyUpload';
 
 
 export default function documentRegister( ){
 
-    // Estados individuais para os s
-       const [req,setReq] = useState({
-          name: '',
-          url: '',
-          type: '',
-          user_id: 1,
-          id: -1,
-          created_at: new Date().toISOString(),
       
-      });
 
     const [documents, setDocuments] = useState<iDoc[]>([]);
     const [allDocuments, setAllDocuments] = useState<iDoc[]>([]);//const q mostra todos os tipos independente do que estiver selecionado

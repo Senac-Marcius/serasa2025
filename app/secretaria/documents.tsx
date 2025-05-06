@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { useRouter } from 'expo-router';
 import {insertDocument, iDoc, updateDocument, deleteDocument, getListDocuments} from '../../src/controllers/documents'
 import MyView from '../../src/components/MyView';
 import MyDocument from '../../src/components/MyDocument';
-//import MyUpload from '../src/components/MyUpload';
 
 
 export default function DocumentsScreen() {
@@ -56,7 +54,16 @@ export default function DocumentsScreen() {
       
     <MyView>
 
-      <MyDocument type='Documentos' user_id={5}></MyDocument>
+    <MyDocument
+      type='Documentos'
+      user_id={5}
+      req={req}
+      setReq={setReq}
+      documents={documents}
+      setDocuments={setDocuments}
+      handleRegister={handleRegister}
+    />
+
       
     </MyView>
   );
