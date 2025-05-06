@@ -125,7 +125,6 @@ export default function ParentScreen (){
         <Myinput label="Telefone" placeholder="Telefone:" value={req.phone} onChangeText={(Text) => setReq({ ...req, phone: Text })} iconName="phone" />
         <Myinput label="Email" placeholder="Email:" value={req.email} onChangeText={(Text) => setReq({ ...req, email: Text })} iconName="email" />
         <Myinput label="Parentesco" placeholder="Parentesco:" value={req.kinship} onChangeText={(Text) => setReq({ ...req, kinship: Text })} iconName="groups" />
-        {/*<Myinput label="Url" placeholder="Url:" value={req.publicUrl} onChangeText={(Text) => setReq({ ...req, kinship: Text })} iconName="groups" />*/}
       
       </View>
 
@@ -159,7 +158,6 @@ export default function ParentScreen (){
             <Text >Email: {item.email}</Text>
             <Text >Parentesco: {item.kinship}</Text>
             <Text >Data: {item.createat}</Text>
-            <Text >URL: {item.publicUrl}</Text>
             <Text >UserId: {item.userid}</Text>
             </View>
           </MyItem>

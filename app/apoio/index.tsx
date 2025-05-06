@@ -159,10 +159,6 @@ export default function HomeScreen() {
               [{messages[currentIndex].institution}] {messages[currentIndex].message}
             </Text>
           </View>
-
-          <View style={styles.content}>
-            <Text style={styles.title}>Teste de conteúdos adicionais</Text>
-          </View>
         </View>
       </ImageBackground>
     </MyView>
