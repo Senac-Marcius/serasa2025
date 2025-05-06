@@ -15,9 +15,20 @@ import { getEmployees, iEmployees, toListEmployees } from '../../src/controllers
 import { getDisciplines, iDisciplines, toListDisciplines, getDisciplinesSelectList  } from '../../src/controllers/disciplines';
 import { getLocals, toListLocal, setLocal, iLocal } from '@/src/controllers/locals';
 import { getCourses, toListCourses } from '@/src/controllers/courses';
+import { useUserData } from "@/hooks/useUserData";
+import { usePathname } from "expo-router";
+import SideMenu from "./components/SideMenu";
+
 
 
 export default function TimelineScreen() {
+
+    // const userId = localStorage.getItem("userId");
+    const userId = 3;
+  
+    const pathname = usePathname();
+  
+    const { user, role, classroomData, loading } = useUserData(userId);
   const [req, setReq] = useState({
     id: -1,
     discipline_id: -1,
@@ -143,122 +154,188 @@ export default function TimelineScreen() {
 
   return (
     <MyView router={router}>
-      <ScrollView style={{ flex: 1, backgroundColor: '#f0f2f5' }} keyboardShouldPersistTaps="handled">
-        <View style={{ flexDirection: 'row', flex: 1, backgroundColor: '#f0f2f5' }}>
-          <View style={{ flex: 1, backgroundColor: '#f0f2f5' }}>
+      <View style={{ flexDirection: "row", flex: 1 }}>
+        {/* SideMenu com largura fixa */}
+        <View style={{ width: 280, flexShrink: 0 }}>
+          <SideMenu role={role} activeRoute="classroom/timelines" />
+        </View>
+
+        {/* Conteúdo principal */}
+        <View style={{ flex: 1 }}>
+          <ScrollView
+            style={{ flex: 1, backgroundColor: "#f0f2f5" }}
+            keyboardShouldPersistTaps="handled"
+          >
+            {/* Cabeçalho */}
             <View style={{ padding: 20 }}>
               <View style={styles.headerRow}>
                 <Text style={styles.title}>Meu Cronograma</Text>
-                <Pressable style={styles.buttonCapsule} onPress={() => setShowForm(true)}>
-                  <Text style={{ color: 'white' }} >+ Novo Cronograma</Text>
+                <Pressable
+                  style={styles.buttonCapsule}
+                  onPress={() => setShowForm(true)}
+                >
+                  <Text style={{ color: "white" }}>+ Novo Cronograma</Text>
                 </Pressable>
               </View>
             </View>
-          </View>
-        </View>
 
-        <View style={styles.searchWrapper}>
-          <MySearch
-            busca={filtro}
-            onChangeText={setFiltro}
-            onPress={buscar}
-            style={styles.searchWrapper}
-            placeholder='Filtrar'
-          />
-        </View>
-
-        <Mytext style={styles.formTitle}>Cronograma do Docente</Mytext>
-
-        {showForm && (
-          <View style={styles.card}>
-            <Mytext style={styles.titlee}>Data </Mytext>
-            <MyCalendar date={req.date} setDate={(date) => setReq({ ...req, date })} icon="" />
-            <Mytext style={styles.titlee}>Horário de Início </Mytext>
-            <MyTimerPicker
-              onTimeSelected={(text) => setReq({ ...req, start_time: text })}
-              initialTime={req.start_time}
-            />
-            <Mytext style={styles.titlee}>Horário do Fim </Mytext>
-            <MyTimerPicker
-              onTimeSelected={(text) => setReq({ ...req, end_time: text })}
-              initialTime={req.end_time}
-            />
-
-
-            <MySelect
-              caption="Selecione o Docente" 
-              label={teatcher.find(t => t.key == req.teacher_id )?.option || 'Selecione um Docente'}
-              list={teatcher}
-              setLabel={() =>{}}
-              setKey={(key) => setReq({ ...req, teacher_id: key })}
-            />
-
-            <MySelect
-              caption="Selecione a Disciplina" 
-              label={discipline.find(t => t.key == req.discipline_id)?.option || 'Selecione a Disciplina'}
-              list={discipline}
-              setLabel={() =>{}}
-              setKey={(key) => setReq({ ...req, discipline_id: key })}
-
-              // não esta funcionado
-            />
-
-            <MySelect
-              caption="Selecione o Local" 
-              label={local.find(t => t.key == req.local)?.option || 'Selecione o Local'}
-              list={local}
-              setLabel={() =>{}}
-              setKey={(key) => setReq({ ...req, local: key })}
-
-              // não esta funcionado
-            />
-              <MySelect
-              caption="Selecione a Turma" 
-              label={courses.find(c => c.key == req.turma )?.option || 'Selecione a Turma'}
-              list={courses}
-              setLabel={() =>{}}
-              setKey={(key) => {    setReq({ ...req, turma: key })    }}
-            />
-
-
-            <View style={styles.formButtons}>
-              <MyButton title={isEditing ? 'Atualizar' : 'Cadastrar'} button_type="default" onPress={handleRegister} style={{ flex: 1, marginRight: 8 }} />
-              <MyButton title="Cancelar" onPress={() => setShowForm(false)} style={{ flex: 1, marginLeft: 8, backgroundColor: '#EEE' }} />
+            {/* Barra de busca */}
+            <View style={styles.searchWrapper}>
+              <MySearch
+                busca={filtro}
+                onChangeText={setFiltro}
+                onPress={buscar}
+                style={styles.searchWrapper}
+                placeholder="Filtrar"
+              />
             </View>
-          </View>
-        )}
 
-        <View style={styles.table}> {/** Pegar com o pedro a nova mylist com mytb */}
-          <View style={styles.tableRowHeader}>
-            <Text style={styles.th}>Docente</Text>
-            <Text style={styles.th}>Disciplina</Text>
-            <Text style={styles.th}>Local</Text>
-            <Text style={styles.th}>Turma</Text>
-            <Text style={styles.th}>Horário de Início</Text>
-            <Text style={styles.th}>Horário do fim</Text>
-            <Text style={styles.th}>Data</Text>
-            
-            <Text style={styles.th}>Ações</Text>
-          </View>
+            <Mytext style={styles.formTitle}>Cronograma do Docente</Mytext>
 
-          {timelines //pegar com o vitor o filtro dele
-            .map((item) => (
-              <View style={styles.tableRow} key={item.id}>
-                <Text style={styles.td}>{teatcher.find(c=> c.key == item.teacher_id)?.option || ''}</Text>
-                <Text style={styles.td}>{discipline.find(c=> c.key == item.discipline_id)?.option || ''}</Text>
-                <Text style={styles.td}>{local.find(c=> c.key == item.local_id)?.option || '' }</Text>
-                <Text style={styles.td}>{courses.find(c=> c.key == item.turma)?.option || ''}</Text>
-                <Text style={styles.td}>{item.start_time ? item.start_time + 'h' : '-'}</Text>
-                <Text style={styles.td}>{item.end_time ? item.end_time + 'h' : '-'}</Text>
-                <Text style={styles.td}>{item.date}</Text>
-                <Text style={[styles.td, styles.actions]}>
-                  <Text style={styles.edit} onPress={() => editTimelines(item.id)}>Editar</Text>{' '}
-                  <Text style={styles.del} onPress={() => delTimelines(item.id)}>Excluir</Text>
-                </Text>
+            {/* Formulário */}
+            {showForm && (
+              <View style={styles.card}>
+                <Mytext style={styles.titlee}>Data</Mytext>
+                <MyCalendar
+                  date={req.date}
+                  setDate={(date) => setReq({ ...req, date })}
+                  icon=""
+                />
+
+                <Mytext style={styles.titlee}>Horário de Início</Mytext>
+                <MyTimerPicker
+                  onTimeSelected={(text) =>
+                    setReq({ ...req, start_time: text })
+                  }
+                  initialTime={req.start_time}
+                />
+
+                <Mytext style={styles.titlee}>Horário do Fim</Mytext>
+                <MyTimerPicker
+                  onTimeSelected={(text) =>
+                    setReq({ ...req, end_time: text })
+                  }
+                  initialTime={req.end_time}
+                />
+
+                <MySelect
+                  caption="Selecione o Docente"
+                  label={
+                    teatcher.find((t) => t.key == req.teacher_id)?.option ||
+                    "Selecione um Docente"
+                  }
+                  list={teatcher}
+                  setLabel={() => {}}
+                  setKey={(key) => setReq({ ...req, teacher_id: key })}
+                />
+
+                <MySelect
+                  caption="Selecione a Disciplina"
+                  label={
+                    discipline.find((t) => t.key == req.discipline_id)
+                      ?.option || "Selecione a Disciplina"
+                  }
+                  list={discipline}
+                  setLabel={() => {}}
+                  setKey={(key) => setReq({ ...req, discipline_id: key })}
+                />
+
+                <MySelect
+                  caption="Selecione o Local"
+                  label={
+                    local.find((t) => t.key == req.local)?.option ||
+                    "Selecione o Local"
+                  }
+                  list={local}
+                  setLabel={() => {}}
+                  setKey={(key) => setReq({ ...req, local: key })}
+                />
+
+                <MySelect
+                  caption="Selecione a Turma"
+                  label={
+                    courses.find((c) => c.key == req.turma)?.option ||
+                    "Selecione a Turma"
+                  }
+                  list={courses}
+                  setLabel={() => {}}
+                  setKey={(key) => {
+                    setReq({ ...req, turma: key });
+                  }}
+                />
+
+                <View style={styles.formButtons}>
+                  <MyButton
+                    title={isEditing ? "Atualizar" : "Cadastrar"}
+                    button_type="default"
+                    onPress={handleRegister}
+                    style={{ flex: 1, marginRight: 8 }}
+                  />
+                  <MyButton
+                    title="Cancelar"
+                    onPress={() => setShowForm(false)}
+                    style={{ flex: 1, marginLeft: 8, backgroundColor: "#EEE" }}
+                  />
+                </View>
               </View>
-            ))}
+            )}
+
+            {/* Tabela */}
+            <View style={styles.table}>
+              <View style={styles.tableRowHeader}>
+                <Text style={styles.th}>Docente</Text>
+                <Text style={styles.th}>Disciplina</Text>
+                <Text style={styles.th}>Local</Text>
+                <Text style={styles.th}>Turma</Text>
+                <Text style={styles.th}>Horário de Início</Text>
+                <Text style={styles.th}>Horário do Fim</Text>
+                <Text style={styles.th}>Data</Text>
+                <Text style={styles.th}>Ações</Text>
+              </View>
+
+              {timelines.map((item) => (
+                <View style={styles.tableRow} key={item.id}>
+                  <Text style={styles.td}>
+                    {teatcher.find((c) => c.key == item.teacher_id)?.option ||
+                      ""}
+                  </Text>
+                  <Text style={styles.td}>
+                    {discipline.find((c) => c.key == item.discipline_id)
+                      ?.option || ""}
+                  </Text>
+                  <Text style={styles.td}>
+                    {local.find((c) => c.key == item.local_id)?.option || ""}
+                  </Text>
+                  <Text style={styles.td}>
+                    {courses.find((c) => c.key == item.turma)?.option || ""}
+                  </Text>
+                  <Text style={styles.td}>
+                    {item.start_time ? item.start_time + "h" : "-"}
+                  </Text>
+                  <Text style={styles.td}>
+                    {item.end_time ? item.end_time + "h" : "-"}
+                  </Text>
+                  <Text style={styles.td}>{item.date}</Text>
+                  <Text style={[styles.td, styles.actions]}>
+                    <Text
+                      style={styles.edit}
+                      onPress={() => editTimelines(item.id)}
+                    >
+                      Editar
+                    </Text>{" "}
+                    <Text
+                      style={styles.del}
+                      onPress={() => delTimelines(item.id)}
+                    >
+                      Excluir
+                    </Text>
+                  </Text>
+                </View>
+              ))}
+            </View>
+          </ScrollView>
         </View>
-      </ScrollView>
+      </View>
     </MyView>
   );
 }
