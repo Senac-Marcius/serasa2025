@@ -12,8 +12,9 @@ import Mytext from '../../src/components/MyText';
 import MyTimerPicker from '../../src/components/MyTimerPiker';
 import MySelect from '../../src/components/MySelect';
 import { getEmployees, iEmployees, toListEmployees } from '../../src/controllers/employees';
-import { getDisciplines, iDisciplines, toListDisciplines } from '../../src/controllers/disciplines';
+import { getDisciplines, iDisciplines, toListDisciplines, getDisciplinesSelectList  } from '../../src/controllers/disciplines';
 import { getLocals, toListLocal } from '@/src/controllers/locals';
+
 
 export default function TimelineScreen() {
   const [req, setReq] = useState({
