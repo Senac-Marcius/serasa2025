@@ -24,7 +24,7 @@ function StarRating({ rating, onChange }: { rating: number; onChange: (star: num
     );
 }
 
- 
+
 
 
 type StarCalculationProps = {
@@ -40,7 +40,7 @@ export default function StarCalculation({ BookId }: StarCalculationProps) {
         id: -1,
         bookId: 0,
         name: '',
-        totalStar:0,
+        totalStar: 0,
         quantity: '',
         star: 0,
         commentary: '',
@@ -63,11 +63,11 @@ export default function StarCalculation({ BookId }: StarCalculationProps) {
     useEffect(() => {
         async function loadOrReset() {
             const _userId = await getLoggedUserId();
-    
+
             const existing = collections.find(
                 (c) => c.bookId === BookId && c.userId === _userId
             );
-    
+
             if (existing) {
                 setReq(existing);
             } else {
@@ -83,13 +83,13 @@ export default function StarCalculation({ BookId }: StarCalculationProps) {
                     createAt: new Date().toISOString(),
                 });
             }
-    
+
             setSuccessMessage('');
         }
-    
+
         loadOrReset();
     }, [BookId, collections]);
-    
+
     async function handleRegister() {
         const _userId = await getLoggedUserId();
 
@@ -97,7 +97,7 @@ export default function StarCalculation({ BookId }: StarCalculationProps) {
         const alreadyRated = collections.some(
             (c) => c.bookId === req.bookId && c.userId === _userId
         );
-        
+
 
         if (alreadyRated && req.id === -1) {
             alert("Você já avaliou este exemplar.");
@@ -116,7 +116,7 @@ export default function StarCalculation({ BookId }: StarCalculationProps) {
             setCollections([...collections, newCollection]);
             await setCollection(newCollection);
             await updateItemStar(BookId);
-            setSuccessMessage('Reservado com sucesso! ✅');
+            setSuccessMessage("Item avaliado com sucesso!");
         } else {
             setCollections(collections.map(c => (c.id == req.id ? req : c)));
             const update = await updateCollectionById(req.id, req);
@@ -125,66 +125,54 @@ export default function StarCalculation({ BookId }: StarCalculationProps) {
                 return;
             }
         }
-
-        setReq({
-            id: -1,
-            bookId: 0,
-            name: '',
-            totalStar:0,
-            quantity: '',
-            commentary: '',
-            star: 0,
-            userId: '',
-            createAt: new Date().toISOString(),
-        });
     }
     const getAverageStarsByBookId = async () => {
         const { data, error } = await supabase
-          .from("collections")
-          .select("bookId, star");
-      
+            .from("collections")
+            .select("bookId, star");
+
         if (error) {
-          console.error("Erro ao buscar avaliações:", error);
-          return {};
+            console.error("Erro ao buscar avaliações:", error);
+            return {};
         }
-      
+
         const starMap: Record<string, { total: number; count: number }> = {};
-      
+
         data.forEach(({ bookId, star }) => {
             if (!bookId || star == null) return;
-          
+
             if (!starMap[bookId]) {
-              starMap[bookId] = { total: star, count: 1 };
+                starMap[bookId] = { total: star, count: 1 };
             } else {
-              starMap[bookId].total += star;
-              starMap[bookId].count += 1;
+                starMap[bookId].total += star;
+                starMap[bookId].count += 1;
             }
-          });
-      
+        });
+
         const averageMap: Record<string, number> = {};
         for (const id in starMap) {
-          const { total, count } = starMap[id];
-          averageMap[id] = total / count;
+            const { total, count } = starMap[id];
+            averageMap[id] = total / count;
         }
-      
+
         return averageMap;
-      };
-      const updateItemStar = async (bookId: number) => {
+    };
+    const updateItemStar = async (bookId: number) => {
         const averageMap = await getAverageStarsByBookId();
         const average = averageMap[bookId];
-      
+
         if (average === undefined) return;
-      
+
         const { error } = await supabase
-          .from("items_librarie") // ou o nome real da tabela de itens
-          .update({ star: average })
-          .eq("id", bookId); // assumindo que `bookId` corresponde ao `id` da tabela items
-      
+            .from("items_librarie") // ou o nome real da tabela de itens
+            .update({ star: average })
+            .eq("id", bookId); // assumindo que `bookId` corresponde ao `id` da tabela items
+
         if (error) {
-          console.error(`Erro ao atualizar star em items para bookId ${bookId}:`, error);
+            console.error(`Erro ao atualizar star em items para bookId ${bookId}:`, error);
         }
-      };
-      
+    };
+
 
     return (
         <View style={styles.formContainer}>
@@ -202,20 +190,25 @@ export default function StarCalculation({ BookId }: StarCalculationProps) {
                             style={styles.inputComentary}
                             placeholder="Digite a avaliação"
                             label="Avaliação"
-                            iconName="pen"
+                            iconName=""
                         />
                         <View style={styles.containerRegister}>
-                        <View style={{ marginTop: 20, alignItems: 'center' }}>
-                            <Text style={styles.textPreview}>Prévia da Avaliação:</Text>
-                            <Text>Estrelas: {req.star} ★</Text>
-                            <Text>Comentário: {req.commentary || "Nenhum comentário ainda."}</Text>
-                        </View>
-                        
-                        <MyButton
-                            onPress={handleRegister}
-                            title="Salvar"
-                            style={styles.button_round}
-                        />
+                            <View style={{ marginTop: 20, alignItems: 'center' }}>
+                                <Text style={styles.textPreview}>Prévia da Avaliação:</Text>
+                                <Text>Estrelas: {req.star} ★</Text>
+                                <Text>Comentário: {req.commentary || "Nenhum comentário ainda."}</Text>
+                            </View>
+
+                            <MyButton
+                                onPress={handleRegister}
+                                title="Salvar"
+                                style={styles.button_round}
+                            />
+                            {successMessage !== '' && (
+                                <Text style={{ color: 'green', fontWeight: 'bold' }}>
+                                    {successMessage}
+                                </Text>
+                            )}
                         </View>
                     </View>
                 </ScrollView>
@@ -248,36 +241,36 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    containerRegister:{
-        gap:10,
+    containerRegister: {
+        gap: 10,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
     },
-    text:{
-        marginBottom: 10, 
-        fontWeight: 'bold', 
+    text: {
+        marginBottom: 10,
+        fontWeight: 'bold',
         fontSize: 30,
-        color:"#813AB1"
+        color: "#813AB1"
     },
-    textPreview:{
-        marginBottom: 10, 
-        fontWeight: 'bold', 
+    textPreview: {
+        marginBottom: 10,
+        fontWeight: 'bold',
         fontSize: 15,
-        color:"#813AB1"
+        color: "#813AB1"
 
     },
-    inputComentary:{
-        fontWeight: 'bold', 
+    inputComentary: {
+        fontWeight: 'bold',
         fontSize: 25,
-        color:"#813AB1"
+        color: "#813AB1"
     },
     form: {
         padding: 20,
         borderRadius: 30,
         backgroundColor: 'white',
-        width: 400,
-        height:"auto",
+        width: 390,
+        height: "auto",
         justifyContent: 'center',
         alignItems: 'center',
     },

@@ -25,7 +25,7 @@ interface iItem {
     keywords: string,
     summary: string,
     notes: string,
-    number_copies: string,
+    number_copies: number,
     status: string,
     url: string,
     file: string,

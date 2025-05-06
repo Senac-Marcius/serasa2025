@@ -5,8 +5,6 @@ import { getLoggedUserId, iUser } from '../../src/controllers/users';
 import { FlatList, View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter, Link } from 'expo-router';
-import StarCalculation from './starsCalculation';
-import { MyModal } from '../../src/components/MyModal';
 import { ScrollView } from 'react-native-gesture-handler';
 import MyMenu from '../../src/components/MyMenu';
 import MyButton from '../../src/components/MyButtons';
@@ -234,8 +232,10 @@ const styles = StyleSheet.create({
         padding: 12,
         marginBottom: 10,
         flexDirection: "row",
+        alignItems:"center",
         gap: 10
     },
+  
     containerLabel: {
         display: "flex",
         width: 340,

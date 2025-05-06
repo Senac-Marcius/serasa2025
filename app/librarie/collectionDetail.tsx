@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
     height: "100%"
   },
   textTitle: {
-    fontFamily: 'Poppins, sans-serif',
+    fontFamily: 'Poppins_400Regular',
     fontWeight: 600,
     color: '#750097',
     fontSize: 30,

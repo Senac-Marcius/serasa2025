@@ -249,14 +249,11 @@ export default function CollectionPreviewScreen() {
                         ) : (
                             <FlatList
                                 data={filtered}
-                                numColumns={4}
+                                numColumns={3}
                                 keyExtractor={(item) => item.id.toString()}
                                 renderItem={({ item }) => (
                                     <TouchableOpacity
                                         onPress={() => {
-                                            // if (item.keywords) {
-                                            //     const tagsArray = item.keywords.split(',').map(tag => tag.trim());
-                                            // }
                                             router.push({ pathname: 'librarie/collectionDetail', params: { id: item.id.toString() } });
                                         }}
                                     >
@@ -401,6 +398,7 @@ const styles = StyleSheet.create({
     itemContainer: {
         padding: 25,
         margin: 5,
+        flexGrow: 1,
         backgroundColor: '#ecdef0',
         borderWidth: 3,
         borderColor: "white",
@@ -410,6 +408,7 @@ const styles = StyleSheet.create({
         width: 300,
         height: 530,
         alignItems: "center",
+        overflow: 'hidden',
         justifyContent:"space-between",
 
     },

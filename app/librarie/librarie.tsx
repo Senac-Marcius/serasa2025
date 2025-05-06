@@ -10,8 +10,6 @@ import MyTabsbar from '../../src/components/MyTabsBar';
 import MyButton from '../../src/components/MyButtons';
 import { MyModal } from '../../src/components/MyModal';
 import MySelect from '../../src/components/MySelect';
-import MyUpload from '../../src/components/MyUpload';
-import MyAccessibility from '../../src/components/MyAccessibility';
 import { Myinput, MyTextArea, MyCheck } from '../../src/components/MyInputs';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -173,13 +171,13 @@ export default function itemScreen() {
             translation: '',
             language: '',
             image: "",
-            year: 0,
+            year: '',
             edition: '',
             publisher: '',
             location: '',
-            number_pages: 0,
+            number_pages: '',
             serie: '',
-            volume: 0,
+            volume: '',
             format: '',
             isbn: '',
             issn: '',
@@ -189,7 +187,7 @@ export default function itemScreen() {
             keywords: '',
             summary: '',
             notes: '',
-            number_copies: 0,
+            number_copies: '',
             status: '',
             url: '',
             file: '',
@@ -281,6 +279,8 @@ export default function itemScreen() {
                     file: '',
                     type_loan: '',
                     incorporated: false,
+                    star:0,
+                    borrowedAmount:0,
                 });
                 router.push('/librarie/librariePreview');
             }
@@ -334,7 +334,9 @@ export default function itemScreen() {
                     url: req.url,
                     file: req.file,
                     type_loan: req.type_loan,
-                    incorporated: req.incorporated || false, // Se não estiver marcado, será "false"
+                    incorporated: req.incorporated || false,
+                    star:0,
+                    borrowedAmount:0, // Se não estiver marcado, será "false"
                 }
             ]);
     
@@ -383,6 +385,8 @@ export default function itemScreen() {
                 file: '',
                 type_loan: '',
                 incorporated: false,
+                star:0,
+                borrowedAmount:0,
             });
             setSelectedImage(null);
             setSelectedFile(null);
@@ -435,81 +439,6 @@ export default function itemScreen() {
         }
     };
 
-<<<<<<< HEAD
-    const save = () => {
-        console.log("Item salvo:",);
-    };
-
-    const cancel = () => {
-
-        Alert.alert(
-            "Cancelar Registro",
-            "Tem certeza que deseja cancelar este registro? Todos os dados não salvos serão perdidos.",
-            [
-                {
-                    text: "Não",
-                    style: "cancel"
-                },
-                { 
-                    text: "Sim", 
-                    onPress: () => {
-                        // Resetar o formulário
-                        setReq({
-                            id: -1,
-                            created_at: new Date().toISOString(),
-                            typology: '',
-                            title: '',
-                            subtitle: '',
-                            responsible: '',
-                            translation: '',
-                            language: '',
-                            image: '',
-                            year: 0,
-                            edition: '',
-                            publisher: '',
-                            location: '',
-                            number_pages: 0,
-                            serie: '',
-                            volume: 0,
-                            format: '',
-                            isbn: '',
-                            issn: '',
-                            cdd: '',
-                            call_number: '',
-                            subject: '',
-                            keywords: '',
-                            summary: '',
-                            notes: '',
-                            number_copies: 0,
-                            status: '',
-                            url: '',
-                            file: '',
-                            type_loan: '',
-                            incorporated: false,
-                            star:0,
-                            borrowedAmount:0,
-                        });
-                        setSelectedImage(null);
-                        setSelectedFile(null);
-                        
-                        router.push('/Biblioteca/librariePreview');
-                    }
-                }
-            ]
-        );
-    };
-
-
-
-    //Selects/Pickers
-    const [typology, setTypology] = useState("Tipologia")
-    const [language, setLanguage] = useState("Idioma") 
-    const [format, setFormat] = useState("Formato") 
-    const [status, setStatus] = useState("Status")
-    const [type_loan, setType_loan] = useState("Tipo de Empréstimo") 
-
-=======
->>>>>>> origin/dev_librarie1.3
     return ( //encapsulamento
         <ScrollView>
             <View style={styles.header}>
