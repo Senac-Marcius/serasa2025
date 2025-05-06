@@ -4,7 +4,7 @@ import { supabase } from '../utils/supabase';
 export type Turma = {
   id: number;
   curso: string;
-  nome_curso: string;
+  nome_turma: string;
   turno: string;
   modalidade: string;
   horario: string;

@@ -14,7 +14,7 @@ import {
 } from '../../src/controllers/classes';
 
 const camposForm = [
-  'id', 'curso', 'nome_curso', 'turno', 'modalidade', 'horario',
+  'id', 'curso', 'nome_turma', 'turno', 'modalidade', 'horario',
   'cargaHoraria', 'vagas', 'inicio', 'termino', 'valor',
   'docente', 'status',
 ];
@@ -27,7 +27,7 @@ export default function TurmasComCadastro() {
   const [form, setForm] = useState<Turma>({
     id: 0,
     curso: '',
-    nome_curso: '',
+    nome_turma: '',
     turno: '',
     modalidade: '',
     horario: '',
@@ -64,7 +64,7 @@ export default function TurmasComCadastro() {
       setForm({
         id: 0,
         curso: '',
-        nome_curso: '',
+        nome_turma: '',
         turno: '',
         modalidade: '',
         horario: '',
@@ -102,6 +102,10 @@ export default function TurmasComCadastro() {
 
   return (
     <MyView style={styles.container}>
+         {!modoCadastro && (
+        <MyButton title="Cadastrar nova turma" onPress={() => setModoCadastro(true)} />
+      )}
+
       {/* TABELA */}
       <MyList
         style={styles.table}
@@ -111,7 +115,7 @@ export default function TurmasComCadastro() {
           <MyTb onEdit={() => editar(item)} onDel={() => excluir(item.id)}>
             <MyText style={styles.td}>{item.id}</MyText>
             <MyText style={styles.td}>{item.curso}</MyText>
-            <MyText style={styles.td}>{item.nome_curso}</MyText>
+            <MyText style={styles.td}>{item.nome_turma}</MyText>
             <MyText style={styles.td}>{item.turno}</MyText>
             <MyText style={styles.td}>{item.modalidade}</MyText>
             <MyText style={styles.td}>{item.horario}</MyText>
@@ -126,20 +130,25 @@ export default function TurmasComCadastro() {
         )}
         header={(
           <View style={styles.tableRowHeader}>
-            {camposForm.map((campo) => (
-              <MyText style={styles.th} key={campo}>
-                {campo.toUpperCase()}
-              </MyText>
-            ))}
+            <MyText style={styles.th}>Codigo</MyText>
+             <MyText style={styles.th}>Curso</MyText>
+            <MyText style={styles.th}>Turma</MyText>
+            <MyText style={styles.th}>Turno</MyText>
+            <MyText style={styles.th}>Modalidade</MyText>
+            <MyText style={styles.th}>Horario</MyText>
+            <MyText style={styles.th}>Carga Horaria</MyText>
+            <MyText style={styles.th}>Vagas</MyText>
+            <MyText style={styles.th}>Data Inicio</MyText>
+            <MyText style={styles.th}>Data Termino</MyText>
+            <MyText style={styles.th}>Valor</MyText>
+            <MyText style={styles.th}>Docente</MyText>
+            <MyText style={styles.th}>Status</MyText>
           </View>
         )}
       />
 
-      {/* BOTÃO */}
-      {!modoCadastro && (
-        <MyButton title="Cadastrar nova turma" onPress={() => setModoCadastro(true)} />
-      )}
-
+      
+     
       {/* FORMULÁRIO */}
       {modoCadastro && (
         <>
@@ -192,7 +201,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     paddingBottom: 8,
+    justifyContent:'space-between',
+    gap:15
   },
-  th: { flex: 1, fontWeight: 'bold', fontSize: 12 },
+  th: { flex: 1, fontWeight: 'bold', fontSize: 20 },
   td: { flex: 1, fontSize: 12 },
 });
