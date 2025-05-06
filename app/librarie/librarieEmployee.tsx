@@ -156,7 +156,7 @@ export default function librarieEmployeeScreen () {
                                 data={cards}
                                 keyExtractor={(item) => item.title}
                                 contentContainerStyle={styles.grid}
-                                numColumns={2}
+                                numColumns={4}
                                 scrollEnabled={false}
                                 renderItem={({ item }) => (
                                     <TouchableOpacity 
@@ -354,7 +354,7 @@ const styles = StyleSheet.create({
     },
     card: {
         flex: 1,
-        minWidth: '40%',
+        minWidth: '32%',
         margin: 4,
         padding: 24,
         borderRadius: 12,
@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
         gap: 8,
     },
     cardTitle: {
-        fontSize: 14,
+        fontSize: 16,
         marginTop: 8,
         color: '#555',
     },
