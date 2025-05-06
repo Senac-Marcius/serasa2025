@@ -103,6 +103,8 @@ export default function itemScreen() {
         incorporated: boolean,
         created_at: string,
         id: number,
+        star: number,
+        borrowedAmount:number,
     }
     
     async function setItem(item:iItem){
