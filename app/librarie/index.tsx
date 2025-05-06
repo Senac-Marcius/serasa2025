@@ -175,12 +175,12 @@ export default function CollectionPreviewScreen() {
                                 <Text style={styles.buttonText}>Meus empréstimos</Text>
                             </TouchableOpacity>
 
-                            {/* {isEmployeeUser && (//exibe apenas para funcionarios */}
+                            {isEmployeeUser && (//exibe apenas para funcionarios
                                 <TouchableOpacity style={styles.button_round} onPress={() => router.push({ pathname: 'librarie/librarieEmployee' })}>
                                     <MaterialCommunityIcons name="account-hard-hat" size={20} color="#750097" />
                                     <Text style={styles.buttonText}>Funcionários</Text>
                                 </TouchableOpacity>
-                            {/* )} */}
+                            )} 
 
                             <TouchableOpacity style={styles.avatarButton}>
                                 <Image source={{ uri: 'https://i.pravatar.cc/150?img=1' }} style={styles.avatar} />
