@@ -96,6 +96,7 @@ export default function TimelineScreen() {
 
     (async () =>{
       const result = await getLocals({});
+      console.log(result)
       if (result.status && result.data && result.data.length > 0) {
         setLocal( await toListLocal(result.data) );
       } else {
@@ -103,7 +104,7 @@ export default function TimelineScreen() {
       }
      
     })();
-      // local não esta funcionado 
+  
   
   }, []);
 
@@ -241,16 +242,16 @@ export default function TimelineScreen() {
                   setKey={(key) => setReq({ ...req, discipline_id: key })}
                 />
 
-                <MySelect
-                  caption="Selecione o Local"
-                  label={
-                    local.find((t) => t.key == req.local_id?.option ||
-                    "Selecione o Local")
-                  }
-                  list={local}
-                  setLabel={() => {}}
-                  setKey={(key) => setReq({ ...req, local: key })}
-                />
+            <MySelect
+              caption="Selecione o Local"
+              label={
+                local.find((t) => t.key === req.local_id)?.option || "Selecione o Local"
+              }
+              list={local}
+              setLabel={() => {}}
+              setKey={(key) => setReq({ ...req, local_id: key })}
+            />
+
 
                 <MySelect
                   caption="Selecione a Turma"

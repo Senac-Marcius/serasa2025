@@ -30,11 +30,13 @@ function toListLocal(data: iLocal[]){
 async function getLocals (params: any) {
     const {data: todos, error} = await supabase.from('locals').select();
 
-    if(error) 
+    if(error) {
       console.log(error)
-      return {status: false, error: error}
-    
-    return {status: true, data: todos}
+      return {status: true, data: todos}}
+    else{
+
+      return {status: true, data: todos}
+    }
 }
 
 

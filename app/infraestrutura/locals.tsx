@@ -106,7 +106,7 @@ export default function LocalScreen() {
           marginBottom: 20,
         }}
       >
-        <MySelect
+        {/* <MySelect
           caption="Selecione uma unidade"
           label={unity} // Mostra o valor selecionado
           list={[
@@ -116,7 +116,7 @@ export default function LocalScreen() {
           ]}
           setLabel={(option) => setUnit(option)} // Atualiza o valor selecionado
           setKey={(key) => console.log("Chave selecionada:", key)} // Opcional: registra a chave
-        />
+        /> */}
         <Myinput
           iconName="search"
           placeholder="Digite o nome do local"
