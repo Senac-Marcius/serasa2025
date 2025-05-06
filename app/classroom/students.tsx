@@ -253,7 +253,15 @@ export default function Students() {
               </View>
             )}
 
-            {renderHeader()}
+            <MyButton
+              title="Novo Aluno"
+              onPress={() => {
+                
+              }}
+            />
+
+            {
+            renderHeader()}
             <FlatList
               data={students}
               keyExtractor={(item) => item.id.toString()}
