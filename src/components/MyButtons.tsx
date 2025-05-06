@@ -6,7 +6,8 @@ import {
   ViewStyle,
   View,
   Animated,
-  Easing
+  Easing,
+  TouchableOpacityProps
 } from "react-native";
 import { Icon } from "react-native-paper";
 
@@ -50,7 +51,7 @@ function getButtonType(button_type: Button_type): any {
   }
 }
 
-const MyButton: React.FC<MyButtonProps> = ({
+const MyButton: React.FC<MyButtonProps & TouchableOpacityProps> = ({
   title,
   bottom_text,
   onPress,
@@ -65,6 +66,7 @@ const MyButton: React.FC<MyButtonProps> = ({
   iconColor = "white",
   height,
   width,
+  ...touchableProps
 }) => {
   const [loading, setLoading] = useState(false);
   const rotateAnim = useRef(new Animated.Value(0)).current;
@@ -115,6 +117,7 @@ const MyButton: React.FC<MyButtonProps> = ({
         ]}
         onPress={onPressInternal}
         disabled={loading}
+        {...touchableProps}
       >
         {loading ? (
           <Animated.View

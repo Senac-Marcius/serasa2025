@@ -68,15 +68,26 @@ function toListUser(data: iUser[]) {
 
 //const [users, setUsers] = useState<iUser[]>([])
 
-async function setUser(user: iUser) {
-    const { data, error } = await supabase.from('users').insert([user]).select()
-    if (error) {
-        //aqui vem os tratamentos da varíavel error
-        console.log('erro', error)
-    }
+async function setUser(user: Partial<iUser>): Promise<{ status: boolean; data?: any; error?: any }> {
 
-    return data
-}
+    const { id, ...cleanUser } = user;
+  
+    console.log('Enviando ao Supabase (sem id):', cleanUser); 
+  
+    const { data, error } = await supabase
+      .from('users')
+      .insert([cleanUser])
+      .select();
+  
+    if (error) {
+      console.error('Erro ao cadastrar usuário:', error.message, error.details, error.hint);
+      return { status: false, error };
+    }
+  
+    return { status: true, data };
+  }
+  
+  
 
 async function deleteUserById(id: number) {
     const { error } = await supabase
