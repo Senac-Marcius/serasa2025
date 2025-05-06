@@ -2,19 +2,17 @@ import React, {useState} from 'react';
 import { supabase } from '../utils/supabase'
 
 interface iEmployees { 
-    id: number,
-    urls: string,
-    nationality: string,
-    disc_personality: string,
-    sex: string,
-    martinal_status: string,
-    ethnicity: string,
-    deficiency: string,
-    created_at: string,
-    is_active: string,
-    user_id:number,
-    positions_id:number,
-    scale_id:number
+  id: number;
+  urls: string;
+  nationality: string;
+  disc_personality: string;
+  sex: string;
+  martinal_status: string;
+  ethnicity: string;
+  deficiency: string;
+  is_active: string; // Alterado para string
+  user_id: number;
+  positions_id: number;
 }
 function toListEmployees(data: iEmployees[]){
   const resp: {key: number, option: string}[] = [];
@@ -24,66 +22,69 @@ function toListEmployees(data: iEmployees[]){
 
   return resp;
 }
-async function getEmployees(params:any) { 
-  const { data: todos , error} = await supabase.from('employees').select()
-  if(error){
-    console.log(error)
-    return {status: false, error: error}
-  } 
-  return {status: true, data: todos}
+async function getEmployees(params: any) { 
+  let query = supabase.from('employees').select('*');
   
-}
-
-async function  setEmployee(employee:iEmployees){
-
-    //aqui vem o tratamento da informação antes da inserção
-    
-    const { data, error } = await supabase.from('employees')
-    .insert(
-        employee
-    ).select()
-
-   
-    if(error){
-      //aqui vem o tratamento da variavel error
-
-
-        return[]
-    }
-    return data
-}
-async function updateEmployee(id: number, req:any){
-    const { data, error } = await supabase
-  .from('employees')
-  .update({
-    urls: req.urls,
-    name: req.name,
-    tell: req.tell,
-    email: req.email,
-    address: req.address,
-    nationality: req.nationality,
-    disc_personality: req.disc_personality,
-    sex: req.sex,
-    martinal_status: req.martinal_status,
-    is_active: req.is_active,
-    positions_id: req.positions_id
-     })
-  .eq('id', id)
-  .select()
-  if(error){
-    //aqui vem o tratamento da variavel error
-
-
-      return[]
+  if (params?.user_id) {
+    query = query.eq('user_id', params.user_id);
   }
-  return data
+
+  const { data, error } = await query;
+  
+  if(error){
+    console.log(error);
+    return {status: false, error: error};
+  } 
+  return {status: true, data: data};
 }
-async function  dellEmployee(id:number) {
-    const { error } = await supabase
-  .from('employees')
-  .delete()
-  .eq('id', id)
-  return 'Usuario Deletado'
+
+async function setEmployee(employee: iEmployees) {
+  const { data, error } = await supabase
+    .from('employees')
+    .insert([employee]) // Envolva em um array
+    .select();
+
+  if (error) {
+    console.error("Erro ao criar funcionário:", error);
+    return null;
+  }
+  return data?.[0]; // Retorna o primeiro item inserido
+}
+async function updateEmployee(id: number, req: iEmployees) {
+  const { data, error } = await supabase
+    .from('employees')
+    .update({
+      urls: req.urls,
+      nationality: req.nationality,
+      disc_personality: req.disc_personality,
+      sex: req.sex,
+      martinal_status: req.martinal_status,
+      ethnicity: req.ethnicity,
+      deficiency: req.deficiency,
+      is_active: req.is_active,
+      positions_id: req.positions_id,
+      user_id: req.user_id
+    })
+    .eq('id', id)
+    .select();
+
+  if (error) {
+    console.error("Erro ao atualizar funcionário:", error);
+    return null;
+  }
+  return data?.[0];
+}
+async function dellEmployee(id: number) {
+  const { error } = await supabase
+    .from('employees')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    console.error("Erro ao deletar funcionário:", error);
+    throw error; // Ou retorne um objeto { status: false, error }
+  }
+  return { status: true, message: "Usuário deletado" };
 }
 
 export {setEmployee,updateEmployee,dellEmployee,getEmployees,toListEmployees, iEmployees}

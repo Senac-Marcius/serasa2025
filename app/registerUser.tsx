@@ -102,7 +102,7 @@ export default function UserScreen() {
             setUsers([...users, newUser])
             const result = await setUser(newUser)
             console.log(users)
-            router.push("/")
+            router.push("/homeLogin")
 
         } else {
             setUsers(users.map(u => (u.id == req.id ? req : u)))
@@ -115,7 +115,7 @@ export default function UserScreen() {
 
                 });
             }
-
+            router.push("/")
         }
 
 
@@ -194,7 +194,7 @@ export default function UserScreen() {
 
                             <View style={{ display: 'flex', alignItems: 'center' }}>
                                 <MyButton
-                                    title="CADASTRAR"
+                                    title={req.id==-1? "CADASTRAR": "ATUALIZAR"}
                                     onPress={handleRegister}
                                     button_type="round"
                                     style={styles.button_round}

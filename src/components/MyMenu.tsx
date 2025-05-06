@@ -89,6 +89,9 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Apoio" route="apoio" icon='accessibility-outline' />
         <MenuItem label="Administração" route="adminsitration/" icon="people" />
         <MenuItem label="Financeiro" route="finance" icon="people" />
+        <MenuItem label="Administração" route="adminsitration/" icon="people" />
+        <MenuItem label="Financeiro" route="finance" icon="people" />
+        <MenuItem label="Financeiro" route="finance" icon="people" />
         <MenuItem label="Secretaria" route="secretaria" icon="add-circle" />
         <MenuItem label="Categories" route="categories" icon="albums" />
         <MenuItem label="Classes" route="sala_de_aula/classes" icon="school" />

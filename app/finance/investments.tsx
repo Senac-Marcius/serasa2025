@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Children, useEffect, useState, } from 'react';
 import { View, Text, StyleSheet  } from 'react-native';
 import MyView from '../../src/components/MyView';
 import { Myinput, MyTextArea } from '../../src/components/MyInputs';
@@ -6,7 +6,6 @@ import Mylist from '../../src/components/MyList';
 import {MyTb} from '../../src/components/MyItem';
 import MyButton from '../../src/components/MyButtons';
 import Mytext from '../../src/components/MyText';
-//import { MyAccess } from '../../src/components/MyAccess';
 import { iInvestment, setInvestment, getInvestment, deleteInvestment, updateInvestment } from '../../src/controllers/investments';
 import {MyModal} from '../../src/components/MyModal';
 import MySearch from '../../src/components/MySearch';
@@ -29,6 +28,7 @@ export default function investmentScreen(){
     const [investments, setInvestments] = useState<iInvestment[]>([]);
 
     const [searchTerm, setSearchTerm] = useState('');
+
 
 
     useEffect(() => {
@@ -158,7 +158,6 @@ export default function investmentScreen(){
                     onChangeText={(text) => setReq({...req, description: text })}
                     iconName=''
                   />
-                    
 
                 <MyButton style={{justifyContent:'center'}} onPress={ handleRegister } title={req.id == -1 ? "cadastrar" : "Atualizar"} /> 
             </View>
@@ -184,7 +183,7 @@ export default function investmentScreen(){
                        <Mytext style={styles.td}> {item.name}</Mytext>
                        <Mytext style={styles.td}> {item.description}</Mytext>
                        <Mytext style={styles.td}> {item.url}</Mytext>
-                       <Mytext style={styles.td}> {item.created_at}</Mytext>
+                       <Mytext style={styles.td}> {new Date(item.created_at).toLocaleDateString('pt-BR')}</Mytext>
                        <Mytext style={styles.td}> {item.value}</Mytext>
                        </MyTb> 
                 )}
@@ -198,7 +197,7 @@ export default function investmentScreen(){
                     <Mytext style={styles.th}>Ações</Mytext>
                 </View>
                 )}
-            />
+                 />
       </MyView>   
     );
 } 
