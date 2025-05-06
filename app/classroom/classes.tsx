@@ -10,11 +10,12 @@ import {
   Turma,
   buscarTurmas,
   salvarTurma,
+  atualizarTurma,
   deletarTurma,
 } from '../../src/controllers/classes';
 
 const camposForm = [
-  'id', 'curso', 'nome_turma', 'turno', 'modalidade', 'horario',
+  'curso', 'nome_turma', 'turno', 'modalidade', 'horario',
   'cargaHoraria', 'vagas', 'inicio', 'termino', 'valor',
   'docente', 'status',
 ];
@@ -51,16 +52,27 @@ export default function TurmasComCadastro() {
 
   const salvar = async () => {
     for (const campo of camposForm) {
-      if (!form[campo as keyof Turma]) {
+      if (!form[campo as keyof typeof form]) {
         setErrorMessage(`Campo obrigatório: ${campo}`);
         return;
       }
     }
+
     setErrorMessage(null);
 
     try {
-      await salvarTurma(form);
-      carregarTurmas();
+      let turmaSalva: Turma;
+      if (form.id === 0) {
+        const { id, ...dadosSemId } = form;
+        turmaSalva = await salvarTurma(dadosSemId);        
+        setTurmas((prev) => [...prev, turmaSalva]);
+      } else {
+        turmaSalva = await atualizarTurma(form);
+        setTurmas((prev) =>
+          prev.map((t) => (t.id === turmaSalva.id ? turmaSalva : t))
+        );
+      }
+
       setForm({
         id: 0,
         curso: '',
@@ -102,7 +114,7 @@ export default function TurmasComCadastro() {
 
   return (
     <MyView style={styles.container}>
-         {!modoCadastro && (
+      {!modoCadastro && (
         <MyButton title="Cadastrar nova turma" onPress={() => setModoCadastro(true)} />
       )}
 
@@ -131,7 +143,7 @@ export default function TurmasComCadastro() {
         header={(
           <View style={styles.tableRowHeader}>
             <MyText style={styles.th}>Codigo</MyText>
-             <MyText style={styles.th}>Curso</MyText>
+            <MyText style={styles.th}>Curso</MyText>
             <MyText style={styles.th}>Turma</MyText>
             <MyText style={styles.th}>Turno</MyText>
             <MyText style={styles.th}>Modalidade</MyText>
@@ -147,8 +159,6 @@ export default function TurmasComCadastro() {
         )}
       />
 
-      
-     
       {/* FORMULÁRIO */}
       {modoCadastro && (
         <>
@@ -201,8 +211,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     paddingBottom: 8,
-    justifyContent:'space-between',
-    gap:15
+    justifyContent: 'space-between',
+    gap: 15,
   },
   th: { flex: 1, fontWeight: 'bold', fontSize: 20 },
   td: { flex: 1, fontSize: 12 },

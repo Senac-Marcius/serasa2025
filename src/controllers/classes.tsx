@@ -25,10 +25,31 @@ export async function buscarTurmas(): Promise<Turma[]> {
   return data as Turma[];
 }
 
-export async function salvarTurma(turma: Turma) {
-  const { error } = await supabase.from(tabela).insert([turma]);
+export async function salvarTurma(turma: Omit<Turma, 'id'>): Promise<Turma> {
+  const { data, error } = await supabase
+    .from(tabela)
+    .insert([turma])
+    .select('*') 
+    .single();
+
   if (error) throw new Error(error.message);
+
+  return data as Turma;
 }
+
+export async function atualizarTurma(turma: Turma): Promise<Turma> {
+  const { data, error } = await supabase
+    .from(tabela)
+    .update(turma)
+    .eq('id', turma.id)
+    .select('*')
+    .single();
+
+  if (error) throw new Error(error.message);
+  return data as Turma;
+}
+
+
 
 export async function deletarTurma(id: number) {
   const { error } = await supabase.from(tabela).delete().eq('id', id);
