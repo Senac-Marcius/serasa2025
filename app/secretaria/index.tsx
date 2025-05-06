@@ -19,6 +19,7 @@ const menuItems = [
   { label: 'Calendário', icon: <Ionicons name="calendar-outline" size={20} color="#555" />, route: 'secretaria/calendar' },
   { label: 'Documentos', icon: <Ionicons name="document-text-outline" size={20} color="#555" />, route: 'secretaria/documents' },
   { label: 'Cursos', icon: <Ionicons name="document-text-outline" size={20} color="#555" />, route: 'secretaria/courses' }
+  
 ];
 
 export default function IndexScreen() {
