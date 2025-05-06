@@ -13,13 +13,13 @@ import MyTimerPicker from '../../src/components/MyTimerPiker';
 import MySelect from '../../src/components/MySelect';
 import { getEmployees, iEmployees, toListEmployees } from '../../src/controllers/employees';
 import { getDisciplines, iDisciplines, toListDisciplines, getDisciplinesSelectList  } from '../../src/controllers/disciplines';
-import { getLocals, toListLocal } from '@/src/controllers/locals';
+import { getLocals, toListLocal, setLocal, iLocal } from '@/src/controllers/locals';
+import { getCourses, toListCourses } from '@/src/controllers/courses';
 
 
 export default function TimelineScreen() {
   const [req, setReq] = useState({
     id: -1,
-    class_id: -1,
     discipline_id: -1,
     local_id: -1,
     start_time: '',
@@ -37,10 +37,10 @@ export default function TimelineScreen() {
   const [filtro, setFiltro] = useState('');
   const [teatcher, setTeatcher] = useState<{key:number, option: string}[]>([]);
   const [discipline, setDisciplines, ] = useState<{key:number, option: string}[]>([]);
-  const [local, setLocal] = useState<{key:number, option: string}[]>([]);
+  const [local, setLocal] = useState<any[]>([]);
   const [classes, setClasses] = useState<{key:number, option: string}[]>([]);
   const [courses, setCourses] = useState<any[]>([]);
-  
+  const [date, setDate] = useState('');
 
 
 
@@ -67,17 +67,6 @@ export default function TimelineScreen() {
       }
     })();
 
-   //disciplinas
-   
-    // (async () =>{
-    //   const result = await getClasses({local:"local"});
-    //   if (result.status && result.data && result.data.length > 0) {
-    //     setClasses( await toListClasses(result.data) );
-    //   } else {
-    //     console.log('Erro ao buscar o Local/classes:', result.error);
-    //   }
-    // })();
-
     (async () => {
       const retorno = await  getCourses ({})
       if (retorno.status && retorno.data && retorno.data.length > 0){
@@ -85,33 +74,25 @@ export default function TimelineScreen() {
       }  
   })();
 
+    // (async () =>{
+    //   const result = await getDisciplines({discipline:"disciplines"});
+    //   if (result.status && result.data && result.data.length > 0) {
+    //     setDisciplines( await toListDisciplines(result.data) );
+    //   } else {
+    //     console.log('Erro ao buscar :', result.error);
+    //   }
+    // })();
+
     (async () =>{
-      const result = await getDisciplines({discipline:""});
+      const result = await getLocals({local:"locals"});
       if (result.status && result.data && result.data.length > 0) {
-        setDiscipline( await toListDisciplines(result.data) );
+        setLocal( await toListLocal(result.data) );
       } else {
         console.log('Erro ao buscar :', result.error);
       }
     })();
-
-    (async () =>{
-      const result = await getLocals({discipline:""});
-      if (result.status && result.data && result.data.length > 0) {
-        setDiscipline( await toListDisciplines(result.data) );
-      } else {
-        console.log('Erro ao buscar :', result.error);
-      }
-    })();
-
-    (async () =>{
-      const result = await getTurma({discipline:""});
-      if (result.status && result.data && result.data.length > 0) {
-        setDiscipline( await toListDisciplines(result.data) );
-      } else {
-        console.log('Erro ao buscar :', result.error);
-      }
-    })();
-
+      // local não esta funcionado 
+  
   }, []);
 
   async function handleRegister() {
@@ -127,7 +108,6 @@ export default function TimelineScreen() {
 
     setReq({
       id: -1,
-      class_id: -1,
       discipline_id: -1,
       local_id: -1,
       start_time: '',
@@ -187,13 +167,12 @@ export default function TimelineScreen() {
           />
         </View>
 
-        <Mytext style={styles.formTitle}>Cronograma do Professor</Mytext>
+        <Mytext style={styles.formTitle}>Cronograma do Docente</Mytext>
 
         {showForm && (
           <View style={styles.card}>
             <Mytext style={styles.titlee}>Data </Mytext>
             <MyCalendar date={req.date} setDate={(date) => setReq({ ...req, date })} icon="" />
-
             <Mytext style={styles.titlee}>Horário de Início </Mytext>
             <MyTimerPicker
               onTimeSelected={(text) => setReq({ ...req, start_time: text })}
@@ -215,11 +194,23 @@ export default function TimelineScreen() {
             />
 
             <MySelect
+              caption="Selecione a Disciplina" 
+              label={discipline.find(t => t.key == req.discipline_id)?.option || 'Selecione a Disciplina'}
+              list={discipline}
+              setLabel={() =>{}}
+              setKey={(key) => setReq({ ...req, discipline_id: key })}
+
+              // não esta funcionado
+            />
+
+            <MySelect
               caption="Selecione o Local" 
-              label={local.find(t => t.key == req.local_id)?.option || 'Selecione o Local'}
+              label={local.find(t => t.key == req.local)?.option || 'Selecione o Local'}
               list={local}
               setLabel={() =>{}}
-              setKey={(key) => setReq({ ...req, local_id: key })}
+              setKey={(key) => setReq({ ...req, local: key })}
+
+              // não esta funcionado
             />
               <MySelect
               caption="Selecione a Turma" 
@@ -239,7 +230,7 @@ export default function TimelineScreen() {
 
         <View style={styles.table}> {/** Pegar com o pedro a nova mylist com mytb */}
           <View style={styles.tableRowHeader}>
-            <Text style={styles.th}>Professor</Text>
+            <Text style={styles.th}>Docente</Text>
             <Text style={styles.th}>Disciplina</Text>
             <Text style={styles.th}>Local</Text>
             <Text style={styles.th}>Turma</Text>
@@ -257,7 +248,6 @@ export default function TimelineScreen() {
                 <Text style={styles.td}>{discipline.find(c=> c.key == item.discipline_id)?.option || ''}</Text>
                 <Text style={styles.td}>{local.find(c=> c.key == item.local_id)?.option || '' }</Text>
                 <Text style={styles.td}>{courses.find(c=> c.key == item.turma)?.option || ''}</Text>
-                <Text style={styles.td}>{item.class_id}</Text>
                 <Text style={styles.td}>{item.start_time ? item.start_time + 'h' : '-'}</Text>
                 <Text style={styles.td}>{item.end_time ? item.end_time + 'h' : '-'}</Text>
                 <Text style={styles.td}>{item.date}</Text>
