@@ -176,7 +176,7 @@ export default function CollectionPreviewScreen() {
                             </TouchableOpacity>
 
                             {isEmployeeUser && (//exibe apenas para funcionarios
-                                <TouchableOpacity style={styles.button_round} onPress={() => router.push({ pathname: 'librarie/pageEmployee' })}>
+                                <TouchableOpacity style={styles.button_round} onPress={() => router.push({ pathname: 'librarie/librarieEmployee' })}>
                                     <MaterialCommunityIcons name="account-hard-hat" size={20} color="#750097" />
                                     <Text style={styles.buttonText}>Funcionários</Text>
                                 </TouchableOpacity>
