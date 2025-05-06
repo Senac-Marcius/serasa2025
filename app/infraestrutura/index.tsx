@@ -87,8 +87,8 @@ export default function infraScreen() {
     return (
         <MyView>
             <View style={styles.headerContainer}>
-                <Mytext>Cadastro de Produtos</Mytext>
-                <View style={styles.buttonsWrapper}>
+            <Mytext style={styles.screenTitle}>Cadastro de Produtos</Mytext>                
+            <View style={styles.buttonsWrapper}>
 
                     <MyButton
                         color='#3AC7A8'
@@ -226,6 +226,15 @@ export default function infraScreen() {
 }
 
 const styles = StyleSheet.create({
+    screenTitle: {
+        fontSize: 26,
+        fontWeight: 'bold',
+        color: '#3A3A3A',
+        textAlign: 'left',
+        marginVertical: 20,
+        fontFamily: 'Arial',
+        textTransform: 'uppercase',
+    },
     modal: {
         margin: 'auto',
         display: 'flex',
@@ -260,6 +269,9 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     headerContainer: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#333',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -268,7 +280,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         borderBottomWidth: 1,
         borderBottomColor: '#e0e0e0',
-        fontWeight: 'bold'
     },
     buttonsWrapper: {
         flexDirection: 'row',
@@ -336,13 +347,13 @@ const styles = StyleSheet.create({
     th: {
         flex: 1,
         fontWeight: '600',
-        fontSize: 13,
+        fontSize: 20,
         color: '#333',
         textAlign: 'center',
     },
     td: {
         flex: 1,
-        fontSize: 13,
+        fontSize: 20,
         color: '#444',
         textAlign: 'center'
     },

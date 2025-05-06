@@ -66,8 +66,7 @@ export default function CategoryScreen() {
     return (
         <MyView style={styles.container}>
             <View>
-            <Mytext>Cadastro de Categorias</Mytext>
-            </View>
+            <Mytext style={styles.screenTitle}>Cadastro de Categorias</Mytext>            </View>
             <MyModal
                 style={styles.modal}
                 visible={visibleForm}
@@ -161,6 +160,15 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#e0e0e0',
         fontWeight: 'bold',
+    },
+    screenTitle: {
+        fontSize: 26,
+        fontWeight: 'bold',
+        color: '#3A3A3A',
+        textAlign: 'left',
+        marginVertical: 20,
+        fontFamily: 'Arial',
+        textTransform: 'uppercase',
     },
     modal: {
         margin: 'auto',
