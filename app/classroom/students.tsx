@@ -32,6 +32,9 @@ import { ScrollView } from "react-native-gesture-handler";
 import { getAllStudents } from "@/src/controllers/students";
 import { Myinput } from "@/src/components/MyInputs";
 import Toast from "react-native-toast-message";
+import { useUserData } from "@/hooks/useUserData";
+import { usePathname } from "expo-router";
+import SideMenu from "./components/SideMenu";
 
 interface Student {
   id: number;
@@ -49,25 +52,23 @@ interface Student {
   }[];
 }
 export default function Students() {
-  const userId = 6;
+ 
+    const userId = 3;
+  
+    const pathname = usePathname();
+  
+    const { user, role, classroomData, loading } = useUserData(userId);
 
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredStudents, setFilteredStudents] = useState<Student[]>([]);
 
-  const [loading, setLoading] = useState(true);
   const [isEditing, setEditing] = useState(false);
   const [students, setStudents] = useState<Student[]>([]);
   const [req, setReq] = useState<iUser>();
-  const [role, setRole] = useState<null | {
-    isStudent: boolean;
-    isEmployee: boolean;
-    employeePosition?: string;
-    positionId?: number;
-  }>(null);
+ 
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
   const [userToDelete, setUserToDelete] = useState<number | null>(null);
-  const [user, setUserHere] = useState<null | iUser>(null);
   const [showForm, setShowForm] = useState(false);
   const animation = useRef(new Animated.Value(0)).current;
 
@@ -81,41 +82,17 @@ export default function Students() {
     cpf: "",
   });
 
-  const [classroomData, setClassroomData] = useState<null | {
-    numberClasses: number | null;
-    numberStudents: number | null;
-    numberTeachers: number | null;
-    numberDiciplines: number | null;
-  }>(null);
-
+ 
   // const userId = localStorage.getItem("userId");
 
-  const fetchUserData = async (id: string) => {
-    const userData = await getUserById(Number(id));
-    setUserHere(userData.data);
-    setLoading(false);
-  };
+ 
 
   useEffect(() => {
     setFilteredStudents(students);
   }, [students]);
 
-  useEffect(() => {
-    const fetchRoles = async () => {
-      const roles = await getUserRoles(Number(userId));
-      setRole(roles);
-      setLoading(false);
-    };
-
-    const fetchClassroomData = async () => {
-      const classroomData = await getClassroomData(Number(userId));
-      setClassroomData(classroomData);
-      setLoading(false);
-    };
-
-    fetchClassroomData();
-    fetchRoles();
-  }, []);
+ 
+   
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -126,7 +103,7 @@ export default function Students() {
       } else {
         console.error("Erro ao carregar estudantes");
       }
-      setLoading(false);
+      
     };
 
     fetchStudents();
@@ -302,7 +279,7 @@ export default function Students() {
   };
 
   const renderHeader = () => (
-    <View className="flex-row bg-white px-8 py-6 border-b border-gray-300 mt-10 rounded-t-lg ">
+    <View className="flex-row bg-white px-8 py-6 border-b border-gray-300  rounded-t-lg ">
       <Text className="w-[600] font-bold text-gray-800 text-sm">Nome</Text>
       <Text className="w-[150] font-bold text-gray-800 text-sm">ID</Text>
       <Text className="w-[200] font-bold text-gray-800 text-sm">Turma</Text>
@@ -424,72 +401,52 @@ export default function Students() {
   return (
     <MyView>
       <View className="flex flex-row h-full w-full bg-secondary-100">
-        <View className="flex flex-col  h-full gap-14 w-[350] bg-white  items-center p-6 rounded-md">
-          {menuItems.map((item, index) => {
-            if (index === 3) {
-              return (
-                <Pressable
-                  className="flex flex-row gap-3 items-center p-1 justify-start w-[250] h-[70] bg-purple-100 rounded-lg hover:bg-purple-200"
-                  key={index}
-                  onPress={() => router.push(item.route)}
-                >
-                  <View className="flex items-center justify-center w-10 h-10 rounded-lg">
-                    {item.icon}
-                  </View>
-                  <Text className="font-medium text-xl color-primary-100">
-                    {item.label}
-                  </Text>
-                </Pressable>
-              );
-            } else {
-              return (
-                <Pressable
-                  className="flex flex-row gap-3 items-center p-1 justify-start w-[250] h-[70] bg-white rounded-lg hover:bg-gray-100"
-                  key={index}
-                  onPress={() => router.push(item.route)}
-                >
-                  <View className="flex items-center justify-center w-10 h-10 rounded-lg">
-                    {item.icon}
-                  </View>
-                  <Text className="font-medium text-xl color-secondary-400">
-                    {item.label}
-                  </Text>
-                </Pressable>
-              );
-            }
-          })}
-        </View>
+      {role && <SideMenu role={role} activeRoute={pathname.replace("/", "")} />}
 
-        {role?.isEmployee && (
+        
           <ScrollView className="h-full flex-1 bg-secondary-100 items-center mt-[100] ">
             {!showForm && (
-              <MyButton
-                icon="plus"
-                title="Novo Aluno"
-                onPress={() => {
-                  setForm({
-                    name: "",
-                    email: "",
-                    age: "",
-                    password: "",
-                    cpf: "",
-                    phone: "",
-                    address: "",
-                  });
-                  setEditing(false);
-                  setShowForm(true);
-                  animation.setValue(1);
-                }}
-                width={150}
-              />
+
+              <View className="flex flex-row items-center w-[100%] justify-between">
+                <MySearch
+              style={{ marginVertical: 10 , width: "30%"}}
+              busca={searchTerm}
+              placeholder="Buscar aluno por nome, email ou idade..."
+              onChangeText={(text) => {
+                setSearchTerm(text);
+                filterStudents(text); // 🔄 usa o texto atualizado
+              }}
+              onPress={() => filterStudents()} // usa o valor atual do estado
+            />
+
+                <MyButton
+                  icon="plus"
+                  title="Novo Aluno"
+                  onPress={() => {
+                    setForm({
+                      name: "",
+                      email: "",
+                      age: "",
+                      password: "",
+                      cpf: "",
+                      phone: "",
+                      address: "",
+                    });
+                    setEditing(false);
+                    setShowForm(true);
+                    animation.setValue(1);
+                  }}
+                  width={150}
+                />
+              </View>
             )}
 
             <Animated.View
               style={{ height: formHeight, overflow: "hidden" }}
-              className="w-[90%] mt-4 bg-white p-4 rounded-lg"
+              className="w-[90%] mt-2 bg-white p-4 rounded-lg"
             >
               {showForm && (
-                <View className="gap-4 mt-8">
+                <View className="gap-4 mt-4">
                   <Myinput
                     iconName="short-text"
                     label="Nome"
@@ -559,16 +516,7 @@ export default function Students() {
                 </View>
               )}
             </Animated.View>
-            { !showForm && <MySearch
-              style={{ marginVertical: 10 }}
-              busca={searchTerm}
-              placeholder="Buscar aluno por nome, email ou idade..."
-              onChangeText={(text) => {
-                setSearchTerm(text);
-                filterStudents(text); // 🔄 usa o texto atualizado
-              }}
-              onPress={() => filterStudents()} // usa o valor atual do estado
-            />}
+          
 
             {renderHeader()}
             <FlatList
@@ -634,7 +582,7 @@ export default function Students() {
               </View>
             )}
           </ScrollView>
-        )}
+        
       </View>
     </MyView>
   );

@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { TextInput, StyleSheet, View } from 'react-native';
-import MyView from '../../src/components/MyView';
-import MyText from '../../src/components/MyText';
-import MyList from '../../src/components/MyList';
-import MyButton from '../../src/components/MyButtons';
-import { MyTb } from '../../src/components/MyItem';
+import React, { useEffect, useState } from "react";
+import { TextInput, StyleSheet, View } from "react-native";
+import MyView from "../../src/components/MyView";
+import MyText from "../../src/components/MyText";
+import MyList from "../../src/components/MyList";
+import MyButton from "../../src/components/MyButtons";
+import { MyTb } from "../../src/components/MyItem";
+import { usePathname } from "expo-router";
+import SideMenu from "./components/SideMenu";
+import { useUserData } from "@/hooks/useUserData";
 
 import {
   Turma,
@@ -12,12 +15,21 @@ import {
   salvarTurma,
   atualizarTurma,
   deletarTurma,
-} from '../../src/controllers/classes';
+} from "../../src/controllers/classes";
 
 const camposForm = [
-  'curso', 'nome_turma', 'turno', 'modalidade', 'horario',
-  'cargaHoraria', 'vagas', 'inicio', 'termino', 'valor',
-  'docente', 'status',
+  "curso",
+  "nome_turma",
+  "turno",
+  "modalidade",
+  "horario",
+  "cargaHoraria",
+  "vagas",
+  "inicio",
+  "termino",
+  "valor",
+  "docente",
+  "status",
 ];
 
 export default function TurmasComCadastro() {
@@ -27,26 +39,31 @@ export default function TurmasComCadastro() {
 
   const [form, setForm] = useState<Turma>({
     id: 0,
-    curso: '',
-    nome_turma: '',
-    turno: '',
-    modalidade: '',
-    horario: '',
-    cargaHoraria: '',
-    vagas: '',
-    inicio: '',
-    termino: '',
-    valor: '',
-    docente: '',
-    status: '',
+    curso: "",
+    nome_turma: "",
+    turno: "",
+    modalidade: "",
+    horario: "",
+    cargaHoraria: "",
+    vagas: "",
+    inicio: "",
+    termino: "",
+    valor: "",
+    docente: "",
+    status: "",
   });
+
+  const pathname = usePathname();
+  const userId = 3;
+
+  const { user, role, classroomData, loading } = useUserData(Number(userId));
 
   const carregarTurmas = async () => {
     try {
       const lista = await buscarTurmas();
       setTurmas(lista);
     } catch (err: any) {
-      console.error('Erro ao carregar turmas:', err.message);
+      console.error("Erro ao carregar turmas:", err.message);
     }
   };
 
@@ -64,7 +81,7 @@ export default function TurmasComCadastro() {
       let turmaSalva: Turma;
       if (form.id === 0) {
         const { id, ...dadosSemId } = form;
-        turmaSalva = await salvarTurma(dadosSemId);        
+        turmaSalva = await salvarTurma(dadosSemId);
         setTurmas((prev) => [...prev, turmaSalva]);
       } else {
         turmaSalva = await atualizarTurma(form);
@@ -75,18 +92,18 @@ export default function TurmasComCadastro() {
 
       setForm({
         id: 0,
-        curso: '',
-        nome_turma: '',
-        turno: '',
-        modalidade: '',
-        horario: '',
-        cargaHoraria: '',
-        vagas: '',
-        inicio: '',
-        termino: '',
-        valor: '',
-        docente: '',
-        status: '',
+        curso: "",
+        nome_turma: "",
+        turno: "",
+        modalidade: "",
+        horario: "",
+        cargaHoraria: "",
+        vagas: "",
+        inicio: "",
+        termino: "",
+        valor: "",
+        docente: "",
+        status: "",
       });
       setModoCadastro(false);
     } catch (err: any) {
@@ -99,7 +116,7 @@ export default function TurmasComCadastro() {
       await deletarTurma(id);
       carregarTurmas();
     } catch (err: any) {
-      console.error('Erro ao excluir turma:', err.message);
+      console.error("Erro ao excluir turma:", err.message);
     }
   };
 
@@ -114,9 +131,24 @@ export default function TurmasComCadastro() {
 
   return (
     <MyView style={styles.container}>
+
+      <View className="flex-1 flex-row justify-between ">
+
+        
+
+        
+      {role && <SideMenu role={role} activeRoute={pathname.replace("/", "")} />}
+      <View className="flex-1 mt-[50] p-[50]">
       {!modoCadastro && (
-        <MyButton title="Cadastrar nova turma" onPress={() => setModoCadastro(true)} />
+        <MyButton
+          title="Nova turma"
+          onPress={() => setModoCadastro(true)}
+          icon="plus"
+          className="mb-4"
+          style={{width: 200,justifyContent:'center',alignSelf:'flex-end'}}
+        />
       )}
+
 
       {/* TABELA */}
       <MyList
@@ -124,7 +156,7 @@ export default function TurmasComCadastro() {
         data={turmas}
         keyItem={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <MyTb onEdit={() => editar(item)} onDel={() => excluir(item.id)}>
+          <MyTb onEdit={() => editar(item)} onDel={() => excluir(item.id)} style={{flexDirection: 'row', alignItems: 'center'}}>
             <MyText style={styles.td}>{item.id}</MyText>
             <MyText style={styles.td}>{item.curso}</MyText>
             <MyText style={styles.td}>{item.nome_turma}</MyText>
@@ -140,7 +172,7 @@ export default function TurmasComCadastro() {
             <MyText style={styles.td}>{item.status}</MyText>
           </MyTb>
         )}
-        header={(
+        header={
           <View style={styles.tableRowHeader}>
             <MyText style={styles.th}>Codigo</MyText>
             <MyText style={styles.th}>Curso</MyText>
@@ -156,14 +188,16 @@ export default function TurmasComCadastro() {
             <MyText style={styles.th}>Docente</MyText>
             <MyText style={styles.th}>Status</MyText>
           </View>
-        )}
+        }
       />
 
       {/* FORMULÁRIO */}
       {modoCadastro && (
         <>
           <MyText style={styles.header}>Cadastro de Turma</MyText>
-          {errorMessage && <MyText style={styles.errorText}>{errorMessage}</MyText>}
+          {errorMessage && (
+            <MyText style={styles.errorText}>{errorMessage}</MyText>
+          )}
           {camposForm.map((campo) => (
             <TextInput
               key={campo}
@@ -177,6 +211,9 @@ export default function TurmasComCadastro() {
           <MyButton title="Cancelar" onPress={() => setModoCadastro(false)} />
         </>
       )}
+</View>
+      </View>
+      
     </MyView>
   );
 }
@@ -186,34 +223,34 @@ const styles = StyleSheet.create({
   input: {
     padding: 12,
     borderWidth: 1,
-    borderColor: '#999',
+    borderColor: "#999",
     borderRadius: 10,
     marginBottom: 10,
   },
   header: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginVertical: 10,
-    textAlign: 'center',
+    textAlign: "center",
   },
   errorText: {
-    color: 'red',
+    color: "red",
     marginBottom: 8,
-    textAlign: 'center',
+    textAlign: "center",
   },
   table: {
-    backgroundColor: '#fdfdfd',
+    backgroundColor: "#fdfdfd",
     borderRadius: 10,
     padding: 10,
     marginBottom: 20,
   },
   tableRowHeader: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",    
     paddingBottom: 8,
-    justifyContent: 'space-between',
-    gap: 15,
+    justifyContent: "space-evenly",
+    alignItems: "center",
+  
   },
-  th: { flex: 1, fontWeight: 'bold', fontSize: 20 },
-  td: { flex: 1, fontSize: 12 },
+  th: { flex: 1, fontWeight: "bold", fontSize: 16 },
+  td: { flex: 1, fontSize: 14 },
 });

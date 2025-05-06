@@ -15,7 +15,7 @@ const CalendarComponent: React.FC = () => {
   return (
     <View style={[styles.container, width > 768 ? styles.containerDesktop : {}]}>
       <Calendar
-        style={{height:800, width:1800, fonteSize:20}}
+        style={{height:800, width:900, fonteSize:20}}
         current={today}
         onDayPress={handleDayPress}
         markedDates={{
@@ -39,14 +39,14 @@ const CalendarComponent: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: 600,
+    width: 500,
     padding: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
   containerDesktop: {
     
-    width: 600,
+    width: 500,
     alignSelf: 'center',
     marginTop: 32,
   },
