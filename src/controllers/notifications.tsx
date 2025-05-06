@@ -56,7 +56,7 @@ async function setNotification(notification:iNotification){
 }
 
  async function getNotifications(params:any) {
-    const { data: todos, error } = await supabase.from('notifications').select();
+    const { data: todos, error } = await supabase.from('notifications').select().eq('user_id', params.user_id);
  
     if (error) 
         return {status: false, erro: error}
