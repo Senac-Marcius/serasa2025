@@ -130,128 +130,108 @@ export default function librarieEmployeeScreen () {
                     );
                 })}
             </View>
-            {/* Conteúdo */}  
-            <View style={styles.mainContent}  >      
-                <View style={styles.header}>
-                    <View style={styles.headerLeft}>
-                        <TouchableOpacity onPress={() => router.back()} style={styles.iconButton}>
-                            <Ionicons name="arrow-back" size={20} color="#4A148C" />
-                        </TouchableOpacity>
-                    </View>
-        
-                    <Text style={styles.headerTitle}>VISÃO GERAL</Text>
-        
-                    <View style={styles.headerRight}>  
-                        <MyNotify style={styles.iconButton} />
-                        <TouchableOpacity onPress={() => router.push('/perfil')} style={styles.avatarButton}>
-                            <Image source={{ uri: 'https://i.pravatar.cc/150?img=1' }} style={styles.avatar} />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <ScrollView contentContainerStyle={styles.content}>
-                    {/* Cards */}
-                    <View style={styles.gridContainer}>
-                        <FlatList
-                            data={cards}
-                            keyExtractor={(item) => item.title}
-                            contentContainerStyle={styles.grid}
-                            numColumns={2}
-                            scrollEnabled={false}
-                            renderItem={({ item }) => (
-                                <TouchableOpacity 
-                                    style={[styles.card, { backgroundColor: item.backgroundColor }]} 
-                                    onPress={() => item.route && router.push(item.route)}
-                                >
-                                    <Ionicons name={item.icon as any} size={24} color="#4A148C" />
-                                    <Text style={styles.cardTitle}>{item.title}</Text>
-                                    <Text style={styles.cardValue}>{item.value.toLocaleString()}</Text>
-                                </TouchableOpacity>
-                            )}
-                        />
-                    </View>
-                    {/* Seção de Tipologia
-                    <View style={styles.chartsContainer}>
-                        <View style={styles.chartSection}>
-                            <Text style={styles.sectionTitle}>Tipologias</Text>
-                            <PieChart
-                                data={Object.keys(tipologiaResumo).map((key, index) => ({
-                                    name: key,
-                                    population: tipologiaResumo[key],
-                                    color: ['#FF6384', '#36A2EB', '#FFCE56', '#9CCC65', '#FF7043', '#9575CD', '#4DB6AC', '#BA68C8', '#FFD54F'][index % 9],
-                                    legendFontColor: '#555',
-                                    legendFontSize: 12,
-                                }))}
-                                width={Dimensions.get('window').width - 250}
-                                height={200}
-                                accessor={'population'}
-                                backgroundColor={'transparent'}
-                                paddingLeft={'15'}
-                                absolute
-                            /> 
-                        </View> */} 
-
-
-                        <Text style={styles.sectionTitle}>Distribuição por Tipologia</Text>
-                            <PieChart
-                            data={dataTipologiaPie}
-                            width={screenWidth - 32}
-                            height={220}
-                            chartConfig={{
-                                backgroundColor: '#fff',
-                                backgroundGradientFrom: '#fff',
-                                backgroundGradientTo: '#fff',
-                                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                                labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                            }}
-                            accessor={"population"}
-                            backgroundColor={"transparent"}
-                            paddingLeft={"15"}
-                            absolute
-                            style={{ alignSelf: 'center' }}
-                        />
-
-                        <View style={styles.chartSection}>   
-                            <Text style={styles.sectionTitle}>Top 5 Recursos Mais Emprestados</Text>
-                                {maisEmprestados.map((item, index) => (
-                                    <View key={index} style={styles.tipologiaItem}>
-                                        <Text style={styles.tipologiaText}>{item.titulo}</Text>
-                                        <Text style={styles.tipologiaValue}>{item.total}x</Text>
-                                    </View>
-                                ))}
+            {/* Conteúdo */}
+            <ScrollView > 
+                <View style={styles.mainContent}  >      
+                    <View style={styles.header}>
+                        <View style={styles.headerLeft}>
+                            <TouchableOpacity onPress={() => router.back()} style={styles.iconButton}>
+                                <Ionicons name="arrow-back" size={20} color="#4A148C" />
+                            </TouchableOpacity>
                         </View>
-
-                        <View style={styles.chartSection}> 
-
-                            <Text style={styles.sectionTitle}>Empréstimos Mensais</Text>
-                    
-                            <BarChart
-                                data={{
-                                    labels: historicoMensal.map(item => item.mes),
-                                    datasets: [
-                                    {
-                                        data: historicoMensal.map(item => item.emprestimos),
-                                        color: () => '#4A148C',
-                                    },
-                                    ],
-                                }}
-                                width={Dimensions.get('window').width - 250}
-                                height={220}
-                                yAxisLabel=""
-                                yAxisSuffix=""
-                                chartConfig={{
-                                    backgroundGradientFrom: '#fff',
-                                    backgroundGradientTo: '#fff',
-                                    decimalPlaces: 0,
-                                    color: (opacity = 1) => `rgba(74, 20, 140, ${opacity})`, // define a cor da barra
-                                    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                                    barPercentage: 0.5,
-                                }}
-                                verticalLabelRotation={0}
+            
+                        <Text style={styles.headerTitle}>VISÃO GERAL</Text>
+            
+                        <View style={styles.headerRight}>  
+                            <MyNotify style={styles.iconButton} />
+                            <TouchableOpacity onPress={() => router.push('/perfil')} style={styles.avatarButton}>
+                                <Image source={{ uri: 'https://i.pravatar.cc/150?img=1' }} style={styles.avatar} />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <View>
+                        {/* Cards */}
+                        <View style={styles.gridContainer}>
+                            <FlatList
+                                data={cards}
+                                keyExtractor={(item) => item.title}
+                                contentContainerStyle={styles.grid}
+                                numColumns={2}
+                                scrollEnabled={false}
+                                renderItem={({ item }) => (
+                                    <TouchableOpacity 
+                                        style={[styles.card, { backgroundColor: item.backgroundColor }]} 
+                                        onPress={() => item.route && router.push(item.route)}
+                                    >
+                                        <Ionicons name={item.icon as any} size={24} color="#4A148C" />
+                                        <Text style={styles.cardTitle}>{item.title}</Text>
+                                        <Text style={styles.cardValue}>{item.value.toLocaleString()}</Text>
+                                    </TouchableOpacity>
+                                )}
                             />
                         </View>
-                       
-                </ScrollView>       
-            </View>    
+                            <Text style={styles.sectionTitle}>Distribuição por Tipologia</Text>
+                                <PieChart
+                                data={dataTipologiaPie}
+                                width={screenWidth - 32}
+                                height={220}
+                                chartConfig={{
+                                    backgroundColor: '#fff',
+                                    backgroundGradientFrom: '#fff',
+                                    backgroundGradientTo: '#fff',
+                                    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                                    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                                }}
+                                accessor={"population"}
+                                backgroundColor={"transparent"}
+                                paddingLeft={"15"}
+                                absolute
+                                style={{ alignSelf: 'center' }}
+                            />
+
+                            <View style={styles.chartSection}>   
+                                <Text style={styles.sectionTitle}>Top 5 Recursos Mais Emprestados</Text>
+                                    {maisEmprestados.map((item, index) => (
+                                        <View key={index} style={styles.tipologiaItem}>
+                                            <Text style={styles.tipologiaText}>{item.titulo}</Text>
+                                            <Text style={styles.tipologiaValue}>{item.total}x</Text>
+                                        </View>
+                                    ))}
+                            </View>
+
+                            <View style={styles.chartSection}> 
+
+                                <Text style={styles.sectionTitle}>Empréstimos Mensais</Text>
+                        
+                                <BarChart
+                                    data={{
+                                        labels: historicoMensal.map(item => item.mes),
+                                        datasets: [
+                                        {
+                                            data: historicoMensal.map(item => item.emprestimos),
+                                            color: () => '#4A148C',
+                                        },
+                                        ],
+                                    }}
+                                    width={Dimensions.get('window').width - 250}
+                                    height={220}
+                                    yAxisLabel=""
+                                    yAxisSuffix=""
+                                    chartConfig={{
+                                        backgroundGradientFrom: '#fff',
+                                        backgroundGradientTo: '#fff',
+                                        decimalPlaces: 0,
+                                        color: (opacity = 1) => `rgba(74, 20, 140, ${opacity})`, // define a cor da barra
+                                        labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                                        barPercentage: 0.5,
+                                    }}
+                                    verticalLabelRotation={0}
+                                />
+                            </View>
+                        
+                    </View>       
+                </View>
+            </ScrollView>         
         </View>       
     );       
 }           
