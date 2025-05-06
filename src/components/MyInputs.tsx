@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TextInput, TextStyle, View, Text, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import MaskInput, { Masks } from 'react-native-mask-input';
 
 interface MyinputProps {
   value: string;
@@ -9,6 +10,7 @@ interface MyinputProps {
   style?: TextStyle | TextStyle[];
   label: string;
   iconName: string;
+  type?: 'text' | 'cpf' | 'phone' | 'password';
 }
 
 interface MyCheckProps {
@@ -30,7 +32,7 @@ const inputContainerStyle = {
   flexDirection: 'row' as const,
   alignItems: 'center' as const,
   backgroundColor: '#FFFFFF',
-  borderWidth: 1, 
+  borderWidth: 1,
   borderColor: '#D9D9D9',
   borderRadius: 8,
   paddingHorizontal: 12,
@@ -42,6 +44,7 @@ const inputTextStyle = {
   fontSize: 14,
   color: '#000',
   paddingVertical: 0,
+  outlineWidth: 0,
 };
 
 const labelStyle = {
@@ -51,19 +54,67 @@ const labelStyle = {
   fontSize: 14,
 };
 
-const Myinput: React.FC<MyinputProps> = ({ value, onChangeText, placeholder, style, label, iconName }) => {
+const Myinput: React.FC<MyinputProps> = ({
+  value,
+  onChangeText,
+  placeholder,
+  style,
+  label,
+  iconName,
+  type = 'text'
+}) => {
+  const [isPasswordVisible, setPasswordVisible] = useState(false);
+  const getMask = () => {
+    switch (type) {
+      case 'cpf':
+        return Masks.BRL_CPF;
+      case 'phone':
+        return Masks.BRL_PHONE;
+      default:
+        return undefined;
+    }
+  };
+
+  const isMasked = type === 'cpf' || type === 'phone';
+
   return (
     <View style={{ marginBottom: 14 }}>
       <Text style={labelStyle}>{label}</Text>
       <View style={inputContainerStyle}>
         <Icon name={iconName} size={18} color="#6A1B9A" style={{ marginRight: 8 }} />
-        <TextInput
-          value={value}
-          onChangeText={onChangeText}
-          placeholder={placeholder}
-          placeholderTextColor="#999"
-          style={[inputTextStyle, style]}
-        />
+
+        {isMasked ? (
+          <MaskInput
+            value={value}
+            onChangeText={(_, unmasked) => onChangeText(unmasked)}
+            placeholder={placeholder}
+            placeholderTextColor="#999"
+            style={[inputTextStyle, style]}
+            mask={getMask()}
+            keyboardType="numeric"
+          />
+        ) : (
+          <TextInput
+            value={value}
+            onChangeText={onChangeText}
+            placeholder={placeholder}
+            placeholderTextColor="#999"
+            style={[inputTextStyle, style]}
+            secureTextEntry={type === 'password' && !isPasswordVisible}
+            keyboardType={type === 'password' ? 'default' : 'default'}
+          />
+        )}
+
+        {type === 'password' && (
+          <Pressable onPress={() => setPasswordVisible((prev) => !prev)}>
+            <Icon
+              name={isPasswordVisible ? 'visibility' : 'visibility-off'}
+              size={20}
+              color="#6A1B9A"
+              style={{ marginLeft: 8 }}
+            />
+          </Pressable>
+        )}
       </View>
     </View>
   );
@@ -105,7 +156,7 @@ const MyCheck: React.FC<MyCheckProps> = ({ label, checked, onToggle }) => {
         justifyContent: 'center',
         marginRight: 8
       }}>
-        <Icon name={checked ? 'check' : 'close'} size={16} color="white" />
+        <Icon name={checked ? 'check' : ''} size={16} color="white" />
       </View>
       <Text style={{ fontSize: 14, color: '#333' }}>{label}</Text>
     </Pressable>

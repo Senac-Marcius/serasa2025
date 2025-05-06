@@ -1,73 +1,103 @@
-import React, { useState } from "react";
-import { supabase } from "../utils/supabase";
-import { Alert } from "react-native";
+import { supabase } from '../utils/supabase';
 
 interface iStudent {
-  name: string;
-  birthday: string;
-  email: string;
-  phone: string;
-  rg: string;
-  cpf: string;
-  cep: string;
-  address: string;
-  city: string;
-  state: string;
-  password: string;
+  id?: number;
+  created_at?: string;
   user_id: number;
 }
 
-type eStudent = { id: number } & iStudent;
-
-async function setStudent(student: iStudent) {
+async function getAllStudents() {
   const { data, error } = await supabase
-    .from("students")
+    .from('students')
+    .select('*, users(*)') // join opcional com users
+
+  if (error) {
+    console.error("Erro ao buscar estudantes:", error.message);
+    return { status: false, error };
+  }
+
+  return { status: true, data };
+}
+
+async function getStudentById(id: number) {
+  const { data, error } = await supabase
+    .from('students')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    console.error("Erro ao buscar estudante:", error.message);
+    return { status: false, error };
+  }
+
+  return { status: true, data };
+}
+
+async function getStudentByUserId(user_id: number) {
+  const { data, error } = await supabase
+    .from('students')
+    .select('*')
+    .eq('user_id', user_id)
+    .single();
+
+  if (error) {
+    console.error("Erro ao buscar estudante por user_id:", error.message);
+    return { status: false, error };
+  }
+
+  return { status: true, data };
+}
+
+async function createStudent(student: iStudent) {
+  const { data, error } = await supabase
+    .from('students')
     .insert([student])
     .select();
+
   if (error) {
-    console.error("Error inserting student:", error);
+    console.error("Erro ao criar estudante:", error.message);
+    return { status: false, error };
   }
+
+  return { status: true, data };
 }
 
-async function delStudent(id: number) {
-  const { error } = await supabase.from("students").delete().eq("id", `${id}`);
-
-  if (error) {
-    console.log(error);
-    alert(error);
-
-    return false;
-  } else return true;
-}
-
-async function editStudent(student: eStudent) {
-  let studentID = student.id;
-  const { id, ...studentValues } = student;
-
+async function updateStudent(id: number, updates: Partial<iStudent>) {
   const { data, error } = await supabase
-    .from("students")
-    .update(studentValues)
-    .eq("id", `${studentID}`)
+    .from('students')
+    .update(updates)
+    .eq('id', id)
     .select();
 
-  console.log(data);
+  if (error) {
+    console.error("Erro ao atualizar estudante:", error.message);
+    return { status: false, error };
+  }
+
+  return { status: true, data };
 }
 
-async function getStudent() {
-  let { data: students, error } = await supabase.from("students").select("*");
+async function deleteStudent(id: number) {
+  const { error } = await supabase
+    .from('students')
+    .delete()
+    .eq('id', id);
 
-  return students;
+  if (error) {
+    console.error("Erro ao deletar estudante:", error.message);
+    return { status: false, error };
+  }
+
+  return { status: true };
 }
 
-async function selectStudent() {
-  let { data: students, error } = await supabase.from("students").select("*");
-}
 export {
-  selectStudent,
-  delStudent,
-  editStudent,
-  getStudent,
   iStudent,
-  eStudent,
-  setStudent,
+  getAllStudents,
+  getStudentById,
+  getStudentByUserId,
+  createStudent,
+  updateStudent,
+  deleteStudent
 };
