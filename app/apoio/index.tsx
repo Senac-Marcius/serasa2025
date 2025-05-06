@@ -125,11 +125,7 @@ export default function HomeScreen() {
   return (
     <MyView router={router} style={{ flex: 1 }}>
       <ImageBackground
-<<<<<<< HEAD
         source={require('./imagens/design.png')} // <-- sua imagem aqui!
-=======
-        source={require('./imagens/download.png')} // <-- sua imagem aqui!
->>>>>>> 8873c8185ad4c4c45346b3b73ff0beaf95bda6ad
         style={styles.backgroundImage}
         resizeMode="center"
       >
