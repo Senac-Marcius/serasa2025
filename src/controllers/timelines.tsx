@@ -3,7 +3,6 @@ import { supabase } from '../utils/supabase';
 
 interface iTimeline {
   id: number;
-  class_id: number;
   discipline_id: number;
   local_id: number;
   start_time: string;

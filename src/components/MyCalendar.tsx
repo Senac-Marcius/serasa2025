@@ -16,7 +16,7 @@ interface MyCalendarProps {
   
 }
 
-const MyCalendar : React.FC<MyCalendarProps> = ({ date, setDate, icon, label, placeholder }) => {
+const MyCalendar : React.FC<MyCalendarProps> = ({ date, setDate, iconName, label, placeholder }) => {
     const [open, setOpen] = useState(false);
 
     function setAuxDate(date:Date | undefined){
