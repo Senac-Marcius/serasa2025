@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import MyButton from "@/src/components/MyButtons";
+import MySearch from "@/src/components/MySearch";
 import {
   View,
   Text,
@@ -28,7 +29,7 @@ import {
 } from "@/src/controllers/users";
 import { createStudent } from "@/src/controllers/students";
 import { ScrollView } from "react-native-gesture-handler";
-import { getAllStudents } from "@/src/controllers/students"; // ajuste o caminho conforme sua estrutura
+import { getAllStudents } from "@/src/controllers/students";
 import { Myinput } from "@/src/components/MyInputs";
 import Toast from "react-native-toast-message";
 
@@ -51,6 +52,9 @@ export default function Students() {
   const userId = 6;
 
   const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredStudents, setFilteredStudents] = useState<Student[]>([]);
+
   const [loading, setLoading] = useState(true);
   const [isEditing, setEditing] = useState(false);
   const [students, setStudents] = useState<Student[]>([]);
@@ -93,6 +97,10 @@ export default function Students() {
   };
 
   useEffect(() => {
+    setFilteredStudents(students);
+  }, [students]);
+
+  useEffect(() => {
     const fetchRoles = async () => {
       const roles = await getUserRoles(Number(userId));
       setRole(roles);
@@ -114,6 +122,7 @@ export default function Students() {
       const res = await getAllStudents();
       if (res.status) {
         setStudents(res.data || []);
+        setFilteredStudents(res.data || []);
       } else {
         console.error("Erro ao carregar estudantes");
       }
@@ -121,7 +130,8 @@ export default function Students() {
     };
 
     fetchStudents();
-  }, [students]);
+  }, []);
+
   const toggleForm = () => {
     const toValue = showForm ? 0 : 1;
     setShowForm(!showForm);
@@ -135,6 +145,25 @@ export default function Students() {
     inputRange: [0, 1],
     outputRange: [0, 800],
   });
+
+  const filterStudents = (text?: string) => {
+    const term = (text ?? searchTerm).trim().toLowerCase();
+
+    if (!term) {
+      setFilteredStudents(students);
+      return;
+    }
+
+    const resultado = students.filter((item) => {
+      const name = item.users?.name?.toLowerCase() || "";
+      const email = item.users?.email?.toLowerCase() || "";
+      const age = item.users?.age?.toString() || "";
+
+      return name.includes(term) || email.includes(term) || age.includes(term);
+    });
+
+    setFilteredStudents(resultado);
+  };
 
   const handleCancel = () => {
     setForm({
@@ -186,7 +215,6 @@ export default function Students() {
         throw new Error("ID do usuário não retornado");
       }
 
-      // Agora cria o estudante vinculado ao usuário
       const studentResult = await createStudent({ user_id: userId });
 
       if (!studentResult.status) {
@@ -235,7 +263,7 @@ export default function Students() {
         name: form.name,
         email: form.email,
         age: form.age,
-        password: form.password, // cuidado: atualize apenas se for necessário
+        password: form.password,
         cpf: form.cpf,
         contact: form.phone,
         address: form.address,
@@ -317,7 +345,6 @@ export default function Students() {
               <>
                 <Pressable
                   onPress={async () => {
-                    // setEditing(true)
                     await getUserById(item.user_id).then(({ status, data }) => {
                       setReq(data);
                       setForm({
@@ -449,9 +476,9 @@ export default function Students() {
                     phone: "",
                     address: "",
                   });
-                  setEditing(false); // sai do modo edição
-                  setShowForm(true); // abre o formulário
-                  animation.setValue(1); // expande o formulário
+                  setEditing(false);
+                  setShowForm(true);
+                  animation.setValue(1);
                 }}
                 width={150}
               />
@@ -516,8 +543,8 @@ export default function Students() {
                       title="Cancelar"
                       width={150}
                       onPress={handleCancel}
-                      color="#e5e7eb" // cinza claro
-                      text_color="#374151" // texto escuro
+                      color="#e5e7eb"
+                      text_color="#374151"
                       height={50}
                       font_size={16}
                     />
@@ -532,14 +559,25 @@ export default function Students() {
                 </View>
               )}
             </Animated.View>
+            { !showForm && <MySearch
+              style={{ marginVertical: 10 }}
+              busca={searchTerm}
+              placeholder="Buscar aluno por nome, email ou idade..."
+              onChangeText={(text) => {
+                setSearchTerm(text);
+                filterStudents(text); // 🔄 usa o texto atualizado
+              }}
+              onPress={() => filterStudents()} // usa o valor atual do estado
+            />}
 
             {renderHeader()}
             <FlatList
-              data={students}
+              data={filteredStudents}
               keyExtractor={(item) => item.id.toString()}
               renderItem={renderItem}
               contentContainerStyle={{ paddingBottom: 16 }}
             />
+
             {confirmDeleteVisible && (
               <View className="absolute top-0 left-0 right-0 bottom-0 bg-black/50 justify-center width-full items-center z-50">
                 <View className="bg-white p-6 rounded-lg w-[80%]">
