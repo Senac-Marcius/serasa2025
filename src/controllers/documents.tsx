@@ -33,6 +33,7 @@ async function getListDocuments(params: { type: string }) {
 
 //função do banco de dados - CREATE
 async function insertDocument(document: iDoc) {//mesma coisa que o set só que com nome dif para não ter conflito
+  console.log(document)
   try{
     const { data, error } = await supabase
     .from('documents')

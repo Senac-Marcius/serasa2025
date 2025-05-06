@@ -8,11 +8,6 @@ import MyUpload from './MyUpload';
 interface MyDocumentProps {
   type: string;
   user_id: number;
-  req: iDoc;
-  setReq: React.Dispatch<React.SetStateAction<iDoc>>;
-  documents: iDoc[];
-  setDocuments: React.Dispatch<React.SetStateAction<iDoc[]>>;
-  handleRegister: () => void;
 }
 
 const MyDocument: React.FC<MyDocumentProps> = ({ type, user_id }) => {
@@ -33,7 +28,7 @@ const MyDocument: React.FC<MyDocumentProps> = ({ type, user_id }) => {
 
     console.log("URL no handleRegister:", req.url); // Verifique se a URL está correta
 
-    if (req.url === '') {
+    if (req.url == '') {
       alert("Por favor, faça o upload de um documento.");
       return;
     }    
@@ -41,6 +36,7 @@ const MyDocument: React.FC<MyDocumentProps> = ({ type, user_id }) => {
     if (req.id === -1) {
       const newid = documents.length ? documents[documents.length - 1].id + 1 : 0;
       const newDoc = { ...req, id: newid };
+      console.log(newDoc)
 
       setDocuments([...documents, newDoc]);
       await insertDocument(newDoc);
@@ -63,8 +59,8 @@ const MyDocument: React.FC<MyDocumentProps> = ({ type, user_id }) => {
     <View style={styles.container}>
       
       <MyUpload 
-        setUrl={(url) => setReq({ ...req, url })} 
-        setName={(name) => setReq({ ...req, name })}
+        setUrl={(url) => setReq({...req, url: url} )} 
+        setName={(name) => setReq({ ...req,name: name })}
         style={styles.button}
       />
 

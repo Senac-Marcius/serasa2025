@@ -53,12 +53,12 @@ const MyUpload: React.FC<MyUploadProps> = ({ setUrl, setName }) => {
         .from("myuploads")
         .getPublicUrl(fileName);
 
-        console.log("URL retornada do Supabase:", urlData); // Log para depuração
+        //console.log("URL retornada do Supabase:", urlData); // Log para depuração
 
 
       // Verificar se a URL foi retornada corretamente
       if (urlData && urlData.publicUrl) {
-        setAlert(`Upload concluído! URL: ${urlData.publicUrl}`);
+        setAlert(file.name);
         setUrl(urlData.publicUrl); // <-- envia a URL para o componente pai
         setName(file.name);        // <-- envia o nome do arquivo original para o pai
       } else {
