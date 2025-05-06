@@ -11,7 +11,7 @@ export default function librarieEmployeeScreen () {
     const router = useRouter();
     const [hoveredItem, setHoveredItem] = useState<string | null>(null);
     const screenWidth = Dimensions.get('window').width;
-    const logo = require('../../librarie/assets/WhatsApp Image 2025-05-04 at 18.36.06.jpeg');
+    const logo = require('../librarie/assets/logo.jpeg');
     
     const dados = {
         totalRecursos: 8948,
@@ -282,12 +282,12 @@ const styles = StyleSheet.create({
     logoTitle: { 
         fontSize: 18, 
         fontWeight: 'bold', 
-        backgroundColor: '#4A148C', 
+        color: '#4A148C', 
         marginTop: 6 
     },
     logoSubtitle: { 
         fontSize: 11, 
-        backgroundColor: '#4A148C' 
+        color: '#4A148C' 
     },
     menuItem: {
         flexDirection: 'row', 
@@ -424,8 +424,8 @@ const styles = StyleSheet.create({
         color: '#4A148C',
     },
     logoImage: {
-        width: 40,
-        height: 40,
+        width: 90,
+        height: 90,
     },
     chartsContainer: {
         marginTop: 20,
