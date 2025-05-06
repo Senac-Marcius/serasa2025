@@ -7,6 +7,7 @@ interface iScale {
     end_time: string,
     created_at: string,
     employ_id: number,
+    date:string
 }
 
 function toListScale (data: iScale[]){
@@ -27,6 +28,11 @@ async function setScale(scale: Omit<iScale, 'id'>) {
         return [];
     }
 
+    if (!scale.date) {
+        console.error("Erro: Data não informada!");
+        return [];
+    }
+
     const { data, error } = await supabase
         .from('scales')
         .insert([scale])
@@ -41,7 +47,19 @@ async function setScale(scale: Omit<iScale, 'id'>) {
     return data;
 }
 
+// Atualize também a função updateScale para lidar com o campo date
 async function updateScale(id: number, updatedFields: Partial<Omit<iScale, 'id'>>) {
+    if (updatedFields.date) {
+        // Se a data foi alterada, atualize também o dia da semana
+        const daysOfWeek = [
+            'Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 
+            'Quinta-feira', 'Sexta-feira', 'Sábado'
+        ];
+        const date = new Date(updatedFields.date);
+        const dayOfWeek = daysOfWeek[date.getDay()];
+        updatedFields.day = dayOfWeek;
+    }
+
     const { data, error } = await supabase
         .from('scales')
         .update(updatedFields)
@@ -70,13 +88,21 @@ async function deleteScale(id: number) {
     return true;
 }
 
-async function getScale (params:any){
-    const { data: todos,error } = await supabase.from('scales').select();
-
-        if (error)
-            return{status: false, error:error}
-        
-        return{status: true, data:todos}
-}
+async function getScale(params: any) {
+    let query = supabase.from('scales').select('*');
+    
+    if (params?.employ_id) {
+      query = query.eq('employ_id', params.employ_id);
+    }
+  
+    const { data, error } = await query;
+  
+    if (error) {
+      console.error('Error fetching scales:', error);
+      return { status: false, error };
+    }
+  
+    return { status: true, data };
+  }
 
 export { getScale, setScale, updateScale, deleteScale, iScale, toListScale }

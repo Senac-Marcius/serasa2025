@@ -9,21 +9,18 @@ interface iDisciplines {
   teacher: string;
 }
 
-function toListDisciplines(data: iDisciplines []){
+// Transforma lista de disciplinas no formato que o MySelect precisa
+function toListDisciplines(data: iDisciplines[]) {
+  const resp: { key: number; option: string }[] = [];
 
-const resp: {key: number, option: string}[] = [];
+  data.map((d) => {
+    resp.push({ key: d.id, option: d.name });
+  });
 
-data.map((d) => {
-resp.push({key: d.id, option: d.name})
-
-})
-return resp
-
+  return resp;
 }
 
-
-
-
+// Lista disciplinas completas (para uso geral)
 async function getDisciplines(paramens: any) {
   const { data, error } = await supabase.from('disciplines').select();
 
@@ -31,6 +28,17 @@ async function getDisciplines(paramens: any) {
     return { status: false, data: error };
 
   return { status: true, data: data };
+}
+
+// Lista disciplinas formatadas para <MySelect />
+async function getDisciplinesSelectList() {
+  const { data, error } = await supabase.from('disciplines').select();
+
+  if (error)
+    return { status: false, data: error };
+
+  const lista = toListDisciplines(data as iDisciplines[]);
+  return { status: true, data: lista };
 }
 
 type DisciplineWithoutId = Omit<iDisciplines, 'id'>;
@@ -86,4 +94,12 @@ async function DeleteDisciplinebd(id: number): Promise<boolean> {
   return true;
 }
 
-export { SetDisciplinebd, UpdateDisciplinebd, DeleteDisciplinebd, iDisciplines, getDisciplines, toListDisciplines };
+export {
+  SetDisciplinebd,
+  UpdateDisciplinebd,
+  DeleteDisciplinebd,
+  iDisciplines,
+  getDisciplines,
+  getDisciplinesSelectList, // ✅ export para uso externo
+  toListDisciplines,
+};

@@ -7,7 +7,7 @@ interface iBudgets{
     url: string;
     created_at: string;
     user_id: number;
-    value: string;
+    value: number;
     start_date: string;
     end_date: string;
 }
@@ -51,9 +51,9 @@ async function  setBudget(budget:iBudgets ){
         return "Campo url deve conter o seguinte formato https://dominio";
     }*/
  
-    if (!valueRegex.test(budget.value)) {
-        return "Campo value deve ser um valor monetário (ex: '100', 'R$ 50,00')";
-    }
+    // if (!valueRegex.test(budget.value)) {
+    //     return "Campo value deve ser um valor monetário (ex: '100', 'R$ 50,00')";
+    // }
     /*if (!startDateRgex.test(budget.create_at)) {
         return "Campo createAt deve conter o seguinte formato YYYY-MM-DD";
     }
@@ -111,9 +111,9 @@ async function updateBudget(budget: iBudgets): Promise<iBudgets[] | string> {
         return "Nome inválido (2-100 caracteres, apenas letras, espaços ou hífens)";
     }
 
-    if (!valueRegex.test(budget.value)) {
-        return "Valor deve ser numérico (ex: 100 ou 50.00)";
-    }
+    // // if (!valueRegex.test(budget.value)) {
+    //     return "Valor deve ser numérico (ex: 100 ou 50.00)";
+    // }
 
    
     const { data, error } = await supabase

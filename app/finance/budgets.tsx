@@ -8,8 +8,9 @@ import Mytext from '../../src/components/MyText';
 import {MyItem, MyTb} from '../../src/components/MyItem';
 import { useRouter } from 'expo-router';
 import {iBudgets , setBudget, deleteBudget, updateBudget, getBudgets} from '../../src/controllers/budgets';
-import {MyModal_mobilefullscreen} from '../../src/components/MyModal';
+import {MyModal} from '../../src/components/MyModal';
 import MySearch from '../../src/components/MySearch';
+import Mydownload from '../../src/components/MyDownload';
 
 
 export default function BudgetScreen(){
@@ -24,7 +25,7 @@ export default function BudgetScreen(){
         name:'',
         url:'',
         created_at: new Date().toISOString(),
-        value: '',
+        value: 0,
         user_id: 3,
         start_date: '',
         end_date:'',
@@ -68,7 +69,7 @@ export default function BudgetScreen(){
         name:'',
         url:'',
         created_at: new Date().toISOString(),
-        value:'',
+        value:0,
         user_id: 3,
         start_date: '',
         end_date:'',
@@ -123,7 +124,10 @@ export default function BudgetScreen(){
             Cadastre os orçamentos
             </Mytext>
             
-            <MyModal_mobilefullscreen visible={visible} setVisible={setVisible}>
+            <MyModal style={styles.MyModal}
+            title='Novo Cadastro'
+            visible={visible} 
+            setVisible={setVisible}>
                 <View style={styles.form}>
                     
                     <Myinput
@@ -143,8 +147,8 @@ export default function BudgetScreen(){
                      
                      <Myinput 
                     placeholder = "Digite o valor"
-                    value={req.value}
-                    onChangeText={(text) => setReq({...req ,value: text})} 
+                    value={String(req.value)}
+                    onChangeText={(text) => setReq({...req ,value:Number( text)})} 
                     label="valor"
                     iconName="pin"
                      />
@@ -167,16 +171,17 @@ export default function BudgetScreen(){
 
                      <MyButton style={{justifyContent:'center'}} onPress={() => handleRegister ()} title="cadastrar"  />
                 </View>
-               </MyModal_mobilefullscreen>
+               </MyModal>
 
                <MySearch
+               placeholder='Pessquise no Virtudemy'
                      style={styles.searchInput}
                      onChangeText={setSearchTerm}
                     onPress={()=> {setSearchTerm(searchTerm)}}
                     busca={searchTerm}
                 />
                 <MyList
-
+                    style={styles.table}
                     data={getFilteredBudgets()}
                     keyItem={(item) => item.id.toString()}
                     renderItem={({item}) => (
@@ -184,30 +189,26 @@ export default function BudgetScreen(){
                         <MyTb
                        onEdit ={()=> editBudget(item.id)}
                        onDel ={()=> delBudget(item.id)}
+
                         >
-                       
-                            <Text style={styles.td}>{item.name}</Text>
+                            <Text style={styles.td}> {item.name}</Text>
                             <Text style={styles.td}> {item.id}</Text>
-                            <Text style={styles.td}>{item.url}</Text>
-                           <Text style={styles.td}> {item.created_at}</Text>
-                           <Text style={styles.td}> {item.value}</Text>
-                           <Text style={styles.td}> {item.start_date}</Text>
-                           <Text style={styles.td}> {item.end_date}</Text>
-                          
-    
+                            <Text style={styles.td}> {item.url}</Text>
+                            <Text style={styles.td}> {item.value}</Text>
+                            <Text style={styles.td}> {new Date(item.start_date).toLocaleDateString('pt-BR')}</Text>
+                            <Text style={styles.td}> {new Date(item.end_date).toLocaleDateString('pt-BR')}</Text>
                         </MyTb>
                     )}
                     header={(
-                        <View style={styles.tableRowHeader}>
+                    <View style={styles.tableRowHeader}>
                         <Text style={styles.th}>Nome</Text>
                         <Text style={styles.th}>Id</Text>
                         <Text style={styles.th}>url </Text>
-                        <Text style={styles.th}>created_at </Text>
                         <Text style={styles.th}>Valor</Text>
                         <Text style={styles.th}>Data Inicial</Text>
                         <Text style={styles.th}>Data Final</Text>
                         <Text style={styles.th}>Ações</Text>
-                        </View>
+                     </View>
                     )}
                 />
             
@@ -216,6 +217,13 @@ export default function BudgetScreen(){
 }
 
 const styles = StyleSheet.create({
+
+    table: {
+        backgroundColor: '#FFF',
+        borderRadius: 10,
+        padding: 8,
+      },
+
     row:{
         flexDirection: 'row',
         justifyContent:'space-between',
@@ -232,50 +240,6 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 4 },
         shadowRadius: 5,
     },
-    budetStyle:{
-        flex: 1,
-        marginRight: 10,
-        padding: 20,
-        backgroundColor: '#F2F2F2',
-        borderRadius: 15,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 5,
-        margin: 10,
-        width: 400,
-
-        },
-
-        
-        buttonsContanier:{
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap:20,
-        alignContent:'space-around',
-
-        },
-
-        editButton:{
-        backgroundColor:'#FFFF00',
-        padding:10,
-        borderRadius:5,
-        alignItems: 'center',
-        justifyContent:'center',
-        },
-
-        delButton:{
-        backgroundColor:'#f44336',
-        padding: 10,
-        borderRadius:5,
-        alignItems: 'center',
-        justifyContent:'center',
-        },
-
-        buttonText:{
-        color:'#000000',
-        fontWeight:'bold',
-         },
 
          title:{              
             marginBottom: 8,
@@ -293,24 +257,25 @@ const styles = StyleSheet.create({
 
          th: {
             flex: 1,
-             fontWeight: '900',
-              fontSize: 13,
-               color: '#333'
-            },
+            fontWeight: '900',
+            fontSize: 14,
+            color: '#333',
+            textAlign: 'center',
+          },
 
-        td: {
+          td: {
             flex: 1,
-            fontSize: 13,
-            color: '#444'
-             },
+            fontSize: 14,
+            color: '#444',
+            textAlign: 'center',
+          },
 
-         tableRowHeader: {
-                flexDirection: 'row',
-                paddingVertical: 10,
-                borderBottomWidth: 1,
-                borderBottomColor: '#ddd',
-              },
-
+          tableRowHeader: {
+            flexDirection: 'row',
+            paddingVertical: 15,
+            borderBottomWidth: 2,
+            borderBottomColor: '#ddd',
+          },
               searchInput: {
                 backgroundColor: '#fff',
                 borderRadius: 8,
@@ -321,6 +286,18 @@ const styles = StyleSheet.create({
                 borderColor: '#ccc',
                 fontSize: 14,
               },
+              MyModal: {
+                display: 'flex',
+                width: 400,
+                height: 1000,
+                padding: 20,
+                backgroundColor: 'white',
+                borderRadius: 20,
+                borderWidth: 4,
+                borderColor: 'purple',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+            },
              
 
 
