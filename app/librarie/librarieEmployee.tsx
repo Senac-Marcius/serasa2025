@@ -1,31 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, FlatList, Image, StyleSheet, ActivityIndicator, TouchableOpacity, Pressable, Dimensions } from 'react-native';
-import { getItems, iItem, setItem, deleteItemById, updateItemById, } from '../../src/controllers/librarie';
-import { iUser } from '../../src/controllers/users';
-import { iLoans } from '../../src/controllers/loans';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, FlatList, Image, StyleSheet, TouchableOpacity, Pressable, Dimensions } from 'react-native';
 import MyNotify from '../../src/components/MyNotify';
-import { MyModal } from '../../src/components/MyModal';
-import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { supabase } from '../../src/utils/supabase';
-import { BarChart, LineChart, PieChart } from 'react-native-chart-kit';
-
+import { BarChart, PieChart } from 'react-native-chart-kit';
 
 
 export default function librarieEmployeeScreen () {
     
     const router = useRouter();
-    const [recursos, setRecursos] = useState<iItem[]>([]);
-    const [usuarios, setUsuarios] = useState<iUser[]>([]);
-    const [emprestimos, setEmprestimos] = useState<iLoans[]>([]);
-    const [loading, setLoading] = useState(true);
     const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-
+    const screenWidth = Dimensions.get('window').width;
+    const logo = require('../../librarie/assets/WhatsApp Image 2025-05-04 at 18.36.06.jpeg');
+    
     const dados = {
-        totalRecursos: 12350,
+        totalRecursos: 8948,
         totalEmprestimos: 1050,
         pendentes: 230,
-        totalUsuarios: 5870,
+        totalUsuarios: 870,
+    };
+
+    const tipologiaResumo: Record<string, number> = {
+        Livros: 6400,
+        Artigos: 300,
+        Revistas: 100,
+        Ebooks: 950,
+        Audiolivros: 430,
+        Mangás: 120,
+        Mapas: 50,
+        Relatórios: 38,
+        Outros: 560,
     };
     
     const historicoMensal = [
@@ -39,97 +43,55 @@ export default function librarieEmployeeScreen () {
         { mes: 'Ago', emprestimos: 890, devolucoes: 880 },
     ];
 
-    const menuItems = [
-        { label: 'Catálogo Online', iconName: 'book-outline', route: '' },
-        { label: 'Acervo Geral', iconName: 'library-outline', route: '' },
-        { label: 'Empréstimos', iconName: '', route: '' },
-        { label: 'Usuários', iconName: 'people-outline', route: '' },
+    const maisEmprestados = [
+        { titulo: 'Senhor dos Anéis: A Sociedade do Anel', total: 120 },
+        { titulo: 'O Pequeno Princípe', total: 98 },
+        { titulo: 'Jojos', total: 76 },
+        { titulo: 'Cem Anos de Solidão', total: 65 },
+        { titulo: 'O Iluminado', total: 54 },
     ];
 
-    useEffect(() => {
-        const fetchDados = async () => {
-          try {
-            const { data: recursosData } = await supabase.from('librarie_items').select('*');
-            const { data: usuariosData } = await supabase.from('users').select('*');
-            const { data: emprestimosData } = await supabase.from('loans').select('*');
-            
-            setRecursos(recursosData || []);
-            setUsuarios(usuariosData || []);
-            setEmprestimos(emprestimosData || []);
-          } catch (error) {
-            console.error('Erro ao buscar dados:', error);
-          } finally {
-            setLoading(false);
-          }
-        };
-    
-        fetchDados();
-    }, []);
-
-    if (loading) {
-    return (
-        <View style={styles.center}>
-            <ActivityIndicator size="large" color="#4A148C" />
-        </View>
-    );
-    }
-
-    const totalRecursos = recursos.length;
-    const totalUsuarios = usuarios.length;
-    const emprestados = emprestimos.filter(e => e.statusLoan === 'emprestado').length;
-    const pendentes = emprestimos.filter(e => e.statusLoan === 'pendente').length;
+    const menuItems = [
+        { label: 'Catálogo Online', icon: <Ionicons name="book-outline" size={20} color="#4A148C" />, route: 'librarie/collectionsPreview' },
+        { label: 'Acervo Geral', icon: <Ionicons name="library-outline" size={20} color="#4A148C" />, route: 'librarie/librariePreview' },
+        { label: 'Empréstimos', icon: <Ionicons name="document-text-outline" size={20} color="#4A148C" />, route: 'librarie/loansTableEmployees' },
+        { label: 'Usuários', icon: <Ionicons name="people-outline" size={20} color="#4A148C"/>, route: 'librarie/loansTableUsers' },
+    ];
     
     const cards = [
         {
           title: 'Recursos Cadastrados',
-          icon: "book",
+          icon: "book-outline",
           route: 'librarie/librariePreview',
-          bgColor: '#d3cbd8',
-          value: totalRecursos,
+          backgroundColor: '#d3cbd8',
+          value: dados.totalRecursos,
         },
         {
           title: 'Recursos Emprestados',
-          icon: 'arrow-up-circle',
-          route: 'librarie/loans',
-          bgColor: '#e9e0ef',
-          value: emprestados,
+          icon: 'arrow-up-circle-outline',
+          route: 'librarie/loansTableEmployees',
+          backgroundColor: '#e9e0ef',
+          value: dados.totalEmprestimos,
         },
         {
           title: 'Recursos Pendentes',
-          icon: 'time',
+          icon: 'time-outline',
           route: '',
-          bgColor: '#d3cbd8',
-          value: pendentes,
+          backgroundColor: '#d3cbd8',
+          value: dados.pendentes,
         },
         {
           title: 'Total de Usuários',
-          icon: 'people',
+          icon: 'people-outline',
           route: '',
-          bgColor: '#e9e0ef',
-          value: totalUsuarios,
+          backgroundColor: '#e9e0ef',
+          value: dados.totalUsuarios,
         },
     ];
-    
-    const tipologiaResumo = recursos.reduce((acc: Record<string, number>, curr) => {
-        acc[curr.typology] = (acc[curr.typology] || 0) + 1;
-        return acc;
-    }, {});
-
-    const screenWidth = Dimensions.get('window').width;
-
-    const dataEmprestimos = {
-    labels: historicoMensal.map(item => item.mes),
-    datasets: [
-        {
-        data: historicoMensal.map(item => item.emprestimos),
-        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // cor da barra
-        }
-    ]
-    };
 
     const cores = [
         "#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40"
-      ];
+    ];
       
     const dataTipologiaPie = Object.entries(tipologiaResumo).map(([tipo, quantidade], index) => ({
     name: tipo,
@@ -139,12 +101,13 @@ export default function librarieEmployeeScreen () {
     legendFontSize: 12,
     }));
 
+
     return (
         <View style={styles.page}>
             {/* Sidebar */}
             <View style={styles.sidebar}>
                 <View style={styles.logoContainer}>
-                <Image source={{ uri: './assets/favicon.png' }}/>
+                <Image source={logo} style={styles.logoImage}/>
                 <Text style={styles.logoTitle}>Virtudemy</Text>
                 <Text style={styles.logoSubtitle}>Biblioteca</Text>
                 </View>
@@ -159,7 +122,7 @@ export default function librarieEmployeeScreen () {
                         onPress={() => router.push(item.route)}
                         style={[styles.menuItem, isHovered && styles.activeItem]}
                         >
-                        <View style={styles.icon}>{item.iconName}</View>
+                        <View style={styles.icon}>{item.icon}</View>
                         <Text style={[styles.menuText, isHovered && styles.activeText]}>
                             {item.label}
                         </Text>
@@ -192,11 +155,11 @@ export default function librarieEmployeeScreen () {
                             data={cards}
                             keyExtractor={(item) => item.title}
                             contentContainerStyle={styles.grid}
-                            numColumns={4}
+                            numColumns={2}
                             scrollEnabled={false}
                             renderItem={({ item }) => (
                                 <TouchableOpacity 
-                                    style={[styles.card, { backgroundColor: item.bgColor }]} 
+                                    style={[styles.card, { backgroundColor: item.backgroundColor }]} 
                                     onPress={() => item.route && router.push(item.route)}
                                 >
                                     <Ionicons name={item.icon as any} size={24} color="#4A148C" />
@@ -206,58 +169,87 @@ export default function librarieEmployeeScreen () {
                             )}
                         />
                     </View>
-                    {/* Seção de Tipologia */}
-                    <View style={styles.section}>
-
-                        <Text style={styles.sectionTitle}>Gráfico por Tipologia</Text>
-                        <PieChart
-                        data={dataTipologiaPie}
-                        width={screenWidth - 32}
-                        height={220}
-                        accessor="population"
-                        backgroundColor="transparent"
-                        paddingLeft="15"
-                        chartConfig={{
-                            backgroundColor: "#fff",
-                            backgroundGradientFrom: "#fff",
-                            backgroundGradientTo: "#fff",
-                            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                            labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                        }}
-                        absolute
-                        style={{
-                            marginVertical: 8,
-                            alignSelf: 'center',
-                        }}
-                        />
+                    {/* Seção de Tipologia
+                    <View style={styles.chartsContainer}>
+                        <View style={styles.chartSection}>
+                            <Text style={styles.sectionTitle}>Tipologias</Text>
+                            <PieChart
+                                data={Object.keys(tipologiaResumo).map((key, index) => ({
+                                    name: key,
+                                    population: tipologiaResumo[key],
+                                    color: ['#FF6384', '#36A2EB', '#FFCE56', '#9CCC65', '#FF7043', '#9575CD', '#4DB6AC', '#BA68C8', '#FFD54F'][index % 9],
+                                    legendFontColor: '#555',
+                                    legendFontSize: 12,
+                                }))}
+                                width={Dimensions.get('window').width - 250}
+                                height={200}
+                                accessor={'population'}
+                                backgroundColor={'transparent'}
+                                paddingLeft={'15'}
+                                absolute
+                            /> 
+                        </View> */} 
 
 
-                        <Text style={styles.sectionTitle}>Empréstimos Mensais</Text>
-                        <BarChart
-                            data={dataEmprestimos}
+                        <Text style={styles.sectionTitle}>Distribuição por Tipologia</Text>
+                            <PieChart
+                            data={dataTipologiaPie}
                             width={screenWidth - 32}
                             height={220}
-                            yAxisLabel=""
-                            yAxisSuffix=""
                             chartConfig={{
-                                backgroundGradientFrom: "#fff",
-                                backgroundGradientTo: "#fff",
-                                decimalPlaces: 0,
+                                backgroundColor: '#fff',
+                                backgroundGradientFrom: '#fff',
+                                backgroundGradientTo: '#fff',
                                 color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                                 labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                                style: {
-                                borderRadius: 16,
-                                },
                             }}
-                            style={{
-                                marginVertical: 8,
-                                borderRadius: 16,
-                                alignSelf: 'center',
-                            }}
+                            accessor={"population"}
+                            backgroundColor={"transparent"}
+                            paddingLeft={"15"}
+                            absolute
+                            style={{ alignSelf: 'center' }}
                         />
 
+                        <View style={styles.chartSection}>   
+                            <Text style={styles.sectionTitle}>Top 5 Recursos Mais Emprestados</Text>
+                                {maisEmprestados.map((item, index) => (
+                                    <View key={index} style={styles.tipologiaItem}>
+                                        <Text style={styles.tipologiaText}>{item.titulo}</Text>
+                                        <Text style={styles.tipologiaValue}>{item.total}x</Text>
+                                    </View>
+                                ))}
+                        </View>
 
-                    </View> 
+                        <View style={styles.chartSection}> 
+
+                            <Text style={styles.sectionTitle}>Empréstimos Mensais</Text>
+                    
+                            <BarChart
+                                data={{
+                                    labels: historicoMensal.map(item => item.mes),
+                                    datasets: [
+                                    {
+                                        data: historicoMensal.map(item => item.emprestimos),
+                                        color: () => '#4A148C',
+                                    },
+                                    ],
+                                }}
+                                width={Dimensions.get('window').width - 250}
+                                height={220}
+                                yAxisLabel=""
+                                yAxisSuffix=""
+                                chartConfig={{
+                                    backgroundGradientFrom: '#fff',
+                                    backgroundGradientTo: '#fff',
+                                    decimalPlaces: 0,
+                                    color: (opacity = 1) => `rgba(74, 20, 140, ${opacity})`, // define a cor da barra
+                                    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                                    barPercentage: 0.5,
+                                }}
+                                verticalLabelRotation={0}
+                            />
+                        </View>
+                       
                 </ScrollView>       
             </View>    
         </View>       
@@ -290,12 +282,12 @@ const styles = StyleSheet.create({
     logoTitle: { 
         fontSize: 18, 
         fontWeight: 'bold', 
-        color: '#4A148C', 
+        backgroundColor: '#4A148C', 
         marginTop: 6 
     },
     logoSubtitle: { 
         fontSize: 11, 
-        color: '#4A148C' 
+        backgroundColor: '#4A148C' 
     },
     menuItem: {
         flexDirection: 'row', 
@@ -430,5 +422,19 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         color: '#4A148C',
+    },
+    logoImage: {
+        width: 40,
+        height: 40,
+    },
+    chartsContainer: {
+        marginTop: 20,
+    },
+    chartSection: {
+        marginBottom: 30,
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        padding: 15,
+        elevation: 2,
     },
 });
