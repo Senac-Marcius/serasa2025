@@ -52,7 +52,7 @@ export default function librarieEmployeeScreen () {
     ];
 
     const menuItems = [
-        { label: 'Catálogo Online', icon: <Ionicons name="book-outline" size={20} color="#4A148C" />, route: 'librarie/collectionsPreview' },
+        { label: 'Catálogo Online', icon: <Ionicons name="book-outline" size={20} color="#4A148C" />, route: 'librarie' },
         { label: 'Acervo Geral', icon: <Ionicons name="library-outline" size={20} color="#4A148C" />, route: 'librarie/librariePreview' },
         { label: 'Empréstimos', icon: <Ionicons name="document-text-outline" size={20} color="#4A148C" />, route: 'librarie/loansTableEmployees' },
         { label: 'Usuários', icon: <Ionicons name="people-outline" size={20} color="#4A148C"/>, route: 'librarie/loansTableUsers' },

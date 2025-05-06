@@ -95,7 +95,6 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Secretaria" route="secretaria" icon="add-circle" />
         <MenuItem label="Categories" route="categories" icon="albums" />
         <MenuItem label="Classes" route="sala_de_aula/classes" icon="school" />
-        <MenuItem label="Collections" route="collections" icon="cube" />
         <MenuItem label="Employees" route="employees" icon="people" />
         <MenuItem label="Items" route="items" icon="pricetag" />
         <MenuItem label="Launchs" route="sala_de_aula/launchs" icon="rocket" />
@@ -105,7 +104,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Launchs" route="launchs" icon="rocket" />
         <MenuItem label="Libraie" route="libraie" icon="book" />
         <MenuItem label="Levels" route="levels" icon="stats-chart" />
-        <MenuItem label="Biblioteca" route="librarie/collectionsPreview" icon="book" />
+        <MenuItem label="Biblioteca" route="librarie" icon="book" />
         <MenuItem label="Loans" route="loans" icon="card" />
         <MenuItem label="Locals" route="infraestrutura/locals" icon="location" />
         <MenuItem label="Perfil" route="perfil" icon="person" />

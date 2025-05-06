@@ -83,7 +83,7 @@ export default function CollectionViewScreen() {
           break;
   
         case 3: // "catalogo online"
-          router.push('/librarie/collectionsPreview');
+          router.push('/librarie');
           return [];
   
         default:

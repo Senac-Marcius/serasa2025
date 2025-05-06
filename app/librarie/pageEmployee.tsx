@@ -34,7 +34,7 @@ export default function pageEmployee() {
               </Text>
             </View>
             <View style={styles.rightIcons}>
-              <TouchableOpacity style={styles.button_round} onPress={() => router.push({ pathname: 'librarie/collectionsPreview' })}>
+              <TouchableOpacity style={styles.button_round} onPress={() => router.push({ pathname: 'librarie' })}>
                 <MaterialCommunityIcons name="book-open-page-variant" size={20} color="#750097" />
                 <Text style={styles.buttonText}>Catálogo</Text>
               </TouchableOpacity>
