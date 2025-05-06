@@ -331,7 +331,7 @@ const getFilteredRevenues = () => {
               <Mytext style={styles.td}>{courses.find(c=> c.key == item.select_course)?.option || ''}</Mytext>
               <Mytext style={styles.td}>{item.tipo_mensalidade}</Mytext>
               <Mytext style={styles.td}>{item.scholarship_status}</Mytext>
-              <Mytext style={styles.td}>{item.created_at}</Mytext>
+              <Mytext style={styles.td}>{new Date(item.created_at).toLocaleDateString('pt-BR')}</Mytext>
               <Mytext style={styles.td}>{item.description}</Mytext>    
               <Mytext style={styles.td}>{item.discount_percentage}%</Mytext>
               <Mytext style={styles.td}>R${item.value}</Mytext>
