@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   TouchableOpacity,
   Text,
   StyleSheet,
   ViewStyle,
   View,
+  Animated,
+  Easing
 } from "react-native";
 import { Icon } from "react-native-paper";
 
@@ -37,22 +39,14 @@ interface MyButtonProps {
 
 function getButtonType(button_type: Button_type): any {
   switch (button_type) {
-    case "circle":
-      return styles.button_circle;
-    case "capsule":
-      return styles.button_capsule;
-    case "round":
-      return styles.button_round;
+    case "circle": return styles.button_circle;
+    case "capsule": return styles.button_capsule;
+    case "round": return styles.button_round;
     case "rect":
-      return styles.button_rect;
-    case "loading":
-      return styles.button_rect;
-    case "edit":
-      return styles.button_edit;
-    case "delete":
-      return styles.button_delete;
-    default:
-      return styles.button_default;
+    case "loading": return styles.button_rect;
+    case "edit": return styles.button_edit;
+    case "delete": return styles.button_delete;
+    default: return styles.button_default;
   }
 }
 
@@ -73,16 +67,35 @@ const MyButton: React.FC<MyButtonProps> = ({
   width,
 }) => {
   const [loading, setLoading] = useState(false);
+  const rotateAnim = useRef(new Animated.Value(0)).current;
 
-  function onPressIntenal() {
-    if (button_type === "loading") {
-      setLoading(true);
-      setTimeout(() => {
-        onPress && onPress();
-        setLoading(false);
-      }, 2000);
+  useEffect(() => {
+    if (loading) {
+      Animated.loop(
+        Animated.timing(rotateAnim, {
+          toValue: 1,
+          duration: 1000,
+          easing: Easing.linear,
+          useNativeDriver: true,
+        })
+      ).start();
     } else {
-      onPress && onPress();
+      rotateAnim.stopAnimation();
+      rotateAnim.setValue(0);
+    }
+  }, [loading]);
+
+  const rotateInterpolate = rotateAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg']
+  });
+
+  async function onPressInternal() {
+    setLoading(true);
+    try {
+      onPress && await onPress();
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -94,17 +107,32 @@ const MyButton: React.FC<MyButtonProps> = ({
           style,
           {
             backgroundColor: color,
-            height: height ?? undefined,
-            width: width ?? undefined,
+            height: height,
+            width: width,
             gap: gap,
           },
+          loading && styles.botaoDesabilitado
         ]}
-        onPress={onPressIntenal}
+        onPress={onPressInternal}
+        disabled={loading}
       >
-        {icon && <Icon size={iconSize} source={icon} color={iconColor} />}
-        <Text style={[styles.button_text, { fontSize: font_size, color: text_color }]}>
-          {title}
-        </Text>
+        {loading ? (
+          <Animated.View
+            style={[
+              styles.spinner,
+              { transform: [{ rotate: rotateInterpolate }] }
+            ]}
+          />
+        ) : (
+          <>
+            {icon && <Icon size={iconSize} source={icon} color={iconColor} />}
+            {title && (
+              <Text style={[styles.button_text, { fontSize: font_size, color: text_color }]}>
+                {title}
+              </Text>
+            )}
+          </>
+        )}
       </TouchableOpacity>
 
       {bottom_text && (
@@ -181,7 +209,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   button_text: {
-    fontWeight: "600",    
+    fontWeight: "600",
+  },
+  spinner: {
+    width: 20,
+    height: 20,
+    borderWidth: 3,
+    borderColor: '#fff',
+    borderTopColor: 'transparent',
+    borderRadius: 10,
+  },
+  botaoDesabilitado: {
+    opacity: 0.7,
   },
 });
 

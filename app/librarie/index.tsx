@@ -50,16 +50,16 @@ export default function CollectionPreviewScreen() {
         getTodos2()
     }, [])
 
-    useEffect(() => {
-        async function getTodos() {
-            const retorno = await getCollections({})
+    // useEffect(() => {
+    //     async function getTodos() {
+    //         const retorno = await getCollections({})
 
-            if (retorno.status && retorno.data && retorno.data.length > 0) {
-                setCollections(retorno.data);
-            }
-        }
-        getTodos()
-    }, [])
+    //         if (retorno.status && retorno.data && retorno.data.length > 0) {
+    //             setCollections(retorno.data);
+    //         }
+    //     }
+    //     getTodos()
+    // }, [])
 
     useEffect(() => {
         itemsSearch();

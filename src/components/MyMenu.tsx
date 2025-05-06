@@ -94,11 +94,11 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Financeiro" route="finance" icon="people" />
         <MenuItem label="Secretaria" route="secretaria" icon="add-circle" />
         <MenuItem label="Categories" route="categories" icon="albums" />
-        <MenuItem label="Classes" route="sala_de_aula/classes" icon="school" />
+        <MenuItem label="Classroom" route="classroom" icon="school" />
         <MenuItem label="Employees" route="employees" icon="people" />
         <MenuItem label="Items" route="items" icon="pricetag" />
-        <MenuItem label="Launchs" route="sala_de_aula/launchs" icon="rocket" />
-        <MenuItem label="Classes" route="classes" icon="school" />
+        <MenuItem label="Launchs" route="classroom/launchs" icon="rocket" />
+        <MenuItem label="Classes" route="classroom/classes" icon="school" />
         <MenuItem label="More" route="more" icon="cube" />
         <MenuItem label="Employees" route="employees" icon="people" />
         <MenuItem label="Launchs" route="launchs" icon="rocket" />
@@ -113,7 +113,7 @@ export default function HamburgerMenu({ closeMenu }: HamburgerMenuProps) {
         <MenuItem label="Projects" route="projects" icon="briefcase" />
         <MenuItem label="Records" route="records" icon="document-text-outline"/>
         <MenuItem label="Revenues" route="revenues" icon="cash-outline" />
-        <MenuItem label="Timelines" route="timelines" icon="calendar" />
+        <MenuItem label="Timelines" route="classroom/timelines" icon="calendar" />
         <MenuItem label="Students" route="students" icon="school" />
         <MenuItem label="More" route="more" icon="add-circle" />
       </ScrollView>

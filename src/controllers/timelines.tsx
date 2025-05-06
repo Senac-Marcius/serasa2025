@@ -3,14 +3,14 @@ import { supabase } from '../utils/supabase';
 
 interface iTimeline {
   id: number;
-  class_id: number;
-  discipline_id: string;
+  discipline_id: number;
   local_id: number;
   start_time: string;
   end_time: string;
   date: string,
   created_at: string;
-  teacher_id: string;
+  teacher_id: number;
+  turma: string;
 }
 
 // funçoes que chama o selec e lista
