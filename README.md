@@ -14,5 +14,5 @@ Invest : Guilherme Jesus Silva
 - Discipline : Miszael N. Costa
 - Secretary: Lorrany Santos de Jesus 
 - Student: Daniel da Silva Ferrari 🎓
-- Timeline: Karolina Rodrigues da Silva 
+- Cronograma: Karolina Rodrigues da Silva 
 
